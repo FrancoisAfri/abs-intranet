@@ -138,63 +138,66 @@
                     </div>
                     <!-- End new User Form-->
                 </div>
-            @endsection
+            </div>
+        </div>
+    </div>
+@endsection
 
-            @section('page_script')
-                <!-- DataTables -->
-                    <!-- DataTables -->
-                    <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-                    <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-                    <!-- End Bootstrap File input -->
-                    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                            type="text/javascript"></script>
-                    <!-- the main fileinput plugin file -->
-                    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-                    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-                    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-                    <script src="/custom_components/js/modal_ajax_submit.js"></script>
-                    <script>
+@section('page_script')
+<!-- DataTables -->
+	<!-- DataTables -->
+	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<!-- End Bootstrap File input -->
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+			type="text/javascript"></script>
+	<!-- the main fileinput plugin file -->
+	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<script>
 
 
-                        //Cancel button click event
-                        document.getElementById("cancel").onclick = function () {
-                            location.href = "/vehicle_management/manage_fleet";
-                        };
-                        $(function () {
-                            $('#example2').DataTable({
-                                "paging": true,
-                                "lengthChange": true,
-                                "searching": true,
-                                "ordering": true,
-                                "info": true,
-                                "autoWidth": true
-                            });
-                        });
+		//Cancel button click event
+		document.getElementById("cancel").onclick = function () {
+			location.href = "/vehicle_management/manage_fleet";
+		};
+		$(function () {
+			$('#example2').DataTable({
+				"paging": true,
+				"lengthChange": true,
+				"searching": true,
+				"ordering": true,
+				"info": true,
+				"autoWidth": true
+			});
+		});
 
-                        $('[data-toggle="tooltip"]').tooltip();
+		$('[data-toggle="tooltip"]').tooltip();
 
-                        //Vertically center modals on page
-                        function reposition() {
-                            var modal = $(this),
-                                dialog = modal.find('.modal-dialog');
-                            modal.css('display', 'block');
+		//Vertically center modals on page
+		function reposition() {
+			var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+			modal.css('display', 'block');
 
-                            // Dividing by two centers the modal exactly, but dividing by three
-                            // or four works better for larger screens.
-                            dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                        }
-                        // Reposition when a modal is shown
-                        $('.modal').on('show.bs.modal', reposition);
-                        // Reposition when the window is resized
-                        $(window).on('resize', function () {
-                            $('.modal:visible').each(reposition);
-                        });
-                        //
-                        $(function () {
-                            $('img').on('click', function () {
-                                $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
-                                $('#enlargeImageModal').modal('show');
-                            });
-                        });
-                    </script>
+			// Dividing by two centers the modal exactly, but dividing by three
+			// or four works better for larger screens.
+			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+		}
+		// Reposition when a modal is shown
+		$('.modal').on('show.bs.modal', reposition);
+		// Reposition when the window is resized
+		$(window).on('resize', function () {
+			$('.modal:visible').each(reposition);
+		});
+		//
+		$(function () {
+			$('img').on('click', function () {
+				$('.enlargeImageModalSource').attr('src', $(this).attr('src'));
+				$('#enlargeImageModal').modal('show');
+			});
+		});
+	</script>
 @endsection

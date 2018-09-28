@@ -1,17 +1,18 @@
-<div id="add-preferred-supplier-modal" class="modal modal-default fade">
+<div id="edit-preferred-supplier-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" name="add-new-pre-supploer-form" enctype="multipart/form-data">
-                {{ csrf_field() }}
+			<form class="form-horizontal" name="edit-preferred-supplier-form" enctype="multipart/form-data">
+				{{ csrf_field() }}
+				{{ method_field('PATCH') }}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Preferred Supplier </h4>
+                    <h4 class="modal-title">Edit Preferred Supplier Details</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-                    <div class="box-body">
+					<div class="box-body">
 						<div class="form-group">
 							<label for="order_no" class="col-sm-2 control-label">Order No</label>
 							<div class="col-sm-8">
@@ -20,16 +21,16 @@
 							</div>
 						</div>
 						<div class="form-group">
-                        <label for="supplier_id" class="col-sm-2 control-label">Supplier </label>
-                        <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;" id="supplier_id" name="supplier_id">
-                                <option value="0">*** Select a Supplier ***</option>
-                                @foreach($ContactCompany as $supplier)
-                                   <option value="{{ $supplier->id }}" >{{ $supplier->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
+							<label for="supplier_id" class="col-sm-2 control-label">Supplier </label>
+							<div class="col-sm-8">
+								<select class="form-control select2" style="width: 100%;" id="supplier_id" name="supplier_id">
+									<option value="0">*** Select a Supplier ***</option>
+									@foreach($ContactCompany as $supplier)
+									   <option value="{{ $supplier->id }}" >{{ $supplier->name }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
 						<div class="form-group">
 							<label for="description" class="col-sm-2 control-label">Description</label>
 							<div class="col-sm-8">
@@ -45,13 +46,13 @@
 							</div>
 						</div>
 					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-						<button type="button" id="add_pre_supplier" class="btn btn-warning"><i
-									class="fa fa-cloud-upload"></i> Save
-						</button>
-					</div>
-				</div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
+                    <button type="button" id="update_preferred_supplier" class="btn btn-primary"><i class="fa fa-floppy-o"></i>
+                        Save
+                    </button>
+                </div>
             </form>
         </div>
     </div>

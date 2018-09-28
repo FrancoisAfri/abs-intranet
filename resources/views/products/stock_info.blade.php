@@ -5,6 +5,8 @@
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 <!-- iCheck -->
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css"> 
+	    <!-- bootstrap file input -->
+<link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css"/>
 	<!--  -->
 	 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
@@ -59,13 +61,15 @@
 												data-maximum_level="{{ $product->maximum_level }}"
 												data-bar_code="{{ $product->bar_code }}"
 												data-unit="{{ $product->unit }}"
-												data-commodity_code="{{ $product->commodity_code }}">
+												data-commodity_code="{{ $product->commodity_code }}"
+												data-stock_image="{{ (!empty($product->picture)) ? Storage::disk('local')->url("Producrs/images/$product->picture") : 'http://placehold.it/60x50' }}">
 												<i class="fa fa-pencil-square-o"></i> Edit
 											</button>
 										</td>
 										<td>
 											<div class="product-img">
-												<img alt="Vehicle Image" class="img-responsive" src="{{ (!empty($product->image)) ? Storage::disk('local')->url("Stock/images/$product->picture") : 'http://placehold.it/60x50' }}">
+												<img alt="Product Image" class="img-responsive" width="100" height="80"
+												src="{{ (!empty($product->picture)) ? Storage::disk('local')->url("Producrs/images/$product->picture") : 'http://placehold.it/60x50' }}">
 											</div>
 											<div class="modal fade" id="enlargeImageModal" tabindex="-1"
 													 role="dialog" align="center"
@@ -109,9 +113,11 @@
 					</table>
                 </div>
 				<div class="box-footer">
+				@if (count($products->infosProduct) <= 0)
                     <button type="button" id="add-price_titles" class="btn btn-primary pull-right" data-toggle="modal"
                             data-target="#add-stock-info-modal">Add Details
                     </button>
+				@endif
 				</div>
 			</div>
 		</div>
@@ -147,7 +153,7 @@
 									<tr>
 										<td>
 											<button type="button" id="edit_info" class="btn btn-primary  btn-xs"
-                                                data-toggle="modal" data-target="#edit-stock-info-modal"
+                                                data-toggle="modal" data-target="#edit-preferred-supplier-modal"
                                                 data-id="{{ $productPreferred->id }}" 
 												data-order_no="{{ $productPreferred->order_no }}"
 												data-supplier_id="{{ $productPreferred->supplier_id }}"
@@ -252,6 +258,7 @@
             @include('products.partials.add_new_stock_info_modal')
 			@include('products.partials.edit_stock_info_modal')
             @include('products.partials.add_prefered_suppliers_modal')
+            @include('products.partials.edit_prefered_suppliers_modal')
 @endsection
 
 @section('page_script')
@@ -267,27 +274,15 @@
 <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+            type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
 <script type="text/javascript">
 
-function hideFields() {
-	var radioCheck = $("input[name='attendance']:checked").val();
-	if (radioCheck == 1) {
-		$('.no_field').hide();
-	}
-	else if (radioCheck == 2) {
-		$('.no_field').show();
-	}
-}
-function hideFieldsEdit() {
-	var radioCheck = $("input[name='attendance_edit']:checked").val();
-	if (radioCheck == 1) {
-		$('.no_field').hide();
-	}
-	else if (radioCheck == 2) {
-		$('.no_field').show();
-	}
-}
 function postData(id, data)
 {
 	if (data == 'print_minutes')
@@ -299,15 +294,20 @@ $('#back_button').click(function () {
             location.href = '/Product/Product/{{$products->category_id}}';
         });
 $(function () {
+	
+	$('img').on('click', function () {
+		$('.enlargeImageModalSource').attr('src', $(this).attr('src'));
+		$('#enlargeImageModal').modal('show');
+	});
 
-	 $(".select2").select2();
+	$(".select2").select2();
 
-	 $('#due_time').datetimepicker({
+	$('#due_time').datetimepicker({
              format: 'HH:mm:ss'
-        });
-        $('#time_to').datetimepicker({
-             format: 'HH:mm:ss'
-        });
+    });
+	$('#time_to').datetimepicker({
+		 format: 'HH:mm:ss'
+	});
 	 
 	 //Initialize iCheck/iRadio Elements
 	$('input').iCheck({
@@ -315,12 +315,7 @@ $(function () {
 		radioClass: 'iradio_square-green',
 		increaseArea: '20%' // optional
 	});
-	$('#attendance_yes, #attendance_no').on('ifChecked', function(){
-           hideFields();
-    });
-	$('#attendance_yes_edit, #attendance_no_edit').on('ifChecked', function(){
-           hideFieldsEdit();
-    });
+
 	$('.datepicker').datepicker({
 		format: 'dd/mm/yyyy',
 		autoclose: true,
@@ -335,8 +330,7 @@ $(function () {
 		// or four works better for larger screens.
 		dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
 	}
-    //Hide/show fields
-    hideFields();
+
 	// Reposition when a modal is shown
 	$('.modal').on('show.bs.modal', reposition);
 	// Reposition when the window is resized
@@ -346,168 +340,93 @@ $(function () {
 	//Show success action modal
 	$('#success-action-modal').modal('show');
 	//Post end task form to server using ajax (add)
-	var minuteID;
-	var attendeeID;
-	
-	// Call add attendee Modal
-	$('#add-attendee-modal').on('show.bs.modal', function (e) {
-		var btnEnd = $(e.relatedTarget);
-		minuteID = btnEnd.data('meeting_id');
-		var modal = $(this);
-		modal.find('#meeting_id').val(minuteID);
-	});
-	// Add attendee Submit
-	$('#save-attendee').on('click', function() {
-		var strUrl = '/meeting/add_attendees/' + minuteID;
-		var formName = 'add-attendee-form';
-		var modalID = 'add-attendee-modal';
-		var submitBtnID = 'save-attendee';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
-		var successMsgTitle = 'Attendee Saved!';
-		var successMsg = 'Attendee Has Been Successfully Saved!';
-		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-	});
-	// Call add minute Modal
-	$('#add-minutes-modal').on('show.bs.modal', function (e) {
-		var btnEnd = $(e.relatedTarget);
-		minuteID = btnEnd.data('meeting_id');
-		var modal = $(this);
-		modal.find('#meeting_id').val(minuteID);
-	});
+	var stockID;
+	var preferredID;
 	// Add minute Submit
-	$('#save-minute').on('click', function() {
-		var strUrl = '/meeting/add_minutes/' + minuteID;
-		var formName = 'add-minutes-form';
-		var modalID = 'add-minutes-modal';
-		var submitBtnID = 'save-attendee';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
-		var successMsgTitle = 'Minute Saved!';
-		var successMsg = 'Minute Has Been Successfully Saved!';
+	$('#add_stock_info').on('click', function() {
+		var strUrl = '/stock/stock_info/add/' + {{$products->id}};
+		var formName = 'add-new-stock-info-form';
+		var modalID = 'add-stock-info-modal';
+		var submitBtnID = 'add_stock_info';
+		var redirectUrl = '/stock/stockinfo/' + {{$products->id}};
+		var successMsgTitle = 'Stock details Saved!';
+		var successMsg = 'Stock details Has Been Successfully Saved!';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 	});
-	// Call add task Modal
-	$('#add-task-modal').on('show.bs.modal', function (e) {
-		var btnEnd = $(e.relatedTarget);
-		minuteID = btnEnd.data('meeting_id');
-		var modal = $(this);
-		modal.find('#meeting_id').val(minuteID);
-	});
-	// Add minute Submit
-	$('#save-task').on('click', function() {
-		var strUrl = '/meeting/add_task/'+ {{$products->id}};
-		var formName = 'add-task-form';
-		var modalID = 'add-task-modal';
-		var submitBtnID = 'save-task';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
-		var successMsgTitle = 'Task Saved!';
-		var successMsg = 'Task Has Been Successfully Saved!';
-		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-	});
+
 	// Call Edit meeting modal/*data-meeting_id=""
-	$('#edit-meeting-modal').on('show.bs.modal', function (e) {
+	$('#edit-stock-info-modal').on('show.bs.modal', function (e) {
 		var btnEdit = $(e.relatedTarget);
-		minuteID = btnEdit.data('meeting_id');
-		var meetingName = btnEdit.data('meeting_name');
-		var meetingLocation = btnEdit.data('meeting_location');
-		var meetingAgenda = btnEdit.data('meeting_agenda');
+		stockID = btnEdit.data('id');
+		var Description = btnEdit.data('description');
+		var Location = btnEdit.data('location');
+		var AllowVat = btnEdit.data('allow_vat');
+		var MassNet = btnEdit.data('mass_net');
+		var MinimumLevel = btnEdit.data('minimum_level');
+		var MaximumLevel = btnEdit.data('maximum_level');
+		var BarCode = btnEdit.data('bar_code');
+		var Unit = btnEdit.data('unit');
+		var CommodityCode = btnEdit.data('commodity_code');
+		var stockImage = btnEdit.data('stock_image');
+
 		var modal = $(this);
-		modal.find('#meeting_location').val(meetingLocation);
-		modal.find('#meeting_name').val(meetingName);
-		modal.find('#meeting_agenda').val(meetingAgenda);
-		modal.find('#meeting_id').val(minuteID);
+		modal.find('#description').val(Description);
+		modal.find('#location').val(Location);
+		modal.find('select#allow_vat').val(AllowVat).trigger("change");
+		modal.find('#mass_net').val(MassNet);
+		modal.find('#minimum_level').val(MinimumLevel);
+		modal.find('#maximum_level').val(MaximumLevel);
+		modal.find('#bar_code').val(BarCode);
+		modal.find('#unit').val(Unit);
+		modal.find('#commodity_code').val(CommodityCode);
+		modal.find('#stock_image').attr("src", stockImage);
 	});
 	//Update meeting
-	$('#update-meeting').on('click', function () {
+	$('#update_stock_info').on('click', function () {
+		var strUrl = '/stock/stock_info/update/' + stockID;
+		var formName = 'edit-stock-info-form';
+		var modalID = 'edit-stock-info-modal';
+		var submitBtnID = 'update_stock_info';
+		var successMsgTitle = 'Changes Saved!';
+		var redirectUrl = '/stock/stockinfo/' + {{$products->id}};
+		var successMsg = 'Stock nfo details has been updated successfully.';
+		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		
-		var strUrl = '/meeting/update/' + minuteID;
-		var formName = 'edit-meeting-form';
-		var modalID = 'edit-meeting-modal';
-		var submitBtnID = 'update-meeting';
-		var successMsgTitle = 'Changes Saved!';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
-		var successMsg = 'Meeting details has been updated successfully.';
-		var method = 'PATCH';
+	});
+	// Preferred Supplier
+	$('#add_pre_supplier').on('click', function () {
+		var strUrl = '/stock/pre_supplier/add/' + {{$products->id}};
+		var formName = 'add-new-pre-supploer-form';
+		var modalID = 'add-preferred-supplier-modal';
+		var submitBtnID = 'add_pre_supplier';
+		var redirectUrl = '/stock/stockinfo/' + {{$products->id}};
+		var successMsgTitle = 'Preferred Supplier Added!';
+		var successMsg = 'Preferred Supplier has been Successfully Completed!';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 	});
-	// Call Complete Induction modal
-	$('#comp-induction-modal').on('show.bs.modal', function (e) {
-		var btnEdit = $(e.relatedTarget);
-		inductionID = btnEdit.data('induction_id');
-		var modal = $(this);
-		modal.find('#induction_id').val(inductionID);
-	});
-	// Complete Induction
-	$('#complete-induction').on('click', function () {
-		var strUrl = '/induction/complete';
-		var formName = 'comp-induction-form';
-		var modalID = 'comp-induction-modal';
-		var submitBtnID = 'complete-induction';
-		var redirectUrl = '/induction/' + {{$products->id}} + '/view';
-		var successMsgTitle = 'Induction Completed!';
-		var successMsg = 'Induction has been Successfully Completed!';
-		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-	});
-// Update task
-	$('#update-task').on('click', function () {
-	var strUrl = '/tasks/update/' + taskID;
-	var objData = {
-		order_no: $('#edit-tasks-modal').find('#order_no').val()
-		, description: $('#edit-tasks-modal').find('#description').val()
-		, upload_required: $('#edit-tasks-modal').find('#upload_required').val()
-		, employee_id: $('#edit-tasks-modal').find('#employee_id').val()
-		, administrator_id: $('#edit-tasks-modal').find('#administrator_id').val()
-		, _token: $('#edit-tasks-modal').find('input[name=_token]').val()
-	};
-	var modalID = 'edit-tasks-modal';
-	var submitBtnID = 'update-task';
-	var redirectUrl = '/induction/' + {{$products->id}} + '/view';
-	var successMsgTitle = 'Changes Saved!';
-	var successMsg = 'Task details has been updated successfully.';
-	var method = 'PATCH';
-	modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, method);
-	});
-	// Call Edit meeting modal/*data-meeting_id="}"
-	$('#edit-attendees-modal').on('show.bs.modal', function (e) {
-		var btnEdit = $(e.relatedTarget);
-		attendeeID = btnEdit.data('attendee_id');
-		var employeeID = btnEdit.data('employee_id') || 0;
-		var clientID = btnEdit.data('client_id') || 0;
-		var Attendance = btnEdit.data('attendance');
-		var Apology = btnEdit.data('apology');
-		var modal = $(this);
-		//console.log('gets here. clientID = ' + clientID + '. empID = ' + employeeID);
-		modal.find('#apology').val(Apology);
-		modal.find('#attendee_id').val(attendeeID);
-		modal.find('select#employee_id').val(employeeID).trigger('change');
-		modal.find('select#client_id').val(clientID).trigger('change');
-		if (employeeID > 0) {
-			$('.internal-attendee').show();
-			$('.external-attendee').hide();
-		}
-		else if (clientID > 0) {
-			$('.internal-attendee').hide();
-			$('.external-attendee').show();
-		}
 
-		if (Attendance == 2)
-		{
-			$("#attendance_no_edit").iCheck('check');
-			$('.no_field').show();
-		}
-		else
-		{
-			$("#attendance_yes_edit").iCheck('check');
-			$('.no_field').hide();
-		}
+	// Call Edit meeting modal/*data-meeting_id="}"
+	$('#edit-preferred-supplier-modal').on('show.bs.modal', function (e) {
+		var btnEdit = $(e.relatedTarget);
+		preferredID = btnEdit.data('id');
+		var orderNo = btnEdit.data('order_no');
+		var supplierID = btnEdit.data('supplier_id');
+		var Description = btnEdit.data('description');
+		var inventoryCode = btnEdit.data('inventory_code');
+		var modal = $(this);
+		modal.find('#order_no').val(orderNo);
+		modal.find('#description').val(Description);
+		modal.find('#inventory_code').val(inventoryCode);
+		modal.find('select#supplier_id').val(supplierID).trigger('change');
 	});
-	$('#update-attendees').on('click', function () {
-		var strUrl = '/meeting/update_attendee/' + attendeeID;
-		var formName = 'edit-attendees-form';
-		var modalID = 'edit-attendees-modal';
-		var submitBtnID = 'update-attendees';
+	$('#update_preferred_supplier').on('click', function () {
+		var strUrl = '/stock/pre_supplier/update/' + preferredID;
+		var formName = 'edit-preferred-supplier-form';
+		var modalID = 'edit-preferred-supplier-modal';
+		var submitBtnID = 'update_preferred_supplier';
 		var successMsgTitle = 'Changes Saved!';
-		var redirectUrl = '/meeting_minutes/view_meeting/' + {{$products->id}} + '/view';
-		var successMsg = 'Meeting details has been updated successfully.';
+		var redirectUrl = '/stock/stockinfo/' + {{$products->id}};
+		var successMsg = 'Preferred Supplier details has been updated successfully.';
 		var method = 'PATCH';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 	});

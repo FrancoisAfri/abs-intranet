@@ -11,14 +11,20 @@ use App\product_category;
 use App\product_packages;
 use App\product_price;
 use App\product_products;
+use App\ContactCompany;
+use App\stockInfo;
+use App\productsPrefferedSuppliers;
 use App\productsPreferredSupplier;
 use App\product_promotions;
 use App\stockhistory;
 use App\ProductServiceSettings;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use Intervention\Image\ImageManagerStatic as Image;
 // use App\product_category;
 class Product_categoryController extends Controller
 {
@@ -74,24 +80,16 @@ class Product_categoryController extends Controller
                 ->where('user_id', Auth::user()->person->user_id)
                 ->first();
             $jobCategories = product_category::orderBy('name', 'asc')->get();
-            $products = product_products::orderBy('name', 'asc')->get();
+            //$products = product_products::orderBy('name', 'asc')->get();
             //$Category->load('productCategory');
 			
-			$products = product_products::select('Product_products.*','vehicle_details.id as id'
-					,'vehicle_details.fleet_number as fleet_number'
-					,'vehicle_details.vehicle_registration as vehicle_registration' 
-					,'Product_products.name as product_name', 'hr_people.first_name as name',
-					'hr_people.surname as surname', 'hr.first_name as allocated_firstname'
-					, 'hr.surname as allocated_surname')
-            ->leftJoin('hr_people', 'stock_history.user_id', '=', 'hr_people.id')
-            ->leftJoin('hr_people as hr', 'stock_history.user_allocated_id', '=', 'hr.id')
-            ->leftJoin('Product_products', 'stock_history.product_id', '=', 'Product_products.id')
-            ->leftJoin('vehicle_details', 'stock_history.vehicle_id', '=', 'vehicle_details.id')
-             ->orderBy('product_name', 'asc')
-            ->orderBy('stock_history.id', 'asc')
-			->where('category_id', $Category->id)
+			$products = product_products::select('Product_products.*','stock.avalaible_stock')
+            ->leftJoin('stock', 'stock.product_id', '=', 'Product_products.id')
+             ->orderBy('Product_products.name', 'asc')
+            ->orderBy('Product_products.id', 'name')
+			->where('Product_products.category_id', $Category->id)
             ->get();
-			
+			//return $products;
             $data['page_title'] = 'Manage Products Product';
             $data['page_description'] = 'Products page';
             $data['breadcrumb'] = [
@@ -100,7 +98,6 @@ class Product_categoryController extends Controller
             ];
 
 			$stockTypeArray = array(1 => 'Stock Item', 2 => 'Non Stock Item', 3 => 'Both');
-            $data['jobCategories'] = $jobCategories;
             $data['userAccess'] = $userAccess;
             $data['category'] = $Category;
             $data['products'] = $products;
@@ -230,7 +227,7 @@ class Product_categoryController extends Controller
     {
         if ($product->status == 1) {
 			$product = $product->load('infosProduct');
-			
+			$ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
             $data['page_title'] = 'Manage Package_Products Stock Info';
             $data['page_description'] = 'Stock Informations';
             $data['breadcrumb'] = [
@@ -267,6 +264,7 @@ class Product_categoryController extends Controller
             $data['products'] = $product;
             $data['productPreferreds'] = $productPreferreds;
             $data['productActivities'] = $productActivities;
+            $data['ContactCompany'] = $ContactCompany;
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Categories';
             AuditReportsController::store('Products', 'Job Titles Page Accessed', 'Accessed by User', 0);
@@ -289,13 +287,20 @@ class Product_categoryController extends Controller
         $stock = new stockInfo();
         $stock->location = $request->input('location');
         $stock->description = $request->input('description');
-        $stock->product_id = $request->input('stock_type');
+        $stock->allow_vat = $request->input('allow_vat');
+        $stock->mass_net = $request->input('mass_net');
+        $stock->minimum_level = $request->input('minimum_level');
+        $stock->maximum_level = $request->input('maximum_level');
+        $stock->bar_code = $request->input('bar_code');
+        $stock->unit = $request->input('unit');
+        $stock->commodity_code = $request->input('commodity_code');
+        $stock->product_id = $product->id;
         $stock->save();
 		
 		//Upload Image picture
         if ($request->hasFile('picture')) {
             $fileExt = $request->file('picture')->extension();
-            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('picture')->isValid()) {
                 $fileName = time() . "picture." . $fileExt;
                 $request->file('picture')->storeAs('Producrs/images', $fileName);
                 //Update file name in the database
@@ -307,7 +312,88 @@ class Product_categoryController extends Controller
         AuditReportsController::store('Products', 'Stock Info Added', 'Actioned By User', 0);
         return response()->json();
     }
-//
+	
+	public function updateStockInfo(Request $request, stockInfo $stock)
+    {
+        $this->validate($request, [
+            'location' => 'required',
+            'description' => 'required',
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $stock->location = $request->input('location');
+        $stock->description = $request->input('description');
+        $stock->allow_vat = $request->input('allow_vat');
+        $stock->mass_net = $request->input('mass_net');
+        $stock->minimum_level = $request->input('minimum_level');
+        $stock->maximum_level = $request->input('maximum_level');
+        $stock->bar_code = $request->input('bar_code');
+        $stock->unit = $request->input('unit');
+        $stock->commodity_code = $request->input('commodity_code');
+        $stock->update();
+		
+		//Upload Image picture
+        if ($request->hasFile('picture')) {
+            $fileExt = $request->file('picture')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('picture')->isValid()) {
+                $fileName = time() . "picture." . $fileExt;
+                $request->file('picture')->storeAs('Producrs/images', $fileName);
+                //Update file name in the database
+                $stock->picture = $fileName;
+                $stock->update();
+            }
+        }
+		
+        AuditReportsController::store('Products', 'Stock Info Updated', 'Actioned By User', 0);
+        return response()->json();
+    }
+
+	public function addPreferredSupplier(Request $request, product_products $product)
+    {
+        $this->validate($request, [
+            'supplier_id' => 'required',
+            'inventory_code' => 'required',
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $productsPrefferedSuppliers = new productsPrefferedSuppliers();
+        $productsPrefferedSuppliers->order_no = $request->input('order_no');
+        $productsPrefferedSuppliers->supplier_id = $request->input('supplier_id');
+        $productsPrefferedSuppliers->status = 1;
+        $productsPrefferedSuppliers->description = $request->input('description');
+        $productsPrefferedSuppliers->inventory_code = $request->input('inventory_code');
+        $productsPrefferedSuppliers->product_id = $product->id;
+        $productsPrefferedSuppliers->save();
+		
+        AuditReportsController::store('Products', 'Product Preferred Suppliers Added', 'Actioned By User', 0);
+        return response()->json();
+    }
+	
+	public function updatePreSupplier(Request $request, productsPrefferedSuppliers $preferred)
+    {
+        $this->validate($request, [
+            'supplier_id' => 'required',
+            'inventory_code' => 'required',
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $preferred->order_no = $request->input('order_no');
+        $preferred->supplier_id = $request->input('supplier_id');
+        $preferred->description = $request->input('description');
+        $preferred->inventory_code = $request->input('inventory_code');
+        $preferred->update();
+		
+        AuditReportsController::store('Products', 'Stock Info Updated', 'Actioned By User', 0);
+        return response()->json();
+    }
+
+	
     //add product to packages
 
     public function viewProducts(product_packages $package)
