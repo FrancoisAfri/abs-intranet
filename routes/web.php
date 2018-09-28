@@ -300,8 +300,11 @@ Route::post('product/package/Search', 'Product_categoryController@packageSearch'
 Route::post('product/promotion/Search', 'Product_categoryController@promotionSearch');
 //
 Route::get('/stock/stockinfo/{product}', 'Product_categoryController@stockInfos');
-Route::post('/stock/stock_info/add/{product}', 'Product_categoryController@addStockInfo');
-Route::patch('stock/stock_info/edit/{stock}', 'Product_categoryController@updateStockInfo');
+Route::post('stock/stock_info/add/{product}', 'Product_categoryController@addStockInfo');
+Route::patch('stock/stock_info/update/{stock}', 'Product_categoryController@updateStockInfo');
+Route::post('stock/pre_supplier/add/{product}', 'Product_categoryController@addPreferredSupplier');
+Route::patch('stock/stock_info/update/{stock}', 'Product_categoryController@updateStockInfo');
+Route::patch('stock/pre_supplier/update/{preferred}', 'Product_categoryController@updatePreSupplier');
 //Help Desk
 Route::get('helpdesk/setup', 'HelpdeskController@viewsetup');
 Route::post('help_desk/system/add', 'HelpdeskController@systemAdd');

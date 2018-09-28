@@ -18,7 +18,6 @@
 								<input type="text" class="form-control" id="description" name="description"
 									   value="" placeholder="Enter Description">
 							</div>
-
 						</div>
 						<div class="form-group hours-field">
 							<label for="location" class="col-sm-2 control-label">Location</label>
@@ -26,15 +25,13 @@
 								<input type="text" class="form-control" id="location" name="location" value=""
 									   placeholder="Enter Location">
 							</div>
-
 						</div>
 						<div class="form-group hours-field">
 							<label for="allow_vat" class="col-sm-2 control-label">Allow Vat</label>
 							<div class="col-sm-8">
 								<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_allow_vat_yes" name="allow_vat" value="1" checked> Yes</label>
-								<label class="radio-inline"><input type="radio" id="rdo_allow_vat_no" name="allow_vat" value="0"> No</label> 
+								<label class="radio-inline"><input type="radio" id="rdo_allow_vat_no" name="allow_vat" value="2"> No</label> 
 							</div>
-
 						</div>
 						<div class="form-group hours-field">
 							<label for="mass_net" class="col-sm-2 control-label">Mass Net</label>
@@ -42,7 +39,6 @@
 								<input type="text" class="form-control" id="mass_net" name="mass_net" value=""
 									   placeholder="Enter Mass Net">
 							</div>
-
 						</div>
 						<div class="form-group hours-field">
 							<label for="minimum_level" class="col-sm-2 control-label">Minimum Level</label>
@@ -50,7 +46,6 @@
 								<input type="number" class="form-control" id="minimum_level" name="minimum_level" value=""
 									   placeholder="Enter Minimum Level">
 							</div>
-
 						</div>
 						<div class="form-group hours-field">
 							<label for="maximum_level" class="col-sm-2 control-label">Maximum Level</label>
@@ -58,7 +53,6 @@
 								<input type="text" class="form-control" id="maximum_level" name="maximum_level" value=""
 									   placeholder="Enter Maximum Level">
 							</div>
-
 						</div>
 						<div class="form-group hours-field">
 							<label for="bar_code" class="col-sm-2 control-label">Bar Code</label>
@@ -66,7 +60,6 @@
 								<input type="text" class="form-control" id="bar_code" name="bar_code" value=""
 									   placeholder="Enter Bar Code">
 							</div>
-
 						</div>
 						<div class="form-group hours-field">
 							<label for="unit" class="col-sm-2 control-label">Unit</label>
@@ -74,7 +67,6 @@
 								<input type="text" class="form-control" id="unit" name="unit" value=""
 									   placeholder="Enter Unit">
 							</div>
-
 						</div>
 						<div class="form-group hours-field">
 							<label for="commodity_code" class="col-sm-2 control-label">Commodity Code</label>

@@ -760,8 +760,8 @@ class VehicleManagemntController extends Controller
 
         $hrDetails = HRPerson::where('status', 1)->get();
 
-        $companyID = $request['company_id'];
-        $departmentID = $request['department_id'];
+        $companyID = $request['division_level_5'];
+        $departmentID = $request['division_level_4'];
         $propertyID = $request['property_type'];
         $vehicleID = $request['vehicle_type'];
         $fleetID = $request['fleet_number'];

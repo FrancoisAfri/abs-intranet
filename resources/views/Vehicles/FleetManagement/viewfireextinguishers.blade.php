@@ -331,21 +331,17 @@
 				modal.find('select#supplier_id').val(supplierID).trigger("change");
 				modal.find('#date_purchased').val(datePurchased);
 				modal.find('#Cost').val(amount);
-				//modal.find('#fire_image').val(fireImage);
 				modal.find('#fire_image').attr("src", fireImage);
-				//$(".edit-fire-extinghuisher-modal #fire_image").attr("src", fireImage);
-				console.log(fireDocument);
 			});
 			
 			$('#update-fire-extinguishers').on('click', function() {
-				
-					var strUrl = '/vehicle_management/editfireexting/' + fireID;
-					var formName = 'edit-fireextinguishers-form';
-					var modalID = 'edit-fire-extinghuisher-modal';
-					var submitBtnID = 'update-fire-extinguishers';
-					var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
-					var successMsgTitle = 'The Record  has been updated successfully';
-                    var successMsg = 'The Record  has been updated successfully.';
+				var strUrl = '/vehicle_management/editfireexting/' + fireID;
+				var formName = 'edit-fireextinguishers-form';
+				var modalID = 'edit-fire-extinghuisher-modal';
+				var submitBtnID = 'update-fire-extinguishers';
+				var redirectUrl = '/vehicle_management/fire_extinguishers/{{ $maintenance->id }}';
+				var successMsgTitle = 'The Record  has been updated successfully';
+				var successMsg = 'The Record  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 			
