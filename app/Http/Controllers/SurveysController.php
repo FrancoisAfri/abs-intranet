@@ -44,7 +44,6 @@ class SurveysController extends Controller
         $data['active_mod'] = 'Survey';
         $data['active_rib'] = 'Reports';
         AuditReportsController::store('Survey', 'Reports page accessed', "Accessed by User", 0);
-
         return view('survey.reports.survey_report_index')->with($data);
     }
 
