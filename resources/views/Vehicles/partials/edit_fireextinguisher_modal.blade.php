@@ -76,10 +76,10 @@
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="date_purchased" class="col-sm-2 control-label">Date Purchased </label>
+                        <label for="date_purchaseds" class="col-sm-2 control-label">Date Purchased </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="date_purchased" name="date_purchased"
-                                   value="{{ old('date_purchased') }}" placeholder="Select  Purchased date ...">
+                            <input type="text" class="form-control" id="date_purchaseds" name="date_purchased"
+                                   value="{{ old('date_purchaseds') }}" placeholder="Select  Purchased date ...">
                         </div>
                     </div>   
                     <div class="form-group">

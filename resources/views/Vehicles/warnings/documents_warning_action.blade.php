@@ -10,6 +10,8 @@
                 <h4 class="modal-title"><i class="fa fa-warning"></i> {{ $modal_title }}</h4>
             </div>
             <div class="modal-body">
+			<div id="invalid-input-alert"></div>
+            <div id="success-alert"></div>
 			<form>
 			<input type="hidden">
                 <p>{{ $modal_content }}</p>

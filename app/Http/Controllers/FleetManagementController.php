@@ -1018,10 +1018,8 @@ class FleetManagementController extends Controller
                 $vehicledocumets->update();
             }
         }
-
         AuditReportsController::store('Vehicle FleetDocumentType', 'Fleet Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
-
     }
 
     public function editVehicleDoc(Request $request, vehicle_documets $vehicledocumets)
@@ -1030,7 +1028,6 @@ class FleetManagementController extends Controller
             'type' => 'required',
             'description' => 'required',
             'date_from' => 'required',
-            'exp_date' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -1068,14 +1065,12 @@ class FleetManagementController extends Controller
 
     }
 
-    public function deleteDoc(vehicle_documets $documents)
+    public function deleteDoc(Request $request, vehicle_documets $document)
     {
-
-        $documents->delete();
+        $document->delete();
 
         AuditReportsController::store('Fleet Management', 'document  Deleted', "document has been deleted", 0);
-        return back();
-        //return redirect('/vehicle_management/document/$maintenance->id');
+        return response()->json();
     }
 
     public function ActivateDoc(vehicle_documets $documents){

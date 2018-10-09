@@ -571,7 +571,7 @@ Route::get('vehicle_management/reminder_act/{reminder}', 'VehicleFleetController
 Route::get('vehicle_management/reminder/{reminder}/delete', 'VehicleFleetController@deletereminder');
 
 Route::post('vehicle_management/add_new_document', 'FleetManagementController@newdocument');
-Route::get('vehicle_management/document/{documents}/delete', 'FleetManagementController@deleteDoc');
+Route::post('vehicle_management/document/delete/{document}', 'FleetManagementController@deleteDoc');
 Route::patch('vehicle_management/edit_vehicledoc/{vehicledocumets}', 'FleetManagementController@editVehicleDoc');
 
 Route::get('vehicle_management/vehicledoc_act/{documents}', 'FleetManagementController@ActivateDoc');

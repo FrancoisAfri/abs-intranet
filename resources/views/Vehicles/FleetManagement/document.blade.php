@@ -24,7 +24,7 @@
                         </button>
                     </div>
                 </div>
-            <!-- /.box-header -->
+				<!-- /.box-header -->
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -139,6 +139,7 @@
 													@endif
 												</div>
 											</td>
+											<td bgcolor="red">{{ !empty($document->documentType) ? $document->documentType->name : ''}}</td>
 											<td bgcolor="red">{{ !empty($document->description) ? $document->description : ''}}</td>
 											<td bgcolor="red">{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
 											<td bgcolor="red">{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : '' }}</td>
@@ -150,7 +151,8 @@
 											</td>
 											<td bgcolor="red">
 												<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-														data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
+														data-target="#delete-documents-warning-modal"
+														data-id="{{ $document->id }}"><i class="fa fa-trash"></i>
 													Delete
 												</button>
 											</td>
@@ -162,8 +164,8 @@
 														data-id="{{ $document->id }}" data-type="{{ $document->type }}"
 														data-description="{{ $document->description }}"
 														data-role="{{ $document->role }}"
-														data-datefrom="{{  date(' d M Y', $document->date_from) }}"
-														data-expdate="{{ date(' d M Y', $document->exp_date) }}"
+														data-datefrom="{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : ''}}"
+														data-expdate="{{ !empty($document->exp_date) ? date(' d M Y', $document->exp_date) : ''}}"
 														data-doc_document="{{ (!empty($document->document)) ? Storage::disk('local')->url("Vehicle/documents/$document->document") : '' }}"
 												><i class="fa fa-pencil-square-o"></i> Edit
 												</button>
@@ -192,7 +194,8 @@
 											</td>
 											<td>
 												<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-														data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
+														data-target="#delete-documents-warning-modal"
+														data-id="{{ $document->id }}"><i class="fa fa-trash"></i>
 													Delete
 												</button>
 											</td>
@@ -202,7 +205,7 @@
 								@endforeach
 							@else
 								<tr id="categories-list">
-									<td colspan="7">
+									<td colspan="9">
 										<div class="alert alert-danger alert-dismissable">
 											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
 												&times;
@@ -235,192 +238,189 @@
         </div>
         @endsection
 
-        @section('page_script')
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-            <!-- iCheck -->
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                    type="text/javascript"></script>
-            <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-                    type="text/javascript"></script>
-            <!-- the main fileinput plugin file -->
-            <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-            <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-            <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+@section('page_script')
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+	<!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+			type="text/javascript"></script>
+	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+			type="text/javascript"></script>
+	<!-- the main fileinput plugin file -->
+	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
-            <!-- InputMask -->
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script>
-                function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/vehicledoc_act/" + id;
+	<!-- InputMask -->
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script>
+		function postData(id, data) {
+			if (data == 'actdeac') location.href = "/vehicle_management/vehicledoc_act/" + id;
 
-                }
+		}
 
-                $('#back_button').click(function () {
-                    location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-                });
+		$('#back_button').click(function () {
+			location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+		});
 
-                $(function () {
-                    $('#back_button').click(function () {
-                        location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-                    });
-                    var moduleId;
-                    //Initialize Select2 Elements
-                    $(".select2").select2();
-                    $('.zip-field').hide();
-                    $('.sex-field').hide();
+		$(document).ready(function () {
+			$('#date_from').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			$('#exp_date').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			$('#date_froms').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			$('#exp_dates').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+		});
+		 function hideFields() {
+			var allType = $("input[name='upload_type']:checked").val();
+			if (allType == 1) {
+				$('.zip-field').hide();
+				$('.user-field').show();
+			}
+			else if (allType == 2) {
+				$('.user-field').hide();
+				$('.zip-field').show();
+			}
+			return allType;
+		}
+		$(function () {
+			$('#back_button').click(function () {
+				location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+			});
+			var moduleId;
+			//Initialize Select2 Elements
+			$(".select2").select2();
+			$('.zip-field').hide();
+			$('.sex-field').hide();
+			//Tooltip
+			$('[data-toggle="tooltip"]').tooltip();
 
+			//Vertically center modals on page
+			function reposition() {
+				var modal = $(this),
+					dialog = modal.find('.modal-dialog');
+				modal.css('display', 'block');
 
-                    //Tooltip
+				// Dividing by two centers the modal exactly, but dividing by three
+				// or four works better for larger screens.
+				dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+			}
 
-                    $('[data-toggle="tooltip"]').tooltip();
+			// Reposition when a modal is shown
+			$('.modal').on('show.bs.modal', reposition);
+			// Reposition when the window is resized
+			$(window).on('resize', function () {
+				$('.modal:visible').each(reposition);
+			});
 
-                    //Vertically center modals on page
-                    function reposition() {
-                        var modal = $(this),
-                            dialog = modal.find('.modal-dialog');
-                        modal.css('display', 'block');
+			//Show success action modal
+			$('#success-action-modal').modal('show');
+			$(".js-example-basic-multiple").select2();
 
-                        // Dividing by two centers the modal exactly, but dividing by three
-                        // or four works better for larger screens.
-                        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                    }
+			$(function () {
+				$('img').on('click', function () {
+					$('.enlargeImageModalSource').attr('src', $(this).attr('src'));
+					$('#enlargeImageModal').modal('show');
+				});
+			});
 
-                    // Reposition when a modal is shown
-                    $('.modal').on('show.bs.modal', reposition);
-                    // Reposition when the window is resized
-                    $(window).on('resize', function () {
-                        $('.modal:visible').each(reposition);
-                    });
+			//Initialize iCheck/iRadio Elements
+			$('input').iCheck({
+				checkboxClass: 'icheckbox_square-blue',
+				radioClass: 'iradio_square-blue',
+				increaseArea: '10%' // optional
+			});
+			
+			$('#rdo_single, #rdo_bulke').on('ifChecked', function () {
+				var allType = hideFields();
+				if (allType == 1) $('#box-subtitle').html('Site Address');
+				else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
+			});
 
-                    //Show success action modal
-                    $('#success-action-modal').modal('show');
+		//Post perk form to server using ajax (add)
+		$('#add_document').on('click', function () {
+			var strUrl = '/vehicle_management/add_new_document';
+			var formName = 'add-document-form';
+			var modalID = 'add-document-modal';
+			var submitBtnID = 'add_document';
+			var redirectUrl = '/vehicle_management/document/{{ $maintenance->id }}';
+			var successMsgTitle = 'New Documents Details Added!';
+			var successMsg = 'The Documents Details has been updated successfully.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
 
-                    //
+		var docID;
+		$('#edit-newdoc-modal').on('shown.bs.modal', function (e) {
+			var btnEdit = $(e.relatedTarget);
+			docID = btnEdit.data('id');
+			var type = btnEdit.data('type');
+			var description = btnEdit.data('description');
+			var role = btnEdit.data('start_date');
+			var date_from = btnEdit.data('datefrom');
+			var exp_date = btnEdit.data('expdate');
+			var docDocument = btnEdit.data('doc_document');
+			var modal = $(this);
+			modal.find('#type').val(type);
+			modal.find('#description').val(description);
+			modal.find('#role').val(role);
+			modal.find('#date_froms').val(date_from);
+			modal.find('#exp_dates').val(exp_date);
+			if(docDocument === '') { $("a[href='http://afrixcel.co.za/']").attr('href', "http://afrixcel.co.za/");}
+			else{ $("a[href='http://afrixcel.co.za/']").attr('href', docDocument);}
+			//$("a").attr("href", docDocument)
+		});
 
-                    $(".js-example-basic-multiple").select2();
-
-                    $('.datepicker').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                    $(function () {
-                        $('img').on('click', function () {
-                            $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
-                            $('#enlargeImageModal').modal('show');
-                        });
-                    });
-
-                    //Initialize iCheck/iRadio Elements
-                    $('input').iCheck({
-                        checkboxClass: 'icheckbox_square-blue',
-                        radioClass: 'iradio_square-blue',
-                        increaseArea: '10%' // optional
-                    });
-
-                        $('#date_from').datepicker({
-                            format: 'dd/mm/yyyy',
-                            autoclose: true,
-                            todayHighlight: true
-                        });
-
-                    });
-
-                    $('#exp_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                     $('#expdate').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                     $('#datefrom').datepicker({
-                            format: 'dd/mm/yyyy',
-                            autoclose: true,
-                            todayHighlight: true
-                        });
-
-                $('#rdo_single, #rdo_bulke').on('ifChecked', function () {
-                    var allType = hideFields();
-                    if (allType == 1) $('#box-subtitle').html('Site Address');
-                    else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
-                });
-
-
-                function hideFields() {
-                    var allType = $("input[name='upload_type']:checked").val();
-                    if (allType == 1) {
-                        $('.zip-field').hide();
-                        $('.user-field').show();
-                    }
-                    else if (allType == 2) {
-                        $('.user-field').hide();
-                        $('.zip-field').show();
-                    }
-                    return allType;
-                }
-
-                //Post perk form to server using ajax (add)
-                $('#add_document').on('click', function () {
-                    var strUrl = '/vehicle_management/add_new_document';
-                    var formName = 'add-document-form';
-                    var modalID = 'add-document-modal';
-                    var submitBtnID = 'add_document';
-                    var redirectUrl = '/vehicle_management/document/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Documents Details Added!';
-                    var successMsg = 'The Documents Details has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-
-                var docID;
-                $('#edit-newdoc-modal').on('show.bs.modal', function (e) {
-                    var btnEdit = $(e.relatedTarget);
-                    docID = btnEdit.data('id');
-                    var type = btnEdit.data('type');
-                    var description = btnEdit.data('description');
-                    var role = btnEdit.data('start_date');
-                    var date_from = btnEdit.data('datefrom');
-                    var exp_date = btnEdit.data('expdate');
-					var docDocument = btnEdit.data('doc_document');
-                    var modal = $(this);
-                    modal.find('#type').val(type);
-                    modal.find('#description').val(description);
-                    modal.find('#role').val(role);
-                    modal.find('#date_from').val(date_from);
-                    modal.find('#exp_date').val(exp_date);
-					if(docDocument === '') { $("a[href='http://afrixcel.co.za/']").attr('href', "http://afrixcel.co.za/");}
-					else{ $("a[href='http://afrixcel.co.za/']").attr('href', docDocument);}
-					//$("a").attr("href", docDocument)
-                });
-
-                $('#edit_doc').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_vehicledoc/' + docID;
-                    var formName = 'edit-newdoc-form';
-                    var modalID = 'edit-newdoc-modal';
-                    var submitBtnID = 'edit_doc';
-                    var redirectUrl = '/vehicle_management/document/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Documents Details have been updated!';
-                    var successMsg = 'The Documents Details has been updated successfully.';
-                    var Method = 'PATCH';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-
-            </script>
+		$('#edit_doc').on('click', function () {
+			var strUrl = '/vehicle_management/edit_vehicledoc/' + docID;
+			var formName = 'edit-newdoc-form';
+			var modalID = 'edit-newdoc-modal';
+			var submitBtnID = 'edit_doc';
+			var redirectUrl = '/vehicle_management/document/{{ $maintenance->id }}';
+			var successMsgTitle = 'New Documents Details have been updated!';
+			var successMsg = 'The Documents Details has been updated successfully.';
+			var Method = 'PATCH';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+		
+		$('#delete-documents-warning-modal').on('shown.bs.modal', function (e) {
+			var btnDelete = $(e.relatedTarget);
+			docID = btnDelete.data('id');
+		});
+		$('#delete_documents').on('click', function () {
+			var strUrl = '/vehicle_management/document/delete/' + docID;
+			var formName = 'delete-documents-warning-modal-form';
+			var modalID = 'delete-documents-warning-modal';
+			var submitBtnID = 'delete_documents';
+			var redirectUrl = '/vehicle_management/document/{{ $maintenance->id }}';
+			var successMsgTitle = 'Document Successfully Deleted!';
+			var successMsg = 'Document has been deleted successfully.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+	});
+	</script>
 @endsection
