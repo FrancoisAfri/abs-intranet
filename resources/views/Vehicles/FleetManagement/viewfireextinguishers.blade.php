@@ -130,7 +130,7 @@
                                                 data-supplier_id="{{ $extinguishers->supplier_id }}" data-date_purchased="{{date(' d M Y', $extinguishers->date_purchased)}}"
                                                 data-cost="{{ $extinguishers->Cost }}"
                                                 data-fire_image="{{ (!empty($extinguishers->image)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/images/$extinguishers->image") : 'http://placehold.it/60x50' }}"
-												data-fire_document="{{ (!empty($extinguishers->attachement)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/document/$extinguishers->attachement") : '<a class="btn btn-default btn-flat btn-block"><i class="fa fa-exclamation-triangle"></i> Nothing Was Uploaded</a>' }}"		
+												data-fire_document="{{ (!empty($extinguishers->attachement)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/document/$extinguishers->attachement") : '' }}"	
 												>
 												<i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -319,7 +319,6 @@
 				var amount = btnEdit.data('cost');
 				var fireImage = btnEdit.data('fire_image');
 				var fireDocument = btnEdit.data('fire_document');
-
 				var modal = $(this);
 				modal.find('#bar_code').val(barCode);
 				modal.find('#item_no').val(itemNo);
@@ -332,6 +331,9 @@
 				modal.find('#date_purchased').val(datePurchased);
 				modal.find('#Cost').val(amount);
 				modal.find('#fire_image').attr("src", fireImage);
+				if(fireDocument === '') { $("a[href='http://afrixcel.co.za/']").attr('href', "http://afrixcel.co.za/");}
+				else{ $("a[href='http://afrixcel.co.za/']").attr('href', fireDocument);}
+				//$("a").attr("href", fireDocument)
 			});
 			
 			$('#update-fire-extinguishers').on('click', function() {

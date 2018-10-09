@@ -1326,8 +1326,8 @@ class FleetManagementController extends Controller
                 $fileName = time() . "_fire_documents." . $fileExt;
                 $request->file('documents')->storeAs('Vehicle/fireextinguishers/document', $fileName);
                 //Update file name in the table
-                $vehiclefirextinguishers->attachement = $fileName;
-                $vehiclefirextinguishers->update();
+                $extinguishers->attachement = $fileName;
+                $extinguishers->update();
             }
         }
         AuditReportsController::store('Fleet Management', 'Vehicle Fire Extinguishers Updated', "Accessed by User", 0);

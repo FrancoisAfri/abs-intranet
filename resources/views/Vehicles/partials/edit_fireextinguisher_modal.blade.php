@@ -109,7 +109,9 @@
                         <div class="col-sm-8">
                             <input type="file" id="documents" name="documents"
                                    class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
-                                   data-show-upload="false">
+                                   data-show-upload="false"> 
+								<a class="btn btn-default btn-flat btn-block btn-xs" href="http://afrixcel.co.za/"
+									target="_blank"><i class="fa fa-file-pdf-o"></i>Document</a>
                         </div>
                     </div> 
                     <input type="hidden" id="vehicle_id" name="vehicle_id"

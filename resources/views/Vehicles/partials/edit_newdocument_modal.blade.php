@@ -28,7 +28,6 @@
                         {{--</div>--}}
 
                     {{--</div>--}}
-
                     <div class="form-group">
                         <label for="type" class="col-sm-2 control-label"> Type</label>
                         <div class="col-sm-8">
@@ -56,7 +55,6 @@
 
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="path" class="col-sm-2 control-label">Description </label>
                         <div class="col-sm-8">
@@ -64,7 +62,6 @@
                                    value=" " placeholder="Enter  Description ...">
                         </div>
                     </div>
-
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Upload </label>
                         <div class="col-sm-8">
@@ -75,11 +72,11 @@
                                 <input type="file" id="documents" name="documents"
                                        class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc", "xlsx"]'
                                        data-show-upload="false">
+								<a class="btn btn-default btn-flat btn-block btn-xs" href="http://afrixcel.co.za/"
+									target="_blank"><i class="fa fa-file-pdf-o"></i>Document</a>	   
                             </div>
                         </div>
                     </div>
-
-
                     <div class="form-group ">
                         <label for="path" class="col-sm-2 control-label"> Date From</label>
                         <div class="col-sm-8">
@@ -94,20 +91,6 @@
                                    value="{{ old('exp_date') }}" placeholder="Select  Expiry date ...">
                         </div>
                     </div>
-
-                    {{--<div class="form-group">--}}
-                        {{--<label for="role" class="col-sm-2 control-label">Role</label>--}}
-                        {{--<div class="col-sm-8">--}}
-                            {{--<select class="form-control select2" style="width: 100%;" id="role" name="role">--}}
-                                {{--<option value="">*** Select a Role ***</option>--}}
-                                {{--@foreach($employees as $employee)--}}
-                                    {{--<option value="{{ $employee->id }}"> {{ !empty($employee->first_name . ' ' . $employee->surname) ? $employee->first_name . ' ' . $employee->surname : ''}}</option>--}}
-                                {{--@endforeach--}}
-                            {{--</select>--}}
-                        {{--</div>--}}
-                    {{--</div>--}}
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
