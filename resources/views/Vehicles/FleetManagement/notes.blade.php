@@ -135,9 +135,6 @@
 											@endif
 										</div>
 									</td>
-
-
-
                                     <td>
                                         <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
                                                 data-target="#delete-note-warning-modal" data-id="{{ $document->id }}"><i class="fa fa-trash"></i>
