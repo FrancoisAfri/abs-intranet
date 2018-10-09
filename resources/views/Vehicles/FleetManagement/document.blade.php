@@ -108,98 +108,93 @@
                             <th>Date From</th>
                             <th>Expiry Date</th>
                             <th style="width: 5px; text-align: center;"></th>
+                            <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($vehicleDocumets) > 0)
                             @foreach ($vehicleDocumets as $document)
                                 <tr id="categories-list">
-                                  
-                                     @if (isset($document) && $document->exp_date < $currentTime)
-                                       <td bgcolor="red" nowrap>
-                                        <button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-newdoc-modal"
-                                                data-id="{{ $document->id }}" data-type="{{ $document->type }}"
-                                                data-description="{{ $document->description }}"
-                                                data-role="{{ $document->role }}"
-                                                data-date_from="{{  date(' d M Y', $document->date_from) }}"
-                                                data-exp_date="{{ date(' d M Y', $document->exp_date) }}"
-                                        ><i class="fa fa-pencil-square-o"></i> Edit
-                                        </button>
-                                    </td>
-
-                                    <td bgcolor="red" nowrap>
-                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($document->document))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ Storage::disk('local')->url("Vehicle/documents/$document->document") }}"
-                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td bgcolor="red">{{ !empty($document->description) ? $document->description : ''}}</td>
-                                    <td bgcolor="red">{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
-                                    <td bgcolor="red">{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : '' }}</td>
-                                    <td bgcolor="red">{{ !empty($document->exp_date) ? date(' d M Y', $document->exp_date) : '' }}</td>
-                                     <td bgcolor="red">
-                                        <button vehice="button" id="view_ribbons" class="btn {{ (!empty($document->status) && $document->status == 1) ? " btn-danger " : "btn-success " }}
-                                          btn-xs" onclick="postData({{$document->id}}, 'actdeac');"><i class="fa {{ (!empty($document->status) && $document->status == 1) ?
-                                          " fa-times " : "fa-check " }}"></i> {{(!empty($document->status) && $document->status == 1) ? "De-Activate" : "Activate"}}</button>
-                                     </td>
-                                    <td bgcolor="red">
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
-                                            Delete
-                                        </button>
-                                    </td>
-                                                     <td bgcolor="red"> Expired </td>
-                                                 @else
-                                                
-                                    <td nowrap>
-                                        <button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
-                                                data-toggle="modal" data-target="#edit-newdoc-modal"
-                                                data-id="{{ $document->id }}" data-type="{{ $document->type }}"
-                                                data-description="{{ $document->description }}"
-                                                data-role="{{ $document->role }}"
-                                                data-datefrom="{{  date(' d M Y', $document->date_from) }}"
-                                                data-expdate="{{ date(' d M Y', $document->exp_date) }}"
-                                        ><i class="fa fa-pencil-square-o"></i> Edit
-                                        </button>
-                                    </td>
-
-                                    <td nowrap>
-                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($document->document))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ Storage::disk('local')->url("Vehicle/documents/$document->document") }}"
-                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
-                                    </td>
-                                    <td>{{ !empty($document->documentType) ? $document->documentType->name : ''}}</td>
-                                    <td>{{ !empty($document->description) ? $document->description : ''}}</td>
-                                    <td>{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
-                                    <td>{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : '' }}</td>
-                                    <td>{{ !empty($document->exp_date) ? date(' d M Y', $document->exp_date) : '' }}</td>
-                                     <td>
-                                        <button vehice="button" id="view_ribbons" class="btn {{ (!empty($document->status) && $document->status == 1) ? " btn-danger " : "btn-success " }}
-                                          btn-xs" onclick="postData({{$document->id}}, 'actdeac');"><i class="fa {{ (!empty($document->status) && $document->status == 1) ?
-                                          " fa-times " : "fa-check " }}"></i> {{(!empty($document->status) && $document->status == 1) ? "De-Activate" : "Activate"}}</button>
-                                     </td>
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
-                                            Delete
-                                        </button>
-                                    </td>
-                                    <td></td>
-                                               
-                                            @endif
-
+                                    @if (!empty($document->exp_date) && $document->exp_date < $currentTime))
+										<td bgcolor="red" nowrap>
+											<button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
+													data-toggle="modal" data-target="#edit-newdoc-modal"
+													data-id="{{ $document->id }}" data-type="{{ $document->type }}"
+													data-description="{{ $document->description }}"
+													data-role="{{ $document->role }}"
+													data-date_from="{{  date(' d M Y', $document->date_from) }}"
+													data-exp_date="{{ date(' d M Y', $document->exp_date) }}"
+											><i class="fa fa-pencil-square-o"></i> Edit
+											</button>
+										</td>
+										<td bgcolor="red" nowrap>
+											<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+												<label for="document" class="control-label"></label>
+												@if(!empty($document->document))
+													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+													   href="{{ Storage::disk('local')->url("Vehicle/documents/$document->document") }}"
+													   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+												@else
+													<a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+												@endif
+											</div>
+										</td>
+										<td bgcolor="red">{{ !empty($document->description) ? $document->description : ''}}</td>
+										<td bgcolor="red">{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
+										<td bgcolor="red">{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : '' }}</td>
+										<td bgcolor="red">{{ !empty($document->exp_date) ? date(' d M Y', $document->exp_date) : '' }}</td>
+										<td bgcolor="red">
+											<button vehice="button" id="view_ribbons" class="btn {{ (!empty($document->status) && $document->status == 1) ? " btn-danger " : "btn-success " }}
+											  btn-xs" onclick="postData({{$document->id}}, 'actdeac');"><i class="fa {{ (!empty($document->status) && $document->status == 1) ?
+											  " fa-times " : "fa-check " }}"></i> {{(!empty($document->status) && $document->status == 1) ? "De-Activate" : "Activate"}}</button>
+										</td>
+										<td bgcolor="red">
+											<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+													data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
+												Delete
+											</button>
+										</td>
+                                        <td bgcolor="red"> Expired </td>
+                                    @else           
+										<td nowrap>
+											<button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
+													data-toggle="modal" data-target="#edit-newdoc-modal"
+													data-id="{{ $document->id }}" data-type="{{ $document->type }}"
+													data-description="{{ $document->description }}"
+													data-role="{{ $document->role }}"
+													data-datefrom="{{  date(' d M Y', $document->date_from) }}"
+													data-expdate="{{ date(' d M Y', $document->exp_date) }}"
+											><i class="fa fa-pencil-square-o"></i> Edit
+											</button>
+										</td>
+										<td nowrap>
+											<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+												<label for="document" class="control-label"></label>
+												@if(!empty($document->document))
+													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+													   href="{{ Storage::disk('local')->url("Vehicle/documents/$document->document") }}"
+													   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+												@else
+													<a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+												@endif
+											</div>
+										</td>
+										<td>{{ !empty($document->documentType) ? $document->documentType->name : ''}}</td>
+										<td>{{ !empty($document->description) ? $document->description : ''}}</td>
+										<td>{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
+										<td>{{ !empty($document->date_from) ? date(' d M Y', $document->date_from) : '' }}</td>
+										<td>{{ !empty($document->exp_date) ? date(' d M Y', $document->exp_date) : '' }}</td>
+										<td>
+											<button vehice="button" id="view_ribbons" class="btn {{ (!empty($document->status) && $document->status == 1) ? " btn-danger " : "btn-success " }}
+											  btn-xs" onclick="postData({{$document->id}}, 'actdeac');"><i class="fa {{ (!empty($document->status) && $document->status == 1) ?
+											  " fa-times " : "fa-check " }}"></i> {{(!empty($document->status) && $document->status == 1) ? "De-Activate" : "Activate"}}</button>
+										</td>
+										<td>
+											<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+													data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
+												Delete
+											</button>
+										</td>
+										<td></td>       
+                                    @endif
                                 </tr>
                             @endforeach
                         @else

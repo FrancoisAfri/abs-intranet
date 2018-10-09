@@ -22,7 +22,7 @@
                 <form name="survey-report-form" class="form-horizontal" method="POST" action="/survey/reports" >
                     {{ csrf_field() }}
 
-                    <div class="box-body">
+                    <div class="box-body"  id="survey_report">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -34,22 +34,26 @@
                                 </ul>
                             </div>
                         @endif
-                        
                         @foreach($division_levels as $division_level)
-                            <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}{{ $loop->last ? ' last-level' : '' }}">
-                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
+                        <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                            <label for="{{ 'division_level_' . $division_level->level }}"
+                                   class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this)" style="width: 100%">
-                                        </select>
+                            <div class="col-sm-8">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-black-tie"></i>
                                     </div>
+                                    <select id="{{ 'division_level_' . $division_level->level }}"
+                                            name="{{ 'division_level_' . $division_level->level }}"
+                                            class="form-control select2"
+                                            onchange="divDDOnChange(this, null, 'survey_report')"
+                                            style="width: 100%;">
+                                    </select>
                                 </div>
                             </div>
-                        @endforeach
+                        </div>
+                    @endforeach
                         <div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employee(s)</label>
 
@@ -157,22 +161,21 @@
                 //minViewMode: "months",
                 todayHighlight: true
             });
-
-            //Load divisions drop down
-            var parentDDID = '';
-            var loadAllDivs = 1;
-            @foreach($division_levels as $division_level)
-            //Populate drop down on page load
-            var ddID = '{{ 'division_level_' . $division_level->level }}';
-            var postTo = '{!! route('divisionsdropdown') !!}';
-            var selectedOption = '';
-            var divLevel = parseInt('{{ $division_level->level }}');
-            var incInactive = -1;
-            var loadAll = loadAllDivs;
-            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-            parentDDID = ddID;
-            loadAllDivs = -1;
-            @endforeach
         });
+ //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+			//Populate drop down on page load
+			var ddID = '{{ 'division_level_' . $division_level->level }}';
+			var postTo = '{!! route('divisionsdropdown') !!}';
+			var selectedOption = '';
+			var divLevel = parseInt('{{ $division_level->level }}');
+			var incInactive = -1;
+			var loadAll = loadAllDivs;
+			loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+			parentDDID = ddID;
+			loadAllDivs = -1;
+        @endforeach
     </script>
 @endsection
