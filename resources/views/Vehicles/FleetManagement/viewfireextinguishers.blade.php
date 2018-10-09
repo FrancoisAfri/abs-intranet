@@ -127,7 +127,8 @@
                                                 data-item_no="{{ $extinguishers->item_no }}" data-description="{{$extinguishers->Description}}"
                                                 data-weight="{{ $extinguishers->Weight }}" data-serial_number="{{$extinguishers->Serial_number}}"
                                                 data-purchase_order="{{ $extinguishers->purchase_order }}" data-invoice_number="{{$extinguishers->invoice_number}}"
-                                                data-supplier_id="{{ $extinguishers->supplier_id }}" data-date_purchased="{{date(' d M Y', $extinguishers->date_purchased)}}"
+                                                data-supplier_id="{{ $extinguishers->supplier_id }}" 
+												data-date_purchased="{{ !empty($extinguishers->date_purchased) ? date(' d M Y', $extinguishers->date_purchased) : ''}}"
                                                 data-cost="{{ $extinguishers->Cost }}"
                                                 data-fire_image="{{ (!empty($extinguishers->image)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/images/$extinguishers->image") : 'http://placehold.it/60x50' }}"
 												data-fire_document="{{ (!empty($extinguishers->attachement)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/document/$extinguishers->attachement") : '' }}"	
@@ -257,6 +258,11 @@
 				autoclose: true,
 				todayHighlight: true
 			});
+			$('#date_purchaseds').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
 	
 		});
 
@@ -303,7 +309,7 @@
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
 			
-			$('#edit-fire-extinghuisher-modal').on('show.bs.modal', function (e) {
+			$('#edit-fire-extinghuisher-modal').on('shown.bs.modal', function (e) {
 				//console.log('kjhsjs');
 				var btnEdit = $(e.relatedTarget);
 				fireID = btnEdit.data('id');
@@ -328,7 +334,7 @@
 				modal.find('#purchase_order').val(purchaseOrder);
 				modal.find('#invoice_number').val(invoiceNumber);
 				modal.find('select#supplier_id').val(supplierID).trigger("change");
-				modal.find('#date_purchased').val(datePurchased);
+				modal.find('#date_purchaseds').val(datePurchased);
 				modal.find('#Cost').val(amount);
 				modal.find('#fire_image').attr("src", fireImage);
 				if(fireDocument === '') { $("a[href='http://afrixcel.co.za/']").attr('href', "http://afrixcel.co.za/");}

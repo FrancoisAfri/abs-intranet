@@ -79,14 +79,14 @@
 
 
                     <div class="form-group ">
-                        <label for="path" class="col-sm-2 control-label"> Date From</label>
+                        <label for="date_from" class="col-sm-2 control-label"> Date From</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date_from" name="date_from"
                                    value="{{ old('date_from') }}" placeholder="Select  Date From ...">
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="path" class="col-sm-2 control-label">Expiry Date </label>
+                        <label for="exp_date" class="col-sm-2 control-label">Expiry Date </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="exp_date" name="exp_date"
                                    value="{{ old('exp_date') }}" placeholder="Select  Expiry date ...">
