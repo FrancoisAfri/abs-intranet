@@ -728,9 +728,10 @@ class JobcardController extends Controller
 
     public function jobcardsApprovals()
     {
-
         $hrID = Auth::user()->person->user_id;
         $hrjobtile = Auth::user()->person->position;
+        $hrjobtile = Auth::user()->person->position;
+
         $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
             ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
             ->where('security_modules.code_name', 'job_cards')
@@ -739,17 +740,17 @@ class JobcardController extends Controller
             ->pluck('user_id')->first();
 
         $processflow = processflow::where('job_title', $hrjobtile)->where('status', 1)->orderBy('id', 'asc')->get();
-        $lastProcess = processflow::where('job_title', $hrjobtile)->where('status', 1)->orderBy('id', 'desc')->first();
+        $lastProcess = processflow::where('status', 1)->orderBy('id', 'desc')->first();
         $lastStepNumber = !empty($lastProcess->step_number) ? $lastProcess->step_number : 0;
+
         $statuses = array();
         $status = '';
-
-        $processss = processflow::take(1);
+		$userAccess = 0;
         $rowcolumn = $processflow->count();
-        if ($rowcolumn > 0 || !empty($userAccess)) {
-
-            if (!empty($userAccess)) $statuses = array();
-            else {
+        if ($rowcolumn > 0) 
+		{
+            if (empty($userAccess))
+			{
                 foreach ($processflow as $process) {
                     $status .= $process->step_number . ',';
                 }
@@ -771,9 +772,7 @@ class JobcardController extends Controller
                 ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
                 ->where(function ($query) use ($statuses) {
                     if (!empty($statuses)) {
-                        for ($i = 0; $i < count($statuses); $i++) {
-                            $query->whereOr('jobcard_maintanance.status', '=', $statuses[$i]);
-                        }
+                        $query->whereIn('jobcard_maintanance.status', $statuses);
                     }
                 })
                 ->where(function ($query) use ($lastStepNumber) {
@@ -801,12 +800,13 @@ class JobcardController extends Controller
 
             AuditReportsController::store('Job Card Management', 'Job Card Approvals Page Accessed', "Accessed By User", 0);
             return view('job_cards.Job_card_approval')->with($data);
-        } else {
+        }
+		else 
+		{
 //           return redirect('/');
             //return back();
             return back()->with('success_edit', "The are not permitted to view this page.");
         }
-
     }
 
     public function appovecards(Request $request, jobcard_maintanance $jobcards)
@@ -830,7 +830,6 @@ class JobcardController extends Controller
                 $aValue = explode("_", $key);
                 $name = $aValue[0];
                 $cardID = $aValue[1];
-                //return $name;
                 if (count($sValue) > 1) {
                     $status = $sValue[1];
                 } else $status = $sValue[0];
@@ -838,12 +837,8 @@ class JobcardController extends Controller
 
                 $getStatus = DB::table('jobcard_maintanance')->where('id', $cardsID)->get();
                 $statusflow = $getStatus->first()->status;
-
                 $processflow = processflow::where('step_number', '>', $statusflow)->where('status', 1)->orderBy('step_number', 'asc')->first();
-
                 $jobcards->updateOrCreate(['id' => $cardsID], ['status' => $processflow->step_number]);
-
-
                 $stadisplay = DB::table('jobcard_process_flow')->where('step_number', $processflow->step_number)->first();
                 $statusdisplay = !empty($stadisplay->step_name) ? $stadisplay->step_name : '';
 
@@ -860,9 +855,7 @@ class JobcardController extends Controller
                     Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
                 }
             }
-
             // decline
-
             foreach ($results as $sKey => $sValue) {
                 if (strlen(strstr($sKey, 'declined_'))) {
                     list($sUnit, $iID) = explode("_", $sKey);
@@ -871,7 +864,6 @@ class JobcardController extends Controller
 
                         $getStatus = DB::table('jobcard_maintanance')->where('id', $iID)->get();
                         $statusflow = $getStatus->first()->status;
-
 
                         $jobcard = jobcard_maintanance::where('id', $iID)->first();  // when declined move back to the last step
                         if ($statusflow === 0) {
@@ -890,7 +882,8 @@ class JobcardController extends Controller
                         if ($statusflow != 0) {
                             $processflow = processflow::where('step_number', $statusflow - 1)->where('status', 1)->orderBy('step_number', 'asc')->first();
                             $user = HRPerson::where('position', $processflow->job_title)->pluck('user_id');
-                            foreach ($user as $manID) {
+                            foreach ($user as $manID) 
+							{
                                 $usedetails = HRPerson::where('user_id', $manID)->select('first_name', 'surname', 'email')->first();
                                 $email = $usedetails->email;
                                 $firstname = $usedetails->first_name;
@@ -899,8 +892,6 @@ class JobcardController extends Controller
                                 $reason = $sValue;
                                 Mail::to($email)->send(new DeclinejobstepNotification($firstname, $surname, $email, $reason));
                             }
-                        } else {
-                            //
                         }
                     }
                 }
