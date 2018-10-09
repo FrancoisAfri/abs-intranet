@@ -123,7 +123,7 @@
 														data-role="{{ $document->role }}"
 														data-date_from="{{  date(' d M Y', $document->date_from) }}"
 														data-exp_date="{{ date(' d M Y', $document->exp_date) }}"
-														data-doc_document="{{ (!empty($document->document)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/document/$document->document") : '' }}"
+														data-doc_document="{{ (!empty($document->document)) ? Storage::disk('local')->url("Vehicle/documents/$document->document") : '' }}"
 												><i class="fa fa-pencil-square-o"></i> Edit
 												</button>
 											</td>
@@ -164,7 +164,7 @@
 														data-role="{{ $document->role }}"
 														data-datefrom="{{  date(' d M Y', $document->date_from) }}"
 														data-expdate="{{ date(' d M Y', $document->exp_date) }}"
-														data-doc_document="{{ (!empty($document->document)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/document/$document->document") : '' }}"
+														data-doc_document="{{ (!empty($document->document)) ? Storage::disk('local')->url("Vehicle/documents/$document->document") : '' }}"
 												><i class="fa fa-pencil-square-o"></i> Edit
 												</button>
 											</td>
