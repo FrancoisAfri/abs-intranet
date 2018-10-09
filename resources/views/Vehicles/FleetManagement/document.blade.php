@@ -123,6 +123,7 @@
 														data-role="{{ $document->role }}"
 														data-date_from="{{  date(' d M Y', $document->date_from) }}"
 														data-exp_date="{{ date(' d M Y', $document->exp_date) }}"
+														data-doc_document="{{ (!empty($document->document)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/document/$document->document") : '' }}"
 												><i class="fa fa-pencil-square-o"></i> Edit
 												</button>
 											</td>
@@ -163,6 +164,7 @@
 														data-role="{{ $document->role }}"
 														data-datefrom="{{  date(' d M Y', $document->date_from) }}"
 														data-expdate="{{ date(' d M Y', $document->exp_date) }}"
+														data-doc_document="{{ (!empty($document->document)) ? Storage::disk('local')->url("Vehicle/fireextinguishers/document/$document->document") : '' }}"
 												><i class="fa fa-pencil-square-o"></i> Edit
 												</button>
 											</td>
@@ -396,12 +398,16 @@
                     var role = btnEdit.data('start_date');
                     var date_from = btnEdit.data('datefrom');
                     var exp_date = btnEdit.data('expdate');
+					var docDocument = btnEdit.data('doc_document');
                     var modal = $(this);
                     modal.find('#type').val(type);
                     modal.find('#description').val(description);
                     modal.find('#role').val(role);
                     modal.find('#date_from').val(date_from);
                     modal.find('#exp_date').val(exp_date);
+					if(docDocument === '') { $("a[href='http://afrixcel.co.za/']").attr('href', "http://afrixcel.co.za/");}
+					else{ $("a[href='http://afrixcel.co.za/']").attr('href', docDocument);}
+					//$("a").attr("href", docDocument)
                 });
 
                 $('#edit_doc').on('click', function () {
