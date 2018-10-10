@@ -330,7 +330,7 @@
 
 
                 var warrantyID;
-                $('#edit-warrantie-modal').on('show.bs.modal', function (e) {
+                $('#edit-warrantie-modal').on('shown.bs.modal', function (e) {
                     var btnEdit = $(e.relatedTarget);
                     if (parseInt(btnEdit.data('id')) > 0) {
                         warrantyID = btnEdit.data('id');

@@ -135,12 +135,12 @@
                                     <td>{{ !empty($reminder->description) ?  $reminder->description : '' }}</td>
                                     <td>{{ !empty($reminder->first_name . ' ' . $reminder->surname) ? $reminder->first_name . ' ' . $reminder->surname : ''}}</td>
                                     <td>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+                                        
+                                    </td>
+<!--<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
                                                 data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
                                             Delete
-                                        </button>
-                                    </td>
-
+                                        </button>-->
                                 </tr>
                             @endforeach
                         @else
