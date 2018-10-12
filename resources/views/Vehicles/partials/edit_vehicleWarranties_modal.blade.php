@@ -27,40 +27,16 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
-
-                        <div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
-                            <label for="{{ 'contact_person_id' }}" class="col-sm-2 control-label">Contact Person</label>
-
-                            <div class="col-sm-8">
-                                <select id="contact_person_id" name="contact_person_id" class="form-control select2" style="width: 100%;">
-                                    <option value="">*** Please Select a Company First ***</option>
-                                </select>
-                            </div>
-                        </div>
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Contact Number</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="contact_number" name="contact_number" value=""
-                                   placeholder="Enter Contact Number" required>
-                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Contact E-Mail</label>
-                        <div class="col-sm-8">
-                            <input type="email" class="form-control" id="contact_email" name="contact_email" value=""
-                                   placeholder="Enter Contact E-Mail" required>
-                        </div>
-                    </div>
-                    <div class="form-group ">
-                        <label for="address" class="col-sm-2 control-label">Address</label>
-                        <div class="col-sm-8">
+					<div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
+						<label for="{{ 'contact_person_id' }}" class="col-sm-2 control-label">Contact Person</label>
 
-                            <textarea class="form-control" id="address" name="address"
-                                      placeholder="Enter address..." rows="3">{{ old('description') }}</textarea>
-
-                        </div>
-                    </div>
+						<div class="col-sm-8">
+							<select id="contact_person_id" name="contact_person_id" class="form-control select2" style="width: 100%;">
+								<option value="">*** Please Select a Company First ***</option>
+							</select>
+						</div>
+					</div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Policy/Document Number</label>
                         <div class="col-sm-8">

@@ -717,8 +717,9 @@ Route::patch('jobcards/edit_cardparts/{parts}', 'JobcardController@editcardparts
 Route::post('jobcards/delete_jobcards/{parts}', 'JobcardController@deletejobcards');
 
 
+Route::get('jobcard/addparts/{jobcardpart}', 'JobcardController@addparts');
 Route::get('jobcard/parts/{jobcardparts}', 'JobcardController@viewparts');
-Route::post('jobcard/addjobparts', 'JobcardController@addjobparts');
+Route::post('jobcard/addjobparts/{jobcardpart}', 'JobcardController@addjobparts');
 
 
 Route::get('jobcards/print/{print}', 'JobcardController@printcards');
