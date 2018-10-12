@@ -31,6 +31,7 @@
 									<th>Fleet Number</th>
 									<th>Vehicle Registration</th>
 									<th>Booking Type</th>
+									<th>Booking Date</th>
 									<th>Required From</th>
 									<th>Return By</th>
 									<th>Capturer</th>
@@ -52,6 +53,7 @@
 											<td>{{ !empty($booking->fleet_number) ? $booking->fleet_number : ''}}</td>
 											<td>{{ !empty($booking->vehicle_reg) ? $booking->vehicle_reg : ''}}</td>
 											<td>{{ !empty($booking->usage_type) ? $usageTypes[$booking->usage_type] : ''}}</td>
+											<td>{{ !empty($booking->booking_date) ?  date("F j, Y, g:i a", $booking->booking_date)  : ''}}</td>
 											<td>{{ !empty($booking->require_datetime ) ?  date("F j, Y, g:i a", $booking->require_datetime)  : ''}}</td>
 											<td>{{ !empty($booking->return_datetime ) ? date("F j, Y, g:i a", $booking->return_datetime) : ''}}</td>
 											<td>{{ !empty($booking->capturer_id) ? $booking->capturer_id : ''}}</td>
@@ -67,6 +69,7 @@
 								<th>Fleet Number</th>
 								<th>Vehicle Registration</th>
 								<th>Booking Type</th>
+								<th>Booking Date</th>
 								<th>Required From</th>
 								<th>Return By</th>
 								<th>Capturer</th>

@@ -1248,7 +1248,7 @@ class VehicleBookingController extends Controller
 				$query->where('vehicle_booking.fleet_number', 'ILIKE', "%$fleetNumber%");
 			}
 		})
-		->orderBy('vehicle_booking.booking_date')
+		->orderBy('vehicle_booking.booking_date','desc')
 		->get();
 
 		$data['page_title'] = "Search";
