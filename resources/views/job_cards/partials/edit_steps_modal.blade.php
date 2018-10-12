@@ -15,22 +15,21 @@
                     <div id="success-alert"></div>
 
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label"> Step number</label>
+                        <label for="step_number" class="col-sm-2 control-label"> Step number</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="step_number" name="step_number" value=""
                                    placeholder="" readonly="">
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Step Name</label>
+                        <label for="step_name" class="col-sm-2 control-label">Step Name</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="step_name" name="step_name" value=""
                                    placeholder="Enter step name" required>
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <label for="kpa_id" class="col-sm-2 control-label">Job Title</label>
+                        <label for="job_title" class="col-sm-2 control-label">Job Title</label>
                         <div class="col-sm-8">
                             <select id="job_title" name="job_title" class="form-control select2" style="width: 100%;"
                                     required>
@@ -40,8 +39,7 @@
                                 @endforeach
                             </select>
                         </div>
-                    </div>
-
+                    </div> 
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

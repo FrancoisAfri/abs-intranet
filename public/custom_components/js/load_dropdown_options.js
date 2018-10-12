@@ -472,8 +472,6 @@ function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, load
 
     }
 
-//
-// 
 // // **********************************************
 
     /* function to load job card categories drop down options */
@@ -489,15 +487,11 @@ function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, load
         loadproductcategoryModelOptions(productCategoryDDID, selectedOption, procategoryID);
     }
 
-
     /* function to load Contact People drop down options */
     function loadproductcategoryModelOptions(ddID, selectedOption, procategoryID, incInactive, loadAll, postTo) {
         loadAll = loadAll || -1;
         incInactive = incInactive || -1;
         postTo = postTo || '/api/productCategorydropdown';
-        //var parentDDVal = $('#'+parentDDID).val();
-        //var ddLabel = 'a Company';
-        //var divLvl = parseInt(parentDDID.substr(parentDDID.lastIndexOf("_") + 1));
         $.post(postTo, { category_id: procategoryID, _token: $('input[name=_token]').val(), load_all: loadAll, inc_inactive: incInactive },
             function(data) {
                 var dropdown = $('#'+ddID);
