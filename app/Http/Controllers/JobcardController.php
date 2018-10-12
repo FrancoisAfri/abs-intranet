@@ -464,7 +464,7 @@ class JobcardController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $processflow = processflow::orderBy('id', 'acs')->first();
+        $processflow = processflow::orderBy('id', 'asc')->first();
         $jobtitle = !empty($processflow->job_title) ? $processflow->job_title : 0;
 
         $carddate = $SysData['card_date'] = str_replace('/', '-', $SysData['card_date']);
@@ -738,7 +738,6 @@ class JobcardController extends Controller
 
         $statuses = array();
         $status = '';
-		$userAccess = 0;
         $rowcolumn = $processflow->count();
         if ($rowcolumn > 0) 
 		{
@@ -794,48 +793,34 @@ class JobcardController extends Controller
             AuditReportsController::store('Job Card Management', 'Job Card Approvals Page Accessed', "Accessed By User", 0);
             return view('job_cards.Job_card_approval')->with($data);
         }
-		else 
-		{
-//           return redirect('/');
-            //return back();
-            return back()->with('success_edit', "The are not permitted to view this page.");
-        }
+		else return back()->with('success_edit', "The are not permitted to view this page.");
     }
 
-    public function appovecards(Request $request, jobcard_maintanance $jobcards)
+    public function appovecards(Request $request)
     {
         $this->validate($request, [
             // 'date_uploaded' => 'required',
         ]);
         $results = $request->all();
         //Exclude empty fields from query
+		//return $jobcards;
         unset($results['_token']);
-        //  return $results;
-
+          
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
                 unset($results[$key]);
             }
         }
-
         foreach ($results as $key => $sValue) {
             if (strlen(strstr($key, 'cardappprove'))) {
                 $aValue = explode("_", $key);
                 $name = $aValue[0];
-                $cardID = $aValue[1];
-                if (count($sValue) > 1) {
-                    $status = $sValue[1];
-                } else $status = $sValue[0];
-                $cardsID = $cardID;
+                $cardsID = $aValue[1];
+				$jobCard = jobcard_maintanance::where('id', $cardsID)->first();
 
-                $getStatus = DB::table('jobcard_maintanance')->where('id', $cardsID)->get();
-                $statusflow = $getStatus->first()->status;
-                $processflow = processflow::where('step_number', '>', $statusflow)->where('status', 1)->orderBy('step_number', 'asc')->first();
-                $jobcards->updateOrCreate(['id' => $cardsID], ['status' => $processflow->step_number]);
-                $stadisplay = DB::table('jobcard_process_flow')->where('step_number', $processflow->step_number)->first();
-                $statusdisplay = !empty($stadisplay->step_name) ? $stadisplay->step_name : '';
-
-                DB::table('jobcard_maintanance')->where('id', $cardsID)->update(['status_display' => $statusdisplay]);
+                $processflow = processflow::where('step_number', '>', $sValue)->where('status', 1)->orderBy('step_number', 'asc')->first();
+				$jobCard->status = $processflow->step_number;
+				$jobCard->update();
 
                 // send email to the next person the step
                 $users = HRPerson::where('position', $processflow->job_title)->pluck('user_id');
@@ -855,8 +840,8 @@ class JobcardController extends Controller
                     if ($sUnit == 'declined' && !empty($sValue)) {
                         if (empty($sValue)) $sValue = $sReasonToReject;
 
-                        $getStatus = DB::table('jobcard_maintanance')->where('id', $iID)->get();
-                        $statusflow = $getStatus->first()->status;
+                        $getStatus = DB::table('jobcard_maintanance')->where('id', $iID)->first();
+                        $statusflow = $getStatus->status;
 
                         $jobcard = jobcard_maintanance::where('id', $iID)->first();  // when declined move back to the last step
                         if ($statusflow === 0) {
@@ -870,7 +855,6 @@ class JobcardController extends Controller
                         $jobcard->reject_timestamp = time();
                         $jobcard->rejector_id = Auth::user()->person->id;
                         $jobcard->update();
-                        // $vehicle_maintenance->where('id',$iID)->update(['status' => 3],['reject_reason' => $sValue],['reject_timestamp' => time()]);
 
                         if ($statusflow != 0) {
                             $processflow = processflow::where('step_number', $statusflow - 1)->where('status', 1)->orderBy('step_number', 'asc')->first();
@@ -892,7 +876,7 @@ class JobcardController extends Controller
             $sReasonToReject = '';
         }
 
-        AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User", $jobcards->id);
+        AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User",0);
         return back();
     }
 

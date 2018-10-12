@@ -201,15 +201,11 @@
                             autoclose: true,
                             todayHighlight: true
                         });
-
-
                         $('#schedule_date').datepicker({
                             format: 'dd/mm/yyyy',
                             autoclose: true,
                             todayHighlight: true
                         });
-
-                        //
                         $('#booking_date').datepicker({
                             format: 'dd/mm/yyyy',
                             autoclose: true,
@@ -220,14 +216,12 @@
                             autoclose: true,
                             todayHighlight: true
                         });
-
                         $('#completion_date').datepicker({
                             format: 'dd/mm/yyyy',
                             autoclose: true,
                             todayHighlight: true
                         });
                     });
-
                     $('#add-jobcard-modal').on('show.bs.modal', function (e) {
 
                         var btnEdit = $(e.relatedTarget);
@@ -235,7 +229,6 @@
                         var modal = $(this);
                         modal.find('#card_date').val(card_date);
                     });
-
                     //Post form to server using ajax (add)
                     $('#add_jobcardtypes').on('click', function () {
                         var strUrl = '/jobcards/addjobcard';

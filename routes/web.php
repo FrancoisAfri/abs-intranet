@@ -687,7 +687,7 @@ Route::get('jobcards/approval', 'JobcardController@jobcardsApprovals');
 Route::get('jobcards/search', 'JobcardController@cardsearch');
 Route::post('jobcards/jobcardsearch', 'JobcardController@jobcardsearch');
 
-Route::post('jobcards/appovecards', 'JobcardController@appovecards');
+//Route::post('jobcards/appovecards', 'JobcardController@appovecards');
 Route::get('jobcards/viewjobcard/{card}', 'JobcardController@viewcard');
 
 Route::get('jobcards/viewcard/{card}', 'JobcardController@viewjobcard');
