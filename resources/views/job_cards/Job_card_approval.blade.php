@@ -44,52 +44,44 @@
                             </tr>
 
                             @if (count($jobcardmaintanance) > 0)
-                                @foreach ($jobcardmaintanance as $filling)
+                                @foreach ($jobcardmaintanance as $maintanance)
                                     <tr style="text-align:center">
                                         <td>
-                                            <a href="{{ '/jobcards/viewcard/' . $filling->id }}" id="edit_compan"
+                                            <a href="{{ '/jobcards/viewcard/' . $maintanance->id }}" id="edit_compan"
                                                class="btn btn-warning  btn-xs">View</a></td>
-                                        <td>{{ !empty($filling->jobcard_number ) ? $filling->jobcard_number : '' }}</td>
-                                        <td>{{ (!empty( $filling->fleet_number . ' ' .  $filling->vehicle_registration . ' ' . $filling->vehicle_make . ' ' . $filling->vehicle_model))
-                                    ?  $filling->fleet_number . ' ' .  $filling->vehicle_registration . ' ' . $filling->vehicle_make . ' ' . $filling->vehicle_model : ''}} </td>
-                                        <td>{{ !empty($filling->vehicle_registration ) ? $filling->vehicle_registration : '' }}</td>
-                                        <td>{{ !empty($filling->completion_date ) ? date(' d M Y', $filling->completion_date) : 'Nill' }}</td>
-                                        <td>{{ !empty($filling->firstname.' '. $filling->surname ) ? $filling->firstname.' '. $filling->surname : '' }}</td>
-                                        <td>{{ !empty($filling->servicetype ) ? $filling->servicetype : '' }}</td>
-                                        <td>{{ !empty($filling->instruction ) ? $filling->instruction : '' }}</td>
-                                        <td>{{ !empty($filling->aStatus ) ? $filling->aStatus : 'Declined' }}</td>
-                                        @if (isset($filling) && $filling->status === 0 || $filling->status === $stepnumber)
+                                        <td>{{ !empty($maintanance->jobcard_number ) ? $maintanance->jobcard_number : '' }}</td>
+                                        <td>{{ (!empty( $maintanance->fleet_number . ' ' .  $maintanance->vehicle_registration . ' ' . $maintanance->vehicle_make . ' ' . $maintanance->vehicle_model))
+                                    ?  $maintanance->fleet_number . ' ' .  $maintanance->vehicle_registration . ' ' . $maintanance->vehicle_make . ' ' . $maintanance->vehicle_model : ''}} </td>
+                                        <td>{{ !empty($maintanance->vehicle_registration ) ? $maintanance->vehicle_registration : '' }}</td>
+                                        <td>{{ !empty($maintanance->completion_date ) ? date(' d M Y', $maintanance->completion_date) : 'Nill' }}</td>
+                                        <td>{{ !empty($maintanance->firstname.' '. $maintanance->surname ) ? $maintanance->firstname.' '. $maintanance->surname : '' }}</td>
+                                        <td>{{ !empty($maintanance->servicetype ) ? $maintanance->servicetype : '' }}</td>
+                                        <td>{{ !empty($maintanance->instruction ) ? $maintanance->instruction : '' }}</td>
+                                        <td>{{ !empty($maintanance->aStatus ) ? $maintanance->aStatus : 'Declined' }}</td>
+                                        @if (isset($maintanance) && $maintanance->status === 0 || $maintanance->status === $stepnumber)
                                             <td></td>
                                         @else
                                             <td style='text-align:center'>
-                                                <input type="hidden" class="checkbox selectall"
-                                                       id="cardappprove_{{ $filling->id }}"
-                                                       name="cardappprove_{{ $filling->id }}" value="0">
                                                 <input type="checkbox" class="checkbox selectall"
-                                                       id="cardappprove_{{ $filling->id }}"
-                                                       name="cardappprove_{{ $filling->id }}"
-                                                       value="1">
+                                                       id="cardappprove_{{ $maintanance->id }}"
+                                                       name="cardappprove_{{ $maintanance->id }}"
+                                                       value="{{$maintanance->status}}">
                                             </td>
                                         @endif
 
-                                        @if (isset($filling) && $filling->status === 0 || $filling->status === $stepnumber)
+                                        @if (isset($maintanance) && $maintanance->status === 0 || $maintanance->status === $stepnumber)
                                             <td></td>
                                             <td></td>
                                         @else
-                                            <td style="text-align:center"><input type="checkbox"
-                                                                                 class="checkalldeclines "
-                                                                                 id="decline_$aVehicles[id]"
-                                                                                 onclick="$('#comment_id_{{$filling->id}}').toggle(); uncheckCheckBoxes({{$filling->id}}, 0);">
+                                            <td style="text-align:center"><input type="checkbox" class="checkalldeclines" id="decline_{{$maintanance->id}}"
+                                                   onclick="$('#comment_id_{{$maintanance->id}}').toggle(); uncheckCheckBoxes({{$maintanance->id}}, 0);">
                                             </td>
                                             <td style="width: 15px;">
-                                                {{--  <input type="text" size="30" id="comment_id_{{$filling->id}}" name="declined_{{$filling->id}}" style="display:none">         --}}
-                                                <textarea class="form-control" id="comment_id_{{$filling->id}}"
-                                                          name="declined_{{$filling->id}}"
+                                                <textarea class="form-control" id="comment_id_{{$maintanance->id}}"
+                                                          name="declined_{{$maintanance->id}}"
                                                           placeholder="Enter rejection reason ..." rows="2"
                                                           style="display:none"></textarea>
                                             </td>
-
-
                                         @endif
                                     </tr>
                                 @endforeach
