@@ -33,7 +33,7 @@
                         <div class="col-sm-8">
                             <select id="job_title" name="job_title" class="form-control select2" style="width: 100%;"
                                     required>
-                                <option value="0">*** Select Job Title ***</option>
+                                <option value="">*** Select Job Title ***</option>
                                 @foreach($positions as $position)
                                     <option value="{{ $position->id }}">{{ $position->name }}</option>
                                 @endforeach

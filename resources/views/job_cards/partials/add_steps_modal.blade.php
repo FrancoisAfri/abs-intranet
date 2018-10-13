@@ -32,7 +32,7 @@
                         <label for="leave_type" class="col-sm-2 control-label">Job Title</label>
                         <div class="col-sm-8">
                             <select id="job_title" name="job_title" class="form-control">
-                                <option value=" ">*** Select Job Title ***</option>
+                                <option value="">*** Select Job Title ***</option>
                                 @foreach($positions as $position)
                                     <option value="{{ $position->id }}">{{ $position->name }}</option>
                                 @endforeach
