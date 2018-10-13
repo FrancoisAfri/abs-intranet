@@ -293,7 +293,6 @@ class JobcardController extends Controller
     {
         $this->validate($request, [
             'step_name' => 'required',
-            'job_title' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -316,7 +315,6 @@ class JobcardController extends Controller
     {
         $this->validate($request, [
             'step_name' => 'required',
-            'job_title' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
