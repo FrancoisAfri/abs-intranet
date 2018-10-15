@@ -2,6 +2,8 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-jobcard-form">
+			<input type="hidden" name="file_index" id="file_index" value="1"/>
+			<input type="hidden" name="total_files" id="total_files" value="1"/>
             {{ csrf_field() }}
             <!--                {{ method_field('PATCH') }}-->
 
@@ -26,17 +28,17 @@
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="date" class="col-sm-2 control-label"> Job card Date </label>
+                        <label for="card_date" class="col-sm-2 control-label"> Job card Date </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control datepicker" id="card_date" name="card_date"
-                                   value="{{ old('date') }}" placeholder="Select start date  ...">
+                                   value="{{ old('card_date') }}" placeholder="Select start date  ...">
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="date" class="col-sm-2 control-label"> Schedule Date </label>
+                        <label for="schedule_date" class="col-sm-2 control-label"> Schedule Date </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control datepicker" id="schedule_date" name="schedule_date"
-                                   value="{{ old('date') }}" placeholder="Select start date  ...">
+                                   value="{{ old('schedule_date') }}" placeholder="Select start date  ...">
                         </div>
                     </div>
                     <div class="form-group">
@@ -135,7 +137,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
+                    <!--<div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Inspection Info</label>
                         <div class="col-sm-8">
                             <div class="input-group">
@@ -156,7 +158,7 @@
                                    class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
                                    data-show-upload="false">
                         </div>
-                    </div>
+                    </div>-->
                     <div class="form-group mechanic_row">
                         <label for="leave_type" class="col-sm-2 control-label">Mechanic</label>
                         <div class="col-sm-8">
@@ -168,19 +170,26 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
-                        <label for="days" class="col-sm-2 control-label">instruction Info</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-sticky-note"></i>
-                                </div>
-                                <textarea class="form-control" id="instruction" name="instruction"
-                                          placeholder="Enter a inspection Info"
-                                          rows="4">{{ old('description') }}</textarea>
-                            </div>
-                        </div>
-                    </div>
+					<div id="tab_10">
+						<hr class="hr-text" data-content="Instructions">
+						<div class="row" id="tab_tab">							
+							<div class="col-sm-12" style="display:none;" id="instructions_row">
+								<textarea class="form-control" id="instruction" name="instruction"
+									placeholder="Enter a inspection Info" rows="3" disabled="disabled"></textarea>
+							</div>
+							<div class="col-sm-12" id="1" name="1" style="margin-bottom: 15px;">
+								<textarea class="form-control" id="instruction[1]" name="instruction[1]"
+									placeholder="Enter a inspection Info" rows="3"></textarea>
+							</div>
+						</div>
+						<div class="row" id="final_row">
+							<div class="col-sm-12">
+								<button type="button" class="btn btn-default btn-block btn-flat add_more" onclick="addFile()">
+									<i class="fa fa-clone"></i> Add More
+								</button>
+							</div>
+						</div>
+					</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

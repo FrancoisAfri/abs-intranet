@@ -1046,7 +1046,6 @@ class VehicleFleetController extends Controller
     public function viewIncidents(vehicle_maintenance $maintenance)
     {
         $ID = $maintenance->id;
-
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $incidentType = incident_type::orderBy('id', 'asc')->get();
        

@@ -25,7 +25,7 @@
                             <th style="width: 10px; text-align: center;"></th>
                             <th style="text-align: center">Step number</th>
                             <th>Step name</th>
-                            <th>Job title</th>
+                            <th>Role</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($processflows) > 0)

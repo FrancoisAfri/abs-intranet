@@ -2,6 +2,8 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-jobcard-form">
+				<input type="hidden" name="file_index" id="file_index" value="1"/>
+				<input type="hidden" name="total_files" id="total_files" value="1"/>
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
@@ -168,19 +170,26 @@
                             </select>
                         </div>
                     </div>
-                    <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
-                        <label for="days" class="col-sm-2 control-label">instruction Info</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-sticky-note"></i>
-                                </div>
-                                <textarea class="form-control" id="instruction" name="instruction"
-                                          placeholder="Enter a inspection Info"
-                                          rows="4">{{ old('description') }}</textarea>
-                            </div>
-                        </div>
-                    </div>
+					<div id="tab_10">
+						<hr class="hr-text" data-content="Instructions">
+						<div class="row" id="tab_tab">							
+							<div class="col-sm-12" style="display:none;" id="instructions_row">
+								<textarea class="form-control" id="instruction" name="instruction"
+									placeholder="Enter a inspection Info" rows="3" disabled="disabled"></textarea>
+							</div>
+							<div class="col-sm-12" id="1" name="1" style="margin-bottom: 15px;">
+								<textarea class="form-control" id="instruction[1]" name="instruction[1]"
+									placeholder="Enter a inspection Info" rows="3"></textarea>
+							</div>
+						</div>
+						<div class="row" id="final_row">
+							<div class="col-sm-12">
+								<button type="button" class="btn btn-default btn-block btn-flat add_more" onclick="addFile()">
+									<i class="fa fa-clone"></i> Add More
+								</button>
+							</div>
+						</div>
+					</div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

@@ -104,20 +104,35 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="caption">Instructions</td>
-                                    <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : ''}}</td>
-                                    <td class="caption">Instructions Info</td>
-                                    <td>{{ !empty($jobcard->inspection_info) ? $jobcard->inspection_info : ''}}</td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" class="caption"></td>
-                                </tr>
-                                <tr>
-                                    <td colspan="4" style="text-align:left;" height="40" border="1"></td>
-                                </tr>
-                                <tr>
                         </table>
+						<table class="table table-striped table-bordered">
+							<hr class="hr-text" data-content="Instructions">
+							<tr>
+									<td>#</td>
+									<td></td>
+									<td>Status</td>
+									<td>Completion  Date/Time</td>
+							</tr>
+							@if (count($instructions) > 0)
+								@foreach ($instructions as $instruction)
+									<tr>
+										<td>
+										@if ($jobcard->status <= 1)
+											<a href="{{ '/jobcards/edit_instructions/' . $instruction->id }}"
+											id="edit_instructions/" class="btn btn-sm btn-default btn-flat">Modify</a>
+										@endif
+										</td>
+										<td>
+											{{ $loop->iteration }}. {{ !empty($instruction->instruction_details) ? $instruction->instruction_details : '' }}
+										</td>
+										<td>{{ !empty($instruction->status) && $instruction->status == 2 ? 'Completed' : 'Incomplete' }}</td>
+									<td>{{ !empty($instruction->completion_date) ? date('d M Y ', $instruction->completion_date) : '' }} - {{ !empty($instruction->completion_time) ? $instruction->completion_time : '' }}</td>
+									</tr>
+								@endforeach
+							@else
+								<tr><td colspan="4"></td></tr>
+							@endif
+						</table>
                     </div>
                 </div>
                 <!-- /.box-body -->
@@ -142,16 +157,12 @@
                     <a href="{{ '/jobcards/jobcardimages/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Images</a>
-
                     <a href="{{ '/jobcards/jobcardnotes/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Job Card Notes</a>
-
                     <a href="{{ '/jobcard/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Parts</a>
-
-
                     <a href="{{ '/vehicle_management/conclude/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $card->id }}">Conclude Jobcard</a>
@@ -238,20 +249,12 @@
         }
 
         $(function () {
-
-
-//        if($maintenance->metre_reading_type == 1)
-//            $('.odometer-field').show();
-//        }else  $('.odometer-field').show();
             $(".select2").select2();
             $('.hours-field').hide();
             $('.comp-field').hide();
-
             var JobId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
-
-
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -262,21 +265,18 @@
                 // or four works better for larger screens.
                 dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
             }
-
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
             $(window).on('resize', function () {
                 $('.modal:visible').each(reposition);
             });
-
             //
             $('.datepicker').datepicker({
                 format: 'dd/mm/yyyy',
                 autoclose: true,
                 todayHighlight: true
             });
-
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
@@ -292,14 +292,11 @@
                 });
 
             });
-
             $('#rdo_package, #rdo_product').on('ifChecked', function () {
                 var allType = hideFields();
                 if (allType == 1) $('#box-subtitle').html('Site Address');
                 else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
             });
-
-            //
 
             $('#rdo_fin, #rdo_comp').on('ifChecked', function () {
                 var allType = hidenFields();
@@ -319,7 +316,6 @@
                 }
                 return allType;
             }
-
             //
             function hidenFields() {
                 var allType = $("input[name='title_type']:checked").val();
@@ -335,10 +331,9 @@
             }
 
             //pass category data to the edit category modal
-            $('#edit-jobcard-modal').on('show.bs.modal', function (e) {
-
+            $('#edit-jobcard-modal').on('shown.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
-                kpiId = btnEdit.data('id');
+                JobId = btnEdit.data('id');
                 var cardDate = btnEdit.data('card_date');
                 var scheduleDate = btnEdit.data('schedule_date');
                 var bookingDate = btnEdit.data('booking_date');
@@ -375,13 +370,12 @@
                 var formName = 'add-note-form';
                 var modalID = 'add-note-modal';
                 var submitBtnID = 'add_notes';
-                var redirectUrl = '/jobcards/viewcard/{{$card->id}}';
+                var redirectUrl = '/jobcards/viewcard/' + {{$card->id}};
                 var successMsgTitle = 'New Record Added!';
                 var successMsg = 'The Record  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
             $('#update_jobcard').on('click', function () {
-
                 var strUrl = '/jobcards/updatejobcard/' + JobId;
                 var formName = 'edit-jobcard-form';
                 var modalID = 'edit-jobcard-modal';
@@ -393,5 +387,43 @@
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
         });
+			function clone(id, file_index, child_id) {
+		var clone = document.getElementById(id).cloneNode(true);
+		clone.setAttribute("id", file_index);
+		clone.setAttribute("name", file_index);
+		clone.style.display = "table-row";
+		clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
+		clone.querySelector('#' + child_id).disabled = false;
+		clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
+		return clone;
+	}
+	function addFile() {
+		var table = document.getElementById("tab_tab");
+		var file_index = document.getElementById("file_index");
+		file_index.value = ++file_index.value;
+		var instruction_clone = clone("instructions_row", file_index.value, "instruction");
+		var final_row = document.getElementById("final_row").cloneNode(false);
+		table.appendChild(instruction_clone);
+		table.appendChild(final_row);
+		var total_files = document.getElementById("total_files");
+		total_files.value = ++total_files.value;
+		//change the following using jquery if necessary
+		var remove = document.getElementsByName("remove");
+		for (var i = 0; i < remove.length; i++)
+			remove[i].style.display = "inline";
+	}
+	
+	function removeFile(row_name)
+	{
+		var row=row_name.parentNode.parentNode.id;
+		var rows=document.getElementsByName(row);
+		while(rows.length>0)
+			rows[0].parentNode.removeChild(rows[0]);
+		var total_files = document.getElementById("total_files");
+		total_files.value=--total_files.value;
+		var remove=document.getElementsByName("remove");
+		if(total_files.value == 1)
+			remove[1].style.display='none';
+	}
     </script>
 @endsection

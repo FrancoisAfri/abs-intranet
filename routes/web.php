@@ -695,6 +695,8 @@ Route::post('jobcards/appovecards', 'JobcardController@appovecards');
 Route::post('jobcards/addjobcardnotes', 'JobcardController@addjobcardnotes');
 Route::get('jobcards/jobcardnotes/{card}', 'JobcardController@viewjobcardnotes');
 
+Route::patch('jobcards/instructions-update/{instruction}', 'JobcardController@editInstruction');
+Route::get('jobcards/edit_instructions/{instruction}','JobcardController@editjobcardinstructions');
 Route::get('jobcard/cancellation/{card}','JobcardController@canceljobcardnotes');
 
 Route::get('jobcards/parts','JobcardController@jobcardparts');

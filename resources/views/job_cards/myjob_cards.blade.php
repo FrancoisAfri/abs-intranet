@@ -30,7 +30,6 @@
                             <th>Registration</th>
                             <th>Job Card Date</th>
                             <th>Completion Date</th>
-                            <th style="width: 5px; text-align: center;">Instruction</th>
                             <th>Mechanic</th>
                             <th>Service Type</th>
                             <th>Supplier</th>
@@ -51,7 +50,6 @@
                                         <td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
                                         <td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
                                         <td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
-                                        <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
                                         <td>{{ !empty($jobcard->firstname . '' . $jobcard->surname) ? $jobcard->firstname . '' . $jobcard->surname : '' }}</td>
                                         <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
                                         <td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
@@ -68,7 +66,6 @@
                             <th>Registration</th>
                             <th>Job Card Date</th>
                             <th>Completion Date</th>
-                            <th style="width: 5px; text-align: center;">Instruction</th>
                             <th>Mechanic</th>
                             <th>Service Type</th>
                             <th>Supplier</th>
@@ -80,7 +77,7 @@
                     <div class="box-footer">
                         <button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal"
                                 data-target="#add-jobcard-modal"
-                                data-card_date="{{ date('d/m/yy', $current_date)}}">Add new Job card
+                                data-card_date="{{ date('d/m/Y', $current_date)}}">Add new Job card
                         </button>
                     </div>
                 </div>
@@ -88,158 +85,192 @@
             <!-- Include add new prime rate modal -->
         @include('job_cards.partials.add_jobcard_modal')
         <!-- Include delete warning Modal form-->
-
             <!-- Confirmation Modal -->
             @if(Session('success_edit'))
                 @include('job_cards.partials.success_action', ['modal_title' => "User not permitted!", 'modal_content' => session('success_edit')])
             @endif
         </div>
-    @endsection
+    </div>
+@endsection
+@section('page_script')
+<!-- DataTables -->
+	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<!-- time picker -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+	<!-- Select2 -->
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<!-- End Bootstrap File input -->
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+	<!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+			type="text/javascript"></script>
+	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+			type="text/javascript"></script>
+	<!-- the main fileinput plugin file -->
+	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<!-- InputMask -->
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script>
+		//Cancel button click event
+	$(function () {
+		$('#example2').DataTable({
+			"paging": true,
+			"lengthChange": true,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			"autoWidth": true
+		});
+	});
+	function showHide() {
+		if (document.getElementById('external_service').checked) {
+			$('.agent_field').show();
+			$('#mechanic_id').val('');
+			$('.mechanic_row').hide();
+		}
+		else {
+			$('.agent_field').hide();
+			$('.mechanic_row').show();
+		}
+	}
+	$(function () {
 
-    @section('page_script')
-        <!-- DataTables -->
-            <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <!-- time picker -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-            <!-- Select2 -->
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <!-- End Bootstrap File input -->
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-            <!-- iCheck -->
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                    type="text/javascript"></script>
-            <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-                    type="text/javascript"></script>
-            <!-- the main fileinput plugin file -->
-            <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-            <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-            <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-            <!-- InputMask -->
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script>
-                //Cancel button click event
+		$('.agent_field').hide();
 
-                $(function () {
-                    $('#example2').DataTable({
-                        "paging": true,
-                        "lengthChange": true,
-                        "searching": true,
-                        "ordering": true,
-                        "info": true,
-                        "autoWidth": true
-                    });
-                });
+		var moduleId;
+		//Initialize Select2 Elements
+		$(".select2").select2();
 
-                function showHide() {
-                    if (document.getElementById('external_service').checked) {
-                        $('.agent_field').show();
-                        $('#mechanic_id').val('');
-                        $('.mechanic_row').hide();
-                    }
-                    else {
-                        $('.agent_field').hide();
-                        $('.mechanic_row').show();
-                    }
-                }
+		//Tooltip
 
-                $(function () {
+		$('[data-toggle="tooltip"]').tooltip();
 
-                    $('.agent_field').hide();
+		//Vertically center modals on page
+		function reposition() {
+			var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+			modal.css('display', 'block');
 
-                    var moduleId;
-                    //Initialize Select2 Elements
-                    $(".select2").select2();
+			// Dividing by two centers the modal exactly, but dividing by three
+			// or four works better for larger screens.
+			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+		}
 
-                    //Tooltip
+		// Reposition when a modal is shown
+		$('.modal').on('show.bs.modal', reposition);
+		// Reposition when the window is resized
+		$(window).on('resize', function () {
+			$('.modal:visible').each(reposition);
+		});
 
-                    $('[data-toggle="tooltip"]').tooltip();
+		//Show success action modal
+		$('#success-action-modal').modal('show');
 
-                    //Vertically center modals on page
-                    function reposition() {
-                        var modal = $(this),
-                            dialog = modal.find('.modal-dialog');
-                        modal.css('display', 'block');
+		$(".js-example-basic-multiple").select2();
 
-                        // Dividing by two centers the modal exactly, but dividing by three
-                        // or four works better for larger screens.
-                        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                    }
+		//Cancell booking
+		//Post module form to server using ajax (ADD)
 
-                    // Reposition when a modal is shown
-                    $('.modal').on('show.bs.modal', reposition);
-                    // Reposition when the window is resized
-                    $(window).on('resize', function () {
-                        $('.modal:visible').each(reposition);
-                    });
+		$(document).ready(function () {
 
-                    //Show success action modal
-                    $('#success-action-modal').modal('show');
+			$('#card_date').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			$('#schedule_date').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			$('#booking_date').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			$('#dateserviced').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			$('#completion_date').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+		});
+		$('#add-jobcard-modal').on('shown.bs.modal', function (e) {
 
-                    $(".js-example-basic-multiple").select2();
-
-                    //Cancell booking
-                    //Post module form to server using ajax (ADD)
-
-                    $(document).ready(function () {
-
-                        $('#card_date').datepicker({
-                            format: 'dd/mm/yyyy',
-                            autoclose: true,
-                            todayHighlight: true
-                        });
-                        $('#schedule_date').datepicker({
-                            format: 'dd/mm/yyyy',
-                            autoclose: true,
-                            todayHighlight: true
-                        });
-                        $('#booking_date').datepicker({
-                            format: 'dd/mm/yyyy',
-                            autoclose: true,
-                            todayHighlight: true
-                        });
-                        $('#dateserviced').datepicker({
-                            format: 'dd/mm/yyyy',
-                            autoclose: true,
-                            todayHighlight: true
-                        });
-                        $('#completion_date').datepicker({
-                            format: 'dd/mm/yyyy',
-                            autoclose: true,
-                            todayHighlight: true
-                        });
-                    });
-                    $('#add-jobcard-modal').on('show.bs.modal', function (e) {
-
-                        var btnEdit = $(e.relatedTarget);
-                        var card_date = btnEdit.data('card_date');
-                        var modal = $(this);
-                        modal.find('#card_date').val(card_date);
-                    });
-                    //Post form to server using ajax (add)
-                    $('#add_jobcardtypes').on('click', function () {
-                        var strUrl = '/jobcards/addjobcard';
-                        var formName = 'add-jobcard-form';
-                        var modalID = 'add-jobcard-modal';
-                        var submitBtnID = 'add_jobcardtypes';
-                        var redirectUrl = '/jobcards/mycards';
-                        var successMsgTitle = 'New Record Added!';
-                        var successMsg = 'The Record  has been updated successfully.';
-                        modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                    });
-                });
-            </script>
+			var btnEdit = $(e.relatedTarget);
+			var card_date = btnEdit.data('card_date');
+			var modal = $(this);
+			modal.find('#card_date').val(card_date);
+		});
+		//Post form to server using ajax (add)
+		$('#add_jobcardtypes').on('click', function () {
+			var strUrl = '/jobcards/addjobcard';
+			var formName = 'add-jobcard-form';
+			var modalID = 'add-jobcard-modal';
+			var submitBtnID = 'add_jobcardtypes';
+			var redirectUrl = '/jobcards/mycards';
+			var successMsgTitle = 'New Record Added!';
+			var successMsg = 'The Record  has been updated successfully.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+	});
+	function clone(id, file_index, child_id) {
+		var clone = document.getElementById(id).cloneNode(true);
+		clone.setAttribute("id", file_index);
+		clone.setAttribute("name", file_index);
+		clone.style.display = "table-row";
+		clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
+		clone.querySelector('#' + child_id).disabled = false;
+		clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
+		return clone;
+	}
+	function addFile() {
+		var table = document.getElementById("tab_tab");
+		var file_index = document.getElementById("file_index");
+		file_index.value = ++file_index.value;
+		var instruction_clone = clone("instructions_row", file_index.value, "instruction");
+		var final_row = document.getElementById("final_row").cloneNode(false);
+		table.appendChild(instruction_clone);
+		table.appendChild(final_row);
+		var total_files = document.getElementById("total_files");
+		total_files.value = ++total_files.value;
+		//change the following using jquery if necessary
+		var remove = document.getElementsByName("remove");
+		for (var i = 0; i < remove.length; i++)
+			remove[i].style.display = "inline";
+	}
+	
+	function removeFile(row_name)
+	{
+		var row=row_name.parentNode.parentNode.id;
+		var rows=document.getElementsByName(row);
+		while(rows.length>0)
+			rows[0].parentNode.removeChild(rows[0]);
+		var total_files = document.getElementById("total_files");
+		total_files.value=--total_files.value;
+		var remove=document.getElementsByName("remove");
+		if(total_files.value == 1)
+			remove[1].style.display='none';
+	}
+	</script>
 @endsection
