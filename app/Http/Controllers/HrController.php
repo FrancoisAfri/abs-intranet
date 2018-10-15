@@ -178,8 +178,6 @@ class HrController extends Controller {
     }
 	
 	public function userRoleSave(Request $request, User $user) {
-		
-		
 		$this->validate($request, [
             'hr_id' => 'required',
         ]);

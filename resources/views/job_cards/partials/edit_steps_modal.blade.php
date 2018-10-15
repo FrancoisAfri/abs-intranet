@@ -26,16 +26,15 @@
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="step_name" name="step_name" value=""
                                    placeholder="Enter step name" required>
-                        </div>
+                        </di v>
                     </div>
                     <div class="form-group">
                         <label for="job_title" class="col-sm-2 control-label">Job Title</label>
                         <div class="col-sm-8">
-                            <select id="job_title" name="job_title" class="form-control select2" style="width: 100%;"
-                                    required>
-                                <option value="">*** Select Job Title ***</option>
-                                @foreach($positions as $position)
-                                    <option value="{{ $position->id }}">{{ $position->name }}</option>
+                            <select id="job_title" name="job_title" class="form-control select2" style="width: 100%;">
+                                <option value="">*** Select Role ***</option>
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}">{{ $role->description }}</option>
                                 @endforeach
                             </select>
                         </div>

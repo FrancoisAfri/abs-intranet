@@ -202,204 +202,202 @@
             <!-- Include add new prime rate modal -->
             @include('Vehicles.partials.add_vehicleIncidents_modal')
             @include('Vehicles.partials.edit_vehicleIncidents_modal')
-
         </div>
+    </div>
+@endsection
+@section('page_script')
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+	<!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+			type="text/javascript"></script>
+	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+			type="text/javascript"></script>
+	<!-- the main fileinput plugin file -->
+	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
-        @endsection
+	<!-- InputMask -->
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<!-- time picker -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+	<script>
+		function postData(id, data) {
+		   // if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
+			if (data == 'actdeac') location.href = "/vehicle_management/fixvehicle/" + id;
 
-        @section('page_script')
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-            <!-- iCheck -->
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                    type="text/javascript"></script>
-            <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-                    type="text/javascript"></script>
-            <!-- the main fileinput plugin file -->
-            <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-            <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-            <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
-            <!-- InputMask -->
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <!-- time picker -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-            <script>
-                function postData(id, data) {
-                   // if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
-                    if (data == 'actdeac') location.href = "/vehicle_management/fixvehicle/" + id;
-
-                }
-			$(function () {
-                $('#back_button').click(function () {
-                    location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-                });
-                
-                var moduleId;
-                //Initialize Select2 Elements
-                $(".select2").select2();
-                $('.zip-field').hide();
-
-
-                //Tooltip
-
-                $('[data-toggle="tooltip"]').tooltip();
-
-                //Vertically center modals on page
-                function reposition() {
-                    var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
-                    modal.css('display', 'block');
-
-                    // Dividing by two centers the modal exactly, but dividing by three
-                    // or four works better for larger screens.
-                    dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                }
-
-                // Reposition when a modal is shown
-                $('.modal').on('show.bs.modal', reposition);
-                // Reposition when the window is resized
-                $(window).on('resize', function () {
-                    $('.modal:visible').each(reposition);
-                });
-
-                //Show success action modal
-                $('#success-action-modal').modal('show');
-
-                //
-
-                $(".js-example-basic-multiple").select2();
+		}
+	$(function () {
+		$('#back_button').click(function () {
+			location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+		});
+		
+		var moduleId;
+		//Initialize Select2 Elements
+		$(".select2").select2();
+		$('.zip-field').hide();
 
 
-                $(document).ready(function () {
+		//Tooltip
 
-                    $('#date_of_incident').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
+		$('[data-toggle="tooltip"]').tooltip();
 
-                    //
-                    $('#dateofincident').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
+		//Vertically center modals on page
+		function reposition() {
+			var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+			modal.css('display', 'block');
 
-                });
+			// Dividing by two centers the modal exactly, but dividing by three
+			// or four works better for larger screens.
+			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+		}
 
-                //Post perk form to server using ajax (add)
-                $('#add_vehicleincidents').on('click', function () {
-                    var strUrl = '/vehicle_management/addvehicleincidents';
-                    var formName = 'add-incidents-form';
-                    var modalID = 'add-incidents-modal';
-                    var submitBtnID = 'add_vehicleincidents';
-                    var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
+		// Reposition when a modal is shown
+		$('.modal').on('show.bs.modal', reposition);
+		// Reposition when the window is resized
+		$(window).on('resize', function () {
+			$('.modal:visible').each(reposition);
+		});
+
+		//Show success action modal
+		$('#success-action-modal').modal('show');
+
+		//
+
+		$(".js-example-basic-multiple").select2();
 
 
-                var incidentID;
-                $('#edit-incidents-modal').on('show.bs.modal', function (e) {
-                    var btnEdit = $(e.relatedTarget);
-                    if (parseInt(btnEdit.data('id')) > 0) {
-                        incidentID = btnEdit.data('id');
-                    }
-                    //console.log('gets here: ' + incidentID);
-                    var date_of_incident = btnEdit.data('date_of_incident');
-                    var incident_type = btnEdit.data('incident_type');
-                    var severity = btnEdit.data('severity');
-                    var reported_by = btnEdit.data('reported_by');
-                    var odometer_reading = btnEdit.data('odometer_reading');
-                    var status = btnEdit.data('status');
-                    var description = btnEdit.data('description');
-                    var claim_number = btnEdit.data('claim_number');
-                    var Cost = btnEdit.data('cost');
-                    var documents = btnEdit.data('documents');
-                    var documents1 = btnEdit.data('documents1');
-                    var valueID = btnEdit.data('valueID');
-                    var name = btnEdit.data('name');
-                    var modal = $(this);
-                    modal.find('#date_of_incident').val(date_of_incident);
-                    modal.find('#name').val(name);
-                    modal.find('#incident_type').val(incident_type);
-                    modal.find('#severity').val(severity);
-                    modal.find('#reported_by').val(reported_by);
-                    modal.find('#odometer_reading').val(odometer_reading);
-                    modal.find('#status').val(status);
-                    modal.find('#description').val(description);
-                    modal.find('#claim_number').val(claim_number);
-                    modal.find('#Cost').val(Cost);
-                    modal.find('#documents').val(documents);
-                    modal.find('#documents1').val(documents1);
-                    modal.find('#valueID').val(valueID);
-                });
+		$(document).ready(function () {
 
-                $('#edit_vehicleincidents').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_vehicleincidents/' + incidentID;
-                    var formName = 'edit-incidents-form';
-                    var modalID = 'edit-incidents-modal';
-                    var submitBtnID = 'edit_vehicleincidents';
-                    var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
-                    var successMsgTitle = 'Vehicle incident Record updated';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    var Method = 'PATCH'
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
+			$('#date_of_incident').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
 			});
-			
-			function clone(id, file_index, child_id) {
-				var clone = document.getElementById(id).cloneNode(true);
-				clone.setAttribute("id", file_index);
-				clone.setAttribute("name", file_index);
-				clone.style.display = "table-row";
-				clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
-				clone.querySelector('#' + child_id).disabled = false;
-				clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
-				return clone;
+
+			//
+			$('#dateofincident').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+
+		});
+
+		//Post perk form to server using ajax (add)
+		$('#add_vehicleincidents').on('click', function () {
+			var strUrl = '/vehicle_management/addvehicleincidents';
+			var formName = 'add-incidents-form';
+			var modalID = 'add-incidents-modal';
+			var submitBtnID = 'add_vehicleincidents';
+			var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
+			var successMsgTitle = 'New Record Added!';
+			var successMsg = 'The Record  has been updated successfully.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+
+
+		var incidentID;
+		$('#edit-incidents-modal').on('show.bs.modal', function (e) {
+			var btnEdit = $(e.relatedTarget);
+			if (parseInt(btnEdit.data('id')) > 0) {
+				incidentID = btnEdit.data('id');
 			}
-			function addFile() {
-				var table = document.getElementById("tab_tab");
-				var file_index = document.getElementById("file_index");
-				file_index.value = ++file_index.value;
-				var file_clone = clone("file_row", file_index.value, "document");
-				var name_clone = clone("name_row", file_index.value, "name");
-				var final_row = document.getElementById("final_row").cloneNode(false);
-				table.appendChild(file_clone);
-				table.appendChild(name_clone);
-				table.appendChild(final_row);
-				var total_files = document.getElementById("total_files");
-				total_files.value = ++total_files.value;
-				//change the following using jquery if necessary
-				var remove = document.getElementsByName("remove");
-				for (var i = 0; i < remove.length; i++)
-					remove[i].style.display = "inline";
-			}
-			
-			function removeFile(row_name)
-			{
-				var row=row_name.parentNode.parentNode.id;
-				var rows=document.getElementsByName(row);
-				while(rows.length>0)
-					rows[0].parentNode.removeChild(rows[0]);
-				var total_files = document.getElementById("total_files");
-				total_files.value=--total_files.value;
-				var remove=document.getElementsByName("remove");
-				if(total_files.value == 1)
-					remove[1].style.display='none';
-			}
-            </script>
+			//console.log('gets here: ' + incidentID);
+			var date_of_incident = btnEdit.data('date_of_incident');
+			var incident_type = btnEdit.data('incident_type');
+			var severity = btnEdit.data('severity');
+			var reported_by = btnEdit.data('reported_by');
+			var odometer_reading = btnEdit.data('odometer_reading');
+			var status = btnEdit.data('status');
+			var description = btnEdit.data('description');
+			var claim_number = btnEdit.data('claim_number');
+			var Cost = btnEdit.data('cost');
+			var documents = btnEdit.data('documents');
+			var documents1 = btnEdit.data('documents1');
+			var valueID = btnEdit.data('valueID');
+			var name = btnEdit.data('name');
+			var modal = $(this);
+			modal.find('#date_of_incident').val(date_of_incident);
+			modal.find('#name').val(name);
+			modal.find('#incident_type').val(incident_type);
+			modal.find('#severity').val(severity);
+			modal.find('#reported_by').val(reported_by);
+			modal.find('#odometer_reading').val(odometer_reading);
+			modal.find('#status').val(status);
+			modal.find('#description').val(description);
+			modal.find('#claim_number').val(claim_number);
+			modal.find('#Cost').val(Cost);
+			modal.find('#documents').val(documents);
+			modal.find('#documents1').val(documents1);
+			modal.find('#valueID').val(valueID);
+		});
+
+		$('#edit_vehicleincidents').on('click', function () {
+			var strUrl = '/vehicle_management/edit_vehicleincidents/' + incidentID;
+			var formName = 'edit-incidents-form';
+			var modalID = 'edit-incidents-modal';
+			var submitBtnID = 'edit_vehicleincidents';
+			var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
+			var successMsgTitle = 'Vehicle incident Record updated';
+			var successMsg = 'The Record  has been updated successfully.';
+			var Method = 'PATCH'
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+	});
+	
+	function clone(id, file_index, child_id) {
+		var clone = document.getElementById(id).cloneNode(true);
+		clone.setAttribute("id", file_index);
+		clone.setAttribute("name", file_index);
+		clone.style.display = "table-row";
+		clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
+		clone.querySelector('#' + child_id).disabled = false;
+		clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
+		return clone;
+	}
+	function addFile() {
+		var table = document.getElementById("tab_tab");
+		var file_index = document.getElementById("file_index");
+		file_index.value = ++file_index.value;
+		var file_clone = clone("file_row", file_index.value, "document");
+		var name_clone = clone("name_row", file_index.value, "name");
+		var final_row = document.getElementById("final_row").cloneNode(false);
+		table.appendChild(file_clone);
+		table.appendChild(name_clone);
+		table.appendChild(final_row);
+		var total_files = document.getElementById("total_files");
+		total_files.value = ++total_files.value;
+		//change the following using jquery if necessary
+		var remove = document.getElementsByName("remove");
+		for (var i = 0; i < remove.length; i++)
+			remove[i].style.display = "inline";
+	}
+	
+	function removeFile(row_name)
+	{
+		var row=row_name.parentNode.parentNode.id;
+		var rows=document.getElementsByName(row);
+		while(rows.length>0)
+			rows[0].parentNode.removeChild(rows[0]);
+		var total_files = document.getElementById("total_files");
+		total_files.value=--total_files.value;
+		var remove=document.getElementsByName("remove");
+		if(total_files.value == 1)
+			remove[1].style.display='none';
+	}
+	</script>
 @endsection
