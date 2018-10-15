@@ -26,7 +26,7 @@
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="step_name" name="step_name" value=""
                                    placeholder="Enter step name" required>
-                        </di v>
+						</div>
                     </div>
                     <div class="form-group">
                         <label for="job_title" class="col-sm-2 control-label">Job Title</label>
