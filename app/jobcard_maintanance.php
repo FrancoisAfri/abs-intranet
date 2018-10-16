@@ -11,10 +11,16 @@ class jobcard_maintanance extends Model
         'booking_date', 'supplier_id', 'service_type',
         'estimated_hours', 'service_file_upload', 'service_time',
         'machine_hour_metre', 'machine_odometer', 'last_driver_id',
-        'mechanic_id','status', 'jobcard_number', 'date_default', 'user_id', 'status_display'];
+        'mechanic_id','status', 'jobcard_number', 'date_default'
+		, 'user_id', 'status_display', 'mechanic_comment', 'completion_comment'];
 		
 	 //Relationship JC and JC instructions
     public function JCinstructions() {
         return $this->hasMany(JobCardInstructions::class, 'job_card_id');
+    }
+	
+	public function jobCardHistory() {
+		
+		return $this->hasMany(JobCardHistory::class, 'job_card_id');
     }
 }

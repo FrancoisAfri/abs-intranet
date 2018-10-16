@@ -150,15 +150,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
-                        <label for="documents" class="col-sm-2 control-label">Inspection Document</label>
-                        <div class="col-sm-8">
-
-                            <input type="file" id="inspection_file_upload" name="inspection_file_upload"
-                                   class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
-                                   data-show-upload="false">
-                        </div>
-                    </div>
                     <div class="form-group mechanic_row">
                         <label for="leave_type" class="col-sm-2 control-label">Mechanic</label>
                         <div class="col-sm-8">

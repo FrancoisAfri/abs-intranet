@@ -104,6 +104,12 @@
                                         </div>
                                     </td>
                                 </tr>
+								<tr>
+                                    <td class="caption">Mechanic Comment</td>
+                                    <td>{{ !empty($jobcard->mechanic_comment) ? $jobcard->mechanic_comment : ''}}</td>
+                                    <td class="caption">Completion Comment</td>
+                                    <td>{{ !empty($jobcard->completion_comment) ? $jobcard->completion_comment : ''}}</td>
+                                </tr>
                         </table>
 						<table class="table table-striped table-bordered">
 							<hr class="hr-text" data-content="Instructions">
@@ -117,7 +123,7 @@
 								@foreach ($instructions as $instruction)
 									<tr>
 										<td>
-										@if ($jobcard->status <= 1)
+										@if ($card->status <= 1)
 											<a href="{{ '/jobcards/edit_instructions/' . $instruction->id }}"
 											id="edit_instructions/" class="btn btn-sm btn-default btn-flat">Modify</a>
 										@endif
@@ -159,33 +165,32 @@
                        data-id="{{ $jobcard->id }}">Images</a>
                     <a href="{{ '/jobcards/jobcardnotes/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $jobcard->id }}">Job Card Notes</a>
+                       data-id="{{ $jobcard->id }}">Notes</a>
                     <a href="{{ '/jobcard/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Parts</a>
-                    <a href="{{ '/vehicle_management/conclude/' . $card->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $card->id }}">Conclude Jobcard</a>
+					@if (($flow->step_number - 1) == $card->status)
+						<button vehice="button" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
+								data-target="#close-jobcard-modal" data-id="{{ $jobcard->id }}"
+								data-completion_date="{{ !empty($current_date) ? date('d/m/Y', $current_date) : ''}}"
+								><i class="fa fa-lock"></i> Conclude Jobcard
+						</button>
+					@endif
+					
+					<a href="{{ '/jobcard/jobcard_history/' . $card->id }}"
+						   class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
                     <button class="btn btn-sm btn-default btn-flat" id="print" name="print" onclick="myFunction()">
                         Print
                     </button>
                     <div id="myDIV">
                         <br>
                         <form class="form-horizontal" method="get" action="/jobcards/print/{{$card->id}}">
-
-                            <td style="vertical-align: middle; text-align: center;"> Job Cards <input type="checkbox"
-                                                                                                      class="checkbox selectall"
-                                                                                                      id="jobcards{{ $card->id }}"
-                                                                                                      name="cards_2"
-                                                                                                      value="1"></td>
-                            <td style="vertical-align: middle; text-align: center;"> Job Cards + notes <input
-                                        type="checkbox" class="checkbox selectall"
-                                        id="jobcards_notes{{ $card->id }}" name="cards_3" value="1"></td>
-                            <td style="vertical-align: middle; text-align: center;"> Audit <input type="checkbox"
-                                                                                                  class="checkbox selectall"
-                                                                                                  id="audit{{ $card->id }}"
-                                                                                                  name="cards_4"
-                                                                                                  value="1"></td>
+                            <td style="vertical-align: middle; text-align: center;"> Job Cards 
+								<input type="checkbox" class="checkbox selectall" id="jobcards{{ $card->id }}" name="cards_2" value="1">
+							</td>
+                            <td style="vertical-align: middle; text-align: center;">+ notes 
+								<input type="checkbox" class="checkbox selectall" id="jobcards_notes{{ $card->id }}" name="cards_3" value="1">
+							</td>
                             <input type="submit" id="load-allocation" name="load-allocation"
                                    class="btn btn-sm btn-default btn-flat" value="Submit">
                         </form>
@@ -198,6 +203,7 @@
             </div>
         </div>
         @include('job_cards.partials.edit_jobcard_modal')
+        @include('job_cards.partials.conclude_jobcard_modal')
     </div>
 @endsection
 @section('page_script')
@@ -220,16 +226,12 @@
     <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
     <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
     <!-- InputMask -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-
     <script>
         $('#cancel').click(function () {
             location.href = '/jobcards/search';
@@ -238,8 +240,6 @@
         $('.print').hide();
 
         function myFunction() {
-
-
             var x = document.getElementById("myDIV");
             if (x.style.display === "none") {
                 x.style.display = "block";
@@ -329,7 +329,22 @@
                 }
                 return allType;
             }
-
+			$('#close-jobcard-modal').on('shown.bs.modal', function (e) {
+				var btnEdit = $(e.relatedTarget);
+				var completionDate = btnEdit.data('completion_date');
+				var modal = $(this);
+				modal.find('#completion_date').val(completionDate);
+			});
+			$('#close_jobcard').on('click', function () {
+                var strUrl = '/jobcards/closejobcard/' + {{$card->id}};
+                var formName = 'close-jobcard-form';
+                var modalID = 'close-jobcard-modal';
+                var submitBtnID = 'close_jobcard';
+                var redirectUrl = '/jobcards/viewcard/' + {{$card->id}};
+                var successMsgTitle = 'Job Card Closed!';
+                var successMsg = 'The Job Card  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
             //pass category data to the edit category modal
             $('#edit-jobcard-modal').on('shown.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
@@ -364,17 +379,7 @@
                 modal.find('select#supplier_id').val(supplierID);
                 modal.find('select#vehicle_id').val(vehicleID);
             });
-            $('#add_notes').on('click', function () {
-
-                var strUrl = '/jobcards/addjobcardnotes';
-                var formName = 'add-note-form';
-                var modalID = 'add-note-modal';
-                var submitBtnID = 'add_notes';
-                var redirectUrl = '/jobcards/viewcard/' + {{$card->id}};
-                var successMsgTitle = 'New Record Added!';
-                var successMsg = 'The Record  has been updated successfully.';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
+          
             $('#update_jobcard').on('click', function () {
                 var strUrl = '/jobcards/updatejobcard/' + JobId;
                 var formName = 'edit-jobcard-form';
@@ -387,7 +392,7 @@
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
         });
-			function clone(id, file_index, child_id) {
+	function clone(id, file_index, child_id) {
 		var clone = document.getElementById(id).cloneNode(true);
 		clone.setAttribute("id", file_index);
 		clone.setAttribute("name", file_index);

@@ -13,9 +13,7 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
                     <input type="hidden" name="ID" value="">
-
                     <div class="form-group ">
                         <label for="note" class="col-sm-2 control-label">Note</label>
                         <div class="col-sm-8">
@@ -24,14 +22,10 @@
                                       rows="3">{{ old('notes') }}</textarea>
                         </div>
                     </div>
-
                     <input type="hidden" id="vehicle_id" name="vehicle_id"
                            value="{{$card->vehicle_id}}">
-
-
                     <input type="hidden" id="jobcard_id" name="jobcard_id"
                            value="{{ $card->id }}">
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
