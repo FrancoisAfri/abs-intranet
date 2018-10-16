@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Add Job Card Note </h3>
+                    <h3 class="box-title">Job Card Note(s)</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -52,7 +52,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-note-modal">Add Job Card Notes
+                                data-target="#add-note-modal">Add Note
                         </button>
 
                         </button>

@@ -7,7 +7,6 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\HRPerson;
-use App\EmployeeTasks;
 use App\CompanyIdentity;
 class NextjobstepNotification extends Mailable
 {

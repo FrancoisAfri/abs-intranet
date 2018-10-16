@@ -9,23 +9,22 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class QuotesRejectionMail extends Mailable
+class NoteCommunications extends Mailable
 {
     use Queueable, SerializesModels;
 	
-	public $creator;
-    public $quoteID;
-    public $rejectionReason;
+	public $first_name;
+    public $note;
+    public $email;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(HRPerson $creator, $quoteID, $rejectionReason)
+    public function __construct($first_name, $note)
     {
-        $this->creator = $creator;
-        $this->quoteID = $quoteID;
-        $this->quoteID = $rejectionReason;
+        $this->first_name = $first_name;
+        $this->note = $note;
     }
 
     /**
@@ -43,9 +42,8 @@ class QuotesRejectionMail extends Mailable
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['quote_url'] = url("/quote/view/$this->quoteID/01");
 
-        return $this->view('mails.declinee_quote')
+        return $this->view('mails.note_communciations')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);

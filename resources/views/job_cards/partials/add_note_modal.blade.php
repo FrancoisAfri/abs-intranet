@@ -17,10 +17,10 @@
                     <input type="hidden" name="ID" value="">
 
                     <div class="form-group ">
-                        <label for="days" class="col-sm-2 control-label">Note</label>
+                        <label for="note" class="col-sm-2 control-label">Note</label>
                         <div class="col-sm-8">
 
-                            <textarea class="form-control" id="notes" name="notes" placeholder="Enter notes..."
+                            <textarea class="form-control" id="note" name="note" placeholder="Enter note..."
                                       rows="3">{{ old('notes') }}</textarea>
                         </div>
                     </div>
@@ -30,7 +30,7 @@
 
 
                     <input type="hidden" id="jobcard_id" name="jobcard_id"
-                           value="{{ $card->jobcard_number }}">
+                           value="{{ $card->id }}">
 
                 </div>
                 <div class="modal-footer">
