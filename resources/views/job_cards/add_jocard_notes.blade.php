@@ -10,7 +10,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Add Job Card Note </h3>
+                    <h3 class="box-title">Job Card Note(s)</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -52,7 +52,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-note-modal">Add Job Card Notes
+                                data-target="#add-note-modal">Add Note
                         </button>
 
                         </button>
@@ -62,118 +62,60 @@
             <!-- Include add new prime rate modal -->
         @include('job_cards.partials.add_note_modal')
         <!-- Include delete warning Modal form-->
-
         </div>
+	</div>
+@endsection
 
+@section('page_script')
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<!-- Select2 -->
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script>
+		$('#back_button').click(function () {
+			location.href = '/jobcards/viewcard/{{$card->id}}';
+		});
+		$(function () {
+			var moduleId;
+			//Initialize Select2 Elements
+			$(".select2").select2();
 
-        @endsection
+			//Tooltip
 
-        @section('page_script')
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <!-- Select2 -->
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script>
-                function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/safe_act/" + id;
+			$('[data-toggle="tooltip"]').tooltip();
 
-                }
+			//Vertically center modals on page
+			function reposition() {
+				var modal = $(this),
+					dialog = modal.find('.modal-dialog');
+				modal.css('display', 'block');
 
-                $('#back_button').click(function () {
-                    location.href = '/jobcards/viewcard/{{$card->id}}';
-                });
-                $(function () {
-                    var moduleId;
-                    //Initialize Select2 Elements
-                    $(".select2").select2();
+				// Dividing by two centers the modal exactly, but dividing by three
+				// or four works better for larger screens.
+				dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+			}
 
-                    //Tooltip
+			// Reposition when a modal is shown
+			$('.modal').on('show.bs.modal', reposition);
+			// Reposition when the window is resized
+			$(window).on('resize', function () {
+				$('.modal:visible').each(reposition);
+			});
 
-                    $('[data-toggle="tooltip"]').tooltip();
-
-                    //Vertically center modals on page
-                    function reposition() {
-                        var modal = $(this),
-                            dialog = modal.find('.modal-dialog');
-                        modal.css('display', 'block');
-
-                        // Dividing by two centers the modal exactly, but dividing by three
-                        // or four works better for larger screens.
-                        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                    }
-
-                    // Reposition when a modal is shown
-                    $('.modal').on('show.bs.modal', reposition);
-                    // Reposition when the window is resized
-                    $(window).on('resize', function () {
-                        $('.modal:visible').each(reposition);
-                    });
-
-                    //Show success action modal
-                    $('#success-action-modal').modal('show');
-
-                    //
-
-                    $(".js-example-basic-multiple").select2();
-
-                    //save Fleet
-                    //Post module form to server using ajax (ADD)
-                    $('#add_notes').on('click', function () {
-                        var strUrl = '/jobcards/addjobcardnotes';
-                        var formName = 'add-note-form';
-                        var modalID = 'add-note-modal';
-                        var submitBtnID = 'add_notes';
-                        var redirectUrl = '/jobcards/jobcardnotes/{{$card->id}}';
-                        var successMsgTitle = 'New Record Added!';
-                        var successMsg = 'The Record  has been updated successfully.';
-                        modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                    });
-
-                    var safeID;
-                    $('#edit-package-modal').on('show.bs.modal', function (e) {
-                        //console.log('kjhsjs');
-                        var btnEdit = $(e.relatedTarget);
-                        safeID = btnEdit.data('id');
-                        var name = btnEdit.data('name');
-                        var description = btnEdit.data('description');
-                        var modal = $(this);
-                        modal.find('#name').val(name);
-                        modal.find('#description').val(description);
-                    });
-                    $('#edit_safe').on('click', function () {
-                        var strUrl = '/vehicle_management/edit_safe/' + safeID;
-                        var modalID = 'edit-package-modal';
-                        var objData = {
-                            name: $('#' + modalID).find('#name').val(),
-                            description: $('#' + modalID).find('#description').val(),
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
-                        var submitBtnID = 'edit_safe';
-                        var redirectUrl = '/vehicle_management/safe';
-                        var successMsgTitle = 'Changes Saved!';
-                        var successMsg = 'The Safe has been updated successfully.';
-                        var Method = 'PATCH';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-                    });
-
-                    var safeID;
-                    $('#delete-safe-warning-modal').on('show.bs.modal', function (e) {
-                        var btnEdit = $(e.relatedTarget);
-                        safeID = btnEdit.data('id');
-                        var modal = $(this);
-                    });
-
-                    $('#delete_safe').on('click', function () {
-                        var strUrl = '/vehicle_management/Manage_safe/' + safeID;
-                        var modalID = 'delete-safe-warning-modal';
-                        var objData = {
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
-                        var submitBtnID = 'delete_safe';
-                        var redirectUrl = '/vehicle_management/safe';
-                        //var Method = 'PATCH';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl);
-                    });
-
-                });
-            </script>
+			//Show success action modal
+			$('#success-action-modal').modal('show');
+			$(".js-example-basic-multiple").select2();
+			//save Fleet
+			//Post module form to server using ajax (ADD)
+			$('#add_notes').on('click', function () {
+				var strUrl = '/jobcards/addjobcardnotes';
+				var formName = 'add-note-form';
+				var modalID = 'add-note-modal';
+				var submitBtnID = 'add_notes';
+				var redirectUrl = '/jobcards/jobcardnotes/{{$card->id}}';
+				var successMsgTitle = 'New Record Added!';
+				var successMsg = 'The Record  has been updated successfully.';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
+		});
+	</script>
 @endsection

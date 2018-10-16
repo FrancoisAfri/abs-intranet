@@ -668,72 +668,51 @@ Route::post('jobcards/addservicetype', 'JobcardController@addservicetype');
 Route::patch('jobcards/edit_servicetype/{service}', 'JobcardController@editservicetype');
 Route::get('jobcards/service_act/{service}', 'JobcardController@servicetype_act');
 Route::get('jobcards/serveice/{service}', 'JobcardController@deleteservicetype');
-
 Route::get('jobcards/configuration', 'JobcardController@configuration');
 Route::post('jobcards/configuration_setings/{config}', 'JobcardController@configurationSetings');
-
 Route::get('jobcards/mycards', 'JobcardController@myjobcards');
-
 Route::get('jobcards/approval_process', 'JobcardController@procesflow');
 Route::post('jobcards/add_processflow', 'JobcardController@addprocessflow');
 Route::patch('jobcards/edit_step/{steps}', 'JobcardController@editprocessflow');
 Route::get('jobcards/process_act/{steps}', 'JobcardController@steps_act');
-
 Route::post('jobcards/addjobcard', 'JobcardController@addjobcardmanagement');
 Route::patch('jobcards/updatejobcard/{jobCard}', 'JobcardController@updateJobCard');
-
 Route::get('jobcards/approval', 'JobcardController@jobcardsApprovals');
-//Route::get('jobcards/search', 'JobcardController@jobcardsApprovals');
 Route::get('jobcards/search', 'JobcardController@cardsearch');
 Route::post('jobcards/jobcardsearch', 'JobcardController@jobcardsearch');
-
-//Route::post('jobcards/appovecards', 'JobcardController@appovecards');
-Route::get('jobcards/viewjobcard/{card}', 'JobcardController@viewcard');
-
+//Route::get('jobcards/viewjobcard/{card}', 'JobcardController@viewcard');
 Route::get('jobcards/viewcard/{card}', 'JobcardController@viewjobcard');
 Route::post('jobcards/appovecards', 'JobcardController@appovecards');
+Route::post('jobcards/closejobcard/{card}', 'JobcardController@completeJobcard');
 Route::post('jobcards/addjobcardnotes', 'JobcardController@addjobcardnotes');
 Route::get('jobcards/jobcardnotes/{card}', 'JobcardController@viewjobcardnotes');
-
+Route::get('jobcard/jobcard_history/{card}', 'JobcardController@jobcardhistory');
+Route::get('jobcard/jobcard_print/{card}', 'JobcardController@jobcardHistoriesPrint');
 Route::patch('jobcards/instructions-update/{instruction}', 'JobcardController@editInstruction');
 Route::get('jobcards/edit_instructions/{instruction}','JobcardController@editjobcardinstructions');
 Route::get('jobcard/cancellation/{card}','JobcardController@canceljobcardnotes');
-
 Route::get('jobcards/parts','JobcardController@jobcardparts');
-
 Route::get('jobcards/jobcardimages/{images}','JobcardController@jobcardimages');
 Route::post('jobcard/addimages','JobcardController@addcardimages');
-
 Route::post('jobcards/audits/print','JobcardController@printAudit');
-
 Route::post('jobcards/addcatergory','JobcardController@addpartscatergory');
-
 Route::get('jobcards/addparts/{parts}','JobcardController@viewjobcardparts');
 Route::patch('jobcards/edit_partscatagory/{parts}', 'JobcardController@editpartscatagory');
 Route::get('jobcards/card_act/{parts}', 'JobcardController@jobcat_act');
 Route::post('jobcards/delete_partscatergory/{parts}', 'JobcardController@deletepartscatergory');
-
 Route::post('jobcards/addjobcardparts','JobcardController@addjobcardparts');
 Route::get('jobcards/parts_act/{parts}', 'JobcardController@parts_act');
 Route::patch('jobcards/edit_cardparts/{parts}', 'JobcardController@editcardparts');
 Route::post('jobcards/delete_jobcards/{parts}', 'JobcardController@deletejobcards');
-
-
 Route::get('jobcard/addparts/{jobcardpart}', 'JobcardController@addparts');
 Route::get('jobcard/parts/{jobcardparts}', 'JobcardController@viewparts');
 Route::post('jobcard/addjobparts/{jobcardpart}', 'JobcardController@addjobparts');
-
-
 Route::get('jobcards/print/{print}', 'JobcardController@printcards');
-
 Route::get('jobcards/reports', 'JobcardController@viewreport');
-
 Route::post('jobcards/reports/cards', 'JobcardController@cards');
-
 Route::post('jobcards/printcards', 'JobcardController@printscard');
 Route::post('jobcards/reports/printparts', 'JobcardController@printsparts');
 Route::post('jobcards/reports/notesprint', 'JobcardController@printnotes');
-
 Route::post('jobcards/reports/parts', 'JobcardController@parts');
 Route::post('jobcards/reports/notes', 'JobcardController@notes');
 
