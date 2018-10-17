@@ -584,7 +584,6 @@ class VehicleFleetController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-
         $data['companies'] = $companies;
         $data['contactPeople'] = $contactPeople;
         $data['ContactCompany'] = $ContactCompany;

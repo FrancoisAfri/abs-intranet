@@ -680,9 +680,10 @@ Route::patch('jobcards/updatejobcard/{jobCard}', 'JobcardController@updateJobCar
 Route::get('jobcards/approval', 'JobcardController@jobcardsApprovals');
 Route::get('jobcards/search', 'JobcardController@cardsearch');
 Route::post('jobcards/jobcardsearch', 'JobcardController@jobcardsearch');
-//Route::get('jobcards/viewjobcard/{card}', 'JobcardController@viewcard');
+Route::get('jobcards/mechanic-feedback/{card}', 'JobcardController@mechanicFeedback');
 Route::get('jobcards/viewcard/{card}', 'JobcardController@viewjobcard');
 Route::post('jobcards/appovecards', 'JobcardController@appovecards');
+Route::post('jobcard/mecfeedback/{card}', 'JobcardController@mechanicomplete');
 Route::post('jobcards/closejobcard/{card}', 'JobcardController@completeJobcard');
 Route::post('jobcards/addjobcardnotes', 'JobcardController@addjobcardnotes');
 Route::get('jobcards/jobcardnotes/{card}', 'JobcardController@viewjobcardnotes');

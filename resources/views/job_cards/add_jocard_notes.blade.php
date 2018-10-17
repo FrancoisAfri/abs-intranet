@@ -72,7 +72,7 @@
 	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 	<script>
 		$('#back_button').click(function () {
-			location.href = '/jobcards/viewcard/{{$card->id}}';
+			location.href = '/jobcards/viewcard/' + {{$card->id}};
 		});
 		$(function () {
 			var moduleId;
