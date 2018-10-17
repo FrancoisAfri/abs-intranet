@@ -700,8 +700,8 @@ class JobcardController extends Controller
 						$instructions->completion_date = strtotime(date("Y-m-d"));
 						$instructions->completion_time = date("h:i:sa");
 						$instructions->update();
-						$count ++;
 					}
+					$count ++;
 				}
             }
         }
