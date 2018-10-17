@@ -90,7 +90,7 @@
 
                             //Cancel button click event
                             document.getElementById("cancel").onclick = function () {
-                                location.href = "/vehicle_management/create_request";
+                                location.href = "/jobcards/search";
                             };
                             $(function () {
                                 $('#example2').DataTable({
