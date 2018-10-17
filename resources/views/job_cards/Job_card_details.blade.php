@@ -115,7 +115,7 @@
 							<hr class="hr-text" data-content="Instructions">
 							<tr>
 									<td>#</td>
-									<td></td>
+									<td>Instructions</td>
 									<td>Status</td>
 									<td>Completion  Date/Time</td>
 							</tr>
@@ -160,6 +160,9 @@
                             data-vehicle_id="{{$jobcard->vehicle_id}}"
                             data-instruction="{{$jobcard->instruction}}"><i class="fa fa-pencil-square-o"></i> Edit
                     </button>
+					<a href="{{ '/jobcards/mechanic-feedback/' . $card->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
+                       data-id="{{ $jobcard->id }}">Mechanic Feedback</a>
                     <a href="{{ '/jobcards/jobcardimages/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Images</a>
@@ -176,20 +179,22 @@
 								><i class="fa fa-lock"></i> Conclude Jobcard
 						</button>
 					@endif
-					
+					@if (!empty($userAccess))
 					<a href="{{ '/jobcard/jobcard_history/' . $card->id }}"
 						   class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
+					@endif
                     <button class="btn btn-sm btn-default btn-flat" id="print" name="print" onclick="myFunction()">
                         Print
                     </button>
                     <div id="myDIV">
                         <br>
                         <form class="form-horizontal" method="get" action="/jobcards/print/{{$card->id}}">
-                            <td style="vertical-align: middle; text-align: center;"> Job Cards 
-								<input type="checkbox" class="checkbox selectall" id="jobcards{{ $card->id }}" name="cards_2" value="1">
+                        {{ csrf_field() }}
+							<td style="vertical-align: middle; text-align: center;"> Job Cards 
+								<input type="checkbox" class="checkbox" id="jobcards" name="jobcards" value="1">
 							</td>
                             <td style="vertical-align: middle; text-align: center;">+ notes 
-								<input type="checkbox" class="checkbox selectall" id="jobcards_notes{{ $card->id }}" name="cards_3" value="1">
+								<input type="checkbox" class="checkbox" id="jobcards_notes" name="jobcards_notes" value="1">
 							</td>
                             <input type="submit" id="load-allocation" name="load-allocation"
                                    class="btn btn-sm btn-default btn-flat" value="Submit">
@@ -236,9 +241,7 @@
         $('#cancel').click(function () {
             location.href = '/jobcards/search';
         });
-
-        $('.print').hide();
-
+        $('#myDIV').hide();
         function myFunction() {
             var x = document.getElementById("myDIV");
             if (x.style.display === "none") {
@@ -362,7 +365,6 @@
                 var inspectionInfo = btnEdit.data('inspection_info');
                 var mechanicID = btnEdit.data('mechanic_id');
                 var vehicleID = btnEdit.data('vehicle_id');
-                var Instruction = btnEdit.data('instruction');
                 var modal = $(this);
                 modal.find('#card_date').val(cardDate);
                 modal.find('#schedule_date').val(scheduleDate);
@@ -370,7 +372,6 @@
                 modal.find('#estimated_hours').val(estimatedHours);
                 modal.find('#service_time').val(serviceTime);
                 modal.find('#machine_hour_metre').val(machineHourMetre);
-                modal.find('#instruction').val(Instruction);
                 modal.find('#machine_odometer').val(machineOdometer);
                 modal.find('#inspection_info').val(inspectionInfo);
                 modal.find('select#service_type').val(serviceType);

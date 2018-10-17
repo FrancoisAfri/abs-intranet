@@ -146,7 +146,7 @@
                                 </div>
                                 <textarea class="form-control" id="inspection_info" name="inspection_info"
                                           placeholder="Enter a inspection Info"
-                                          rows="2">{{ old('description') }}</textarea>
+                                          rows="2">{{ old('inspection_info') }}</textarea>
                             </div>
                         </div>
                     </div>
