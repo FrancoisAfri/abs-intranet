@@ -2182,7 +2182,7 @@ class JobcardController extends Controller
 
 
         AuditReportsController::store('Job Card Management', 'Job Card print notes Page Accessed', "Accessed By User", 0);
-        return view('job_cards.Jobcard_notes')->with($data);
+        return view('job_cards.jobcard_notes')->with($data);
 
     }
     
