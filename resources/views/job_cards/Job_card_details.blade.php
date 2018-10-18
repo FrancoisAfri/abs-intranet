@@ -160,9 +160,11 @@
                             data-vehicle_id="{{$jobcard->vehicle_id}}"
                             data-instruction="{{$jobcard->instruction}}"><i class="fa fa-pencil-square-o"></i> Edit
                     </button>
+					@if (!empty($roles->role_id) && $roles->role_id == $jobcard->job_title)
 					<a href="{{ '/jobcards/mechanic-feedback/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Mechanic Feedback</a>
+					@endif
                     <a href="{{ '/jobcards/jobcardimages/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat"
                        data-id="{{ $jobcard->id }}">Images</a>

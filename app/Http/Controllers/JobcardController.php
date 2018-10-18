@@ -1074,6 +1074,17 @@ class JobcardController extends Controller
             ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
             ->where('security_modules.code_name', 'job_cards')->where('security_modules_access.access_level', '>=', 4)
             ->where('security_modules_access.user_id', $userID)->pluck('user_id')->first();
+		$roles = DB::table('hr_roles')->select('hr_roles.id as role_id', 'hr_roles.description as role_name'
+		, 'hr_users_roles.id as user_role' , 'hr_users_roles.date_allocated')
+		 ->leftjoin("hr_users_roles",function($join) use ($userID) {
+                $join->on("hr_roles.id","=","hr_users_roles.role_id")
+                    ->on("hr_users_roles.hr_id","=",DB::raw($userID));
+            })
+		->where('hr_roles.description', '=','Mechanic')
+		->where('hr_roles.status', 1)
+		->orderBy('hr_roles.description', 'asc')
+		->first();
+
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $servicetype = servicetype::where('status', 1)->get();
         $users = HRPerson::where('status', 1)->orderBy('id', 'asc')->get();
@@ -1096,7 +1107,8 @@ class JobcardController extends Controller
                 'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type', 'service_type.name as servicetype',
                 'hr_people.first_name as me_firstname', 'hr_people.surname as me_surname',
-                'hrp.first_name as dr_firstname', 'hrp.surname as dr_surname','jobcard_process_flow.step_name as aStatus')
+                'hrp.first_name as dr_firstname', 'hrp.surname as dr_surname','jobcard_process_flow.step_name as aStatus'
+				,'jobcard_process_flow.job_title as job_title')
             ->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
             ->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
             ->leftJoin('vehicle_details', 'jobcard_maintanance.vehicle_id', '=', 'vehicle_details.id')
@@ -1109,9 +1121,11 @@ class JobcardController extends Controller
             ->where('jobcard_maintanance.id', $card->id)
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();
+
         $configuration = jobcards_config::first();
 		$data['current_date'] = strtotime(date("Y-m-d"));
         $data['configuration'] = $configuration;
+        $data['roles'] = $roles;
         $data['users'] = $users;
         $data['flow'] = $flow;
         $data['userAccess'] = $userAccess;
