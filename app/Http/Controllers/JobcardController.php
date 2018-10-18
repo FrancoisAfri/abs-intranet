@@ -411,7 +411,8 @@ class JobcardController extends Controller
                 ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
                 ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
                 ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-                ->get();
+                ->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+				->get();
 
             $configuration = jobcards_config::first();
             $data['page_title'] = "Job Cards";
