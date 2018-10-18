@@ -916,7 +916,7 @@ class JobcardController extends Controller
             $data['active_rib'] = 'Approvals';
 
             AuditReportsController::store('Job Card Management', 'Job Card Approvals Page Accessed', "Accessed By User", 0);
-            return view('job_cards.Job_card_approval')->with($data);
+            return view('job_cards.job_card_approval')->with($data);
         }
 		else return back()->with('success_edit', "The are not permitted to view this page.");
     }
@@ -1139,7 +1139,7 @@ class JobcardController extends Controller
 		$JobCardHistory->save();
 			
         AuditReportsController::store('Job Card Management', 'View Job Cards Page Accessed', "Accessed By User", $card->id);
-        return view('job_cards.Job_card_details')->with($data);
+        return view('job_cards.job_card_details')->with($data);
     }
 	public function jobcardhistory(jobcard_maintanance $card)
     {
