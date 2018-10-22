@@ -68,7 +68,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-servicetype-modal">Add new service Type
+                                data-target="#add-servicetype-modal">Add Service Type
                         </button>
                     </div>
                 </div>
@@ -76,108 +76,101 @@
             <!-- Include a modal -->
         @include('job_cards.partials.add_servicetype_modal')
         @include('job_cards.partials.edit_servicetype_modal')
-        <!-- Include delete warning Modal form-->
-            @if (count($servicetype) > 0)
-                @include('job_cards.partials.servicetype_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Service Type? This action cannot be undone.'])
-            @endif
-
         </div>
+    </div>
+@endsection
+@section('page_script')
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<!-- Select2 -->
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script>
+		function postData(id, data) {
+			if (data == 'actdeac') location.href = "/jobcards/service_act/" + id;
 
+		}
 
-        @endsection
+		$('#back_button').click(function () {
+			location.href = '/jobcards/set_up';
+		});
+		$(function () {
+			var moduleId;
+			//Initialize Select2 Elements
+			$(".select2").select2();
 
-        @section('page_script')
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <!-- Select2 -->
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script>
-                function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/jobcards/service_act/" + id;
+			//Tooltip
 
-                }
+			$('[data-toggle="tooltip"]').tooltip();
 
-                $('#back_button').click(function () {
-                    location.href = '/jobcards/set_up';
-                });
-                $(function () {
-                    var moduleId;
-                    //Initialize Select2 Elements
-                    $(".select2").select2();
+			//Vertically center modals on page
+			function reposition() {
+				var modal = $(this),
+					dialog = modal.find('.modal-dialog');
+				modal.css('display', 'block');
 
-                    //Tooltip
+				// Dividing by two centers the modal exactly, but dividing by three
+				// or four works better for larger screens.
+				dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+			}
 
-                    $('[data-toggle="tooltip"]').tooltip();
+			// Reposition when a modal is shown
+			$('.modal').on('show.bs.modal', reposition);
+			// Reposition when the window is resized
+			$(window).on('resize', function () {
+				$('.modal:visible').each(reposition);
+			});
 
-                    //Vertically center modals on page
-                    function reposition() {
-                        var modal = $(this),
-                            dialog = modal.find('.modal-dialog');
-                        modal.css('display', 'block');
+			//Show success action modal
+			$('#success-action-modal').modal('show');
 
-                        // Dividing by two centers the modal exactly, but dividing by three
-                        // or four works better for larger screens.
-                        dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                    }
+			//
 
-                    // Reposition when a modal is shown
-                    $('.modal').on('show.bs.modal', reposition);
-                    // Reposition when the window is resized
-                    $(window).on('resize', function () {
-                        $('.modal:visible').each(reposition);
-                    });
+			$(".js-example-basic-multiple").select2();
 
-                    //Show success action modal
-                    $('#success-action-modal').modal('show');
+			//save Fleet
+			//Post module form to server using ajax (ADD)
+			$('#add-servicetype').on('click', function () {
+				//console.log('strUrl');
+				var strUrl = '/jobcards/addservicetype';
+				var modalID = 'add-servicetype-modal';
+				var objData = {
+					name: $('#' + modalID).find('#name').val(),
+					description: $('#' + modalID).find('#description').val(),
+					_token: $('#' + modalID).find('input[name=_token]').val()
+				};
+				var submitBtnID = 'add-servicetype';
+				var redirectUrl = '/jobcards/servicetype';
+				var successMsgTitle = 'Service Type Added!';
+				var successMsg = 'The Service Type has been updated successfully.';
+				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
 
-                    //
+			var sevicetypeID;
+			$('#edit-servicetype-modal').on('show.bs.modal', function (e) {
+				//console.log('kjhsjs');
+				var btnEdit = $(e.relatedTarget);
+				sevicetypeID = btnEdit.data('id');
+				var name = btnEdit.data('name');
+				var description = btnEdit.data('description');
+				var modal = $(this);
+				modal.find('#name').val(name);
+				modal.find('#description').val(description);
+			});
+			$('#edit_servicetype').on('click', function () {
+				var strUrl = '/jobcards/edit_servicetype/' + sevicetypeID;
+				var modalID = 'edit-servicetype-modal';
+				var objData = {
+					name: $('#' + modalID).find('#name').val(),
+					description: $('#' + modalID).find('#description').val(),
+					_token: $('#' + modalID).find('input[name=_token]').val()
+				};
+				var submitBtnID = 'edit_servicetype';
+				var redirectUrl = '/jobcards/servicetype';
+				var successMsgTitle = 'Service Type Added!';
+				var successMsg = 'The Service Type has been updated successfully.';
+				var Method = 'PATCH';
+				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+			});
 
-                    $(".js-example-basic-multiple").select2();
-
-                    //save Fleet
-                    //Post module form to server using ajax (ADD)
-                    $('#add-servicetype').on('click', function () {
-                        //console.log('strUrl');
-                        var strUrl = '/jobcards/addservicetype';
-                        var modalID = 'add-servicetype-modal';
-                        var objData = {
-                            name: $('#' + modalID).find('#name').val(),
-                            description: $('#' + modalID).find('#description').val(),
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
-                        var submitBtnID = 'add-servicetype';
-                        var redirectUrl = '/jobcards/servicetype';
-                        var successMsgTitle = 'Service Type Added!';
-                        var successMsg = 'The Service Type has been updated successfully.';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                    });
-
-                    var sevicetypeID;
-                    $('#edit-servicetype-modal').on('show.bs.modal', function (e) {
-                        //console.log('kjhsjs');
-                        var btnEdit = $(e.relatedTarget);
-                        sevicetypeID = btnEdit.data('id');
-                        var name = btnEdit.data('name');
-                        var description = btnEdit.data('description');
-                        var modal = $(this);
-                        modal.find('#name').val(name);
-                        modal.find('#description').val(description);
-                    });
-                    $('#edit_servicetype').on('click', function () {
-                        var strUrl = '/jobcards/edit_servicetype/' + sevicetypeID;
-                        var modalID = 'edit-servicetype-modal';
-                        var objData = {
-                            name: $('#' + modalID).find('#name').val(),
-                            description: $('#' + modalID).find('#description').val(),
-                            _token: $('#' + modalID).find('input[name=_token]').val()
-                        };
-                        var submitBtnID = 'edit_servicetype';
-                        var redirectUrl = '/jobcards/servicetype';
-                        var successMsgTitle = 'Service Type Added!';
-                        var successMsg = 'The Service Type has been updated successfully.';
-                        var Method = 'PATCH';
-                        modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-                    });
-
-                });
-            </script>
+		});
+	</script>
 @endsection
