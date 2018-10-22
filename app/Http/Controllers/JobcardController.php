@@ -376,7 +376,7 @@ class JobcardController extends Controller
         if ((!empty($roles->role_id)) || !empty($userAccess)) {
             $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
             $servicetype = servicetype::where('status', 1)->get();
-            $users = HRPerson::where('status', 1)->orderBy('id', 'asc')->get();
+            $users = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
             $Status = array(-1 => 'Rejected', 1 => 'Job Card created',
                 3 => 'Completed', 6 => 'Procurement ', 7 => 'At Service',
                 8 => 'Spare Dispatch', 9 => ' At Mechanic', 10 => 'Spares Dispatch Paperwork',
@@ -400,7 +400,6 @@ class JobcardController extends Controller
                 ->where('jobcard_maintanance.user_id', $currentUser)
                 ->orderBy('jobcard_maintanance.id', 'asc')
                 ->get();
-
 
             $vehicledetails = DB::table('vehicle_details')
                 ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
