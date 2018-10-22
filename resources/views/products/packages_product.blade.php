@@ -62,7 +62,7 @@
 
         <!-- Include add new prime rate modal -->
         @include('products.partials.add_product_position')
-        @include('products.partials.edit_position')
+    
     </div>
 @endsection
 
