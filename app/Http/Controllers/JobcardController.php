@@ -1220,7 +1220,7 @@ class JobcardController extends Controller
         $data['user'] = $user;
 		
 		AuditReportsController::store('Fleet Management', 'Vehicle History Page Printed', 'Accessed by User', 0);
-		return view('job_cards.Job_card_history_print')->with($data);
+		return view('job_cards.job_card_history_print')->with($data);
     }
 
     public function viewjobcardnotes(jobcard_maintanance $card)
