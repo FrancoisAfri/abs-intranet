@@ -1474,8 +1474,7 @@ class JobcardController extends Controller
     }
 	public function addparts(jobcard_maintanance $jobcardpart)
     {
-        $productCategories = product_category::orderBy('name', 'asc')->get();
-        
+        $productCategories = product_category::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get(); 
         $data['productCategories'] = $productCategories;
         $data['jobcardpart'] = $jobcardpart;
         $data['page_title'] = "Job Cards";
