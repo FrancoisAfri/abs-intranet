@@ -154,7 +154,7 @@ class JobcardController extends Controller
             ['title' => 'Job Card Settings ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['images'] = $images;
+        $data['card'] = $images;
         $data['jobCardimages'] = $jobCardimages;
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'SetUp';
@@ -206,7 +206,33 @@ class JobcardController extends Controller
          AuditReportsController::store('Job Card Management', 'Job Card Images added', "Added by User", 0);        
         return response()->json();
     }
+	
+	public function editImage(Request $request, images $image)
+    {
+        $SysData = $request->all();
+        unset($SysData['_token']);
 
+        $userLogged = Auth::user()->load('person');
+		
+        $image->upload_date = time();
+        $image->user_name = 3;
+
+        //Upload Image picture
+        if ($request->hasFile('image')) {
+            $fileExt = $request->file('image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('image')->isValid()) {
+                $fileName = "image" . time() . '.' . $fileExt;
+                $request->file('image')->storeAs('Vehicle/images', $fileName);
+                //Update file name in the database
+                $image->image = $fileName;
+                $image->update();
+            }
+        }
+		$image->update();
+        AuditReportsController::store('Fleet Management', 'Vehicle Image Edited', "Accessed By User", 0);;
+        return response()->json();
+    }
+	
     public function configuration()
     {
         $row = jobcards_config::count();

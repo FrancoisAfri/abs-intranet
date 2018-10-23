@@ -695,6 +695,7 @@ Route::get('jobcard/cancellation/{card}','JobcardController@canceljobcardnotes')
 Route::get('jobcards/parts','JobcardController@jobcardparts');
 Route::get('jobcards/jobcardimages/{images}','JobcardController@jobcardimages');
 Route::post('jobcard/addimages','JobcardController@addcardimages');
+Route::patch('jobcard/edit_images/{image}','JobcardController@editImage');
 Route::post('jobcards/audits/print','JobcardController@printAudit');
 Route::post('jobcards/addcatergory','JobcardController@addpartscatergory');
 Route::get('jobcards/addparts/{parts}','JobcardController@viewjobcardparts');

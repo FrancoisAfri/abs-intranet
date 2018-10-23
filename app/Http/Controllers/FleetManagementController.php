@@ -603,20 +603,21 @@ class FleetManagementController extends Controller
     public function editImage(Request $request, images $image)
     {
         $this->validate($request, [
-           // 'name' => 'required',
+            'name' => 'required',
+            'description' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 
+        $currentDate = time();
         $userLogged = Auth::user()->load('person');
-		
-        //$image->name = $SysData['name'];
-        //$image->description = $SysData['description'];
+
+        $image->name = $SysData['name'];
+        $image->description = $SysData['description'];
         $image->vehicle_maintanace = $SysData['valueID'];
-        $image->upload_date = time();
+        $image->upload_date = $currentDate;
         $image->user_name = $userLogged->person->id;
         $image->default_image = 1;
-        //$image->image = $SysData['images'];
 
         //Upload Image picture
         if ($request->hasFile('image')) {
@@ -629,8 +630,6 @@ class FleetManagementController extends Controller
                 $image->update();
             }
         }
-
-        $image->update();
 
         AuditReportsController::store('Fleet Management', 'Vehicle Image Edited', "Accessed By User", 0);;
         return response()->json();

@@ -23,7 +23,7 @@
                 </div>
                 <div align="center" class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Jobcard Images No: {{$images->id}}
+                        <h3 class="box-title">Jobcard Images No: {{$card->id}}
                         </h3>
                     </div>
                     <div class="box-body">
@@ -128,7 +128,7 @@
 
 	<script>
 	   $('#back_button').click(function () {
-				location.href = '/jobcards/viewcard/{{$images->id}}';
+				location.href = '/jobcards/viewcard/{{$card->id}}';
 			});
 		$(function () {
 			$('.zip-field').hide();
@@ -197,8 +197,6 @@
 				var successMsg = 'The Image  has been updated successfully.';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
-			
-			
 			var ImageID;
 			$('#edit-package-modal').on('show.bs.modal', function (e) {
 				//console.log('kjhsjs');
@@ -219,14 +217,13 @@
 				modal.find('#valueID').val(valueID);
 			});
 			$('#edit_image').on('click', function () {
-				var strUrl = '/vehicle_management/edit_images/' + ImageID;
+				var strUrl = '/jobcard/edit_images/' + ImageID;
 				var formName = 'edit-image-form';
 				var modalID = 'edit-package-modal';
 				var submitBtnID = 'edit_image';
-				var redirectUrl = '/vehicle_management/viewImage';
+				var redirectUrl = '/jobcards/jobcardimages/{{$card->id}}';
 				var successMsgTitle = 'Image Modified!';
 				var successMsg = 'The Image  has been updated successfully.';
-				var Method = 'PATCH'
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
 		});

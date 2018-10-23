@@ -18,7 +18,7 @@
                         <label for="image" class="col-sm-3 control-label">Upload</label>
 
                         <div class="col-sm-8">
-                            <input type="file" id="image" name="images[]" multiple class="file file-loading"
+                            <input type="file" id="image" name="image" multiple class="file file-loading"
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
 							<input src="" type="image" id="jc_image" width="250"
                                          height="200" class="img-responsive img-thumbnail">
@@ -32,8 +32,6 @@
                                       rows="3" readonly="">{{ old('note') }}</textarea>
                         </div>
                     </div>
-                    <input type="hidden" id="jobcard_id" name="jobcard_id"
-                           value="{{ !empty($images->id) ? $images->id : ''}}">
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
