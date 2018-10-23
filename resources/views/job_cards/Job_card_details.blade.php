@@ -144,7 +144,7 @@
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
                     <button vehice="button" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
-                            data-target="#edit-jobcard-modal" data-id="{{ $jobcard->id }}"
+                            data-target="#edit-jobcard-modal" data-id="{{ $card->id }}"
                             data-card_date="{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : ''}}"
                             data-schedule_date="{{ !empty($jobcard->schedule_date) ? date(' d M Y', $jobcard->schedule_date) : ''}}"
                             data-booking_date="{{ !empty($jobcard->booking_date) ? date(' d M Y', $jobcard->booking_date) : ''}}"
@@ -162,23 +162,19 @@
                     </button>
 					@if (!empty($roles->role_id) && $roles->role_id == $jobcard->job_title)
 					<a href="{{ '/jobcards/mechanic-feedback/' . $card->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $jobcard->id }}">Mechanic Feedback</a>
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat">Mechanic Feedback</a>
 					@endif
                     <a href="{{ '/jobcards/jobcardimages/' . $card->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $jobcard->id }}">Images</a>
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat">Images</a>
                     <a href="{{ '/jobcards/jobcardnotes/' . $card->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $jobcard->id }}">Notes</a>
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat">Notes</a>
                     <a href="{{ '/jobcard/parts/' . $card->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat"
-                       data-id="{{ $jobcard->id }}">Parts</a>
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat">Parts</a>
 					@if (($flow->step_number - 1) == $card->status)
 						<button vehice="button" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
-								data-target="#close-jobcard-modal" data-id="{{ $jobcard->id }}"
-								data-completion_date="{{ !empty($current_date) ? date('d/m/Y', $current_date) : ''}}"
-								><i class="fa fa-lock"></i> Conclude Jobcard
+						data-target="#close-jobcard-modal" data-id="{{ $card->id }}"
+						data-completion_date="{{ !empty($current_date) ? date('d/m/Y', $current_date) : ''}}"
+						><i class="fa fa-lock"></i> Conclude Jobcard
 						</button>
 					@endif
 					@if (!empty($userAccess))
@@ -388,7 +384,7 @@
                 var formName = 'edit-jobcard-form';
                 var modalID = 'edit-jobcard-modal';
                 var submitBtnID = 'edit_warrantie';
-                var redirectUrl = '/jobcards/viewcard/' + {{ $jobcard->id }};
+                var redirectUrl = '/jobcards/viewcard/' + {{ $card->id }};
                 var successMsgTitle = 'Record Updated!';
                 var successMsg = 'The Record  has been updated successfully.';
                 var Method = 'PATCH'
