@@ -141,14 +141,12 @@ class JobcardController extends Controller
     
     public function jobcardimages(jobcard_maintanance $images){
 
-         $viewimage = DB::table('vehicle_image')   
+         $jobCardimages = DB::table('vehicle_image')   
                 ->select('vehicle_image.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
                 ->leftJoin('hr_people', 'vehicle_image.user_name', '=', 'hr_people.id')
                 ->where('jobcard_id', $images->id)
                 ->get();
-         
-        //return $viewimage;
-          
+
         $data['page_title'] = "Job Card Settings";
         $data['page_description'] = "Job Card Management";
         $data['breadcrumb'] = [
@@ -157,7 +155,7 @@ class JobcardController extends Controller
         ];
 
         $data['images'] = $images;
-        $data['viewimage'] = $viewimage;
+        $data['jobCardimages'] = $jobCardimages;
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'SetUp';
 
@@ -176,8 +174,7 @@ class JobcardController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 		$images = !empty($SysData['images']) ? $SysData['images'] : array();
-        $currentDate = time();
-        $userLogged = Auth::user()->load('person');
+        $currentDate = time(); 
 		$count = 0;
 		foreach ($images as $image)
 		{
@@ -185,10 +182,10 @@ class JobcardController extends Controller
 			$imageArray = explode(".",$image);
 			$vehicleImages = new images();
 			$vehicleImages->name = $imageArray[0];
-			// $vehicleImages->description = $SysData['description'];
+			
 			$vehicleImages->vehicle_maintanace = $SysData['valueID'];
 			$vehicleImages->upload_date = $currentDate;
-			$vehicleImages->user_name = $userLogged->id;
+			$vehicleImages->user_name = Auth::user()->person->id;
 			$vehicleImages->default_image = 1;
 			$vehicleImages->jobcard_id = $SysData['jobcard_id'];
 			$vehicleImages->save();
@@ -206,7 +203,7 @@ class JobcardController extends Controller
 			}
 			$image = '';
 		}     
-         AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed', "Job Card Image added", 0);        
+         AuditReportsController::store('Job Card Management', 'Job Card Images added', "Added by User", 0);        
         return response()->json();
     }
 
