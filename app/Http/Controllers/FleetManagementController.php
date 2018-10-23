@@ -608,13 +608,12 @@ class FleetManagementController extends Controller
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $currentDate = time();
         $userLogged = Auth::user()->load('person');
-
-        $image->name = $SysData['name'];
-        $image->description = $SysData['description'];
+		
+        //$image->name = $SysData['name'];
+        //$image->description = $SysData['description'];
         $image->vehicle_maintanace = $SysData['valueID'];
-        $image->upload_date = $currentDate;
+        $image->upload_date = time();
         $image->user_name = $userLogged->person->id;
         $image->default_image = 1;
         //$image->image = $SysData['images'];
