@@ -18,7 +18,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script> </head>
 @endsection
 @section('content')
-
     <div class="row">
         <div class="col-md-12">
             <div class="box box-warning">
@@ -380,7 +379,7 @@
             });
           
             $('#update_jobcard').on('click', function () {
-                var strUrl = '/jobcards/updatejobcard/' + JobId;
+                var strUrl = '/jobcards/updatejobcard/' + {{ $card->id }};
                 var formName = 'edit-jobcard-form';
                 var modalID = 'edit-jobcard-modal';
                 var submitBtnID = 'edit_warrantie';
