@@ -69,28 +69,16 @@
                     <td>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : ''}}</td>
                 </tr>
                 <tr>
-                    <td class="caption" width="25%">Make</td>
-                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_make) ? $vehiclemaintenance->vehicle_make : ''}}</td>
-                    <td class="caption">Job Card Status</td>
-                    <td>{{ !empty($vehiclemaintenance->aStatus) ? $vehiclemaintenance->aStatus : ''}}</td>
-                </tr>
-                <tr>
-                    <td class="caption" width="25%">Model</td>
-                    <td width="25%">{{ !empty($vehiclemaintenance->vehicle_model) ? $vehiclemaintenance->vehicle_model : ''}}</td>
-                    <td class="caption" width="25%"></td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td class="caption">Vehicle Description</td>
-                    <td>{{ !empty($vehiclemaintenance->instruction) ? $vehiclemaintenance->instruction : ''}}</td>
                     <td class="caption">Driver</td>
-                    <td>{{ !empty($vehiclemaintenance->last_driver_id) ? $vehiclemaintenance->last_driver_id : ''}}</td>
+                    <td>{{ !empty($jobcard->dr_firstname)  && !empty($jobcard->dr_surname) ? $jobcard->dr_firstname." ".$jobcard->dr_surname : ''}}</td>
+					<td class="caption">Mechanic</td>
+                    <td>{{ !empty($jobcard->me_firstname)  && !empty($jobcard->me_surname) ? $jobcard->me_firstname." ".$jobcard->me_surname : ''}}</td>
                 </tr>
                 <tr>
                     <td class="caption">Current Odometer</td>
                     <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
-                    <td class="caption">Mechanic</td>
-                    <td>{{ !empty($vehiclemaintenance->mechanic_id) ? $vehiclemaintenance->mechanic_id : ''}}</td>
+					<td class="caption">Job Card Status</td>
+                    <td>{{ !empty($vehiclemaintenance->aStatus) ? $vehiclemaintenance->aStatus : ''}}</td>
                 </tr>
                 <tr>
                     <td class="caption">Current Hours</td>
@@ -106,7 +94,7 @@
                 </tr>
                 <tr>
                     <td class="caption">Hours used</td>
-                    <td>{{ !empty($vehiclemaintenance->vehicle_type) ? $vehiclemaintenance->vehicle_type : ''}}</td>-->
+                    <td>{{ !empty($vehiclemaintenance->machine_hour_metre) ? $vehiclemaintenance->machine_hour_metre : ''}}</td>-->
                     <td></td>
                     <td class="caption">Service Time</td>
                     <td>{{ !empty($vehiclemaintenance->service_time) ? $vehiclemaintenance->service_time : ''}}</td>
