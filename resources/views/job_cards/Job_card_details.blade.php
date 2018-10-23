@@ -379,7 +379,7 @@
             });
           
             $('#update_jobcard').on('click', function () {
-                var strUrl = '/jobcards/updatejobcard/' + {{ $card->id }};
+                var strUrl = '/jobcards/updatejobcard/' + {{$card->id}};
                 var formName = 'edit-jobcard-form';
                 var modalID = 'edit-jobcard-modal';
                 var submitBtnID = 'edit_warrantie';
