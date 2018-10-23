@@ -603,8 +603,7 @@ class FleetManagementController extends Controller
     public function editImage(Request $request, images $image)
     {
         $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
+           // 'name' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
