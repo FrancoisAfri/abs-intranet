@@ -36,7 +36,7 @@ class NoteCommunications extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "$companyName - Quote Declined.";
+        $subject = "$companyName - JC Note.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
