@@ -23,7 +23,7 @@
                 </div>
                 <div align="center" class="box box-default">
                     <div class="box-header with-border">
-                        <h3 class="box-title"> Images for Jobcard 
+                        <h3 class="box-title">Jobcard Images No: {{$images->id}}
                         </h3>
                     </div>
                     <div class="box-body">
@@ -38,33 +38,30 @@
                                 </ul>
                             </div>
                         @endif
-               
                         <table class="table table-striped table-bordered">
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th style="width: 5px; text-align: center;">Image</th>
-                                
                                 <th>Date Uploaded</th>
-                                <th> Job Card #</th>
                                 <th>Uploaded By</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
-                            @if (count($viewimage) > 0)
-                                @foreach ($viewimage as $vehiclemaintenance)
+                            @if (count($jobCardimages) > 0)
+                                @foreach ($jobCardimages as $images)
                                     <tr id="categories-list">
                                         <td nowrap>
                                             <button type="button" id="edit_compan" class="btn btn-default  btn-xs"
                                                     data-toggle="modal" data-target="#edit-package-modal"
-                                                    data-id="{{ $vehiclemaintenance->id }}"
-                                                    data-name="{{ $vehiclemaintenance->name }}"
-                                                    data-description="{{ $vehiclemaintenance->description }}"
-                                                    data-image="{{ $vehiclemaintenance->image }}"><i
-                                                        class="fa fa-pencil-square-o"></i> Edit
+                                                    data-id="{{ $images->id }}"
+                                                    data-name="{{ $images->name }}"
+                                                    data-description="{{ $images->description }}"
+													data-jc_image="{{ (!empty($images->image)) ? Storage::disk('local')->url("Vehicle/images/$images->image") : 'http://placehold.it/60x50' }}"
+                                                   ><i class="fa fa-pencil-square-o"></i> Edit
                                             </button>
                                         </td>
                                         <td>
                                             <div class="product-img">
-                                                <img src="{{ (!empty($vehiclemaintenance->image)) ? Storage::disk('local')->url("Vehicle/images/$vehiclemaintenance->image") : 'http://placehold.it/60x50' }}"
+                                                <img src="{{ (!empty($images->image)) ? Storage::disk('local')->url("Vehicle/images/$images->image") : 'http://placehold.it/60x50' }}"
                                                      alt="Product Image" width="50" height="50">
                                             </div>
 											<div class="modal fade" id="enlargeImageModal" tabindex="-1"
@@ -87,10 +84,8 @@
 												</div> 
 											</div>
                                         </td>
-                                       
-                                        <td>{{ !empty($vehiclemaintenance->upload_date) ? date(' d M Y', $vehiclemaintenance->upload_date) : '' }}</td>
-                                        <td>{{ !empty($vehiclemaintenance->jobcard_id) ? $vehiclemaintenance->jobcard_id : 0}}</td>
-                                        <td>{{ !empty($vehiclemaintenance->firstname . ' ' . $vehiclemaintenance->surname ) ? $vehiclemaintenance->firstname . ' ' . $vehiclemaintenance->surname : ''}}</td>
+                                        <td>{{ !empty($images->upload_date) ? date(' d M Y', $images->upload_date) : '' }}</td>
+                                        <td>{{ !empty($images->firstname . ' ' . $images->surname ) ? $images->firstname . ' ' . $images->surname : ''}}</td>
                                     </tr>
                                 @endforeach
                             @else
