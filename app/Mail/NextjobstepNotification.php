@@ -38,7 +38,7 @@ class NextjobstepNotification extends Mailable
         //return $this->view('view.name');
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "New vehicle booking Application on $companyName online system.";
+        $subject = "Job Card Notification on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;

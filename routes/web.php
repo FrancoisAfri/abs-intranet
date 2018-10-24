@@ -685,6 +685,8 @@ Route::get('jobcards/viewcard/{card}', 'JobcardController@viewjobcard');
 Route::post('jobcards/appovecards', 'JobcardController@appovecards');
 Route::post('jobcard/mecfeedback/{card}', 'JobcardController@mechanicomplete');
 Route::post('jobcards/closejobcard/{card}', 'JobcardController@completeJobcard');
+Route::post('jobcards/documentjobcard/{card}', 'JobcardController@documnentJobcard');
+Route::get('jobcard/next-step/{card}', 'JobcardController@nextStep');
 Route::post('jobcards/addjobcardnotes', 'JobcardController@addjobcardnotes');
 Route::get('jobcards/jobcardnotes/{card}', 'JobcardController@viewjobcardnotes');
 Route::get('jobcard/jobcard_history/{card}', 'JobcardController@jobcardhistory');

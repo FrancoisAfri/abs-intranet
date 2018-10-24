@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - Quote Approval Required</title>
+    <title>{{ $company_name }} - JC Notification</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -215,7 +215,7 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name . ' ' . $surname }},<br><br>
-                                                    We would like to inform you that a new Job Card has been added and requires your attention To view  and approve the new Job Card please follow this link <a target="_blank" href="{{ $jobcard_url }}">click here.</a>
+                                                    We would like to inform you that a Job Card requires your attention To view  and approve the new Job Card please follow this link <a target="_blank" href="{{ $jobcard_url }}">click here.</a>
                                                 </td>
                                             </tr>
 

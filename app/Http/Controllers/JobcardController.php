@@ -614,28 +614,6 @@ class JobcardController extends Controller
         $jobCard->user_id = Auth::user()->person->id;
         $jobCard->update();
 
-        //Upload supporting document
-        if ($request->hasFile('inspection_file_upload')) {
-            $fileExt = $request->file('inspection_file_upload')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('inspection_file_upload')->isValid()) {
-                $fileName = time() . "_inspection_file_upload." . $fileExt;
-                $request->file('inspection_file_upload')->storeAs('Jobcard/inspectionfileupload', $fileName);
-                //Update file name in the table
-                $jobCard->inspection_file_upload = $fileName;
-                $jobCard->update();
-            }
-        }
-        //Upload supporting document
-        if ($request->hasFile('inspection_file_upload')) {
-            $fileExt = $request->file('service_file_upload')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('service_file_upload')->isValid()) {
-                $fileName = time() . "_service_file_upload." . $fileExt;
-                $request->file('service_file_upload')->storeAs('Jobcard/servicefileupload', $fileName);
-                //Update file name in the table
-                $jobCard->service_file_upload = $fileName;
-                $jobCard->update();
-            }
-        }
 		# Instructions
         $numInstruction = $index = 0;
         $totalFiles = !empty($SysData['total_files']) ? $SysData['total_files'] : 0;
@@ -668,16 +646,13 @@ class JobcardController extends Controller
 	public function completeJobcard(Request $request, jobcard_maintanance $card)
     {
         $this->validate($request, [
-          'completion_date' => 'required',
+          //'completion_date' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $completiondate = $SysData['completion_date'] = str_replace('/', '-', $SysData['completion_date']);
-        $completiondate = $SysData['completion_date'] = strtotime($SysData['completion_date']);
-		$flow = processflow::orderBy('id', 'desc')->latest()->first();
+        $flow = processflow::orderBy('id', 'desc')->latest()->first();
 		$card->completion_comment = !empty($SysData['completion_comment']) ? $SysData['completion_comment']: '';
-		$card->completion_date = $completiondate;
 		$card->status = $flow->step_number;
         $card->update();
 
@@ -686,12 +661,60 @@ class JobcardController extends Controller
         $JobCardHistory->job_card_id = $card->id;
         $JobCardHistory->user_id = Auth::user()->person->id;
         $JobCardHistory->status = $flow->step_number;
-        $JobCardHistory->comment = "New Job Card Completed";
+        $JobCardHistory->comment = "Job Card Closed";
         $JobCardHistory->action_date = time();
         $JobCardHistory->save();
+        AuditReportsController::store('Job Card Management', ' Job card Closed', "Closed by User");
+        return response()->json();
+    }
+	// document proccessing JC
+	public function documnentJobcard(Request $request, jobcard_maintanance $card)
+    {
+        $this->validate($request, [
+          'service_file_upload' => 'required',
+          'completion_date' => 'required',
+        ]);
+        $SysData = $request->all();
+        unset($SysData['_token']);
+		$completiondate = $SysData['completion_date'] = str_replace('/', '-', $SysData['completion_date']);
+		$completiondate = $SysData['completion_date'] = strtotime($SysData['completion_date']);
+		//Upload supporting document
+        if ($request->hasFile('service_file_upload')) {
+            $fileExt = $request->file('service_file_upload')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('service_file_upload')->isValid()) {
+                $fileName = time() . "_service_file_upload." . $fileExt;
+                $request->file('service_file_upload')->storeAs('Jobcard/servicefileupload', $fileName);
+                //Update file name in the table
+				$flow = processflow::where('step_number', '>', $card->status)->where('status', 1)->orderBy('step_number', 'asc')->first();
+				$card->completion_date = $completiondate;
+				$card->status = $flow->step_number;
+                $card->service_file_upload = $fileName;
+                $card->update();
+            }
+        }
+		if (!empty($flow))
+		{
+			//Jobcard history
+			$JobCardHistory = new JobCardHistory();
+			$JobCardHistory->job_card_id = $card->id;
+			$JobCardHistory->user_id = Auth::user()->person->id;
+			$JobCardHistory->status = $flow->step_number;
+			$JobCardHistory->comment = "Job Card Document Added";
+			$JobCardHistory->action_date = time();
+			$JobCardHistory->save();
+			//send email to the next person the step
+			$users = HRUserRoles::where('role_id', $flow->job_title)->pluck('hr_id');
+			foreach ($users as $manID) {
+				$usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
+				$email = $usedetails->email;
+				$firstname = $usedetails->first_name;
+				$surname = $usedetails->surname;
+				$email = $usedetails->email;
+				Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
+			}
+		}
         AuditReportsController::store('Job Card Management', ' Job card Updated', "Job Card Edited");
         return response()->json();
-
     }
 	public function mechanicomplete(Request $request, jobcard_maintanance $card)
     {
@@ -745,7 +768,17 @@ class JobcardController extends Controller
 			$JobCardHistory->status = $processflow->step_number;
 			$JobCardHistory->comment = "Mechanic Feedback Completed And Moved to Next Step.";
 			$JobCardHistory->action_date = time();
-			$JobCardHistory->save();	
+			$JobCardHistory->save();
+			//send email to the next person the step
+			$users = HRUserRoles::where('role_id', $processflow->job_title)->pluck('hr_id');
+			foreach ($users as $manID) {
+				$usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
+				$email = $usedetails->email;
+				$firstname = $usedetails->first_name;
+				$surname = $usedetails->surname;
+				$email = $usedetails->email;
+				Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
+			}
 		}
 		else
 		{
@@ -760,6 +793,32 @@ class JobcardController extends Controller
 		}
 		$card->update();
 		AuditReportsController::store('Job Card Management', ' Job card Updated', "Job Card Edited");
+	    return redirect("/jobcards/viewcard/$card->id");
+    }
+	public function nextStep(jobcard_maintanance $card)
+    {
+		$processflow = processflow::where('step_number', '>', $card->status)->where('status', 1)->orderBy('step_number', 'asc')->first();
+		$card->status = $processflow->step_number;
+		$card->update();
+		//Jobcard history
+		$JobCardHistory = new JobCardHistory();
+		$JobCardHistory->job_card_id = $card->id;
+		$JobCardHistory->user_id = Auth::user()->person->id;
+		$JobCardHistory->status = $processflow->step_number;
+		$JobCardHistory->comment = "Job Card Moved to Next Step.";
+		$JobCardHistory->action_date = time();
+		$JobCardHistory->save();
+		//send email to the next person the step
+		$users = HRUserRoles::where('role_id', $processflow->job_title)->pluck('hr_id');
+		foreach ($users as $manID) {
+			$usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
+			$email = $usedetails->email;
+			$firstname = $usedetails->first_name;
+			$surname = $usedetails->surname;
+			$email = $usedetails->email;
+			Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
+		}
+		AuditReportsController::store('Job Card Management', ' Job card Status Updated', "Updated by User");
 	    return redirect("/jobcards/viewcard/$card->id");
     }
     public function cardsearch()
@@ -990,7 +1049,6 @@ class JobcardController extends Controller
                 }
             }
             // decline
-            
         }
 		
 		foreach ($results as $sKey => $sValue) 
@@ -1110,7 +1168,7 @@ class JobcardController extends Controller
         $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
         $servicetype = servicetype::where('status', 1)->get();
         $users = HRPerson::where('status', 1)->orderBy('id', 'asc')->get();
-        $flow = processflow::orderBy('id', 'desc')->latest()->first();
+        $flow = processflow::where('status', 1)->orderBy('id', 'desc')->latest()->first();
 		
 		$instructions = JobCardInstructions::where('job_card_id',$card->id)->orderBy('instruction_details', 'asc')->get();
         $vehicledetails = DB::table('vehicle_details')
@@ -1174,7 +1232,7 @@ class JobcardController extends Controller
 		$JobCardHistory->comment = "JC opened";
 		$JobCardHistory->action_date = time();
 		$JobCardHistory->save();
-			
+		
         AuditReportsController::store('Job Card Management', 'View Job Cards Page Accessed', "Accessed By User", $card->id);
         return view('job_cards.job_card_details')->with($data);
     }

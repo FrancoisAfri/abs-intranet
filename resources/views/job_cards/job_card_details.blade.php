@@ -169,6 +169,17 @@
                        id="edit_compan" class="btn btn-sm btn-default btn-flat">Notes</a>
                     <a href="{{ '/jobcard/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat">Parts</a>
+					@if ($card->status == 1)
+						<a href="{{ '/jobcard/next-step/' . $card->id }}"
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat">Next Step</a>
+					@endif
+					@if (($flow->step_number - 2) == $card->status)
+						<button vehice="button" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
+						data-target="#document-jobcard-modal" data-id="{{ $card->id }}"
+						data-completion_date="{{ !empty($current_date) ? date('d/m/Y', $current_date) : ''}}"
+						><i class="fa fa-lock"></i> Process Documents
+						</button>
+					@endif
 					@if (($flow->step_number - 1) == $card->status)
 						<button vehice="button" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
 						data-target="#close-jobcard-modal" data-id="{{ $card->id }}"
@@ -205,6 +216,7 @@
             </div>
         </div>
         @include('job_cards.partials.edit_jobcard_modal')
+        @include('job_cards.partials.document_jobcard_modal')
         @include('job_cards.partials.conclude_jobcard_modal')
     </div>
 @endsection
@@ -329,12 +341,22 @@
                 }
                 return allType;
             }
-			$('#close-jobcard-modal').on('shown.bs.modal', function (e) {
+			$('#document-jobcard-modal').on('shown.bs.modal', function (e) {
 				var btnEdit = $(e.relatedTarget);
 				var completionDate = btnEdit.data('completion_date');
 				var modal = $(this);
 				modal.find('#completion_date').val(completionDate);
 			});
+			$('#document_jobcard').on('click', function () {
+                var strUrl = '/jobcards/documentjobcard/' + {{$card->id}};
+                var formName = 'document-jobcard-form';
+                var modalID = 'document-jobcard-modal';
+                var submitBtnID = 'document_jobcard';
+                var redirectUrl = '/jobcards/viewcard/' + {{$card->id}};
+                var successMsgTitle = 'Job Card Closed!';
+                var successMsg = 'The Job Card  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
 			$('#close_jobcard').on('click', function () {
                 var strUrl = '/jobcards/closejobcard/' + {{$card->id}};
                 var formName = 'close-jobcard-form';
