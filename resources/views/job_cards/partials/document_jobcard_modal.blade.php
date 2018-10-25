@@ -21,6 +21,14 @@
                                    placeholder="Click to Select a Date...">
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="service_time" class="col-sm-2 control-label">Service Time</label>
+                        <div class="col-sm-8">
+
+                            <input type="number" class="form-control" id="service_time" name="service_time" value=""
+                                   placeholder="Enter service time">
+                        </div>
+                    </div>
 					<div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Service File Upload </label>
                         <div class="col-sm-8">

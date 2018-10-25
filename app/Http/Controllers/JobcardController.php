@@ -14,6 +14,7 @@ use App\JobCardHistory;
 use App\jobcard_order_parts;
 use App\jobcart_parts;
 use App\AuditTrail;
+use App\vehicle_detail;
 use App\jobcard_category_parts;
 use App\jobcard_maintanance;
 use App\ContactCompany;
@@ -30,9 +31,11 @@ use App\HRUserRoles;
 use App\modules;
 use App\Mail\NoteCommunications;
 use App\Mail\NextjobstepNotification;
+use App\Mail\MechanicEmailJC;
 use App\Mail\DeclinejobstepNotification;
 use Illuminate\Http\Request;
 use App\Mail\confirm_collection;
+use App\Http\Controllers\BulkSMSController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -467,12 +470,12 @@ class JobcardController extends Controller
     public function addjobcardmanagement(Request $request)
     {
         $this->validate($request, [
-//              'step_name' => 'required',
+              'mechanic_id' => 'required',
 //              'job_title' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
+		$message = '';
         $processflow = processflow::orderBy('id', 'asc')->first();
         $jobtitle = !empty($processflow->job_title) ? $processflow->job_title : 0;
 
@@ -484,9 +487,7 @@ class JobcardController extends Controller
 
         $bookingdate = $SysData['booking_date'] = str_replace('/', '-', $SysData['booking_date']);
         $bookingdate = $SysData['booking_date'] = strtotime($SysData['booking_date']);
-
-        $completiondate = $SysData['completion_date'] = str_replace('/', '-', $SysData['completion_date']);
-        $completiondate = $SysData['completion_date'] = strtotime($SysData['completion_date']);
+        $communicationType = !empty($SysData['communication_type']) ? $SysData['communication_type'] : 0;
 
         $flow = jobcard_maintanance::orderBy('id', 'desc')->latest()->first();
         $flowprocee = !empty($flow->jobcard_number) ? $flow->jobcard_number : 0;
@@ -502,29 +503,16 @@ class JobcardController extends Controller
         $jobcardmaintanance->supplier_id = !empty($SysData['supplier_id']) ? $SysData['supplier_id'] : 0;
         $jobcardmaintanance->service_type = !empty($SysData['service_type']) ? $SysData['service_type'] : 0;
         $jobcardmaintanance->estimated_hours = !empty($SysData['estimated_hours']) ? $SysData['estimated_hours'] : 0;
-        $jobcardmaintanance->service_time = !empty($SysData['service_time']) ? $SysData['service_time'] : 0;
         $jobcardmaintanance->machine_hour_metre = !empty($SysData['machine_hour_metre']) ? $SysData['machine_hour_metre'] : 0;
         $jobcardmaintanance->machine_odometer = !empty($SysData['machine_odometer']) ? $SysData['machine_odometer'] : 0;
         $jobcardmaintanance->last_driver_id = !empty($SysData['last_driver_id']) ? $SysData['last_driver_id'] : 0;
         $jobcardmaintanance->mechanic_id = !empty($SysData['mechanic_id']) ? $SysData['mechanic_id'] : 0;
-        $jobcardmaintanance->completion_date = $completiondate;
         $jobcardmaintanance->jobcard_number = $flowprocee + 1;
         $jobcardmaintanance->status = 1;
         $jobcardmaintanance->date_default = time();
         $jobcardmaintanance->user_id = Auth::user()->person->id;
         $jobcardmaintanance->save();
-
-        //Upload supporting document
-		if ($request->hasFile('service_file_upload')) {
-            $fileExt = $request->file('service_file_upload')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('service_file_upload')->isValid()) {
-                $fileName = time() . "_service_file_upload." . $fileExt;
-                $request->file('service_file_upload')->storeAs('Jobcard/servicefileupload', $fileName);
-                //Update file name in the table
-                $jobcardmaintanance->service_file_upload = $fileName;
-                $jobcardmaintanance->update();
-            }
-        }
+		
 		# Instructions
         $numInstruction = $index = 0;
         $totalFiles = !empty($SysData['total_files']) ? $SysData['total_files'] : 0;
@@ -538,44 +526,84 @@ class JobcardController extends Controller
 				$JobCardInstructions->job_card_id = $jobcardmaintanance->id;
 				$JobCardInstructions->status = 1;
 				$JobCardInstructions->save();
+				$message .= $instruction.",";
 			}
             $numInstruction++;
         }
-        //Upload supporting document
-       /*
-        if ($request->hasFile('inspection_file_upload')) {
-            $fileExt = $request->file('inspection_file_upload')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'tiff']) && $request->file('inspection_file_upload')->isValid()) {
-                $fileName = time() . "_inspection_file_upload." . $fileExt;
-                $request->file('inspection_file_upload')->storeAs('Jobcard/inspectionfileupload', $fileName);
-                //Update file name in the table
-                $jobcardmaintanance->inspection_file_upload = $fileName;
-                $jobcardmaintanance->update();
-            }
-        } */
 		// add to jobcard history 
         $JobCardHistory = new JobCardHistory();
         $JobCardHistory->job_card_id = $jobcardmaintanance->id;
         $JobCardHistory->user_id = Auth::user()->person->id;
         $JobCardHistory->status = 1;
-        $JobCardHistory->comment = "New Job Card Created";
+        $JobCardHistory->comment = "Job Card Created";
         $JobCardHistory->action_date = time();
         $JobCardHistory->save();
-		
-        // send emails
+
+	   // send emails
         $users = HRUserRoles::where('role_id', $jobtitle)->pluck('hr_id');
         foreach ($users as $manID) {
             $usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
-            $email = $usedetails->email;
-            $firstname = $usedetails->first_name;
-            $surname = $usedetails->surname;
-            $email = $usedetails->email;
-            Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
+			if (!empty($usedetails->emaill))
+				Mail::to($usedetails->email)->send(new NextjobstepNotification($usedetails->first_name, $usedetails->surname, $usedetails->email));
         }
+		
+		// get fleet details
+		$fleet = vehicle_detail::where('id',$jobcardmaintanance->vehicle_id)->first();
+		$jobDetails = "Fleet No: ".$fleet->fleet_number .", JobCard No: ".$jobcardmaintanance->id;
+		$message = "Hi New JobCard ".$jobDetails." ".$message;
+		$mechanicdetails = HRPerson::where('id', $SysData['mechanic_id'])->select('first_name', 'surname', 'email')->first();
+		$jcAttachment = $this->viewjobcard($jobcardmaintanance, true);
+		if (!empty($communicationType) && $communicationType == 1)
+		{
+			//// Send email to mechanic
+			if (!empty($mechanicdetails->email))
+				Mail::to($mechanicdetails->email)->send(new MechanicEmailJC($mechanicdetails->first_name, $jcAttachment));
+		}
+		elseif (!empty($communicationType) && $communicationType == 2)
+		{
+			//// Send sms to mechanic
+			if (!empty($mechanicdetails->cell_number))
+			{
+				$mobileArray[] = $this->formatCellNo($mechanicdetails->cell_number);
+				$message = str_replace("<br>", "", $message);
+				$message = str_replace(">", "-", $message);
+				$message = str_replace("<", "-", $message);
+				BulkSMSController::send($mobileArray, $message);
+			}
+		}
+		elseif (!empty($communicationType) && $communicationType == 3)
+		{
+			//// Send sms and email to mechanic
+			if (!empty($mechanicdetails->email))
+				Mail::to($mechanicdetails->email)->send(new MechanicEmailJC($mechanicdetails->first_name, $jcAttachment));
+			//// Send sms to mechanic
+			if (!empty($mechanicdetails->cell_number))
+			{
+				$mobileArray[] = $this->formatCellNo($mechanicdetails->cell_number);
+				$message = str_replace("<br>", "", $message);
+				$message = str_replace(">", "-", $message);
+				$message = str_replace("<", "-", $message);
+				BulkSMSController::send($mobileArray, $message);
+			}
+		}
         AuditReportsController::store('Job Card Management', ' Job card created', "New Job Card Created", $jobcardmaintanance->id);
         return response()->json();
     }
+	
+	function formatCellNo($sCellNo)
+    {
+        # Remove the following characters from the phone number
+        $cleanup_chr = array("+", " ", "(", ")", "\r", "\n", "\r\n");
 
+        # clean phone number
+        $sCellNo = str_replace($cleanup_chr, '', $sCellNo);
+
+        #Internationalise  the number
+        if ($sCellNo{0} == "0") $sCellNo = "27" . substr($sCellNo, 1);
+
+        return $sCellNo;
+    }
+	
     public function updateJobCard(Request $request, jobcard_maintanance $jobCard)
     {
         $this->validate($request, [
@@ -673,6 +701,7 @@ class JobcardController extends Controller
         $this->validate($request, [
           'service_file_upload' => 'required',
           'completion_date' => 'required',
+          'service_time' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -687,6 +716,7 @@ class JobcardController extends Controller
                 //Update file name in the table
 				$flow = processflow::where('step_number', '>', $card->status)->where('status', 1)->orderBy('step_number', 'asc')->first();
 				$card->completion_date = $completiondate;
+				$card->service_time = $SysData['service_time'];
 				$card->status = $flow->step_number;
                 $card->service_file_upload = $fileName;
                 $card->update();
@@ -1147,7 +1177,7 @@ class JobcardController extends Controller
         return redirect("/jobcards/viewcard/$instruction->job_card_id");
     }
 
-    public function viewjobcard(jobcard_maintanance $card)
+    public function viewjobcard(jobcard_maintanance $card, $isPDF = false)
     {
 		$userID = Auth::user()->id;
 		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
@@ -1232,9 +1262,32 @@ class JobcardController extends Controller
 		$JobCardHistory->comment = "JC opened";
 		$JobCardHistory->action_date = time();
 		$JobCardHistory->save();
-		
-        AuditReportsController::store('Job Card Management', 'View Job Cards Page Accessed', "Accessed By User", $card->id);
-        return view('job_cards.job_card_details')->with($data);
+		if ($isPDF === true) 
+		{
+			AuditReportsController::store('Job Card Management', 'Job Cards Printed', "Accessed By User");
+			$companyDetails = CompanyIdentity::systemSettings();
+			$companyName = $companyDetails['company_name'];
+			$user = Auth::user()->load('person');
+
+			$data['support_email'] = $companyDetails['support_email'];
+			$data['company_name'] = $companyName;
+			$data['full_company_name'] = $companyDetails['full_company_name'];
+			$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+			$data['date'] = date("d-m-Y");
+			$data['user'] = $user;
+			$data['file_name'] = 'JobCard';
+            $view = view('job_cards.jobcard_view_print', $data)->render();
+            $pdf = resolve('dompdf.wrapper');
+            $pdf->getDomPDF()->set_option('enable_html5_parser', true);
+            $pdf->loadHTML($view);
+			return $pdf->output();
+        }
+		else 
+		{
+			AuditReportsController::store('Job Card Management', 'View Job Cards Page Accessed', "Accessed By User");
+			return view('job_cards.job_card_details')->with($data);
+        }
+
     }
 	public function jobcardhistory(jobcard_maintanance $card)
     {

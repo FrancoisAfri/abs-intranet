@@ -123,6 +123,18 @@
                             </select>
                         </div>
                     </div>
+					<div class="form-group{{ $errors->has('communication_type') ? ' has-error' : '' }}">
+						<label for="status_type" class="col-sm-2 control-label"> Communication Type
+							 </label>
+						<div class="col-sm-8">
+							<label class="radio-inline"><input type="radio" id="rdo_status" name="communication_type" value="1">
+								Email </label>
+							<label class="radio-inline"><input type="radio" id="rdo_status" name="communication_type" value="2">
+								SMS</label>
+							 <label class="radio-inline"><input type="radio" id="rdo_status" name="communication_type" value="3">
+								Both </label>
+						</div>
+					</div>
 					<div id="tab_10">
 						<hr class="hr-text" data-content="Instructions">
 						<div class="row" id="tab_tab">							

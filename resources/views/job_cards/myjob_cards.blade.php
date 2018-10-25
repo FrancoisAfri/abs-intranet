@@ -10,7 +10,8 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
           rel="stylesheet">
-
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @endsection
 @section('content')
     <div class="row">
@@ -121,7 +122,9 @@
 	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
 	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
 	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+    <!-- iCheck -->
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
 	<!-- InputMask -->
 	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
@@ -137,6 +140,12 @@
 			"info": true,
 			"autoWidth": true
 		});
+	});
+	//Initialize iCheck/iRadio Elements
+	$('input').iCheck({
+		checkboxClass: 'icheckbox_square-blue',
+		radioClass: 'iradio_square-blue',
+		increaseArea: '10%' // optional
 	});
 	function showHide() {
 		if (document.getElementById('external_service').checked) {

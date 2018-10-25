@@ -41,14 +41,6 @@
                                    value="{{ old('date') }}" placeholder="Select start date  ...">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="completion_date" class="col-sm-2 control-label">Completion Date</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control datepicker" id="completion_date"
-                                   name="completion_date" value="{{ old('completion_date') }}"
-                                   placeholder="Click to Select a Date...">
-                        </div>
-                    </div>
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label"> Service by Agent</label>
                         <div class="col-sm-8">
@@ -93,23 +85,6 @@
                                    placeholder="Enter Estimated Hours" required>
                         </div>
                     </div>
-                    <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
-                        <label for="documents" class="col-sm-2 control-label">Service File Upload </label>
-                        <div class="col-sm-8">
-
-                            <input type="file" id="service_file_upload" name="service_file_upload"
-                                   class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
-                                   data-show-upload="false">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Service Time</label>
-                        <div class="col-sm-8">
-
-                            <input type="number" class="form-control" id="service_time" name="service_time" value=""
-                                   placeholder="Enter service time" required>
-                        </div>
-                    </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Machine Hour Metre</label>
                         <div class="col-sm-8">
@@ -135,19 +110,6 @@
                                     <option value="{{ $details->id }}">{{$details->first_name . ' ' .  $details->surname }}</option>
                                 @endforeach
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
-                        <label for="days" class="col-sm-2 control-label">Inspection Info</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-sticky-note"></i>
-                                </div>
-                                <textarea class="form-control" id="inspection_info" name="inspection_info"
-                                          placeholder="Enter a inspection Info"
-                                          rows="2">{{ old('inspection_info') }}</textarea>
-                            </div>
                         </div>
                     </div>
                     <div class="form-group mechanic_row">
