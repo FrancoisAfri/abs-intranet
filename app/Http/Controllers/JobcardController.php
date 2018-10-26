@@ -576,7 +576,7 @@ class JobcardController extends Controller
 			//// Send sms and email to mechanic
 			if (!empty($mechanicdetails->email))
 				Mail::to($mechanicdetails->email)->send(new MechanicEmailJC($mechanicdetails->first_name, $jcAttachment));
-			//// Send sms to mechanic
+			//// Send sms to mechanic 
 			if (!empty($mechanicdetails->cell_number))
 			{
 				$mobileArray[] = $this->formatCellNo($mechanicdetails->cell_number);
