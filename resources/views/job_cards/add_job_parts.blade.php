@@ -3,7 +3,7 @@
 <!-- bootstrap datepicker -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
 <!-- iCheck -->
-<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
+ <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @endsection
 @section('content')
     <div class="row">
@@ -33,7 +33,14 @@
                                 </ul>
                             </div>
                         @endif
-						<div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }}">
+						<div class="form-group{{ $errors->has('part_type') ? ' has-error' : '' }}">
+                            <label for="part_type" class="col-sm-2 control-label">Parts Type</label>
+                            <div class="col-sm-10">
+                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_prod" name="part_type" value="1" checked> Items</label>
+                                <label class="radio-inline"><input type="radio" id="rdo_kit" name="part_type" value="0"> Kit</label>
+                            </div>
+                        </div>
+						<div class="form-group products-field {{ $errors->has('category_id') ? ' has-error' : '' }}">
 							<label for="category_id" class="col-sm-2 control-label">Category</label>
 							<div class="col-sm-10">
 								<select id="product_id" name="product_id" class="form-control select2" style="width: 100%;"
@@ -46,7 +53,7 @@
 								</select>
 							</div>
 						</div>
-                        <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
+                        <div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-sm-2 control-label">Product</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -57,12 +64,24 @@
                                 </div>
                             </div>
                         </div>
-						<div class="form-group{{ $errors->has('project_id') ? ' has-error' : '' }}">
+						<div class="form-group products-field{{ $errors->has('project_id') ? ' has-error' : '' }}">
 							<label for="no_of_parts_used" class="col-sm-2 control-label">Number</label>
 							<div class="col-sm-8">
 								<input type="number" class="form-control" id="no_of_parts_used" name="no_of_parts_used"
 									   value=""
 									   placeholder="Enter a Number">
+							</div>
+						</div>
+						<div class="form-group kit-field {{ $errors->has('category_id') ? ' has-error' : '' }}">
+							<label for="kit_id" class="col-sm-2 control-label">Kit</label>
+							<div class="col-sm-10">
+								<select id="kit_id" name="kit_id" class="form-control select2" style="width: 100%;">
+									<option value="">*** Please Select a kit ***</option>
+									<option value="0"></option>
+									@foreach($kits as $kit)
+										<option value="{{ $kit->id }}">{{ $kit->name }}</option>
+									@endforeach
+								</select>
 							</div>
 						</div>
                     </div>
@@ -95,10 +114,36 @@
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
+			 //Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
             //Cancel button click event
             $('#cancel').click(function () {
                 location.href = '/jobcard/parts/{{$jobcardpart->id}}';
             });
+			//call hide/show fields functions on doc ready
+            hideFields();
+
+            //show/hide file upload or manual fields on radio checked
+            $('#rdo_kit, #rdo_prod').on('ifChecked', function(){
+                hideFields();
+            });
 		});
+		
+		//function to hide/show security fields
+        function hideFields() {
+			alert('sssssssssssssssss');
+            var part = $("input[name='part_type']:checked").val();
+            if (part == 1) { //yes
+                $('.products-field').show();
+            }
+            else if (part == 0) { //no
+                $('.kit-field').hide();
+            }
+            return part;
+        }
     </script>
 @endsection

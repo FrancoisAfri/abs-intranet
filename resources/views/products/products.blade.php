@@ -11,6 +11,7 @@
             {{ method_field('PATCH') }}
             <!-- /.box-header -->
                 <div class="box-body">
+				<div class="no-padding" style="overflow-x: scroll;">
                     <table class="table table-bordered">
                         <tr>
                             <th style="width: 10px">#</th>
@@ -83,6 +84,7 @@
                             </tr>
                         @endif
                     </table>
+                </div>
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">

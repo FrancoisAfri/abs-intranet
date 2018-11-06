@@ -73,7 +73,6 @@ class Product_categoryController extends Controller
     public function productView(Product_category $Category)
     {
         if ($Category->status == 1) {
-
             $userAccess = DB::table('security_modules_access')
                 ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
                 ->where('code_name', 'quote')
@@ -155,7 +154,7 @@ class Product_categoryController extends Controller
         $data['jobCategories'] = $jobCategories;
         $data['ProductCategory'] = $ProductCategory;
 
-        AuditReportsController::store('Products', 'Job titles Page Accessed', 'Actioned By User', 0);
+        AuditReportsController::store('Products', 'Product Package Page Accessed', 'Accessed By User', 0);
         return view('products.product_packages')->with($data);
     }
 
@@ -392,10 +391,8 @@ class Product_categoryController extends Controller
         AuditReportsController::store('Products', 'Stock Info Updated', 'Actioned By User', 0);
         return response()->json();
     }
-
 	
     //add product to packages
-
     public function viewProducts(product_packages $package)
     {
         if ($package->status == 1) {
@@ -422,7 +419,7 @@ class Product_categoryController extends Controller
 
             $data['active_mod'] = 'Products';
             $data['active_rib'] = 'Packages';
-            AuditReportsController::store('Package_p Records', 'Job Titles Page Accessed', 'Accessed by User', 0);
+            AuditReportsController::store('Stock Management', 'Products Packadges Accessed', 'Accessed by User', 0);
             return view('products.packages_product')->with($data);
         } else {
             return back();
@@ -647,7 +644,6 @@ class Product_categoryController extends Controller
     }
 
     //promotions
-
     public function promotionSave(Request $request)
     {
         $this->validate($request, [
@@ -740,7 +736,6 @@ class Product_categoryController extends Controller
     }
 
     //search functions
-
     public function productSearch(Request $request)
     {
         $this->validate($request, [

@@ -740,9 +740,16 @@ Route::get('stock/stock_allocation', 'StockController@takeout');
 Route::post('stock/stock_outsearch', 'StockController@stockout');
 Route::post('stock/add_stock' ,'StockController@add_stock');
 Route::post('stock/takestock' ,'StockController@takestockout');
-
+Route::get('stock/kit_management', 'StockController@kitIndex');
 Route::get('stock/reports', 'StockController@viewreports');
 Route::post('stock/stock_history/print', 'StockController@printreport');
+Route::post('stock/kit/add', 'StockController@kitSave');
+Route::patch('stock/kit/update/{kit}', 'StockController@kitUpdate');
+Route::get('stock/kit_act/{kit}', 'StockController@kitAct');
+Route::get('product/kit/{kit}', 'StockController@viewKitProducts');
+Route::get('stock/productkitAct/{product}', 'StockController@kitProductAct');
+Route::post('stock/products_kit/add/{kit}', 'StockController@addProductToKit');
+Route::patch('stock/product/update/{prod}', 'StockController@updateProductToKit');
 
 Route::post('stock/search_report' ,'StockController@searchreport');
 //    -Kpi Types

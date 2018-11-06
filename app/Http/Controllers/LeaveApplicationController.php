@@ -77,7 +77,6 @@ class LeaveApplicationController extends Controller
 
     public function show()
     {
-		
         $data['page_title'] = "leave Management";
         $data['page_description'] = "Leave Approvals";
         $data['breadcrumb'] = [
@@ -213,7 +212,6 @@ class LeaveApplicationController extends Controller
 
     public function availableDays($hrID, $typID)
     {
-
         $balance = DB::table('leave_credit')
             ->select('leave_balance')
             ->where('hr_id', $hrID)

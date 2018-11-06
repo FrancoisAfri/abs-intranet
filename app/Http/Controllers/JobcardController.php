@@ -9,6 +9,7 @@ use App\servicetype;
 use App\HRPerson;
 use App\vehicle;
 use App\images;
+use App\kitProducts;
 use App\product_category;
 use App\JobCardHistory;
 use App\jobcard_order_parts;
@@ -1608,8 +1609,11 @@ class JobcardController extends Controller
 	public function addparts(jobcard_maintanance $jobcardpart)
     {
         $productCategories = product_category::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get(); 
+        $kits = kitProducts::where('status',1)->orderBy('name', 'asc')->get(); 
+
         $data['productCategories'] = $productCategories;
         $data['jobcardpart'] = $jobcardpart;
+        $data['kits'] = $kits;
         $data['page_title'] = "Job Cards";
         $data['page_description'] = "Add Part(s) To Job Card";
         $data['breadcrumb'] = [

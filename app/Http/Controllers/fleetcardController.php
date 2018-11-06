@@ -400,11 +400,10 @@ class fleetcardController extends Controller
                 if (count($sValue) > 1) {
                     $status = $sValue[1];
                 } else $status = $sValue[0];
-                $vehID = $vehicleID;
-                $vehicle_maintenance->updateOrCreate(['id' => $vehID], ['status' => $status]);
+                $vehicle_maintenance->updateOrCreate(['id' => $vehicleID], ['status' => $status]);
 				// add to vehicle history 
 				$VehicleHistory = new VehicleHistory();
-				$VehicleHistory->vehicle_id = $vehID;
+				$VehicleHistory->vehicle_id = $vehicleID;
 				$VehicleHistory->user_id = Auth::user()->person->id;
 				$VehicleHistory->status = 1;
 				$VehicleHistory->comment = "New Vehicle Approved";
@@ -414,7 +413,7 @@ class fleetcardController extends Controller
 				# Send email to admin and person who added the vehicle
 				if ($vehicleConfig == 1) {
 					
-					$vehicle_maintenance = vehicle_maintenance::where('id', $iID)->first();
+					$vehicle_maintenance = vehicle_maintenance::where('id', $vehicleID)->first();
 					if (!empty($vehicle_maintenance->author_id))
 					{
 						$authoretails = HRPerson::where('id', $vehicle_maintenance->author_id)->select('first_name', 'surname', 'email')->first();
