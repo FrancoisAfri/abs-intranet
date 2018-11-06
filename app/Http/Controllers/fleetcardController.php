@@ -421,7 +421,7 @@ class fleetcardController extends Controller
 						$firstname = !empty($authoretails->first_name) ? $authoretails->first_name : ''; 
 						$surname = !empty($authoretails->surname) ? $authoretails->surname : '';
 						if (!empty($authoretails->email))
-									Mail::to($email)->send(new VehicleApproved($firstname, $surname, $email, $iID));
+									Mail::to($email)->send(new VehicleApproved($firstname, $surname, $email, $vehicleID));
 					}
 				}
             }

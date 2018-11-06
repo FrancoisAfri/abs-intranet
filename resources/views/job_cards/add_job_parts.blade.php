@@ -34,7 +34,7 @@
                             </div>
                         @endif
 						<div class="form-group{{ $errors->has('part_type') ? ' has-error' : '' }}">
-                            <label for="part_type" class="col-sm-2 control-label">Parts Type</label>
+                            <label for="part_type" class="col-sm-2 control-label">Type</label>
                             <div class="col-sm-10">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_prod" name="part_type" value="1" checked> Items</label>
                                 <label class="radio-inline"><input type="radio" id="rdo_kit" name="part_type" value="0"> Kit</label>
@@ -135,13 +135,15 @@
 		
 		//function to hide/show security fields
         function hideFields() {
-			alert('sssssssssssssssss');
+			
             var part = $("input[name='part_type']:checked").val();
             if (part == 1) { //yes
                 $('.products-field').show();
+				$('.kit-field').hide();
             }
             else if (part == 0) { //no
-                $('.kit-field').hide();
+                $('.kit-field').show();
+				$('.products-field').hide();
             }
             return part;
         }
