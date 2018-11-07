@@ -9,6 +9,7 @@ use App\servicetype;
 use App\HRPerson;
 use App\vehicle;
 use App\images;
+use App\KitJoinProducts;
 use App\kitProducts;
 use App\product_category;
 use App\JobCardHistory;
@@ -1418,169 +1419,6 @@ class JobcardController extends Controller
         return response()->json();
     }
 	
-    public function jobcardparts()
-    {
-        $parts = jobcard_category_parts::OrderBy('id', 'asc')->get();
-        //  return $parts;
-        $data['parts'] = $parts;
-        $data['page_title'] = "Job Cards";
-        $data['page_description'] = "Job Card Management";
-        $data['breadcrumb'] = [
-            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
-        ];
-
-        $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Parts';
-
-        AuditReportsController::store('Job Card Management', 'view job card parts', "Accessed By User", 0);
-        return view('job_cards.add_jobcard_category')->with($data);
-    }
-
-    public function addpartscatergory(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
-        ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
-
-        $parts = new jobcard_category_parts();
-        $parts->name = !empty($SysData['name']) ? $SysData['name'] : '';
-        $parts->description = !empty($SysData['description']) ? $SysData['description'] : '';
-        $parts->status = 1;
-        $parts->save();
-
-        AuditReportsController::store('Job Card Management', ' new parts catergory created', "Accessed By User", $parts->id);
-        return response()->json();
-    }
-
-    public function editpartscatagory(Request $request, jobcard_category_parts $parts)
-    {
-        $this->validate($request, [
-
-        ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
-
-        //$parts =  new jobcard_category_parts();
-        $parts->name = !empty($SysData['name']) ? $SysData['name'] : '';
-        $parts->description = !empty($SysData['description']) ? $SysData['description'] : '';
-        $parts->status = 1;
-        $parts->update();
-
-        AuditReportsController::store('Job Card Management', 'parts catergory  edited', "Accessed By User", $parts->id);
-        return response()->json();
-    }
-
-    public function jobcat_act(jobcard_category_parts $parts)
-    {
-        if ($parts->status == 1)
-            $stastus = 0;
-        else
-            $stastus = 1;
-        $parts->status = $stastus;
-        $parts->update();
-
-        AuditReportsController::store('Job Card Management', 'parts catergory  status Changed', "Accessed By User", $parts->id);
-        return back();
-    }
-
-    public function deletepartscatergory(jobcard_category_parts $parts)
-    {
-        $parts->delete();
-
-        // delete every parts assacoited with parts_catergory
-        DB::table('jobcard_parts')
-            ->where('category_id', $parts->id)
-            ->delete();
-
-        AuditReportsController::store('Job Card Management', ' parts catergory Deleted', "Accessed By User", $parts->id);
-        return back();
-        // return redirect('/jobcards/servicetype');
-    }
-
-    public function viewjobcardparts(Request $request, jobcard_category_parts $parts)
-    {
-        $jobcartparts = jobcart_parts::OrderBy('id', 'asc')->where('category_id', $parts->id)->get();
-
-        $data['parts'] = $parts;
-        $data['jobcartparts'] = $jobcartparts;
-        $data['page_title'] = "Job Cards";
-        $data['page_description'] = "Job Card Management";
-        $data['breadcrumb'] = [
-            ['title' => 'Job Card Management', 'path' => 'jobcards/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Job Card Search ', 'active' => 1, 'is_module' => 0]
-        ];
-
-        $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Parts';
-
-        AuditReportsController::store('Job Card Management', 'view Job card parts ', "Accessed By User", $parts->id);
-        return view('job_cards.add_jobcard_parts')->with($data);
-    }
-
-    public function addjobcardparts(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
-            'no_of_parts_available' => 'required',
-        ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
-
-        $jobcartparts = new jobcart_parts();
-        $jobcartparts->name = !empty($SysData['name']) ? $SysData['name'] : '';
-        $jobcartparts->description = !empty($SysData['description']) ? $SysData['description'] : '';
-        $jobcartparts->status = 1;
-        $jobcartparts->no_of_parts_available = !empty($SysData['no_of_parts_available']) ? $SysData['no_of_parts_available'] : 0;
-        $jobcartparts->category_id = !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
-        $jobcartparts->save();
-
-        AuditReportsController::store('Job Card Management', 'new job card part created', "Accessed By User", $jobcartparts->id);
-        return response()->json();
-    }
-
-    public function editcardparts(Request $request, jobcart_parts $parts)
-    {
-        $this->validate($request, [
-            'name' => 'required',
-            'description' => 'required',
-        ]);
-        $SysData = $request->all();
-        unset($SysData['_token']);
-
-        $parts->name = !empty($SysData['name']) ? $SysData['name'] : '';
-        $parts->description = !empty($SysData['description']) ? $SysData['description'] : '';
-        $parts->no_of_parts_available = !empty($SysData['no_of_parts_available']) ? $SysData['no_of_parts_available'] : 0;;
-        $parts->update();
-
-        AuditReportsController::store('Job Card Management', ' Job card parts edited', "Accessed By User", $parts->id);
-        return response()->json();
-    }
-
-    public function parts_act(jobcart_parts $parts)
-    {
-        if ($parts->status == 1)
-            $stastus = 0;
-        else
-            $stastus = 1;
-        $parts->status = $stastus;
-        $parts->update();
-
-        AuditReportsController::store('Job Card Management', 'Job card parts status Changed', "Accessed By User", $parts->id);
-        return back();
-    }
-
-    public function deletejobcards(jobcart_parts $parts)
-    {
-        $parts->delete();
-        AuditReportsController::store('Job Card Management', ' Job card parts deleted', "Accessed By User", $parts->id);
-        return back();
-    }
-
     public function viewparts(jobcard_maintanance $jobcardparts)
     {
         $parts = DB::table('jobcard__order_parts') 
@@ -1631,14 +1469,16 @@ class JobcardController extends Controller
     {
 		//Validation
         $validator = Validator::make($request->all(), [
-            'category_id' => 'required',
-            'product_id' => 'required',
-            'no_of_parts_used' => 'required',
+            'category_id' => 'bail|required_if:part_type,1',
+            'product_id' => 'bail|required_if:part_type,1',
+            'kit_id' => 'bail|required_if:part_type,2',
+            'no_of_parts_used' => 'bail|required_if:part_type,1',
         ]);
         $validator->after(function ($validator) use($request) {
-            $categoryID = $request->input('product_id');
-            $productID = $request->input('category_id');
+            $categoryID = $request->input('category_id');
+            $productID = $request->input('product_id');
             $noOfPartsWanted = $request->input('no_of_parts_used');
+            $partType = $request->input('part_type');
             $isAvailable = 0;
 			if (!empty($categoryID) && !empty($productID))
 			{
@@ -1649,9 +1489,8 @@ class JobcardController extends Controller
 				if (empty($isAvailable))
 					$validator->errors()->add('no_of_parts_used', "Sorry you cannot request more than: $availblebalance. Please your Request.");
 			}
-			else
-				$validator->errors()->add('product_id', 'Please select a Category and a Product');
-            if (empty($noOfPartsWanted))
+			
+            if (empty($noOfPartsWanted) && $partType == 1)
                 $validator->errors()->add('no_of_parts_used', 'Please enter number of parts needed');
         });
         if ($validator->fails()) {
@@ -1662,48 +1501,98 @@ class JobcardController extends Controller
 
         $SysData = $request->all();
         unset($SysData['_token']);
-
-		$stock = stock::where('category_id', $SysData['product_id'])->where('product_id', $SysData['category_id'])->first();
-		$availblebalance = !empty($stock->avalaible_stock) ? $stock->avalaible_stock : 0;
-        $transactionbalance = $availblebalance - $SysData['no_of_parts_used'];
-
-		$currentparts = new jobcard_order_parts();
-		$currentparts->category_id = !empty($SysData['product_id']) ? $SysData['product_id'] : 0;
-		$currentparts->product_id = !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
-		$currentparts->no_of_parts_used = !empty($SysData['no_of_parts_used']) ? $SysData['no_of_parts_used'] : 0;
-		$currentparts->jobcard_card_id = $jobcardpart->id;
-		$currentparts->avalaible_transaction = $transactionbalance;
-		$currentparts->created_by = Auth::user()->person->id;
-		$currentparts->date_created = time();
-		$currentparts->status = 1;
-		$currentparts->save();
-
-		// Update stock availble balance
-		$stock->avalaible_stock = $transactionbalance;
-		$stock->update();
-		// Update stock history
-		$history = new stockhistory();
-		$history->product_id = !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
-		$history->category_id = !empty($SysData['product_id']) ? $SysData['product_id'] : 0;
-		$history->avalaible_stock = $transactionbalance;
-		$history->action_date = time();
-		$history->balance_before = $availblebalance;
-		$history->balance_after = $transactionbalance;
-		$history->action = 'Stock Updated';
-		$history->user_id = Auth::user()->person->id;
-		$history->user_allocated_id = 0;
-		$history->vehicle_id = $jobcardpart->vehicle_id;
-		$history->save();
 		
-		//add to jobcard history 
-        $JobCardHistory = new JobCardHistory();
-        $JobCardHistory->job_card_id = $jobcardpart->id;
-        $JobCardHistory->user_id = Auth::user()->person->id;
-        $JobCardHistory->status = $jobcardpart->status;
-        $JobCardHistory->comment = "Parts Allocated";
-        $JobCardHistory->action_date = time();
-        $JobCardHistory->save();
-		
+		$kitID = !empty($SysData['kit_id']) ? $SysData['kit_id']: 0;
+		if ($kitID > 0)
+		{
+			$products = KitJoinProducts::where('kit_id', $kitID)->where('status', 1)->get();
+			foreach ($products as $product) {
+
+				$stock = stock::where('category_id', $product->category_id)->where('product_id', $product->product_id)->first();
+				$availblebalance = !empty($stock->avalaible_stock) ? $stock->avalaible_stock : 0;
+				$transactionbalance = $availblebalance - $product->amount_required;
+
+				$currentparts = new jobcard_order_parts();
+				$currentparts->category_id = $product->category_id;
+				$currentparts->product_id = $product->product_id;
+				$currentparts->no_of_parts_used = $product->amount_required;
+				$currentparts->jobcard_card_id = $jobcardpart->id;
+				$currentparts->avalaible_transaction = $transactionbalance;
+				$currentparts->created_by = Auth::user()->person->id;
+				$currentparts->date_created = time();
+				$currentparts->status = 1;
+				$currentparts->save();
+
+				// Update stock availble balance
+				$stock->avalaible_stock = $transactionbalance;
+				$stock->update();
+				// Update stock history
+				$history = new stockhistory();
+				$history->product_id = $product->category_id;
+				$history->category_id = $product->product_id;
+				$history->avalaible_stock = $transactionbalance;
+				$history->action_date = time();
+				$history->balance_before = $availblebalance;
+				$history->balance_after = $transactionbalance;
+				$history->action = 'Stock Items Out';
+				$history->user_id = Auth::user()->person->id;
+				$history->user_allocated_id = 0;
+				$history->vehicle_id = $jobcardpart->vehicle_id;
+				$history->save();
+			}
+
+			//add to jobcard history 
+			$JobCardHistory = new JobCardHistory();
+			$JobCardHistory->job_card_id = $jobcardpart->id;
+			$JobCardHistory->user_id = Auth::user()->person->id;
+			$JobCardHistory->status = $jobcardpart->status;
+			$JobCardHistory->comment = "Parts Allocated";
+			$JobCardHistory->action_date = time();
+			$JobCardHistory->save();
+		}
+		else
+		{
+			$stock = stock::where('category_id', $SysData['category_id'])->where('product_id', $SysData['product_id'])->first();
+			$availblebalance = !empty($stock->avalaible_stock) ? $stock->avalaible_stock : 0;
+			$transactionbalance = $availblebalance - $SysData['no_of_parts_used'];
+
+			$currentparts = new jobcard_order_parts();
+			$currentparts->category_id = !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
+			$currentparts->product_id = !empty($SysData['product_id']) ? $SysData['product_id'] : 0;
+			$currentparts->no_of_parts_used = !empty($SysData['no_of_parts_used']) ? $SysData['no_of_parts_used'] : 0;
+			$currentparts->jobcard_card_id = $jobcardpart->id;
+			$currentparts->avalaible_transaction = $transactionbalance;
+			$currentparts->created_by = Auth::user()->person->id;
+			$currentparts->date_created = time();
+			$currentparts->status = 1;
+			$currentparts->save();
+
+			// Update stock availble balance
+			$stock->avalaible_stock = $transactionbalance;
+			$stock->update();
+			// Update stock history
+			$history = new stockhistory();
+			$history->product_id = !empty($SysData['product_id']) ? $SysData['product_id'] : 0;
+			$history->category_id = !empty($SysData['category_id']) ? $SysData['category_id'] : 0;
+			$history->avalaible_stock = $transactionbalance;
+			$history->action_date = time();
+			$history->balance_before = $availblebalance;
+			$history->balance_after = $transactionbalance;
+			$history->action = 'Stock Updated';
+			$history->user_id = Auth::user()->person->id;
+			$history->user_allocated_id = 0;
+			$history->vehicle_id = $jobcardpart->vehicle_id;
+			$history->save();
+			
+			//add to jobcard history 
+			$JobCardHistory = new JobCardHistory();
+			$JobCardHistory->job_card_id = $jobcardpart->id;
+			$JobCardHistory->user_id = Auth::user()->person->id;
+			$JobCardHistory->status = $jobcardpart->status;
+			$JobCardHistory->comment = "Parts Allocated";
+			$JobCardHistory->action_date = time();
+			$JobCardHistory->save();
+		}
 		AuditReportsController::store('Job Card Management', ' Job card parts added to jobcard', "Accessed By User", 0);
 		return redirect("/jobcard/parts/$jobcardpart->id")->with('success_add', "part Has been Successfully Added To jobCard.");
     }
@@ -2116,9 +2005,7 @@ class JobcardController extends Controller
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
-
         }
-
      //   stock_history
         
             $parts = DB::table('jobcard_maintanance')
@@ -2409,4 +2296,3 @@ class JobcardController extends Controller
      
     }
 }
-

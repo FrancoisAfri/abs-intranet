@@ -18,7 +18,9 @@ use App\Users;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Input;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 class StockController extends Controller
 {
     public function __construct()
@@ -178,14 +180,16 @@ class StockController extends Controller
         if ($kit->status == 1) {
             $products = DB::table('kin_join_products')
                 ->select('kin_join_products.*', 'Product_products.name as prod_name'
+				, 'product_Category.name as cat_name'
 				,'stock.avalaible_stock','Product_products.product_code')
+                ->leftJoin('product_Category', 'kin_join_products.category_id', '=', 'product_Category.id')
                 ->leftJoin('Product_products', 'kin_join_products.product_id', '=', 'Product_products.id')
                 ->leftJoin('stock', 'stock.product_id', '=', 'Product_products.id')
 				->where('kin_join_products.kit_id', $kit->id)
                 ->orderBy('Product_products.name')
                 ->get();
-            $newProducts = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
 
+			$categories = product_category::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
             $data['page_title'] = 'Manage Products Kit';
             $data['page_description'] = 'Products Kit';
             $data['breadcrumb'] = [
@@ -194,7 +198,7 @@ class StockController extends Controller
             ];
             $data['products'] = $products;
             $data['kit'] = $kit;
-            $data['newProducts'] = $newProducts;
+            $data['categories'] = $categories;
 
             $data['active_mod'] = 'Stock Management';
             $data['active_rib'] = 'Kit Management';
@@ -223,25 +227,29 @@ class StockController extends Controller
 	
 	public function addProductToKit(Request $request, kitProducts $kit)
     {
-        $this->validate($request, [
-            'product_id' => 'required',
-            'number_required' => 'required',
+		$validator = Validator::make($request->all(), [
+            'category_id' => 'required|numeric|min:0.1',
+            'number_required' => 'required|numeric|min:0.1',
+			'product_id' => [
+				'required',
+				Rule::unique('kin_join_products')->where(function ($query) use ($kit) {
+					return $query->where('kit_id', $kit->id);
+				}),
+			],   
         ]);
-
-        $kitData = $request->all();
+		if ($validator->fails())
+			return response()->json(['product_id' => 'This product has already been added to this kit. Please choose another one.'], 422);
+        
+		$kitData = $request->all();
         unset($kitData['_token']);
 
-		$category = product_products::where('id', $kitData['product_id'])->first();
-		if (!empty($category))
-		{
-			$KitJoinProducts = new KitJoinProducts();
-			$KitJoinProducts->product_id = $kitData['product_id'];
-			$KitJoinProducts->kit_id = $kit->id;
-			$KitJoinProducts->category_id = $category->category_id;
-			$KitJoinProducts->amount_required = $kitData['number_required'];
-			$KitJoinProducts->status = 1;
-			$KitJoinProducts->save();
-		}
+		$KitJoinProducts = new KitJoinProducts();
+		$KitJoinProducts->product_id = $kitData['product_id'];
+		$KitJoinProducts->kit_id = $kit->id;
+		$KitJoinProducts->category_id = $kitData['category_id'];
+		$KitJoinProducts->amount_required = $kitData['number_required'];
+		$KitJoinProducts->status = 1;
+		$KitJoinProducts->save();
 				
         AuditReportsController::store('Stock Management', 'Products Added to kit', 'Added by User', 0);
         return response()->json();
@@ -267,7 +275,6 @@ class StockController extends Controller
 	public function add_stock(Request $request)
     {
         $this->validate($request, [
-
         ]);
         $results = $request->all();
         //Exclude empty fields from query
@@ -628,5 +635,3 @@ class StockController extends Controller
         return view('stock.stock_report_print')->with($data);
     }
 }
- 
-

@@ -452,9 +452,6 @@
             }
             return allType;
         }
-
         //Load divisions drop down
-
-
     </script>
 @endsection

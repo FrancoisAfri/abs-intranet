@@ -211,10 +211,10 @@ class DropDownAPIController extends Controller
           $productbcategoryID = (int) $request->input('category_id');
           $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
           $loadAll = $request->input('load_all');
-          $model = [];
-          if ($loadAll == -1) $model = product_products::movproductCategory('category_id', $productbcategoryID, $incInactive);
+          $products = [];
+          if ($loadAll == -1) $products = product_products::movproductCategory('category_id', $productbcategoryID, $incInactive);
           elseif ($loadAll == 1) {
-              $model = product_products::where(function ($query) use($incInactive) {
+              $products = product_products::where(function ($query) use($incInactive) {
                   if ($incInactive == -1) {
                       $query->where('status', 1);
                   }
@@ -222,6 +222,6 @@ class DropDownAPIController extends Controller
                   ->sortBy('id')
                   ->pluck('id', 'name');
           }
-          return $model;
+          return $products;
       }
 }

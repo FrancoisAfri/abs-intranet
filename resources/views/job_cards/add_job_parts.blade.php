@@ -12,7 +12,6 @@
             <!-- Horizontal Form -->
             <div class="box box-success">
                 <div class="box-header with-border">
-                    <i class="fa fa-graduation-cap pull-right"></i>
                     <h3 class="box-title">Add Part(s)</h3>
                     <p id="box-subtitle"></p>
                 </div>
@@ -20,7 +19,6 @@
                 <!-- form start -->
                 <form class="form-horizontal" method="POST" action="/jobcard/addjobparts/{{$jobcardpart->id}}">
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
@@ -37,13 +35,13 @@
                             <label for="part_type" class="col-sm-2 control-label">Type</label>
                             <div class="col-sm-10">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_prod" name="part_type" value="1" checked> Items</label>
-                                <label class="radio-inline"><input type="radio" id="rdo_kit" name="part_type" value="0"> Kit</label>
+                                <label class="radio-inline"><input type="radio" id="rdo_kit" name="part_type" value="2"> Kit</label>
                             </div>
                         </div>
 						<div class="form-group products-field {{ $errors->has('category_id') ? ' has-error' : '' }}">
 							<label for="category_id" class="col-sm-2 control-label">Category</label>
 							<div class="col-sm-10">
-								<select id="product_id" name="product_id" class="form-control select2" style="width: 100%;"
+								<select id="category_id" name="category_id" class="form-control select2" style="width: 100%;"
 									onchange="productcategoryDDOnChange(this)">
 									<option value="">*** Please Select a Category ***</option>
 									<option value="0"></option>
@@ -57,7 +55,7 @@
                             <label for="product_id" class="col-sm-2 control-label">Product</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
-                                    <select id="category_id" name="category_id" class="form-control select2"
+                                    <select id="product_id" name="product_id" class="form-control select2"
 										style="width: 100%;">
 										<option value="">*** Please Select a Category First ***</option>
 									</select>
@@ -141,7 +139,7 @@
                 $('.products-field').show();
 				$('.kit-field').hide();
             }
-            else if (part == 0) { //no
+            else if (part == 2) { //no
                 $('.kit-field').show();
 				$('.products-field').hide();
             }

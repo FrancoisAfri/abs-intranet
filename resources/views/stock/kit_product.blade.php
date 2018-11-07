@@ -14,10 +14,11 @@
                     <table class="table table-bordered">
                         <tr>
                             <th></th>
+                            <th>Category</th>
                             <th>Name</th>
 							<th>Code</th>
-							<th style="text-align: center">Number Required</th>
                             <th style="text-align: center">Avalaible Stock</th>
+							<th style="text-align: center">Number Required</th>
                             <th style="width: 40px"></th>
                         </tr>
                         @if (count($products) > 0)
@@ -30,10 +31,11 @@
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
+                                    <td>{{ (!empty($product->cat_name)) ?  $product->cat_name : ''}} </td>
                                     <td>{{ (!empty($product->prod_name)) ?  $product->prod_name : ''}} </td>
                                     <td>{{ (!empty($product->product_code)) ?  $product->product_code : ''}} </td>
-                                    <td style="text-align: center">{{ (!empty($product->amount_required)) ?  $product->amount_required : ''}} </td>
 									<td style="text-align: center">{{ (!empty( $product->avalaible_stock)) ?  $product->avalaible_stock : ''}} </td>
+                                    <td style="text-align: center">{{ (!empty($product->amount_required)) ?  $product->amount_required : ''}} </td>
                                     <td nowrap>
                                         <button type="button" id="activate"
                                                 class="btn {{ (!empty($product->status) && $product->status == 1) ? "btn-danger" : "btn-success" }} btn-xs"
@@ -73,7 +75,9 @@
 @endsection
 @section('page_script')
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script>
         function postData(id, data) {
             if (data == 'actdeac')

@@ -694,7 +694,6 @@ Route::get('jobcard/jobcard_print/{card}', 'JobcardController@jobcardHistoriesPr
 Route::patch('jobcards/instructions-update/{instruction}', 'JobcardController@editInstruction');
 Route::get('jobcards/edit_instructions/{instruction}','JobcardController@editjobcardinstructions');
 Route::get('jobcard/cancellation/{card}','JobcardController@canceljobcardnotes');
-Route::get('jobcards/parts','JobcardController@jobcardparts');
 Route::get('jobcards/jobcardimages/{images}','JobcardController@jobcardimages');
 Route::post('jobcard/addimages','JobcardController@addcardimages');
 Route::patch('jobcard/edit_images/{image}','JobcardController@editImage');
