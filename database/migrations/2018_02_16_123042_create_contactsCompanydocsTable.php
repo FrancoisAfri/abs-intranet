@@ -13,17 +13,17 @@ class CreateContactsCompanydocsTable extends Migration
      */
     public function up()
     {
-     // Schema::create('company_documents', function (Blueprint $table) {
-     //        $table->increments('id');
-     //        $table->string('name')->nullable();
-     //        $table->string('description')->nullable();
-     //        $table->bigInteger('date_from')->nullable();
-     //        $table->bigInteger('expirydate')->nullable();
-     //        $table->string('supporting_docs')->nullable();
-     //        $table->integer('company_id')->index()->unsigned()->nullable();
-     //        $table->integer('status')->nullable();
-     //        $table->timestamps();
-     //    });
+      Schema::create('company_documents', function (Blueprint $table) {
+             $table->increments('id');
+             $table->string('name')->nullable();
+             $table->string('description')->nullable();
+             $table->bigInteger('date_from')->nullable();
+             $table->bigInteger('expirydate')->nullable();
+             $table->string('supporting_docs')->nullable();
+             $table->integer('company_id')->index()->unsigned()->nullable();
+             $table->integer('status')->nullable();
+             $table->timestamps();
+         });
     }
 
     /**
@@ -33,6 +33,6 @@ class CreateContactsCompanydocsTable extends Migration
      */
     public function down()
     {
-       // Schema::dropIfExists('company_documents');
+        Schema::dropIfExists('company_documents');
     }
 }

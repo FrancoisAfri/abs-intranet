@@ -13,9 +13,9 @@ class AddCollumnToContactsClient extends Migration
      */
     public function up()
     {
-       //Schema::table('client_documents', function (Blueprint $table) {
-           // $table->string('document_name')->index()->unsigned()->nullable();
-        //});
+       Schema::table('client_documents', function (Blueprint $table) {
+            $table->string('document_name')->index()->unsigned()->nullable();
+        });
     }
 
     /**
@@ -25,8 +25,8 @@ class AddCollumnToContactsClient extends Migration
      */
     public function down()
     {
-        //Schema::table('client_documents', function (Blueprint $table) {
-           // $table->dropColumn('document_name');
-        //});
+        Schema::table('client_documents', function (Blueprint $table) {
+            $table->dropColumn('document_name');
+        });
     }
 }
