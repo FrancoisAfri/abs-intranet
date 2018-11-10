@@ -395,6 +395,8 @@ class JobcardController extends Controller
 		->where('hr_roles.status', 1)
 		->orderBy('hr_roles.description', 'asc')
 		->first();
+		$positions = DB::table('hr_positions')->where('status', 1)->get();
+		$positions = DB::table('hr_positions')->where('status', 1)->get();
 		
         $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
             ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
@@ -404,12 +406,22 @@ class JobcardController extends Controller
         if ((!empty($roles->role_id)) || !empty($userAccess)) {
             $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
             $servicetype = servicetype::where('status', 1)->get();
-            $users = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-            $Status = array(-1 => 'Rejected', 1 => 'Job Card created',
-                3 => 'Completed', 6 => 'Procurement ', 7 => 'At Service',
-                8 => 'Spare Dispatch', 9 => ' At Mechanic', 10 => 'Spares Dispatch Paperwork',
-                11 => 'Fleet Manager', 12 => 'Awaiting Closure', 13 => 'Closed', 14 => 'Pending Cancellation', 15 => 'Cancelled');
-
+            $mechanics = DB::table('hr_people')
+                ->select('hr_people.*')
+                ->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
+				->where('hr_positions.name', '=','Mechanic')
+                ->where('hr_people.status', 1)
+				->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')
+				->get();
+			$drivers = DB::table('hr_people')
+                ->select('hr_people.*')
+                ->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
+				->where('hr_positions.name', '=','Driver')
+                ->where('hr_people.status', 1)
+				->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')
+				->get();
             $currentUser = Auth::user()->person->id;
 
             $jobcardmaintanance = DB::table('jobcard_maintanance')
@@ -441,7 +453,6 @@ class JobcardController extends Controller
                 ->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
 				->get();
 
-            $configuration = jobcards_config::first();
             $data['page_title'] = "Job Cards";
             $data['page_description'] = "Job Card Management";
             $data['breadcrumb'] = [
@@ -450,13 +461,12 @@ class JobcardController extends Controller
             ];
 
             $data['current_date'] = strtotime(date("Y-m-d"));
-            $data['Status'] = $Status;
-            $data['users'] = $users;
+            $data['mechanics'] = $mechanics;
+            $data['drivers'] = $drivers;
             $data['ContactCompany'] = $ContactCompany;
             $data['jobcardmaintanance'] = $jobcardmaintanance;
             $data['servicetype'] = $servicetype;
             $data['vehicledetails'] = $vehicledetails;
-            $data['configuration'] = $configuration;
             $data['active_mod'] = 'Job Card Management';
             $data['active_rib'] = 'My Job Cards';
 

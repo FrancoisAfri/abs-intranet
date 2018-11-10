@@ -32,7 +32,7 @@ class AllocateLeavedaysAnnualCronController extends Controller {
      */
     public function execute() {
         //$lev = new LeaveType();
-        $users = HRPerson::where('status', 1)->pluck('user_id');
+        $users = HRPerson::where('status', 1)->pluck('id');
         foreach ($users as $empID) {
             //$lev = new leave_credit();
             $AnnualLeaveTypeID = 1;
@@ -57,5 +57,4 @@ class AllocateLeavedaysAnnualCronController extends Controller {
 
         AuditReportsController::store('Leave Annual Management', "Cron leaveAllocationAnnual Ran", "Automatic Ran by Server", 0);
     }
-
 }

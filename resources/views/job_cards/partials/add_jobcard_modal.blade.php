@@ -106,7 +106,7 @@
                         <div class="col-sm-8">
                             <select id="last_driver_id" name="last_driver_id" class="form-control">
                                 <option value="0">*** Select a driver ***</option>
-                                @foreach($users as $details)
+                                @foreach($drivers as $details)
                                     <option value="{{ $details->id }}">{{$details->first_name . ' ' .  $details->surname }}</option>
                                 @endforeach
                             </select>
@@ -117,7 +117,7 @@
                         <div class="col-sm-8">
                             <select id="mechanic_id" name="mechanic_id" class="form-control">
                                 <option value="0">*** Select a mechanic ***</option>
-                                @foreach($users as $details)
+                                @foreach($mechanics as $details)
                                     <option value="{{ $details->id }}">{{ $details->first_name . ' ' .  $details->surname}}</option>
                                 @endforeach
                             </select>

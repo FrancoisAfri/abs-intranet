@@ -53,27 +53,9 @@
 								<tr>
 									<th>#</th>
 									<th>Product Name</th>
-									<th style="vertical-align: middle; text-align: center;"> 
-									<!--<label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-																											  id="rdo_levTkn"
-																											  name="application_type"
-												 user-field															  value="1" checked> Employee
-									</label> -->
-									Employee
-									</th>
-									<th style="vertical-align: middle; text-align: center;"> 
-									
-									<!--<div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
-										   
-											<div class="col-sm-9">
-												<label class="radio-inline"><input type="radio" id="rdo_po" name="application_type"
-																				   value="2"> Vehicle</label>
-											</div>
-											 vehicle-field
-										</div> -->
-										Vehicle
-									</th>
-									<th style="vertical-align: middle; text-align: center;">Available Number</th>
+									<th style="vertical-align: middle; text-align: center;">Employee</th>
+									<th style="vertical-align: middle; text-align: center;">Vehicle</th>
+									<th style="vertical-align: middle; text-align: center;">Stock Available</th>
 									<th style="vertical-align: middle; text-align: center;">Enter Number</th>       
 								</tr>
                             </thead>
@@ -98,8 +80,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td style="vertical-align: middle; text-align: center;"
-                                        >
+                                    <td style="vertical-align: middle; text-align: center;">
                                         <div class="form-group">
                                             <label for="path" class="col-sm-3 control-label"> </label>
                                             <div class="col-sm-15">
@@ -113,7 +94,6 @@
                                             </div>
                                         </div>
                                     </td>
-                                   
                                     <td style="vertical-align: middle; text-align: center;"
                                         nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
                                     <td style="vertical-align: middle; text-align: center;"
@@ -124,11 +104,10 @@
                                                placeholder="Enter Items Number"></td>
                                 </tr>
 							@endforeach
-                                
                             </tbody>
                             <tfoot>
                             <tr>
-								<th>Product Name</th>
+								<th>#</th>
                                 <th>Product Name</th>
                                 <th style="vertical-align: middle; text-align: center;">Employee</th>
                                 <th style="vertical-align: middle; text-align: center;">Vehicle</th>
@@ -149,11 +128,6 @@
                 </form>
             </div>
         </div>
-
-        <!-- Include modal -->
-        @if(Session('changes_saved'))
-            @include('contacts.partials.success_action', ['modal_title' => "Company Identity Updated!", 'modal_content' => session('changes_saved')])
-        @endif
     </div>
 @endsection
 
@@ -237,25 +211,17 @@
             if (data == 'actdeac') location.href = "/System/add_user_act/" + id;
 
         }
-
         $('#cancel').click(function () {
-            location.href = '/stock/storckmanagement';
+            location.href = '/stock/stock_allocation';
         });
-
         $(function () {
             var moduleId;
             //Initialize Select2 Elements
             $(".select2").select2();
             $('.vehicle-field').hide();
-
-
-            //Tooltip
-
             //Phone mask
             $("[data-mask]").inputmask();
-
             $('[data-toggle="tooltip"]').tooltip();
-
             //Initialize the data table
             $('#emp-list-table').DataTable({
                 "paging": true,
@@ -265,7 +231,6 @@
                 "info": false,
                 "autoWidth": true
             });
-
 
             //Vertically center modals on page
             function reposition() {
@@ -287,8 +252,6 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-
-            //
 
             $(".js-example-basic-multiple").select2();
 
@@ -315,7 +278,6 @@
 				}
 				return allType;
 			}
-        
             $('#add-user').on('click', function () {
                 var strUrl = '/System/policy/add_policyUsers';
                 var formName = 'add-user-form';
@@ -326,8 +288,6 @@
                 var successMsg = 'The policy Users has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-
-
         });
     </script>
 @endsection

@@ -50,14 +50,13 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
-                                    <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
-                                        <label for="{{ 'product_id' }}" class="col-sm-2 control-label">Product
-                                            Category </label>
+                                    <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }}">
+                                        <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Categories </label>
 
                                         <div class="col-sm-8">
-                                            <select id="product_id" name="product_id" class="form-control select2"
+                                            <select id="category_id" name="category_id" class="form-control select2"
                                                     style="width: 100%;" onchange="productcategoryDDOnChange(this)">
-                                                <option value="">*** Please Select a Product Category ***</option>
+                                                <option value="">*** Please Select a Category ***</option>
                                                 <option value="0"></option>
                                                 @foreach($productCategories as $product)
                                                     <option value="{{ $product->id }}">{{ $product->name }}</option>
@@ -65,35 +64,28 @@
                                             </select>
                                         </div>
                                     </div>
-
-                                    <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }}">
-                                        <label for="{{ 'category_id' }}"
+                                    <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
+                                        <label for="{{ 'product_id' }}"
                                                class="col-sm-2 control-label">Products </label>
 
                                         <div class="col-sm-8">
-                                            <select id="category_id" name="category_id[]" class="form-control select2"
+                                            <select id="product_id" name="product_id[]" class="form-control select2"
                                                     multiple="multiple" style="width: 100%;">
                                                 <option value="">*** Please Select a Category First ***</option>
                                             </select>
                                         </div>
                                     </div>
-
-                                <!--                                     <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
-                                        <label for="action_date" class="col-sm-2 control-label">Action Date</label>
-                                        <div class="col-sm-8">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type="text" class="form-control daterangepicker" id="action_date"
-                                                       name="action_date" value="" placeholder="Select Action Date...">
-
-                                            </div>
-                                        </div>
-                                    </div>-->
-
+									<div class="form-group">
+                                        <label for="fuel_type" class="col-sm-2 control-label">Stock Type</label>
+										<div class="col-sm-8">
+											<select id="stock_type" name="stock_type" class="form-control">
+												<option value="0">*** Select Stock Type ***</option>
+												<option value="1" selected> Stock Item</option>
+												<option value="3"> Both </option>
+											</select>
+										</div>
+                                    </div>
                                 </div>
-
                                 <div class="box-footer">
                                     <button type="submit" class="btn btn-primary pull-right"><i
                                                 class="fa fa-search"></i> Search
@@ -106,6 +98,9 @@
             </div>
             <!-- /.box -->
         </div>
+		 @if(Session('success_stock'))
+            @include('contacts.partials.success_action', ['modal_title' => "Stock's Item(s) Updated!", 'modal_content' => session('success_stock')])
+        @endif
     </div>
 @endsection
 

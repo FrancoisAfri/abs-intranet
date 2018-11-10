@@ -148,7 +148,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
     //     ### BEGIN: Sick maternity ACCRUAL (Leave Type = 3)
 
     //     $lev = new LeaveType();
-    //     $users = HRPerson::where('status', 1)->pluck('user_id');
+    //     $users = HRPerson::where('status', 1)->pluck('id');
     //     foreach ($users as $empID) {
 
     //         $maternityID = 5;

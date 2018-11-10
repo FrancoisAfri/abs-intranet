@@ -68,15 +68,14 @@ class StockController extends Controller
     public function stock(Request $request)
     {
         $this->validate($request, [
-            'product_id' => 'bail|required',
+            'category_id' => 'bail|required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 
-        $CategoryID = $SysData['product_id'];
-
-		$productID = isset($SysData['category_id']) ? $SysData['category_id'] : array();
-        $stockID = $SysData['stock_type'];
+        $CategoryID = $SysData['category_id'];
+		$productID = isset($SysData['product_id']) ? $SysData['product_id'] : array();
+        $stockType = $SysData['stock_type'];
 
         $stocks = DB::table('Product_products')
             ->select('Product_products.*', 'stock.avalaible_stock')
@@ -91,9 +90,9 @@ class StockController extends Controller
                     $query->whereIn('Product_products.id', $productID);
 				}
             })
-            ->where(function ($query) use ($stockID) {
-                if (!empty($stockID)) {
-                    $query->where('Product_products.stock_type', $stockID);
+            ->where(function ($query) use ($stockType) {
+                if (!empty($stockType)) {
+                    $query->where('Product_products.stock_type', $stockType);
                 }
             })
             ->orderBy('Product_products.name', 'asc')
@@ -340,7 +339,7 @@ class StockController extends Controller
 			}
         }
         AuditReportsController::store('Stock Management', 'Stock Item Added ', "Accessed By User", 0);
-        return redirect('stock/storckmanagement')->with('success_stock', "Stock's items have been successfully updated.");
+        return redirect('stock/storckmanagement')->with('success_stock', "Stock's items have been successfully Added To Your Stock.");
     }
 
     public function takeout()
@@ -364,15 +363,15 @@ class StockController extends Controller
     public function stockout(Request $request)
     {
          $this->validate($request, [
-            'product_id' => 'bail|required',
+            'category_id' => 'bail|required',
         ]);
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
-        $product = '';
-        $categoryID = $results['product_id'];
 
-        $productID = isset($results['category_id']) ? $results['category_id'] : array();
+        $categoryID = $results['category_id'];
+        $productID = isset($results['product_id']) ? $results['product_id'] : array();
+		$stockType = $results['stock_type'];
         $user = HRPerson::where('status', 1)->get();
         
 		$vehicle = DB::table('vehicle_details')
@@ -397,7 +396,12 @@ class StockController extends Controller
 					$query->whereIn('Product_products.id', $productID);
 				 }
             })
-			->where('stock.avalaible_stock', '>', 0)
+			 ->where(function ($query) use ($stockType) {
+                if (!empty($stockType)) {
+                    $query->where('Product_products.stock_type', $stockType);
+                }
+            })
+			//->where('stock.avalaible_stock', '>', 0)
             ->get();
 
         $data['vehicle'] = $vehicle;
@@ -468,7 +472,7 @@ class StockController extends Controller
            } 
         }
         AuditReportsController::store('Stock Management', 'Stock taken out', "Accessed By User", 0);
-        return redirect('stock/storckmanagement');
+        return redirect('stock/stock_allocation')->with('success_stock', "Items have been successfully Deducted From Your Stock.");
     }
 
     public function viewreports()
