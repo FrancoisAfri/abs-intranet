@@ -32,8 +32,8 @@ class CreateVehicleFireExtinguisherTable extends Migration
 			$table->integer('Status')->unsigned()->index()->nullable();
 			$table->string('notes')->unsigned()->index()->nullable();
 			$table->integer('capturer_id')->unsigned()->index()->nullable();
-            $table->timestamps();*/
-        });
+            $table->timestamps();
+        });*/
     }
 
     /**
