@@ -13,7 +13,7 @@ class CreateVehicleFireExtinguisherTable extends Migration
      */
     public function up()
     {
-        Schema::create('vehicle_fire_extinguisher', function (Blueprint $table) {
+       /* Schema::create('vehicle_fire_extinguisher', function (Blueprint $table) {
             $table->increments('id');
 			$table->string('attachement')->unsigned()->index()->nullable();
 			$table->string('Serial_number')->unsigned()->index()->nullable();
@@ -32,7 +32,7 @@ class CreateVehicleFireExtinguisherTable extends Migration
 			$table->integer('Status')->unsigned()->index()->nullable();
 			$table->string('notes')->unsigned()->index()->nullable();
 			$table->integer('capturer_id')->unsigned()->index()->nullable();
-            $table->timestamps();
+            $table->timestamps();*/
         });
     }
 
@@ -43,6 +43,6 @@ class CreateVehicleFireExtinguisherTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('vehicle_fire_extinguisher');
+       // Schema::dropIfExists('vehicle_fire_extinguisher');
     }
 }
