@@ -43,7 +43,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td class="caption" colspan="2">Send mechanic to sms</td>
+                                    <td class="caption" colspan="2">Send sms to mechanic</td>
                                     <input type="hidden" name="mechanic_sms" value="0">
                                     <td colspan="3"><input type="checkbox" name="mechanic_sms"
                                                            value="1" {{(!empty($configuration->mechanic_sms) && $configuration->mechanic_sms === 1) ? 'checked ="checked"' : 0 }}>
