@@ -551,7 +551,7 @@ class Product_categoryController extends Controller
         $documentType->price = $docData['price'];
         $documentType->product_code = $docData['product_code'];
         $documentType->stock_type = !empty($products->stock_type) ? $products->stock_type : 0;
-        $documentType->is_vatable = $docData['is_vatable'];
+        $documentType->is_vatable = !empty($docData['is_vatable']) ? $docData['is_vatable'] : 0;
         $documentType->save();
 
         $newName = $docData['name'];
