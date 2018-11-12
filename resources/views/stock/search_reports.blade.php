@@ -50,12 +50,12 @@
                                 </div>
                                 <div class="box-body" id="vehicle_details">
 
-                                    <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
-                                        <label for="{{ 'product_id' }}" class="col-sm-2 control-label">Product
+                                    <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }}">
+                                        <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Product
                                             Category </label>
 
                                         <div class="col-sm-8">
-                                            <select id="product_id" name="product_id" class="form-control select2"
+                                            <select id="category_id" name="category_id" class="form-control select2"
                                                     style="width: 100%;" onchange="productcategoryDDOnChange(this)">
                                                 <option value="">*** Please Select a Product Category ***</option>
                                                 <option value="0"></option>
@@ -66,12 +66,12 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }}">
-                                        <label for="{{ 'category_id' }}"
+                                    <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
+                                        <label for="{{ 'product_id' }}"
                                                class="col-sm-2 control-label">Products </label>
 
                                         <div class="col-sm-8">
-                                            <select id="category_id" name="category_id[]" class="form-control select2"
+                                            <select id="product_id" name="product_id[]" class="form-control select2"
                                                     multiple="multiple" style="width: 100%;">
                                                 <option value="">*** Please Select a Category First ***</option>
                                             </select>

@@ -43,7 +43,7 @@
                                             @foreach ($parts as $jobcard)
                                                 <tr>
                                                     <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
-                                                    <td>{{ !empty($jobcard->fleet_no . '' . $jobcard->vehicleregistration) ? $jobcard->fleet_no. '' . $jobcard->vehicleregistration : '' }}</td>
+                                                    <td>{{ !empty($jobcard->fleet_no . '-' . $jobcard->vehicleregistration) ? $jobcard->fleet_no. '' . $jobcard->vehicleregistration : '' }}</td>
                                                     <td>{{ !empty($jobcard->date_created) ? date(' d M Y', $jobcard->date_created) : '' }}</td>
                                                     <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
                                                     <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>

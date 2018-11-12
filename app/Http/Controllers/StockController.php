@@ -498,16 +498,16 @@ class StockController extends Controller
     public function searchreport(Request $request)
     {
         $this->validate($request, [
-            'product_id' => 'bail|required',
+            'category_id' => 'bail|required',
         ]);
         $search = $request->all();
         unset($search['_token']);
 
         $actionFrom = $actionTo = 0;
         $product = '';
-        $productArray = isset($search['category_id']) ? $search['category_id'] : array();
+        $productArray = isset($search['product_id']) ? $search['product_id'] : array();
         $actionDate = $request['action_date'];
-        $CategoryID = $search['product_id'];
+        $CategoryID = $search['category_id'];
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
