@@ -14,6 +14,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-graduation-cap pull-right"></i>
                     <h3 class="box-title"><b>Please tick instructions that have been completed and add a comment if needed.</b></h3>
+                    <h5 style="color:red;">NB: Job Card will only move to the next step once all instructions have been completed.</h3>
                     <p id="box-subtitle"></p>
                 </div>
                 <!-- /.box-header -->
