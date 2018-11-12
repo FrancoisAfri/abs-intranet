@@ -166,7 +166,7 @@
                     <a href="{{ '/jobcards/jobcardimages/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat">Images</a>
                     <a href="{{ '/jobcards/jobcardnotes/' . $card->id }}"
-                       id="edit_compan" class="btn btn-sm btn-default btn-flat">Notes</a>
+                       id="edit_compan" class="btn btn-sm btn-default btn-flat">Notes({{$card->jcNotes->count()}})</a>
                     <a href="{{ '/jobcard/parts/' . $card->id }}"
                        id="edit_compan" class="btn btn-sm btn-default btn-flat">Parts</a>
 					@if ($card->status == 1)

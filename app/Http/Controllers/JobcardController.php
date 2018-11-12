@@ -1306,7 +1306,7 @@ HTML;
             ->where('jobcard_maintanance.id', $card->id)
             ->orderBy('jobcard_maintanance.id', 'asc')
             ->get();
-
+		if (!empty($card)) $card->load('jcNotes');
         $configuration = jobcards_config::first();
 		$data['current_date'] = strtotime(date("Y-m-d"));
         $data['configuration'] = $configuration;

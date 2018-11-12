@@ -23,4 +23,8 @@ class jobcard_maintanance extends Model
 		
 		return $this->hasMany(JobCardHistory::class, 'job_card_id');
     }
+	//Relationship JC and Notes
+    public function jcNotes() {
+        return $this->hasmany(jobcardnote::class, 'jobcard_id');
+    }
 }
