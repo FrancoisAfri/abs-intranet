@@ -103,7 +103,6 @@ class VehicleFleetController extends Controller
 
     public function contracts(vehicle_maintenance $maintenance)
     {
-
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -180,7 +179,6 @@ class VehicleFleetController extends Controller
 
     public function reminders(vehicle_maintenance $maintenance)
     {
-
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
         ################## WELL DETAILS ###############
@@ -240,7 +238,6 @@ class VehicleFleetController extends Controller
         $reminders->status = 1;
         $reminders->save();
         return response()->json();
-
     }
 
     public function editreminder(Request $request, reminders $reminder)
@@ -289,7 +286,6 @@ class VehicleFleetController extends Controller
         AuditReportsController::store('Fleet Management', 'reminder Type Deleted', "Document Type has been deleted", 0);
         return back();
     }
-
 
     public function viewGeneralCost(vehicle_maintenance $maintenance)
     {
@@ -1686,7 +1682,8 @@ class VehicleFleetController extends Controller
 	
 	public function sendMessageIndex(vehicle_maintenance $maintenance)
     {
-        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')->get();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -1695,7 +1692,10 @@ class VehicleFleetController extends Controller
 		$contactPersons = DB::table('contacts_contacts')
             ->select('contacts_contacts.*', 'contact_companies.name as comp_name')
             ->leftJoin('contact_companies', 'contacts_contacts.company_id', '=', 'contact_companies.id')
-            ->where('contacts_contacts.status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+            ->where('contacts_contacts.status', 1)
+			->orderBy('contact_companies.name', 'asc')
+			->orderBy('contacts_contacts.first_name', 'asc')
+			->orderBy('contacts_contacts.surname', 'asc')->get();
 		
 
         $data['page_title'] = "Vehicle Communication";

@@ -1810,7 +1810,6 @@ class JobcardController extends Controller
 
         $users = HRPerson::OrderBy('id', 'asc')->get();
 
-
         $vehicledetails = DB::table('vehicle_details')
             ->select('vehicle_details.id as id', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
