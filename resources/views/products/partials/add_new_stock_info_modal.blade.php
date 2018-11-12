@@ -12,13 +12,6 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
                     <div class="box-body">
-						<div class="form-group">
-							<label for="description" class="col-sm-2 control-label">Description</label>
-							<div class="col-sm-8">
-								<input type="text" class="form-control" id="description" name="description"
-									   value="" placeholder="Enter Description">
-							</div>
-						</div>
 						<div class="form-group hours-field">
 							<label for="location" class="col-sm-2 control-label">Location</label>
 							<div class="col-sm-8">

@@ -19,7 +19,7 @@
 		<div class="col-sm-12">
 			<div class="box box-success">
 				<div class="box-header with-border">
-					<h3 class="box-title">Stock Details Products({{  $products->name}})</h3>
+					<h3 class="box-title">Stock Details Products ({{  $products->name}})</h3>
 					<div class="box-tools pull-right">
 						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i
 									class="fa fa-minus"></i></button>
@@ -35,7 +35,6 @@
 								<th></th>
 								<th>Image</th>
 								<th>Location</th>
-								<th>Description</th>
 								<th>Allow Vat</th>
 								<th>Mass Net</th>
 								<th>minimum Level</th>
@@ -53,7 +52,6 @@
 											<button type="button" id="edit_info" class="btn btn-primary  btn-xs"
                                                 data-toggle="modal" data-target="#edit-stock-info-modal"
                                                 data-id="{{ $product->id }}" data-picture="{{ $product->picture }}"
-                                                data-description="{{ $product->description }}"
 												data-location="{{ $product->location }}"
 												data-allow_vat="{{ $product->allow_vat }}"
 												data-mass_net="{{ $product->mass_net }}"
@@ -83,7 +81,6 @@
 											</div>
 										</td>
 										<td>{{ (!empty($product->location)) ? $product->location : ''}} </td>
-										<td>{{ (!empty($product->description)) ? $product->description : ''}} </td>
 										<td>{{ (!empty($product->allow_vat)) ? $product->allow_vat: ''}} </td>
 										<td>{{ (!empty($product->mass_net)) ? $product->mass_net:'' }} </td>
 										<td>{{ (!empty($product->minimum_level)) ? $product->minimum_level : ''}} </td>
@@ -100,7 +97,6 @@
 								<th></th>
 								<th>Image</th>
 								<th>Location</th>
-								<th>Description</th>
 								<th>Allow Vat</th>
 								<th>Mass Net</th>
 								<th>Minimum Level</th>
