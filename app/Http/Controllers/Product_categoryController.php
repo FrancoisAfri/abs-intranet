@@ -227,7 +227,7 @@ class Product_categoryController extends Controller
         if ($product->status == 1) {
 			$product = $product->load('infosProduct');
 			$ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
-            $data['page_title'] = 'Products Stock';
+            $data['page_title'] = 'Product Stock';
             $data['page_description'] = ' Informations';
             $data['breadcrumb'] = [
                 ['title' => 'Products', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
