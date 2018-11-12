@@ -13,7 +13,7 @@
             <div class="box box-success">
                 <div class="box-header with-border">
                     <i class="fa fa-graduation-cap pull-right"></i>
-                    <h3 class="box-title"><b>Please tick instructions that have been completed and add comment if needed.</b></h3>
+                    <h3 class="box-title"><b>Please tick instructions that have been completed and add a comment if needed.</b></h3>
                     <p id="box-subtitle"></p>
                 </div>
                 <!-- /.box-header -->
