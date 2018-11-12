@@ -662,6 +662,7 @@ Route::patch('appraisal/kpi_edit/{kpi}', 'AppraisalTemplatesController@editKpi')
 Route::get('/appraisal/kpi_active/{kpi}', 'AppraisalTemplatesController@kpiAct');
 
 //# Job card settings
+Route::get('jobcards/create-job-card', 'JobcardController@create');
 Route::get('jobcards/set_up', 'JobcardController@jobcard_settings');
 Route::get('jobcards/servicetype', 'JobcardController@servicetype');
 Route::post('jobcards/addservicetype', 'JobcardController@addservicetype');

@@ -51,7 +51,7 @@
                                         <td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
                                         <td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
                                         <td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
-                                        <td>{{ !empty($jobcard->firstname . '' . $jobcard->surname) ? $jobcard->firstname . '' . $jobcard->surname : '' }}</td>
+                                        <td>{{ !empty($jobcard->firstname . ' ' . $jobcard->surname) ? $jobcard->firstname . ' ' . $jobcard->surname : '' }}</td>
                                         <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
                                         <td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
                                         <td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : '' }}</td>
@@ -76,19 +76,15 @@
                     </table>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="button" id="safe_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-jobcard-modal"
-                                data-card_date="{{ date('d/m/Y', $current_date)}}">Add new Job card
-                        </button>
+						<a href="/jobcards/create-job-card" id="edit_compan"
+                                               class="btn btn-warning pull-right"> Create Job Card</a>
                     </div>
                 </div>
             </div>
-            <!-- Include add new prime rate modal -->
-        @include('job_cards.partials.add_jobcard_modal')
         <!-- Include delete warning Modal form-->
             <!-- Confirmation Modal -->
-            @if(Session('success_edit'))
-                @include('job_cards.partials.success_action', ['modal_title' => "User not permitted!", 'modal_content' => session('success_edit')])
+            @if(Session('success_sent'))
+                @include('job_cards.partials.success_action', ['modal_title' => "Job Card Created!", 'modal_content' => session('success_sent')])
             @endif
         </div>
     </div>
@@ -141,30 +137,8 @@
 			"autoWidth": true
 		});
 	});
-	//Initialize iCheck/iRadio Elements
-	$('input').iCheck({
-		checkboxClass: 'icheckbox_square-blue',
-		radioClass: 'iradio_square-blue',
-		increaseArea: '10%' // optional
-	});
-	function showHide() {
-		if (document.getElementById('external_service').checked) {
-			$('.agent_field').show();
-			$('#mechanic_id').val('');
-			$('.mechanic_row').hide();
-		}
-		else {
-			$('.agent_field').hide();
-			$('.mechanic_row').show();
-		}
-	}
+
 	$(function () {
-
-		$('.agent_field').hide();
-
-		var moduleId;
-		//Initialize Select2 Elements
-		$(".select2").select2();
 
 		//Tooltip
 
@@ -194,43 +168,7 @@
 		$(".js-example-basic-multiple").select2();
 
 		//Cancell booking
-		//Post module form to server using ajax (ADD)
 
-		$(document).ready(function () {
-
-			$('#card_date').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-			$('#schedule_date').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-			$('#booking_date').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-			$('#dateserviced').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-			$('#completion_date').datepicker({
-				format: 'dd/mm/yyyy',
-				autoclose: true,
-				todayHighlight: true
-			});
-		});
-		$('#add-jobcard-modal').on('shown.bs.modal', function (e) {
-
-			var btnEdit = $(e.relatedTarget);
-			var card_date = btnEdit.data('card_date');
-			var modal = $(this);
-			modal.find('#card_date').val(card_date);
-		});
 		//Post form to server using ajax (add)
 		$('#add_jobcardtypes').on('click', function () {
 			var strUrl = '/jobcards/addjobcard';
@@ -243,43 +181,5 @@
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
 	});
-	function clone(id, file_index, child_id) {
-		var clone = document.getElementById(id).cloneNode(true);
-		clone.setAttribute("id", file_index);
-		clone.setAttribute("name", file_index);
-		clone.style.display = "table-row";
-		clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
-		clone.querySelector('#' + child_id).disabled = false;
-		clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
-		return clone;
-	}
-	function addFile() {
-		var table = document.getElementById("tab_tab");
-		var file_index = document.getElementById("file_index");
-		file_index.value = ++file_index.value;
-		var instruction_clone = clone("instructions_row", file_index.value, "instruction");
-		var final_row = document.getElementById("final_row").cloneNode(false);
-		table.appendChild(instruction_clone);
-		table.appendChild(final_row);
-		var total_files = document.getElementById("total_files");
-		total_files.value = ++total_files.value;
-		//change the following using jquery if necessary
-		var remove = document.getElementsByName("remove");
-		for (var i = 0; i < remove.length; i++)
-			remove[i].style.display = "inline";
-	}
-	
-	function removeFile(row_name)
-	{
-		var row=row_name.parentNode.parentNode.id;
-		var rows=document.getElementsByName(row);
-		while(rows.length>0)
-			rows[0].parentNode.removeChild(rows[0]);
-		var total_files = document.getElementById("total_files");
-		total_files.value=--total_files.value;
-		var remove=document.getElementsByName("remove");
-		if(total_files.value == 1)
-			remove[1].style.display='none';
-	}
 	</script>
 @endsection

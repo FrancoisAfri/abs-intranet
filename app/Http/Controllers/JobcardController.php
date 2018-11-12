@@ -384,6 +384,7 @@ class JobcardController extends Controller
 
     public function myjobcards()
     {
+		$currentUser = Auth::user()->person->id;
 		$hrID = Auth::user()->id;
 		$roles = DB::table('hr_roles')->select('hr_roles.id as role_id', 'hr_roles.description as role_name'
 		, 'hr_users_roles.id as user_role' , 'hr_users_roles.date_allocated')
@@ -402,25 +403,6 @@ class JobcardController extends Controller
             ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
 
         if ((!empty($roles->role_id)) || !empty($userAccess)) {
-            $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
-            $servicetype = servicetype::where('status', 1)->orderBy('name', 'asc')->get();
-            $mechanics = DB::table('hr_people')
-                ->select('hr_people.*')
-                ->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
-				->where('hr_positions.name', '=','Mechanic')
-                ->where('hr_people.status', 1)
-				->orderBy('first_name', 'asc')
-				->orderBy('surname', 'asc')
-				->get();
-			$drivers = DB::table('hr_people')
-                ->select('hr_people.*')
-                ->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
-				->where('hr_positions.name', '=','Driver')
-                ->where('hr_people.status', 1)
-				->orderBy('first_name', 'asc')
-				->orderBy('surname', 'asc')
-				->get();
-            $currentUser = Auth::user()->person->id;
 
             $jobcardmaintanance = DB::table('jobcard_maintanance')
                 ->select('jobcard_maintanance.*', 'vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
@@ -439,6 +421,67 @@ class JobcardController extends Controller
                 ->orderBy('jobcard_maintanance.id', 'asc')
                 ->get();
 
+            $data['page_title'] = "Job Card";
+            $data['page_description'] = "Management";
+            $data['breadcrumb'] = [
+                ['title' => 'Job Card Management', 'path' => 'jobcards/mycards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Job Cards ', 'active' => 1, 'is_module' => 0]
+            ];
+            $data['jobcardmaintanance'] = $jobcardmaintanance;
+            $data['active_mod'] = 'Job Card Management';
+            $data['active_rib'] = 'My Job Cards';
+
+            AuditReportsController::store('Job Card Management', 'Job Card Page Accessed', "Accessed By User", 0);
+            return view('job_cards.myjob_cards')->with($data);
+        } 
+		else 
+		{
+            return redirect('/');
+        }
+    }
+	
+	public function create()
+    {
+		$hrID = Auth::user()->id;
+		$roles = DB::table('hr_roles')->select('hr_roles.id as role_id', 'hr_roles.description as role_name'
+		, 'hr_users_roles.id as user_role' , 'hr_users_roles.date_allocated')
+		 ->leftjoin("hr_users_roles",function($join) use ($hrID) {
+                $join->on("hr_roles.id","=","hr_users_roles.role_id")
+                    ->on("hr_users_roles.hr_id","=",DB::raw($hrID));
+            })
+		->where('hr_roles.description', '=','Jobcard Capturer')
+		->where('hr_roles.status', 1)
+		->orderBy('hr_roles.description', 'asc')
+		->first();
+
+        $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
+            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+            ->where('security_modules.code_name', 'job_cards')->where('security_modules_access.access_level', '>=', 4)
+            ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
+
+        if ((!empty($roles->role_id)) || !empty($userAccess)) {
+            
+			$ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+            $servicetype = servicetype::where('status', 1)->orderBy('name', 'asc')->get();
+            // get mechanic
+			$mechanics = DB::table('hr_people')
+                ->select('hr_people.*')
+                ->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
+				->where('hr_positions.name', '=','Mechanic')
+                ->where('hr_people.status', 1)
+				->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')
+				->get();
+			// get drivers
+			$drivers = DB::table('hr_people')
+                ->select('hr_people.*')
+                ->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
+				->where('hr_positions.name', '=','Driver')
+                ->where('hr_people.status', 1)
+				->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')
+				->get();
+			// get all fleet
             $vehicledetails = DB::table('vehicle_details')
                 ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                     'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
@@ -451,41 +494,41 @@ class JobcardController extends Controller
                 ->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
 				->get();
 
-            $data['page_title'] = "Job Cards";
-            $data['page_description'] = "Job Card Management";
+            $data['page_title'] = "Job Card";
+            $data['page_description'] = "Creation";
             $data['breadcrumb'] = [
                 ['title' => 'Job Card Management', 'path' => 'jobcards/mycards', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Job Cards ', 'active' => 1, 'is_module' => 0]
+                ['title' => 'create', 'active' => 1, 'is_module' => 0]
             ];
 
             $data['current_date'] = strtotime(date("Y-m-d"));
             $data['mechanics'] = $mechanics;
             $data['drivers'] = $drivers;
             $data['ContactCompany'] = $ContactCompany;
-            $data['jobcardmaintanance'] = $jobcardmaintanance;
             $data['servicetype'] = $servicetype;
             $data['vehicledetails'] = $vehicledetails;
             $data['active_mod'] = 'Job Card Management';
             $data['active_rib'] = 'My Job Cards';
 
-            AuditReportsController::store('Job Card Management', 'Job Card Page Accessed', "Accessed By User", 0);
-            return view('job_cards.myjob_cards')->with($data);
+            AuditReportsController::store('Job Card Management', 'Create Job Card Page Accessed', "Accessed By User", 0);
+            return view('job_cards.create_job_card')->with($data);
         } 
 		else 
 		{
             return redirect('/');
         }
     }
-
+	
     public function addjobcardmanagement(Request $request)
     {
         $this->validate($request, [
-              'mechanic_id' => 'required',
+              'vehicle_id' => 'required',
+              'card_date' => 'required',
 //              'job_title' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-		$message = '';
+		$message = $instructions = '';
         $processflow = processflow::orderBy('id', 'asc')->first();
         $jobtitle = !empty($processflow->job_title) ? $processflow->job_title : 0;
 
@@ -536,7 +579,7 @@ class JobcardController extends Controller
 				$JobCardInstructions->job_card_id = $jobcardmaintanance->id;
 				$JobCardInstructions->status = 1;
 				$JobCardInstructions->save();
-				$message .= $instruction.",";
+				$instructions .= $instruction.";";
 			}
             $numInstruction++;
         }
@@ -556,48 +599,70 @@ class JobcardController extends Controller
 			if (!empty($usedetails->emaill))
 				Mail::to($usedetails->email)->send(new NextjobstepNotification($usedetails->first_name, $usedetails->surname, $usedetails->email));
         }
-		
-		// get fleet details
-		$fleet = vehicle_detail::where('id',$jobcardmaintanance->vehicle_id)->first();
-		$jobDetails = "Fleet No: ".$fleet->fleet_number .", JobCard No: ".$jobcardmaintanance->id;
-		$message = "Hi New JobCard ".$jobDetails." ".$message;
-		$mechanicdetails = HRPerson::where('id', $SysData['mechanic_id'])->select('first_name', 'surname', 'email')->first();
-		$jcAttachment = $this->viewjobcard($jobcardmaintanance, true);
-		if (!empty($communicationType) && $communicationType == 1)
+		if (!empty($SysData['mechanic_id']))
 		{
-			//// Send email to mechanic
-			if (!empty($mechanicdetails->email))
-				Mail::to($mechanicdetails->email)->send(new MechanicEmailJC($mechanicdetails->first_name, $jcAttachment));
-		}
-		elseif (!empty($communicationType) && $communicationType == 2)
-		{
-			//// Send sms to mechanic
-			if (!empty($mechanicdetails->cell_number))
+			$mechanicdetails = HRPerson::where('id', $SysData['mechanic_id'])->select('first_name', 'surname', 'email', 'cell_number')->first();
+			
+			if (!empty($communicationType) && $communicationType == 1)
 			{
-				$mobileArray[] = $this->formatCellNo($mechanicdetails->cell_number);
-				$message = str_replace("<br>", "", $message);
-				$message = str_replace(">", "-", $message);
-				$message = str_replace("<", "-", $message);
-				BulkSMSController::send($mobileArray, $message);
+				$jcAttachment = $this->viewjobcard($jobcardmaintanance, true);
+				//// Send email to mechanic
+				if (!empty($mechanicdetails->email))
+					Mail::to($mechanicdetails->email)->send(new MechanicEmailJC($mechanicdetails->first_name, $jcAttachment));
 			}
-		}
-		elseif (!empty($communicationType) && $communicationType == 3)
-		{
-			//// Send sms and email to mechanic
-			if (!empty($mechanicdetails->email))
-				Mail::to($mechanicdetails->email)->send(new MechanicEmailJC($mechanicdetails->first_name, $jcAttachment));
-			//// Send sms to mechanic 
-			if (!empty($mechanicdetails->cell_number))
+			elseif (!empty($communicationType) && $communicationType == 2)
 			{
-				$mobileArray[] = $this->formatCellNo($mechanicdetails->cell_number);
-				$message = str_replace("<br>", "", $message);
-				$message = str_replace(">", "-", $message);
-				$message = str_replace("<", "-", $message);
-				BulkSMSController::send($mobileArray, $message);
+				//// Send sms to mechanic
+				if (!empty($mechanicdetails->cell_number))
+				{
+					// get fleet details
+					$fleet = vehicle_detail::where('id',$jobcardmaintanance->vehicle_id)->first();	
+			$message = <<<HTML
+<p>
+New JobCard Opened,
+Fleet No: $fleet->fleet_number
+JobCard No: $jobcardmaintanance->id
+Instructions:
+$instructions
+</p>
+HTML;
+					$mobileArray[] = $this->formatCellNo($mechanicdetails->cell_number);
+					$message = str_replace("<br>", "", $message);
+					$message = str_replace(">", "-", $message);
+					$message = str_replace("<", "-", $message);
+					BulkSMSController::send($mobileArray, $message);
+				}
+			}
+			elseif (!empty($communicationType) && $communicationType == 3)
+			{
+				$jcAttachment = $this->viewjobcard($jobcardmaintanance, true);
+				//// Send sms and email to mechanic
+				if (!empty($mechanicdetails->email))
+					Mail::to($mechanicdetails->email)->send(new MechanicEmailJC($mechanicdetails->first_name, $jcAttachment));
+				//// Send sms to mechanic 
+				if (!empty($mechanicdetails->cell_number))
+				{
+					// get fleet details
+					$fleet = vehicle_detail::where('id',$jobcardmaintanance->vehicle_id)->first();	
+			$message = <<<HTML
+<p>
+New JobCard Opened,
+Fleet No: $fleet->fleet_number
+JobCard No: $jobcardmaintanance->id
+Instructions:
+$instructions
+</p>
+HTML;
+					$mobileArray[] = $this->formatCellNo($mechanicdetails->cell_number);
+					$message = str_replace("<br>", "", $message);
+					$message = str_replace(">", "-", $message);
+					$message = str_replace("<", "-", $message);
+					BulkSMSController::send($mobileArray, $message);
+				}
 			}
 		}
         AuditReportsController::store('Job Card Management', ' Job card created', "New Job Card Created", $jobcardmaintanance->id);
-        return response()->json();
+        return redirect("/jobcards/mycards")->with('success_sent', "New Job Card Have Been Successfully Opened.");
     }
 	
 	function formatCellNo($sCellNo)
@@ -1694,42 +1759,40 @@ class JobcardController extends Controller
         //Exclude empty fields from query
         unset($results['_token']);
        
-        
         $cardID = $results['card_id'];
         
         $audits = DB::table('audit_trail')
-                              ->select('audit_trail.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
-                              ->leftJoin('hr_people', 'audit_trail.user_id', '=', 'hr_people.id')
-                              ->where('reference_id' ,$cardID)
-                              ->where('module_name', 'Job Card Management')
-                              ->Orderby('audit_trail.id', 'asc')
-                              ->get();              
-                                
-                   
-                    $data['audits'] = $audits;
-                    $data['page_title'] = " Fleet Management ";
-                    $data['page_description'] = "Fleet Cards Report ";
-                    $data['breadcrumb'] = [
-                        ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-                        ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
-                    ];
+					  ->select('audit_trail.*','hr_people.first_name as firstname', 'hr_people.surname as surname')
+					  ->leftJoin('hr_people', 'audit_trail.user_id', '=', 'hr_people.id')
+					  ->where('reference_id' ,$cardID)
+					  ->where('module_name', 'Job Card Management')
+					  ->Orderby('audit_trail.id', 'asc')
+					  ->get();              
 
-                    $data['active_mod'] = 'Fleet Management';
-                    $data['active_rib'] = 'Reports';
+		$data['audits'] = $audits;
+		$data['page_title'] = " Fleet Management ";
+		$data['page_description'] = "Fleet Cards Report ";
+		$data['breadcrumb'] = [
+			['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+			['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+		];
 
-                    $companyDetails = CompanyIdentity::systemSettings();
-                    $companyName = $companyDetails['company_name'];
-                    $user = Auth::user()->load('person');
+		$data['active_mod'] = 'Fleet Management';
+		$data['active_rib'] = 'Reports';
 
-                    $data['support_email'] = $companyDetails['support_email'];
-                    $data['company_name'] = $companyName;
-                    $data['full_company_name'] = $companyDetails['full_company_name'];
-                    $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-                    $data['date'] = date("d-m-Y");
-                    $data['user'] = $user;
+		$companyDetails = CompanyIdentity::systemSettings();
+		$companyName = $companyDetails['company_name'];
+		$user = Auth::user()->load('person');
 
-                    AuditReportsController::store('Job Card Management', 'Job Card print Audit Page Accessed', "Accessed By User", 0);
-                    return view('job_cards.audit_print')->with($data);
+		$data['support_email'] = $companyDetails['support_email'];
+		$data['company_name'] = $companyName;
+		$data['full_company_name'] = $companyDetails['full_company_name'];
+		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+		$data['date'] = date("d-m-Y");
+		$data['user'] = $user;
+
+		AuditReportsController::store('Job Card Management', 'Job Card print Audit Page Accessed', "Accessed By User", 0);
+		return view('job_cards.audit_print')->with($data);
     }
 
     public function canceljobcardnotes(jobcard_maintanance $card)
