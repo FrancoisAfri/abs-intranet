@@ -395,9 +395,7 @@ class JobcardController extends Controller
 		->where('hr_roles.status', 1)
 		->orderBy('hr_roles.description', 'asc')
 		->first();
-		$positions = DB::table('hr_positions')->where('status', 1)->get();
-		$positions = DB::table('hr_positions')->where('status', 1)->get();
-		
+
         $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
             ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
             ->where('security_modules.code_name', 'job_cards')->where('security_modules_access.access_level', '>=', 4)
@@ -405,7 +403,7 @@ class JobcardController extends Controller
 
         if ((!empty($roles->role_id)) || !empty($userAccess)) {
             $ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
-            $servicetype = servicetype::where('status', 1)->get();
+            $servicetype = servicetype::where('status', 1)->orderBy('name', 'asc')->get();
             $mechanics = DB::table('hr_people')
                 ->select('hr_people.*')
                 ->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
