@@ -17,10 +17,10 @@
                             <div class="box-body">
                                 <table class="table table-striped">
                                     <tr>
-                                        <th>Product Type</th>
-                                        <th>Category Type</th>
+                                        <th>Name</th>
+                                        <th>Category</th>
                                         <th>Description</th>
-                                        <th>Product Price</th>
+                                        <th>Price</th>
                                     </tr>
                                     @if(count($tickets) > 0)
                                         @foreach($tickets as $product)
@@ -34,10 +34,10 @@
                                         @endforeach
                                         <tr>
 
-                                            <th>Product Type</th>
-                                            <th>Category Type</th>
+                                            <th>Name</th>
+                                            <th>Category</th>
                                             <th>Description</th>
-                                            <th>Product Price</th>
+                                            <th>Price</th>
                                         </tr>
                                     @endif
                                 </table>

@@ -16,7 +16,7 @@
                         <tr>
                             <th style="width: 10px">#</th>
                             <th>Name</th>
-                            <th>Product Code</th>
+                            <th>Code</th>
                             <th>Available Stock</th>
                             @if (isset($userAccess) && $userAccess->access_level > 1)
                                 <th>Price</th>
@@ -35,8 +35,10 @@
                                         <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs"
                                                 data-toggle="modal" data-target="#edit-product_title-modal"
                                                 data-id="{{ $product->id }}" data-name="{{ $product->name }}"
+                                                data-product_code="{{ $product->product_code }}"
                                                 data-description="{{ $product->description }}"
                                                 data-price="{{ $product->price }}"
+                                                data-is_vatable="{{ $product->is_vatable }}"
 												data-stock_type="{{ $product->stock_type }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -168,13 +170,16 @@
                 Product_ID = btnEdit.data('id');
                 var name = btnEdit.data('name');
                 var description = btnEdit.data('description');
+                var productCode = btnEdit.data('product_code');
                 var price = btnEdit.data('price');
                 var stockType = btnEdit.data('stock_type');
                 var isVatable = btnEdit.data('is_vatable');
-
+console.log(isVatable);
+console.log('ddddddddddd');
                 //var employeeName = btnEdit.data('employeename');
                 var modal = $(this);
                 modal.find('#name').val(name);
+                modal.find('#product_code').val(productCode);
                 modal.find('#description').val(description);
                 modal.find('#price').val(price);
 				modal.find('select#stock_type').val(stockType);

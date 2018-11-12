@@ -19,7 +19,7 @@
                     <h3 class="box-title"> Search criteria</h3>
                     <p>Enter search Criteria:</p>
                 </div>
-                <form name="leave-application-form" class="form-horizontal" method="POST" action=" "
+                <form name="products-search-form" class="form-horizontal" method="POST" action=" "
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
 
@@ -36,46 +36,26 @@
                                 </ul>
                             </div>
                         @endif
-                        <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
-                            <label for="Leave_type" class="col-sm-2 control-label"> Product Type</label>
-
-
+                        <div class="form-group{{ $errors->has('search_type') ? ' has-error' : '' }}">
+                            <label for="search_type" class="col-sm-2 control-label"> Product Type</label>
                             <div class="col-sm-9">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
                                                                                               id="rdo_levTkn"
-                                                                                              name="application_type"
+                                                                                              name="search_type"
                                                                                               value="1" checked> Product
                                 </label>
-                                <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type"
+                                <label class="radio-inline"><input type="radio" id="rdo_bal" name="search_type"
                                                                    value="2"> Category </label>
-                                <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type"
+                                <label class="radio-inline"><input type="radio" id="rdo_po" name="search_type"
                                                                    value="3"> Package </label>
-                                <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type"
+                                <label class="radio-inline"><input type="radio" id="rdo_all" name="search_type"
                                                                    value="4"> Promotion </label>
-
                             </div>
                             <!--  -->
                         </div>
                     </div>
-
-
                     <div class="box-body">
                         <div class="form-group">
-
-
-                            <!--  -->
-                        <!--    <div class="form-group prod-field">
-                            <label for="product_name" class="col-sm-2 control-label">Name</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                    <input ="text" class="form-control" id="product_name" name="product_name" value="{{ old('product_name') }}" placeholder="Search by name...">
-                                </div>
-                            </div>
-                        </div> -->
-
                             <div class="form-group prod-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
                                 <label for="product_name" class="col-sm-2 control-label">Name</label>
                                 <div class="col-sm-9">
@@ -93,7 +73,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group prod-field">
                                 <label for="product_description" class="col-sm-2 control-label">Description</label>
                                 <div class="col-sm-9">
@@ -107,7 +86,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <!--  -->
                             <div class="form-group prod-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
                                 <label for="product_price" class="col-sm-2 control-label">Price</label>
@@ -126,7 +104,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group prod-field {{ $errors->has('cat_id') ? ' has-error' : '' }}">
                                 <label for="cat_id" class="col-sm-2 control-label">Category</label>
                                 <div class="col-sm-9">
@@ -144,10 +121,17 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!--  -->
-
-
+							<div class="form-group prod-field {{ $errors->has('stock_type') ? ' has-error' : '' }}">
+								<label for="fuel_type" class="col-sm-2 control-label">Stock Type</label>
+								<div class="col-sm-8">
+									<select id="stock_type" name="stock_type" class="form-control">
+										<option value="0">*** Select Stock Type ***</option>
+										<option value="1"> Stock Item</option>
+										<option value="2"> Non Stock Item</option>
+										<option value="3"> Both </option>
+									</select>
+								</div>
+                            </div>
                             <div class="form-group cat-field {{ $errors->has('category_name') ? ' has-error' : '' }}">
                                 <label for="category_name" class="col-sm-2 control-label">Name</label>
                                 <div class="col-sm-9">
@@ -165,7 +149,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group cat-field">
                                 <label for="category_description" class="col-sm-2 control-label">Description</label>
                                 <div class="col-sm-9">
@@ -179,11 +162,6 @@
                                     </div>
                                 </div>
                             </div>
-
-
-                            <!--  -->
-
-
                             <div class="form-group pack-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
                                 <label for="package_name" class="col-sm-2 control-label"> Name</label>
                                 <div class="col-sm-9">
@@ -201,7 +179,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group pack-field">
                                 <label for="package_description" class="col-sm-2 control-label">Description</label>
                                 <div class="col-sm-9">
@@ -215,7 +192,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group pack-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
                                 <label for="product_type" class="col-sm-2 control-label"> Product </label>
                                 <div class="col-sm-9">
@@ -233,7 +209,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group pack-field {{ $errors->has('product_name') ? ' has-error' : '' }}">
                                 <label for="package_discount" class="col-sm-2 control-label">Discount</label>
                                 <div class="col-sm-9">
@@ -251,19 +226,6 @@
                                     </div>
                                 </div>
                             </div>
-
-                        <!-- <div class="form-group pack-field">
-                            <label for="package_discount" class="col-sm-2 control-label">Discount</label>
-                            <div class="col-sm-9">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
-                                    </div>
-                                    <input type="number" class="form-control" id="package_discount" name="package_discount" value="{{ old('package_discount') }}" placeholder="Search by package discount...">
-                                </div>
-                            </div>
-                        </div> -->
-
                             <!-- promotion -->
                             <div class="form-group prom-field {{ $errors->has('document_id') ? ' has-error' : '' }}">
                                 <label for="promotion_name" class="col-sm-2 control-label"> Name</label>
@@ -282,7 +244,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group prom-field">
                                 <label for="promotion_discription" class="col-sm-2 control-label">Discription</label>
                                 <div class="col-sm-9">
@@ -296,7 +257,6 @@
                                     </div>
                                 </div>
                             </div>
-
                             <div class="form-group prom-field">
                                 <label for="promo_date" class="col-sm-2 control-label">Promotion Date</label>
                                 <div class="col-sm-9">
@@ -309,10 +269,7 @@
                                     </div>
                                 </div>
                             </div>
-
-
                             <!--  -->
-
                         </div>
                         <!--  -->
                         <div class="box-footer">
@@ -413,7 +370,7 @@
 
         //function to hide/show fields depending on the
         function hideFields() {
-            var allType = $("input[name='application_type']:checked").val();
+            var allType = $("input[name='search_type']:checked").val();
             if (allType == 1) { //adjsut leave
                 //$('.hours-field').hide();
                 $('.prod-field').show();
@@ -421,7 +378,7 @@
                 $('.cat-field').hide();
                 $('.prom-field').hide();
 
-                $('form[name="leave-application-form"]').attr('action', '/product/product/Search');
+                $('form[name="products-search-form"]').attr('action', '/product/product/Search');
                 $('#gen-report').val("Submit");
             }
             else if (allType == 2) { //resert leave
@@ -429,8 +386,8 @@
                 $('.cat-field').show();
                 $('.pack-field').hide();
                 $('.user-field').hide();
-                $('form[name="leave-application-form"]').attr('action', '/product/category/Search');
-                //$('form[name="leave-application-form"]').attr('action', '/leave/print/bal');
+                $('form[name="products-search-form"]').attr('action', '/product/category/Search');
+                //$('form[name="products-search-form"]').attr('action', '/leave/print/bal');
                 $('#gen-report').val("Submit");
             }
             else if (allType == 3) {
@@ -438,7 +395,7 @@
                 $('.prod-field').hide();
                 $('.pack-field').show();
                 $('.prom-field').hide();
-                $('form[name="leave-application-form"]').attr('action', '/product/package/Search');
+                $('form[name="products-search-form"]').attr('action', '/product/package/Search');
                 $('#gen-report').val("Submit");
 
             } else if (allType == 4) {
@@ -446,7 +403,7 @@
                 $('.prod-field').hide();
                 $('.pack-field').hide();
                 $('.prom-field').show();
-                $('form[name="leave-application-form"]').attr('action', '/product/promotion/Search');
+                $('form[name="products-search-form"]').attr('action', '/product/promotion/Search');
                 $('#gen-report').val("Submit");
             }
 

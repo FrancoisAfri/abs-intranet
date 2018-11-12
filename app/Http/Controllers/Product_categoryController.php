@@ -551,7 +551,7 @@ class Product_categoryController extends Controller
         $documentType->price = $docData['price'];
         $documentType->product_code = $docData['product_code'];
         $documentType->stock_type = !empty($products->stock_type) ? $products->stock_type : 0;
-        $documentType->is_vatable = !empty($products->is_vatable) ? $products->is_vatable : 0;
+        $documentType->is_vatable = $docData['is_vatable'];
         $documentType->save();
 
         $newName = $docData['name'];
@@ -572,7 +572,6 @@ class Product_categoryController extends Controller
         $product->name = $request->input('name');
         $product->product_code = $request->input('product_code');
         $product->price = $request->input('price');
-		$product->stock_type = $request->input('stock_type');
 		$product->is_vatable = $request->input('is_vatable');
         $product->update();
 
@@ -748,6 +747,7 @@ class Product_categoryController extends Controller
         $productDescription = $request->product_description;
         $productPrice = $request->product_price;
         $categoryID = $request->cat_id;
+		$stockType = $request->cat_id;
 
         $tickets = DB::table('Product_products')
             ->select('Product_products.*', 'product_Category.name as catName')
@@ -770,6 +770,11 @@ class Product_categoryController extends Controller
             ->where(function ($query) use ($categoryID) {
                 if (!empty($categoryID)) {
                     $query->where('product_Category.id', $categoryID);
+                }
+            })
+			->where(function ($query) use ($stockType) {
+                if (!empty($stockType)) {
+                    $query->where('Product_products.stock_type', $stockType);
                 }
             })
             ->orderBy('id')
