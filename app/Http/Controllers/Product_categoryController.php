@@ -277,7 +277,6 @@ class Product_categoryController extends Controller
     {
         $this->validate($request, [
             'location' => 'required',
-            'description' => 'required',
         ]);
 
         $docData = $request->all();
@@ -285,7 +284,6 @@ class Product_categoryController extends Controller
 
         $stock = new stockInfo();
         $stock->location = $request->input('location');
-        $stock->description = $request->input('description');
         $stock->allow_vat = $request->input('allow_vat');
         $stock->mass_net = $request->input('mass_net');
         $stock->minimum_level = $request->input('minimum_level');
@@ -316,14 +314,12 @@ class Product_categoryController extends Controller
     {
         $this->validate($request, [
             'location' => 'required',
-            'description' => 'required',
         ]);
 
         $docData = $request->all();
         unset($docData['_token']);
 
         $stock->location = $request->input('location');
-        $stock->description = $request->input('description');
         $stock->allow_vat = $request->input('allow_vat');
         $stock->mass_net = $request->input('mass_net');
         $stock->minimum_level = $request->input('minimum_level');
