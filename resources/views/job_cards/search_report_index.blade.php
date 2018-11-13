@@ -82,7 +82,7 @@
                         </div>
 
                         <div class="form-group levAction-field {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
-                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle Type</label>
+                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -91,8 +91,8 @@
                                     <select class="form-control select2" style="width: 100%;" id="vehicle_id"
                                             name="vehicle_id">
                                         <option value="">*** Select a Vehicle***</option>
-                                        @foreach($vehicledetails as $flow)
-                                            <option value="{{ $flow->id }}">{{ $flow->vehicle_make . ' ' .  $flow->vehicle_model . ' ' . $flow->vehicle_type }}</option>
+                                        @foreach($vehicledetails as $details)
+                                            <option value="{{ $details->fleet_id }}">{{ $details->fleet_number . ' ' .  $details->vehicle_registration . ' ' . $details->vehicle_make . ' ' . $details->vehicle_model }}</option>
                                         @endforeach
                                     </select>
                                 </div>
@@ -127,25 +127,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="form-group day-field {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
-                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle Type</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user-circle"></i>
-                                    </div>
-                                    <select class="form-control select2" style="width: 100%;" id="vehicle_part_id"
-                                            name="vehicle_part_id">
-                                        <option value="">*** Select a Vehicle***</option>
-                                        @foreach($vehicledetails as $flow)
-                                            <option value="{{ $flow->id }}">{{ $flow->vehicle_make . ' ' .  $flow->vehicle_model . ' ' . $flow->vehicle_type }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
                           <div class="form-group day-field {{ $errors->has('process_id') ? ' has-error' : '' }}">
                             <label for="process_id" class="col-sm-2 control-label">Users</label>
                             <div class="col-sm-8">
@@ -178,7 +159,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group day-field{{ $errors->has('category_id') ? ' has-error' : '' }}">
                             <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Product </label>
 
@@ -189,25 +169,6 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="form-group levAction-field {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
-                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle Type</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user-circle"></i>
-                                    </div>
-                                    <select class="form-control select2" style="width: 100%;" id="vehicle_id"
-                                            name="vehicle_id">
-                                        <option value="">*** Select a Vehicle***</option>
-                                        @foreach($vehicledetails as $car)
-                                            <option value="{{ $car->id }}">{{ $car->vehicle_make . ' ' .  $car->vehicle_model . ' ' . $car->vehicle_type }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="form-group notedate-field{{ $errors->has('category_id') ? ' has-error' : '' }}">
                             <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Note Details</label>
 
@@ -260,8 +221,8 @@
                                     <select class="form-control select2" style="width: 100%;" id="vehicle"
                                             name="vehicle">
                                         <option value="">*** Select a Vehicle***</option>
-                                        @foreach($vehicledetails as $vehicle)
-                                            <option value="{{ $vehicle->id }}">{{ $vehicle->vehicle_make . ' ' .  $vehicle->vehicle_model . ' ' . $vehicle->vehicle_type }}</option>
+                                        @foreach($vehicledetails as $details)
+                                            <option value="{{ $details->fleet_id }}">{{ $details->fleet_number . ' ' .  $details->vehicle_registration . ' ' . $details->vehicle_make . ' ' . $details->vehicle_model }}</option>
                                         @endforeach
                                     </select>
                                 </div>

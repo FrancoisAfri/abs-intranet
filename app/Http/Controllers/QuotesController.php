@@ -1150,6 +1150,8 @@ class QuotesController extends Controller
         $data['active_rib'] = 'create quote';
         $data['servicesSettings'] = $servicesSettings;
         $data['quoteType'] = $quoteType;
+        $data['quoteTitle'] = $request->input('quote_title');
+        $data['quoteRemarks'] = $request->input('quote_remarks');
         $data['divisionID'] = $request->input('division_id');
         $data['contactPersonId'] = $request->input('contact_person_id');
         $data['companyID'] = $request->input('company_id');
@@ -1204,6 +1206,8 @@ class QuotesController extends Controller
             $quote->client_id = $request->input('contact_person_id');
             $quote->division_id = $request->input('division_id');
             $quote->division_level = $highestLvl;
+			$quote->quote_title = $request->input('quote_title');
+            $quote->quote_remarks = $request->input('quote_remarks');
             //$quote->hr_person_id = $user->person->id;
             $quote->discount_percent = ($request->input('discount_percent')) ? $request->input('discount_percent') : null;
             $quote->add_vat = ($request->input('add_vat')) ? $request->input('add_vat') : null;

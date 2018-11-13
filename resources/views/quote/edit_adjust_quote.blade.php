@@ -14,6 +14,8 @@
                 <form class="form-horizontal" method="POST" action="/quote/update/{{ $quote->id }}">
                     {{ csrf_field() }}
                     <input type="hidden" name="quote_type" id="quote_type" value="{{ $quoteType }}">
+                    <input type="hidden" name="quote_title" id="quote_title" value="{{ $quoteTitle }}">
+                    <input type="hidden" name="quote_remarks" id="quote_remarks" value="{{ $quoteRemarks }}">
                     <input type="hidden" name="division_id" value="{{ $divisionID }}">
                     <input type="hidden" name="company_id" value="{{ $companyID }}">
                     <input type="hidden" name="contact_person_id" value="{{ $contactPersonId }}">

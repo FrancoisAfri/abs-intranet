@@ -40,7 +40,23 @@
                                 <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_services" name="quote_type" value="2" {{ ($quote->quote_type == 2) ? 'checked' : '' }}>  Services</label>
                             </div>
                         </div>
-
+						<div class="form-group">
+                        <label for="quote_title" class="col-sm-2 control-label">Quote Title</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<input type="text" class="form-control" id="quote_title" name="quote_title" value="{{ !empty($quote->quote_title) ? $quote->quote_title : '' }}" placeholder="Enter Quote Title" required>
+								</div>
+							</div>
+						</div>
+						<div class="form-group existing_one">
+							<label for="name" class="col-sm-2 control-label">Remark</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<textarea class="form-control" rows="3" cols="70" id="quote_remarks" name="quote_remarks"
+											  placeholder="Enter Quote Remark">{{ !empty($quote->quote_remarks) ? $quote->quote_remarks : '' }}</textarea>
+								</div>
+							</div>
+						</div>
                         <div class="form-group{{ $errors->has('division_id') ? ' has-error' : '' }}">
                             <label for="division_id" class="col-sm-2 control-label">{{ $highestLvl->name }}</label>
 
@@ -55,12 +71,9 @@
                                 </select>
                             </div>
                         </div>
-
                         <hr class="hr-text" data-content="SELECT A CLIENT">
-
                         <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
                             <label for="company_id" class="col-sm-2 control-label">Client Company</label>
-
                             <div class="col-sm-10">
                                 <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;" onchange="contactCompanyDDOnChange(this, null, parseInt('{{ $quote->client_id }}'))">
                                     <option value="">*** Please Select a Company ***</option>
@@ -71,7 +84,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
                             <label for="contact_person_id" class="col-sm-2 control-label">Contact Person</label>
 
@@ -81,12 +93,9 @@
                                 </select>
                             </div>
                         </div>
-
                         <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
-
                         <div class="form-group products-field{{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-sm-2 control-label">Products</label>
-
                             <div class="col-sm-10">
                                 <select id="product_id" name="product_id[]" class="form-control select2" style="width: 100%;" multiple>
                                     <option value="">*** Please Select Some Products ***</option>
@@ -96,12 +105,9 @@
                                 </select>
                             </div>
                         </div>
-
                         <hr class="hr-text packages-field" data-content="OR SELECT PACKAGES">
-
                         <div class="form-group packages-field{{ $errors->has('package_id') ? ' has-error' : '' }}">
                             <label for="package_id" class="col-sm-2 control-label">Package</label>
-
                             <div class="col-sm-10">
                                 <select id="package_id" name="package_id[]" class="form-control select2" style="width: 100%;" multiple>
                                     <option value="">*** Please Select a Package ***</option>
@@ -111,7 +117,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <hr class="hr-text" data-content="SELECT TERMS AND CONDITIONS">
 						<div style="max-height: 550px; overflow-y: scroll;">
 							<table class="table table-bordered table-striped table-hover">

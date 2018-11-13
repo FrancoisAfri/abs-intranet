@@ -1874,7 +1874,8 @@ HTML;
         $users = HRPerson::OrderBy('id', 'asc')->get();
 
         $vehicledetails = DB::table('vehicle_details')
-            ->select('vehicle_details.id as id', 'vehicle_make.name as vehicle_make',
+            ->select('vehicle_details.id as fleet_id','vehicle_details.fleet_number as fleet_number',
+			'vehicle_details.vehicle_registration as vehicle_registration', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
                 'division_level_fives.name as company', 'division_level_fours.name as Department')
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
