@@ -811,7 +811,6 @@ class VehicleFleetController extends Controller
 
     public function editservicedetails(Request $request, vehicle_serviceDetails $details)
     {
-
         $this->validate($request, [
             // 'date' => 'required',
             'invoice_number' => 'required|unique:vehicle_serviceDetails,invoice_number',
@@ -852,7 +851,6 @@ class VehicleFleetController extends Controller
                 $details->update();
             }
         }
-
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return back();
@@ -974,7 +972,6 @@ class VehicleFleetController extends Controller
         return response()->json();
 
     }
-
 
     public function edit_finesdetails(Request $request, vehicle_fines $fines)
     {
@@ -1265,7 +1262,6 @@ class VehicleFleetController extends Controller
         return view('Vehicles.FleetManagement.viewVehicleIOilLog')->with($data);
     }
 
-
     public function viewFuelLog(Request $request, vehicle_maintenance $maintenance, $date = 0)
     {
         $this->validate($request, [
@@ -1413,7 +1409,6 @@ class VehicleFleetController extends Controller
 
     public static function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
     {
-
         $approvals = DB::table('vehicle_configuration')->select('fuel_auto_approval', 'fuel_require_tank_manager_approval', 'fuel_require_ceo_approval')->first();
 
         $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
@@ -1472,7 +1467,7 @@ class VehicleFleetController extends Controller
 					return $details;
 				}
 			}
-        } 
+        }
 		else 
 		{
 			if ($status == 4 || $status == 10) $newStatus = 1;
@@ -1481,7 +1476,6 @@ class VehicleFleetController extends Controller
             return $details;
         }
     }
-
 
     public function addvehiclefuellog(Request $request)
     {

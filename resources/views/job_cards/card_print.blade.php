@@ -56,30 +56,35 @@
                     <table class="table table-striped">
                         <tr>
                             <th style="width: 5px; text-align: center;"> Job Card #</th>
-                                            <th>Vehicleb Name</th>
-                                            <th>Registration Number</th>
-                                            <th>Job Card Date</th>
-                                            <th>Completion Date</th>
-                                            <th>Instruction Mechanic</th>
-                                            <th>Service Type</th>
-                                            <th>Supplier</th>
-                                            <th>Status</th>
+							<th>Vehicle</th>
+							<th>Date Created</th>
+							<th>Completion Date</th>
+							<th>Instructions</th>
+							<th>Service Type</th>
+							<th>Supplier</th>
+							<th>Status</th>
                         </tr>
-                         @if (count($vehiclemaintenance) > 0)
-                            @foreach ($vehiclemaintenance as $jobcard)
-                                 <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
-                                <td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model))
-                                             ?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
-                                <td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
-                                <td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
-                                <td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
-                                <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
-                                 <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
-                                <td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
-                                <td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : '' }}</td>
-                                                </tr>
-                                            @endforeach
-                        @endif
+                         @if (count($jobCards) > 0)
+							@foreach ($jobCards as $jobcard)
+								<tr id="categories-list">
+									<td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
+									<td>{{ (!empty( $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model))
+							 ?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
+									<td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
+									<td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
+									<td>
+									@if (count($jobcard->JCinstructions) > 0)
+										@foreach ($jobcard->JCinstructions as $instruction)
+											{{ !empty($instruction->instruction_details) ? $instruction->instruction_details.";" : '' }}
+										@endforeach
+									@endif
+									 </td>
+									<td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
+									<td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
+									<td>{{ !empty($jobcard->aStatus) ? $jobcard->aStatus : '' }}</td>
+								</tr>
+							@endforeach
+						@endif
                     </table>
                 </div>
             </div>

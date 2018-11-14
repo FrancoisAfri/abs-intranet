@@ -26,7 +26,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-anchor pull-right"></i>
-                    <h3 class="box-title">Job Card Reports Search criteria</h3>
+                    <h3 class="box-title">Reports Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
                 <form name="leave-application-form" class="form-horizontal" method="POST" action=" "
@@ -62,17 +62,16 @@
                                                                    value="4">Notes</label>
                             </div>
                         </div>
-
-                        <div class="form-group levAction-field {{ $errors->has('process_id') ? ' has-error' : '' }}">
-                            <label for="process_id" class="col-sm-2 control-label">Status </label>
+                        <div class="form-group levAction-field {{ $errors->has('status') ? ' has-error' : '' }}">
+                            <label for="status" class="col-sm-2 control-label">Status </label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="process_id"
-                                            name="process_id">
-                                        <option value="">*** Select an process Flow ***</option>
+                                    <select class="form-control select2" style="width: 100%;" id="status"
+                                            name="status">
+                                        <option value="">*** Select a Status ***</option>
                                         @foreach($processflow as $flow)
                                             <option value="{{ $flow->step_name }}">{{ $flow->step_name }}</option>
                                         @endforeach
@@ -80,8 +79,7 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group levAction-field {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
+                        <div class="form-group {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
                             <label for="vehicle_id" class="col-sm-2 control-label">Vehicle</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
@@ -98,8 +96,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="form-group levAction-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
                             <label for="action_date" class="col-sm-2 control-label">Action Date</label>
                             <div class="col-sm-8">
@@ -109,7 +105,6 @@
                                     </div>
                                     <input type="text" class="form-control daterangepicker" id="actions_date"
                                            name="actions_date" value="" placeholder="Select Action Date...">
-
                                 </div>
                             </div>
                         </div>
@@ -127,49 +122,31 @@
                                 </div>
                             </div>
                         </div>
-                          <div class="form-group day-field {{ $errors->has('process_id') ? ' has-error' : '' }}">
-                            <label for="process_id" class="col-sm-2 control-label">Users</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user-circle"></i>
-                                    </div>
-                                    <select class="form-control select2" style="width: 100%;" id="user_part_id"
-                                            name="user_part_id">
-                                        <option value="">*** Select an User ***</option>
-                                        @foreach($users as $user)
-                                            <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->surname }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group day-field{{ $errors->has('product_id') ? ' has-error' : '' }}">
-                            <label for="{{ 'product_id' }}" class="col-sm-2 control-label">Product Category </label>
+                        <div class="form-group day-field{{ $errors->has('category_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Product Category </label>
 
                             <div class="col-sm-8">
-                                <select id="product_id" name="product_id" class="form-control select2"
+                                <select id="category_id" name="category_id" class="form-control select2"
                                         style="width: 100%;" onchange="productcategoryDDOnChange(this)">
                                     <option value="">*** Please Select a Product Category ***</option>
                                     <option value="0"></option>
-                                    @foreach($jobCategories as $product)
+                                    @foreach($productsCategories as $product)
                                         <option value="{{ $product->id }}">{{ $product->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group day-field{{ $errors->has('category_id') ? ' has-error' : '' }}">
-                            <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Product </label>
+                        <div class="form-group day-field{{ $errors->has('product_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'product_id' }}" class="col-sm-2 control-label">Product </label>
 
                             <div class="col-sm-8">
-                                <select id="category_id" name="category_id" class="form-control select2"
+                                <select id="product_id" name="product_id" class="form-control select2"
                                         style="width: 100%;">
                                     <option value="">*** Please Select a Category First ***</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group notedate-field{{ $errors->has('category_id') ? ' has-error' : '' }}">
+						 <div class="form-group notedate-field{{ $errors->has('category_id') ? ' has-error' : '' }}">
                             <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Note Details</label>
 
                             <div class="col-sm-8">
@@ -177,8 +154,6 @@
                                        name="note_details" value="" placeholder="">
                             </div>
                         </div>
-
-
                         <div class="form-group notedate-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
                             <label for="action_date" class="col-sm-2 control-label">Action Date</label>
                             <div class="col-sm-8">
@@ -192,9 +167,8 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group user-field {{ $errors->has('process_id') ? ' has-error' : '' }}">
-                            <label for="process_id" class="col-sm-2 control-label">Users</label>
+                        <div class="form-group notedate-field {{ $errors->has('status') ? ' has-error' : '' }}">
+                            <label for="status" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -210,25 +184,6 @@
                                 </div>
                             </div>
                         </div>
-
-                        <div class="form-group user-field {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
-                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle Type</label>
-                            <div class="col-sm-8">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user-circle"></i>
-                                    </div>
-                                    <select class="form-control select2" style="width: 100%;" id="vehicle"
-                                            name="vehicle">
-                                        <option value="">*** Select a Vehicle***</option>
-                                        @foreach($vehicledetails as $details)
-                                            <option value="{{ $details->fleet_id }}">{{ $details->fleet_number . ' ' .  $details->vehicle_registration . ' ' . $details->vehicle_make . ' ' . $details->vehicle_model }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                        </div>
-
                         <div class="box-footer">
 
                             <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right">
@@ -384,7 +339,6 @@
                 $('.day-field').hide();
                 $('.levAction-field').show();
                 $('.date-field').hide();
-                $('.user-field').hide();
                 $('.notedate-field').hide();
                 $('form[name="leave-application-form"]').attr('action', '/jobcards/reports/cards');
                 $('#gen-report').val("Submit");
@@ -394,7 +348,6 @@
                 $('.from-field').hide();
                 $('.notes-field').hide();
                 $('.levAction-field').hide();
-                $('.user-field').hide();
                 $('.notedate-field').hide();
                 $('form[name="leave-application-form"]').attr('action', '/jobcards/reports/parts');
                 //$('form[name="leave-application-form"]').attr('action', '/leave/print/bal');
@@ -406,7 +359,6 @@
                 $('.from-field').hide();
                 $('.notes-field').hide();
                 $('.levAction-field').hide();
-                $('.user-field').show();
                 $('.notedate-field').show();
                 $('form[name="leave-application-form"]').attr('action', '/jobcards/reports/notes');
                 $('#gen-report').val("Submit");

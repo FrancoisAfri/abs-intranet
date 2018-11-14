@@ -39,6 +39,7 @@
         <div class="col-md-12">
             <div class="box box-default no-padding">
 				<div class="box-header with-border">
+				 <h3 class="box-title">Quote Title:{{!empty($quotation->quote_title) ? $quotation->quote_title: ''}} </h3>
 					<p class="text-muted text-center">QUOTE DESCRIPTION</p>
 				</div>
 				<!-- /.box-header -->
