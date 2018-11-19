@@ -201,8 +201,14 @@
 							<td style="vertical-align: middle; text-align: center;"> Job Cards 
 								<input type="checkbox" class="checkbox" id="jobcards" name="jobcards" value="1">
 							</td>
-                            <td style="vertical-align: middle; text-align: center;">+ notes 
+                            <td style="vertical-align: middle; text-align: center;">+ Notes 
 								<input type="checkbox" class="checkbox" id="jobcards_notes" name="jobcards_notes" value="1">
+							</td>
+							<td style="vertical-align: middle; text-align: center;">+ Parts 
+								<input type="checkbox" class="checkbox" id="jobcards_parts" name="jobcards_parts" value="1">
+							</td>
+							<td style="vertical-align: middle; text-align: center;">All 
+								<input type="checkbox" class="checkbox" id="jobcards_all" name="jobcards_all" value="1">
 							</td>
                             <input type="submit" id="load-allocation" name="load-allocation"
                                    class="btn btn-sm btn-default btn-flat" value="Submit">

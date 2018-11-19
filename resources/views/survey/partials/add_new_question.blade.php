@@ -13,25 +13,24 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 					@foreach($division_levels as $division_level)
-                                <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                                            <label for="{{ 'division_level_' . $division_level->level }}"
-                                                   class="col-sm-2 control-label">{{ $division_level->name }}</label>
+						<div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+							<label for="{{ 'division_level_' . $division_level->level }}"
+								   class="col-sm-2 control-label">{{ $division_level->name }}</label>
 
-                                            <div class="col-sm-10">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon">
-                                                        <i class="fa fa-black-tie"></i>
-                                                    </div>
-                                                    <select id="{{ 'division_level_' . $division_level->level }}"
-                                                            name="{{ 'division_level_' . $division_level->level }}"
-                                                            class="form-control"
-                                                            onchange="divDDOnChange(this, null, 'add-new-question-modal')">
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-black-tie"></i>
+									</div>
+									<select id="{{ 'division_level_' . $division_level->level }}"
+											name="{{ 'division_level_' . $division_level->level }}"
+											class="form-control"
+											onchange="divDDOnChange(this, null, 'add-new-question-modal')">
+									</select>
+								</div>
+							</div>
+						</div>
                     @endforeach
-                   
 					<div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-10">

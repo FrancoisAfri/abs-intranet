@@ -22,40 +22,39 @@
                                          <input type="hidden" name="action_to" value="{{!empty($actionTo) ? $actionTo : ''}}">
                                          <input type="hidden" name="note_details" value="{{!empty($noteDetails) ? $noteDetails : ''}}">
                                          <input type="hidden" name="user_id" value="{{!empty($userID) ? $userID : ''}}">
-                                         <input type="hidden" name="user_id" value="{{!empty($userID) ? $userID : ''}}">
                                          <input type="hidden" name="vehicle_id" value="{{!empty($vehicleID) ? $vehicleID : ''}}">
                                     <table id="example2" class="table table-bordered table-hover">
                                         <thead>
                                         <tr>
-                                            <th style="width: 5px; text-align: center;"> Job Card #</th>
                                             <th>Vehicle</th>
+                                            <th style="width: 5px; text-align: center;"> Job Card #</th>
                                             <th>Job note Date</th>
                                             <th>Note Details</th>
-                                            <th>User</th>
+                                            <th>Employees</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        @if (count($notes) > 0)
-                                            @foreach ($notes as $jobcard)
-                                                <tr id="categories-list">
-                                                    <td>{{ !empty($jobcard->jobcard_id) ? $jobcard->jobcard_id : '' }}</td>
-                                                    <td>{{ !empty($jobcard->fleet_no . '' . $jobcard->vehicleregistration) ? $jobcard->fleet_no. '' . $jobcard->vehicleregistration : '' }}</td>
-                                                    <td>{{ !empty($jobcard->date_default) ? date(' d M Y', $jobcard->date_default) : ''}}</td>
-                                                    <td>{{ !empty($jobcard->note_details) ? $jobcard->note_details : '' }}</td>
-                                                    <td>{{ !empty($jobcard->firstname . '' . $jobcard->surname) ? $jobcard->firstname. ' ' . $jobcard->surname : '' }}</td>
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
+											@if (count($notes) > 0)
+												@foreach ($notes as $jobcard)
+													<tr id="categories-list">
+														<td>{{ !empty($jobcard->fleet_no . '' . $jobcard->vehicleregistration) ? $jobcard->fleet_no. '' . $jobcard->vehicleregistration : '' }}</td>
+														<td>{{ !empty($jobcard->jobcard_id) ? $jobcard->jobcard_id : '' }}</td>
+														<td>{{ !empty($jobcard->date_default) ? date(' d M Y', $jobcard->date_default) : ''}}</td>
+														<td>{{ !empty($jobcard->note_details) ? $jobcard->note_details : '' }}</td>
+														<td>{{ !empty($jobcard->firstname . '' . $jobcard->surname) ? $jobcard->firstname. ' ' . $jobcard->surname : '' }}</td>
+														</td>
+													</tr>
+												@endforeach
+											@endif
                                         </tbody>
                                         <tfoot>
-                                        <tr>
-                                            <th style="width: 5px; text-align: center;"> Job Card #</th>
-                                            <th>Vehicle</th>
-                                            <th>Job note Date</th>
-                                            <th>Note Details</th>
-                                            <th>User</th>
-                                        </tr>
+											<tr>
+												<th>Vehicle</th>
+												<th style="width: 5px; text-align: center;"> Job Card #</th>
+												<th>Job note Date</th>
+												<th>Note Details</th>
+												<th>Employees</th>
+											</tr>
                                         </tfoot>
                                     </table>
                                     <div class="box-footer">

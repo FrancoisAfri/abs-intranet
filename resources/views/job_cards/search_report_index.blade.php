@@ -123,7 +123,7 @@
                             </div>
                         </div>
                         <div class="form-group day-field{{ $errors->has('category_id') ? ' has-error' : '' }}">
-                            <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Product Category </label>
+                            <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Category </label>
 
                             <div class="col-sm-8">
                                 <select id="category_id" name="category_id" class="form-control select2"
@@ -176,7 +176,7 @@
                                     </div>
                                     <select class="form-control select2" style="width: 100%;" id="user_id"
                                             name="user_id">
-                                        <option value="">*** Select an User ***</option>
+                                        <option value="">*** Select an Employee ***</option>
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->surname }}</option>
                                         @endforeach

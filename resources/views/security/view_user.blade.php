@@ -529,7 +529,7 @@
                     else if(divLevel == 1) selectedOption = '{{ $user->person->division_level_1 }}';
                     var incInactive = -1;
                     var loadAll = loadAllDivs;
-                     loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+                    loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
                     parentDDID = ddID;
                     loadAllDivs = 1;
                 @endforeach

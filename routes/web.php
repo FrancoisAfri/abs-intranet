@@ -726,6 +726,8 @@ Route::post('/stock/firstlevelstock/add/{stockLevel}', 'StoreManagement@addLevel
 Route::patch('/stock/level_edit/{stockLevel}/{childID}', 'StoreManagement@updateLevel');
 ////
 Route::get('/stock/setup', 'StoreManagement@showSetup');
+Route::post('stock/settings/{settings}', 'StoreManagement@addSettings');
+Route::post('stock/settings', 'StoreManagement@addSettings');
 Route::patch('/stock/grouplevel/{groupLevel}', 'StoreManagement@updateGroupLevel');
 Route::get('/stock/grouplevel/activate/{groupLevel}', 'StoreManagement@activateGroupLevel');
 /////
@@ -1068,6 +1070,7 @@ Route::post('api/vehiclemodeldropdown', 'DropDownAPIController@vehiclemomdeDDID'
 Route::post('api/divisionsdropdown', 'DropDownAPIController@divLevelGroupDD')->name('divisionsdropdown');
 Route::post('api/hrpeopledropdown', 'DropDownAPIController@hrPeopleDD')->name('hrpeopledropdown');
 Route::post('api/kpadropdown', 'DropDownAPIController@kpaDD')->name('kpadropdown');
+Route::post('api/stockdropdown', 'DropDownAPIController@stockLevelGroupDD')->name('stockdropdown');
 Route::get('api/emp/{empID}/monthly-performance', 'AppraisalGraphsController@empMonthlyPerformance');
 Route::get('api/divlevel/{divLvl}/group-performance', 'AppraisalGraphsController@divisionsPerformance');
 Route::get('api/divlevel/{divLvl}/parentdiv/{parentDivisionID}/group-performance', 'AppraisalGraphsController@divisionsPerformance');

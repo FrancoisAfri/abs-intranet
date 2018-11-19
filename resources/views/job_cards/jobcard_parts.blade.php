@@ -19,38 +19,32 @@
                             <div style="overflow-X:auto;">
                                 <form class="form-horizontal" method="POST" action="/jobcards/reports/printparts">
                                     
+                                         <input type="hidden" name="vehicle_id" value="{{!empty($vehicleID) ? $vehicleID : ''}}">
                                          <input type="hidden" name="action_from" value="{{!empty($actionFrom) ? $actionFrom : ''}}">
                                          <input type="hidden" name="action_to" value="{{!empty($actionTo) ? $actionTo : ''}}">
                                          <input type="hidden" name="category_id" value="{{!empty($categoryID) ? $categoryID : ''}}">
                                          <input type="hidden" name="product_id" value="{{!empty($productID) ? $productID : ''}}">
-                                         
                                     <table id="example2" class="table table-bordered table-hover">
                                         <thead>
                                         <tr>
-                                            <th style="width: 5px; text-align: center;"> Job Card #</th>
                                             <th>Vehicle</th>
+                                            <th style="text-align: center;"> Job Card #</th>
                                             <th>Job Card Date</th>
-                                            <th>Instruction Mechanic</th>
                                             <th>Service Type</th>
                                             <th>Part</th>
-                                            <th>Transaction</th>
-                                            <th>User Allocated to</th>
-                                            <th>Vehicle Allocated to</th>
+                                            <th style="text-align: center;">Number Used</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         @if (count($parts) > 0)
                                             @foreach ($parts as $jobcard)
                                                 <tr>
-                                                    <td>{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
                                                     <td>{{ !empty($jobcard->fleet_no . '' . $jobcard->vehicleregistration) ? $jobcard->fleet_no. '-' . $jobcard->vehicleregistration : '' }}</td>
+                                                    <td style="text-align: center;">{{ !empty($jobcard->jobcard_number) ? $jobcard->jobcard_number : '' }}</td>
                                                     <td>{{ !empty($jobcard->date_created) ? date(' d M Y', $jobcard->date_created) : '' }}</td>
-                                                    <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
                                                     <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
                                                     <td>{{ !empty($jobcard->product_name) ? $jobcard->product_name : '' }}</td>
-                                                    <td>{{ !empty($jobcard->no_of_parts_used) ? $jobcard->no_of_parts_used : 0 }}</td>
-                                                    <td></td>
-                                                    <td></td>
+                                                    <td style="text-align: center;">{{ !empty($jobcard->no_of_parts_used) ? $jobcard->no_of_parts_used : 0 }}</td>
                                                     
                                                 </tr>
                                             @endforeach
@@ -58,15 +52,12 @@
                                         </tbody>
                                         <tfoot>
                                         <tr>
-                                             <th style="width: 5px; text-align: center;"> Job Card #</th>
+                                            <th style="text-align: center;"> Job Card #</th>
                                             <th>Vehicle</th>
                                             <th>Job Card Date</th>
-                                            <th>Instruction Mechanic</th>
                                             <th>Service Type</th>
                                             <th>Part</th>
-                                            <th>Transaction</th>
-                                            <th>User Allocated to</th>
-                                            <th>Vehicle Allocated to</th>
+                                            <th>Number Used</th>
                                         </tr>
                                         </tfoot>
                                     </table>

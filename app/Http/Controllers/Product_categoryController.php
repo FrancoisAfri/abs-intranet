@@ -11,6 +11,8 @@ use App\product_category;
 use App\product_packages;
 use App\product_price;
 use App\product_products;
+use App\stockLevel;
+use App\StockSettings;
 use App\ContactCompany;
 use App\stockInfo;
 use App\productsPrefferedSuppliers;
@@ -225,7 +227,13 @@ class Product_categoryController extends Controller
 	public function stockInfos(product_products $product)
     {
         if ($product->status == 1) {
-			$product = $product->load('infosProduct');
+			$stockSettings = StockSettings::orderBy('id', 'desc')->first();
+			$stockLevels = stockLevel::where('active', 1)->orderBy('id', 'desc')->get();
+			//return $stockLevels;
+			$product = $product->load('infosProduct','infosProduct.stockLevelFive'
+			,'infosProduct.stockLevelFour','infosProduct.stockLevelThree'
+			,'infosProduct.stockLevelTwo','infosProduct.stockLevelOne');
+
 			$ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
             $data['page_title'] = 'Product Stock';
             $data['page_description'] = ' Informations';
@@ -233,7 +241,7 @@ class Product_categoryController extends Controller
                 ['title' => 'Products', 'path' => '/Product/Product', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Manage Product', 'active' => 1, 'is_module' => 0]
             ];
-			// Products Activities	
+			
 			$productActivities = stockhistory::select('stock_history.*','vehicle_details.id as id'
 					,'vehicle_details.fleet_number as fleet_number'
 					,'vehicle_details.vehicle_registration as vehicle_registration' 
@@ -249,8 +257,7 @@ class Product_categoryController extends Controller
 			->where('product_id', $product->id)
 			->limit(100)
             ->get();
-			
-			// Preferred Suppliers
+
 			$productPreferreds = productsPreferredSupplier::select('products_preferred_suppliers.*'
 					,'Product_products.name as product_name', 'contact_companies.name as com_name')
             ->leftJoin('contact_companies', 'products_preferred_suppliers.supplier_id', '=', 'contact_companies.id')
@@ -261,6 +268,8 @@ class Product_categoryController extends Controller
             ->get();
 			
             $data['products'] = $product;
+            $data['stockSettings'] = $stockSettings;
+            $data['stock_levels'] = $stockLevels ;
             $data['productPreferreds'] = $productPreferreds;
             $data['productActivities'] = $productActivities;
             $data['ContactCompany'] = $ContactCompany;
@@ -276,14 +285,18 @@ class Product_categoryController extends Controller
 	public function addStockInfo(Request $request, product_products $product)
     {
         $this->validate($request, [
-            'location' => 'required',
+            'stock_level_5' => 'required',
         ]);
 
         $docData = $request->all();
         unset($docData['_token']);
 
         $stock = new stockInfo();
-        $stock->location = $request->input('location');
+        $stock->stock_level_5 = !empty($request->input('stock_level_5')) ? $request->input('stock_level_5') : 0;
+        $stock->stock_level_4 = !empty($request->input('stock_level_4')) ? $request->input('stock_level_4') : 0;
+        $stock->stock_level_3 = !empty($request->input('stock_level_3')) ? $request->input('stock_level_3') : 0;
+        $stock->stock_level_2 = !empty($request->input('stock_level_2')) ? $request->input('stock_level_2') : 0;
+        $stock->stock_level_1 = !empty($request->input('stock_level_1')) ? $request->input('stock_level_1') : 0;
         $stock->allow_vat = $request->input('allow_vat');
         $stock->mass_net = $request->input('mass_net');
         $stock->minimum_level = $request->input('minimum_level');
@@ -313,12 +326,16 @@ class Product_categoryController extends Controller
 	public function updateStockInfo(Request $request, stockInfo $stock)
     {
         $this->validate($request, [
-            'location' => 'required',
+            'stock_level_5' => 'required',
         ]);
 
         $docData = $request->all();
         unset($docData['_token']);
-
+		$stock->stock_level_5 = !empty($request->input('stock_level_5')) ? $request->input('stock_level_5') : 0;
+        $stock->stock_level_4 = !empty($request->input('stock_level_4')) ? $request->input('stock_level_4') : 0;
+        $stock->stock_level_3 = !empty($request->input('stock_level_3')) ? $request->input('stock_level_3') : 0;
+        $stock->stock_level_2 = !empty($request->input('stock_level_2')) ? $request->input('stock_level_2') : 0;
+        $stock->stock_level_1 = !empty($request->input('stock_level_1')) ? $request->input('stock_level_1') : 0;
         $stock->location = $request->input('location');
         $stock->allow_vat = $request->input('allow_vat');
         $stock->mass_net = $request->input('mass_net');

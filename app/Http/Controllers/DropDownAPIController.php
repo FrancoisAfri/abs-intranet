@@ -13,6 +13,11 @@ use App\vehiclemodel;
 use App\jobcart_parts;
 use App\product_products;
 use App\appraisalKpas;
+use App\stockLevelFive;
+use App\stockLevelFour;
+use App\stockLevelThree;
+use App\stockLevelTwo;
+use App\stockLevelOne;
 use Illuminate\Http\Request;
 
 use App\Http\Requests;
@@ -206,22 +211,86 @@ class DropDownAPIController extends Controller
           return $model;
       }
       
-      public function productCategoryDDID(Request $request){
-          
-          $productbcategoryID = (int) $request->input('category_id');
-          $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
-          $loadAll = $request->input('load_all');
-          $products = [];
-          if ($loadAll == -1) $products = product_products::movproductCategory('category_id', $productbcategoryID, $incInactive);
-          elseif ($loadAll == 1) {
-              $products = product_products::where(function ($query) use($incInactive) {
-                  if ($incInactive == -1) {
-                      $query->where('status', 1);
-                  }
-              })->get()
-                  ->sortBy('id')
-                  ->pluck('id', 'name');
-          }
-          return $products;
-      }
+    public function productCategoryDDID(Request $request){      
+		$productbcategoryID = (int) $request->input('category_id');
+		$incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
+		$loadAll = $request->input('load_all');
+		$products = [];
+		if ($loadAll == -1) $products = product_products::movproductCategory('category_id', $productbcategoryID, $incInactive);
+		 elseif ($loadAll == 1) {
+			$products = product_products::where(function ($query) use($incInactive) {
+				if ($incInactive == -1) {
+					  $query->where('status', 1);
+				}
+			})->get()
+				->sortBy('id')
+				->pluck('id', 'name');
+		}
+		return $products;
+    }
+	
+	//load stock level 5, 4, 3, 2, or 1
+    public function stockLevelGroupDD(Request $request) {
+        $divLevel = (int) $request->input('div_level');
+        $divHeadSpecific = (int) $request->input('div_head_specific');
+        $parentID = $request->input('parent_id');
+        $incInactive = !empty($request->input('inc_complete')) ? $request->input('inc_complete') : -1;
+        $loadAll = $request->input('load_all');
+        $stocks = [];
+        $managerID = ($divHeadSpecific == 1) ? Auth::user()->person->id : 0;
+        if ($divLevel === 5) {
+            $stocks = stockLevelFive::where(function ($query) use($incInactive, $managerID) {
+                if ($incInactive == -1) $query->where('active', 1);
+                if ($managerID > 0) $query->where('manager_id', $managerID);
+            })->get()
+                ->sortBy('name')
+                ->pluck('id', 'name');
+        }
+        elseif ($divLevel === 4) {
+            if ($parentID > 0 && $loadAll == -1) $stocks = stockLevelFour::stockFromParent($parentID, $incInactive);
+            elseif ($loadAll == 1) {
+                $stocks = stockLevelFour::where(function ($query) use($incInactive, $managerID) {
+                    if ($incInactive == -1) $query->where('active', 1);
+                    if ($managerID > 0) $query->where('manager_id', $managerID);
+                })->get()
+                    ->sortBy('name')
+                    ->pluck('id', 'name');
+            }
+        }
+        elseif ($divLevel === 3) {
+            if ($parentID > 0 && $loadAll == -1) $stocks = stockLevelThree::stockFromParent($parentID, $incInactive);
+            elseif ($loadAll == 1) {
+                $stocks = stockLevelThree::where(function ($query) use($incInactive, $managerID) {
+                    if ($incInactive == -1) $query->where('active', 1);
+                    if ($managerID > 0) $query->where('manager_id', $managerID);
+                })->get()
+                    ->sortBy('name')
+                    ->pluck('id', 'name');
+            }
+        }
+        elseif ($divLevel === 2) {
+            if ($parentID > 0 && $loadAll == -1) $stocks = stockLevelTwo::stockFromParent($parentID, $incInactive);
+            elseif ($loadAll == 1) {
+                $stocks = stockLevelTwo::where(function ($query) use($incInactive, $managerID) {
+                    if ($incInactive == -1) $query->where('active', 1);
+                    if ($managerID > 0) $query->where('manager_id', $managerID);
+                })->get()
+                    ->sortBy('name')
+                    ->pluck('id', 'name');
+            }
+        }
+        elseif ($divLevel === 1) {
+            if ($parentID > 0 && $loadAll == -1) $stocks = stockLevelOne::stockFromParent($parentID, $incInactive);
+            elseif ($loadAll == 1) {
+                $stocks = stockLevelOne::where(function ($query) use($incInactive, $managerID) {
+                    if ($incInactive == -1) $query->where('active', 1);
+                    if ($managerID > 0) $query->where('manager_id', $managerID);
+                })->get()
+                    ->sortBy('name')
+                    ->pluck('id', 'name');
+            }
+        }
+        
+        return $stocks;
+    }
 }

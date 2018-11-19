@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\Mail\confirm_collection;
 use App\stock;
 use App\stockhistory;
+use App\StockSettings;
 use App\Users;
 use App\stockLevel;
 use App\stockLevelFive;
@@ -35,8 +36,10 @@ class StoreManagement extends Controller
 			['level' => 5, 'active' => 1],
 		]);*/
         $stock_types = DB::table('stock_levels')->orderBy('level', 'desc')->get();
-
+		$stockSettings = StockSettings::orderBy('id', 'desc')->first();
+		
         $data['stock_types'] = $stock_types;
+        $data['stockSettings'] = $stockSettings;
         $data['page_title'] = "Stock Management";
         $data['page_description'] = " Stock Management";
         $data['breadcrumb'] = [
@@ -49,6 +52,21 @@ class StoreManagement extends Controller
 
         AuditReportsController::store('Stock Management', 'view Stock Setup Page', "Accessed By User", 0);
         return view('stock.stock_setup')->with($data);
+    }
+	public function addSettings(Request $request,StockSettings $settings)
+    {
+         $this->validate($request, [
+            'unit_of_measurement' => 'required',
+        ]);
+
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $settings->unit_of_measurement = $request->input('unit_of_measurement');
+        $settings->save();
+        return back();
+
+        AuditReportsController::store('Stock Management', 'Add Stock Settinfs', "Added By User", 0);
     }
 	
 	public function viewLevel()

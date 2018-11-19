@@ -80,15 +80,12 @@ class HelpdeskController extends Controller {
         $names = $name->first_name;
         $surname = $name->surname;
 
-
         $tickets = DB::table('ticket')
                 ->select('ticket.*', 'help_desk.name as HelpDesk', 'help_desk.description as HelpDesk_Description')
                 ->leftJoin('help_desk', 'ticket.helpdesk_id', '=', 'help_desk.id')
                 //->where('helpdesk_Admin.helpdesk_id', $serviceID)
                 ->orderBy('ticket.id')
                 ->get();
-
-        // return $tickets;
 
         $data['page_title'] = "Help Desk";
         $data['page_description'] = "Help Desk Page";
@@ -117,8 +114,7 @@ class HelpdeskController extends Controller {
         $service->name = $request->input('name');
         $service->description = $request->input('description');
         $service->update();
-        AuditReportsController::store('Employee Records', 'Category Informations Edited', "Edited by User", 0);
-		AuditReportsController::store('Help Desk', 'Help Desk Added', "Actioned By User", 0);
+        AuditReportsController::store('Help Desk', 'Help Desk Added', "Actioned By User", 0);
         return response()->json(['new_name' => $service->name, 'new_description' => $service->description], 200);
     }
 
@@ -505,8 +501,6 @@ class HelpdeskController extends Controller {
 
         $systems = HelpDesk::orderBy('name', 'asc')->get();
 
-        //return $systems;
-
         $data['systems'] = $systems;
         $data['active_mod'] = 'Help Desk';
         $data['active_rib'] = '';
@@ -517,7 +511,6 @@ class HelpdeskController extends Controller {
     public function searhTickets() {
 
         $helpdesk = HelpDesk::orderBy('name', 'asc')->get();
-
 
         $data['page_title'] = "Help Desk";
         $data['page_description'] = "Help Desk Page";

@@ -29,8 +29,8 @@
 						</div>
                      @endforeach
 					<div class="form-group">
-                        <label for="path" class="col-sm-3 control-label">Description</label>
-                        <div class="col-sm-9">
+                        <label for="path" class="col-sm-2 control-label">Description</label>
+                        <div class="col-sm-10">
                             <div class="input-group">
 							<textarea rows="4" cols="50" class="form-control" id="description" name="description" placeholder="Enter Description"></textarea>
 							</div>

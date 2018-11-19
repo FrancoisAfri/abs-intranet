@@ -5,7 +5,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Stockp Levels</h3>
+                    <h3 class="box-title">Stock Levels</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -44,12 +44,48 @@
                         <!-- /.box-body -->
 
                 </form>
-        </div>
+			</div>
         <!-- Include add new prime rate modal -->
           @include('stock.partials.edit_group_level')
+		</div>
     </div>
+	<div class="row">
+        <div class="col-md-12">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">Stock Settings</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+                </div>
+                <form class="form-horizontal" method="POST" 
+				action="{{!empty($stockSettings->id) ? '/stock/settings/'.$stockSettings->id : '/stock/settings'}}">
+                    {{ csrf_field() }}
+                    <!-- /.box-header -->
+                    <div class="box-body">
+                        <table class="table table-bordered">
+                            <tr>
+                                <th colspan="2" style="text-align:center">Settings</th>
+                            </tr> 
+							<div class="form-group">
+								<tr>
+									<td>Unit Of Measurement</td>
+									<td>
+										<input type="text" class="form-control" id="unit_of_measurement" name="unit_of_measurement" value="{{ !empty($stockSettings->unit_of_measurement) ? $stockSettings->unit_of_measurement : '' }}" placeholder="Unit Of Measurement"  >
+									</td>
+								</tr>
+							</div>
+                        </table>
+                    </div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> Save Settings</button>  
+                    </div>
+                </form>
+			</div>
+        <!-- Include add new prime rate modal -->
+		</div>
     </div>
-</div>
 @endsection
 
 @section('page_script')

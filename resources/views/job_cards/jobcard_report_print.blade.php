@@ -48,98 +48,90 @@
         <!-- /.row -->
 
         <table class="table table-striped table-bordered">
-            <!--                              <h5 class="box-title"> Job Card </h3>-->
         @foreach ($vehiclemaintenance as $vehiclemaintenance)
-            <!--  -->
-                <tr>
-                    <td class="caption">Fleet Number</td>
-                    <td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
-                    <td class="caption">Job Card Number</td>
-                    <td>{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}</td>
-                </tr>
-                <tr>
-                    <td class="caption">vehicle registration Number</td>
-                    <td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
-                    <td class="caption">Job Card Date</td>
-                    <td>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : ''}}</td>
-                </tr>
-                <tr>
-                    <td class="caption">Driver</td>
-                    <td>{{ !empty($jobcard->dr_firstname)  && !empty($jobcard->dr_surname) ? $jobcard->dr_firstname." ".$jobcard->dr_surname : ''}}</td>
-					<td class="caption">Mechanic</td>
-                    <td>{{ !empty($jobcard->me_firstname)  && !empty($jobcard->me_surname) ? $jobcard->me_firstname." ".$jobcard->me_surname : ''}}</td>
-                </tr>
-                <tr>
-                    <td class="caption">Current Odometer</td>
-                    <td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
-					<td class="caption">Job Card Status</td>
-                    <td>{{ !empty($vehiclemaintenance->aStatus) ? $vehiclemaintenance->aStatus : ''}}</td>
-                </tr>
-                <tr>
-                    <td class="caption">Current Hours</td>
-                    <td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
-                    <td class="caption">Inspection List Number</td>
-                    <td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
-                </tr>
-                <tr>
-                    <td class="caption">Hours Allocated</td>
-                    <td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
-                    <td class="caption">Completion Date</td>
-                    <td>{{ !empty($vehiclemaintenance->completion_date) ? date('d M Y', $vehiclemaintenance->completion_date) : ''}}</td>
-                </tr>
-                <tr>
-                    <td class="caption">Hours used</td>
-                    <td>{{ !empty($vehiclemaintenance->machine_hour_metre) ? $vehiclemaintenance->machine_hour_metre : ''}}</td>-->
-                    <td></td>
-                    <td class="caption">Service Time</td>
-                    <td>{{ !empty($vehiclemaintenance->service_time) ? $vehiclemaintenance->service_time : ''}}</td>
-                </tr>
-                <tr>
-                    <td class="caption">Service Type</td>
-                    <td>{{ !empty($vehiclemaintenance->servicetype) ? $vehiclemaintenance->servicetype : ''}}</td>
-                    <td class="caption">Servicing Agent</td>
-                    <td> N/A</td>
-                </tr>
-                <tr>
-                    <td class="caption">Purchase Order Number</td>
-                    <td></td>
-                    <td class="caption">Service Date</td>
-                    <td></td>
-                </tr>
-				<tr>
-					<td class="caption">Mechanic Comment</td>
-					<td>{{ !empty($vehiclemaintenance->mechanic_comment) ? $vehiclemaintenance->mechanic_comment : ''}}</td>
-					<td class="caption">Completion Comment</td>
-					<td>{{ !empty($vehiclemaintenance->completion_comment) ? $vehiclemaintenance->completion_comment : ''}}</td>
-				</tr>
-                <br>
-                <tr>
-                    <th colspan="4" class="caption">Job Card Instructions</th>
-                </tr>
-				<tr><td colspan="2">Instructions</td><td>Status</td><td>Completion  Date/Time</td></tr>
-				@if (count($instructions) > 0)
-					@foreach ($instructions as $instruction)
-						<tr>
-							<td colspan="2">
-								{{ $loop->iteration }}. {{ !empty($instruction->instruction_details) ? $instruction->instruction_details : '' }}
-							</td>
-							<td>{{ !empty($instruction->status) && $instruction->status == 2 ? 'Completed' : 'Incomplete' }}</td>
-							<td>{{ !empty($instruction->completion_date) ? date('d M Y ', $instruction->completion_date) : '' }} - {{ !empty($instruction->completion_time) ? $instruction->completion_time : '' }}</td>
-						</tr>
-					@endforeach
-				@else
+			<tr>
+				<td class="caption">Fleet Number</td>
+				<td>{{ !empty($vehiclemaintenance->fleet_number) ? $vehiclemaintenance->fleet_number : ''}}</td>
+				<td class="caption">Job Card Number</td>
+				<td>{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}</td>
+			</tr>
+			<tr>
+				<td class="caption">vehicle registration Number</td>
+				<td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
+				<td class="caption">Job Card Date</td>
+				<td>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : ''}}</td>
+			</tr>
+			<tr>
+				<td class="caption">Driver</td>
+				<td>{{ !empty($jobcard->dr_firstname)  && !empty($jobcard->dr_surname) ? $jobcard->dr_firstname." ".$jobcard->dr_surname : ''}}</td>
+				<td class="caption">Mechanic</td>
+				<td>{{ !empty($jobcard->me_firstname)  && !empty($jobcard->me_surname) ? $jobcard->me_firstname." ".$jobcard->me_surname : ''}}</td>
+			</tr>
+			<tr>
+				<td class="caption">Current Odometer</td>
+				<td>{{ !empty($vehiclemaintenance->odometer_reading) ? $vehiclemaintenance->odometer_reading : ''}}</td>
+				<td class="caption">Job Card Status</td>
+				<td>{{ !empty($vehiclemaintenance->aStatus) ? $vehiclemaintenance->aStatus : ''}}</td>
+			</tr>
+			<tr>
+				<td class="caption">Current Hours</td>
+				<td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
+				<td class="caption">Inspection List Number</td>
+				<td>{{ !empty($vehiclemaintenance->cell_number) ? $vehiclemaintenance->cell_number : ''}}</td>
+			</tr>
+			<tr>
+				<td class="caption">Hours Allocated</td>
+				<td>{{ !empty($vehiclemaintenance->hours_reading) ? $vehiclemaintenance->hours_reading : ''}}</td>
+				<td class="caption">Completion Date</td>
+				<td>{{ !empty($vehiclemaintenance->completion_date) ? date('d M Y', $vehiclemaintenance->completion_date) : ''}}</td>
+			</tr>
+			<tr>
+				<td class="caption">Hours used</td>
+				<td>{{ !empty($vehiclemaintenance->machine_hour_metre) ? $vehiclemaintenance->machine_hour_metre : ''}}</td>
+				<td class="caption">Service Time</td>
+				<td>{{ !empty($vehiclemaintenance->service_time) ? $vehiclemaintenance->service_time : ''}}</td>
+			</tr>
+			<tr>
+				<td class="caption">Service Type</td>
+				<td>{{ !empty($vehiclemaintenance->servicetype) ? $vehiclemaintenance->servicetype : ''}}</td>
+				<td class="caption">Servicing Agent</td>
+				<td> N/A</td>
+			</tr>
+			<tr>
+				<td class="caption">Mechanic Comment</td>
+				<td>{{ !empty($vehiclemaintenance->mechanic_comment) ? $vehiclemaintenance->mechanic_comment : ''}}</td>
+				<td class="caption">Completion Comment</td>
+				<td>{{ !empty($vehiclemaintenance->completion_comment) ? $vehiclemaintenance->completion_comment : ''}}</td>
+			</tr>
+			<br>
+			<tr>
+				<th colspan="4" class="caption">Job Card Instructions</th>
+			</tr>
+			<tr><td colspan="2">Instructions</td><td>Status</td><td>Completion  Date/Time</td></tr>
+			@if (count($instructions) > 0)
+				@foreach ($instructions as $instruction)
 					<tr>
-						<td colspan="4" class="caption"></td>
+						<td colspan="2">
+							{{ $loop->iteration }}. {{ !empty($instruction->instruction_details) ? $instruction->instruction_details : '' }}
+						</td>
+						<td>{{ !empty($instruction->status) && $instruction->status == 2 ? 'Completed' : 'Incomplete' }}</td>
+						<td>{{ !empty($instruction->completion_date) ? date('d M Y ', $instruction->completion_date) : '' }} - {{ !empty($instruction->completion_time) ? $instruction->completion_time : '' }}</td>
 					</tr>
-				@endif
-                <br>	
-                <tr>
-                    <th colspan="4" class="caption"> Parts</th></tr>
+				@endforeach
+			@else
+				<tr>
+					<td colspan="4" class="caption"></td>
+				</tr>
+			@endif
+			<br>
+			@if (!empty($part) || !empty($all))				
+				<tr>
+					<th colspan="4" class="caption"> Parts</th></tr>
 					<tr><td colspan="2">Category</td>
-                            <td>Product Name</td>
-                            <td style="text-align: center">Amount Used</td>
-                </tr>
-                @if (count($parts) > 0)
+							<td>Product Name</td>
+							<td style="text-align: center">Amount Used</td>
+				</tr>
+				@if (count($parts) > 0)
 					@foreach ($parts as $part)
 						<tr>
 							<td colspan="2">{{ (!empty( $part->cat_name)) ?  $part->cat_name : ''}} </td>
@@ -149,50 +141,56 @@
 					@endforeach
 				@else
 					<tr><td colspan="4"></td></tr>
-                @endif
-				<br>
+				@endif
+			@else
 				<tr>
-                    <th colspan="4" class="caption">Job Card Notes</th>
-                </tr>
-				<tr><td>Date Captured</td><td>JobCard Note</td><td colspan="2">Captured By</td></tr>
-				@if (!empty($note))
-					@if (count($jobcardnotes) > 0)
-						@foreach ($jobcardnotes as $jobcardnote)
-							<tr>
-								<td>{{ (!empty( $jobcardnote->date_default)) ?  date(' d M Y', $jobcardnote->date_default) : ''}} </td>
-								<td>{{ (!empty( $jobcardnote->note_details)) ?  $jobcardnote->note_details : ''}} </td>
-								<td colspan="2">{{ (!empty( $jobcardnote->firstname . ' ' . $jobcardnote->surname)) ?   $jobcardnote->firstname . ' ' . $jobcardnote->surname : ''}} </td>
-							</tr>
-						@endforeach
-                    @endif
+					<td colspan="4" class="caption"></td>
+				</tr>
+			@endif
+			<br>
+			@if (!empty($note) || !empty($all))
+			<tr>
+				<th colspan="4" class="caption">Job Card Notes</th>
+			</tr>
+			<tr><td>Date Captured</td><td>JobCard Note</td><td colspan="2">Captured By</td></tr>
+				@if (count($jobcardnotes) > 0)
+					@foreach ($jobcardnotes as $jobcardnote)
+						<tr>
+							<td>{{ (!empty( $jobcardnote->date_default)) ?  date(' d M Y', $jobcardnote->date_default) : ''}} </td>
+							<td>{{ (!empty( $jobcardnote->note_details)) ?  $jobcardnote->note_details : ''}} </td>
+							<td colspan="2">{{ (!empty( $jobcardnote->firstname . ' ' . $jobcardnote->surname)) ?   $jobcardnote->firstname . ' ' . $jobcardnote->surname : ''}} </td>
+						</tr>
+					@endforeach
 				@else
-					<tr>
-						<td colspan="4" class="caption"></td>
-					</tr>
-                @endif	
-                <tr>
-                    <td colspan="2" style="text-align:left;">Completed (Y/N)</td>
-                    <td colspan="2" style="text-align:left;"></td>
-                </tr>
-                <tr>
-                    <td colspan="4" style="text-align:left;">Workshop Comments:</td>
-                </tr>
-                <tr border="1">
-                    <td colspan="4" style="text-align:left;" height="170" border="1">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="4">&nbsp;</td>
-                </tr>
-                <tr>
-                    <td colspan="4">&nbsp;</td>
-                </tr>
-                <tr height="50">
-                    <td width="160">Signature - Worshop</td>
-                    <td>____________________</td>
-                    <td width="160">Signature - Fleet Manager</td>
-                    <td>_____________________</td>
-                </tr>
-
+					<tr><td colspan="4"></td></tr>
+				@endif
+			@else
+				<tr>
+					<td colspan="4" class="caption"></td>
+				</tr>
+			@endif	
+			<tr>
+				<td colspan="2" style="text-align:left;">Completed (Y/N)</td>
+				<td colspan="2" style="text-align:left;"></td>
+			</tr>
+			<tr>
+				<td colspan="4" style="text-align:left;">Workshop Comments:</td>
+			</tr>
+			<tr border="1">
+				<td colspan="4" style="text-align:left;" height="170" border="1">&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="4">&nbsp;</td>
+			</tr>
+			<tr>
+				<td colspan="4">&nbsp;</td>
+			</tr>
+			<tr height="50">
+				<td width="160">Signature - Worshop</td>
+				<td>____________________</td>
+				<td width="160">Signature - Fleet Manager</td>
+				<td>_____________________</td>
+			</tr>
         </table>
     @endforeach
 </div>
