@@ -12,21 +12,6 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-					@foreach($stock_levels as $stock_level)
-						<div class="form-group{{ $errors->has('stock_level_' . $stock_level->level) ? ' has-error' : '' }}">
-							<label for="{{ 'stock_level_' . $stock_level->level }}" class="col-sm-2 control-label">{{ $stock_level->name }}</label>
-
-							<div class="col-sm-10">
-								<div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-black-tie"></i>
-									</div>
-									<select id="{{ 'stock_level_' . $stock_level->level }}" name="{{ 'stock_level_' . $stock_level->level }}" class="form-control select2" onchange="stockDDOnChange(this,'edit-stock-info-modal')" style="width: 100%;">
-									</select>
-								</div>
-							</div>
-						</div>
-                     @endforeach
 					<div class="form-group hours-field">
 						<label for="allow_vat" class="col-sm-2 control-label">Allow Vat</label>
 						<div class="col-sm-8">

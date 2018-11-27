@@ -15,6 +15,7 @@ use App\stockLevel;
 use App\StockSettings;
 use App\ContactCompany;
 use App\stockInfo;
+use App\Stock_location;
 use App\productsPrefferedSuppliers;
 use App\productsPreferredSupplier;
 use App\product_promotions;
@@ -230,9 +231,7 @@ class Product_categoryController extends Controller
 			$stockSettings = StockSettings::orderBy('id', 'desc')->first();
 			$stockLevels = stockLevel::where('active', 1)->orderBy('id', 'desc')->get();
 			//return $stockLevels;
-			$product = $product->load('infosProduct','infosProduct.stockLevelFive'
-			,'infosProduct.stockLevelFour','infosProduct.stockLevelThree'
-			,'infosProduct.stockLevelTwo','infosProduct.stockLevelOne');
+			$product = $product->load('infosProduct');
 
 			$ContactCompany = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
             $data['page_title'] = 'Product Stock';
@@ -284,19 +283,13 @@ class Product_categoryController extends Controller
 	
 	public function addStockInfo(Request $request, product_products $product)
     {
-        $this->validate($request, [
-            'stock_level_5' => 'required',
-        ]);
+       /* $this->validate($request, [
+        ]);*/
 
         $docData = $request->all();
         unset($docData['_token']);
 
         $stock = new stockInfo();
-        $stock->stock_level_5 = !empty($request->input('stock_level_5')) ? $request->input('stock_level_5') : 0;
-        $stock->stock_level_4 = !empty($request->input('stock_level_4')) ? $request->input('stock_level_4') : 0;
-        $stock->stock_level_3 = !empty($request->input('stock_level_3')) ? $request->input('stock_level_3') : 0;
-        $stock->stock_level_2 = !empty($request->input('stock_level_2')) ? $request->input('stock_level_2') : 0;
-        $stock->stock_level_1 = !empty($request->input('stock_level_1')) ? $request->input('stock_level_1') : 0;
         $stock->allow_vat = $request->input('allow_vat');
         $stock->mass_net = $request->input('mass_net');
         $stock->minimum_level = $request->input('minimum_level');
@@ -325,18 +318,11 @@ class Product_categoryController extends Controller
 	
 	public function updateStockInfo(Request $request, stockInfo $stock)
     {
-        $this->validate($request, [
-            'stock_level_5' => 'required',
-        ]);
+        /*$this->validate($request, [
+        ]);*/
 
         $docData = $request->all();
         unset($docData['_token']);
-		$stock->stock_level_5 = !empty($request->input('stock_level_5')) ? $request->input('stock_level_5') : 0;
-        $stock->stock_level_4 = !empty($request->input('stock_level_4')) ? $request->input('stock_level_4') : 0;
-        $stock->stock_level_3 = !empty($request->input('stock_level_3')) ? $request->input('stock_level_3') : 0;
-        $stock->stock_level_2 = !empty($request->input('stock_level_2')) ? $request->input('stock_level_2') : 0;
-        $stock->stock_level_1 = !empty($request->input('stock_level_1')) ? $request->input('stock_level_1') : 0;
-        $stock->location = $request->input('location');
         $stock->allow_vat = $request->input('allow_vat');
         $stock->mass_net = $request->input('mass_net');
         $stock->minimum_level = $request->input('minimum_level');
@@ -405,7 +391,75 @@ class Product_categoryController extends Controller
         return response()->json();
     }
 	
-    //add product to packages
+   	public function stockLocation(product_products $product)
+    {
+        if ($product->status == 1) {
+			$stockSettings = StockSettings::orderBy('id', 'desc')->first();
+			$stockLevels = stockLevel::where('active', 1)->orderBy('id', 'desc')->get();
+
+			$product = $product->load('productLocation','productLocation.stockLevelFive'
+			,'productLocation.stockLevelFour','productLocation.stockLevelThree'
+			,'productLocation.stockLevelTwo','productLocation.stockLevelOne');
+
+            $data['products'] = $product;
+            $data['stockSettings'] = $stockSettings;
+            $data['stock_levels'] = $stockLevels;
+            $data['active_mod'] = 'Products';
+            $data['active_rib'] = 'Categories';
+            AuditReportsController::store('Products', 'Product Location Page Accessed', 'Accessed by User', 0);
+            return view('products.stock_location')->with($data);
+			$data['page_title'] = 'Product Stock Location';
+			$data['page_description'] = 'Product Stock Location';
+			$data['breadcrumb'] = [
+				['title' => 'Products', 'path' => '/products', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+				['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+			];
+			$data['active_mod'] = 'Products';
+			$data['active_rib'] = 'Categories';
+        } 
+		else return back();
+    } 
+	public function addStockLocation(Request $request, product_products $product)
+    {
+        $this->validate($request, [
+            'stock_level_5' => 'required',
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $stock = new Stock_location();
+        $stock->stock_level_5 = !empty($request->input('stock_level_5')) ? $request->input('stock_level_5') : 0;
+        $stock->stock_level_4 = !empty($request->input('stock_level_4')) ? $request->input('stock_level_4') : 0;
+        $stock->stock_level_3 = !empty($request->input('stock_level_3')) ? $request->input('stock_level_3') : 0;
+        $stock->stock_level_2 = !empty($request->input('stock_level_2')) ? $request->input('stock_level_2') : 0;
+        $stock->stock_level_1 = !empty($request->input('stock_level_1')) ? $request->input('stock_level_1') : 0;
+        $stock->product_id = $product->id;
+        $stock->save();
+				
+        AuditReportsController::store('Products', 'Stock Location Added', 'Actioned By User', 0);
+        return response()->json();
+    }
+	
+	public function updateStockLocation(Request $request, Stock_location $stock)
+    {
+        $this->validate($request, [
+            'stock_level_5' => 'required',
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+		$stock->stock_level_5 = !empty($request->input('stock_level_5')) ? $request->input('stock_level_5') : 0;
+        $stock->stock_level_4 = !empty($request->input('stock_level_4')) ? $request->input('stock_level_4') : 0;
+        $stock->stock_level_3 = !empty($request->input('stock_level_3')) ? $request->input('stock_level_3') : 0;
+        $stock->stock_level_2 = !empty($request->input('stock_level_2')) ? $request->input('stock_level_2') : 0;
+        $stock->stock_level_1 = !empty($request->input('stock_level_1')) ? $request->input('stock_level_1') : 0;
+        $stock->update();
+		
+        AuditReportsController::store('Products', 'Stock Location Updated', 'Actioned By User', 0);
+        return response()->json();
+    }
+	//add product to packages
     public function viewProducts(product_packages $package)
     {
         if ($package->status == 1) {

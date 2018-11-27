@@ -335,5 +335,4 @@ class LeaveSetupController extends Controller {
         $levg->update($leavecredit);
         return back();
     }
-
 }

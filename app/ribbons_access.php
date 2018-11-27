@@ -16,6 +16,4 @@ class ribbons_access extends Model
     public function ribbonsAccess() {
         return $this->belongsTo(module_ribbons::class, 'ribbon_id');
     }
-	
-	
 }

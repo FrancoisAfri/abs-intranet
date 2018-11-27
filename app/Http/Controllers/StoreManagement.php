@@ -21,23 +21,16 @@ use Illuminate\Support\Facades\DB;
 
 class StoreManagement extends Controller
 {
-   public function __construct()
-    {
-        $this->middleware('auth');
-    }
+    public function __construct()
+	{
+		$this->middleware('auth');
+	}
 	
 	public function showSetup()
     {
-		/*DB::table('stock_levels')->insert([
-			['level' => 1, 'active' => 0],
-			['level' => 2, 'active' => 0],
-			['level' => 3, 'active' => 0],
-			['level' => 4, 'active' => 1],
-			['level' => 5, 'active' => 1],
-		]);*/
         $stock_types = DB::table('stock_levels')->orderBy('level', 'desc')->get();
 		$stockSettings = StockSettings::orderBy('id', 'desc')->first();
-		
+
         $data['stock_types'] = $stock_types;
         $data['stockSettings'] = $stockSettings;
         $data['page_title'] = "Stock Management";
@@ -56,7 +49,6 @@ class StoreManagement extends Controller
 	public function addSettings(Request $request,StockSettings $settings)
     {
          $this->validate($request, [
-            'unit_of_measurement' => 'required',
         ]);
 
         $SysData = $request->all();
@@ -65,6 +57,25 @@ class StoreManagement extends Controller
         $settings->unit_of_measurement = $request->input('unit_of_measurement');
         $settings->save();
         return back();
+
+        AuditReportsController::store('Stock Management', 'Add Stock Settinfs', "Added By User", 0);
+    }
+	
+	public function approvalSettings(Request $request,StockSettings $settings)
+    {
+         $this->validate($request, [
+        ]);
+
+        $SysData = $request->all();
+        unset($SysData['_token']);
+		
+        $settings->require_managers_approval = $request->input('require_managers_approval');
+        $settings->require_store_manager_approval = $request->input('require_store_manager_approval');
+        $settings->require_department_head_approval = $request->input('require_department_head_approval');
+        $settings->require_ceo_approval = $request->input('require_ceo_approval');
+        $settings->save();
+
+		return back();
 
         AuditReportsController::store('Stock Management', 'Add Stock Settinfs', "Added By User", 0);
     }

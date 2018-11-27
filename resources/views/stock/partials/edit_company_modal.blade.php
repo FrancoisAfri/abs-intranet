@@ -30,6 +30,12 @@
 							</select>
                         </div>
                     </div>
+					<div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">Address</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="store_address" name="store_address" value="" placeholder="Enter Address">
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

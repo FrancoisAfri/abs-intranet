@@ -267,8 +267,7 @@
 @section('page_script')
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-	<!-- iCheck -->
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	
 	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
@@ -282,7 +281,6 @@
 	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
 	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
 	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
 	<!-- InputMask -->
 	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>

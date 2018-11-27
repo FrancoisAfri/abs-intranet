@@ -307,8 +307,6 @@ class VehicleBookingController extends Controller
                 $details = array('status' => 2, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email, 'comment' => 'No manager has been assigned to employee.');
                 return $details;
 			}
-            
-            
         } 
 		elseif ($approvals->approval_manager_capturer == 2) {
 			// Driver manager approval...

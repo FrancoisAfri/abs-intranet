@@ -21,19 +21,26 @@
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Name</th>
                                 <th>Manager's Name</th>
+                                <th>Address</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
                               @if (count($highestLvl->stockLevelGroup) > 0)
                             @foreach ($highestLvl->stockLevelGroup as $type)
                                 <tr id="stockLevelGroup-list">
                                      <td nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-company-modal" data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" 
+										data-toggle="modal" data-target="#edit-company-modal" 
+										data-id="{{ $type->id }}" data-name="{{ $type->name }}" 
+										data-store_address="{{ $type->store_address }}" 
+										data-manager_id="{{$type->manager_id}}" >
+										<i class="fa fa-pencil-square-o"></i> Edit</button>
                                         @if($highestLvl->level > $lowestactiveLvl && $type->childStock())
                                             <a href="/stock/child_setup/{{$highestLvl->level}}/{{$type->id}}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $type->id }}" data-name="{{ $type->name }}" data-manager_id="{{$type->manager_id}}" ><i class="fa fa-eye"></i> {{$childLevelname}}</a>
                                         @endif
                                     </td>
                                     <td>{{ $type->name }}</td>
                                     <td>{{ ($type->stockManager) ? $type->stockManager->first_name." ".$type->stockManager->surname : ''}}</td>
+                                    <td>{{ ($type->store_address) ? $type->store_address : ''}}</td>
                                     <td>
                                           <!--   <button type="button" id="view_ribbons" class="btn 11111111111111111111111{{ (!empty($type->active) && $type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$type->id}}) , 'dactive';"><i class="fa {{ (!empty($type->active) && $type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button> -->
                                     <button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
@@ -45,7 +52,7 @@
                             @endforeach
                         @else
                         <tr id="stockLevelGroup-list">
-                        <td colspan="5">
+                        <td colspan="6">
                         <div class="alert alert-danger alert-dismissable">
                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                             No Stock level to display, please start by adding a new Stock.
@@ -100,11 +107,13 @@
 		var btnEdit = $(e.relatedTarget);
 		updatecompanyID = btnEdit.data('id');
 		var name = btnEdit.data('name');
+		var storeAddress = btnEdit.data('store_address');
 		var manager_id = btnEdit.data('manager_id');
 		var level = btnEdit.data('level');
 		//var employeeName = btnEdit.data('employeename');
 		var modal = $(this);
 		modal.find('#name').val(name);
+		modal.find('#store_address').val(storeAddress);
 		modal.find('#manager_id').val(manager_id);
 	 });
 
@@ -115,6 +124,7 @@
 		var modalID = 'level-module-modal';
 		var objData = {
 			name: $('#'+modalID).find('#name').val(),
+			store_address: $('#'+modalID).find('#store_address').val(),
 			manager_id: $('#'+modalID).find('#manager_id').val(),
 			_token: $('#'+modalID).find('input[name=_token]').val()
 		};
@@ -131,6 +141,7 @@
 			var modalID = 'edit-company-modal';
 			var objData = {
 				name: $('#'+modalID).find('#name').val(),
+				store_address: $('#'+modalID).find('#store_address').val(),
 				manager_id: $('#'+modalID).find('#manager_id').val(),
 				 _token: $('#'+modalID).find('input[name=_token]').val()
 			};

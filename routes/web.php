@@ -299,11 +299,13 @@ Route::post('product/category/Search', 'Product_categoryController@categorySearc
 Route::post('product/package/Search', 'Product_categoryController@packageSearch');
 Route::post('product/promotion/Search', 'Product_categoryController@promotionSearch');
 //
-Route::get('/stock/stockinfo/{product}', 'Product_categoryController@stockInfos');
+Route::get('stock/stocklocation/{product}', 'Product_categoryController@stockLocation');
+Route::post('stock/stock_loc/add/{product}', 'Product_categoryController@addStockLocation');
+Route::patch('stock/stock_loc/update/{stock}', 'Product_categoryController@updateStockLocation');
+Route::get('stock/stockinfo/{product}', 'Product_categoryController@stockInfos');
 Route::post('stock/stock_info/add/{product}', 'Product_categoryController@addStockInfo');
 Route::patch('stock/stock_info/update/{stock}', 'Product_categoryController@updateStockInfo');
 Route::post('stock/pre_supplier/add/{product}', 'Product_categoryController@addPreferredSupplier');
-Route::patch('stock/stock_info/update/{stock}', 'Product_categoryController@updateStockInfo');
 Route::patch('stock/pre_supplier/update/{preferred}', 'Product_categoryController@updatePreSupplier');
 //Help Desk
 Route::get('helpdesk/setup', 'HelpdeskController@viewsetup');
@@ -727,6 +729,8 @@ Route::patch('/stock/level_edit/{stockLevel}/{childID}', 'StoreManagement@update
 ////
 Route::get('/stock/setup', 'StoreManagement@showSetup');
 Route::post('stock/settings/{settings}', 'StoreManagement@addSettings');
+Route::post('stock_approval/settings', 'StoreManagement@approvalSettings');
+Route::post('stock_approval/settings/{settings}', 'StoreManagement@approvalSettings');
 Route::post('stock/settings', 'StoreManagement@addSettings');
 Route::patch('/stock/grouplevel/{groupLevel}', 'StoreManagement@updateGroupLevel');
 Route::get('/stock/grouplevel/activate/{groupLevel}', 'StoreManagement@activateGroupLevel');
@@ -754,6 +758,10 @@ Route::post('stock/products_kit/add/{kit}', 'StockController@addProductToKit');
 Route::patch('stock/product/update/{prod}', 'StockController@updateProductToKit');
 
 Route::post('stock/search_report' ,'StockController@searchreport');
+// Request & Approvals
+Route::get('stock/request_items', 'StockRequest@create');
+Route::post('stock/addstockrequest', 'StockRequest@store');
+
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');

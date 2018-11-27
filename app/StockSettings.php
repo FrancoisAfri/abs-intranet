@@ -11,5 +11,6 @@ class StockSettings extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'unit_of_measurement'];
+        'unit_of_measurement','require_managers_approval','require_store_manager_approval'
+		,'require_department_head_approval','require_ceo_approval'];
 }

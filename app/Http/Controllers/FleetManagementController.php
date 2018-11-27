@@ -138,8 +138,6 @@ class FleetManagementController extends Controller
         AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FleetManagement.add_vehicle')->with($data);
     }
-
-
     public function addvehicleDetails(Request $request)
     {
         $this->validate($request, [

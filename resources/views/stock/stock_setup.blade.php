@@ -86,6 +86,65 @@
         <!-- Include add new prime rate modal -->
 		</div>
     </div>
+	<div class="row">
+		<form class="form-horizontal" method="post" action="{{!empty($stockSettings->id) ? '/stock_approval/settings/'.$stockSettings->id : '/stock_approval/settings'}}"> 
+		 {{ csrf_field() }}
+			<div class="col-sm-12">
+				<div class="box box-primary">
+					<div class="box-header with-border">
+						<h3 class="box-title">Approval Settings</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+							<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+						</div>
+					</div>
+					<!-- /.box-header -->
+					<div class="box-body">
+						<table class="table table-bordered">
+							<div class="form-group">
+								<tr>
+									<td>Require Manager's approval</td>
+									<td style="text-align: center; vertical-align: middle;">
+										<input   type="checkbox" name="require_managers_approval" value="1" {{ $stockSettings->require_managers_approval === 1 ? 'checked ="checked"' : 0 }}>
+									</td>
+								</tr>
+							</div>
+							<div class="form-group">
+								<tr>
+								   <td>Require Department Head Approval</td>
+									<td style="text-align: center; vertical-align: middle;">
+										<input   type="checkbox" name="require_department_head_approval" value="1" {{ $stockSettings->require_department_head_approval === 1 ? 'checked ="checked"' : 0 }}>
+									</td>
+								</tr>
+							</div>
+							<div class = "form-group">         
+								<tr>
+								<td>Require Store Manager Approve</td>
+									<td style="text-align: center; vertical-align: middle;">
+										<input  type="checkbox" name="require_store_manager_approval" value="1" {{ $stockSettings->require_store_manager_approval === 1 ? 'checked ="checked"' : 0 }} >
+									</td>
+								</tr>
+							</div>
+							<div class="form-group">
+								<tr>
+								<td>Require CEO Approval</td>
+									<td style="text-align: center; vertical-align: middle;">
+										<input  type="checkbox" name="require_ceo_approval" value="1" {{ $stockSettings->require_ceo_approval === 1 ? 'checked ="checked"' : 0 }}>
+									</td>
+								</tr>
+							</div>
+						</table>
+					</div>
+					<!-- /.box-body -->
+					<div class="modal-footer">
+
+						<button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save approval settings</button>
+					</div>
+				</div>
+			</div>
+		</form>
+
+    </div>
 @endsection
 
 @section('page_script')

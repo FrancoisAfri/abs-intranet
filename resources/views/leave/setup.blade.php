@@ -13,7 +13,7 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                        <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
 				<table class="table table-striped">
 									<tr>
                                         <th style="width: 10px"></th>
@@ -60,162 +60,143 @@
     @include('leave.partials.edit_leavetype') 
 </div>
         <!-- <!-- Leave CreditSettings -->
- <div class="row">
+<div class="row">
     <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
             {{ csrf_field() }}
-            <div class="col-sm-6">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Leave Credit</h3>
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                       <table class="table table-bordered">
-                             
-                                            <div class="form-group">
-                                                <tr>
-                                                  <td style="width: 10px"></td>
-                                                    <td >Allow Annual Leave Credit </td>
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="allow_annualLeave_credit" value="0">
-                                                        <input type="checkbox" name="allow_annualLeave_credit" value="1" {{ $leave_configuration->allow_annualLeave_credit === 1 ?  'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                </tr>
-                                            </div>
-                           
-                                            <div class="form-group">
-                                                <tr>
-                                                   <td style="width: 10px"></td>
-                                                    <td>Allow Sick Leave Credit</td>
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="allow_sickLeave_credit" value="0">
-                                                        <input   type="checkbox" name="allow_sickLeave_credit" value="1" {{ $leave_configuration->allow_sickLeave_credit === 1 ? 'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                </tr>
-                                            </div>
-
-                                            <div class="form-group">
-                                                <tr>
-                                                <td style="width: 10px"></td>
-                                                    <td>Show non-employees in Leave Module</td>
-                                                    
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="show_non_employees_in_leave_Module" value="0">
-                                                        <input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                </tr>
-                                            </div>
-
-                                           <div class="form-group">
-                                                <tr>
-                                                <td style="width: 10px"></td>
-                                                   <td>Numbe of Sick negative leave Days</td>
-                                                    <td >
-                                                         <label for="path" class="control-label"></label>
-														<input type="text" class="form-control" id="allow_sick_negative_days" name="allow_sick_negative_days" value="{{ !empty($leave_configuration->allow_sick_negative_days) ? $leave_configuration->allow_sick_negative_days : '' }}" placeholder="Enter days"required >
-                                                    </td>
-                                                </tr>
-                                            </div>  
-
-                                <!--  -->
-
-                                <div class="form-group">
-                                                <tr>
-                                                <td style="width: 10px"></td>
-                                                   <td>Numbe of Annual negative leave Days</td>
-                                                    <td >
-                                                         <label for="path" class="control-label"></label>
-                                <input type="text" class="form-control" id="allow_annual_negative_days" name="allow_annual_negative_days" value="{{ !empty($leave_configuration->allow_annual_negative_days) ? $leave_configuration->allow_annual_negative_days : '' }}" placeholder="Enter days"required >
-                                                    </td>
-                                                </tr>
-                                            </div>  
-
-
-                        </table>
-                    </div>
-                    <!-- /.box-body -->
-                    <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save leave credit settings</button> 
-                    </div>
-                </div>
-              
-            </div>
-
-<!--     </div>-->
-</form>
+		<div class="col-sm-6">
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<h3 class="box-title">Leave Credit</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body">
+				   <table class="table table-bordered">
+						<div class="form-group">
+							<tr>
+							  <td style="width: 10px"></td>
+								<td >Allow Annual Leave Credit </td>
+								<td style="text-align: center; vertical-align: middle;">
+									<input type="hidden" name="allow_annualLeave_credit" value="0">
+									<input type="checkbox" name="allow_annualLeave_credit" value="1" {{ $leave_configuration->allow_annualLeave_credit === 1 ?  'checked ="checked"' : 0 }}>
+								</td>
+							</tr>
+						</div>
+						<div class="form-group">
+							<tr>
+							   <td style="width: 10px"></td>
+								<td>Allow Sick Leave Credit</td>
+								<td style="text-align: center; vertical-align: middle;">
+									<input type="hidden" name="allow_sickLeave_credit" value="0">
+									<input   type="checkbox" name="allow_sickLeave_credit" value="1" {{ $leave_configuration->allow_sickLeave_credit === 1 ? 'checked ="checked"' : 0 }}>
+								</td>
+							</tr>
+						</div>
+						<div class="form-group">
+							<tr>
+							<td style="width: 10px"></td>
+								<td>Show non-employees in Leave Module</td>
+								
+								<td style="text-align: center; vertical-align: middle;">
+									<input type="hidden" name="show_non_employees_in_leave_Module" value="0">
+									<input   type="checkbox" name="show_non_employees_in_leave_Module" value="1" {{ $leave_configuration->show_non_employees_in_leave_Module === 1 ? 'checked ="checked"' : 0 }}>
+								</td>
+							</tr>
+						</div>
+					   <div class="form-group">
+							<tr>
+							<td style="width: 10px"></td>
+							   <td>Numbe of Sick negative leave Days</td>
+								<td >
+									 <label for="path" class="control-label"></label>
+									<input type="text" class="form-control" id="allow_sick_negative_days" name="allow_sick_negative_days" value="{{ !empty($leave_configuration->allow_sick_negative_days) ? $leave_configuration->allow_sick_negative_days : '' }}" placeholder="Enter days"required >
+								</td>
+							</tr>
+						</div> 
+						<div class="form-group">
+							<tr>
+								<td style="width: 10px"></td>
+								<td>Numbe of Annual negative leave Days</td>
+								<td>
+									<label for="path" class="control-label"></label>
+									<input type="text" class="form-control" id="allow_annual_negative_days" name="allow_annual_negative_days" value="{{ !empty($leave_configuration->allow_annual_negative_days) ? $leave_configuration->allow_annual_negative_days : '' }}" placeholder="Enter days"required >
+								</td>
+							</tr>
+						</div>
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save leave credit settings</button> 
+				</div>
+			</div>
+		</div>
+	</form>
 @include('leave.partials.edit_annual_days')
 @include('leave.partials.edit_sick_days') 
 {{--Approval Settings--}}
 <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}"> 
  {{ csrf_field() }}
-            <div class="col-sm-6">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                <h3 class="box-title">Approval Settings</h3>
-
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                </div>
-            </div>
+    <div class="col-sm-6">
+        <div class="box box-primary">
+			<div class="box-header with-border">
+					<h3 class="box-title">Approval Settings</h3>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+				</div>
+			</div>
             <!-- /.box-header -->
-             <div class="box-body">
+            <div class="box-body">
                 <table class="table table-bordered">
-                           
-                                            <div class="form-group">
-                                                <tr>
-                                                    <td>Require Manager's approval</td>
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="require_managers_approval" value="0">
-                                                        <input   type="checkbox" name="require_managers_approval" value="1" {{ $leave_configuration->require_managers_approval === 1 ? 'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                </tr>
-                                            </div>
-
-                                            <div class = "form-group">         
-                                            <tr>
-                                            <td>All managers to approve</td>
-                                                <td style="text-align: center; vertical-align: middle;">
-                                                    <input type="hidden" name="all_managers_to_approve" value="0">
-                                                    <input  type="checkbox" name="all_managers_to_approve" value="1" {{ $leave_configuration->all_managers_to_approve === 1 ? 'checked ="checked"' : 0 }} >
-                                                </td>
-                                            </tr>
-                                            </div>
-
-      
-                                            <div class="form-group">
-                                                <tr>
-                                                   <td>Require Department Head approval</td>
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="require_department_head_approval" value="0">
-                                                        <input   type="checkbox" name="require_department_head_approval" value="1" {{ $leave_configuration->require_department_head_approval === 1 ? 'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                </tr>
-                                            </div>
-
-                                                <div class="form-group">
-                                                <tr>
-                                                <td>Require HR approval</td>
-                                                    <td style="text-align: center; vertical-align: middle;">
-                                                        <input type="hidden" name="require_hr_approval" value="0">
-                                                        <input  type="checkbox" name="require_hr_approval" value="1" {{ $leave_configuration->require_hr_approval === 1 ? 'checked ="checked"' : 0 }}>
-                                                    </td>
-                                                </tr>
-                                                </div>
-
-                                            <div class="form-group">
-                                            <tr>
-                                            <td>Require Payroll approval</td>
-                                                 <td style="text-align: center; vertical-align: middle;">
-                                                     <input type="hidden" name="require_payroll_approval" value="0">
-                                                    <input  type="checkbox" name="require_payroll_approval" value="1" {{ $leave_configuration->require_payroll_approval === 1 ? 'checked ="checked"' : 0 }}>
-                                                </td>
-                                            </tr>
-                                            </div>
+					<div class="form-group">
+						<tr>
+							<td>Require Manager's approval</td>
+							<td style="text-align: center; vertical-align: middle;">
+								<input type="hidden" name="require_managers_approval" value="0">
+								<input   type="checkbox" name="require_managers_approval" value="1" {{ $leave_configuration->require_managers_approval === 1 ? 'checked ="checked"' : 0 }}>
+							</td>
+						</tr>
+					</div>
+					<div class = "form-group">         
+						<tr>
+						<td>All managers to approve</td>
+							<td style="text-align: center; vertical-align: middle;">
+								<input type="hidden" name="all_managers_to_approve" value="0">
+								<input  type="checkbox" name="all_managers_to_approve" value="1" {{ $leave_configuration->all_managers_to_approve === 1 ? 'checked ="checked"' : 0 }} >
+							</td>
+						</tr>
+					</div>
+					<div class="form-group">
+						<tr>
+						   <td>Require Department Head approval</td>
+							<td style="text-align: center; vertical-align: middle;">
+								<input type="hidden" name="require_department_head_approval" value="0">
+								<input   type="checkbox" name="require_department_head_approval" value="1" {{ $leave_configuration->require_department_head_approval === 1 ? 'checked ="checked"' : 0 }}>
+							</td>
+						</tr>
+					</div>
+					<div class="form-group">
+						<tr>
+						<td>Require HR approval</td>
+							<td style="text-align: center; vertical-align: middle;">
+								<input type="hidden" name="require_hr_approval" value="0">
+								<input  type="checkbox" name="require_hr_approval" value="1" {{ $leave_configuration->require_hr_approval === 1 ? 'checked ="checked"' : 0 }}>
+							</td>
+						</tr>
+					</div>
+					<div class="form-group">
+						<tr>
+						<td>Require Payroll approval</td>
+							 <td style="text-align: center; vertical-align: middle;">
+								 <input type="hidden" name="require_payroll_approval" value="0">
+								<input  type="checkbox" name="require_payroll_approval" value="1" {{ $leave_configuration->require_payroll_approval === 1 ? 'checked ="checked"' : 0 }}>
+							</td>
+						</tr>
+					</div>
                 </table>
             </div>
             <!-- /.box-body -->
@@ -227,69 +208,61 @@
         </div>
     </div>
 </form>
-
 </div>
     {{--Notification Settings--}}
 <div class="row">
  <form class="form-horizontal" method="post" action="/leave/setup/{{ $leave_configuration->id }}">
-  
     {{ csrf_field() }}
-            <div class="col-sm-6">
-                <div class="box box-primary">
-                    <div class="box-header with-border">
-                        <h3 class="box-title">Notification Settings</h3>
+	<div class="col-sm-6">
+		<div class="box box-primary">
+			<div class="box-header with-border">
+				<h3 class="box-title">Notification Settings</h3>
 
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    
-                    <div class="box-body">
-                         <table class="table table-bordered">
-                             <div class="form-group">
-                            <tr>
-                                <td>Notify HR with Application</td>
-                                <td style="text-align: center; vertical-align: middle;">
-                                    <input type="hidden" name="notify_hr_with_application" value="0">
-                                    <input  type="checkbox" name="notify_hr_with_application" value="1" {{ $leave_configuration->notify_hr_with_application === 1 ? 'checked ="checked"' : 0 }}>
-                                </td>
-                              </tr>
-                             </div>
-                             
-                             <div class="form-group">
-                              <tr>
-                                <td>Preferred Communication Method</td>
-                                <td>
-                                         <div class="radio">
-                                            <label><input type="radio" name="preferred_communication_method" id="Email" value="1" checked>Email</label>
-                                            <br>
-                                            <label><input type="radio" name="preferred_communication_method" id="SMS" value="2" checked>SMS</label>
-                                            <br>
-                                            <label><input type="radio" name="preferred_communication_method" id="3" value="3" checked>Based on Employee</label>
-                                            </div>
-                                        </td>
-                             </tr>
-                             </div>
-                             
-                            <div class="form-group">
-                             <tr>
-                                <td>Notify employee about applications submitted on their behalf</td>
-                                 <td style="text-align: center; vertical-align: middle;">
-                                      <input type="hidden" name="notify_employee_about_applications_submitted_on_their_behalf" value="0">
-                                     <input  type="checkbox" name="notify_employee_about_applications_submitted_on_their_behalf" value="1" {{ $leave_configuration->notify_employee_about_applications_submitted_on_their_behalf === 1 ? 'checked ="checked"' : 0 }}>
-                                 </td>
-                              </tr>
-                             </div>
-                             
-                             
-                           
-                        </table>
-                    </div>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+				</div>
+			</div>
+			<div class="box-body">
+				<table class="table table-bordered">
+					 <div class="form-group">
+					<tr>
+						<td>Notify HR with Application</td>
+						<td style="text-align: center; vertical-align: middle;">
+							<input type="hidden" name="notify_hr_with_application" value="0">
+							<input  type="checkbox" name="notify_hr_with_application" value="1" {{ $leave_configuration->notify_hr_with_application === 1 ? 'checked ="checked"' : 0 }}>
+						</td>
+					  </tr>
+					 </div>
+					 
+				<div class="form-group">
+					<tr>
+						<td>Preferred Communication Method</td>
+						<td>
+							<div class="radio">
+								<label><input type="radio" name="preferred_communication_method" id="Email" value="1" checked>Email</label>
+								<br>
+								<label><input type="radio" name="preferred_communication_method" id="SMS" value="2" checked>SMS</label>
+								<br>
+								<label><input type="radio" name="preferred_communication_method" id="3" value="3" checked>Based on Employee</label>
+							</div>
+						</td>
+						</tr>
+					</div> 
+					<div class="form-group">
+						<tr>
+							<td>Notify employee about applications submitted on their behalf</td>
+							<td style="text-align: center; vertical-align: middle;">
+								  <input type="hidden" name="notify_employee_about_applications_submitted_on_their_behalf" value="0">
+								 <input  type="checkbox" name="notify_employee_about_applications_submitted_on_their_behalf" value="1" {{ $leave_configuration->notify_employee_about_applications_submitted_on_their_behalf === 1 ? 'checked ="checked"' : 0 }}>
+							</td>
+						</tr>
+					</div>
+				</table>
+			</div>
             <!-- Include add expenditure and add income modals -->
             <div class="modal-footer">
-         <button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
+				<button type="submit" class="btn btn-primary"><i class="fa fa-database"></i> save notifications settings</button>  
             </div>
         </div>
     </div>

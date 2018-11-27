@@ -34,7 +34,6 @@
 							<tr>
 								<th></th>
 								<th>Image</th>
-								<th>Location</th>
 								<th>Allow Vat</th>
 								<th>Mass Net ({{ !empty($stockSettings->unit_of_measurement) ? $stockSettings->unit_of_measurement : '' }})</th>
 								<th>minimum Level</th>
@@ -438,7 +437,7 @@ $(function () {
 		var submitBtnID = 'update_stock_info';
 		var successMsgTitle = 'Changes Saved!';
 		var redirectUrl = '/stock/stockinfo/' + {{$products->id}};
-		var successMsg = 'Stock nfo details has been updated successfully.';
+		var successMsg = 'Stock information details has been updated successfully.';
 		modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		
 	});

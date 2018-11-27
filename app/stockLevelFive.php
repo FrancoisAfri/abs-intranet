@@ -11,7 +11,7 @@ class stockLevelFive extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'name', 'active', 'manager_id'
+        'name', 'active', 'manager_id', 'store_address'
     ];
 
     //Relationship Division level 5 and hr_person (manager)

@@ -40,6 +40,10 @@ class product_products extends Model
     {
         return $this->hasMany(stockInfo::class, 'product_id');
     }
+	public function productLocation()
+    {
+        return $this->hasMany(Stock_location::class, 'product_id');
+    }
 	
 	public function preferredProduct()
     {

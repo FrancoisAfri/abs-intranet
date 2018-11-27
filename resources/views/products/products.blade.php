@@ -58,7 +58,9 @@
 									<td>{{ (!empty($product->stock_type)) ?  $stockTypeArray[$product->stock_type] : ''}} </td>
 									<td>{{ (!empty($product->is_vatable))  && $product->is_vatable == 2 ?  'No' : 'Yes'}} </td>
                                     @if ((!empty($product->stock_type))  && $product->stock_type == 1)
-                                        <td><a href="/stock/stockinfo/{{$product->id}}" id="srock_info" class="btn btn-primary  btn-xs"><i class="fa fa-eye"></i> Stock Info</a> </td>
+                                        <td><a href="/stock/stockinfo/{{$product->id}}" id="srock_info" class="btn btn-primary  btn-xs"><i class="fa fa-eye"></i> Stock Info</a> 
+                                       <a href="/stock/stocklocation/{{$product->id}}" id="srock_location" class="btn btn-primary  btn-xs"><i class="fa fa-eye"></i> Stock Location</a> 
+									</td>
                                     @else
                                         <td></td>
 									@endif
