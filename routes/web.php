@@ -307,6 +307,8 @@ Route::post('stock/stock_info/add/{product}', 'Product_categoryController@addSto
 Route::patch('stock/stock_info/update/{stock}', 'Product_categoryController@updateStockInfo');
 Route::post('stock/pre_supplier/add/{product}', 'Product_categoryController@addPreferredSupplier');
 Route::patch('stock/pre_supplier/update/{preferred}', 'Product_categoryController@updatePreSupplier');
+Route::post('stock/add_step', 'StockApprovalsController@store');
+Route::patch('stock/edit_step/update/{step}', 'StockApprovalsController@update');
 //Help Desk
 Route::get('helpdesk/setup', 'HelpdeskController@viewsetup');
 Route::post('help_desk/system/add', 'HelpdeskController@systemAdd');
@@ -723,6 +725,7 @@ Route::post('jobcards/reports/parts', 'JobcardController@parts');
 Route::post('jobcards/reports/notes', 'JobcardController@notes');
 
 // stock
+Route::get('/stock/approval_level', 'StockApprovalsController@index');
 Route::get('/stock/store_management', 'StoreManagement@viewLevel');
 Route::post('/stock/firstlevelstock/add/{stockLevel}', 'StoreManagement@addLevel');
 Route::patch('/stock/level_edit/{stockLevel}/{childID}', 'StoreManagement@updateLevel');

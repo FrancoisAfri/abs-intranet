@@ -47,10 +47,8 @@
                                         </div>
                             @endforeach
                         @endif
-                    
                         <div class="form-group">
                             <label for="first_name" class="col-sm-2 control-label">First Name </label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -62,7 +60,6 @@
                         </div>
                         <div class="form-group">
                             <label for="surname" class="col-sm-2 control-label">Surname</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -74,7 +71,6 @@
                         </div>
                           <div class="form-group">
                             <label for="employee_number" class="col-sm-2 control-label">Employee Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -87,7 +83,6 @@
                             {{--add leave porfile--}}
                             <div class="form-group">
                                 <label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>
-
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
@@ -106,7 +101,6 @@
                         @if (isset($view_by_admin) && $view_by_admin === 1)
                             <div class="form-group">
                                 <label for="position" class="col-sm-2 control-label">Position</label>
-
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
@@ -142,7 +136,6 @@
 						@endif
                         <div class="form-group">
                             <label for="cell_number" class="col-sm-2 control-label">Cell Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -154,7 +147,6 @@
                         </div>
                         <div class="form-group">
                             <label for="email" class="col-sm-2 control-label">Email</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -166,7 +158,6 @@
                         </div>
                         <div class="form-group">
                             <label for="res_address" class="col-sm-2 control-label">Address</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -178,7 +169,6 @@
                         </div>
                         <div class="form-group">
                             <label for="res_suburb" class="col-sm-2 control-label">Suburb</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -190,7 +180,6 @@
                         </div>
                         <div class="form-group">
                             <label for="res_city" class="col-sm-2 control-label">City</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -202,7 +191,6 @@
                         </div>
                         <div class="form-group">
                             <label for="res_postal_code" class="col-sm-2 control-label">Postal Code</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -214,7 +202,6 @@
                         </div>
                         <div class="form-group">
                             <label for="res_province_id" class="col-sm-2 control-label">Province</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -231,7 +218,6 @@
                         </div>
                         <div class="form-group">
                             <label for="date_of_birth" class="col-sm-2 control-label">Date of Birth</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group date">
                                     <div class="input-group-addon">
@@ -243,7 +229,6 @@
                         </div>
                         <div class="form-group">
                             <label for="gender" class="col-sm-2 control-label">Gender</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -315,7 +300,6 @@
                                 </div>
                             </div>
                         </div>
-						
 						  <div class="form-group">
 						  @if (isset($view_by_admin) && $view_by_admin === 1)
                             <label for="date_joined" class="col-sm-2 control-label">Date Joined</label>
@@ -329,7 +313,6 @@
                             </div>
                         </div>
 						 @endif
-						
 						  <div class="form-group">
 						  @if (isset($view_by_admin) && $view_by_admin === 1)
                             <label for="date_left" class="col-sm-2 control-label">Date Left Company</label>
@@ -343,7 +326,6 @@
                             </div>
                         </div>
 						 @endif
-						 
                         <div class="form-group">
                             <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
@@ -366,7 +348,6 @@
                         </div>
                     </div>
                     <!-- /.box-body -->
-
                     <div class="box-footer" style="text-align: center;">
                         <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>

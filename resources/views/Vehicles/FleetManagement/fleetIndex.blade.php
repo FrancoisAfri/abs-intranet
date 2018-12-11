@@ -124,11 +124,6 @@
                                                 Rejected </label>
                                              <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="4">
                                                 Inactive </label>
-<!--                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="4">
-                                                All </label>
-                                             <label class="radio-inline"><input type="radio" id="rdo_status" name="status_type" value="5">
-                                                External </label>            -->
-
                                         </div>
 									</div>
                                     <div class="box-footer">

@@ -15,11 +15,12 @@ class CreateStockApprovalsLevelsTable extends Migration
     {
         Schema::create('stock_approvals_levels', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('stock_level_5')->unsigned()->index()->nullable();
-            $table->integer('stock_level_4')->unsigned()->index()->nullable();
-            $table->integer('stock_level_3')->unsigned()->index()->nullable();
-            $table->integer('stock_level_2')->unsigned()->index()->nullable();
-            $table->integer('stock_level_1')->unsigned()->index()->nullable();
+			$table->integer('division_level_5')->unsigned()->index()->nullable();
+            $table->integer('division_level_4')->unsigned()->index()->nullable();
+            $table->integer('division_level_3')->unsigned()->index()->nullable();
+            $table->integer('division_level_2')->unsigned()->index()->nullable();
+            $table->integer('division_level_1')->unsigned()->index()->nullable();
+            $table->integer('employee_id')->unsigned()->index()->nullable();
 			$table->string('step_name')->unsigned()->index()->nullable();
 			$table->integer('step_number')->unsigned()->index()->nullable();
 			$table->double('max_amount')->unsigned()->index()->nullable();
