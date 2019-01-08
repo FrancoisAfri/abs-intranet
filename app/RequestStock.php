@@ -33,5 +33,8 @@ class RequestStock extends Model
     {
         return $this->belongsTo(HRPerson::class, 'on_behalf_employee_id');
     }
-
+	public function requestStatus()
+    {
+        return $this->belongsTo(Stock_Approvals_level::class, 'status');
+    }
 }

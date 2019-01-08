@@ -136,8 +136,9 @@ class StockRequest extends Controller
 
 		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
 		$stocks = RequestStock::orderBy('date_created', 'asc')->get();
-		if (!empty($stocks)) $stocks = $stocks->load('stockItems','employees','employeeOnBehalf');
-        $employees = DB::table('hr_people')
+		if (!empty($stocks)) $stocks = $stocks->load('stockItems','employees','employeeOnBehalf','requestStatus');
+
+		$employees = DB::table('hr_people')
                 ->select('hr_people.*')
                 ->where('hr_people.status', 1)
                 ->where('hr_people.id', $hrID)
