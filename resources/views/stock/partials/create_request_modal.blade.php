@@ -13,19 +13,7 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-					@if (!empty($approvals->require_store_manager_approval) && $approvals->require_store_manager_approval == 1)
-						<div class="form-group">
-							<label for="store_id" class="col-sm-2 control-label">Stores</label>
-							<div class="col-sm-8">
-								<select id="store_id" name="store_id" style="width: 100%;" class="form-control select2">
-									<option value="0">*** Select a Store ***</option>
-									@foreach($stockLevelFives as $stockLevelFive)
-										<option value="{{ $stockLevelFive->id }}">{{ $stockLevelFive->name}}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
-					@endif
+					
 					<div class="form-group">
                         <label for="title_name" class="col-sm-2 control-label">Title</label>
                         <div class="col-sm-8">
@@ -73,7 +61,7 @@
 						<hr class="hr-text" data-content="Items">
 						<div class="row" id="tab_tab">
 							<div class="col-sm-6" id="product_row" style="margin-bottom: 15px; display:none">
-								<select class="form-control select2" style="width: 100%;" disabled="disabled"
+								<select class="form-control select2" style="width: 100%;"
                                     id="product_id" name="product_id">
 									<option value="0">*** Select a Product  ***</option>
 									@foreach($products as $product)
@@ -81,8 +69,8 @@
 									@endforeach
 								</select>
 							</div>
-							<div class="col-sm-6" style="margin-bottom: 15px;">
-								<select class="form-control select2" style="width: 100%;" id="product_id" 
+							<div class="col-sm-6"  id="1" name="1" style="margin-bottom: 15px;">
+								<select class="form-control select2" style="width: 100%;" id="product_id[1]" 
 								name="product_id[1]">
 									<option value="0">*** Select a Product  ***</option>
 									@foreach($products as $product)

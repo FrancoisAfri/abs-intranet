@@ -182,21 +182,14 @@ class StockRequest extends Controller
         ]);
         $stockRequest = $request->all();
         unset($stockRequest['_token']);
-		//return $leavecredit;
-		$hrID = !empty($stockRequest['on_behalf_of']) ? $stockRequest['on_behalf_employee_id'] : $stockRequest['employee_id'];
-		$storeID = !empty($stockRequest['store_id']) ? $stockRequest['store_id'] : 0;
-		$requestDetails = StockRequest::ApplicationDetails(0, $hrID, $storeID);
-		// check if requestDetails function return values
-		if (empty($requestDetails))
-			return response()->json(['product_id' => 'This product has already been added to this kit. Please choose another one.'], 422);
-        
+
 		// Save
 		$requestStock = new RequestStock();
         $requestStock->employee_id = !empty($stockRequest['employee_id']) ? $stockRequest['employee_id'] : 0;
         $requestStock->on_behalf_of = !empty($stockRequest['on_behalf_of']) ? $stockRequest['on_behalf_of'] : 0;
         $requestStock->on_behalf_employee_id = !empty($stockRequest['on_behalf_employee_id']) ? $stockRequest['on_behalf_employee_id'] : 0;
         $requestStock->date_created = time();
-        $requestStock->status = $requestDetails['status'];
+        $requestStock->status = 1;
         $requestStock->title_name = !empty($stockRequest['title_name']) ? $stockRequest['title_name'] : 0;
         $requestStock->store_id = !empty($stockRequest['store_id']) ? $stockRequest['store_id'] : 0;
         $requestStock->request_remarks = !empty($stockRequest['request_remarks']) ? $stockRequest['request_remarks'] : 0;
@@ -219,7 +212,8 @@ class StockRequest extends Controller
 			// next
             $numFiles++;
         }
-        return back();
+        AuditReportsController::store('Stock Management', 'Stock Request Created', 'Created by User', 0);
+        return response()->json();
     }
 	
 	// Cancel Request
