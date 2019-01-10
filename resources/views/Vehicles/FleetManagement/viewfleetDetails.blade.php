@@ -453,7 +453,6 @@
                 var responsible_for_maintenance = btnEdit.data('responsible_for_maintenance');
 
                 var vehicle_make = btnEdit.data('vehicle_make');
-                //console.log('gets here: ' + status);
                 var vehicle_model = btnEdit.data('vehicle_model');
                 var vehicle_type = btnEdit.data('vehicle_type');
                 var year = btnEdit.data('year');
@@ -470,10 +469,8 @@
                 var cell_number = btnEdit.data('cell_number');
                 var tracking_umber = btnEdit.data('tracking_umber');
                 var vehicle_owner = btnEdit.data('vehicle_owner');
-                //var financial_institution = btnEdit.data('financial_institution');
                 var extras = btnEdit.data('extras');
                 var property_type = btnEdit.data('property_type');
-                //var companyID = btnEdit.data('company');
                 var image = btnEdit.data('image');
                 var registration_papers = btnEdit.data('registration_papers');
                 var title_type = btnEdit.data('title_type');

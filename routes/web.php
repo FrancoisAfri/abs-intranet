@@ -759,6 +759,9 @@ Route::get('product/kit/{kit}', 'StockController@viewKitProducts');
 Route::get('stock/productkitAct/{product}', 'StockController@kitProductAct');
 Route::post('stock/products_kit/add/{kit}', 'StockController@addProductToKit');
 Route::patch('stock/product/update/{prod}', 'StockController@updateProductToKit');
+Route::get('stock/viewrequest/{stock}', 'StockRequest@viewRequest');
+Route::post('stock/remove/items/{item}', 'StockRequest@removeItems');
+Route::patch('stock/updateitems/{stock}', 'StockRequest@updateRequest');
 
 Route::post('stock/search_report' ,'StockController@searchreport');
 // Request & Approvals

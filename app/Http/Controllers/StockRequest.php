@@ -135,7 +135,7 @@ class StockRequest extends Controller
 		$stockLevel =stockLevel::where('active',1)->where('level',5)->orderBy('level','asc')->first();
 
 		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
-		$stocks = RequestStock::orderBy('date_created', 'asc')->get();
+		$stocks = RequestStock::where('employee_id',$hrID)->orderBy('date_created', 'asc')->get();
 		if (!empty($stocks)) $stocks = $stocks->load('stockItems','employees','employeeOnBehalf','requestStatus');
 
 		$employees = DB::table('hr_people')
@@ -169,7 +169,7 @@ class StockRequest extends Controller
         $data['active_mod'] = 'Stock Management';
         $data['active_rib'] = 'Request Items';
 
-        AuditReportsController::store('Stock Management', '', 'Accessed By User', 0);
+        AuditReportsController::store('Stock Management', 'Create Request', 'Accessed By User', 0);
         return view('stock.create_request')->with($data);
     }
 	
@@ -217,6 +217,55 @@ class StockRequest extends Controller
         return response()->json();
     }
 	
+	// View Request items
+	public function viewRequest(RequestStock $stock)
+    {
+		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf','requestStatus');
+		//return $stock;
+		$hrID = Auth::user()->person->id;
+		$approvals =StockSettings::select('require_store_manager_approval')->orderBy('id','desc')->first();
+		$stockLevelFives =stockLevelFive::where('active',1)->orderBy('name','asc')->get();
+		$stockLevel =stockLevel::where('active',1)->where('level',5)->orderBy('level','asc')->first();
+
+		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
+		
+		$employees = DB::table('hr_people')
+                ->select('hr_people.*')
+                ->where('hr_people.status', 1)
+                ->where('hr_people.id', $hrID)
+				->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')
+				->get();
+
+		$employeesOnBehalf = DB::table('hr_people')
+			->select('hr_people.*')
+			->where('hr_people.status', 1)
+			->orderBy('first_name', 'asc')
+			->orderBy('surname', 'asc')
+			->get();
+			
+		
+		$data['stockLevel'] = $stockLevel;
+		$data['stockLevelFives'] = $stockLevelFives;
+		$data['approvals'] = $approvals;
+		$data['employees'] = $employees;
+		$data['employeesOnBehalf'] = $employeesOnBehalf;
+		$data['products'] = $products;
+        $data['stock'] = $stock;
+		$data['requestStatuses'] = $this->requestStatuses;
+        $data['page_title'] = 'Items Request';
+        $data['page_description'] = 'Request Stock Items';
+        $data['breadcrumb'] = [
+            ['title' => 'Stock', 'path' => '/stock/request_items', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Request Stock Items', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Stock Management';
+        $data['active_rib'] = 'Request Items';
+
+        AuditReportsController::store('Stock Management', 'View Request', 'Accessed By User', 0);
+        return view('stock.view_request')->with($data);
+    }
+	
 	// Cancel Request
 	public function cancelRequest(Request $request, RequestStock $stock)
     {
@@ -232,5 +281,58 @@ class StockRequest extends Controller
 
             return response()->json(['success' => 'Request application successfully cancelled.'], 200);
         }
+    }
+	//update
+	public function updateRequest(Request $request, RequestStock $stock) {
+        $this->validate($request, [
+			'title_name' => 'required',
+			'store_id' => 'required',
+			'employee_id' => 'required',
+			'on_behalf_employee_id' => 'required_if:on_behalf,1',
+        ]);
+        $stockRequest = $request->all();
+        unset($stockRequest['_token']);
+
+		// Update
+        $stock->employee_id = !empty($stockRequest['employee_id']) ? $stockRequest['employee_id'] : 0;
+        $stock->on_behalf_of = !empty($stockRequest['on_behalf_of']) ? $stockRequest['on_behalf_of'] : 0;
+        $stock->on_behalf_employee_id = !empty($stockRequest['on_behalf_employee_id']) ? $stockRequest['on_behalf_employee_id'] : 0;
+        $stock->date_created = time();
+        $stock->status = 1;
+        $stock->title_name = !empty($stockRequest['title_name']) ? $stockRequest['title_name'] : 0;
+        $stock->store_id = !empty($stockRequest['store_id']) ? $stockRequest['store_id'] : 0;
+        $stock->request_remarks = !empty($stockRequest['request_remarks']) ? $stockRequest['request_remarks'] : 0;
+        $stock->update();
+		// Save Stock Items
+        $numFiles = $index = 0;
+        $totalFiles = !empty($stockRequest['total_files']) ? $stockRequest['total_files'] : 0;
+        while ($numFiles != $totalFiles) {
+            $index++;
+			$productID = $request->product_id[$index];
+            $quantity = $request->quantity[$index];
+            $products = product_products::where('id',$productID)->first();
+			$requestStockItems = new RequestStockItems();
+			$requestStockItems->product_id = $productID;
+			$requestStockItems->category_id = $products->category_id;
+			$requestStockItems->quantity = $quantity;
+			$requestStockItems->date_added = time();
+			$requestStockItems->request_stocks_id = $stock->id;
+			$requestStockItems->save();
+			// next
+            $numFiles++;
+        }
+        AuditReportsController::store('Stock Management', 'Stock Request Updated', 'Updated by User', 0);
+        return response()->json();
+    }
+	
+	// remove items
+	public function removeItems(Request $request, RequestStockItems $item)
+    {
+		$stockID = $item->request_stocks_id;
+        $item->delete();
+
+        AuditReportsController::store('Stock Management', 'Requested Item Removed', "Removed By User");
+        return response()->json();
+
     }
 }

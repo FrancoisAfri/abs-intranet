@@ -21,62 +21,81 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title"> Request Stock </h3>
+                    <h3 class="box-title"> View Request </h3>
                 </div>
                 <div style="overflow-X:auto;">
-                    <table id="example2" class="table table-bordered table-hover">
-                        <thead>
-							<tr>
-								<th style="width: 5px; text-align: center;"></th>
-								<th>Date Requeted</th>
-								<th>Title</th>
-								<th>Employee</th>
-								<th>On Behalf Of</th>
-								<th>Remarks</th>
-								<th>Status</th>
-							</tr>
-                        </thead>
-                        <tbody>
-                        @if (count($stocks) > 0)
-                            <ul class="products-list product-list-in-box">
-                                @foreach ($stocks as $stock)
-                                    <tr id="configuration-list">
-                                        <td>
-                                            <a href="{{ '/stock/viewrequest/' . $stock->id }}" id="edit_compan"
-                                               class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View More</a></td>
-                                        <td>{{ !empty($stock->date_created) ? date(' d M Y', $stock->date_created) : '' }}</td>
-                                        <td>{{ !empty($stock->title_name) ? $stock->title_name : '' }}</td>
-                                        <td>{{ (!empty($stock->employees)) ?  $stock->employees->first_name . ' ' .  $stock->employees->surname : ''}} </td>
-                                        <td>{{ (!empty($stock->employeeOnBehalf)) ?  $stock->employeeOnBehalf->first_name . ' ' .  $stock->employeeOnBehalf->surname : ''}} </td>
-                                        <td>{{ (!empty($stock->request_remarks)) ?  $stock->request_remarks : ''}} </td>
-                                        <td>{{ !empty($stock->status) ? $stock->requestStatus->step_name : '' }}</td>
-                                    </tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                        <tfoot>
-							<tr>
-								<th style="width: 5px; text-align: center;"></th>
-								<th>Date Requeted</th>
-								<th>Title</th>
-								<th>Employee</th>
-								<th>On Behalf Of</th>
-								<th>Remarks</th>
-								<th>Status</th>
-							</tr>                        
-						</tfoot>
-                    </table>
+                   <table class="table table-striped table-bordered">
+						<tr>
+							<td class="caption"><b>Date Requeted:</b></td>
+							<td>{{ !empty($stock->date_created) ? date(' d M Y', $stock->date_created) : '' }}</b></td>
+							<td class="caption"><b>Title:</b></td>
+							<td>{{ !empty($stock->title_name) ? $stock->title_name : '' }}</b></td>
+						</tr>
+						<tr>
+							<td class="caption"><b>Employee:</b></td>
+							<td>{{ (!empty($stock->employees)) ?  $stock->employees->first_name . ' ' .  $stock->employees->surname : ''}}</b></td>
+							<td class="caption"><b>On Behalf Of:</td>
+							<td>{{ (!empty($stock->employeeOnBehalf)) ?  $stock->employeeOnBehalf->first_name . ' ' .  $stock->employeeOnBehalf->surname : ''}}</b></td>
+						</tr>
+						<tr>
+							<td class="caption"><b>Remarks:</b></td>
+							<td>{{ (!empty($stock->request_remarks)) ?  $stock->request_remarks : ''}}</b></td>
+							<td class="caption"><b>Status:</b></td>
+							<td>{{ !empty($stock->status) ? $stock->requestStatus->step_name : '' }}</b></td>
+						</tr>
+					</table>
+					<table class="table table-striped table-bordered">
+						<hr class="hr-text" data-content="Stock Items">
+						<tr>
+							<td>#</td>
+							<td><b>Category</b></td>
+							<td><b>Product</b></td>
+							<td style="text-align:center"><b>Quantity</b></td>
+							<td></td>
+						</tr>
+						@if (count($stock->stockItems) > 0)
+							@foreach ($stock->stockItems as $items)
+								<tr>
+									<td>{{ $loop->iteration }}</td>
+									<td>{{ !empty($items->categories->name) ? $items->categories->name : '' }}</td>
+									<td>{{ !empty($items->products->name) ? $items->products->name : '' }}</td>
+									<td style="text-align:center">{{ !empty($items->quantity) ? $items->quantity : '' }}</td>
+									<td>
+										@if ($stock->status == 1)
+											<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+												data-target="#remove-items-warning-modal"
+												data-id="{{ $items->id }}"><i class="fa fa-trash"></i>  Remove
+											</button>
+										@endif
+									</td>
+								</tr>
+							@endforeach
+						@else
+							<tr><td colspan="4"></td></tr>
+						@endif
+					</table>
                     <!-- /.box-body -->
                     <div class="box-footer">
-						<button type="button" id="create_request" class="btn btn-primary pull-right"
-                                                data-toggle="modal"
-                                                data-target="#create-request-modal"><i
-                                                    class="fa fa-plus-square-o"></i> Create Request
-                        </button>
+						<button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Back</button>
+						@if ($stock->status == 1)
+							<button vehice="button" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
+                            data-target="#edit-request-modal" data-id="{{ $stock->id }}"
+                            data-store_id="{{ !empty($stock->store_id) ? $stock->store_id : ''}}"
+                            data-employee_id="{{ !empty($stock->employee_id) ? $stock->employee_id : ''}}"
+                            data-on_behalf_employee_id="{{ !empty($stock->on_behalf_employee_id) ? $stock->on_behalf_employee_id : ''}}"
+                            data-on_behalf_of="{{ !empty($stock->on_behalf_of) ? $stock->on_behalf_of : ''}}"
+                            data-request_remarks="{{ !empty($stock->request_remarks) ? $stock->request_remarks : ''}}"
+                            data-title_name="{{ !empty($stock->title_name) ? $stock->title_name : ''}}"
+							><i class="fa fa-pencil-square-o"></i> Edit
+							</button>
+						@endif
                     </div>
                 </div>
             </div>
-			@include('stock.partials.create_request_modal')
+			@include('stock.partials.edit_request_modal')
+			@if (count($stock) > 0)
+                @include('stock.warnings.items_warning_action', ['modal_title' => 'Remove Item', 'modal_content' => 'Are you sure you want to remove this item? This action cannot be undone.'])
+            @endif
         </div>
     </div>
 @endsection
@@ -134,7 +153,10 @@
 		//Tooltip
 
 		$('[data-toggle="tooltip"]').tooltip();
-
+		//Cancel button click event
+            document.getElementById("cancel").onclick = function () {
+                location.href = "/stock/request_items";
+            };
 		//Vertically center modals on page
 		function reposition() {
 			var modal = $(this),
@@ -175,14 +197,55 @@
 		});
 
 		//Post form to server using ajax (add)
-		$('#add_request').on('click', function () {
-			var strUrl = '/stock/addstockrequest';
-			var formName = 'create-request-form';
-			var modalID = 'create-request-modal';
-			var submitBtnID = 'add_request';
-			var redirectUrl = '/stock/request_items';
-			var successMsgTitle = 'New Record Added!';
-			var successMsg = 'The Request has been successfully Added And Sent for Approval.';
+		$('#edit-request-modal').on('shown.bs.modal', function (e) {
+			var btnEdit = $(e.relatedTarget);
+			JobId = btnEdit.data('id');
+			var storeID = btnEdit.data('store_id');
+			var employeeID = btnEdit.data('employee_id');
+			var onBehalfEmployeeID = btnEdit.data('on_behalf_employee_id');
+			var requestRemarks = btnEdit.data('request_remarks');
+			var titleName = btnEdit.data('title_name');
+			var onBehalfOf = btnEdit.data('on_behalf_of');
+			
+			var modal = $(this);
+			modal.find('#on_behalf_of').val(onBehalfOf);
+			modal.find('#request_remarks').val(requestRemarks);
+			modal.find('#title_name').val(titleName);
+			modal.find('select#on_behalf_employee_id').val(onBehalfEmployeeID);
+			modal.find('select#employee_id').val(employeeID);
+			modal.find('select#store_id').val(storeID);
+			
+			if (onBehalfEmployeeID > 0)
+			{
+				$('.on_behalf_field').show();
+			}
+		});
+	  
+		$('#update_request').on('click', function () {
+			var strUrl = '/stock/updateitems/' + {{$stock->id}};
+			console.log(strUrl);
+			var formName = 'edit-request-form';
+			var modalID = 'edit-request-modal';
+			var submitBtnID = 'update_request';
+			var redirectUrl = '/stock/viewrequest/{{ $stock->id }}';
+			var successMsgTitle = 'Record Updated!';
+			var successMsg = 'The Record  has been updated successfully.';
+			var Method = 'PATCH'
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+		var stockID;
+		$('#remove-items-warning-modal').on('shown.bs.modal', function (e) {
+			var btnDelete = $(e.relatedTarget);
+			stockID = btnDelete.data('id');
+		});
+		$('#remove_item').on('click', function () {
+			var strUrl = '/stock/remove/items/' + stockID;
+			var formName = 'remove-item-warning-modal-form';
+			var modalID = 'remove-items-warning-modal';
+			var submitBtnID = 'remove_item';
+			var redirectUrl = '/stock/viewrequest/{{ $stock->id }}';
+			var successMsgTitle = 'Item Successfully Removed!';
+			var successMsg = 'Item has been removed successfully.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
 	});
