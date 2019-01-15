@@ -269,8 +269,7 @@ class StockController extends Controller
         AuditReportsController::store('Stock Management', 'Products information updated', 'Added by User', 0);
         return response()->json();
     }
-	
-	
+		
 	public function add_stock(Request $request)
     {
         $this->validate($request, [

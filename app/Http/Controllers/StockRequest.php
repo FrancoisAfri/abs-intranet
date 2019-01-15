@@ -218,8 +218,9 @@ class StockRequest extends Controller
     }
 	
 	// View Request items
-	public function viewRequest(RequestStock $stock)
+	public function viewRequest(RequestStock $stock, $back='')
     {
+		//echo $back;
 		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf','requestStatus');
 		//return $stock;
 		$hrID = Auth::user()->person->id;
@@ -244,7 +245,8 @@ class StockRequest extends Controller
 			->orderBy('surname', 'asc')
 			->get();
 			
-		
+		if (!empty($back)) $data['back'] = "/stock/seach_request";
+		else $data['back'] = '';
 		$data['stockLevel'] = $stockLevel;
 		$data['stockLevelFives'] = $stockLevelFives;
 		$data['approvals'] = $approvals;
@@ -334,5 +336,120 @@ class StockRequest extends Controller
         AuditReportsController::store('Stock Management', 'Requested Item Removed', "Removed By User");
         return response()->json();
 
+    }
+	public function requestSearch()
+    {
+        $hrID = Auth::user()->person->id;
+		$approvals = StockSettings::select('require_store_manager_approval')->orderBy('id','desc')->first();
+		$stockLevelFives = stockLevelFive::where('active',1)->orderBy('name','asc')->get();
+		$stockLevel = stockLevel::where('active',1)->where('level',5)->orderBy('level','asc')->first();
+		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
+
+		$employees = DB::table('hr_people')
+                ->select('hr_people.*')
+                ->where('hr_people.status', 1)
+				->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')
+				->get();
+
+		$employeesOnBehalf = DB::table('hr_people')
+			->select('hr_people.*')
+			->where('hr_people.status', 1)
+			->orderBy('first_name', 'asc')
+			->orderBy('surname', 'asc')
+			->get();
+		$data['stockLevel'] = $stockLevel;
+		$data['stockLevelFives'] = $stockLevelFives;
+		$data['approvals'] = $approvals;
+		$data['employees'] = $employees;
+		$data['employeesOnBehalf'] = $employeesOnBehalf;
+		$data['products'] = $products;
+		$data['page_title'] = 'Search Request';
+        $data['page_description'] = 'Search Request Items';
+        $data['breadcrumb'] = [
+            ['title' => 'Stock', 'path' => '/stock/seach_request', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Search Request', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Stock Management';
+        $data['active_rib'] = 'Search Request';
+
+        AuditReportsController::store('Stock Management', 'Job Card card search Page Accessed', "Job Card card search Page Accessed", 0);
+        return view('stock.search_request')->with($data);
+    }
+	// Search request
+	
+	// Search results
+	
+	public function requestResults(Request $request)
+    {
+        $SysData = $request->all();
+        unset($SysData['_token']);
+        $storeID = $request['store_id'];
+        $titleName = $request['title_name'];
+        $employeeID = $request['employee_id'];
+        $onBehalf = $request['on_behalf_employee_id'];
+        $status = $request['status'];
+        $actionFrom = $actionTo = 0;
+        $actionDate = $request['requested_date'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+        $stocks = DB::table('request_stocks')
+            ->select('request_stocks.*','hr_people.first_name as firstname'
+			, 'hr_people.surname as surname'
+			, 'hp.first_name as hp_first_name', 'hp.surname as hp_surname'
+			, 'stock_level_fives.name as store_name'
+			, 'stock_approvals_levels.step_name as status_name')
+            ->leftJoin('hr_people', 'request_stocks.employee_id', '=', 'hr_people.id')
+            ->leftJoin('hr_people as hp', 'request_stocks.on_behalf_employee_id', '=', 'hp.id')
+            ->leftJoin('stock_approvals_levels','request_stocks.status', '=', 'stock_approvals_levels.id')
+            ->leftJoin('stock_level_fives', 'request_stocks.store_id', '=', 'stock_level_fives.id')
+			->where(function ($query) use ($storeID) {
+                if (!empty($storeID)) {
+                    $query->where('request_stocks.store_id', $storeID);
+                }
+            })
+            ->where(function ($query) use ($titleName) {
+                if (!empty($titleName)) {
+                    $query->where('request_stocks.title_name', 'ILIKE', "%$titleName%");
+                }
+            })
+            ->where(function ($query) use ($employeeID) {
+                if (!empty($employeeID)) {
+                    $query->where('request_stocks.employee_id', $employeeID);
+                }
+            })
+			->where(function ($query) use ($onBehalf) {
+                if (!empty($onBehalf)) {
+                    $query->where('request_stocks.on_behalf_employee_id', $onBehalf);
+                }
+            })
+			->where(function ($query) use ($status) {
+                if (!empty($status)) {
+                    $query->where('request_stocks.status', $status);
+                }
+            })
+			->where(function ($query) use ($actionFrom, $actionTo) {
+				if ($actionFrom > 0 && $actionTo > 0) {
+						$query->whereBetween('request_stocks.date_created', [$actionFrom, $actionTo]);
+				}
+			})
+            ->orderBy('request_stocks.id', 'asc')
+            ->get();
+        $data['stocks'] = $stocks;
+        $data['page_title'] = "Request Search Results";
+        $data['active_mod'] = 'Stock Management';
+        $data['active_rib'] = 'Search Request';
+        $data['breadcrumb'] = [
+            ['title' => 'Stock Management', 'path' => 'stock/seach_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Request Search ', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Job Card Management';
+        $data['active_rib'] = 'Search';
+//return $stocks;
+        AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Job Card card search Page Accessed", 0);
+        return view('stock.search_request_result')->with($data);
     }
 }
