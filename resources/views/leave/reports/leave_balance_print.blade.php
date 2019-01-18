@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Leave History Report Printed By {{ $name.' '. $surname }}</title>
+  <title>Leave Balance Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
  
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -57,7 +57,7 @@
 							<td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
 							<td>{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
 							<td>{{ !empty($audit->leaveType) ? $audit->leaveType : '' }}</td>
-							<td>{{ !empty($audit->Balance) ? $audit->Balance/8 : '' }}</td>
+							<td>{{ !empty($audit->Balance) ? number_format($audit->Balance/8, 2) : '' }} days(s)</td>
 						</tr>
 					@endforeach
 				@endif

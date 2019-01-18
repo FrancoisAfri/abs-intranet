@@ -29,7 +29,7 @@
                     <h3 class="box-title">Leave Reports Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
-                         <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
+                <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -50,7 +50,7 @@
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Leave Taken </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Leave Balance</label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Leave Paid Out</label>
+                                    <!--<label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Leave Paid Out</label>-->
                                     <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Leave Allowance</label>
                                     <label class="radio-inline"><input type="radio" id="rdo_levH" name="application_type" value="5">  Leave History</label>
                                     <label class="radio-inline"><input type="radio" id="rdo_cancelled_leaves" name="application_type" value="6"> Cancelled Leaves</label>
@@ -86,22 +86,7 @@
                                       
                                     </div>
                                 </div>
-                            </div> 
-                        
-                          <div class="form-group date-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Action Date</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                    <input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
-                                    
-                                </div>
-                            </div>
-                        </div>
-                       
+                            </div>                                        
                         <div class="form-group lev-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="leave_types_id" class="col-sm-2 control-label">Leave Type</label>
 
@@ -119,6 +104,20 @@
                                 </div>
                             </div>
                         </div>
+						<div class="form-group date-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label">Action Date</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
+                                    <input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
+                                    
+                                </div>
+                            </div>
+                        </div>
+						<!--
                   @foreach($division_levels as $division_level)
                             <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                 <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
@@ -134,37 +133,7 @@
                                 </div>
                             </div>
                           @endforeach   
-                    
-                         <div class="row emp-field" style="display: block;">
-                                <div class="col-xs-6">
-                                    <div class="form-group from-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
-                                        <label for="date_from" class="col-sm-4 control-label">Date From</label>
-                                        <div class="col-sm-8">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type="text" class="form-control" id="date_from" name="date_from" value="{{ old('date_from') }}" placeholder="Select Month...">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-xs-6">
-                                    <div class="form-group to-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
-                                        <label for="date_to" class="col-sm-3 control-label">Date To</label>
-                                        <div class="col-sm-9">
-                                            <div class="input-group">
-                                                <div class="input-group-addon">
-                                                    <i class="fa fa-calendar"></i>
-                                                </div>
-                                                <input type="text" class="form-control" id="date_to" name="date_to" value="{{ old('date_to') }}" placeholder="Select Month...">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                  
+                    -->
                      <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
                        <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
@@ -315,7 +284,7 @@
                  $('.to-field').show();
                  $('.from-field').show();
                  $('.levAction-field').hide();
-                 $('.date-field').hide();
+                 $('.date-field').show();
                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/taken');
                  $('#gen-report').val("Submit");        
             }
@@ -333,7 +302,7 @@
                 $('.to-field').show();
                  $('.from-field').show();
                  $('.levAction-field').hide();
-                 $('.date-field').hide();
+                 $('.date-field').show();
                   $('form[name="leave-application-form"]').attr('action', '/leave/reports/leavepaOut');
                    $('#gen-report').val("Submit"); 
             }
@@ -343,7 +312,7 @@
                  $('.levAction-field').hide();
                   $('.manual-field').show();
                  $('.lev-field').show();
-                 $('.date-field').hide();
+                 $('.date-field').show();
                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leaveAll');
                  $('#gen-report').val("Submit"); 
             } else if(allType == 5){
@@ -361,7 +330,7 @@
                 $('.lev-field-field').hide();
                 $('.manual-field').hide();
                 $('.levAction-field').hide();
-                $('.date-field').hide();
+                $('.date-field').show();
                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/cancelled-leaves');
                 $('#gen-report').val("Submit");
             }

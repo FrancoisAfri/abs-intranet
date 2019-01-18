@@ -29,13 +29,14 @@
 										<td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
 										<td>{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
 										<td>{{ !empty($audit->leaveType) ? $audit->leaveType : '' }}</td>
-										<td>{{ !empty($audit->Balance) ? $audit->Balance/8 : '' }}</td>
+										<td>{{ !empty($audit->Balance) ? number_format($audit->Balance/8, 2) : '' }} days(s)</td>
 									</tr>
 								@endforeach
 							@endif
 						</table>
 						<div class="row no-print">
 							<div class="col-xs-12">
+								<button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back</button>
 								<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
 							</div>
 						</div>
@@ -47,4 +48,13 @@
             </div>
         </div>
     </div>
+@endsection
+@section('page_script')     
+   <script type="text/javascript">
+        $(function () {
+            $('#cancel').click(function () {
+                location.href = '/leave/reports';
+            });
+		})
+    </script>
 @endsection

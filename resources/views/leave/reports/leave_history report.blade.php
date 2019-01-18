@@ -11,7 +11,7 @@
                  <input type="hidden" name="actionDate" value="{{!empty($actionDate) ? $actionDate : ''}}">
                  <input type="hidden" name="userID" value="{{!empty($userID) ? $userID : ''}}">
                  <input type="hidden" name="report" value="{{!empty($report) ? $report : ''}}">
-                 <input type="hidden" name="action" value="{{!empty($action) ? $action : ''}}">
+                 <input type="hidden" name="leave_types_id" value="{{!empty($leave_types_id) ? $leave_types_id : ''}}">
 					{{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
@@ -37,9 +37,9 @@
 										<td>{{ !empty($audit->action) ? $audit->action : '' }}</td>
 										<td>{{ !empty($audit->action_date) ? date('Y M d : H : i : s', $audit->action_date) : '' }}</td>
 										<td>{{ !empty($audit->leave_type) ? $audit->leave_type : '' }}</td>
-										<td>{{ !empty($audit->previous_balance) ? $audit->previous_balance / 8 : '' }}</td>
-										<td>{{ !empty($audit->transcation) ? $audit->transcation / 8 : '' }}</td>
-										<td>{{ !empty($audit->current_balance) ? $audit->current_balance / 8 : '' }}</td>
+										<td>{{ !empty($audit->previous_balance) ? number_format($audit->previous_balance / 8, 2) : '' }}</td>
+										<td>{{ !empty($audit->transcation) ? number_format($audit->transcation / 8, 2) : '' }}</td>
+										<td>{{ !empty($audit->current_balance) ? number_format($audit->current_balance / 8, 2): '' }}</td>
 										<td>{{ !empty($audit->added_by_name) ? $audit->added_by_name : '' }}</td>
 									</tr>
 								@endforeach
@@ -47,7 +47,8 @@
 						</table>
 						<div class="row no-print">
 							<div class="col-xs-12">
-								<button type="submit" id="cancel" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
+							<button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back</button>
+								<button type="submit" id="print" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
 								 <!-- <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button> -->
 							</div>
 						</div>
@@ -62,9 +63,12 @@
 @endsection
 @section('page_script')
 <!--  -->
-
 <!--  -->
  <script type="text/javascript">
- // 
+ $(function () {
+		$('#cancel').click(function () {
+			location.href = '/leave/reports';
+		});
+	})
  </script>
  @endsection

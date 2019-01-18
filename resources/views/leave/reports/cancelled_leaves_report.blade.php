@@ -10,8 +10,7 @@
                 <form class="form-horizontal" method="POST" action="/leave/reports/cancelled-leaves/print" target="_blank">
                     <input type="hidden" name="hr_person_id" value="{{ $employeeID }}">
                     <input type="hidden" name="leave_types_id" value="{{ $leaveTypeID }}">
-                    <input type="hidden" name="date_from" value="{{ $dateFrom }}">
-                    <input type="hidden" name="date_to" value="{{ $dateTo }}">
+                    <input type="hidden" name="action_date" value="{{ $action_date }}">
                     {{ csrf_field() }}
                     <div class="box-body">
                         <!-- Collapsible section containing the amortization schedule -->

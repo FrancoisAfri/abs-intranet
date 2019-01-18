@@ -53,7 +53,7 @@
                         </div>
 
                         <!--                        <div class="form-group ">-->
-                        <div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                        <div class="form-group emp-field{{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="leave_types_id" class="col-sm-2 control-label">Leave Type(s)</label>
 
                             <div class="col-sm-10">
@@ -61,8 +61,8 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <select id="leave_types_id" name="leave_types_id[]" class="form-control select2"
-                                            multiple="multiple" data-placeholder="**Select Leave type**">
+                                    <select id="leave_types_id" name="leave_types_id" class="form-control select2"
+                                             data-placeholder="**Select Leave type**">
                                         @foreach($leaveTypes as $leaveType)
                                             <option value="{{ $leaveType->id }}">{{ $leaveType->name }}</option>
                                         @endforeach
@@ -121,7 +121,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group resert-field {{ $errors->has('leave_credit_id') ? ' has-error' : '' }}">
+                        <div class="form-group resert-field {{ $errors->has('resert_days') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Reset Number of Days</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -214,14 +214,6 @@
                 else if (allType == 2) $('#box-subtitle').html('Resert leave allocation');
                 else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
             });
-
-
-//            //repopulate projects, year dropdowns when a programme has been changed
-//            $('#programme_id').change(function(){
-//                var programmeID = $(this).val();
-//                populateProjectDD(programmeID);
-//                populateYearDD(programmeID);
-//            });
 
             //Vertically center modals on page
             function reposition() {

@@ -111,8 +111,9 @@ class LeaveController extends Controller
     public function addcustom(Request $request)
     {
         $this->validate($request, [
-            'hr_id' => 'required',
+            'hr_id' => 'required|unique:leave_customs'  ,
             'number_of_days' => 'required',
+			 
         ]);
 
         $leaveData = $request->all();

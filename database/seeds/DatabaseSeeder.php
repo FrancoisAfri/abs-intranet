@@ -1449,6 +1449,12 @@ class DatabaseSeeder extends Seeder
         $type->status = 1;
         $type->description = 'Special Leave Type' ;
         $type->save();
+		
+		$type = new LeaveType();
+        $type->name = 'Paternity';
+        $type->status = 1;
+        $type->description = 'Paternity Leave' ;
+        $type->save();
 
         //#insert leave profiles
         $profile = new leave_profile();

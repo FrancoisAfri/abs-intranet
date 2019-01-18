@@ -178,6 +178,7 @@ Route::post('leave/reports/cancelled-leaves', 'LeaveHistoryAuditController@cance
 Route::post('leave/reports/cancelled-leaves/print', 'LeaveHistoryAuditController@cancelledLeavesPrint');
 Route::post('leave/print', 'LeaveHistoryAuditController@printlevhistoReport');
 Route::post('leave/bal', 'LeaveHistoryAuditController@printlevbalReport');
+Route::post('leave_taken/print', 'LeaveHistoryAuditController@takenPrint');
 
 //#custom leave
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');

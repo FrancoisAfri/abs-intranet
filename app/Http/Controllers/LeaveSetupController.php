@@ -176,122 +176,127 @@ class LeaveSetupController extends Controller {
     public function Adjust(Request $request, HRPerson $person, LeaveType $lev) {
         $this->validate($request, [
                  'hr_person_id' => 'required',
-                // 'Division' => 'bail|required',
-                // 'Department' => 'bail|required',
-                // 'Employee name' => 'bail|required',
-                // 'adjust_days' => 'bail|required',
-                // 'number_of_days' => 'bail|numeric|required',
+                 'leave_types_id' => 'required',
+                 'adjust_days' => 'required',
         ]);
 
         $allData = $request->all();
         unset($allData['_token']);
         $employees = $allData['hr_person_id'];
-        $leveTyps = $allData['leave_types_id'];
+        $leveTyp = $allData['leave_types_id'];
         $days = $allData['adjust_days'];
-        $HRpeople = HRPerson::find($employees);
-
         foreach ($employees as $empID) {
             $emp = HRPerson::find($empID);
             $profile = $emp->leave_types->where('id', $empID)->first();
-            foreach ($leveTyps as $leveTyp) {
-                $credits = leave_credit::where('hr_id', $empID)
-                        ->where('leave_type_id', $leveTyp)
-                        ->first();
-				$val = 0;
-                if (!empty($credits)) {
-                    $val = $credits->leave_balance;
-                }
-                // calculations
-                $currentBalance = $val + ($days * 8);
-                $emp->leave_types()->detach($leveTyp);
-                $emp->leave_types()->attach($leveTyp, ['leave_balance' => $currentBalance]);
+			$credits = leave_credit::where('hr_id', $empID)
+					->where('leave_type_id', $leveTyp)
+					->first();
+			$val = 0;
+			if (!empty($credits)) {
+				$val = $credits->leave_balance;
+			}
+			// calculations
+			$currentBalance = $val + ($days * 8);
+			$emp->leave_types()->detach($leveTyp);
+			$emp->leave_types()->attach($leveTyp, ['leave_balance' => $currentBalance]);
 
-                AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User: $lev->name", 0);
-                LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', $val ,($days * 8),$currentBalance,$leveTyp, $empID);
-            }
+			AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User: $lev->name", 0);
+			LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', $val ,($days * 8),$currentBalance,$leveTyp, $empID);
         }
         return back()->with('success_application', "leave action was successful adjusted.");
     }
 
     //leavecredit
     public function resert(Request $request, LeaveType $lev) {
-  
+		
+		$this->validate($request, [
+                 'hr_person_id' => 'required',
+                 'leave_types_id' => 'required',
+                 'resert_days' => 'required',
+        ]);
         $resertData = $request->all();
         unset($resertData['_token']);
-
+		//return $resertData;
         $resertDays = $resertData['resert_days'];
         $hrID = $resertData['hr_person_id'];
-        $typIDs = $resertData['leave_types_id'];
+        $typID = $resertData['leave_types_id'];
         $resert_days = $resertDays * 8;
 
-        foreach ($typIDs as $typID) {
+        foreach ($hrID as $empID) {
+			$emp = HRPerson::find($empID);
+			$emp->leave_types()->detach($typID);
+			$emp->leave_types()->attach($typID, ['leave_balance' => $resert_days]);
+			//$emp->leave_types()->where('leave_type_id',$typID)->sync([$empID => ['leave_balance' => $resert_days]]);
 
-            foreach ($hrID as $empID) {
-                $emp = HRPerson::find($empID);
-                $emp->leave_types()->detach($typID);
-                $emp->leave_types()->attach($typID, ['leave_balance' => $resert_days]);
-                //$emp->leave_types()->where('leave_type_id',$typID)->sync([$empID => ['leave_balance' => $resert_days]]);
-
-                AuditReportsController::store('Leave Management', 'leave days reset Edited', "Edited by User: $lev->name", 0);
-				LeaveHistoryAuditController::store('leave days reseted','leave days reseted', 0 ,$resert_days,$resert_days,$typID, $empID);
-            }
-        }
+			AuditReportsController::store('Leave Management', 'leave days reset Edited', "Edited by User: $lev->name", 0);
+			LeaveHistoryAuditController::store('leave days reseted','leave days reseted', 0 ,$resert_days,$resert_days,$typID, $empID);
+		}
         return back()->with('success_application', "leave allocation was successful resert.");
     }
 
     public function allocate(Request $request, LeaveType $lev) {
+		
+		$this->validate($request, [
+                 'hr_person_id' => 'required',
+                 'leave_types_id' => 'required',
+        ]);
         $allData = $request->all();
         unset($allData['_token']);
 		
         $empl = $allData['hr_person_id'];
-        $LevIDs = $allData['leave_types_id'];
+        $LevID = $allData['leave_types_id'];
 
-        foreach ($LevIDs as $LevID) {
-            foreach ($empl as $empID) {
-                $emp = HRPerson::find($empID);
-                $leaveTyps = LeaveType::find($LevID);
-                $annul = LeaveType::find(1)->id;
-                $levPro = HRPerson::find($empID)->leave_profile;
-                $custLeave = leave_custom::where('hr_id', $empID)->first();
-                $custDays = $custstatus = 0;
-                if (!empty($custLeave->id) && $custLeave->id > 0) {
-                    $custDays = $custLeave->number_of_days;
-                    $custstatus = $custLeave->status;
-                }
-                $levcustom = $custDays / 12;
-                $custleave = $levcustom * 8;
-                // return leave profile id based on an user id;
-                // get min value from pivot
-                #get leaveprofile ID
-                $LevProfID = HRPerson::where('user_id', $empl)->first();
-                $proId = $LevProfID->leave_profile;
-                $minimum = type_profile::where('leave_type_id', $LevID)
-                        ->where('leave_profile_id', $proId)
-                        ->first();
-                $min = 0;
-                if (count($minimum) > 0) {
-
-                    $min = $minimum->min;
-                }
-                //return $min;
-                $mini = $min / 12;
-                $min = $mini * 8;
-				if (!empty($custleave)) $min = $custleave;
-                
-				if ($min)
-				{
-                    $emp->leave_types()->detach($LevID);
-                    $emp->leave_types()->attach($LevID, ['leave_balance' => $min]);;
-                }
+		foreach ($empl as $empID) {
+			$emp = HRPerson::find($empID);
+			$custLeave = leave_custom::where('hr_id', $empID)->first();
+			$customDays = 0;
+			if (!empty($custLeave->id) && $custLeave->number_of_days > 0) {
+				$customDays = round(($custLeave->number_of_days / 12) * 8, 2);
+			}
+			// return leave profile id based on an user id;
+			// get min value from pivot
+			#get leaveprofile ID
+			$LevProfID = HRPerson::where('user_id', $empID)->first();
+			$proId = $LevProfID->leave_profile;
+			$minimum = type_profile::where('leave_type_id', $LevID)
+					->where('leave_profile_id', $proId)
+					->first();
+			$days = 0;
+			if (count($minimum) > 0) {
+				if (!empty($minimum->min))
+					$days = round(($minimum->min / 12) * 8, 2);
+			}
+			if (!empty($customDays)) $days = $customDays;
+			if ($days)
+			{
 				$credits = leave_credit::where('hr_id', $empID)
-                        ->where('leave_type_id', $LevID)
-                        ->first();
-				$previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
-				$currentBalance =  $previousBalance + $min;
-				AuditReportsController::store('Leave Management', 'leave days allocation Edited', "Edited by User: $lev->name", 0);
-                LeaveHistoryAuditController::store('leave days allocation','leave days allocation', $previousBalance ,$min,$currentBalance,$LevID,$empID);
-            }
-        }
+					->where('leave_type_id', $LevID)
+					->first();
+				
+				if (count($credits) > 0)
+				{
+					$previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
+					$currentBalance =  $previousBalance + $days;
+					$currentBalance =  round($currentBalance, 2);
+					$previousBalance =  round($previousBalance, 2);
+					
+					$credits->leave_balance = $currentBalance;
+					$credits->update();
+					LeaveHistoryAuditController::store('leave days allocation','leave days allocation', $previousBalance ,$days,$currentBalance,$LevID,$empID);
+				}
+				else
+				{
+					$credit = new leave_credit();
+					$credit->leave_balance = $days;
+					$credit->hr_id = $empID;
+					$credit->leave_type_id = $LevID;
+					$credit->save();
+					LeaveHistoryAuditController::store('leave days allocation','leave days allocation', 0 ,$days,$currentBalance,$LevID,$empID);
+				}		
+			}
+
+			AuditReportsController::store('Leave Management', 'leave days allocation Edited', "Edited by User: $lev->name", 0);
+		}
         return back()->with('success_application', "leave allocation was successful.");
     }
 
