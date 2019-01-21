@@ -175,33 +175,57 @@ class LeaveSetupController extends Controller {
 
     public function Adjust(Request $request, HRPerson $person, LeaveType $lev) {
         $this->validate($request, [
-                 'hr_person_id' => 'required',
+                 'division_level_5' => 'required',
                  'leave_types_id' => 'required',
                  'adjust_days' => 'required',
         ]);
 
         $allData = $request->all();
         unset($allData['_token']);
-        $employees = $allData['hr_person_id'];
         $leveTyp = $allData['leave_types_id'];
         $days = $allData['adjust_days'];
+		$div5 = !empty($allData['division_level_5']) ? $allData['division_level_5']: 0;
+		$div4 = !empty($allData['division_level_4']) ? $allData['division_level_4']: 0;
+		$div3 = !empty($allData['division_level_3']) ? $allData['division_level_3']: 0;
+		$div2 = !empty($allData['division_level_2']) ? $allData['division_level_2']: 0;
+		$div1 = !empty($allData['division_level_1']) ? $allData['division_level_1']: 0;
+		$empl = !empty($allData['hr_person_id']) ? $allData['hr_person_id']: 0;
+
+		if(!empty($empl))
+			$employees = $empl;
+		elseif(!empty($div1))
+			$employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+		elseif(!empty($div2))
+			$employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+		elseif(!empty($div3))
+			$employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+		elseif(!empty($div4))
+			$employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+		elseif(!empty($div5))
+			$employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+
         foreach ($employees as $empID) {
-            $emp = HRPerson::find($empID);
-            $profile = $emp->leave_types->where('id', $empID)->first();
+			
 			$credits = leave_credit::where('hr_id', $empID)
 					->where('leave_type_id', $leveTyp)
 					->first();
-			$val = 0;
-			if (!empty($credits)) {
-				$val = $credits->leave_balance;
+			if (!empty($credits->leave_balance)) {
+				$prevBalance = $credits->leave_balance;
+				$currentBalance = $credits->leave_balance + ($days * 8);
+				$credits->leave_balance = $currentBalance;
+				$credits->update();
+				LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', $prevBalance ,($days * 8),$currentBalance,$leveTyp, $empID);
 			}
-			// calculations
-			$currentBalance = $val + ($days * 8);
-			$emp->leave_types()->detach($leveTyp);
-			$emp->leave_types()->attach($leveTyp, ['leave_balance' => $currentBalance]);
-
-			AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User: $lev->name", 0);
-			LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', $val ,($days * 8),$currentBalance,$leveTyp, $empID);
+			else
+			{
+				$credit = new leave_credit();
+				$credit->leave_balance = ($days * 8);
+				$credit->hr_id = $empID;
+				$credit->leave_type_id = $leveTyp;
+				$credit->save();
+				LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', 0 ,($days * 8),($days * 8),$leveTyp, $empID);
+			}
+			AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");
         }
         return back()->with('success_application', "leave action was successful adjusted.");
     }
@@ -210,7 +234,7 @@ class LeaveSetupController extends Controller {
     public function resert(Request $request, LeaveType $lev) {
 		
 		$this->validate($request, [
-                 'hr_person_id' => 'required',
+                 'division_level_5' => 'required',
                  'leave_types_id' => 'required',
                  'resert_days' => 'required',
         ]);
@@ -218,11 +242,29 @@ class LeaveSetupController extends Controller {
         unset($resertData['_token']);
 		//return $resertData;
         $resertDays = $resertData['resert_days'];
-        $hrID = $resertData['hr_person_id'];
         $typID = $resertData['leave_types_id'];
         $resert_days = $resertDays * 8;
+		$div5 = !empty($resertData['division_level_5']) ? $resertData['division_level_5']: 0;
+		$div4 = !empty($resertData['division_level_4']) ? $resertData['division_level_4']: 0;
+		$div3 = !empty($resertData['division_level_3']) ? $resertData['division_level_3']: 0;
+		$div2 = !empty($resertData['division_level_2']) ? $resertData['division_level_2']: 0;
+		$div1 = !empty($resertData['division_level_1']) ? $resertData['division_level_1']: 0;
+		$empl = !empty($resertData['hr_person_id']) ? $resertData['hr_person_id']: 0;
 
-        foreach ($hrID as $empID) {
+		if(!empty($empl))
+			$employees = $empl;
+		elseif(!empty($div1))
+			$employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+		elseif(!empty($div2))
+			$employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+		elseif(!empty($div3))
+			$employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+		elseif(!empty($div4))
+			$employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+		elseif(!empty($div5))
+			$employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+
+        foreach ($employees as $empID) {
 			$emp = HRPerson::find($empID);
 			$emp->leave_types()->detach($typID);
 			$emp->leave_types()->attach($typID, ['leave_balance' => $resert_days]);
@@ -237,16 +279,35 @@ class LeaveSetupController extends Controller {
     public function allocate(Request $request, LeaveType $lev) {
 		
 		$this->validate($request, [
-                 'hr_person_id' => 'required',
+                 'division_level_5' => 'required',
                  'leave_types_id' => 'required',
         ]);
+		//hr_person_id
         $allData = $request->all();
         unset($allData['_token']);
-		
-        $empl = $allData['hr_person_id'];
+		$div5 = !empty($allData['division_level_5']) ? $allData['division_level_5']: 0;
+		$div4 = !empty($allData['division_level_4']) ? $allData['division_level_4']: 0;
+		$div3 = !empty($allData['division_level_3']) ? $allData['division_level_3']: 0;
+		$div2 = !empty($allData['division_level_2']) ? $allData['division_level_2']: 0;
+		$div1 = !empty($allData['division_level_1']) ? $allData['division_level_1']: 0;
+		$empl = !empty($allData['hr_person_id']) ? $allData['hr_person_id']: 0;
         $LevID = $allData['leave_types_id'];
 
-		foreach ($empl as $empID) {
+		if(!empty($empl))
+			$employees = $empl;
+		elseif(!empty($div1))
+			$employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+		elseif(!empty($div2))
+			$employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+		elseif(!empty($div3))
+			$employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+		elseif(!empty($div4))
+			$employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+		elseif(!empty($div5))
+			$employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+		
+			return $employees;
+		foreach ($employees as $empID) {
 			$emp = HRPerson::find($empID);
 			$custLeave = leave_custom::where('hr_id', $empID)->first();
 			$customDays = 0;
@@ -292,7 +353,7 @@ class LeaveSetupController extends Controller {
 					$credit->leave_type_id = $LevID;
 					$credit->save();
 					LeaveHistoryAuditController::store('leave days allocation','leave days allocation', 0 ,$days,$currentBalance,$LevID,$empID);
-				}		
+				}
 			}
 
 			AuditReportsController::store('Leave Management', 'leave days allocation Edited', "Edited by User: $lev->name", 0);

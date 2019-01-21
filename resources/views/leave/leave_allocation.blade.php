@@ -23,7 +23,7 @@
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
 
-                    <div class="box-body">
+                    <div class="box-body" id="view_users">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
@@ -82,7 +82,7 @@
                                         </div>
                                         <select id="{{ 'division_level_' . $division_level->level }}"
                                                 name="{{ 'division_level_' . $division_level->level }}"
-                                                class="form-control" onchange="divDDOnChange(this)">
+                                                class="form-control" onchange="divDDOnChange(this, 'hr_person_id', 'view_users')">
                                         </select>
                                     </div>
                                 </div>
@@ -261,20 +261,6 @@
                 $('#load-allocation').val("Submit");
             }
             return allType;
-            //hideSemesterRow();
-        }
-
-        //function to hide/show semester
-        function hideSemesterRow() {
-            var courseType = $("input[name='course_type']:checked").val();
-            if (courseType == 1) { //Year Course
-                $('#registration_semester').select2().val('').trigger("change");
-                $('#semester-row').hide();
-            }
-            else if (courseType == 2) { //Semester course
-                $('#semester-row').show();
-            }
-            //return courseType;
         }
 
         //Load divisions drop down
