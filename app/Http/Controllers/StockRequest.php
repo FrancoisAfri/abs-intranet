@@ -14,14 +14,23 @@ use App\RequestStock;
 use App\RequestStockItems;
 use App\StockSettings;
 use App\stockLevelFive;
+use App\Stock_Approvals_level;
 use App\stockLevel;
 use App\Users;
+use App\Mail\stockApprovals;
+use App\DivisionLevelFive;
+use App\DivisionLevelFour;
+use App\DivisionLevelThree;
+use App\DivisionLevelTwo;
+use App\DivisionLevelOne;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
 
 class StockRequest extends Controller
 {
@@ -37,98 +46,9 @@ class StockRequest extends Controller
 	,8 => 'Declined by CEO', 9 => 'Cancelled', 10 => 'Approved', 11 => 'Recieved'
 	];
 	
-	// Application Status Function
-	public function ApplicationDetails($status = 0, $hrID = 0, $storeID = 0)
-    {
-        // query the stock congif table and bring back the values
-        $approvals = DB::table('stock_settings')
-            ->select('require_managers_approval', 'require_store_manager_approval'
-			, 'require_department_head_approval', 'require_ceo_approval')
-            ->first();
-        // query the hrperon  model and bring back the values of the manager
-        $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
-
-        if ($approvals->require_managers_approval == 1 && $status == 0) 
-		{
-			if(!empty($hrDetails->manager_id))
-			{
-				// query the hrperon  model and bring back the values of the manager
-				$managerDetails = HRPerson::where('id', $hrDetails->manager_id)->where('status', 1)
-					->select('first_name', 'email')
-					->first();
-				if (!empty($managerDetails->email) && !empty($managerDetails->firstname)) 
-				{
-					$details = array('status' => 1, 'first_name' => $managerDetails->firstname, 'email' => $managerDetails->email, 'comment' => '');
-					return $details;
-				}
-				else return array('status' => 0, 'first_name' => '', 'email' => '', 'comment' => 'Manager details are not correct. Please start by correcting them!');
-			}
-			else return array('status' => 0, 'first_name' => '', 'email' => '', 'comment' => 'No manager has been assigned to this employee. Please start by assigning one!');
-        } 
-		elseif ($approvals->require_department_head_approval == 1 && $status > 1)
-		{
-			if(!empty($hrDetails->division_level_4))
-			{
-				$dept = DivisionLevelFour::where('id', $hrDetails->division_level_4)->where('active', 1)->first();
-				if (!empty($dept))
-				{
-					$dptHeadDetails = HRPerson::where('id', $dept->manager_id)->where('status', 1)
-						->select('first_name', 'email')
-						->first();
-					if (!empty($dptHeadDetails->email) && !empty($dptHeadDetails->first_name))
-					{
-						$details = array('status' => 2, 'first_name' => $dptHeadDetails->first_name, 'email' => $dptHeadDetails->email, 'comment' => '');
-						return $details;
-					} 
-					else return array('status' => 0, 'first_name' => '', 'email' => '', 'comment' => 'User department Head are incoreect!');
-				}
-				else return array('status' => 0, 'first_name' => '', 'email' => '', 'comment' => 'User department does not seem to exist Or has been de-activated!');
-			}
-			else return array('status' => 0, 'first_name' => '', 'email' => '', 'comment' => 'This user has not been assigned to department. Please start by assigning to one!');
-        }
-		elseif ($approvals->require_store_manager_approval == 1) {
-			
-			$roles = DB::table('hr_roles')->select('hr_users_roles.hr_id as hr_id')
-				->leftJoin('hr_users_roles', 'hr_users_roles.role_id', '=', 'hr_roles.id')
-				->where('hr_roles.description', '=','Store Manager')
-				->where('hr_roles.status', 1)
-				->orderBy('hr_users_roles.hr_id', 'asc')
-				->first();
-            if ($msamgerDetails == null) {
-                $details = array('status' => 1, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
-                return $details;
-            } else {
-                // array to store manager details
-                $details = array('status' => 3, 'first_name' => $msamgerDetails->firstname, 'surname' => $msamgerDetails->surname, 'email' => $msamgerDetails->email);
-                return $details;
-            }
-        }
-		elseif ($approvals->require_ceo_approval == 1) 
-		{
-			if (!empty($hrDetails->division_level_5))
-			{
-				$division = DivisionLevelFive::where('id', $hrDetails->division_level_5)->where('active', 1)->first();
-				if (!empty($division))
-				{
-					$divHeadDetails = HRPerson::where('id', $division->manager_id)->where('status', 1)
-						->select('first_name', 'email')
-						->first();
-					if (!empty($divHeadDetails))
-					{
-						$details = array('status' => 2, 'first_name' => $divHeadDetails->first_name,'email' => $divHeadDetails->email);
-						return $details;
-					} 
-					else return array('status' => 0, 'first_name' => '', 'email' => '', 'comment' => 'User division Head are incoreect!');
-				}
-				else return array('status' => 0, 'first_name' => '', 'email' => '', 'comment' => 'User division does not seem to exist Or has been de-activated!');
-			}
-			else return array('status' => 0, 'first_name' => '', 'email' => '', 'comment' => 'This user has not been assigned to Diviion. Please start by assigning to one!');
-        }
-		else return array('status' => 0, 'first_name' => '', 'email' => '', 'comment' => 'Please go to stock setUp and set approval settings!');
-    }
 	// Stock Request index Page
 	public function create()
-    {
+    {		
 		$hrID = Auth::user()->person->id;
 		$approvals =StockSettings::select('require_store_manager_approval')->orderBy('id','desc')->first();
 		$stockLevelFives =stockLevelFive::where('active',1)->orderBy('name','asc')->get();
@@ -137,7 +57,6 @@ class StockRequest extends Controller
 		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
 		$stocks = RequestStock::where('employee_id',$hrID)->orderBy('date_created', 'asc')->get();
 		if (!empty($stocks)) $stocks = $stocks->load('stockItems','employees','employeeOnBehalf','requestStatus');
-
 		$employees = DB::table('hr_people')
                 ->select('hr_people.*')
                 ->where('hr_people.status', 1)
@@ -183,6 +102,9 @@ class StockRequest extends Controller
         ]);
         $stockRequest = $request->all();
         unset($stockRequest['_token']);
+		
+		$flow = Stock_Approvals_level::where('status',1)->orderBy('id', 'asc')->first();
+        $flowprocee = !empty($flow->step_number) ? $flow->step_number : 0;
 
 		// Save
 		$requestStock = new RequestStock();
@@ -190,7 +112,7 @@ class StockRequest extends Controller
         $requestStock->on_behalf_of = !empty($stockRequest['on_behalf_of']) ? $stockRequest['on_behalf_of'] : 0;
         $requestStock->on_behalf_employee_id = !empty($stockRequest['on_behalf_employee_id']) ? $stockRequest['on_behalf_employee_id'] : 0;
         $requestStock->date_created = time();
-        $requestStock->status = 1;
+        $requestStock->status = $flowprocee;
         $requestStock->title_name = !empty($stockRequest['title_name']) ? $stockRequest['title_name'] : 0;
         $requestStock->store_id = !empty($stockRequest['store_id']) ? $stockRequest['store_id'] : 0;
         $requestStock->request_remarks = !empty($stockRequest['request_remarks']) ? $stockRequest['request_remarks'] : 0;
@@ -213,6 +135,49 @@ class StockRequest extends Controller
 			// next
             $numFiles++;
         }
+		// get approver ID and send them email
+		if (!empty($flow->employee_id))
+			$ApproverDetails = HRPerson::where('id', $flow->employee_id)->where('status', 1)->first();
+		else
+		{
+			if (!empty($flow->division_level_1) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelOne::where('id', $flow->division_level_1)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+			elseif(!empty($flow->division_level_2) && empty($flow->division_level_1) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelTwo::where('id', $flow->division_level_2)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+			elseif(!empty($flow->division_level_3) && empty($flow->division_level_2) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelThree::where('id', $flow->division_level_3)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+			elseif(!empty($flow->division_level_4) && empty($flow->division_level_3) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelFour::where('id', $flow->division_level_4)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+			elseif(!empty($flow->division_level_5) && empty($flow->division_level_4) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelFive::where('id', $flow->division_level_5)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+		}
+		if (!empty($ApproverDetails->email))
+			Mail::to($ApproverDetails->email)->send(new stockApprovals($ApproverDetails->first_name, $ApproverDetails->surname, $ApproverDetails->email));
         AuditReportsController::store('Stock Management', 'Stock Request Created', 'Created by User', 0);
         return response()->json();
     }

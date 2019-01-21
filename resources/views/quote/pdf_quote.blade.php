@@ -59,8 +59,8 @@
 						<table class="table table-striped table-bordered">
 							<tr>
 								<th style="width: 10px;">#</th>
-								<th style="width: 90px;">Product</th>
-								<th style="width: 80px;">Comment</th>
+								<th style="width: 150px;">Product</th>
+								<th style="width: 100px;">Comment</th>
 								<th class="text-center; width: 30px;">Quantity</th>
 								<th style="text-align: center; width: 100px;">Unit Price</th>
 								<th style="text-align: center; width: 100px;">Total</th>
