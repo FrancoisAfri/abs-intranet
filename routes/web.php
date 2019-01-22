@@ -762,6 +762,7 @@ Route::post('stock/products_kit/add/{kit}', 'StockController@addProductToKit');
 Route::patch('stock/product/update/{prod}', 'StockController@updateProductToKit');
 Route::get('stock/viewrequest/{stock}', 'StockRequest@viewRequest');
 Route::get('stock/viewrequest/{stock}/{back}', 'StockRequest@viewRequest');
+Route::get('stock/viewrequest/{stock}/{back}/{app}', 'StockRequest@viewRequest');
 Route::post('stock/remove/items/{item}', 'StockRequest@removeItems');
 Route::patch('stock/updateitems/{stock}', 'StockRequest@updateRequest');
 Route::get('stock/seach_request', 'StockRequest@requestSearch');
@@ -771,7 +772,8 @@ Route::post('stock/search_report' ,'StockController@searchreport');
 // Request & Approvals
 Route::get('stock/request_items', 'StockRequest@create');
 Route::post('stock/addstockrequest', 'StockRequest@store');
-
+Route::get('stock/request_approval', 'StockRequest@requestApprovals');
+Route::post('stock/appoverequests', 'StockRequest@appoveRequest');
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');

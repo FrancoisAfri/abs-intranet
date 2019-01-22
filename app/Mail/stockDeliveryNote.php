@@ -6,25 +6,22 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\HRPerson;
 use App\CompanyIdentity;
-use App\User;
-class stockApprovals extends Mailable
+class stockDeliveryNote extends Mailable
 {
     use Queueable, SerializesModels;
 	public $first_name;
-    public $surname;
-    public $email;
+    public $jcAttachment;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($first_name, $surname, $email)
+    public function __construct($first_name, $jcAttachment)
     {
-        // $this->user = $user->load('person');
         $this->first_name = $first_name;
-        $this->surname = $surname;
-        $this->email = $email;
+        $this->jcAttachment = $jcAttachment;
     }
 
     /**
@@ -36,17 +33,21 @@ class stockApprovals extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "New vehicle booking Application on $companyName online system.";
+        $subject = "Job Card Notification on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['dashboard_url'] = url('/stock/request_approval');
+        $data['dashboard_url'] = url('/');
+        $data['jobcard_url'] = url("/jobcards/jobcardsearch");
 
-        return $this->view('mails.stock_approvals')
+        return $this->view('mails.send_stock_delivery_note')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
+			->attachData($this->jcAttachment, 'JobCard.pdf', [
+                'mime' => 'application/pdf',
+            ])
             ->with($data);
     }
 }

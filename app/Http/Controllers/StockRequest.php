@@ -183,9 +183,8 @@ class StockRequest extends Controller
     }
 	
 	// View Request items
-	public function viewRequest(RequestStock $stock, $back='')
+	public function viewRequest(RequestStock $stock, $back='', $app='')
     {
-		//echo $back;
 		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf','requestStatus');
 		//return $stock;
 		$hrID = Auth::user()->person->id;
@@ -209,9 +208,10 @@ class StockRequest extends Controller
 			->orderBy('first_name', 'asc')
 			->orderBy('surname', 'asc')
 			->get();
-			
-		if (!empty($back)) $data['back'] = "/stock/seach_request";
-		else $data['back'] = '';
+		
+		$data['back'] = '';
+		if (!empty($back) && empty($app)) $data['back'] = "/stock/seach_request";
+		if (!empty($app)) $data['back'] = "stock";
 		$data['stockLevel'] = $stockLevel;
 		$data['stockLevelFives'] = $stockLevelFives;
 		$data['approvals'] = $approvals;
@@ -343,8 +343,7 @@ class StockRequest extends Controller
     }
 	// Search request
 	
-	// Search results
-	
+	// Search results	
 	public function requestResults(Request $request)
     {
         $SysData = $request->all();
@@ -411,10 +410,266 @@ class StockRequest extends Controller
             ['title' => 'Stock Management', 'path' => 'stock/seach_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Request Search ', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'Search';
-//return $stocks;
+        $data['active_mod'] = 'Stock Management';
+        $data['active_rib'] = 'Search Request';
+		
         AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Job Card card search Page Accessed", 0);
         return view('stock.search_request_result')->with($data);
+    }
+	// Request Approval landing page
+	public function requestApprovals()
+    {
+		$roleArray = array();
+        $user_id = Auth::user()->person->user_id;
+        $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
+            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+            ->where('security_modules.code_name', 'stock_management')
+            ->where('security_modules_access.access_level', '>=', 4)
+            ->where('security_modules_access.user_id', $user_id)
+            ->pluck('user_id')->first();
+
+        $processflow = Stock_Approvals_level::where('status', 1)->Where('employee_id',$user_id)->orderBy('id', 'asc')
+		->first();
+
+        $lastProcess = Stock_Approvals_level::where('status', 1)->orderBy('id', 'desc')->first();
+        $lastStepNumber = !empty($lastProcess->step_number) ? $lastProcess->step_number : 0;
+
+        $statuses = array();
+        $status = '';
+        $rowcolumn = $processflow->count();
+        if ($rowcolumn > 0 || !empty($userAccess)) 
+		{
+            if (empty($userAccess))
+			{
+                foreach ($processflow as $process) {
+                    $status .= $process->step_number . ',';
+                }
+                $status = rtrim($status, ",");
+                $statuses = (explode(",", $status));
+            }
+
+            $stocks = DB::table('request_stocks')
+                ->select('request_stocks.*','hr_people.first_name as firstname', 'hr_people.surname as surname'
+				,'hp.first_name as hp_firstname', 'hp.surname as hp_surname'
+				, 'stock_approvals_levels.step_name as step_name'
+				, 'stock_level_fives.name as store_name')
+               ->leftJoin('hr_people', 'request_stocks.employee_id', '=', 'hr_people.id')
+                ->leftJoin('hr_people as hp', 'request_stocks.on_behalf_employee_id', '=', 'hp.id')
+				->leftJoin('stock_approvals_levels', 'request_stocks.status', '=', 'stock_approvals_levels.step_number')
+				->leftJoin('stock_level_fives', 'request_stocks.store_id', '=', 'stock_level_fives.id')
+                ->where(function ($query) use ($statuses) {
+                    if (!empty($statuses)) {
+                        $query->whereIn('request_stocks.status', $statuses);
+                    }
+                })
+                ->where(function ($query) use ($lastStepNumber) {
+                    if (!empty($lastStepNumber)) {
+                        $query->where('request_stocks.status', '!=', $lastStepNumber);
+                    }
+                })
+                ->orderBy('request_stocks.date_created', 'desc')
+                ->get();
+
+            $steps = Stock_Approvals_level::latest()->first();
+            $stepnumber = !empty($steps->step_number) ? $steps->step_number : 0;
+
+            $data['page_title'] = "Stock";
+            $data['page_description'] = "Request Management";
+            $data['breadcrumb'] = [
+                ['title' => 'Stock Management', 'path' => 'stock/request_approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Request Approval ', 'active' => 1, 'is_module' => 0]
+            ];
+
+            $data['stepnumber'] = $stepnumber;
+            $data['stocks'] = $stocks;
+            $data['active_mod'] = 'Stock Management';
+			$data['active_rib'] = 'Request Approval';
+		
+            AuditReportsController::store('Job Card Management', 'Job Card Approvals Page Accessed', "Accessed By User", 0);
+            return view('stock.stock_approval')->with($data);
+        }
+		else return back()->with('success_edit', "The are not permitted to view this page.");
+    }
+	// Approve Request
+	public function appoveRequest(Request $request)
+    {
+        $this->validate($request, [
+            // 'date_uploaded' => 'required',
+        ]);
+        $results = $request->all();
+        //Exclude empty fields from query
+		//return $jobcards;
+        unset($results['_token']);
+        
+        foreach ($results as $key => $value) {
+            if (empty($results[$key])) {
+                unset($results[$key]);
+            }
+        }
+        foreach ($results as $key => $sValue) {
+            if (strlen(strstr($key, 'stockappprove'))) {
+                $aValue = explode("_", $key);
+                $name = $aValue[0];
+                $stockID = $aValue[1];
+				$stock = RequestStock::where('id', $stockID)->first();
+				$totalPrice = 0;
+				// get all product attached to this request and calculate total price pluck('product_id')
+		
+				$items = RequestStockItems::where('request_stocks_id',$stockID)->get();
+				foreach ($items as $item) {
+					$product = product_products::where('id',$item->product_id)->first();
+					$totalPrice = $totalPrice + $product->price;
+				}
+				// get max amount allow for this step
+				$currentStep = Stock_Approvals_level::where('step_number', $sValue)->where('status', 1)->first();
+				$maxAmount = !empty($currentStep->max_amount) ? $currentStep->max_amount : 0; 
+				
+				if ($totalPrice <= $maxAmount)
+				{
+					// Approve request
+					$steps = Stock_Approvals_level::latest()->first();
+					$stock->status = $steps->step_number;
+					$stock->update();
+					// Stock History and deduct from stock
+					foreach ($items as $item) {
+						
+						$stock = stock::where('product_id', $item->product_id)->where('store_id',$stock->store_id)->first();
+						$availblebalance = !empty($stock->avalaible_stock) ? $stock->avalaible_stock : 0;
+						$transactionbalance = $availblebalance - $item->quantity;
+
+						// Update stock availble balance
+						$stock->avalaible_stock = $transactionbalance;
+						$stock->update();
+						// Update stock history
+						$history = new stockhistory();
+						$history->product_id = $product->category_id;
+						$history->category_id = $product->product_id;
+						$history->avalaible_stock = $transactionbalance;
+						$history->action_date = time();
+						$history->balance_before = $availblebalance;
+						$history->balance_after = $transactionbalance;
+						$history->action = 'Stock Items Out';
+						$history->user_id = Auth::user()->person->id;
+						$history->user_allocated_id = 0;
+						$history->save();
+					}
+					// send email for request approval to request creator
+					
+					// sendemail to stock controller delivery note
+					$jcAttachment = $this->viewDeliveryNote($stockID, true);
+				//// Send sms and email to mechanic
+				if (!empty($mechanicdetails->email))
+					Mail::to($mechanicdetails->email)->send(new MechanicEmailJC($mechanicdetails->first_name, $jcAttachment));
+				}
+				else
+				{
+					$processflow = Stock_Approvals_level::where('step_number', '>', $sValue)->where('status', 1)->orderBy('step_number', 'asc')->first();
+					$stock->status = $processflow->step_number;
+					$stock->update();
+					// send email to nextstep employeeID
+				}
+               
+				
+                //send email to the next person the step
+				$users = HRUserRoles::where('role_id', $processflow->job_title)->pluck('hr_id');
+                foreach ($users as $manID) {
+                    $usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
+                    $email = $usedetails->email;
+                    $firstname = $usedetails->first_name;
+                    $surname = $usedetails->surname;
+                    $email = $usedetails->email;
+                    Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
+                }
+            }
+            // decline
+        }
+		
+		foreach ($results as $sKey => $sValue) 
+		{
+			if (strlen(strstr($sKey, 'declined_'))) 
+			{
+				list($sUnit, $iID) = explode("_", $sKey);
+				if ($sUnit == 'declined' && !empty($sValue)) {
+					if (empty($sValue)) $sValue = $sReasonToReject;
+
+					$getStatus = DB::table('jobcard_maintanance')->where('id', $iID)->first();
+					$statusflow = $getStatus->status;
+
+					$jobcard = jobcard_maintanance::where('id', $iID)->first();  // when declined move back to the last step
+					if ($statusflow === 0) {
+						// status 0 means declined
+						$jobcard->status = 0;
+					} elseif ($statusflow === 1) {
+						$jobcard->status = 0;
+					} else
+						$jobcard->status = $statusflow - 1;
+					$jobcard->reject_reason = $sValue;
+					$jobcard->reject_timestamp = time();
+					$jobcard->rejector_id = Auth::user()->person->id;
+					$jobcard->update();
+					
+					//Jobcard history
+					$JobCardHistory = new JobCardHistory();
+					$JobCardHistory->job_card_id = $stock->id;
+					$JobCardHistory->user_id = Auth::user()->person->id;
+					$JobCardHistory->status = $jobcard->status;
+					$JobCardHistory->comment = "New Job Card Status Updated";
+					$JobCardHistory->action_date = time();
+					$JobCardHistory->save();
+					
+					if ($statusflow != 0) {
+						$processflow = processflow::where('step_number', $statusflow - 1)->where('status', 1)->orderBy('step_number', 'asc')->first();
+						$user = HRUserRoles::where('role_id', $processflow->job_title)->pluck('hr_id');
+						foreach ($user as $manID) 
+						{
+							$usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
+							$email = $usedetails->email;
+							$firstname = $usedetails->first_name;
+							$surname = $usedetails->surname;
+							$email = $usedetails->email;
+							$reason = $sValue;
+							Mail::to($email)->send(new DeclinejobstepNotification($firstname, $surname, $email, $reason));
+						}
+					}
+				}
+            }
+            $sReasonToReject = '';
+        }
+
+        AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User",0);
+        return back();
+    }
+	public function viewDeliveryNote(RequestStock $stock, $isPDF = false)
+    {
+		$userID = Auth::user()->id;
+		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf');
+		
+		
+		if ($isPDF === true) 
+		{
+			AuditReportsController::store('Job Card Management', 'Job Cards Printed', "Accessed By User");
+			$companyDetails = CompanyIdentity::systemSettings();
+			$companyName = $companyDetails['company_name'];
+			$user = Auth::user()->load('person');
+
+			$data['support_email'] = $companyDetails['support_email'];
+			$data['company_name'] = $companyName;
+			$data['full_company_name'] = $companyDetails['full_company_name'];
+			$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+			$data['date'] = date("d-m-Y");
+			$data['user'] = $user;
+			$data['file_name'] = 'JobCard';
+            $view = view('stock.delivery_note', $data)->render();
+            $pdf = resolve('dompdf.wrapper');
+            $pdf->getDomPDF()->set_option('enable_html5_parser', true);
+            $pdf->loadHTML($view);
+			return $pdf->output();
+        }
+		else 
+		{
+			AuditReportsController::store('Job Card Management', 'View Job Cards Page Accessed', "Accessed By User");
+			return view('stock.delivery_note')->with($data);
+        }
+
     }
 }

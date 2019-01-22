@@ -155,8 +155,9 @@
 		$('[data-toggle="tooltip"]').tooltip();
 		//Cancel button click event
             document.getElementById("cancel").onclick = function () {
-			if ("{{$back}}" === '')
+				if ("{{$back}}" === '')
 					location.href = "/stock/request_items";
+				else if ("{{$back}}" === 'stock') location.href = "/stock/request_approval";
 				else location.href = "/stock/seach_request";
             };
 		//Vertically center modals on page

@@ -1602,8 +1602,8 @@ HTML;
 				$stock->update();
 				// Update stock history
 				$history = new stockhistory();
-				$history->product_id = $product->category_id;
-				$history->category_id = $product->product_id;
+				$history->product_id = $product->product_id;
+				$history->category_id = $product->category_id;
 				$history->avalaible_stock = $transactionbalance;
 				$history->action_date = time();
 				$history->balance_before = $availblebalance;
@@ -2012,20 +2012,19 @@ HTML;
 			->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
 			->where(function ($query) use ($status) {
 				if (!empty($status)) {
-					 $query->where('jobcard_process_flow.step_name','ILIKE', "%$status%");
-					 
+					$query->where('jobcard_process_flow.step_name','ILIKE', "%$status%");	 
 				}
 			})
 			->where(function ($query) use ($vehicleID) {
 				if (!empty($vehicleID)) {
-					 $query->where('jobcard_maintanance.vehicle_id', $vehicleID);
+					$query->where('jobcard_maintanance.vehicle_id', $vehicleID);
 				}
 			})
 			->where(function ($query) use ($actionFrom, $actionTo) {
 				if ($actionFrom > 0 && $actionTo > 0) {
-						$query->whereBetween('jobcard_maintanance.card_date', [$actionFrom, $actionTo]);
+					$query->whereBetween('jobcard_maintanance.card_date', [$actionFrom, $actionTo]);
 				}
-			})		
+			})
 			->orderBy('jobcard_maintanance.id', 'asc')
 			->get();
 		if (!empty($jobCards)) $jobCards->load('JCinstructions');  
@@ -2070,7 +2069,6 @@ HTML;
         $productID = $SysData['product_id'];
         $actionDate = $SysData['action_date'];
         $vehicleID = $SysData['vehicle_id'];
- 
         $actionFrom = $actionTo = 0;
         $actionDate = $request['action_date'];
         if (!empty($actionDate)) {
@@ -2174,7 +2172,6 @@ HTML;
 
 			}
 		})
-		
 		->where(function ($query) use ($vehicleID) {
 			if (!empty($vehicleID)) {
 				$query->where('jobcard__order_parts.vehicle_id', $vehicleID);

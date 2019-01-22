@@ -37,4 +37,8 @@ class RequestStock extends Model
     {
         return $this->belongsTo(Stock_Approvals_level::class, 'status');
     }
+	public function stockDeliver()
+    {
+        return $this->hasMany(StockDelivery::class, 'request_stocks_id');
+    }
 }

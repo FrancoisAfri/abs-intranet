@@ -6,25 +6,22 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\HRPerson;
 use App\CompanyIdentity;
-use App\User;
-class stockApprovals extends Mailable
+class StockRequestApproved extends Mailable
 {
     use Queueable, SerializesModels;
 	public $first_name;
-    public $surname;
-    public $email;
+	public $requestNo;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($first_name, $surname, $email)
+    public function __construct($first_name,$requestNo)
     {
-        // $this->user = $user->load('person');
         $this->first_name = $first_name;
-        $this->surname = $surname;
-        $this->email = $email;
+        $this->request_no = $first_name;
     }
 
     /**
@@ -36,15 +33,16 @@ class stockApprovals extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "New vehicle booking Application on $companyName online system.";
+        $subject = "Stock Request Approved on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['dashboard_url'] = url('/stock/request_approval');
+        $data['dashboard_url'] = url('/');
+        $data['stock_url'] = url("/stock/request_items");
 
-        return $this->view('mails.stock_approvals')
+        return $this->view('mails.approved_stock_request')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);
