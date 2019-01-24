@@ -26,22 +26,34 @@
                 <div style="overflow-X:auto;">
                    <table class="table table-striped table-bordered">
 						<tr>
-							<td class="caption"><b>Date Requeted:</b></td>
+							<td><b>Date Requeted:</b></td>
 							<td>{{ !empty($stock->date_created) ? date(' d M Y', $stock->date_created) : '' }}</b></td>
-							<td class="caption"><b>Title:</b></td>
+							<td><b>Title:</b></td>
 							<td>{{ !empty($stock->title_name) ? $stock->title_name : '' }}</b></td>
 						</tr>
 						<tr>
-							<td class="caption"><b>Employee:</b></td>
+							<td><b>Employee:</b></td>
 							<td>{{ (!empty($stock->employees)) ?  $stock->employees->first_name . ' ' .  $stock->employees->surname : ''}}</b></td>
-							<td class="caption"><b>On Behalf Of:</td>
+							<td><b>On Behalf Of:</td>
 							<td>{{ (!empty($stock->employeeOnBehalf)) ?  $stock->employeeOnBehalf->first_name . ' ' .  $stock->employeeOnBehalf->surname : ''}}</b></td>
 						</tr>
 						<tr>
-							<td class="caption"><b>Remarks:</b></td>
+							<td><b>Remarks:</b></td>
 							<td>{{ (!empty($stock->request_remarks)) ?  $stock->request_remarks : ''}}</b></td>
-							<td class="caption"><b>Status:</b></td>
+							<td><b>Status:</b></td>
 							<td>{{ !empty($stock->status) ? $stock->requestStatus->step_name : '' }}</b></td>
+						</tr>
+						<tr>
+							<td><b>Rejection Reason:</b></td>
+							<td>{{ (!empty($stock->rejection_reason)) ?  $stock->rejection_reason : ''}}</b></td>
+							<td><b>Rejected By:</b></td>
+							<td>{{ !empty($stock->rejectedPerson) ? $stock->rejectedPerson->first_name . ' ' .  $stock->rejectedPerson->surname : '' }}</b></td>
+						</tr>
+						<tr>
+							<td><b>Date Rejected:</b></td>
+							<td>{{ (!empty($stock->rejection_date)) ? date(' d M Y', $stock->rejection_date) : ''}}</b></td>
+							<td></td>
+							<td></td>
 						</tr>
 					</table>
 					<table class="table table-striped table-bordered">

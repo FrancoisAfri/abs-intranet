@@ -7,7 +7,9 @@ use App\Http\Requests;
 use App\Mail\confirm_collection;
 use App\product_category;
 use App\stock;
+use App\HRRoles;
 use App\stockhistory;
+use App\HRUserRoles;
 use App\JobCategory;
 use App\product_products;
 use App\RequestStock;
@@ -18,6 +20,8 @@ use App\Stock_Approvals_level;
 use App\stockLevel;
 use App\Users;
 use App\Mail\stockApprovals;
+use App\Mail\StockRequestApproved;
+use App\Mail\stockDeliveryNote;
 use App\DivisionLevelFive;
 use App\DivisionLevelFour;
 use App\DivisionLevelThree;
@@ -31,6 +35,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 
 class StockRequest extends Controller
 {
@@ -135,6 +140,10 @@ class StockRequest extends Controller
 			// next
             $numFiles++;
         }
+		$requestStock->request_number = "ST".$requestStock->id;
+		$requestStock->invoice_number = "INV".$requestStock->id;
+		$requestStock->update();
+		
 		// get approver ID and send them email
 		if (!empty($flow->employee_id))
 			$ApproverDetails = HRPerson::where('id', $flow->employee_id)->where('status', 1)->first();
@@ -177,7 +186,7 @@ class StockRequest extends Controller
 			}
 		}
 		if (!empty($ApproverDetails->email))
-			Mail::to($ApproverDetails->email)->send(new stockApprovals($ApproverDetails->first_name, $ApproverDetails->surname, $ApproverDetails->email));
+			Mail::to($ApproverDetails->email)->send(new stockApprovals($ApproverDetails->first_name, $requestStock->request_number));
         AuditReportsController::store('Stock Management', 'Stock Request Created', 'Created by User', 0);
         return response()->json();
     }
@@ -185,7 +194,7 @@ class StockRequest extends Controller
 	// View Request items
 	public function viewRequest(RequestStock $stock, $back='', $app='')
     {
-		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf','requestStatus');
+		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf','requestStatus','rejectedPerson');
 		//return $stock;
 		$hrID = Auth::user()->person->id;
 		$approvals =StockSettings::select('require_store_manager_approval')->orderBy('id','desc')->first();
@@ -413,7 +422,7 @@ class StockRequest extends Controller
         $data['active_mod'] = 'Stock Management';
         $data['active_rib'] = 'Search Request';
 		
-        AuditReportsController::store('Job Card Management', 'Job Card Search Page Accessed', "Job Card card search Page Accessed", 0);
+        AuditReportsController::store('Stock Management', 'Job Card Search Page Accessed', "Job Card card search Page Accessed", 0);
         return view('stock.search_request_result')->with($data);
     }
 	// Request Approval landing page
@@ -485,7 +494,7 @@ class StockRequest extends Controller
             $data['active_mod'] = 'Stock Management';
 			$data['active_rib'] = 'Request Approval';
 		
-            AuditReportsController::store('Job Card Management', 'Job Card Approvals Page Accessed', "Accessed By User", 0);
+            AuditReportsController::store('Stock Management', 'Job Card Approvals Page Accessed', "Accessed By User", 0);
             return view('stock.stock_approval')->with($data);
         }
 		else return back()->with('success_edit', "The are not permitted to view this page.");
@@ -533,17 +542,18 @@ class StockRequest extends Controller
 					// Stock History and deduct from stock
 					foreach ($items as $item) {
 						
-						$stock = stock::where('product_id', $item->product_id)->where('store_id',$stock->store_id)->first();
-						$availblebalance = !empty($stock->avalaible_stock) ? $stock->avalaible_stock : 0;
+						$stockA = stock::where('product_id', $item->product_id)->where('store_id',$stock->store_id)->first();
+						$availblebalance = !empty($stockA->avalaible_stock) ? $stockA->avalaible_stock : 0;
 						$transactionbalance = $availblebalance - $item->quantity;
 
 						// Update stock availble balance
-						$stock->avalaible_stock = $transactionbalance;
-						$stock->update();
+						$stockA->avalaible_stock = $transactionbalance;
+						$stockA->update();
 						// Update stock history
+						$category = product_products::where('id',$item->product_id)->first();
 						$history = new stockhistory();
-						$history->product_id = $product->category_id;
-						$history->category_id = $product->product_id;
+						$history->product_id = $item->product_id;
+						$history->category_id = $category->category_id;
 						$history->avalaible_stock = $transactionbalance;
 						$history->action_date = time();
 						$history->balance_before = $availblebalance;
@@ -556,30 +566,71 @@ class StockRequest extends Controller
 					// send email for request approval to request creator
 					
 					// sendemail to stock controller delivery note
-					$jcAttachment = $this->viewDeliveryNote($stockID, true);
-				//// Send sms and email to mechanic
-				if (!empty($mechanicdetails->email))
-					Mail::to($mechanicdetails->email)->send(new MechanicEmailJC($mechanicdetails->first_name, $jcAttachment));
+					$jcAttachment = $this->viewDeliveryNote($stock->id, true);
+					$role = HRRoles::where('description', 'Stock Controller')->first();
+					$users = HRUserRoles::where('role_id', $role->id)->pluck('hr_id');
+					foreach ($users as $userID) {
+						$userDetails = HRPerson::where('id', $userID)->select('first_name', 'email')->first();
+						Mail::to($userDetails->email)->send(new stockDeliveryNote($userDetails->first_name, $jcAttachment,$stock->request_number));
+					}
+					//// Send sms and email to mechanic
+					if (!empty($stock->employee_id))
+					{
+						$empDetails = HRPerson::where('id', $stock->employee_id)->select('first_name', 'email')->first();
+						if (!empty($empDetails->email))
+						Mail::to($empDetails->email)->send(new StockRequestApproved($empDetails->first_name,$stock->request_number));
+					}
 				}
 				else
 				{
 					$processflow = Stock_Approvals_level::where('step_number', '>', $sValue)->where('status', 1)->orderBy('step_number', 'asc')->first();
 					$stock->status = $processflow->step_number;
 					$stock->update();
+							// get approver ID and send them email
+					if (!empty($processflow->employee_id))
+						$ApproverDetails = HRPerson::where('id', $processflow->employee_id)->where('status', 1)->first();
+					else
+					{
+						if (!empty($processflow->division_level_1) && empty($processflow->employee_id))
+						{
+							$Dept = DivisionLevelOne::where('id', $processflow->division_level_1)->first();
+							$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+							->select('first_name', 'surname', 'email')
+							->first();
+						}
+						elseif(!empty($processflow->division_level_2) && empty($processflow->division_level_1) && empty($processflow->employee_id))
+						{
+							$Dept = DivisionLevelTwo::where('id', $processflow->division_level_2)->first();
+							$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+							->select('first_name', 'surname', 'email')
+							->first();
+						}
+						elseif(!empty($processflow->division_level_3) && empty($processflow->division_level_2) && empty($processflow->employee_id))
+						{
+							$Dept = DivisionLevelThree::where('id', $processflow->division_level_3)->first();
+							$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+							->select('first_name', 'surname', 'email')
+							->first();
+						}
+						elseif(!empty($processflow->division_level_4) && empty($processflow->division_level_3) && empty($processflow->employee_id))
+						{
+							$Dept = DivisionLevelFour::where('id', $processflow->division_level_4)->first();
+							$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+							->select('first_name', 'surname', 'email')
+							->first();
+						}
+						elseif(!empty($processflow->division_level_5) && empty($processflow->division_level_4) && empty($processflow->employee_id))
+						{
+							$Dept = DivisionLevelFive::where('id', $processflow->division_level_5)->first();
+							$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+							->select('first_name', 'surname', 'email')
+							->first();
+						}
+					}
 					// send email to nextstep employeeID
+					if (!empty($ApproverDetails->email))
+						Mail::to($ApproverDetails->email)->send(new stockApprovals($ApproverDetails->first_name, $requestStock->request_number));
 				}
-               
-				
-                //send email to the next person the step
-				$users = HRUserRoles::where('role_id', $processflow->job_title)->pluck('hr_id');
-                foreach ($users as $manID) {
-                    $usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
-                    $email = $usedetails->email;
-                    $firstname = $usedetails->first_name;
-                    $surname = $usedetails->surname;
-                    $email = $usedetails->email;
-                    Mail::to($email)->send(new NextjobstepNotification($firstname, $surname, $email));
-                }
             }
             // decline
         }
@@ -607,16 +658,7 @@ class StockRequest extends Controller
 					$jobcard->reject_timestamp = time();
 					$jobcard->rejector_id = Auth::user()->person->id;
 					$jobcard->update();
-					
-					//Jobcard history
-					$JobCardHistory = new JobCardHistory();
-					$JobCardHistory->job_card_id = $stock->id;
-					$JobCardHistory->user_id = Auth::user()->person->id;
-					$JobCardHistory->status = $jobcard->status;
-					$JobCardHistory->comment = "New Job Card Status Updated";
-					$JobCardHistory->action_date = time();
-					$JobCardHistory->save();
-					
+										
 					if ($statusflow != 0) {
 						$processflow = processflow::where('step_number', $statusflow - 1)->where('status', 1)->orderBy('step_number', 'asc')->first();
 						$user = HRUserRoles::where('role_id', $processflow->job_title)->pluck('hr_id');
@@ -636,7 +678,7 @@ class StockRequest extends Controller
             $sReasonToReject = '';
         }
 
-        AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User",0);
+        AuditReportsController::store('Stock Management', 'Job card Approvals Page', "Accessed By User",0);
         return back();
     }
 	public function viewDeliveryNote(RequestStock $stock, $isPDF = false)
@@ -644,10 +686,10 @@ class StockRequest extends Controller
 		$userID = Auth::user()->id;
 		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf');
 		
-		
+		$data['stock'] = $stock;	
 		if ($isPDF === true) 
 		{
-			AuditReportsController::store('Job Card Management', 'Job Cards Printed', "Accessed By User");
+			AuditReportsController::store('Stock Management', 'Delivery Note Printed', "Accessed By User");
 			$companyDetails = CompanyIdentity::systemSettings();
 			$companyName = $companyDetails['company_name'];
 			$user = Auth::user()->load('person');
@@ -658,7 +700,7 @@ class StockRequest extends Controller
 			$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
 			$data['date'] = date("d-m-Y");
 			$data['user'] = $user;
-			$data['file_name'] = 'JobCard';
+			$data['file_name'] = 'Delivery Note';
             $view = view('stock.delivery_note', $data)->render();
             $pdf = resolve('dompdf.wrapper');
             $pdf->getDomPDF()->set_option('enable_html5_parser', true);
@@ -667,9 +709,8 @@ class StockRequest extends Controller
         }
 		else 
 		{
-			AuditReportsController::store('Job Card Management', 'View Job Cards Page Accessed', "Accessed By User");
+			AuditReportsController::store('Stock Management', 'View Delivery Note', "Accessed By User");
 			return view('stock.delivery_note')->with($data);
         }
-
     }
 }

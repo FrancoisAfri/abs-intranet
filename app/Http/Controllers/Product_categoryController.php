@@ -15,6 +15,7 @@ use App\stockLevel;
 use App\StockSettings;
 use App\ContactCompany;
 use App\stockInfo;
+use App\stock;
 use App\Stock_location;
 use App\productsPrefferedSuppliers;
 use App\productsPreferredSupplier;
@@ -85,12 +86,19 @@ class Product_categoryController extends Controller
             //$products = product_products::orderBy('name', 'asc')->get();
             //$Category->load('productCategory');
 			
-			$products = product_products::select('Product_products.*','stock.avalaible_stock')
-            ->leftJoin('stock', 'stock.product_id', '=', 'Product_products.id')
-             ->orderBy('Product_products.name', 'asc')
-            ->orderBy('Product_products.id', 'name')
+			$products = product_products::with(['productPrices' => function ($query) {
+                    $query->orderBy('id', 'desc');
+                    $query->limit(1);
+                }])
+			->orderBy('Product_products.name', 'asc')
 			->where('Product_products.category_id', $Category->id)
             ->get();
+			///
+			foreach ($products as $product) {
+                $currentPrice = ($product->productPrices->first())
+                    ? $product->productPrices->first()->price : $product->price;
+                $product->current_price = $currentPrice;
+            }
 			//return $products;
             $data['page_title'] = 'Manage Products Product';
             $data['page_description'] = 'Products page';

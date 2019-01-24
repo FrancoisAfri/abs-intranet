@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - Stock Delivery Note</title>
+    <title>{{ $company_name }} - Stock Request Approved</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -213,7 +213,7 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-													We Would like to that your stock request {{$request_no}} have been approved<br><br>
+													We Would like to inform you that, your stock request with ref #: {{$request_no}} have been approved<br><br>
                                                     For more details, please click the link <a href="{{ $stock_url }}">View Request</a>.
                                                 </td>
                                             </tr>

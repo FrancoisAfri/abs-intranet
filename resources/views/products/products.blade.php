@@ -17,7 +17,6 @@
                             <th style="width: 10px">#</th>
                             <th>Name</th>
                             <th>Code</th>
-                            <th>Available Stock</th>
                             @if (isset($userAccess) && $userAccess->access_level > 1)
                                 <th>Price</th>
                             @else
@@ -49,9 +48,8 @@
                                             Prices</a></td>
                                     <td>{{ (!empty($product->name)) ?  $product->name : ''}} </td>
                                     <td>{{ (!empty($product->product_code)) ?  $product->product_code : ''}} </td>
-                                    <td style="text-align:center">{{ (!empty($product->avalaible_stock)) ?  $product->avalaible_stock : ''}} </td>
                                     @if (isset($userAccess) && $userAccess->access_level > 1)
-                                        <td>{{ (!empty( $product->price)) ?  'R' .number_format($product->price, 2) : ''}} </td>
+                                        <td>{{ (!empty($product->current_price)) ?  'R ' .number_format($product->current_price, 2) : 0}} </td>
                                     @else
                                         <td></td>
                                     @endif

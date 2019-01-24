@@ -12,7 +12,9 @@ class RequestStock extends Model
     // Mass assignable fields
     protected $fillable = [
         'employee_id', 'on_behalf_of', 'on_behalf_employee_id', 'date_created'
-		, 'date_approved', 'status', 'title_name', 'request_remarks', 'store_id'];
+		, 'date_approved', 'status', 'title_name', 'request_remarks', 'store_id'
+		, 'request_number', 'invoice_number', 'delivery_number', 'rejection_reason'
+		, 'rejected_by', 'rejection_date'];
 		
 	/**
      * Relationship between RequestStock and RequestStockItems
@@ -27,6 +29,11 @@ class RequestStock extends Model
 	public function employees()
     {
         return $this->belongsTo(HRPerson::class, 'employee_id');
+    }
+	
+	public function rejectedPerson()
+    {
+        return $this->belongsTo(HRPerson::class, 'rejected_by');
     }
 	
 	public function employeeOnBehalf()

@@ -825,7 +825,6 @@ class QuotesController extends Controller
         $data['active_mod'] = 'Quote';
         $data['active_rib'] = 'Search Results';
         $data['quoteApplications'] = $quoteApplications;
-        //return $quoteApplications;
         AuditReportsController::store('Quote', 'Quote Search Results', 'Accessed By User', 0);
         return view('quote.search_results')->with($data);
     }

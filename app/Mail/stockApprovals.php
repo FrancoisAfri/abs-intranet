@@ -12,19 +12,16 @@ class stockApprovals extends Mailable
 {
     use Queueable, SerializesModels;
 	public $first_name;
-    public $surname;
-    public $email;
+    public $request_no;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($first_name, $surname, $email)
+    public function __construct($first_name, $request_no)
     {
-        // $this->user = $user->load('person');
         $this->first_name = $first_name;
-        $this->surname = $surname;
-        $this->email = $email;
+        $this->request_no  = $request_no;
     }
 
     /**
@@ -36,7 +33,7 @@ class stockApprovals extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "New vehicle booking Application on $companyName online system.";
+        $subject = "Stock Request Approval on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;

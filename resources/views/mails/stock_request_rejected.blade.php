@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - Stock Request Approval</title>
+    <title>{{ $company_name }} - Stock Request Rejected</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -159,7 +159,6 @@
         .force-full-width {
             width: 100% !important;
         }
-
     </style>
     <style type="text/css" media="only screen and (max-width: 600px)">
         @media only screen and (max-width: 600px) {
@@ -194,7 +193,6 @@
         }
     </style>
 </head>
-
 <body leftmargin="0" marginwidth="0" topmargin="0" marginheight="0" offset="0" bgcolor="" class="background">
 <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" class="background">
     <tr>
@@ -215,13 +213,15 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that, There is a new stock request on {{ $company_name }},  with ref #: {{$request_no}}, that requires your attention! For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
+													We Would like to inform you that, your stock request with ref #: {{$request_no}} have been rejected<br><br>
+                                                    For more details, please click the link <a href="{{ $stock_url }}">View Request</a>.
                                                 </td>
                                             </tr>
+
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    {{ $company_name }} Online System
+                                                    {{ $company_name }} online system
                                                 </td>
                                             </tr>
                                         </table>
@@ -242,6 +242,5 @@
         </td>
     </tr>
 </table>
-
 </body>
 </html>

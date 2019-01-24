@@ -26,6 +26,18 @@
                 <div style="overflow-X:auto;">
                    <table class="table table-striped table-bordered">
 						<tr>
+							<td class="caption"><b>Request #</b></td>
+							<td>{{ !empty($stock->request_number) ? date(' d M Y', $stock->request_number) : '' }}</b></td>
+							<td class="caption"><b>Invoice #:</b></td>
+							<td>{{ !empty($stock->invoice_number) ? $stock->invoice_number : '' }}</b></td>
+						</tr>
+						<tr>
+							<td class="caption"><b>Delivery #</b></td>
+							<td>{{ !empty($stock->delivery_number) ? date(' d M Y', $stock->delivery_number) : '' }}</b></td>
+							<td class="caption"></td>
+							<td></td>
+						</tr>
+						<tr>
 							<td class="caption"><b>Date Requeted:</b></td>
 							<td>{{ !empty($stock->date_created) ? date(' d M Y', $stock->date_created) : '' }}</b></td>
 							<td class="caption"><b>Title:</b></td>
@@ -47,12 +59,12 @@
 							<td style="text-align:center"><b>Quantity</b></td>
 						</tr>
 						@if (count($stock->stockItems) > 0)
-							@foreach ($stock->stockItems as $items)
+							@foreach ($stock->stockItems as $item)
 								<tr>
 									<td>{{ $loop->iteration }}</td>
-									<td>{{ !empty($items->categories->name) ? $items->categories->name : '' }}</td>
-									<td>{{ !empty($items->products->name) ? $items->products->name : '' }}</td>
-									<td style="text-align:center">{{ !empty($items->quantity) ? $items->quantity : '' }}</td>
+									<td>{{ !empty($item->categories->name) ? $item->categories->name : '' }}</td>
+									<td>{{ !empty($item->products->name) ? $item->products->name : '' }}</td>
+									<td style="text-align:center">{{ !empty($item->quantity) ? $item->quantity : '' }}</td>
 								</tr>
 							@endforeach
 						@else

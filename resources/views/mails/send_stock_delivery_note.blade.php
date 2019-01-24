@@ -213,8 +213,9 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-													There is a new stock request that requires your attention.<br><br>
-                                                    Please see attached stock request delivery note.
+													There is a new stock request with ref #: {{$request_no}}, that requires your attention.<br>
+                                                    Please see attached stock request delivery note.<br>
+													For more details, please click the link <a href="{{ $stock_url }}">View Request</a>.
                                                 </td>
                                             </tr>
 
