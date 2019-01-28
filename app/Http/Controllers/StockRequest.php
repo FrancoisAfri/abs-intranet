@@ -19,6 +19,7 @@ use App\stockLevelFive;
 use App\Stock_Approvals_level;
 use App\stockLevel;
 use App\Users;
+use App\product_price;
 use App\Mail\stockApprovals;
 use App\Mail\StockRequestApproved;
 use App\Mail\stockDeliveryNote;
@@ -202,6 +203,7 @@ class StockRequest extends Controller
 		$stockLevel =stockLevel::where('active',1)->where('level',5)->orderBy('level','asc')->first();
 
 		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
+		$flow = Stock_Approvals_level::where('status', 1)->orderBy('id', 'desc')->latest()->first();
 		
 		$employees = DB::table('hr_people')
                 ->select('hr_people.*')
@@ -223,6 +225,7 @@ class StockRequest extends Controller
 		if (!empty($app)) $data['back'] = "stock";
 		$data['stockLevel'] = $stockLevel;
 		$data['stockLevelFives'] = $stockLevelFives;
+		$data['flow'] = $flow;
 		$data['approvals'] = $approvals;
 		$data['employees'] = $employees;
 		$data['employeesOnBehalf'] = $employeesOnBehalf;
@@ -523,11 +526,16 @@ class StockRequest extends Controller
 				$stock = RequestStock::where('id', $stockID)->first();
 				$totalPrice = 0;
 				// get all product attached to this request and calculate total price pluck('product_id')
-		
 				$items = RequestStockItems::where('request_stocks_id',$stockID)->get();
+			
 				foreach ($items as $item) {
 					$product = product_products::where('id',$item->product_id)->first();
-					$totalPrice = $totalPrice + $product->price;
+					$productPrice = product_price::where('product_product_id',$item->product_id)
+							->orderBy('id', 'desc')
+							->first();
+					$currentPrice = !empty($productPrice->price) 
+						? $productPrice->price : !empty($product->price) ? $product->price : 0;
+					$totalPrice = $totalPrice + $currentPrice;
 				}
 				// get max amount allow for this step
 				$currentStep = Stock_Approvals_level::where('step_number', $sValue)->where('status', 1)->first();
@@ -643,6 +651,7 @@ class StockRequest extends Controller
 				if ($sUnit == 'declined' && !empty($sValue)) {
 					if (empty($sValue)) $sValue = $sReasonToReject;
 
+					//$stock = RequestStock::where('id', $)->->first();
 					$getStatus = DB::table('jobcard_maintanance')->where('id', $iID)->first();
 					$statusflow = $getStatus->status;
 
@@ -679,6 +688,41 @@ class StockRequest extends Controller
         }
 
         AuditReportsController::store('Stock Management', 'Job card Approvals Page', "Accessed By User",0);
+        return back();
+    }
+	
+	// Approve Request
+	public function appoveRequestSingle(RequestStock $stock)
+    {
+		$processflow = Stock_Approvals_level::where('step_number', '>', $stock)->where('status', 1)->orderBy('step_number', 'asc')->first();
+		$stock->status = $processflow->step_number;
+		$stock->update();
+		// add to vehicle history 
+		$VehicleHistory = new VehicleHistory();
+		$VehicleHistory->vehicle_id = $fleet->id;
+		$VehicleHistory->user_id = Auth::user()->person->id;
+		$VehicleHistory->status = 1;
+		$VehicleHistory->comment = "New Vehicle Approved";
+		$VehicleHistory->action_date = time();
+		$VehicleHistory->save();
+		
+		$vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
+        $vehicleConfig = $vehicleConfigs->first();
+		# Send email to admin and person who added the vehicle
+		if ($vehicleConfig == 1) {
+			
+			if (!empty($fleet->author_id))
+			{
+				$authoretails = HRPerson::where('id', $fleet->author_id)->select('first_name', 'surname', 'email')->first();
+				$email = !empty($authoretails->email) ? $authoretails->email : ''; 
+				$firstname = !empty($authoretails->first_name) ? $authoretails->first_name : ''; 
+				$surname = !empty($authoretails->surname) ? $authoretails->surname : '';
+				if (!empty($authoretails->email))
+							Mail::to($email)->send(new VehicleApproved($firstname, $surname, $email, $fleet->id));
+			}
+		}
+		
+		AuditReportsController::store('Stock Management', 'Approve Stock Request ', "Stock request has been Approved", 0);
         return back();
     }
 	public function viewDeliveryNote(RequestStock $stock, $isPDF = false)

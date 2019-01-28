@@ -497,8 +497,14 @@ class QuotesController extends Controller
         $validator->after(function ($validator) use ($request, $quoteType) {
             $products = $request->input('product_id');
             $packages = $request->input('package_id');
-
-            if (($quoteType == 1) && (!$products && !$packages)) {
+			$contactPersonID = $request->input('contact_person_id');
+			$contactPeople = ContactPerson::where('status', 1)->where('id', $contactPersonID)->first();
+            if (empty($contactPeople->email))
+                $validator->errors()->add('contact_email', 'The Contact person Choosen does not have an email address. Please add one before completing this process.');
+            elseif (!empty($contactPeople->email) && !filter_var($contactPeople->email, FILTER_VALIDATE_EMAIL))
+				$validator->errors()->add('contact_email', 'The Contact person Choosen does not have a valid email address. Please correct it before completing this process.');
+				
+			if (($quoteType == 1) && (!$products && !$packages)) {
                 $validator->errors()->add('product_id', 'Please make sure you select at least a product or a package.');
                 $validator->errors()->add('package_id', 'Please make sure you select at least a product or a package.');
             }

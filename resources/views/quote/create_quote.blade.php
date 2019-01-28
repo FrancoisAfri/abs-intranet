@@ -14,6 +14,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <form class="form-horizontal" method="POST" action="/quote/adjust">
+				<input type="hidden" name="contact_email" id="contact_email" value="">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
                         <h3 class="box-title">New Quote</h3>

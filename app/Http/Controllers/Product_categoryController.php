@@ -29,7 +29,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\ImageManagerStatic as Image;
-// use App\product_category;
+
 class Product_categoryController extends Controller
 {
 
@@ -55,7 +55,6 @@ class Product_categoryController extends Controller
         } else {
             $products = $ProductCategory->first()->id;
         }
-        // $names->first()->first_name ;
 		$stockTypeArray = array(1 => 'Stock Item', 2 => 'Non Stock Item', 3 => 'Both');
         $data['products'] = $products;
         $data['page_title'] = 'Product Categories';
@@ -83,9 +82,7 @@ class Product_categoryController extends Controller
                 ->where('user_id', Auth::user()->person->user_id)
                 ->first();
             $jobCategories = product_category::orderBy('name', 'asc')->get();
-            //$products = product_products::orderBy('name', 'asc')->get();
-            //$Category->load('productCategory');
-			
+
 			$products = product_products::with(['productPrices' => function ($query) {
                     $query->orderBy('id', 'desc');
                     $query->limit(1);

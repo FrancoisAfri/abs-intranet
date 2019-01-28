@@ -101,14 +101,29 @@
 							><i class="fa fa-pencil-square-o"></i> Edit
 							</button>
 						@endif
+						@if(!empty($stock->status) && $flow->step_number > $stock->status)
+							<button type="button" class="btn btn-primary btn-success" 
+								id="request_approved" onclick="postData({{$stock->id}}, 'request_approval');">
+								<i class="fa fa-check"></i> Approve Request</button>
+							<button type="button" class="btn btn-primary btn-danger" data-toggle="modal"
+                            data-target="#stock-reject-modal" data-id="{{ $stock->id }}"
+							><i class="fa fa-times"></i> Reject Request
+							</button>
+						@endif
+						<button type="button" class="btn btn-primary btn-danger" data-toggle="modal"
+                            data-target="#stock-reject-modal" data-id="{{ $stock->id }}"
+							><i class="fa fa-times"></i> Print Delivery Note
+						</button>
                     </div>
                 </div>
             </div>
 			@include('stock.partials.edit_request_modal')
+			@include('stock.partials.stock_request_rejection')
 			@if (count($stock) > 0)
                 @include('stock.warnings.items_warning_action', ['modal_title' => 'Remove Item', 'modal_content' => 'Are you sure you want to remove this item? This action cannot be undone.'])
             @endif
-        </div>
+			@include('Vehicles.partials.fleet_single_approval')
+		</div>
     </div>
 @endsection
 
@@ -303,6 +318,12 @@
 		var remove=document.getElementsByName("remove");
 		if(total_files.value == 1)
 			remove[1].style.display='none';
+	}
+	
+	function postData(id, data)
+	{
+		if (data == 'request_approval')
+			location.href = "/stock/approve-request-single/" + id;
 	}
 	</script>
 @endsection
