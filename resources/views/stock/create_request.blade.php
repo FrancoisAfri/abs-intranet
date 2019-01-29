@@ -49,7 +49,7 @@
                                         <td>{{ (!empty($stock->employees)) ?  $stock->employees->first_name . ' ' .  $stock->employees->surname : ''}} </td>
                                         <td>{{ (!empty($stock->employeeOnBehalf)) ?  $stock->employeeOnBehalf->first_name . ' ' .  $stock->employeeOnBehalf->surname : ''}} </td>
                                         <td>{{ (!empty($stock->request_remarks)) ?  $stock->request_remarks : ''}} </td>
-                                        <td>{{ !empty($stock->status) ? $stock->requestStatus->step_name : '' }}</td>
+                                        <td>{{ !empty($stock->status) ? $stock->requestStatus->step_name : 'Rejected' }}</td>
                                     </tr>
                             @endforeach
                         @endif

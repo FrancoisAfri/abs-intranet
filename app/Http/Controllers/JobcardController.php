@@ -1162,7 +1162,6 @@ HTML;
 			{
 				list($sUnit, $iID) = explode("_", $sKey);
 				if ($sUnit == 'declined' && !empty($sValue)) {
-					if (empty($sValue)) $sValue = $sReasonToReject;
 
 					$getStatus = DB::table('jobcard_maintanance')->where('id', $iID)->first();
 					$statusflow = $getStatus->status;
@@ -1205,7 +1204,6 @@ HTML;
 					}
 				}
             }
-            $sReasonToReject = '';
         }
 
         AuditReportsController::store('Job Card Management', 'Job card Approvals Page', "Accessed By User",0);

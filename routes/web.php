@@ -757,15 +757,13 @@ Route::post('stock/remove/items/{item}', 'StockRequest@removeItems');
 Route::patch('stock/updateitems/{stock}', 'StockRequest@updateRequest');
 Route::get('stock/seach_request', 'StockRequest@requestSearch');
 Route::post('stock/search_results', 'StockRequest@requestResults');
-
 Route::post('stock/search_report' ,'StockController@searchreport');
 // Request & Approvals
 Route::get('stock/request_items', 'StockRequest@create');
 Route::post('stock/addstockrequest', 'StockRequest@store');
 Route::get('stock/request_approval', 'StockRequest@requestApprovals');
 Route::post('stock/appoverequests', 'StockRequest@appoveRequest');
-Route::get('stock/approve-request-single{stock}', 'StockRequest@appoveRequestSingle');
-//
+Route::get('stock/approve-request-single/{stock}', 'StockRequest@appoveRequestSingle');
 Route::get('stock/stocklocation/{product}', 'Product_categoryController@stockLocation');
 Route::post('stock/stock_loc/add/{product}', 'Product_categoryController@addStockLocation');
 Route::patch('stock/stock_loc/update/{stock}', 'Product_categoryController@updateStockLocation');
@@ -776,7 +774,8 @@ Route::post('stock/pre_supplier/add/{product}', 'Product_categoryController@addP
 Route::patch('stock/pre_supplier/update/{preferred}', 'Product_categoryController@updatePreSupplier');
 Route::post('stock/add_step', 'StockApprovalsController@store');
 Route::patch('stock/edit_step/update/{step}', 'StockApprovalsController@update');
-
+Route::get('stock/print_delivery_note/{stock}', 'StockRequest@viewDeliveryNotePrint');
+Route::post('stock/reject-reason/{stock}', 'StockRequest@rejectRequestSingle');
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');

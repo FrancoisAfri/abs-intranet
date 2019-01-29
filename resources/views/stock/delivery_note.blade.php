@@ -1,120 +1,123 @@
-@extends('layouts.main_layout')
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Stock Delivery Note Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Bootstrap 3.3.6 -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.5.0/css/font-awesome.min.css">
 
-@section('page_dependencies')
- <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-    <!--  -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
-          rel="stylesheet">
-    <!-- iCheck -->
-	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
-	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
-@endsection
-@section('content')
-	<div class="row">
-        <div class="col-md-12 col-md-offset-0">
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title"> Delivery Note</h3>
-                </div>
-                <div style="overflow-X:auto;">
-                   <table class="table table-striped table-bordered">
-						<tr>
-							<td class="caption"><b>Request #</b></td>
-							<td>{{ !empty($stock->request_number) ? date(' d M Y', $stock->request_number) : '' }}</b></td>
-							<td class="caption"><b>Invoice #:</b></td>
-							<td>{{ !empty($stock->invoice_number) ? $stock->invoice_number : '' }}</b></td>
-						</tr>
-						<tr>
-							<td class="caption"><b>Delivery #</b></td>
-							<td>{{ !empty($stock->delivery_number) ? date(' d M Y', $stock->delivery_number) : '' }}</b></td>
-							<td class="caption"></td>
-							<td></td>
-						</tr>
-						<tr>
-							<td class="caption"><b>Date Requeted:</b></td>
-							<td>{{ !empty($stock->date_created) ? date(' d M Y', $stock->date_created) : '' }}</b></td>
-							<td class="caption"><b>Title:</b></td>
-							<td>{{ !empty($stock->title_name) ? $stock->title_name : '' }}</b></td>
-						</tr>
-						<tr>
-							<td class="caption"><b>Requested By:</b></td>
-							<td>{{ (!empty($stock->employees)) ?  $stock->employees->first_name . ' ' .  $stock->employees->surname : ''}}</b></td>
-							<td class="caption"><b>On Behalf Of:</td>
-							<td>{{ (!empty($stock->employeeOnBehalf)) ?  $stock->employeeOnBehalf->first_name . ' ' .  $stock->employeeOnBehalf->surname : ''}}</b></td>
-						</tr>
-					</table>
-					<table class="table table-striped table-bordered">
-						<hr class="hr-text" data-content="Stock Items">
-						<tr>
-							<td>#</td>
-							<td><b>Category</b></td>
-							<td><b>Product</b></td>
-							<td style="text-align:center"><b>Quantity</b></td>
-						</tr>
-						@if (count($stock->stockItems) > 0)
-							@foreach ($stock->stockItems as $item)
-								<tr>
-									<td>{{ $loop->iteration }}</td>
-									<td>{{ !empty($item->categories->name) ? $item->categories->name : '' }}</td>
-									<td>{{ !empty($item->products->name) ? $item->products->name : '' }}</td>
-									<td style="text-align:center">{{ !empty($item->quantity) ? $item->quantity : '' }}</td>
-								</tr>
-							@endforeach
-						@else
-							<tr><td colspan="3"></td></tr>
-						@endif
-					</table>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                    </div>
-                </div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/ionicons/2.0.1/css/ionicons.min.css">
+   -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/dist/css/AdminLTE.min.css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+	<style type="text/css" media="print">
+@page { size: landscape; }
+</style>
+</head>
+<body onload="window.print();">
+<div class="wrapper">
+    <!-- Main content -->
+    <section class="invoice">
+        <!-- title row -->
+        <div class="row">
+            <div class="col-xs-12">
+                <h2 class="page-header">
+                    <img width="196" height="60" src="{{ $company_logo }}" alt="logo">
+                    <small class="pull-right">Date: {{$date}}</small>
+                </h2>
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- info row -->
+        <div class="row invoice-info">
+            <div class="col-sm-8 invoice-col">
+                <address>
+                    <strong>{{ $company_name }}</strong><br>
+                </address>
+            </div>
+			<h3 class="box-title">Request #: {{$stock->request_number}}</h3>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        <div class="row">
+            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+            <div class="box-body">
+				<table class="table table-striped table-bordered">
+					<tr>
+						<td class="caption"><b>Delivery #</b></td>
+						<td>{{ !empty($stock->delivery_number) ? date(' d M Y', $stock->delivery_number) : '' }}</b></td>
+						<td class="caption"><b>Invoice #:</b></td>
+						<td>{{ !empty($stock->invoice_number) ? $stock->invoice_number : '' }}</b></td>
+					</tr>
+					<tr>
+						<td class="caption"><b>Date Requeted:</b></td>
+						<td>{{ !empty($stock->date_created) ? date(' d M Y', $stock->date_created) : '' }}</b></td>
+						<td class="caption"><b>Title:</b></td>
+						<td>{{ !empty($stock->title_name) ? $stock->title_name : '' }}</b></td>
+					</tr>
+					<tr>
+						<td class="caption"><b>Requested By:</b></td>
+						<td>{{ (!empty($stock->employees)) ?  $stock->employees->first_name . ' ' .  $stock->employees->surname : ''}}</b></td>
+						<td class="caption"><b>On Behalf Of:</td>
+						<td>{{ (!empty($stock->employeeOnBehalf)) ?  $stock->employeeOnBehalf->first_name . ' ' .  $stock->employeeOnBehalf->surname : ''}}</b></td>
+					</tr>
+				</table>
+				<table class="table table-striped table-bordered">
+					<hr class="hr-text" data-content="Stock Items">
+					<tr>
+						<td>#</td>
+						<td><b>Category</b></td>
+						<td><b>Product</b></td>
+						<td style="text-align:center"><b>Quantity</b></td>
+					</tr>
+					@if (count($stock->stockItems) > 0)
+						@foreach ($stock->stockItems as $item)
+							<tr>
+								<td>{{ $loop->iteration }}</td>
+								<td>{{ !empty($item->categories->name) ? $item->categories->name : '' }}</td>
+								<td>{{ !empty($item->products->name) ? $item->products->name : '' }}</td>
+								<td style="text-align:center">{{ !empty($item->quantity) ? $item->quantity : '' }}</td>
+							</tr>
+						@endforeach
+					@else
+						<tr><td colspan="4"></td></tr>
+					@endif
+				</table></br></br></br></br>
+				<table class="table table-striped">
+					<tr>
+						<td colspan="2"><b><u>Stock Controller Signature</u></b></td>
+						<td colspan="2"><b><u>Employee Signature</u></b></td>
+					</tr>
+					<tr>
+						<td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</td>
+						<td colspan="2">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						</td>
+					</tr>
+				</table>
             </div>
         </div>
-    </div>
-@endsection
-
-@section('page_script')
-<!-- DataTables -->
-	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-	<script src="/custom_components/js/modal_ajax_submit.js"></script>
-	<!-- time picker -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-	<!-- Select2 -->
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<!-- End Bootstrap File input -->
-	<script src="/custom_components/js/modal_ajax_submit.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-	<!-- iCheck -->
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-			type="text/javascript"></script>
-	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-			type="text/javascript"></script>
-	<!-- the main fileinput plugin file -->
-	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-
-	<!-- InputMask -->
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-	<script type="text/javascript">
-	</script>
-@endsection
+        <!-- /.row -->
+    </section>
+    <!-- /.content -->
+</div>
+<!-- ./wrapper -->
+</body>
+</html>

@@ -33,13 +33,13 @@ class stockRequestRejected extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "Stock Request Approval on $companyName online system.";
+        $subject = "Stock Request Rejected on $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['dashboard_url'] = url('/stock/request_items');
+        $data['stock_url'] = url('/stock/request_items');
 
         return $this->view('mails.stock_request_rejected')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])

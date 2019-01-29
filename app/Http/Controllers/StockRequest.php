@@ -21,6 +21,7 @@ use App\stockLevel;
 use App\Users;
 use App\product_price;
 use App\Mail\stockApprovals;
+use App\Mail\stockRequestRejected;
 use App\Mail\StockRequestApproved;
 use App\Mail\stockDeliveryNote;
 use App\DivisionLevelFive;
@@ -551,30 +552,33 @@ class StockRequest extends Controller
 					foreach ($items as $item) {
 						
 						$stockA = stock::where('product_id', $item->product_id)->where('store_id',$stock->store_id)->first();
-						$availblebalance = !empty($stockA->avalaible_stock) ? $stockA->avalaible_stock : 0;
-						$transactionbalance = $availblebalance - $item->quantity;
+						if (!empty($stockA->id))
+						{
+							$availblebalance = !empty($stockA->avalaible_stock) ? $stockA->avalaible_stock : 0;
+							$transactionbalance = $availblebalance - $item->quantity;
 
-						// Update stock availble balance
-						$stockA->avalaible_stock = $transactionbalance;
-						$stockA->update();
-						// Update stock history
-						$category = product_products::where('id',$item->product_id)->first();
-						$history = new stockhistory();
-						$history->product_id = $item->product_id;
-						$history->category_id = $category->category_id;
-						$history->avalaible_stock = $transactionbalance;
-						$history->action_date = time();
-						$history->balance_before = $availblebalance;
-						$history->balance_after = $transactionbalance;
-						$history->action = 'Stock Items Out';
-						$history->user_id = Auth::user()->person->id;
-						$history->user_allocated_id = 0;
-						$history->save();
+							// Update stock availble balance
+							$stockA->avalaible_stock = $transactionbalance;
+							$stockA->update();
+							// Update stock history
+							$category = product_products::where('id',$item->product_id)->first();
+							$history = new stockhistory();
+							$history->product_id = $item->product_id;
+							$history->category_id = $category->category_id;
+							$history->avalaible_stock = $transactionbalance;
+							$history->action_date = time();
+							$history->balance_before = $availblebalance;
+							$history->balance_after = $transactionbalance;
+							$history->action = 'Stock Items Out';
+							$history->user_id = Auth::user()->person->id;
+							$history->user_allocated_id = 0;
+							$history->save();
+						}
 					}
 					// send email for request approval to request creator
 					
 					// sendemail to stock controller delivery note
-					$jcAttachment = $this->viewDeliveryNote($stock->id, true);
+					$jcAttachment = $this->viewDeliveryNote($stock->id);
 					$role = HRRoles::where('description', 'Stock Controller')->first();
 					$users = HRUserRoles::where('role_id', $role->id)->pluck('hr_id');
 					foreach ($users as $userID) {
@@ -649,43 +653,24 @@ class StockRequest extends Controller
 			{
 				list($sUnit, $iID) = explode("_", $sKey);
 				if ($sUnit == 'declined' && !empty($sValue)) {
-					if (empty($sValue)) $sValue = $sReasonToReject;
 
-					//$stock = RequestStock::where('id', $)->->first();
-					$getStatus = DB::table('jobcard_maintanance')->where('id', $iID)->first();
-					$statusflow = $getStatus->status;
+					$stockReject = RequestStock::where('id', $iID)->first();
+					$stockReject->status = 0;
+					$stockReject->rejection_reason = $sValue;
+					$stockReject->rejected_by = Auth::user()->person->id;;
+					$stockReject->rejection_date = time();
+					$stockReject->update();
 
-					$jobcard = jobcard_maintanance::where('id', $iID)->first();  // when declined move back to the last step
-					if ($statusflow === 0) {
-						// status 0 means declined
-						$jobcard->status = 0;
-					} elseif ($statusflow === 1) {
-						$jobcard->status = 0;
-					} else
-						$jobcard->status = $statusflow - 1;
-					$jobcard->reject_reason = $sValue;
-					$jobcard->reject_timestamp = time();
-					$jobcard->rejector_id = Auth::user()->person->id;
-					$jobcard->update();
-										
-					if ($statusflow != 0) {
-						$processflow = processflow::where('step_number', $statusflow - 1)->where('status', 1)->orderBy('step_number', 'asc')->first();
-						$user = HRUserRoles::where('role_id', $processflow->job_title)->pluck('hr_id');
-						foreach ($user as $manID) 
-						{
-							$usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
-							$email = $usedetails->email;
-							$firstname = $usedetails->first_name;
-							$surname = $usedetails->surname;
-							$email = $usedetails->email;
-							$reason = $sValue;
-							Mail::to($email)->send(new DeclinejobstepNotification($firstname, $surname, $email, $reason));
-						}
+					//// Send sms and email to mechanic
+					if (!empty($stockReject->employee_id))
+					{
+						$empDetails = HRPerson::where('id', $stockReject->employee_id)->select('first_name', 'email')->first();
+						if (!empty($empDetails->email))
+							Mail::to($empDetails->email)->send(new stockRequestRejected($empDetails->first_name,$stockReject->request_number));
 					}
 				}
-            }
-            $sReasonToReject = '';
-        }
+			}
+		}
 
         AuditReportsController::store('Stock Management', 'Job card Approvals Page', "Accessed By User",0);
         return back();
@@ -694,67 +679,201 @@ class StockRequest extends Controller
 	// Approve Request
 	public function appoveRequestSingle(RequestStock $stock)
     {
-		$processflow = Stock_Approvals_level::where('step_number', '>', $stock)->where('status', 1)->orderBy('step_number', 'asc')->first();
-		$stock->status = $processflow->step_number;
-		$stock->update();
-		// add to vehicle history 
-		$VehicleHistory = new VehicleHistory();
-		$VehicleHistory->vehicle_id = $fleet->id;
-		$VehicleHistory->user_id = Auth::user()->person->id;
-		$VehicleHistory->status = 1;
-		$VehicleHistory->comment = "New Vehicle Approved";
-		$VehicleHistory->action_date = time();
-		$VehicleHistory->save();
+		$totalPrice = 0;
+		// get all product attached to this request and calculate total price pluck('product_id')
+		$items = RequestStockItems::where('request_stocks_id',$stock->id)->get();
+	
+		foreach ($items as $item) {
+			$product = product_products::where('id',$item->product_id)->first();
+			$productPrice = product_price::where('product_product_id',$item->product_id)
+					->orderBy('id', 'desc')
+					->first();
+			$currentPrice = !empty($productPrice->price) 
+				? $productPrice->price : !empty($product->price) ? $product->price : 0;
+			$totalPrice = $totalPrice + $currentPrice;
+		}
+		// get max amount allow for this step
+		$currentStep = Stock_Approvals_level::where('step_number', $stock->status)->where('status', 1)->first();
+		$maxAmount = !empty($currentStep->max_amount) ? $currentStep->max_amount : 0; 
 		
-		$vehicleConfigs = DB::table('vehicle_configuration')->pluck('new_vehicle_approval');
-        $vehicleConfig = $vehicleConfigs->first();
-		# Send email to admin and person who added the vehicle
-		if ($vehicleConfig == 1) {
+		if ($totalPrice <= $maxAmount)
+		{
+			// Approve request
+			$steps = Stock_Approvals_level::latest()->first();
+			$stock->status = $steps->step_number;
+			$stock->update();
+			// Stock History and deduct from stock
+			foreach ($items as $item) {
+				
+				$stockA = stock::where('product_id', $item->product_id)->where('store_id',$stock->store_id)->first();
+				if (!empty($stockA->id))
+				{
+					$availblebalance = !empty($stockA->avalaible_stock) ? $stockA->avalaible_stock : 0;
+					$transactionbalance = $availblebalance - $item->quantity;
+					// Update stock availble balance
+					$stockA->avalaible_stock = $transactionbalance;
+					$stockA->update();
+					// Update stock history
+					$category = product_products::where('id',$item->product_id)->first();
+					$history = new stockhistory();
+					$history->product_id = $item->product_id;
+					$history->category_id = $category->category_id;
+					$history->avalaible_stock = $transactionbalance;
+					$history->action_date = time();
+					$history->balance_before = $availblebalance;
+					$history->balance_after = $transactionbalance;
+					$history->action = 'Stock Items Out';
+					$history->user_id = Auth::user()->person->id;
+					$history->user_allocated_id = 0;
+					$history->save();
+				}
+			}
+			// send email for request approval to request creator
 			
-			if (!empty($fleet->author_id))
+			// sendemail to stock controller delivery note
+			$jcAttachment = $this->viewDeliveryNote($stock->id);
+			$role = HRRoles::where('description', 'Stock Controller')->first();
+			$users = HRUserRoles::where('role_id', $role->id)->pluck('hr_id');
+			foreach ($users as $userID) {
+				$userDetails = HRPerson::where('id', $userID)->select('first_name', 'email')->first();
+				Mail::to($userDetails->email)->send(new stockDeliveryNote($userDetails->first_name, $jcAttachment,$stock->request_number));
+			}
+			//// Send sms and email to mechanic
+			if (!empty($stock->employee_id))
 			{
-				$authoretails = HRPerson::where('id', $fleet->author_id)->select('first_name', 'surname', 'email')->first();
-				$email = !empty($authoretails->email) ? $authoretails->email : ''; 
-				$firstname = !empty($authoretails->first_name) ? $authoretails->first_name : ''; 
-				$surname = !empty($authoretails->surname) ? $authoretails->surname : '';
-				if (!empty($authoretails->email))
-							Mail::to($email)->send(new VehicleApproved($firstname, $surname, $email, $fleet->id));
+				$empDetails = HRPerson::where('id', $stock->employee_id)->select('first_name', 'email')->first();
+				if (!empty($empDetails->email))
+				Mail::to($empDetails->email)->send(new StockRequestApproved($empDetails->first_name,$stock->request_number));
 			}
 		}
-		
-		AuditReportsController::store('Stock Management', 'Approve Stock Request ', "Stock request has been Approved", 0);
+		else
+		{
+			$processflow = Stock_Approvals_level::where('step_number', '>', $stock->status)->where('status', 1)->orderBy('step_number', 'asc')->first();
+			$stock->status = $processflow->step_number;
+			$stock->update();
+					// get approver ID and send them email
+			if (!empty($processflow->employee_id))
+				$ApproverDetails = HRPerson::where('id', $processflow->employee_id)->where('status', 1)->first();
+			else
+			{
+				if (!empty($processflow->division_level_1) && empty($processflow->employee_id))
+				{
+					$Dept = DivisionLevelOne::where('id', $processflow->division_level_1)->first();
+					$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+					->select('first_name', 'surname', 'email')
+					->first();
+				}
+				elseif(!empty($processflow->division_level_2) && empty($processflow->division_level_1) && empty($processflow->employee_id))
+				{
+					$Dept = DivisionLevelTwo::where('id', $processflow->division_level_2)->first();
+					$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+					->select('first_name', 'surname', 'email')
+					->first();
+				}
+				elseif(!empty($processflow->division_level_3) && empty($processflow->division_level_2) && empty($processflow->employee_id))
+				{
+					$Dept = DivisionLevelThree::where('id', $processflow->division_level_3)->first();
+					$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+					->select('first_name', 'surname', 'email')
+					->first();
+				}
+				elseif(!empty($processflow->division_level_4) && empty($processflow->division_level_3) && empty($processflow->employee_id))
+				{
+					$Dept = DivisionLevelFour::where('id', $processflow->division_level_4)->first();
+					$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+					->select('first_name', 'surname', 'email')
+					->first();
+				}
+				elseif(!empty($processflow->division_level_5) && empty($processflow->division_level_4) && empty($processflow->employee_id))
+				{
+					$Dept = DivisionLevelFive::where('id', $processflow->division_level_5)->first();
+					$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+					->select('first_name', 'surname', 'email')
+					->first();
+				}
+			}
+			// send email to nextstep employeeID
+			if (!empty($ApproverDetails->email))
+				Mail::to($ApproverDetails->email)->send(new stockApprovals($ApproverDetails->first_name, $stock->request_number));
+		}
         return back();
     }
-	public function viewDeliveryNote(RequestStock $stock, $isPDF = false)
+	// 	// Approve Request
+	public function rejectRequestSingle(Request $request, RequestStock $stock)
     {
-		$userID = Auth::user()->id;
+		$this->validate($request, [
+			'rejection_reason' => 'required',
+        ]);
+        $stockRequest = $request->all();
+        unset($stockRequest['_token']);
+
+		$stock->status = 0;
+		$stock->rejection_reason = $stockRequest['rejection_reason'];
+		$stock->rejected_by = Auth::user()->person->id;;
+		$stock->rejection_date = time();
+		$stock->update();
+
+		//// Send sms and email to mechanic
+		if (!empty($stock->employee_id))
+		{
+			$empDetails = HRPerson::where('id', $stock->employee_id)->select('first_name', 'email')->first();
+			if (!empty($empDetails->email))
+				Mail::to($empDetails->email)->send(new stockRequestRejected($empDetails->first_name,$stock->request_number));
+		}
+        return back();
+    }
+	public function viewDeliveryNote(RequestStock $stock)
+    {
 		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf');
 		
 		$data['stock'] = $stock;	
-		if ($isPDF === true) 
-		{
-			AuditReportsController::store('Stock Management', 'Delivery Note Printed', "Accessed By User");
-			$companyDetails = CompanyIdentity::systemSettings();
-			$companyName = $companyDetails['company_name'];
-			$user = Auth::user()->load('person');
 
-			$data['support_email'] = $companyDetails['support_email'];
-			$data['company_name'] = $companyName;
-			$data['full_company_name'] = $companyDetails['full_company_name'];
-			$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-			$data['date'] = date("d-m-Y");
-			$data['user'] = $user;
-			$data['file_name'] = 'Delivery Note';
-            $view = view('stock.delivery_note', $data)->render();
-            $pdf = resolve('dompdf.wrapper');
-            $pdf->getDomPDF()->set_option('enable_html5_parser', true);
-            $pdf->loadHTML($view);
-			return $pdf->output();
-        }
-		else 
-		{
-			AuditReportsController::store('Stock Management', 'View Delivery Note', "Accessed By User");
-			return view('stock.delivery_note')->with($data);
-        }
+		AuditReportsController::store('Stock Management', 'Delivery Note Printed', "Accessed By User");
+		$companyDetails = CompanyIdentity::systemSettings();
+		$companyName = $companyDetails['company_name'];
+		$user = Auth::user()->load('person');
+
+		$data['support_email'] = $companyDetails['support_email'];
+		$data['company_name'] = $companyName;
+		$data['full_company_name'] = $companyDetails['full_company_name'];
+		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+		$data['date'] = date("d-m-Y");
+		$data['user'] = $user;
+		$data['file_name'] = 'DeliveryNote';
+		$view = view('stock.delivery_note', $data)->render();
+		$pdf = resolve('dompdf.wrapper');
+		$pdf->getDomPDF()->set_option('enable_html5_parser', true);
+		$pdf->loadHTML($view);
+		return $pdf->output();
+    }
+	public function viewDeliveryNotePrint(RequestStock $stock, $isPDF = false)
+    {
+		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf');
+		
+		$data['stock'] = $stock;	
+		AuditReportsController::store('Stock Management', 'Delivery Note Printed', "Accessed By User");
+		$companyDetails = CompanyIdentity::systemSettings();
+		$companyName = $companyDetails['company_name'];
+		$user = Auth::user()->load('person');
+		$data['page_title'] = 'Print ';
+		$data['page_description'] = 'Delivery Note';
+		$data['breadcrumb'] = [
+			['title' => 'Stock Management', 'path' => '/stock/request_items', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+			['title' => 'Delivery Note', 'active' => 1, 'is_module' => 0]
+		];
+		
+		$data['active_mod'] = 'Stock Management';
+        
+		$companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
+		return view('stock.delivery_note')->with($data);
     }
 }

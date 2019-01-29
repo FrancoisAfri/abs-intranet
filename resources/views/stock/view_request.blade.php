@@ -41,7 +41,7 @@
 							<td><b>Remarks:</b></td>
 							<td>{{ (!empty($stock->request_remarks)) ?  $stock->request_remarks : ''}}</b></td>
 							<td><b>Status:</b></td>
-							<td>{{ !empty($stock->status) ? $stock->requestStatus->step_name : '' }}</b></td>
+							<td>{{ !empty($stock->status) ? $stock->requestStatus->step_name : 'Rejected' }}</b></td>
 						</tr>
 						<tr>
 							<td><b>Rejection Reason:</b></td>
@@ -110,10 +110,8 @@
 							><i class="fa fa-times"></i> Reject Request
 							</button>
 						@endif
-						<button type="button" class="btn btn-primary btn-danger" data-toggle="modal"
-                            data-target="#stock-reject-modal" data-id="{{ $stock->id }}"
-							><i class="fa fa-times"></i> Print Delivery Note
-						</button>
+						<a href="{{ '/stock/print_delivery_note/' . $stock->id }}"
+						   class="btn btn-sm btn-default btn-flat" target=”_blank”">Print Delivery Note</a>
                     </div>
                 </div>
             </div>
@@ -122,7 +120,7 @@
 			@if (count($stock) > 0)
                 @include('stock.warnings.items_warning_action', ['modal_title' => 'Remove Item', 'modal_content' => 'Are you sure you want to remove this item? This action cannot be undone.'])
             @endif
-			@include('Vehicles.partials.fleet_single_approval')
+
 		</div>
     </div>
 @endsection
@@ -176,9 +174,7 @@
 	});
 
 	$(function () {
-
 		//Tooltip
-
 		$('[data-toggle="tooltip"]').tooltip();
 		//Cancel button click event
             document.getElementById("cancel").onclick = function () {
@@ -278,6 +274,19 @@
 			var successMsg = 'Item has been removed successfully.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
+		
+				//Post form to server using ajax (add)
+		$('#save-rejection-reason').on('click', function () {
+			var strUrl = '/stock/reject-reason/' + {{$stock->id}};
+			var formName = 'decline-stock-request-modal';
+			var modalID = 'stock-reject-modal';
+			var submitBtnID = 'save-rejection-reason';
+			var redirectUrl = '/stock/viewrequest/{{ $stock->id }}';
+			var successMsgTitle = 'Rejection Reason Saved!';
+			var successMsg = 'The rejection reason has been successfully saved.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+		//
 	});
 	function clone(id, file_index, child_id) {
 		var clone = document.getElementById(id).cloneNode(true);
