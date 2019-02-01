@@ -49,10 +49,8 @@
                                     <h3 class="box-title">Search Product</h3>
                                 </div>
                                 <div class="box-body" id="vehicle_details">
-
                                     <div class="form-group{{ $errors->has('category_id') ? ' has-error' : '' }}">
                                         <label for="{{ 'category_id' }}" class="col-sm-2 control-label">Categories</label>
-
                                         <div class="col-sm-8">
                                             <select id="category_id" name="category_id" class="form-control select2"
                                                     style="width: 100%;" onchange="productcategoryDDOnChange(this)">
@@ -64,7 +62,6 @@
                                             </select>
                                         </div>
                                     </div>
-
                                     <div class="form-group{{ $errors->has('product_id') ? ' has-error' : '' }}">
                                         <label for="{{ 'product_id' }}" class="col-sm-2 control-label">Products </label>
 
@@ -75,7 +72,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group">
+                                    <div class="form-group{{ $errors->has('stock_type') ? ' has-error' : '' }}">
                                         <label for="fuel_type" class="col-sm-2 control-label">Stock Type</label>
 										<div class="col-sm-8">
 											<select id="stock_type" name="stock_type" class="form-control">

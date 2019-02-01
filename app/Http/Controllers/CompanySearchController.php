@@ -34,6 +34,7 @@ class CompanySearchController extends Controller
 		$name =$request->company_name; 
 		$regNo =$request->reg_no; 
 		$VatNo =$request->vat_no; 
+		$status =$request->status; 
 		$companies = DB::table('contact_companies')
 		->where(function ($query) use ($name) {
 			if (!empty($name)) {
@@ -49,6 +50,10 @@ class CompanySearchController extends Controller
 			if (!empty($VatNo)) {
 				$query->where('vat_number', 'ILIKE', "%$VatNo%");
 			}
+		})
+		->where(function ($query) use ($status) {
+			if (!empty($status) && $status == 1) $query->where('status',1);
+			elseif (!empty($status) && $status == 2) $query->where('status',2);
 		})
 		->orderBy('contact_companies.name')
 		->get();

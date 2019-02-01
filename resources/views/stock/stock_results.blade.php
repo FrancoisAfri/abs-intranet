@@ -45,7 +45,7 @@
                             <tr>
                                 <th>#</th>
                                 <th>Product Name</th>
-                                <th style="vertical-align: middle; text-align: center;">Available Number</th>
+                                <th style="vertical-align: middle; text-align: center;">Stores</th>
                                 <th style="vertical-align: middle; text-align: center;">Enter Number</th>
                             </tr>
                             </thead>
@@ -56,21 +56,26 @@
                                     <td style="vertical-align: center;"
                                         nowrap>{{ (!empty( $stock->name)) ?  $stock->name : ''}}</td>
                                     <td style="vertical-align: middle; text-align: center;"
-                                        nowrap>{{ (!empty( $stock->avalaible_stock)) ?  $stock->avalaible_stock : 0}}</td>
+                                        nowrap><select id="storeid_{{ $stock->id }}" name="storeid_{{ $stock->id }}" style="width: 100%;" class="form-control select2">
+												<option value="">*** Select a Store ***</option>
+												@foreach($stockLevelFives as $stockLevelFive)
+													<option value="{{ $stockLevelFive->id }}">{{ $stockLevelFive->name}}</option>
+												@endforeach
+											</select></td>
                                     <td style="vertical-align: middle; text-align: center;"
                                         nowrap>
                                         <input type="number" min="0" class="form-control"
                                                id="newstock_{{ $stock->id }}_{{$stock->category_id}}"
                                                name="newstock_{{$stock->id}}_{{$stock->category_id}}" value=""
                                                placeholder="Enter Items Number"></td>
-                                    @endforeach
                                 </tr>
+                            @endforeach
                             </tbody>
                             <tfoot>
 								<tr>
 									<th>#</th>
 									<th>Product Name</th>
-									<th style="vertical-align: middle; text-align: center;">Available Number</th>
+									<th style="vertical-align: middle; text-align: center;">Stores</th>
 									<th style="vertical-align: middle; text-align: center;">Enter number</th>
 								</tr>
                             </tfoot>
@@ -78,10 +83,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="button" id="cancel" class="btn btn-default pull-left"><i
-                                    class="fa fa-arrow-left"></i>
-                            Back
-                        </button>
+                        <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i>Back</button>
                         <button type="submit" class="btn btn-warning pull-right"> Submit</button>
                     </div>
                 </form>

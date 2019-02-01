@@ -27,9 +27,6 @@
                             <label for="company_name" class="col-sm-3 control-label">Name</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-user"></i>
-								</div>
 								<input type="text" class="form-control" id="company_name" name="company_name" value="" placeholder="Enter Compamy Name...">
                                 </div>
                             </div>
@@ -38,9 +35,6 @@
                             <label for="reg_no" class="col-sm-3 control-label">Registration Number</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-user"></i>
-								</div>
 								<input type="text" class="form-control" id="reg_no" name="reg_no" value="" placeholder="Enter Registration Number...">
                                 </div>
                             </div>
@@ -49,11 +43,18 @@
                             <label for="vat_no" class="col-sm-3 control-label">VAT Number</label>
                             <div class="col-sm-9">
                                 <div class="input-group">
-								<div class="input-group-addon">
-									<i class="fa fa-user"></i>
-								</div>
 								<input type="text" class="form-control" id="vat_no" name="vat_no" value="" placeholder="Enter VAT Number...">
                                 </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="status" class="col-sm-3 control-label">Status</label>
+                            <div class="col-sm-9">
+                                <select id="status" name="status"
+									style="width: 100%;" class="form-control select2">
+										<option value="1">Active</option>
+										<option value="2">Inactive</option>
+								</select>
                             </div>
                         </div>
                      </div>   

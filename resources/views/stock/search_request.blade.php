@@ -74,6 +74,7 @@
                                         <label for="path" class="col-sm-2 control-label">Created By</label>
                                         <div class="col-sm-8">
                                            <select id="employee_id" name="employee_id" style="width: 100%;" class="form-control">
+												<option value="0">*** Select an Employee ***</option>
 												@foreach($employees as $employee)
 													<option value="{{ $employee->id }}">{{$employee->first_name . ' ' .  $employee->surname }}</option>
 												@endforeach
@@ -85,7 +86,7 @@
                                         <div class="col-sm-8">
                                             <select id="on_behalf_employee_id" name="on_behalf_employee_id"
 												style="width: 100%;" class="form-control select2">
-													<option value="0">*** Select an Employees ***</option>
+													<option value="0">*** Select an On Behalf Of ***</option>
 													@foreach($employeesOnBehalf as $employeeOnBehalf)
 														<option value="{{ $employeeOnBehalf->id }}">{{ $employeeOnBehalf->first_name . ' ' .  $employeeOnBehalf->surname}}</option>
 													@endforeach

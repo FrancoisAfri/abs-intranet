@@ -14,7 +14,8 @@ class RequestStock extends Model
         'employee_id', 'on_behalf_of', 'on_behalf_employee_id', 'date_created'
 		, 'date_approved', 'status', 'title_name', 'request_remarks', 'store_id'
 		, 'request_number', 'invoice_number', 'delivery_number', 'rejection_reason'
-		, 'rejected_by', 'rejection_date'];
+		, 'rejected_by', 'rejection_date', 'request_collected', 'collection_document'
+		, 'collection_note'];
 		
 	/**
      * Relationship between RequestStock and RequestStockItems

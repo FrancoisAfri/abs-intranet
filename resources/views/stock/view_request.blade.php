@@ -52,8 +52,24 @@
 						<tr>
 							<td><b>Date Rejected:</b></td>
 							<td>{{ (!empty($stock->rejection_date)) ? date(' d M Y', $stock->rejection_date) : ''}}</b></td>
-							<td></td>
-							<td></td>
+							<td>Collected</td>
+							<td>{{ (!empty($stock->request_collected)) ? 'Yes' : 'No'}}</td>
+						</tr>
+						<tr>
+							<td><b>Collection Document:</b></td>
+							<td>
+								@if(!empty($stock->collection_document))
+									<br><a class="btn btn-default btn-flat btn-block btn-xs"
+										   href="{{ $collection_document }}"
+										   target="_blank"><i class="fa fa-file-pdf-o"></i> View
+										Document</a>
+								@else
+									<br><a class="btn btn-default btn-flat btn-block"><i
+										class="fa fa-exclamation-triangle"></i> Nothing Was Uploaded</a>
+								@endif
+							</b></td>
+							<td>Collection Note</td>
+							<td>{{ (!empty($stock->collection_note)) ? $stock->collection_note : 'No'}}</td>
 						</tr>
 					</table>
 					<table class="table table-striped table-bordered">
@@ -90,7 +106,7 @@
                     <div class="box-footer">
 						<button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Back</button>
 						@if ($stock->status == 1)
-							<button vehice="button" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
+							<button vehice="button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal"
                             data-target="#edit-request-modal" data-id="{{ $stock->id }}"
                             data-store_id="{{ !empty($stock->store_id) ? $stock->store_id : ''}}"
                             data-employee_id="{{ !empty($stock->employee_id) ? $stock->employee_id : ''}}"
@@ -102,16 +118,28 @@
 							</button>
 						@endif
 						@if(!empty($stock->status) && $flow->step_number > $stock->status)
-							<button type="button" class="btn btn-primary btn-success" 
+							<button type="button" class="btn btn-primary btn-success pull-right" 
 								id="request_approved" onclick="postData({{$stock->id}}, 'request_approval');">
 								<i class="fa fa-check"></i> Approve Request</button>
-							<button type="button" class="btn btn-primary btn-danger" data-toggle="modal"
+							<button type="button" class="btn btn-primary btn-danger pull-right" data-toggle="modal"
                             data-target="#stock-reject-modal" data-id="{{ $stock->id }}"
 							><i class="fa fa-times"></i> Reject Request
 							</button>
 						@endif
+						@if(!empty($stock->status) && $flow->step_number == $stock->status)
+							<button vehice="button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal"
+                            data-target="#edit-request-modal" data-id="{{ $stock->id }}"
+                            data-store_id="{{ !empty($stock->store_id) ? $stock->store_id : ''}}"
+                            data-employee_id="{{ !empty($stock->employee_id) ? $stock->employee_id : ''}}"
+                            data-on_behalf_employee_id="{{ !empty($stock->on_behalf_employee_id) ? $stock->on_behalf_employee_id : ''}}"
+                            data-on_behalf_of="{{ !empty($stock->on_behalf_of) ? $stock->on_behalf_of : ''}}"
+                            data-request_remarks="{{ !empty($stock->request_remarks) ? $stock->request_remarks : ''}}"
+                            data-title_name="{{ !empty($stock->title_name) ? $stock->title_name : ''}}"
+							><i class="fa fa-pencil-square-o"></i> Close Request
+							</button>
+						@endif
 						<a href="{{ '/stock/print_delivery_note/' . $stock->id }}"
-						   class="btn btn-sm btn-default btn-flat" target=”_blank”">Print Delivery Note</a>
+						   class="btn btn-sm btn-default btn-flat pull-right" target=”_blank”">Print Delivery Note</a>
                     </div>
                 </div>
             </div>
@@ -124,7 +152,6 @@
 		</div>
     </div>
 @endsection
-
 @section('page_script')
 <!-- DataTables -->
 	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>

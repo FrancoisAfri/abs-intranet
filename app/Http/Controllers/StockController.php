@@ -9,6 +9,7 @@ use App\Mail\confirm_collection;
 use App\product_category;
 use App\KitJoinProducts;
 use App\stock;
+use App\stockLevelFive;
 use App\stockhistory;
 use App\kitProducts;
 use App\JobCategory;
@@ -49,6 +50,7 @@ class StockController extends Controller
     }
 	public function mystock()
     {
+		$stockLevelFives = stockLevelFive::where('active',1)->orderBy('name','asc')->get();
         $jobCategories = product_category::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('id', 'asc')->get();
         $data['jobCategories'] = $jobCategories;
         $data['page_title'] = "Stock Management";
@@ -60,7 +62,8 @@ class StockController extends Controller
 
         $data['active_mod'] = 'Stock Management';
         $data['active_rib'] = 'Add Stock';
-
+		$data['stockLevelFives'] = $stockLevelFives;
+		
         AuditReportsController::store('Stock Management', 'view Stock Add Page', "Accessed By User", 0);
         return view('stock.search_product')->with($data);
     }
@@ -72,14 +75,13 @@ class StockController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-
+		$stockLevelFives = stockLevelFive::where('active',1)->orderBy('name','asc')->get();
         $CategoryID = $SysData['category_id'];
 		$productID = isset($SysData['product_id']) ? $SysData['product_id'] : array();
         $stockType = $SysData['stock_type'];
 
         $stocks = DB::table('Product_products')
-            ->select('Product_products.*', 'stock.avalaible_stock')
-            ->leftJoin('stock', 'Product_products.id', '=', 'stock.product_id')
+            ->select('Product_products.*')
             ->where(function ($query) use ($CategoryID) {
                 if (!empty($CategoryID)) {
                     $query->where('Product_products.category_id', $CategoryID);
@@ -107,169 +109,12 @@ class StockController extends Controller
 
         $data['active_mod'] = 'Stock Management';
         $data['active_rib'] = 'Add Stock';
+		$data['stockLevelFives'] = $stockLevelFives;
 
         AuditReportsController::store('Stock Management', 'Stock Search Page', "Accessed By User", 0);
         return view('stock.stock_results')->with($data);
     }
 
-    public function kitSave(Request $request)
-    {
-        $this->validate($request, [
-            'name' => 'required',
-            'product_id.*' => 'required',
-        ]);
-
-        $kitData = $request->all();
-        unset($kitData['_token']);
-
-		$kit = new kitProducts();
-        $kit->name = !empty($kitData['name']) ? $kitData['name'] : '';
-        $kit->date_added = strtotime(date("Y-m-d"));
-        $kit->status = 1;
-        $kit->save();
-
-        /*foreach ($products as $product) {
-			// Get Category_id From product
-			$category = product_products::where('id', $product)->first();
-			if (!empty($category))
-			{
-				$KitJoinProducts = new KitJoinProducts();
-				$KitJoinProducts->product_id = $product;
-				$KitJoinProducts->kit_id = $kit->id;
-				$KitJoinProducts->category_id = $category->category_id;
-				$KitJoinProducts->save();
-			}
-        }
-			*/	
-        AuditReportsController::store('Stock Management', 'Products Added to kit', 'Added by User', 0);
-        return response()->json();
-    }
-	
-	public function kitUpdate(Request $request, kitProducts $kit)
-    {
-        $this->validate($request, [
-            'name' => 'required',
-        ]);
-
-        $kitData = $request->all();
-        unset($kitData['_token']);
-
-        $kit->name = !empty($kitData['name']) ? $kitData['name'] : '';
-        $kit->update();
-				
-        AuditReportsController::store('Stock Management', 'Kit details  updated', 'Added by User', 0);
-        return response()->json();
-    }
-	public function kitAct(kitProducts $kit)
-    {
-        if ($kit->status == 1) {
-            $status = 0;
-        } else {
-            $status = 1;
-        }
-
-        $kit->status = $status;
-        $kit->update();
-        AuditReportsController::store('Stock Management', 'Kit status changed', 'Edited by User', 0);
-        return back();
-    }
-	// View Products kit
-	public function viewKitProducts(kitProducts $kit)
-    {
-        if ($kit->status == 1) {
-            $products = DB::table('kin_join_products')
-                ->select('kin_join_products.*', 'Product_products.name as prod_name'
-				, 'product_Category.name as cat_name'
-				,'stock.avalaible_stock','Product_products.product_code')
-                ->leftJoin('product_Category', 'kin_join_products.category_id', '=', 'product_Category.id')
-                ->leftJoin('Product_products', 'kin_join_products.product_id', '=', 'Product_products.id')
-                ->leftJoin('stock', 'stock.product_id', '=', 'Product_products.id')
-				->where('kin_join_products.kit_id', $kit->id)
-                ->orderBy('Product_products.name')
-                ->get();
-
-			$categories = product_category::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
-            $data['page_title'] = 'Manage Products Kit';
-            $data['page_description'] = 'Products Kit';
-            $data['breadcrumb'] = [
-                ['title' => 'Products Kit', 'path' => '/stock/kit_management', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-                ['title' => 'Manage Product Kit', 'active' => 1, 'is_module' => 0]
-            ];
-            $data['products'] = $products;
-            $data['kit'] = $kit;
-            $data['categories'] = $categories;
-
-            $data['active_mod'] = 'Stock Management';
-            $data['active_rib'] = 'Kit Management';
-            AuditReportsController::store('Stock Management', 'Kit Product Accessed', 'Accessed by User', 0);
-            return view('stock.kit_product')->with($data);
-        }
-		else 
-		{
-            return back();
-        }
-    }
-	
-	public function kitProductAct(KitJoinProducts $product)
-    {
-        if ($product->status == 1) {
-            $status = 0;
-        } else {
-            $status = 1;
-        }
-
-        $product->status = $status;
-        $product->update();
-        AuditReportsController::store('Stock Management', 'Product Kit status changed', 'Edited by User', 0);
-        return back();
-    }
-	
-	public function addProductToKit(Request $request, kitProducts $kit)
-    {
-		$validator = Validator::make($request->all(), [
-            'category_id' => 'required|numeric|min:0.1',
-            'number_required' => 'required|numeric|min:0.1',
-			'product_id' => [
-				'required',
-				Rule::unique('kin_join_products')->where(function ($query) use ($kit) {
-					return $query->where('kit_id', $kit->id);
-				}),
-			],   
-        ]);
-		if ($validator->fails())
-			return response()->json(['product_id' => 'This product has already been added to this kit. Please choose another one.'], 422);
-        
-		$kitData = $request->all();
-        unset($kitData['_token']);
-
-		$KitJoinProducts = new KitJoinProducts();
-		$KitJoinProducts->product_id = $kitData['product_id'];
-		$KitJoinProducts->kit_id = $kit->id;
-		$KitJoinProducts->category_id = $kitData['category_id'];
-		$KitJoinProducts->amount_required = $kitData['number_required'];
-		$KitJoinProducts->status = 1;
-		$KitJoinProducts->save();
-				
-        AuditReportsController::store('Stock Management', 'Products Added to kit', 'Added by User', 0);
-        return response()->json();
-    }
-	
-	public function updateProductToKit(Request $request, KitJoinProducts $prod)
-    {
-        $this->validate($request, [
-            'number_required' => 'required',
-        ]);
-
-        $kitData = $request->all();
-        unset($kitData['_token']);
-
-		$prod->amount_required = $kitData['number_required'];
-		$prod->update();
-	
-        AuditReportsController::store('Stock Management', 'Products information updated', 'Added by User', 0);
-        return response()->json();
-    }
-		
 	public function add_stock(Request $request)
     {
         $this->validate($request, [
@@ -290,10 +135,12 @@ class StockController extends Controller
             if (strlen(strstr($sKey, 'newstock_'))) {
 				
                 list($sUnit, $productID, $CategoryID) = explode("_", $sKey);
-                $row = stock::where('product_id', $productID)->where('category_id', $CategoryID)->count();
+                $store = 'storeid' . '_' . $productID;           
+                $storeID = isset($request[$store]) ? $request[$store] : 0;
+                $row = stock::where('product_id', $productID)->where('store_id', $storeID)->count();
                 if ($row > 0) {
 					// update stock item
-                    $currentstock = stock::where('product_id', $productID)->first();
+                    $currentstock = stock::where('product_id', $productID)->where('store_id', $storeID)->first();
                     $available = !empty($currentstock->avalaible_stock) ? $currentstock->avalaible_stock : 0;
 					$currentstock->avalaible_stock = $available + $sValue;
 					$currentstock->update();
@@ -318,6 +165,7 @@ class StockController extends Controller
                     $storck->avalaible_stock = $sValue;
 					$storck->category_id = $CategoryID;
 					$storck->product_id = $productID;
+					$storck->store_id = $storeID;
 					$storck->status = 1;
 					$storck->date_added = time();
 					$storck->save();
@@ -400,7 +248,6 @@ class StockController extends Controller
                     $query->where('Product_products.stock_type', $stockType);
                 }
             })
-			//->where('stock.avalaible_stock', '>', 0)
             ->get();
 
         $data['vehicle'] = $vehicle;
@@ -636,5 +483,149 @@ class StockController extends Controller
 
         AuditReportsController::store('Stock Management', 'view Stock takeout Page', "Accessed By User", 0);
         return view('stock.stock_report_print')->with($data);
+    }
+	public function kitSave(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'product_id.*' => 'required',
+        ]);
+
+        $kitData = $request->all();
+        unset($kitData['_token']);
+
+		$kit = new kitProducts();
+        $kit->name = !empty($kitData['name']) ? $kitData['name'] : '';
+        $kit->date_added = strtotime(date("Y-m-d"));
+        $kit->status = 1;
+        $kit->save();
+	
+        AuditReportsController::store('Stock Management', 'Products Added to kit', 'Added by User', 0);
+        return response()->json();
+    }
+	
+	public function kitUpdate(Request $request, kitProducts $kit)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+
+        $kitData = $request->all();
+        unset($kitData['_token']);
+
+        $kit->name = !empty($kitData['name']) ? $kitData['name'] : '';
+        $kit->update();
+				
+        AuditReportsController::store('Stock Management', 'Kit details  updated', 'Added by User', 0);
+        return response()->json();
+    }
+	public function kitAct(kitProducts $kit)
+    {
+        if ($kit->status == 1) {
+            $status = 0;
+        } else {
+            $status = 1;
+        }
+
+        $kit->status = $status;
+        $kit->update();
+        AuditReportsController::store('Stock Management', 'Kit status changed', 'Edited by User', 0);
+        return back();
+    }
+	// View Products kit
+	public function viewKitProducts(kitProducts $kit)
+    {
+        if ($kit->status == 1) {
+            $products = DB::table('kin_join_products')
+                ->select('kin_join_products.*', 'Product_products.name as prod_name'
+				, 'product_Category.name as cat_name'
+				,'stock.avalaible_stock','Product_products.product_code')
+                ->leftJoin('product_Category', 'kin_join_products.category_id', '=', 'product_Category.id')
+                ->leftJoin('Product_products', 'kin_join_products.product_id', '=', 'Product_products.id')
+                ->leftJoin('stock', 'stock.product_id', '=', 'Product_products.id')
+				->where('kin_join_products.kit_id', $kit->id)
+                ->orderBy('Product_products.name')
+                ->get();
+
+			$categories = product_category::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
+            $data['page_title'] = 'Manage Products Kit';
+            $data['page_description'] = 'Products Kit';
+            $data['breadcrumb'] = [
+                ['title' => 'Products Kit', 'path' => '/stock/kit_management', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+                ['title' => 'Manage Product Kit', 'active' => 1, 'is_module' => 0]
+            ];
+            $data['products'] = $products;
+            $data['kit'] = $kit;
+            $data['categories'] = $categories;
+
+            $data['active_mod'] = 'Stock Management';
+            $data['active_rib'] = 'Kit Management';
+            AuditReportsController::store('Stock Management', 'Kit Product Accessed', 'Accessed by User', 0);
+            return view('stock.kit_product')->with($data);
+        }
+		else 
+		{
+            return back();
+        }
+    }
+	
+	public function kitProductAct(KitJoinProducts $product)
+    {
+        if ($product->status == 1) {
+            $status = 0;
+        } else {
+            $status = 1;
+        }
+
+        $product->status = $status;
+        $product->update();
+        AuditReportsController::store('Stock Management', 'Product Kit status changed', 'Edited by User', 0);
+        return back();
+    }
+	
+	public function addProductToKit(Request $request, kitProducts $kit)
+    {
+		$validator = Validator::make($request->all(), [
+            'category_id' => 'required|numeric|min:0.1',
+            'number_required' => 'required|numeric|min:0.1',
+			'product_id' => [
+				'required',
+				Rule::unique('kin_join_products')->where(function ($query) use ($kit) {
+					return $query->where('kit_id', $kit->id);
+				}),
+			],   
+        ]);
+		if ($validator->fails())
+			return response()->json(['product_id' => 'This product has already been added to this kit. Please choose another one.'], 422);
+        
+		$kitData = $request->all();
+        unset($kitData['_token']);
+
+		$KitJoinProducts = new KitJoinProducts();
+		$KitJoinProducts->product_id = $kitData['product_id'];
+		$KitJoinProducts->kit_id = $kit->id;
+		$KitJoinProducts->category_id = $kitData['category_id'];
+		$KitJoinProducts->amount_required = $kitData['number_required'];
+		$KitJoinProducts->status = 1;
+		$KitJoinProducts->save();
+				
+        AuditReportsController::store('Stock Management', 'Products Added to kit', 'Added by User', 0);
+        return response()->json();
+    }
+	
+	public function updateProductToKit(Request $request, KitJoinProducts $prod)
+    {
+        $this->validate($request, [
+            'number_required' => 'required',
+        ]);
+
+        $kitData = $request->all();
+        unset($kitData['_token']);
+
+		$prod->amount_required = $kitData['number_required'];
+		$prod->update();
+	
+        AuditReportsController::store('Stock Management', 'Products information updated', 'Added by User', 0);
+        return response()->json();
     }
 }

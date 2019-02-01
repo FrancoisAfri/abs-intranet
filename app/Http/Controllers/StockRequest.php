@@ -220,10 +220,13 @@ class StockRequest extends Controller
 			->orderBy('first_name', 'asc')
 			->orderBy('surname', 'asc')
 			->get();
-		
+			//return $stock;
+		$collectionDocument = $stock->collection_document;
 		$data['back'] = '';
 		if (!empty($back) && empty($app)) $data['back'] = "/stock/seach_request";
 		if (!empty($app)) $data['back'] = "stock";
+		$data['collection_document'] = (!empty($collectionDocument)) ? Storage::disk('local')->url("Stock/Collection_document/$collectionDocument") : '';
+
 		$data['stockLevel'] = $stockLevel;
 		$data['stockLevelFives'] = $stockLevelFives;
 		$data['flow'] = $flow;
@@ -246,7 +249,7 @@ class StockRequest extends Controller
         return view('stock.view_request')->with($data);
     }
 	
-	// Cancel Request
+	// Cancel Request 
 	public function cancelRequest(Request $request, RequestStock $stock)
     {
         if ($stock && in_array($stock->status, [2, 3, 4, 5])) {
@@ -809,7 +812,7 @@ class StockRequest extends Controller
 
 		$stock->status = 0;
 		$stock->rejection_reason = $stockRequest['rejection_reason'];
-		$stock->rejected_by = Auth::user()->person->id;;
+		$stock->rejected_by = Auth::user()->person->id;
 		$stock->rejection_date = time();
 		$stock->update();
 
@@ -875,5 +878,134 @@ class StockRequest extends Controller
         $data['date'] = date("d-m-Y");
         $data['user'] = $user;
 		return view('stock.delivery_note')->with($data);
+    }
+	// delivery/collection
+	public function collectRequest()
+    {
+		$hrID = Auth::user()->id;
+		$roles = DB::table('hr_roles')->select('hr_roles.id as role_id')
+		 ->leftjoin("hr_users_roles",function($join) use ($hrID) {
+                $join->on("hr_roles.id","=","hr_users_roles.role_id")
+                    ->on("hr_users_roles.hr_id","=",DB::raw($hrID));
+            })
+		->where('hr_roles.description', '=','Stock Controller')
+		->where('hr_roles.status', 1)
+		->orderBy('hr_roles.description', 'asc')
+		->first();
+		
+        $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
+            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+            ->where('security_modules.code_name', 'stock_management')->where('security_modules_access.access_level', '>=', 4)
+            ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
+
+		if ((!empty($roles->role_id)) || !empty($userAccess)) {
+			
+			$steps = Stock_Approvals_level::latest()->first();
+			$stocks = RequestStock::where('status',$steps->step_number)
+						->whereNull('request_collected')
+						->orderBy('date_created', 'asc')->get();
+			if (!empty($stocks)) $stocks = $stocks->load('stockItems','employees','employeeOnBehalf','requestStatus');
+
+			$data['stocks'] = $stocks;
+			$data['requestStatuses'] = $this->requestStatuses;
+			$data['page_title'] = 'Items Collection';
+			$data['page_description'] = 'Stock Request Collection';
+			$data['breadcrumb'] = [
+				['title' => 'Stock', 'path' => '/stock/request_collection', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+				['title' => 'Request Stock Collection', 'active' => 1, 'is_module' => 0]
+			];
+			$data['active_mod'] = 'Stock Management';
+			$data['active_rib'] = 'Stock Collection';
+		}
+		else 
+		{
+            return redirect('/');
+        }
+        AuditReportsController::store('Stock Management', 'Create Request', 'Accessed By User', 0);
+        return view('stock.stoc_collection')->with($data);
+    }
+	// View Request items coleection
+	public function viewRequestCollection(RequestStock $stock)
+    {
+		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf','requestStatus','rejectedPerson');
+		//return $stock;
+		$hrID = Auth::user()->person->id;
+		$approvals =StockSettings::select('require_store_manager_approval')->orderBy('id','desc')->first();
+		$stockLevelFives =stockLevelFive::where('active',1)->orderBy('name','asc')->get();
+		$stockLevel =stockLevel::where('active',1)->where('level',5)->orderBy('level','asc')->first();
+
+		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
+		$flow = Stock_Approvals_level::where('status', 1)->orderBy('id', 'desc')->latest()->first();
+		
+		$employees = DB::table('hr_people')
+                ->select('hr_people.*')
+                ->where('hr_people.status', 1)
+                ->where('hr_people.id', $hrID)
+				->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')
+				->get();
+
+		$employeesOnBehalf = DB::table('hr_people')
+			->select('hr_people.*')
+			->where('hr_people.status', 1)
+			->orderBy('first_name', 'asc')
+			->orderBy('surname', 'asc')
+			->get();
+		
+		$data['back'] = '';
+		if (!empty($back) && empty($app)) $data['back'] = "/stock/seach_request";
+		if (!empty($app)) $data['back'] = "stock";
+		$data['stockLevel'] = $stockLevel;
+		$data['stockLevelFives'] = $stockLevelFives;
+		$data['flow'] = $flow;
+		$data['approvals'] = $approvals;
+		$data['employees'] = $employees;
+		$data['employeesOnBehalf'] = $employeesOnBehalf;
+		$data['products'] = $products;
+        $data['stock'] = $stock;
+		$data['requestStatuses'] = $this->requestStatuses;
+        $data['page_title'] = 'Items Collection';
+        $data['page_description'] = 'Request Stock Collection';
+        $data['breadcrumb'] = [
+            ['title' => 'Stock', 'path' => '/stock/request_collection', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Request Stock Collection', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['active_mod'] = 'Stock Management';
+        $data['active_rib'] = 'Stock Collection';
+        AuditReportsController::store('Stock Management', 'View Request', 'Accessed By User', 0);
+        return view('stock.stoc_collected')->with($data);
+    }
+	// close Request
+	public function closeRequest(Request $request, RequestStock $stock)
+    {
+		$this->validate($request, [
+			 'document' => 'required',
+        ]);
+		$user = Auth::user();
+		$closeData = $request->all();
+
+        //Exclude empty fields from query
+        foreach ($closeData as $key => $value)
+        {
+            if (empty($closeData[$key])) {
+                unset($closeData[$key]);
+            }
+        }
+        //Upload task doc
+        if ($request->hasFile('document')) {
+            $fileExt = $request->file('document')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'xlsx', 'doc', 'xltm']) && $request->file('document')->isValid()) {
+                $fileName = time() . "_close_request" . '.' . $fileExt;
+                $request->file('document')->storeAs('Stock/Collection_document', $fileName);
+                //Update 
+				$stock->request_collected = 1;
+				$stock->collection_document = $fileName;
+				$stock->collection_note = !empty($closeData['comment']) ? $closeData['comment'] : '';
+				$stock->update();
+            }
+        }
+		AuditReportsController::store('Stock Management', "Task Ended", "Edited by User", 0);
+		return response()->json();
     }
 }
