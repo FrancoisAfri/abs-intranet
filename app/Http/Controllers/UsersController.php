@@ -251,7 +251,10 @@ class UsersController extends Controller
 		return response()->json();
 	}
     public function store(Request $request ) {
-        //Save usr
+        $this->validate($request, [
+            'email' => 'unique:users,email',
+        ]);
+		//Save usr
 		$compDetails = CompanyIdentity::first();
 		$iduration = !empty($compDetails->password_expiring_month) ? $compDetails->password_expiring_month : 0;
 		$expiredDate = !empty($iduration) ? mktime(0,0,0,date('m')+ $iduration,date('d'),date('Y')) : 0;
