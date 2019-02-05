@@ -25,7 +25,7 @@ class QuotesRejectionMail extends Mailable
     {
         $this->creator = $creator;
         $this->quoteID = $quoteID;
-        $this->quoteID = $rejectionReason;
+        $this->rejectionReason = $rejectionReason;
     }
 
     /**

@@ -222,6 +222,8 @@
 												SMS</label>
 											 <label class="radio-inline"><input type="radio" id="rdo_communication" name="communication_type" value="3">
 												Both </label>
+											<label class="radio-inline"><input type="radio" id="rdo_communication" name="communication_type" checked value="4">
+												Both </label>
 										</div>
 									</div>
 								</div>
