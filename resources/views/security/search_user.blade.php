@@ -53,6 +53,18 @@
                                 </div>
                             </div>
                         </div>
+						<div class="form-group">
+                            <label for="email" class="col-sm-3 control-label">Email</label>
+
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="email" name="email" value="{{ old('email') }}" placeholder="Search by Email...">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">

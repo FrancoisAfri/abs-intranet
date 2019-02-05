@@ -431,6 +431,7 @@ class UsersController extends Controller
         $personName = trim($request->person_name);
         $personIDNum = trim($request->id_number);
         $personPassport = trim($request->passport_number);
+        $email = trim($request->email);
         $aPositions = [];
         $cPositions = DB::table('hr_positions')->get();
         foreach ($cPositions as $position) {
@@ -453,6 +454,11 @@ class UsersController extends Controller
             ->where(function ($query) use ($personPassport) {
                 if (!empty($personPassport)) {
                     $query->where('passport_number', 'ILIKE', "%$personPassport%");
+                }
+            })
+			->where(function ($query) use ($email) {
+                if (!empty($email)) {
+                    $query->where('email', 'ILIKE', "%$email%");
                 }
             })
             ->orderBy('first_name')
