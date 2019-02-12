@@ -779,6 +779,7 @@ Route::get('stock/print_delivery_note/{stock}', 'StockRequest@viewDeliveryNotePr
 Route::post('stock/reject-reason/{stock}', 'StockRequest@rejectRequestSingle');
 Route::get('stock/viewcollection/{stock}', 'StockRequest@viewRequestCollection');
 Route::post('stock/close-request/{stock}', 'StockRequest@closeRequest');
+Route::get('stock/process_act/{step}', 'StockApprovalsController@steps_act');
 //    -Kpi Types
 Route::get('/appraisal/kpi_range/{kpi}', 'AppraisalKpiTypeController@kpiRange');
 Route::post('appraisal/range', 'AppraisalKpiTypeController@kpiAddRange');
@@ -1117,3 +1118,10 @@ Route::post('api/contact-people-dropdown', 'DropDownAPIController@contactPeopleD
 
 //Test leave cron
 Route::get('test/cron', 'AllocateLeavedaysFamilyCronController@sickDays');
+
+// Procurement
+Route::get('procurement/approval_level', 'procurementApprovalsController@index');
+Route::post('procurement/add_step', 'procurementApprovalsController@store');
+Route::get('procurement/process_act/{step}', 'procurementApprovalsController@steps_act');
+Route::patch('procument/edit_step/update/{step}', 'procurementApprovalsController@update');
+Route::get('procurement/create_request', 'procurementRequestController@create');

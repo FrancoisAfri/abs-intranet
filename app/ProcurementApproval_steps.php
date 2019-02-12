@@ -4,13 +4,13 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Stock_Approvals_level extends Model
+class ProcurementApproval_steps extends Model
 {
-    protected $table = 'stock_approvals_levels';
-
-    protected $fillable = ['division_level_5', 'division_level_4', 'division_level_3'
+    protected $table = 'procurement_approval_steps';
+	
+	protected $fillable = ['division_level_5', 'division_level_4', 'division_level_3'
 	, 'division_level_2', 'division_level_1', 'employee_id', 'step_name', 'step_number'
-	, 'max_amount', 'job_title', 'status' ,'date_added'];
+	, 'max_amount', 'role_id', 'status' ,'date_added'];
 	
 	//relationship division level details and each specific division level(one to many)
     public function divisionLevelFive() {
@@ -42,4 +42,9 @@ class Stock_Approvals_level extends Model
          return $this->belongsTo(HRPerson::class, 'employee_id');
         
     }
+	//relationship division level details and each specific division level(one to many)
+    public function roleDetails() {
+         return $this->belongsTo(HRRoles::class, 'role_id');
+        
+    }	
 }

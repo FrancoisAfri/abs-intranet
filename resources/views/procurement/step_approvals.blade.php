@@ -2,15 +2,15 @@
 @section('page_dependencies')
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-    <!-- iCheck -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @endsection
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Stock Step Approvals</h3>
+                    <h3 class="box-title">Step Approvals</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -26,6 +26,7 @@
                             <th style="text-align: center">Step number</th>
                             <th>Step name</th>
                             <th>Max Amount</th>
+                            <th>Role</th>
 							@if (!empty($LevelFive))
                             <th>{{$LevelFive->name}}</th>
 							@endif
@@ -55,6 +56,7 @@
                                                 data-step_name="{{$processflow->step_name}}"
                                                 data-max_amount="{{$processflow->max_amount}}"
                                                 data-employee_id="{{$processflow->employee_id}}"
+                                                data-role_id="{{$processflow->role_id}}"
                                                 data-division_level_5="{{!empty($processflow->division_level_5) ? $processflow->division_level_5 : 0}}"
                                                 data-division_level_4="{{!empty($processflow->division_level_4) ? $processflow->division_level_4 : 0 }}"
                                                 data-division_level_3="{{!empty($processflow->division_level_3) ? $processflow->division_level_3 : 0 }}"
@@ -66,6 +68,7 @@
                                     <td style="text-align: center">{{ (!empty( $processflow->step_number)) ?  $processflow->step_number : ''}} </td>
                                     <td>{{ (!empty( $processflow->step_name)) ?  $processflow->step_name : ''}} </td>
                                     <td>{{ (!empty( $processflow->max_amount)) ? 'R '. $processflow->max_amount : ''}} </td>
+                                    <td>{{ (!empty( $processflow->roleDetails->description)) ?  $processflow->roleDetails->description : ''}} </td>
                                     @if (!empty($LevelFive))
 										<td>{{ (!empty($processflow->divisionLevelFive->name)) ?  $processflow->divisionLevelFive->name : ''}}</td>
 									@endif
@@ -90,7 +93,6 @@
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($processflow->status) && $processflow->status == 1) ? "De-Activate" : "Activate"}}
                                         </button>
                                     </td>
-                                    <!--                                 <td><button type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i> Delete</button></td>-->
                                 </tr>
                             @endforeach
                         @else
@@ -115,8 +117,8 @@
                 </div>
             </div>
             <!-- Include add  modal -->
-        @include('stock.partials.add_step_approvals_modal')
-        @include('stock.partials.edit_step_approvls_modal')
+        @include('procurement.partials.add_step_approvals_modal')
+        @include('procurement.partials.edit_step_approvls_modal')
         </div>
     </div>
 @endsection
@@ -124,11 +126,13 @@
 	<script src="/custom_components/js/modal_ajax_submit.js"></script>
 	<!-- Select2 -->
 	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	    <!-- iCheck -->
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 	<!-- Ajax dropdown options load -->
 	<script src="/custom_components/js/load_dropdown_options.js"></script>
 	<script>
 		function postData(id, data) {
-			if (data == 'actdeac') location.href = "/stock/process_act/" + id;
+			if (data == 'actdeac') location.href = "/procurement/process_act/" + id;
 		}
 
 		$('#back_button').click(function () {
@@ -153,6 +157,12 @@
 				// or four works better for larger screens.
 				dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
 			}
+			//Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
 
 			// Reposition when a modal is shown
 			$('.modal').on('show.bs.modal', reposition);
@@ -169,11 +179,11 @@
 			//Post module form to server using ajax (ADD)
 			$('#add_step').on('click', function () {
 			
-				var strUrl = '/stock/add_step';
+				var strUrl = '/procurement/add_step';
 				var formName = 'add-new-step-form';
 				var modalID = 'add-new-step-modal';
 				var submitBtnID = 'add_step';
-				var redirectUrl = '/stock/approval_level';
+				var redirectUrl = '/procurement/approval_level';
 				var successMsgTitle = 'New Step Added!';
 				var successMsg = 'The Step has been Added successfully.';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -188,6 +198,7 @@
 				var step_name = btnEdit.data('step_name');
 				var maxAmount = btnEdit.data('max_amount');
 				var EmployeeID = btnEdit.data('employee_id');
+				var roleID = btnEdit.data('role_id');
 				var dept5 = btnEdit.data('division_level_5');
 				var dept4 = btnEdit.data('division_level_4');
 				var dept3 = btnEdit.data('division_level_3');
@@ -198,6 +209,7 @@
 				modal.find('#step_number').val(step_number);
 				modal.find('#step_name').val(step_name);
 				modal.find('#max_amount').val(maxAmount);
+				modal.find('select#role_id').val(roleID);
 				//Load divisions drop down
 				var parentDDID = '';
 				var loadAllDivs = 1;
@@ -229,15 +241,27 @@
 					loadAllDivs = 1;
 				@endforeach
 				modal.find('select#hr_person_id').val(EmployeeID);
+				if (roleID > 0)
+				{
+					$('.role-field').show();
+					$('.emp-field').hide();
+					$( "#rdo_roles").prop( "checked", true );
+				}
+				else
+				{
+					$('.emp-field').show();
+					$('.role-field').hide();
+					$( "#rdo_emps").prop( "checked", true );
+				}
 			});
 			// Update
 			$('#update-step').on('click', function () {
-				var strUrl = '/stock/edit_step/update/' + stepID;
+				var strUrl = '/procument/edit_step/update/' + stepID;
 				var formName = 'edit-step-form';
 				var modalID = 'edit-step-modal';
 				var submitBtnID = 'update-step';
 				var successMsgTitle = 'Changes Saved!';
-				var redirectUrl = '/stock/approval_level';
+				var redirectUrl = '/procurement/approval_level';
 				var successMsg = 'Step Details has been updated successfully.';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 				
@@ -258,6 +282,44 @@
 			parentDDID = ddID;
 			loadAllDivs = -1;
 			@endforeach
+			
+			//call hide/show fields functions on doc ready
+			hideFields();
+
+			//show/hide file upload or manual fields on radio checked
+			$('#rdo_role, #rdo_emp').on('ifChecked', function(){
+				hideFields();
+			});
+			//show/hide file upload or manual fields on radio checked
+			$('#rdo_roles, #rdo_emps').on('ifChecked', function(){
+				hideField();
+			});
 		});
+		//function to hide/show fields
+		function hideFields() {
+			var approvalType = $("input[name='approval_type']:checked").val();
+			if (approvalType == 1) { 
+				$('.role-field').show();
+				$('.emp-field').hide();
+			}
+			else if (approvalType == 2) {
+				$('.emp-field').show();
+				$('.role-field').hide();
+			}
+		}
+		
+		//function to hide/show fields
+		function hideField() {
+			var approvalType = $("input[name='approval_types']:checked").val();
+			if (approvalType == 1) { 
+				$('.role-field').show();
+				$('.emp-field').hide();
+			}
+			else if (approvalType == 2) {
+				$('.emp-field').show();
+				$('.role-field').hide();
+			}
+		}
+	
 	</script>
 @endsection
