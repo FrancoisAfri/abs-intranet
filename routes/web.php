@@ -224,12 +224,14 @@ Route::patch('contacts/edit_companydoc/{company}', 'ContactCompaniesController@e
 Route::post('contacts/reports/contact_note', 'ContactCompaniesController@contactnote');
 Route::post('contacts/reports/meetings', 'ContactCompaniesController@meetings');
 Route::post('contacts/reports/communication', 'ContactCompaniesController@communicationsReport');
+Route::post('contacts/reports/documents_expired', 'ContactCompaniesController@expiredDocumentsReport');
 Route::get('import/company', 'ContactsUploadController@index');
 Route::post('contacts_upload', 'ContactsUploadController@store');
 //reports
 Route::post('reports/contact_note/meetingreport', 'ContactCompaniesController@printmeetingsReport');
 Route::post('reports/contact_note/client_report', 'ContactCompaniesController@printclientReport');
 Route::post('reports/contact_com_print', 'ContactCompaniesController@printcommunicationsReport');
+Route::post('reports/contact_docs_print', 'ContactCompaniesController@printDocsReport');
 
 Route::get('contacts/company_search', 'CompanySearchController@index');
 Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');

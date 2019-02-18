@@ -46,8 +46,9 @@
 
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="report_type" value="1" checked> Client Note </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="2">  Meetings </label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="3">  Communications </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="2"> Meetings</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="3"> Communications</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="4"> Documents Expiring</label>
                                       
                                 </div>
                             </div>
@@ -68,9 +69,7 @@
                                 </div>
                             </div>
                         </div>
-                       
                          <hr class="hr-text" data-content="SELECT A CLIENT">
-
                         <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
                             <label for="{{ 'company_id' }}" class="col-sm-2 control-label">Client Company</label>
 
@@ -84,8 +83,7 @@
                                 </select>
                             </div>
                         </div>
-
-                        <div class="form-group {{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
+                        <div class="form-group all-field {{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
                             <label for="{{ 'contact_person_id' }}" class="col-sm-2 control-label">Contact Person</label>
 
                             <div class="col-sm-10">
@@ -94,7 +92,18 @@
                                 </select>
                             </div>
                         </div>
+						<div class="form-group doc-field {{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
+                            <label for="{{ 'contact_id' }}" class="col-sm-2 control-label">Client</label>
 
+                            <div class="col-sm-10">
+                                <select id="contact_id" name="contact_id" class="form-control select2" style="width: 100%;">
+                                    <option value="">*** Please Select Contact ***</option>
+									@foreach($contacts as $contact)
+                                        <option value="{{ $contact->id }}" {{ ($contact->id == old('contact_id')) ? 'selected' : '' }}>{{ $contact->first_name."".$contact->surname }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group meetings-field">
                             <div class="col-xs-6">
                                 <div class="form-group ">
@@ -181,11 +190,7 @@
             }
              //Phone mask
             $("[data-mask]").inputmask();
-
             //Date picker
-          
-
-            
               $('input[name="date_from"]').daterangepicker({
                   singleDatePicker: true,
                   showDropdowns: false,
@@ -194,10 +199,6 @@
                   singleDatePicker: true,
                   showDropdowns: false,
                });
-
-
-                                       
-        
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
@@ -213,7 +214,6 @@
                 var allType = hideFields();
                
             });
-         
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
@@ -223,36 +223,45 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-        });      
-    
+        });
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='report_type']:checked").val();
             if (allType == 1) { //adjsut leave
                  //$('.hours-field').hide();
                  $('.employee-field').show();
+                 $('.all-field').show();
                  $('.meetings-field').hide();
+                 $('.doc-field').hide();
                  $('form[name="contact-report-form"]').attr('action', '/contacts/reports/contact_note');
                  $('#gen-report').val("Submit");        
             }
             else if (allType == 2) { //resert leave
                  $('.meetings-field').show();
+                 $('.all-field').show();
                  $('.employee-field').hide();
+                 $('.doc-field').hide();
                  $('form[name="contact-report-form"]').attr('action', '/contacts/reports/meetings');
                  $('#gen-report').val("Submit"); 
             }
             else if(allType == 3){
                 $('.meetings-field').show();
                  $('.employee-field').show();
+                 $('.all-field').show();
+                 $('.doc-field').hide();
                  $('form[name="contact-report-form"]').attr('action', '/contacts/reports/communication');
                  $('#gen-report').val("Submit"); 
             }
-           
-            return allType;      
+			else if(allType == 4){
+                $('.meetings-field').show();
+                $('.doc-field').show();
+                $('.employee-field').hide();
+                $('.all-field').hide();
+                $('form[name="contact-report-form"]').attr('action', '/contacts/reports/documents_expired');
+                $('#gen-report').val("Submit"); 
             }
-          //Load divisions drop down
-       
-      
-        
+            return allType;      
+        }
+          //Load divisions drop down 
     </script>
 @endsection

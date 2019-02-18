@@ -64,7 +64,6 @@ class VehicleFleetController extends Controller
     public function document(vehicle_maintenance $maintenance)
     {
         $ID = $maintenance->id;
-
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();

@@ -846,15 +846,9 @@ class ContactCompaniesController extends Controller
                     $query->where('meeting_minutes.company_id', $companyID);
                 }
             })
-            // ->orderBy('contacts_notes.id')
             ->get();
-
-        //  $companyname = $meetingminutes->first()->companyname;
-        // return $meetingminutes;
-
         $data['notesStatus'] = $notesStatus;
         $data['companyID'] = $companyID;
-        //$data['companyname'] = $companyname;
         $data['personID'] = $personID;
         $data['Datefrom'] = $Datefrom;
         $data['Dateto'] = $Dateto;
@@ -874,7 +868,6 @@ class ContactCompaniesController extends Controller
     ##print reports
     public function printmeetingsReport(Request $request)
     {
-
         $personID = $request['hr_person_id'];
         $Datefrom = $request['date_from'];
         $Dateto = $request['date_to'];
@@ -900,11 +893,7 @@ class ContactCompaniesController extends Controller
                     $query->where('meeting_minutes.company_id', $companyID);
                 }
             })
-            // ->orderBy('contacts_notes.id')
             ->get();
-
-        // return $meetingminutes;
-
 
         $data['meetingminutes'] = $meetingminutes;
         $data['page_title'] = "Minutes Neetingd Report";
@@ -984,6 +973,149 @@ class ContactCompaniesController extends Controller
         $data['active_rib'] = 'Report';
         AuditReportsController::store('Contacts', 'View Contacts Communications Search Results', "view Contacts Results", 0);
         return view('contacts.reports.communications_report_result')->with($data);
+    }
+	// Companies documents reports
+	public function expiredDocumentsReport(Request $request)
+    {
+        $this->validate($request, [
+            // // 'name' => 'required',
+            // 'date_from' => 'date_format:"d F Y"',
+            //'action_date' => 'required',
+        ]);
+
+        $communicationsdata = $request->all();
+        unset($communicationsdata['_token']);
+
+        $companyID = $communicationsdata['company_id'];
+        $personID = $communicationsdata['contact_id'];
+        $datefrom = $communicationsdata['date_from'];
+        $dateto = $communicationsdata['date_to'];
+        $Datefrom = str_replace('/', '-', $communicationsdata['date_from']);
+        $Datefrom = strtotime($communicationsdata['date_from']);
+        $Dateto = str_replace('/', '-', $communicationsdata['date_to']);
+        $Dateto = strtotime($communicationsdata['date_to']);
+		
+        $companyDocs = DB::table('company_documents')
+            ->select('company_documents.*',
+			'contact_companies.name as companyname')
+            ->leftJoin('contact_companies', 'contact_companies.id', '=', 'company_documents.company_id')
+            ->where(function ($query) use ($Datefrom, $Dateto) {
+                if ($Datefrom > 0 && $Dateto > 0) {
+                    $query->whereBetween('company_documents.expirydate', [$Datefrom, $Dateto]);
+                }
+            })
+            ->where(function ($query) use ($companyID) {
+                if (!empty($companyID)) {
+                    $query->where('company_documents.company_id', $companyID);
+                }
+            })
+            ->orderBy('company_documents.company_id', 'company_documents.expirydate')
+            ->get();
+
+		$contactsDocs = DB::table('client_documents')
+            ->select('client_documents.*', 'contacts_contacts.first_name'
+					, 'contacts_contacts.surname')
+            ->leftJoin('contacts_contacts', 'contacts_contacts.id', '=', 'client_documents.client_id')
+            ->where(function ($query) use ($Datefrom, $Dateto) {
+                if ($Datefrom > 0 && $Dateto > 0) {
+                    $query->whereBetween('client_documents.expirydate', [$Datefrom, $Dateto]);
+                }
+            })
+            ->where(function ($query) use ($companyID) {
+                if (!empty($companyID)) {
+                    $query->where('client_documents.client_id', $companyID);
+                }
+            })
+            ->orderBy('client_documents.client_id')
+            ->orderBy('client_documents.expirydate')
+            ->get();
+//return $contactsDocs;
+        $data['company_id'] = $companyID;
+        $data['contact_id'] = $personID;
+        $data['Datefrom'] = $Datefrom;
+        $data['Dateto'] = $Dateto;
+        $data['companyDocs'] = $companyDocs;
+        $data['contactsDocs'] = $contactsDocs;
+        $data['page_title'] = "Expiring Document Report";
+        $data['page_description'] = "Expiring Document Report";
+        $data['breadcrumb'] = [
+            ['title' => 'Contacts Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Contacts Document Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Report';
+        AuditReportsController::store('Contacts', 'View Contacts Expiring Document Search Results', "view Contacts Results", 0);
+        return view('contacts.reports.doc_report')->with($data);
+    }
+	
+	##print reports
+    public function printDocsReport(Request $request)
+    {
+        $communicationsdata = $request->all();
+        unset($communicationsdata['_token']);
+
+        $companyID = $communicationsdata['company_id'];
+        $personID = $communicationsdata['contact_id'];
+        $Datefrom = str_replace('/', '-', $communicationsdata['date_from']);
+        $Datefrom = strtotime($communicationsdata['date_from']);
+        $Dateto = str_replace('/', '-', $communicationsdata['date_to']);
+        $Dateto = strtotime($communicationsdata['date_to']);
+       $companyDocs = DB::table('company_documents')
+            ->select('company_documents.*',
+			'contact_companies.name as companyname')
+            ->leftJoin('contact_companies', 'contact_companies.id', '=', 'company_documents.company_id')
+            ->where(function ($query) use ($Datefrom, $Dateto) {
+                if ($Datefrom > 0 && $Dateto > 0) {
+                    $query->whereBetween('company_documents.expirydate', [$Datefrom, $Dateto]);
+                }
+            })
+            ->where(function ($query) use ($companyID) {
+                if (!empty($companyID)) {
+                    $query->where('company_documents.company_id', $companyID);
+                }
+            })
+            ->orderBy('company_documents.company_id', 'company_documents.expirydate')
+            ->get();
+
+		$contactsDocs = DB::table('client_documents')
+            ->select('client_documents.*', 'contacts_contacts.first_name'
+					, 'contacts_contacts.surname')
+            ->leftJoin('contacts_contacts', 'contacts_contacts.id', '=', 'client_documents.client_id')
+            ->where(function ($query) use ($Datefrom, $Dateto) {
+                if ($Datefrom > 0 && $Dateto > 0) {
+                    $query->whereBetween('client_documents.expirydate', [$Datefrom, $Dateto]);
+                }
+            })
+            ->where(function ($query) use ($companyID) {
+                if (!empty($companyID)) {
+                    $query->where('client_documents.client_id', $companyID);
+                }
+            })
+            ->orderBy('client_documents.client_id')
+            ->orderBy('client_documents.expirydate')
+            ->get();
+
+        $data['page_title'] = "Expiring Document Report";
+        $data['page_description'] = "Expiring Document Report";
+        $data['breadcrumb'] = [
+            ['title' => 'Contacts Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Contacts Document Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Contacts';
+        $data['active_rib'] = 'Report';
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
+		$data['companyDocs'] = $companyDocs;
+        $data['contactsDocs'] = $contactsDocs;
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
+        AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
+        return view('contacts.reports.docs_report_print')->with($data);
     }
 
     ##print reports

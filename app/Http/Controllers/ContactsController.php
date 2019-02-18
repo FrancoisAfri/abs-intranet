@@ -55,41 +55,6 @@ class ContactsController extends Controller
         return view('contacts.search_contact')->with($data);
     }
 
-    public function reports()
-    {
-        //$employees = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
-		$hrID = Auth::user()->person->id;
-        $employees = HRPerson::where('status', 1)->get();
-        // return $employees;
-		$hrID = Auth::user()->id;
-		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
-            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
-            ->where('security_modules.code_name', 'job_cards')->where('security_modules_access.access_level', '>=', 4)
-            ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
-		if (!empty($userAccess))
-			$employees = HRPerson::where('status', 1)->where('id',$hrID)->get();
-
-        $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
-
-        $data['page_title'] = "contacts";
-        $data['page_description'] = "Reports";
-        $data['breadcrumb'] = [
-            ['title' => 'Clients', 'path' => '/contacts/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Clients', 'path' => '/Clients/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Clients Clients-reports', 'active' => 1, 'is_module' => 0]
-        ];
-
-        $data['active_mod'] = 'contacts';
-        $data['active_rib'] = 'report';
-        $data['companies'] = $companies;
-
-        $data['employees'] = $employees;
-        AuditReportsController::store('Audit', 'View Audit Search', "view Audit", 0);
-        return view('contacts.contacts_report_index')->with($data);
-
-    }
-
-
     public function create($companyID = null)
     {
         $contactTypes = [1 => 'Company Rep', 2 => 'Student', 3 => 'Learner', 4 => 'Official', 5 => 'Educator', 6 => 'Osizweni Employee', 7 => 'Osizweni Board Member', 8 => 'Other'];
@@ -892,5 +857,38 @@ class ContactsController extends Controller
         AuditReportsController::store('Contacts', "Client Document Deleted, Document Name:$document->name, Client:$clientDetails->first_name $clientDetails->surname, Document Name: $document->document_name", "Deleted By User", 0);
         return back();
     }
+	
+	public function reports()
+    {
+        $hrID = Auth::user()->person->id;
+        $employees = HRPerson::where('status', 1)->get();
+        // return $employees;
+		$hrID = Auth::user()->id;
+		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
+            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+            ->where('security_modules.code_name', 'job_cards')->where('security_modules_access.access_level', '>=', 4)
+            ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
+		if (!empty($userAccess))
+			$employees = HRPerson::where('status', 1)->where('id',$hrID)->get();
 
+        $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
+        $contacts = ContactPerson::where('status', 1)->orderBy('first_name')->get();
+
+        $data['page_title'] = "contacts";
+        $data['page_description'] = "Reports";
+        $data['breadcrumb'] = [
+            ['title' => 'Clients', 'path' => '/contacts/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Clients', 'path' => '/Clients/Clients-reports', 'icon' => 'fa-tasks', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Clients Clients-reports', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'contacts';
+        $data['active_rib'] = 'report';
+        $data['companies'] = $companies;
+        $data['contacts'] = $contacts;
+
+        $data['employees'] = $employees;
+        AuditReportsController::store('Audit', 'View Audit Search', "view Audit", 0);
+        return view('contacts.contacts_report_index')->with($data);
+    }
 }
