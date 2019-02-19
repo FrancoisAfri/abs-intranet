@@ -8,6 +8,7 @@ use App\DivisionLevel;
 use App\fleet_licence_permit;
 use App\FleetType;
 use App\HRPerson;
+use App\vehicle_fire_extinguishers;
 use App\Http\Requests;
 use App\Mail\confirm_collection;
 use App\permits_licence;
@@ -61,8 +62,6 @@ class VehicleReportsController extends Controller
         $hrDetails = HRPerson::where('status', 1)->get();
         $fleetcardtype = FleetType::orderBy('id', 'desc')->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
-
-
         $vehicledetail = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type')
@@ -72,14 +71,12 @@ class VehicleReportsController extends Controller
             ->orderBy('vehicle_details.id', 'desc')
             ->get();
 
-
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Reports ";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
         ];
-
         $data['fleetcardtype'] = $fleetcardtype;
         $data['hrDetails'] = $hrDetails;
         $data['contactcompanies'] = $contactcompanies;
@@ -93,11 +90,9 @@ class VehicleReportsController extends Controller
         $data['licence'] = $licence;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Reports';
-
         AuditReportsController::store('Fleet Management', 'Reports Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.generalreport_search')->with($data);
     }
-
 
     public function bookingReports(Request $request)
     {
@@ -1816,5 +1811,132 @@ class VehicleReportsController extends Controller
 
         AuditReportsController::store('Fleet Management', 'Fleet Cards Report Printed', "Accessed By User", 0);
         return view('Vehicles.Reports.fleet_cards_report_print')->with($data);
+    }
+	
+	public function fireExtinguishersReport(Request $request)
+    {
+        $reportData = $request->all();
+        unset($reportData['_token']);
+        $actionFrom = $actionTo = 0;
+        $vehicle = '';
+        $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
+        $actionDate = $request['action_date'];
+		$statusArray= array(1 => 'Active', 2 => ' Allocate', 3 => 'In Use', 4 => 'Empty', 5=> 'Evacate', 6=> 'In Storage', 7=> 'Discarded', 8=> 'Rental' , 9=> 'Sold');
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+
+        $fireExtinguishers = vehicle_fire_extinguishers::select('vehicle_fire_extinguisher.*'
+            ,'vehicle_details.fleet_number as fleet_number',
+            'hr_people.first_name as capt_name','hr_people.surname as capt_surname'
+			,'contact_companies.name as com_name')
+            ->leftJoin('vehicle_details', 'vehicle_fire_extinguisher.vehicle_id', '=', 'vehicle_details.id')
+            ->leftJoin('hr_people', 'vehicle_fire_extinguisher.capturer_id', '=', 'hr_people.id')
+            ->leftJoin('contact_companies', 'vehicle_fire_extinguisher.supplier_id', '=', 'contact_companies.id')
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('date_purchased', [$actionFrom, $actionTo]);
+                }
+            })
+            ->Where(function ($query) use ($vehicleArray) {
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
+            })
+            ->orderBy('vehicle_id', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+
+//return $fireExtinguishers;
+        for ($i = 0; $i < count($vehicleArray); $i++) {
+            $vehicle .= $vehicleArray[$i] . ',';
+        }
+
+        $data['vehicle_id'] = rtrim($vehicle, ",");
+        $data['action_date'] = $actionDate;
+        $data['fireExtinguishers'] = $fireExtinguishers;
+        $data['statusArray'] = $statusArray;
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Fire Extinguisher Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Vehicle Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Reports';
+        AuditReportsController::store('Fleet Management', 'Report Search Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Reports.fire_results')->with($data);
+    }
+
+    public function fireExtinguishersReportPrint(Request $request)
+    {
+        $reportData = $request->all();
+        unset($reportData['_token']);
+        $actionFrom = $actionTo = 0;
+
+        $vehicle = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : '';
+        if (!empty($vehicle))
+			$vehicleArray = (explode(",", $vehicle));
+		else $vehicleArray = '';
+        $actionDate = $request['action_date'];
+        $Destination = $request['destination'];
+        $Purpose = $request['purpose'];
+
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+
+        $fireExtinguishers = vehicle_fire_extinguishers::select('vehicle_fire_extinguisher.*'
+            ,'vehicle_details.fleet_number as fleet_number',
+            'hr_people.first_name as capt_name','hr_people.surname as capt_surname'
+			,'contact_companies.name as com_name')
+            ->leftJoin('vehicle_details', 'vehicle_fire_extinguisher.vehicle_id', '=', 'vehicle_details.id')
+            ->leftJoin('hr_people', 'vehicle_fire_extinguisher.capturer_id', '=', 'hr_people.id')
+            ->leftJoin('contact_companies', 'vehicle_fire_extinguisher.supplier_id', '=', 'contact_companies.id')
+            ->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('date_purchased', [$actionFrom, $actionTo]);
+                }
+            })
+            ->Where(function ($query) use ($vehicleArray) {
+				if (!empty($vehicleArray)) {
+                    $query->whereIn('vehicle_id', $vehicleArray);
+				}
+            })
+            ->orderBy('vehicle_id', 'desc')
+            ->orderBy('id', 'desc')
+            ->get();
+		$statusArray= array(1 => 'Active', 2 => ' Allocate', 3 => 'In Use', 4 => 'Empty', 5=> 'Evacate', 6=> 'In Storage', 7=> 'Discarded', 8=> 'Rental' , 9=> 'Sold');
+        
+        $data['fireExtinguishers'] = $fireExtinguishers;
+        $data['page_title'] = " Fleet Management ";
+        $data['page_description'] = "Fire Extinguisher Report ";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/vehicle_reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Vehicle Report ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['statusArray'] = $statusArray;
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Reports';
+
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
+
+        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
+        return view('Vehicles.Reports.fire_report_print')->with($data);
     }
 }

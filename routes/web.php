@@ -402,7 +402,7 @@ Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingControlle
 //cancel booking
  Route::get('vehicle_management/cancel_booking/{booking}', 'VehicleBookingController@cancel_booking');
 // edit booking
- Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
+ Route::patch('vehicle_management/edit_booking/{booking}', 'VehicleBookingController@edit_bookings');
 // collect vehicle
  Route::get('/vehicle_management/collect/{collect}', 'VehicleBookingController@collect_vehicle');
 
@@ -626,6 +626,8 @@ Route::post('fleet/reports/details/print', 'VehicleReportsController@DetailsRepo
 Route::post('fleet/reports/expdocs/print', 'VehicleReportsController@ExpdocsReportPrint');
 Route::post('fleet/reports/expLic/print', 'VehicleReportsController@ExpLicencesReportPrint');
 Route::post('fleet/reports/extOil/print', 'VehicleReportsController@ExternalOilReportPrint');
+Route::post('vehicle_management/fire_extinguishers', 'VehicleReportsController@fireExtinguishersReport');
+Route::post('fleet/reports/fireExtinguisher/print', 'VehicleReportsController@fireExtinguishersReportPrint');
 
 //Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');

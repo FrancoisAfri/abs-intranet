@@ -44,7 +44,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type='text' class="form-control" id='required_from' name="required_from" value=""/>
+                                <input type="text" class="form-control" id="required_from" name="required_from" value=""/>
                             </div>
                         </div>
                     </div>
@@ -56,7 +56,7 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-                                <input type='text' class="form-control" id='required_to' name="required_to" value=""/>
+                                <input type="text" class="form-control" id="required_to" name="required_to" value=""/>
                             </div>
                         </div>
                     </div>

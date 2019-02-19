@@ -499,7 +499,7 @@ class VehicleBookingController extends Controller
         return redirect('/vehicle_management/vehiclebooking_results')->with('success_application', "Vehicle Booking application was successful.");
     }
 
-    public function edit_bookings(Request $request, vehicle_booking $Vehicebookings)
+    public function edit_bookings(Request $request, vehicle_booking $booking)
     {
         $this->validate($request, [
             // 'description' => 'numeric',
@@ -513,23 +513,17 @@ class VehicleBookingController extends Controller
         $Employee = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
         $name = $Employee->first_name . ' ' . $Employee->surname;
         $vehicleID = $vehicleData['vehicle_id'];
-        $Employee = vehicle_detail::where('id', $vehicleID)->orderBy('id', 'desc')->get()->first();
 
-        $Vehicebookings->vehicle_type = $Employee->vehicle_type;
-        $Vehicebookings->vehicle_model = $Employee->vehicle_model;
-        $Vehicebookings->vehicle_make = $Employee->vehicle_make;
-        $Vehicebookings->vehicle_reg = $Employee->vehicle_registration;
-        $Vehicebookings->require_datetime = $request['required_from'];
-        $Vehicebookings->return_datetime = $request['required_to'];
-        $Vehicebookings->usage_type = $request['Usage_type'];
-        $Vehicebookings->driver_id = $request['driver'];
-        $Vehicebookings->purpose = $vehicleData['purpose'];
-        $Vehicebookings->destination = $request['destination'];
-        $Vehicebookings->vehicle_id = $request['vehicle_id'];
-        $Vehicebookings->capturer_id = $name;
-        $Vehicebookings->UserID = $loggedInEmplID;
-        $Vehicebookings->cancel_status = 0;
-        $Vehicebookings->update();
+        $booking->require_datetime = strtotime($vehicleData['required_from']);
+        $booking->return_datetime = strtotime($vehicleData['required_to']);
+        $booking->usage_type = $vehicleData['usage_type'];
+        $booking->driver_id = $vehicleData['driver'];
+        $booking->purpose = $vehicleData['purpose'];
+        $booking->destination = $vehicleData['destination'];
+        $booking->capturer_id = $name;
+        $booking->UserID = $loggedInEmplID;
+        $booking->cancel_status = 0;
+        $booking->update();
 
         AuditReportsController::store('Fleet Management', 'Vehicle Booking edited ', "Edited by User", 0);
         return response()->json();

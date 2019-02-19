@@ -1172,11 +1172,8 @@ class FleetManagementController extends Controller
         ################## WELL DETAILS ###############
 
         $ID = $maintenance->id;
-
-        $statusArray= array(1 => 'Active', 2 => ' Allocate', 3 => 'In Use', 4 => 'Empty', 5=> 'Evacate', 6=> 'In Storage', 7=> 'Discarded', 8=> 'Rental' , 9=> 'Sold');
-         
+        $statusArray= array(1 => 'Active', 2 => ' Allocate', 3 => 'In Use', 4 => 'Empty', 5=> 'Evacate', 6=> 'In Storage', 7=> 'Discarded', 8=> 'Rental' , 9=> 'Sold'); 
         $vehicle_details = DB::table('vehicle_details')->get();
-        
         $fireextinguishers = DB::table('vehicle_fire_extinguisher')
             ->select('vehicle_fire_extinguisher.*'
 			,'contact_companies.name as comp_name'

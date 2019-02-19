@@ -23,30 +23,9 @@
                 <form class="form-horizontal" id="report_form" method="POST">
                     <!-- audits -->
                     {{ csrf_field() }}
-
                     <div class="box-body" id="vehicle_details">
-
-                        <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
-                            <label for="Leave_type" class="col-sm-2 control-label"> Report Type</label>
-
-                            <div class="col-sm-10">
-                                <label class="radio-inline"><input type="radio" id="rdo_all" name="report_type"
-                                                                   value="1" checked> ALL </label>
-                                <label class="radio-inline"><input type="radio" id="rdo_active" name="report_type"
-                                                                   value="2"> Active </label>
-                                <label class="radio-inline"><input type="radio" id="rdo_inactive" name="report_type"
-                                                                   value="3"> Inactive </label>
-                                <label class="radio-inline"><input type="radio" id="rdo_req_approval" name="report_type"
-                                                                   value="4"> Require Approval </label>
-                                <label class="radio-inline"><input type="radio" id="rdo_rejected" name="report_type"
-                                                                   value="5"> Rejected </label>
-
-                            </div>
-                        </div>
-
                         <div class="form-group">
                             <label for="gender" class="col-sm-2 control-label">Report Type</label>
-
                             <div class="col-sm-8">
                                 <select name="report_id" id="report_id" class="form-control"
                                         onchange="changetype(this.value);" required>
@@ -63,12 +42,12 @@
                                     <option value="9">External Diesel Log</option>
                                    {{-- <option value="10">Internal Diesel Log</option>
                                     <option value="11">Diesel Log</option>--}}
+									<option value="12">Fire Extinguishers </option>
                                     {{--<option value="13">Alerts Report</option>--}}
                                 </select>
                             </div>
                         </div>
-
-                        <div class="form-group">
+                        <div id="vehicle_type_div" class="form-group">
                             <label for="vehicle_type" class="col-sm-2 control-label">Vehicle Type</label>
                             <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
@@ -80,7 +59,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group detail-field {{ $errors->has('licence_type') ? ' has-error' : '' }}">
                             <label for="vehicle_make" class="col-sm-2 control-label">Manufacturer</label>
                             <div class="col-sm-8">
@@ -93,7 +71,6 @@
                                 </select>
                             </div>
                         </div>
-
                         @foreach($division_levels as $division_level)
                             <div class="form-group  detail-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                 <label for="{{ 'division_level_' . $division_level->level }}"
@@ -113,7 +90,6 @@
                                 </div>
                             </div>
                         @endforeach
-
                         <div class="form-group {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
                             <label for="vehicle_id" class="col-sm-2 control-label">Vehicle </label>
                             <div class="col-sm-8">
@@ -144,11 +120,9 @@
                                        name="purpose" value="" placeholder="Enter Purpose...">
                             </div>
                         </div>
-
-                        <div class="form-group {{ $errors->has('driver_id') ? ' has-error' : '' }}">
+                        <div id="driver_div" class="form-group {{ $errors->has('driver_id') ? ' has-error' : '' }}">
                             <label for="driver_id" class="col-sm-2 control-label">Driver</label>
                             <div class="col-sm-8">
-
                                 <select class="form-control select2" style="width: 100%;" id="driver_id"
                                         name="driver_id">
                                     <option value="">*** Select an Driver ***</option>
@@ -156,10 +130,8 @@
                                         <option value="{{ $driver->id }}">{{ $driver->first_name . ' ' . $driver->surname }}</option>
                                     @endforeach
                                 </select>
-
                             </div>
                         </div>
-
                         <div class="form-group day-field {{ $errors->has('action_date') ? ' has-error' : '' }}">
                             <label for="action_date" class="col-sm-2 control-label">Action Date</label>
                             <div class="col-sm-8">
@@ -169,15 +141,12 @@
                                     </div>
                                     <input type="text" class="form-control daterangepicker" id="action_date"
                                            name="action_date" value="" placeholder="Select Action Date...">
-
                                 </div>
                             </div>
                         </div>
-						
 						<div class="form-group card-field">
 							<label for="path" class="col-sm-2 control-label">Card Type</label>
 							<div class="col-sm-10">
-
 								<select class="form-control select2" style="width: 100%;"
 										id="card_type_id" name="card_type_id">
 									<option value="">*** Select a Card Type ***</option>
@@ -192,6 +161,18 @@
 							<div class="col-sm-10">
 								<select class="form-control select2" style="width: 100%;"
 										id="company_id" name="company_id">
+									<option value="">*** Select a Company ***</option>
+									@foreach($contactcompanies as $Company)
+										<option value="{{ $Company->id }}">{{ $Company->name }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+						<div class="form-group fire-field">
+							<label for="supplier_id" class="col-sm-2 control-label">Supplier</label>
+							<div class="col-sm-10">
+								<select class="form-control select2" style="width: 100%;"
+										id="supplier_id" name="supplier_id">
 									<option value="">*** Select a Company ***</option>
 									@foreach($contactcompanies as $Company)
 										<option value="{{ $Company->id }}">{{ $Company->name }}</option>
@@ -256,6 +237,7 @@
         $('.licence-field').hide();
         $('.detail-field').hide();
         $('.card-field').hide();
+        $('.fire-field ').hide();
 
         $(function () {
             //Initialize Select2 Elements
@@ -291,51 +273,58 @@
             else if (type == 9) $('#report_form').attr('action', '/vehicle_management/report_external_diesel');
             else if (type == 10) $('#report_form').attr('action', '/vehicle_management/report_internal_diesel');
             else if (type == 11) $('#report_form').attr('action', '/activity/search12');
+            else if (type == 12) $('#report_form').attr('action', '/vehicle_management/fire_extinguishers');
 
             //changetype
 
-            var levID = document.getElementById("report_id").value;
+            var reportID = document.getElementById("report_id").value;
 
-            if (levID == 1) {
+            if (reportID == 1) {
                 $('.licence-field').hide();
                 $('.dest-field').show();
                 $('.detail-field').hide();
                 $('.card-field').hide();
-            } else if (levID == 2) {
+            } else if (reportID == 2) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
                 $('.card-field').hide();
-            } else if (levID == 3) {
+            } else if (reportID == 3) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
                 $('.card-field').hide();
-            } else if (levID == 4) {
+            } else if (reportID == 4) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
                 $('.card-field').hide();
-            } else if (levID == 5) {
+            } else if (reportID == 5) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
                 $('.card-field').hide();
-            } else if (levID == 6) {
+            } else if (reportID == 6) {
                 $('.dest-field').hide();
                 $('.detail-field').show();
                 $('.card-field').show();
-            }else if (levID == 7) {
+            }else if (reportID == 7) {
                 $('.dest-field').hide();
                 $('.card-field').show();
                 $('.detail-field').hide();
-            }else if (levID == 8) {
+            }else if (reportID == 8) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
-            }else if (levID == 9) {
-                $('.dest-field').hide();
-                $('.detail-field').hide();
-                $('.card-field').hide();
-            }else if (levID == 10) {
+            }else if (reportID == 9) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
                 $('.card-field').hide();
+            }else if (reportID == 10) {
+                $('.dest-field').hide();
+                $('.detail-field').hide();
+                $('.card-field').hide();
+            }else if (reportID == 12) {
+                $('.dest-field').hide();
+                $('.detail-field').hide();
+                $('.card-field').hide();
+                $('#driver_div').hide();
+                $('#vehicle_type_div').hide();
             }
 
         }

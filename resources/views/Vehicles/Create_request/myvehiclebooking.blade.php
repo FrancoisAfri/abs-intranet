@@ -61,8 +61,8 @@ rel="stylesheet">
 											data-id="{{ $booking->id }}"
 											data-vehiclemodel="{{ $booking->vehicleModel }}"
 											data-vehicle_reg="{{ $booking->vehicle_reg }}"
-											data-required_from="{{date("y F  Y, g:i a", $booking->require_datetime)}}"
-											data-required_to="{{date("y F  Y, g:i a", $booking->return_datetime)}}"
+											data-required_from="{{date("F j, Y, g:i a", $booking->require_datetime)}}"
+											data-required_to="{{ date("F j, Y, g:i a", $booking->return_datetime)}}"
 											data-usage_type="{{$booking->usage_type}}"
 											data-driver="{{$booking->driver_id}}"
 											data-purpose="{{$booking->purpose}}"
@@ -154,113 +154,107 @@ rel="stylesheet">
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- End Bootstrap File input -->
 
-    <script>
-                    
-					document.getElementById("search_booking").onclick = function () {
-                        location.href = "/vehicle_management/vehicle_request";
-                    };
-                    $(function () {
-                        $('#example2').DataTable({
-                            "paging": true,
-                            "lengthChange": true,
-                            "searching": true,
-                            "ordering": true,
-                            "info": true,
-                            "autoWidth": true
-                        });
-                    });
+    <script>        
+		document.getElementById("search_booking").onclick = function () {
+			location.href = "/vehicle_management/vehicle_request";
+		};
+		$(function () {
+			$('#example2').DataTable({
+				"paging": true,
+				"lengthChange": true,
+				"searching": true,
+				"ordering": true,
+				"info": true,
+				"autoWidth": true
+			});
+		});
 
-                    $(document).ready(function () {
+		$(document).ready(function () {
 
-                        $(function () {
-                            $('#required_from').datetimepicker();
-                        });
+			$(function () {
+				$('#required_from').datetimepicker();
+			});
 
-                        $('#required_to').datetimepicker({});
+			$('#required_to').datetimepicker({});
 
-                    });
+		});
 
-                    $(function () {
-                        var moduleId;
-                        //Initialize Select2 Elements
-                        $(".select2").select2();
+		$(function () {
+			var moduleId;
+			//Initialize Select2 Elements
+			$(".select2").select2();
 
-                        //Tooltip
+			//Tooltip
 
-                        $('[data-toggle="tooltip"]').tooltip();
+			$('[data-toggle="tooltip"]').tooltip();
 
-                        //Vertically center modals on page
-                        function reposition() {
-                            var modal = $(this),
-                            dialog = modal.find('.modal-dialog');
-                            modal.css('display', 'block');
+			//Vertically center modals on page
+			function reposition() {
+				var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+				modal.css('display', 'block');
 
-                            // Dividing by two centers the modal exactly, but dividing by three
-                            // or four works better for larger screens.
-                            dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                        }
+				// Dividing by two centers the modal exactly, but dividing by three
+				// or four works better for larger screens.
+				dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+			}
 
-                        // Reposition when a modal is shown
-                        $('.modal').on('show.bs.modal', reposition);
-                        // Reposition when the window is resized
-                        $(window).on('resize', function () {
-                            $('.modal:visible').each(reposition);
-                        });
+			// Reposition when a modal is shown
+			$('.modal').on('show.bs.modal', reposition);
+			// Reposition when the window is resized
+			$(window).on('resize', function () {
+				$('.modal:visible').each(reposition);
+			});
 
-                        //Show success action modal
-                        $('#success-action-modal').modal('show');
-                        
-                        $(".js-example-basic-multiple").select2();
+			//Show success action modal
+			$('#success-action-modal').modal('show');
+			
+			$(".js-example-basic-multiple").select2();
 
-                        //Cancell booking
-                        //Post module form to server using ajax (ADD)
+			//Cancell booking
+			//Post module form to server using ajax (ADD)
+			//edit booking
+			var bookingID;
+			$('#edit-booking-modal').on('show.bs.modal', function (e) {
+				//console.log('kjhsjs');
+				var btnEdit = $(e.relatedTarget);
+				if (parseInt(btnEdit.data('id')) > 0) {
+					bookingID = btnEdit.data('id');
 
+				}
+				var vehiclemodel = btnEdit.data('vehiclemodel');
+				var vehicle_reg = btnEdit.data('vehicle_reg');
+				var required_from = btnEdit.data('required_from');
+				var required_to = btnEdit.data('required_to');
+				var usage_type = btnEdit.data('usage_type');
+				var driver = btnEdit.data('driver');
+				var purpose = btnEdit.data('purpose');
+				var destination = btnEdit.data('destination');
+				var vehicle_id = btnEdit.data('vehicle_id');
+				var modal = $(this);
+				modal.find('#vehiclemodel').val(vehiclemodel);
+				modal.find('#vehicle_reg').val(vehicle_reg);
+				modal.find('#required_from').val(required_from);
+				modal.find('#required_to').val(required_to);
+				modal.find('#usage_type').val(usage_type);
+				modal.find('#driver').val(driver);
+				modal.find('#purpose').val(purpose);
+				modal.find('#destination').val(destination);
+				modal.find('#vehicle_id').val(vehicle_id);
+			});
 
-                        //edit booking
-                        var bookingID;
-                        $('#edit-booking-modal').on('show.bs.modal', function (e) {
-                            //console.log('kjhsjs');
-                            var btnEdit = $(e.relatedTarget);
-                            if (parseInt(btnEdit.data('id')) > 0) {
-                                bookingID = btnEdit.data('id');
-
-                            }
-                            var vehiclemodel = btnEdit.data('vehiclemodel');
-                            var vehicle_reg = btnEdit.data('vehicle_reg');
-                            var required_from = btnEdit.data('required_from');
-                            var required_to = btnEdit.data('required_to');
-                            var usage_type = btnEdit.data('usage_type');
-                            var driver = btnEdit.data('driver');
-                            var purpose = btnEdit.data('purpose');
-                            var destination = btnEdit.data('destination');
-                            var vehicle_id = btnEdit.data('vehicle_id');
-                            var modal = $(this);
-                            modal.find('#vehiclemodel').val(vehiclemodel);
-                            modal.find('#vehicle_reg').val(vehicle_reg);
-                            modal.find('#required_from').val(required_from);
-                            modal.find('#required_to').val(required_to);
-                            modal.find('#usage_type').val(usage_type);
-                            modal.find('#driver').val(driver);
-                            modal.find('#purpose').val(purpose);
-                            modal.find('#destination').val(destination);
-                            modal.find('#vehicle_id').val(vehicle_id);
-                        });
-
-                        //Post perk form to server using ajax (edit)
-                        $('#edit_booking').on('click', function () {
-                            var strUrl = '/vehicle_management/edit_booking/' + bookingID;
-                            var formName = 'edit-booking-form';
-                            var modalID = 'edit-booking-modal';
-                            var submitBtnID = 'edit_booking';
-                            var redirectUrl = '/vehicle_management/vehiclebooking_results';
-                            var successMsgTitle = 'Changes Saved!';
-                            var successMsg = 'The  details have been updated successfully!';
-                            var Method = 'PATCH';
-                            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                        });
-
-
-                    });
-                </script>
-
-                @endsection
+			//Post perk form to server using ajax (edit)
+			$('#edit_booking').on('click', function () {
+				var strUrl = '/vehicle_management/edit_booking/' + bookingID;
+				var formName = 'edit-booking-form';
+				var modalID = 'edit-booking-modal';
+				var submitBtnID = 'edit_booking';
+				var redirectUrl = '/vehicle_management/create_request';
+				var successMsgTitle = 'Changes Saved!';
+				var successMsg = 'The  details have been updated successfully!';
+				var Method = 'PATCH';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
+		});
+	</script>
+@endsection
