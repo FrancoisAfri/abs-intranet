@@ -431,9 +431,9 @@ class VehicleBookingController extends Controller
             $Vehiclebookings->status = $BookingDetail['status'];
         $Vehiclebookings->cancel_status = 0;  // 0 is the for vehicle not booked
         if ($vehicleDetails->metre_reading_type === 1)
-            $Vehiclebookings->start_mileage_id = $vehicleData['odometer_reading'];
+            $Vehiclebookings->start_mileage_id = !empty($vehicleData['odometer_reading']) ? $vehicleData['odometer_reading'] : 0;
         else
-            $Vehiclebookings->start_mileage_id = $vehicleData['hours_reading'];
+            $Vehiclebookings->start_mileage_id = !empty($vehicleData['hours_reading']) ? $vehicleData['hours_reading'] : 0;
 
         $Vehiclebookings->booking_date = time();
         $Vehiclebookings->save();
