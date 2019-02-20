@@ -27,7 +27,7 @@
 							<th>Date Purchased</th>
 							<th>Barcode</th>
 							<th>Item</th>
-							<th>Service Provier</th>
+							<th>Service Provider</th>
 							<th>Serial Number</th>
 							<th>Weight</th>
 							<th>Cost</th>
