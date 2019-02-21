@@ -44,7 +44,7 @@
                         </div>
                     </div>
                     <div class="form-group ">
-                        <label for="date" class="col-sm-2 control-label"> On Behalf Of</label>
+                        <label for="on_behalf" class="col-sm-2 control-label"> On Behalf Of</label>
                         <div class="col-sm-8">
                             <input type="checkbox" id="on_behalf" value="1" name="on_behalf"
                                    onclick="showHide();">

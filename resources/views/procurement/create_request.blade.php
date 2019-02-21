@@ -21,7 +21,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title"> Request Stock </h3>
+                    <h3 class="box-title"> Procurement Request</h3>
                 </div>
                 <div style="overflow-X:auto;">
                     <table id="example2" class="table table-bordered table-hover">
@@ -37,19 +37,19 @@
 							</tr>
                         </thead>
                         <tbody>
-                        @if (count($stocks) > 0)
+                        @if (count($procurements) > 0)
                             <ul class="products-list product-list-in-box">
-                                @foreach ($stocks as $stock)
+                                @foreach ($procurements as $procurement)
                                     <tr id="configuration-list">
                                         <td>
-                                            <a href="{{ '/stock/viewrequest/' . $stock->id }}" id="edit_compan"
+                                            <a href="{{ '/procurement/viewrequest/' . $procurement->id }}" id="edit_compan"
                                                class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View More</a></td>
-                                        <td>{{ !empty($stock->date_created) ? date(' d M Y', $stock->date_created) : '' }}</td>
-                                        <td>{{ !empty($stock->title_name) ? $stock->title_name : '' }}</td>
-                                        <td>{{ (!empty($stock->employees)) ?  $stock->employees->first_name . ' ' .  $stock->employees->surname : ''}} </td>
-                                        <td>{{ (!empty($stock->employeeOnBehalf)) ?  $stock->employeeOnBehalf->first_name . ' ' .  $stock->employeeOnBehalf->surname : ''}} </td>
-                                        <td>{{ (!empty($stock->request_remarks)) ?  $stock->request_remarks : ''}} </td>
-                                        <td>{{ !empty($stock->status) ? $stock->requestStatus->step_name : 'Rejected' }}</td>
+                                        <td>{{ !empty($procurement->date_created) ? date(' d M Y', $procurement->date_created) : '' }}</td>
+                                        <td>{{ !empty($procurement->title_name) ? $procurement->title_name : '' }}</td>
+                                        <td>{{ (!empty($procurement->employees)) ?  $procurement->employees->first_name . ' ' .  $procurement->employees->surname : ''}} </td>
+                                        <td>{{ (!empty($procurement->employeeOnBehalf)) ?  $procurement->employeeOnBehalf->first_name . ' ' .  $procurement->employeeOnBehalf->surname : ''}} </td>
+                                        <td>{{ (!empty($procurement->request_remarks)) ?  $procurement->request_remarks : ''}} </td>
+                                        <td>{{ !empty($procurement->status) ? $procurement->requestStatus->step_name : 'Rejected' }}</td>
                                     </tr>
                             @endforeach
                         @endif
@@ -68,15 +68,11 @@
                     </table>
                     <!-- /.box-body -->
                     <div class="box-footer">
-						<button type="button" id="create_request" class="btn btn-primary pull-right"
-                                                data-toggle="modal"
-                                                data-target="#create-request-modal"><i
-                                                    class="fa fa-plus-square-o"></i> Create Request
+						<button type="button" id="send_communication" class="btn btn-warning pull-right">New Request
                         </button>
                     </div>
                 </div>
             </div>
-			@include('procurement.partials.create_request_modal')
         </div>
     </div>
 @endsection
@@ -128,7 +124,9 @@
 			"autoWidth": true
 		});
 	});
-
+	$('#send_communication').click(function () {
+		location.href = '/procurement/create-request';
+	});
 	$(function () {
 
 		//Tooltip
@@ -169,11 +167,11 @@
 
 		//Post form to server using ajax (add)
 		$('#add_request').on('click', function () {
-			var strUrl = '/stock/addstockrequest';
+			var strUrl = '/procurement/addrequest';
 			var formName = 'create-request-form';
 			var modalID = 'create-request-modal';
 			var submitBtnID = 'add_request';
-			var redirectUrl = '/stock/request_items';
+			var redirectUrl = '/procurement/request_items';
 			var successMsgTitle = 'New Record Added!';
 			var successMsg = 'The Request has been successfully Added And Sent for Approval.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -218,8 +216,6 @@
 		var remove=document.getElementsByName("remove");
 		if(total_files.value == 1)
 			remove[1].style.display='none';
-	}
-	return reportType;
 	}
 	</script>
 @endsection

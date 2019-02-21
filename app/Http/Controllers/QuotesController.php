@@ -390,14 +390,15 @@ class QuotesController extends Controller
             $changedStatus .= ', Email sent to client, to welcome them';
         } elseif ($stastus == 2) {
             //if authorization not required: email quote to client and update status to awaiting client approval
-            $quote->load('client');
+            $quote->load('client', 'person');
+			$email = !empty($quote->person->email) ? $quote->person->email : '';
             $messageContents = EmailTemplate::where('template_key', 'send_quote')->first();
             if (!empty($messageContents)) {
                 $messageContent = $messageContents->template_content;
 				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
 				$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email." ".$quote->person->cell_number, $messageContent);
 				$quoteAttachment = $this->viewQuote($quote, false,true, false, true);
-				Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+				Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment,$email));
             }
 			$quote->status = $stastus;
             $quote->update();

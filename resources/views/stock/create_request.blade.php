@@ -28,7 +28,7 @@
                         <thead>
 							<tr>
 								<th style="width: 5px; text-align: center;"></th>
-								<th>Date Requeted</th>
+								<th>Date Requested</th>
 								<th>Title</th>
 								<th>Employee</th>
 								<th>On Behalf Of</th>

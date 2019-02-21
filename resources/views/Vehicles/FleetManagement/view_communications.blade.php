@@ -142,9 +142,9 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-						<a href="{{ '/vehicle_management/vehicle_communication_print/'.$maintenance->id.''}}" class="btn btn-success pull-right" target="_blank">Print Communication</a>   
-                        <button type="button" id="send_communication" class="btn btn-warning pull-right">Send Communication
-                        </button>
+						<a href="{{ '/vehicle_management/vehicle_communication_print/'.$maintenance->id.''}}" class="btn btn-success pull-right" target="_blank">Print</a>   
+                        <button type="button" id="send_communication" class="btn btn-warning pull-right">New Message
+                        </button> &nbsp;
                     </div>
                 </div>
             </div>

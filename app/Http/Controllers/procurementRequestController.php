@@ -11,7 +11,7 @@ use App\StockSettings;
 use App\stockLevelFive;
 use App\stockLevel;
 use App\product_products;
-use App\RequestStock;
+use App\ProcurementRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -25,9 +25,8 @@ class procurementRequestController extends Controller
 	{
 		$this->middleware('auth');
 	}
-	
 	// Procurement Request index Page
-	public function create()
+	public function index()
     {		
 		$hrID = Auth::user()->person->id;
 		$approvals =StockSettings::select('require_store_manager_approval')->orderBy('id','desc')->first();
@@ -35,8 +34,8 @@ class procurementRequestController extends Controller
 		$stockLevel =stockLevel::where('active',1)->where('level',5)->orderBy('level','asc')->first();
 
 		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
-		$stocks = RequestStock::where('employee_id',$hrID)->orderBy('date_created', 'asc')->get();
-		if (!empty($stocks)) $stocks = $stocks->load('stockItems','employees','employeeOnBehalf','requestStatus');
+		$procurements = ProcurementRequest::where('employee_id',$hrID)->orderBy('date_created', 'asc')->get();
+		if (!empty($procurements)) $procurements = $procurements->load('procurementItems','employees','employeeOnBehalf','requestStatus');
 		$employees = DB::table('hr_people')
                 ->select('hr_people.*')
                 ->where('hr_people.status', 1)
@@ -57,7 +56,7 @@ class procurementRequestController extends Controller
 		$data['employees'] = $employees;
 		$data['employeesOnBehalf'] = $employeesOnBehalf;
 		$data['products'] = $products;
-        $data['stocks'] = $stocks;
+        $data['procurements'] = $procurements;
         $data['page_title'] = 'Items Request';
         $data['page_description'] = 'Request Stock Items';
         $data['breadcrumb'] = [
@@ -69,6 +68,51 @@ class procurementRequestController extends Controller
 
         AuditReportsController::store('Procurement', 'Create Request', 'Accessed By User', 0);
         return view('procurement.create_request')->with($data);
+    }
+	
+	// Procurement Request index Page
+	public function create()
+    {		
+		$hrID = Auth::user()->person->id;
+		$approvals =StockSettings::select('require_store_manager_approval')->orderBy('id','desc')->first();
+		$stockLevelFives =stockLevelFive::where('active',1)->orderBy('name','asc')->get();
+		$stockLevel =stockLevel::where('active',1)->where('level',5)->orderBy('level','asc')->first();
+
+		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
+		$procurements = ProcurementRequest::where('employee_id',$hrID)->orderBy('date_created', 'asc')->get();
+		if (!empty($procurements)) $procurements = $procurements->load('procurementItems','employees','employeeOnBehalf','requestStatus');
+		$employees = DB::table('hr_people')
+                ->select('hr_people.*')
+                ->where('hr_people.status', 1)
+                ->where('hr_people.id', $hrID)
+				->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')
+				->get();
+
+		$employeesOnBehalf = DB::table('hr_people')
+			->select('hr_people.*')
+			->where('hr_people.status', 1)
+			->orderBy('first_name', 'asc')
+			->orderBy('surname', 'asc')
+			->get();
+		$data['stockLevel'] = $stockLevel;
+		$data['stockLevelFives'] = $stockLevelFives;
+		$data['approvals'] = $approvals;
+		$data['employees'] = $employees;
+		$data['employeesOnBehalf'] = $employeesOnBehalf;
+		$data['products'] = $products;
+        $data['procurements'] = $procurements;
+        $data['page_title'] = 'Items Request';
+        $data['page_description'] = 'Request Stock Items';
+        $data['breadcrumb'] = [
+            ['title' => 'Stock', 'path' => '/stock/request_items', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Request Stock Items', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Procurement';
+        $data['active_rib'] = 'Request Items';
+
+        AuditReportsController::store('Procurement', 'Create Request', 'Accessed By User', 0);
+        return view('procurement.new_request')->with($data);
     }
 	
 	// save request
@@ -86,7 +130,7 @@ class procurementRequestController extends Controller
         $flowprocee = !empty($flow->step_number) ? $flow->step_number : 0;
 
 		// Save
-		$requestStock = new RequestStock();
+		$requestStock = new ProcurementRequest();
         $requestStock->employee_id = !empty($stockRequest['employee_id']) ? $stockRequest['employee_id'] : 0;
         $requestStock->on_behalf_of = !empty($stockRequest['on_behalf_of']) ? $stockRequest['on_behalf_of'] : 0;
         $requestStock->on_behalf_employee_id = !empty($stockRequest['on_behalf_employee_id']) ? $stockRequest['on_behalf_employee_id'] : 0;
@@ -166,7 +210,7 @@ class procurementRequestController extends Controller
     }
 	
 	// View Request items
-	public function viewRequest(RequestStock $stock, $back='', $app='')
+	public function viewRequest(ProcurementRequest $stock, $back='', $app='')
     {
 		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf','requestStatus','rejectedPerson');
 		//return $stock;
@@ -222,7 +266,7 @@ class procurementRequestController extends Controller
     }
 	
 	// Cancel Request 
-	public function cancelRequest(Request $request, RequestStock $stock)
+	public function cancelRequest(Request $request, ProcurementRequest $stock)
     {
         if ($stock && in_array($stock->status, [2, 3, 4, 5])) {
             $this->validate($request, [
@@ -238,7 +282,7 @@ class procurementRequestController extends Controller
         }
     }
 	//update
-	public function updateRequest(Request $request, RequestStock $stock) {
+	public function updateRequest(Request $request, ProcurementRequest $stock) {
         $this->validate($request, [
 			'title_name' => 'required',
 			'store_id' => 'required',
@@ -348,7 +392,7 @@ class procurementRequestController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $stocks = DB::table('request_stocks')
+        $procurements = DB::table('request_stocks')
             ->select('request_stocks.*','hr_people.first_name as firstname'
 			, 'hr_people.surname as surname'
 			, 'hp.first_name as hp_first_name', 'hp.surname as hp_surname'
@@ -390,7 +434,7 @@ class procurementRequestController extends Controller
 			})
             ->orderBy('request_stocks.id', 'asc')
             ->get();
-        $data['stocks'] = $stocks;
+        $data['procurements'] = $procurements;
         $data['page_title'] = "Request Search Results";
         $data['active_mod'] = 'Procurement';
         $data['active_rib'] = 'Search Request';
@@ -436,7 +480,7 @@ class procurementRequestController extends Controller
                 $statuses = (explode(",", $status));
             }
 
-            $stocks = DB::table('request_stocks')
+            $procurements = DB::table('request_stocks')
                 ->select('request_stocks.*','hr_people.first_name as firstname', 'hr_people.surname as surname'
 				,'hp.first_name as hp_firstname', 'hp.surname as hp_surname'
 				, 'stock_approvals_levels.step_name as step_name'
@@ -469,7 +513,7 @@ class procurementRequestController extends Controller
             ];
 
             $data['stepnumber'] = $stepnumber;
-            $data['stocks'] = $stocks;
+            $data['procurements'] = $procurements;
             $data['active_mod'] = 'Procurement';
 			$data['active_rib'] = 'Request Approval';
 		
@@ -499,7 +543,7 @@ class procurementRequestController extends Controller
                 $aValue = explode("_", $key);
                 $name = $aValue[0];
                 $stockID = $aValue[1];
-				$stock = RequestStock::where('id', $stockID)->first();
+				$stock = ProcurementRequest::where('id', $stockID)->first();
 				$totalPrice = 0;
 				// get all product attached to this request and calculate total price pluck('product_id')
 				$items = RequestStockItems::where('request_stocks_id',$stockID)->get();
@@ -629,7 +673,7 @@ class procurementRequestController extends Controller
 				list($sUnit, $iID) = explode("_", $sKey);
 				if ($sUnit == 'declined' && !empty($sValue)) {
 
-					$stockReject = RequestStock::where('id', $iID)->first();
+					$stockReject = ProcurementRequest::where('id', $iID)->first();
 					$stockReject->status = 0;
 					$stockReject->rejection_reason = $sValue;
 					$stockReject->rejected_by = Auth::user()->person->id;;
@@ -652,7 +696,7 @@ class procurementRequestController extends Controller
     }
 	
 	// Approve Request
-	public function appoveRequestSingle(RequestStock $stock)
+	public function appoveRequestSingle(ProcurementRequest $stock)
     {
 		$totalPrice = 0;
 		// get all product attached to this request and calculate total price pluck('product_id')
@@ -774,7 +818,7 @@ class procurementRequestController extends Controller
         return back();
     }
 	// 	// Approve Request
-	public function rejectRequestSingle(Request $request, RequestStock $stock)
+	public function rejectRequestSingle(Request $request, ProcurementRequest $stock)
     {
 		$this->validate($request, [
 			'rejection_reason' => 'required',

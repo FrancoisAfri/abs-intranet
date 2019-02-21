@@ -20,10 +20,11 @@ class SendQuoteToClient extends Mailable
      *
      * @return void
      */
-    public function __construct($messageContent, $quoteAttachment)
+    public function __construct($messageContent, $quoteAttachment, $email)
     {
         $this->messageContent = $messageContent;
         $this->quoteAttachment = $quoteAttachment;
+		$this->email = $email;
     }
 
     /**
@@ -43,7 +44,7 @@ class SendQuoteToClient extends Mailable
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
 		
         return $this->view('mails.send_quote_to_client')
-            ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
+            ->from(!empty($this->email) ? $this->email : $companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->attachData($this->quoteAttachment, 'quotation.pdf', [
                 'mime' => 'application/pdf',

@@ -1128,4 +1128,5 @@ Route::get('procurement/approval_level', 'procurementApprovalsController@index')
 Route::post('procurement/add_step', 'procurementApprovalsController@store');
 Route::get('procurement/process_act/{step}', 'procurementApprovalsController@steps_act');
 Route::patch('procument/edit_step/update/{step}', 'procurementApprovalsController@update');
-Route::get('procurement/create_request', 'procurementRequestController@create');
+Route::get('procurement/create_request', 'procurementRequestController@index');
+Route::get('procurement/create-request', 'procurementRequestController@create');

@@ -238,7 +238,6 @@
                 $(".select2").select2();
                 $('.zip-field').hide();
 
-
                 //Tooltip
 
                  //Phone mask
@@ -263,109 +262,95 @@
                 $(window).on('resize', function () {
                     $('.modal:visible').each(reposition);
                 });
-
                 //Show success action modal
                 $('#success-action-modal').modal('show');
-
                 //
-
                 $(".js-example-basic-multiple").select2();
 
-                     //Initialize iCheck/iRadio Elements
+                //Initialize iCheck/iRadio Elements
                 $('input').iCheck({
                     checkboxClass: 'icheckbox_square-blue',
                     radioClass: 'iradio_square-blue',
                     increaseArea: '10%' // optional
                 });
+				$(document).ready(function () {
 
-
-                $(document).ready(function () {
-
-                    $('#inception_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                     $('#inceptiondate').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                });
-
-                //Post perk form to server using ajax (add)
-                $('#add_policy').on('click', function () {
-                    var strUrl = '/vehicle_management/addpolicy';
-                    var formName = 'add-policy-form';
-                    var modalID = 'add-policy-modal';
-                    var submitBtnID = 'add_policy';
-                    var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-
-
-                var policyID;
-                $('#edit-policy-modal').on('show.bs.modal', function (e) {
-                    var btnEdit = $(e.relatedTarget);
-                    if (parseInt(btnEdit.data('id')) > 0) {
-                        policyID = btnEdit.data('id');
-                     }
-
-                    var service_provider = btnEdit.data('service_provider');
-                    var contact_person = btnEdit.data('contact_person');
-                    var contact_number = btnEdit.data('contact_number');
-                    var contact_email = btnEdit.data('contact_email');
-                    var address = btnEdit.data('address');
-                    var policy_no = btnEdit.data('policy_no');
-                    var inception_date = btnEdit.data('inceptiondate');
-                    var exp_date = btnEdit.data('exp_date');
-                    var value_coverd = btnEdit.data('value_coverd');
-                    var premium_amount = btnEdit.data('premium_amount');
-                    var type = btnEdit.data('type');
-                    var warranty_amount = btnEdit.data('warranty_amount');
-                    var description = btnEdit.data('description');
-                    var notes = btnEdit.data('notes');
-                    var documents = btnEdit.data('documents');
-                    var name = btnEdit.data('name');
-                    var valueID = btnEdit.data('valueID');
-                    var modal = $(this);
-                    modal.find('#service_provider').val(service_provider);
-                    modal.find('#contact_person').val(contact_person);
-                    modal.find('#contact_number').val(contact_number);
-                    modal.find('#contact_email').val(contact_email);
-                    modal.find('#address').val(address);
-                    modal.find('#policy_no').val(policy_no);
-                    modal.find('#inception_date').val(inception_date);
-                    modal.find('#exp_date').val(exp_date);
-                    modal.find('#value_coverd').val(value_coverd);
-                    modal.find('#premium_amount').val(premium_amount);
-                    modal.find('#type').val(type);
-                    modal.find('#warranty_amount').val(warranty_amount);
-                    modal.find('#description').val(description);
-                    modal.find('#notes').val(notes);
-                    modal.find('#documents').val(documents);
-                    modal.find('#name').val(name);
-                    modal.find('#valueID').val(valueID);
-                });
-
-                 $('#edit_insurance').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_policy/'+ policyID ;
-                    var formName = 'edit-policy-form';
-                    var modalID = 'edit-policy-modal';
-                    var submitBtnID = 'edit_insurance';
-                    var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Policy Details have been updated!';
-                    var successMsg = 'The Policy Details has been updated successfully.';
-                    var Method = 'PATCH';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
+					$('#inception_date').datepicker({
+							format: 'dd/mm/yyyy',
+							autoclose: true,
+							todayHighlight: true
+					});
+					$('#inceptiondate').datepicker({
+						format: 'dd/mm/yyyy',
+						autoclose: true,
+						todayHighlight: true
+					});
+				});
+			//Post perk form to server using ajax (add)
+			$('#add_policy').on('click', function () {
+				var strUrl = '/vehicle_management/addpolicy';
+				var formName = 'add-policy-form';
+				var modalID = 'add-policy-modal';
+				var submitBtnID = 'add_policy';
+				var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
+				var successMsgTitle = 'New Record Added!';
+				var successMsg = 'The Record  has been updated successfully.';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
-			
+			var policyID;
+			$('#edit-policy-modal').on('show.bs.modal', function (e) {
+				var btnEdit = $(e.relatedTarget);
+				if (parseInt(btnEdit.data('id')) > 0) {
+					policyID = btnEdit.data('id');
+				 }
+				var service_provider = btnEdit.data('service_provider');
+				var contact_person = btnEdit.data('contact_person');
+				var contact_number = btnEdit.data('contact_number');
+				var contact_email = btnEdit.data('contact_email');
+				var address = btnEdit.data('address');
+				var policy_no = btnEdit.data('policy_no');
+				var inception_date = btnEdit.data('inceptiondate');
+				var exp_date = btnEdit.data('exp_date');
+				var value_coverd = btnEdit.data('value_coverd');
+				var premium_amount = btnEdit.data('premium_amount');
+				var type = btnEdit.data('type');
+				var warranty_amount = btnEdit.data('warranty_amount');
+				var description = btnEdit.data('description');
+				var notes = btnEdit.data('notes');
+				var documents = btnEdit.data('documents');
+				var name = btnEdit.data('name');
+				var valueID = btnEdit.data('valueID');
+				var modal = $(this);
+				modal.find('#service_provider').val(service_provider);
+				modal.find('#contact_person').val(contact_person);
+				modal.find('#contact_number').val(contact_number);
+				modal.find('#contact_email').val(contact_email);
+				modal.find('#address').val(address);
+				modal.find('#policy_no').val(policy_no);
+				modal.find('#inception_date').val(inception_date);
+				modal.find('#exp_date').val(exp_date);
+				modal.find('#value_coverd').val(value_coverd);
+				modal.find('#premium_amount').val(premium_amount);
+				modal.find('#type').val(type);
+				modal.find('#warranty_amount').val(warranty_amount);
+				modal.find('#description').val(description);
+				modal.find('#notes').val(notes);
+				modal.find('#documents').val(documents);
+				modal.find('#name').val(name);
+				modal.find('#valueID').val(valueID);
+			});
+
+			 $('#edit_insurance').on('click', function () {
+				var strUrl = '/vehicle_management/edit_policy/'+ policyID ;
+				var formName = 'edit-policy-form';
+				var modalID = 'edit-policy-modal';
+				var submitBtnID = 'edit_insurance';
+				var redirectUrl = '/vehicle_management/insurance/{{ $maintenance->id }}';
+				var successMsgTitle = 'New Policy Details have been updated!';
+				var successMsg = 'The Policy Details has been updated successfully.';
+				var Method = 'PATCH';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
+		});	
             </script>
 @endsection
