@@ -12,6 +12,7 @@ use App\CRMPayment;
 use App\ContactPerson;
 use App\DivisionLevel;
 use App\EmailTemplate;
+use App\QuoteConfiguration;
 use App\module_access;
 use App\ContactCompany;
 use App\ProductService;
@@ -89,7 +90,40 @@ class QuotesController extends Controller
 
         return view('quote.quote_setup')->with($data);
     }
+	
+	public function setupConfiguration()
+    {
+        $quoteConfiguration = QuoteConfiguration::first();
+        $data['page_title'] = 'Quotes';
+        $data['page_description'] = 'Quotation Settings';
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/quote', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Quote';
+        $data['active_rib'] = 'setup';
+        $data['quoteConfiguration'] = $quoteConfiguration;
+        AuditReportsController::store('Quote', 'Quote Settings Page Accessed', 'Accessed By User', 0);
 
+        return view('quote.quote_settings')->with($data);
+    }
+	public function AddQuotesetting(Request $request) {
+		$docData = $request->all();
+		unset($docData['_token']);
+		$QuoteConfiguration = new QuoteConfiguration();
+		$QuoteConfiguration->allow_client_email_quote = $request->input('allow_client_email_quote');
+		$QuoteConfiguration->save();
+		AuditReportsController::store('Quote', 'Quote Configuration Saved', "Actioned By User", 0);
+		return back();
+    }
+	public function AddQuotesettings(Request $request, QuoteConfiguration $setup) {
+        $docData = $request->all();
+        unset($docData['_token']);
+        $setup->allow_client_email_quote = $request->input('allow_client_email_quote');
+        $setup->update();
+        AuditReportsController::store('Quote', 'Quotes Settings Saved', "Actioned By User", 0);
+        return back();
+    }
     /**
      * Save the quote profile for a specific division.
      *
@@ -286,7 +320,7 @@ class QuotesController extends Controller
         } elseif ($quote->status == 2) {
             $stastus = 5;
         }
-           
+        $configuration = QuoteConfiguration::first();
        // return $stastus;
         $quote->status = $stastus;
         $changedStatus = 'Status Changed To: ' . $quote->quote_status;
@@ -393,7 +427,7 @@ class QuotesController extends Controller
             $quote->load('client', 'person');
 			$email = !empty($quote->person->email) ? $quote->person->email : '';
             $messageContents = EmailTemplate::where('template_key', 'send_quote')->first();
-            if (!empty($messageContents)) {
+            if (!empty($messageContents) && !empty($configuration->allow_client_email_quote)) {
                 $messageContent = $messageContents->template_content;
 				$messageContent = str_replace('[client name]', $quote->client->full_name, $messageContent);
 				$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email." ".$quote->person->cell_number, $messageContent);

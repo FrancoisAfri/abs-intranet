@@ -1,11 +1,8 @@
 @extends('layouts.main_layout')
 @section('content')
-
     <div class="row">
         <div class="col-md-12">
             <div class="box box-warning">
-
-
                 <div align="center" class="box box-default">
                     <div class="box-header with-border">
                         <h3 class="box-title">Job Card Settings</h3>
@@ -24,11 +21,9 @@
                             <h3 class="box-title">Job Cards Configuration</h3>
                         </div>
                         <div class="box-body">
-
                             <a href="/jobcards/configuration" class="btn btn-app">
                                 <i class="fa fa-cog"></i> Settings
                             </a>
-
                         </div>
                     </div>
                     <!-- /.box-body -->

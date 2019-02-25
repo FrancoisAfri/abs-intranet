@@ -1008,6 +1008,10 @@ Route::get('/hr/adddoc/{sta}', 'HrController@DocAct');
 // /hr/category/' . $type->id
 //quote
 Route::get('quote/setup', 'QuotesController@setupIndex');
+Route::get('quote/configuration', 'QuotesController@setupConfiguration');
+Route::post('quote/configuration_setings/{setup}', 'QuotesController@AddQuotesettings');
+Route::post('quote/configuration_setings', 'QuotesController@AddQuotesetting');
+
 Route::get('quotes/authorisation', 'QuotesController@authorisationIndex');
 Route::post('quote/setup/add-quote-profile', 'QuotesController@saveQuoteProfile');
 Route::post('quote/setup/update-quote-profile/{quoteProfile}', 'QuotesController@updateQuoteProfile');

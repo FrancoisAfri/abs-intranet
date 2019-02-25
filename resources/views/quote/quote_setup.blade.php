@@ -117,7 +117,6 @@
                 </form>
             </div>
         </div>
-
         <div class="col-md-12">
             <div class="box box-success collapsed-box">
                 <form class="form-horizontal" method="POST" action="/email-template/save">
@@ -143,6 +142,22 @@
                     <!-- /.box-footer -->
                 </form>
             </div>
+        </div>
+		<div class="col-md-12">
+            <div class="box-body">
+                    <div align="center">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Quotes Configuration</h3>
+                        </div>
+                        <div class="box-body">
+                            <a href="/quote/configuration" class="btn btn-app">
+                                <i class="fa fa-cog"></i> Settings
+                            </a>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="modal-footer"></div>
+                </div>
         </div>
     </div>
 @endsection
