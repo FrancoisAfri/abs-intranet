@@ -56,16 +56,16 @@
 				<td>{{ !empty($vehiclemaintenance->jobcard_number) ? $vehiclemaintenance->jobcard_number : ''}}</td>
 			</tr>
 			<tr>
-				<td class="caption">vehicle registration Number</td>
+				<td class="caption">Vehicle registration Number</td>
 				<td>{{ !empty($vehiclemaintenance->vehicle_registration) ? $vehiclemaintenance->vehicle_registration : ''}}</td>
 				<td class="caption">Job Card Date</td>
 				<td>{{ !empty($vehiclemaintenance->card_date) ? date(' d M Y', $vehiclemaintenance->card_date) : ''}}</td>
 			</tr>
 			<tr>
 				<td class="caption">Driver</td>
-				<td>{{ !empty($jobcard->dr_firstname)  && !empty($jobcard->dr_surname) ? $jobcard->dr_firstname." ".$jobcard->dr_surname : ''}}</td>
+				<td>{{ !empty($vehiclemaintenance->dr_firstname)  && !empty($vehiclemaintenance->dr_surname) ? $vehiclemaintenance->dr_firstname." ".$vehiclemaintenance->dr_surname : ''}}</td>
 				<td class="caption">Mechanic</td>
-				<td>{{ !empty($jobcard->me_firstname)  && !empty($jobcard->me_surname) ? $jobcard->me_firstname." ".$jobcard->me_surname : ''}}</td>
+				<td>{{ !empty($vehiclemaintenance->me_firstname)  && !empty($vehiclemaintenance->me_surname) ? $vehiclemaintenance->me_firstname." ".$vehiclemaintenance->me_surname : ''}}</td>
 			</tr>
 			<tr>
 				<td class="caption">Current Odometer</td>

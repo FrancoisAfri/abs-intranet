@@ -403,7 +403,6 @@ class JobcardController extends Controller
             ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
 
         if ((!empty($roles->role_id)) || !empty($userAccess)) {
-
             $jobcardmaintanance = DB::table('jobcard_maintanance')
                 ->select('jobcard_maintanance.*', 'vehicle_details.fleet_number as fleet_number', 'vehicle_details.vehicle_registration as vehicle_registration',
                     'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make', 'vehicle_model.name as vehicle_model',
@@ -418,7 +417,8 @@ class JobcardController extends Controller
                 ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
                 ->leftJoin('jobcard_process_flow', 'jobcard_maintanance.status', '=', 'jobcard_process_flow.step_number')
                 ->where('jobcard_maintanance.user_id', $currentUser)
-                ->orderBy('jobcard_maintanance.id', 'asc')
+                ->orderBy('jobcard_maintanance.id', 'desc')
+				->limit(50)
                 ->get();
 
             $data['page_title'] = "Job Card";
@@ -1693,7 +1693,7 @@ HTML;
 			->select('jobcard_maintanance.*', 'vehicle_details.*',
 				'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
 				'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type', 'service_type.name as servicetype',
-				'hr_people.first_name as firstname', 'hr_people.surname as surname', 'jobcard_process_flow.step_name as aStatus'
+				'hr_people.first_name as me_firstname', 'hr_people.surname as me_surname', 'jobcard_process_flow.step_name as aStatus'
 				,'hrp.first_name as dr_firstname', 'hrp.surname as dr_surname')
 			->leftJoin('service_type', 'jobcard_maintanance.service_type', '=', 'service_type.id')
 			->leftJoin('hr_people', 'jobcard_maintanance.mechanic_id', '=', 'hr_people.id')
@@ -1707,6 +1707,7 @@ HTML;
 			->where('jobcard_maintanance.id', $print->id)
 			->orderBy('jobcard_maintanance.id', 'asc')
 			->get();
+		//return $vehiclemaintenance;
 		$instructions = JobCardInstructions::where('job_card_id',$print->id)->orderBy('instruction_details', 'asc')->get();
 		if ($note > 0 || $all > 0)
 		{
