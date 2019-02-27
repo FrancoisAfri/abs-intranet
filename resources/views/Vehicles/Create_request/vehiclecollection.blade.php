@@ -158,37 +158,20 @@
                                     </div>
                                 </div>
                             </div>
-							@if (isset($vehiclebookings) && $vehiclebookings->metre_reading_type === 1)
-								<div class="form-group">
-									<label for="path" class="col-sm-2 control-label">Odometer </label>
-									<div class="col-sm-8">
-										<div class="input-group">
-											<div class="input-group-addon">
-												 <i class="fa fa-spinner"></i>
-											</div>
-											<input type="text" id="start_mileage_id" class="form-control pull-left"
-												   name="start_mileage_id"
-												   value="{{  (!empty($vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : '' }}"
-												   readonly>
+							<div class="form-group">
+								<label for="path" class="col-sm-2 control-label">{{isset($vehiclebookings) && $vehiclebookings->metre_reading_type === 1 ? "Odometer Reading" : "Hour Reading"}} </label>
+								<div class="col-sm-8">
+									<div class="input-group">
+										<div class="input-group-addon">
+											 <i class="fa fa-spinner"></i>
 										</div>
+										<input type="text" id="start_mileage_id" class="form-control pull-left"
+											   name="start_mileage_id"
+											   value="{{  (!empty($vehiclebookings->start_mileage_id)) ?  $vehiclebookings->start_mileage_id : '' }}"
+											   readonly>
 									</div>
 								</div>
-                            @else
-								<div class="form-group">
-									<label for="path" class="col-sm-2 control-label">HoursReading </label>
-									<div class="col-sm-8">
-										<div class="input-group">
-											<div class="input-group-addon">
-												 <i class="fa fa-spinner"></i>
-											</div>
-											<input type="text" id="hours_reading" class="form-control pull-left"
-												   name="hours_reading"
-												   value="{{  (!empty($vehiclebookings->hours_reading)) ?  $vehiclebookings->hours_reading : '' }}"
-												   readonly>
-										</div>
-									</div>
-								</div>
-                            @endif
+							</div>
                             <div class="form-group">
                                 <label for="path" class="col-sm-2 control-label">Destination </label>
                                 <div class="col-sm-8">

@@ -47,6 +47,22 @@ class VehicleBookingController extends Controller
 
     public function index()
     {
+		$oldBookings = vehicle_booking::where('status',10)->get();
+		
+		foreach ($oldBookings as $booking)
+		{
+			$updateBooking = vehicle_booking::where('id',$booking->id)->first(); 
+			$vehicleDetails = vehicle_detail::where('id', $booking->vehicle_id)->first();
+			if (empty($booking->start_mileage_id))
+			{
+				if ($vehicleDetails->metre_reading_type === 1)
+					$updateBooking->start_mileage_id = !empty($vehicleDetails->odometer_reading) ? $vehicleDetails->odometer_reading: 1;
+				else
+					$updateBooking->start_mileage_id = !empty($vehicleDetails->hours_reading) ? $vehicleDetails->hours_reading: 1;
+				$updateBooking->update();
+			}
+		}
+		die('go her');
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -393,7 +409,9 @@ class VehicleBookingController extends Controller
             'usage_type' => 'bail|required',
             'purpose' => 'required',
             'destination' => 'required',
-            // 'odometer_reading' => 'bail|required',
+            'metre_reading_type' => 'required',
+			'odometer_reading' => 'required_if:metre_reading_type,1',
+			'hours_reading' => 'required_if:metre_reading_type,2',
         ]);
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
@@ -850,7 +868,7 @@ class VehicleBookingController extends Controller
     public function confrmCollection(Request $request, vehicle_booking $confirm)
     {
         $this->validate($request, [
-            //'start_mileage_id' => 'required',
+            'start_mileage_id' => 'required',
         ]);
         $vehicleData = $request->all();
         unset($vehicleData['_token']);
@@ -862,10 +880,6 @@ class VehicleBookingController extends Controller
         $confirm->collector_id = $loggedInEmplID;
         $confirm->status = 11;
         $confirm->collect_timestamp = time();
-        if ($vehicleDetails->metre_reading_type === 1)
-            $confirm->start_mileage_id = $vehicleData['start_mileage_id'];
-        else
-            $confirm->start_mileage_id = $vehicleData['hours_reading'];
         $confirm->update();
         $ID = $confirm->id;
         $BookingDetail = HRPerson::where('id', $loggedInEmplID)->orderBy('id', 'desc')->get()->first();
@@ -892,8 +906,10 @@ class VehicleBookingController extends Controller
         $Vehiclemilege->date_created = time();
         $Vehiclemilege->date_taken = time();
         $Vehiclemilege->vehicle_id = $confirm->vehicle_id;
-        $Vehiclemilege->odometer_reading = !empty($SysData['start_mileage_id']) ? $SysData['start_mileage_id'] : 0;
-        $Vehiclemilege->hours_reading = !empty($SysData['hours_reading']) ? $SysData['hours_reading'] : '';
+		if ($vehicleDetails->metre_reading_type === 1)
+            $Vehiclemilege->odometer_reading = $vehicleData['start_mileage_id'];
+        else
+            $Vehiclemilege->hours_reading = $vehicleData['start_mileage_id'];
         $Vehiclemilege->type = 2;
         $Vehiclemilege->booking_id = $confirm->id;
         $Vehiclemilege->save();

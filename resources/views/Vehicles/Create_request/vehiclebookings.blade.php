@@ -201,7 +201,6 @@
                                                 </div>
                                             </div>
                                         </div>
-                                       
                                         @if (isset($vehicle) && $vehicle->metre_reading_type === 1)
                                          <div class="form-group">
                                             <label for="path" class="col-sm-2 control-label">OdometerReading</label>
@@ -229,6 +228,8 @@
                                          @endif			
                                         <input type="hidden" id="vehicle_id" name="vehicle_id"
                                                value="{{ !empty($vehicle->id) ? $vehicle->id : ''}}">
+										<input type="hidden" id="metre_reading_type" name="metre_reading_type"
+                                               value="{{ !empty($vehicle->metre_reading_type) ? $vehicle->metre_reading_type : 0}}">
 
                                         <!-- /.box-body -->
                                         <div class="box-footer">
