@@ -47,22 +47,6 @@ class VehicleBookingController extends Controller
 
     public function index()
     {
-		$oldBookings = vehicle_booking::where('status',10)->get();
-		
-		foreach ($oldBookings as $booking)
-		{
-			$updateBooking = vehicle_booking::where('id',$booking->id)->first(); 
-			$vehicleDetails = vehicle_detail::where('id', $booking->vehicle_id)->first();
-			if (empty($booking->start_mileage_id))
-			{
-				if ($vehicleDetails->metre_reading_type === 1)
-					$updateBooking->start_mileage_id = !empty($vehicleDetails->odometer_reading) ? $vehicleDetails->odometer_reading: 1;
-				else
-					$updateBooking->start_mileage_id = !empty($vehicleDetails->hours_reading) ? $vehicleDetails->hours_reading: 1;
-				$updateBooking->update();
-			}
-		}
-		die('go her');
         $vehicle = vehicle::orderBy('id', 'asc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
