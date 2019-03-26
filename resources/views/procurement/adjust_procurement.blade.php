@@ -11,22 +11,19 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/quote/save">
+                <form class="form-horizontal" method="POST" action="/procurement/save">
                     {{ csrf_field() }}
-                    <input type="hidden" name="quote_type" id="quote_type" value="{{ $quoteType }}">
-                    <input type="hidden" name="division_id" value="{{ $divisionID }}">
-                    <input type="hidden" name="company_id" value="{{ $companyID }}">
-                    <input type="hidden" name="contact_person_id" value="{{ $contactPersonId }}">
-                    <input type="hidden" name="quote_remarks" value="{{ $quote_remarks }}">
-                    <input type="hidden" name="quote_title" value="{{ $quote_title }}">
-                    <input type="hidden" name="service_rate" id="service_rate" value="{{ ($servicesSettings && $servicesSettings->service_rate > 0) ? $servicesSettings->service_rate : 0 }}">
-                    @if($tcIDs && count($tcIDs) > 0)
-                        @foreach($tcIDs as $tcID)
-                            <input type="hidden" name="tc_id[]" value="{{ $tcID }}">
-                        @endforeach
-                    @endif
+                    <input type="hidden" name="item_type" id="item_type" value="{{ $item_type }}">
+                    <input type="hidden" name="date_created" value="{{ $date_created }}">
+                    <input type="hidden" name="title_name" value="{{ $title_name }}">
+                    <input type="hidden" name="employee_id" value="{{ $employee_id }}">
+                    <input type="hidden" name="on_behalf" value="{{ $on_behalf }}">
+                    <input type="hidden" name="on_behalf_employee_id" value="{{ $on_behalf }}">
+                    <input type="hidden" name="special_instructions" value="{{ $on_behalf }}">
+                    <input type="hidden" name="justification_of_expenditure" value="{{ $on_behalf }}">
+                    <input type="hidden" name="detail_of_expenditure" value="{{ $on_behalf }}">
                     <div class="box-header with-border">
-                        <h3 class="box-title">New Quote</h3>
+                        <h3 class="box-title">Procurement Request</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -43,12 +40,11 @@
                         @endif
 
                         <div style="overflow-x:auto;">
-                            @if($quoteType == 1)
+                            @if($item_type == 1)
                                 <table class="table table-striped table-bordered">
                                     <tr>
                                         <th style="width: 10px">#</th>
                                         <th>Product</th>
-                                        <th>Comment</th>
                                         <th>Quantity</th>
                                         <th style="text-align: right;">Unit Price</th>
                                     </tr>
@@ -56,102 +52,50 @@
                                         @if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
                                             <?php $prevCategory = 0; ?>
                                             <tr>
-                                                <th class="success" colspan="5" style="text-align: center;">
+                                                <th class="success" colspan="4" style="text-align: center;">
                                                     <i>{{ $product->ProductPackages->name }}</i>
                                                 </th>
                                             </tr>
                                         @endif
-                                        <tr class="{{ ($product->promotions->first()) ? 'warning' : '' }}"
-                                            @if($promotion = $product->promotions->first())
-                                            data-toggle="tooltip" title="{{ 'This item is on promotion from ' .
-                                            date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
-                                            @endif>
-
+                                        <tr>
                                             <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-                                            <td style="vertical-align: middle;">
-                                                {{ $product->name }}
-                                                @if($product->promotions->first())
-                                                    &nbsp;<i class="fa fa-info-circle"></i>
-                                                @endif
-                                            </td>
-											<td style="vertical-align: middle; width: 200px;">
-                                                <input type="text" class="form-control input-sm" name="comment[{{ $product->id }}]"
-                                                       value="">
+                                            <td style="vertical-align: middle; width: 250px;">
+                                                <input type="text" class="form-control" name="item_names[{{ $product->id }}]"
+                                                       value="{{ $product->name }}">
                                             </td>
                                             <td style="vertical-align: middle; width: 80px;">
-                                                <input type="number" class="form-control input-sm item-quantity" name="quantity[{{ $product->id }}]"
-                                                       value="1" onchange="subtotal()" required>
+                                                <input type="number" class="form-control input-sm items-quantity" name="quantity[{{ $product->id }}]"
+                                                       value="1" onchange="subtotal()">
                                             </td>
-                                            <td style="vertical-align: middle; width: 100px;">
-											<input type="text" class="form-control input-sm item-price" name="current_price[{{ $product->id }}]"
-											id="current_price_{{$product->id }}"
-                                            value="{{$product->current_price}}" onchange="subtotal()" required>
+											<td style="vertical-align: middle; width: 100px;">
+												<input type="text" name="price[{{ $product->id }}]" class="form-control items-price" value="{{ ($product->current_price) ? $product->current_price : '' }}" onchange="subtotal()">
                                             </td>
                                         </tr>
                                         <?php $prevCategory = $product->category_id; ?>
                                     @endforeach
-                                    @foreach ($packages as $package)
-                                        <tr class="{{ ($package->promotions->first()) ? 'warning' : 'success' }}"
-                                            @if($promotion = $package->promotions->first())
-                                            data-toggle="tooltip" title="{{ 'This item is on promotion from ' .
-                                            date('d M Y', $promotion->start_date) . ' to ' . date('d M Y', $promotion->end_date) . '.' }}"
-                                            @endif>
-
-                                            <td style="vertical-align: middle;"><i class="fa fa-caret-down"></i></td>
-                                            <th style="vertical-align: middle;">
-                                                Package: {{ $package->name }}
-                                                @if($package->promotions->first())
-                                                    &nbsp;<i class="fa fa-info-circle"></i>
-                                                @endif
-                                            </th>
-                                            <td style="vertical-align: middle; width: 80px;">
-                                                <input type="number" class="form-control input-sm item-quantity" name="package_quantity[{{ $package->id }}]"
-                                                       value="1" data-price="{{ $package->price }}"
-                                                       onchange="subtotal()" required>
-                                            </td>
-                                            <td style="vertical-align: middle; text-align: right;">
-                                                {{ ($package->price) ? 'R ' . number_format($package->price, 2) : '' }}
-                                            </td>
-                                        </tr>
-                                        <input type="hidden" name="package_price[{{ $package->id }}]" value="{{ ($package->price) ? $package->price : '' }}">
-                                        @if($package->products_type && count($package->products_type) > 0)
-                                            @foreach($package->products_type as $product)
-                                                <tr class="{{ ($package->promotions->first()) ? 'warning' : '' }}">
-                                                    <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
-                                                    <td style="vertical-align: middle;">{{ $product->name }}</td>
-                                                    <td style="text-align: center; vertical-align: middle; width: 80px;">
-                                                        &mdash;
-                                                    </td>
-                                                    <td style="vertical-align: middle; text-align: right;">
-                                                        &mdash;
-                                                    </td>
-                                                </tr>
-                                            @endforeach
-                                        @endif
-                                    @endforeach
                                 </table>
-                            @elseif($quoteType == 2)
-                                @if($servicesSettings)
+                            @elseif($item_type == 2)
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
                                                 <th style="width: 10px" nowrap>#</th>
                                                 <th>Description</th>
-                                                <th style="width: 10px" nowrap class="text-center">Unit</th>
+                                                <th style="width: 20px" nowrap class="text-center">Unit Price</th>
                                                 <th nowrap>Quantity</th>
-                                                <th style="width: 10px" nowrap class="text-center"></th>
+                                                <th style="width: 20px" nowrap class="text-center"></th>
                                             </tr>
                                         </thead>
-
                                         <tbody class="input-fields-wrap">
                                             <tr>
                                                 <td style="width: 10px; vertical-align: middle;" nowrap>1</td>
                                                 <td>
-                                                    <textarea name="description[]" rows="2" class="form-control" required></textarea>
+                                                    <textarea name="description[]" rows="2" class="form-control"></textarea>
                                                 </td>
-                                                <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">{{ $servicesSettings->service_unit_name }}</th>
                                                 <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
-                                                    <input type="number" name="service_quantity[]" class="form-control item-quantity" onchange="subtotal()" required>
+													<input type="text" name="no_price[]" class="form-control item-price" onchange="subtotal()">
+												</td>
+                                                <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
+                                                    <input type="number" name="no_quantity[]" class="form-control item-quantity" onchange="subtotal()">
                                                 </td>
                                                 <td style="width: 10px; vertical-align: middle;" nowrap class="text-center"></td>
                                             </tr>
@@ -159,66 +103,27 @@
 
                                         <tfoot>
                                             <tr>
-                                                <th colspan="3" class="text-right">Total</th>
-                                                <th colspan="2" nowrap><span id="total_service_units"></span> <i>{{ $servicesSettings->service_unit_plural_name }}</i></th>
-                                            </tr>
-                                            <tr>
                                                 <td colspan="5">
                                                     <button id="add_row" type="button" class="btn btn-primary btn-flat btn-block"><i class="fa fa-files-o"></i> Add New Row</button>
                                                 </td>
                                             </tr>
                                         </tfoot>
                                     </table>
-                                @else
-                                    <div class="alert alert-danger alert-dismissible">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                                        <h4><i class="icon fa fa-database"></i> Services Settings Not Found!</h4>
-                                        Please go to Products > Setup and enter the Services Settings.
-                                    </div>
-                                @endif
                             @endif
-
                             <!-- Total cost section -->
                             <div class="col-sm-6 col-sm-offset-6 no-padding">
                                 <table class="table">
-                                    @if($quoteType == 2 && $servicesSettings)
-                                        <tr>
-                                            <td></td>
-                                            <th style="text-align: left;">Rate Per {{ ucfirst($servicesSettings->service_unit_name) }}:</th>
-                                            <td style="text-align: right;" nowrap>
-                                                {{ ($servicesSettings->service_rate && $servicesSettings->service_rate > 0) ? 'R ' . number_format($servicesSettings->service_rate, 2) : '' }}
-                                            </td>
-                                        </tr>
-                                    @endif
                                     <tr>
                                         <td></td>
                                         <th style="text-align: left;">Subtotal:</th>
                                         <td style="text-align: right;" id="subtotal" nowrap></td>
                                     </tr>
                                     <tr>
-                                        <td style="width: 250px; vertical-align: middle;">
-                                            <div class="form-group no-margin{{ $errors->has('discount_percent') ? ' has-error' : '' }}">
-                                                <label for="{{ 'discount_percent' }}" class="col-sm-4 control-label">Discount</label>
-
-                                                <div class="col-sm-8">
-                                                    <div class="input-group">
-                                                        <div class="input-group-addon"><i class="fa fa-percent"></i></div>
-                                                        <input type="number" class="form-control input-sm" id="discount_percent"
-                                                               name="discount_percent" placeholder="Discount"
-                                                               value="{{ old('discount_percent') }}" onchange="subtotal()">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <th style="text-align: left; vertical-align: middle;">Discount:</th>
-                                        <td style="text-align: right; vertical-align: middle;" id="discount-amount" nowrap></td>
-                                    </tr>
-                                    <tr>
                                         <td style="vertical-align: middle;">
                                             <div class="form-group no-margin">
                                                 <label for="" class="col-sm-4 control-label"></label>
                                                 <div class="col-sm-8">
-                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1" checked></label>
+                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1"></label>
                                                 </div>
                                             </div>
                                         </td>
@@ -236,7 +141,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Submit Quote</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Submit</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -311,9 +216,10 @@
                             <td>
                                 <textarea name="description[]" rows="2" class="form-control" required></textarea>
                             </td>
-                            <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">{{ ($servicesSettings) ? $servicesSettings->service_unit_name : '' }}</th>
+                            <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">
+								<input type="text" name="no_price[]" class="form-control item-price" onchange="subtotal()" required></td>
                             <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
-                                <input type="number" name="service_quantity[]" class="form-control item-quantity" onchange="subtotal()" required>
+                                <input type="number" name="no_quantity[]" class="form-control item-quantity" onchange="subtotal()" required>
                             </td>
                             <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">
                                 <button type="button" class="btn btn-link btn-xs remove_row" title="Remove"><i class="fa fa-times"></i></button>
@@ -339,17 +245,16 @@
 
         //function to calculate the subtotal
         function subtotal() {
-            var quoteType = parseInt($('#quote_type').val());
+            var itemType = parseInt($('#item_type').val());
             var subtotal = 0;
-            var discountAmount = 0;
-            if (quoteType == 1) { //products
+            if (itemType == 1) { //Stock items
 				var totalPrices = new Array();
 				var quantitys = new Array();
-                $( ".item-quantity" ).each(function( index ) {
+                $( ".items-quantity" ).each(function( index ) {
                     var qty = parseInt($( this ).val()) || 0;
 					quantitys[index]= qty;
                 });
-				$( ".item-price" ).each(function( index ) {
+				$( ".items-price" ).each(function( index ) {
                     var price = parseInt($( this ).val()) || 0;
 					
                     totalPrices[index] = price * quantitys[index] ;
@@ -360,25 +265,28 @@
 				} 
 				subtotal = sums;
 				$( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
-				
-            } else if (quoteType == 2) { //services
-                var serviceRate = parseInt($('#service_rate').val());
-                var totalServiceUnits = 0;
+            }
+			else if (itemType == 2) { //Non Stock Items
+                var totalPrice = new Array();
+				var quantities = new Array();
                 $( ".item-quantity" ).each(function( index ) {
                     var qty = parseInt($( this ).val()) || 0;
-                    totalServiceUnits += qty;
-                    subtotal += (qty * serviceRate);
-                    $( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
+					quantities[index]= qty;
                 });
-                $('#total_service_units').html(totalServiceUnits);
+				$( ".item-price" ).each(function( index ) {
+					//console.log( index + ": " + $( this ).val() );
+                    var price = parseInt($( this ).val()) || 0;
+					
+                    totalPrice[index] = price * quantities[index] ;
+                });
+				const sum = totalPrice.reduce(add);
+				function add(accumulator, a) {
+					return accumulator + a;
+				} 
+				subtotal = sum;
+				$( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
             }
-
-            var discountPercent = $('#discount_percent').val();
-            discountAmount = (subtotal * discountPercent) / 100;
-            $( "#discount-amount" ).html('R ' + discountAmount.formatMoney(2));
-
-            var total = (subtotal - discountAmount);
-
+            var total = subtotal;
             var formattedVAT = '&mdash;';
             var vatCheckValue = $('#rdo_add_vat').iCheck('update')[0].checked;
             if (vatCheckValue) {
@@ -390,7 +298,7 @@
 
             $( "#total-amount" ).html('R ' + total.formatMoney(2));
         }
-		
+
         Number.prototype.formatMoney = function(c, d, t){
             var n = this,
                 c = isNaN(c = Math.abs(c)) ? 2 : c,

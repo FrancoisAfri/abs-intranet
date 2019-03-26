@@ -1,5 +1,4 @@
 @extends('layouts.main_layout')
-
 @section('page_dependencies')
 <!-- Include Date Range Picker -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
@@ -10,8 +9,6 @@
 <!-- bootstrap file input -->
 <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 <!--Time Charger-->
-
-
 @endsection
 @section('content')
 <div class="row">
@@ -26,7 +23,6 @@
             </div>
             <!-- /.box-header -->
             <!-- form start -->
-
             <!--                    <form name="leave-alloccation-form" class="form-horizontal" method="POST" action="" enctype="multipart/form-data">-->
             <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                 {{ csrf_field() }}
@@ -59,15 +55,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
-                        <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
-
-                        <div class="col-sm-9">
-                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_days" name="application_type" value="1" checked> Days </label>
-                            <label class="radio-inline"><input type="radio" id="rdo_hours" name="application_type" value="2">  Hours</label>
-
-                        </div>
-                    </div>
                      <div class="form-group {{ $errors->has('leave_type') ? ' has-error' : '' }}">
                         <label for="leave_type" class="col-sm-2 control-label">Leave Types</label>
                         <div class="col-sm-10">
@@ -84,15 +71,6 @@
                             </div>
                         </div>
                     </div>
-
-                   
-                    <!-- This is the dropbox which must receive a value from the leave dropbox via jquery -->
-                    <!--   <div class="form-group  ">
-                          <label for="days" class="col-sm-2 control-label">Available/Taken:</label>
-                          <div class="col-sm-5">
-                                  <input type="text" id ="availdays" class="form-control pull-left" name="val" value=" " disabled="true">
-                          </div>
-                      </div> -->
                     <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Available:</label>
                         <div class="col-sm-10">
@@ -104,39 +82,13 @@
                             </div>
                         </div>
                     </div>
-
-                    <!--  -->
-                    <div class="row emp-field" style="display: block;">
-                        <div class="col-xs-6">
-                            <div class="form-group Sick-field {{ $errors->has('date_from') ? ' has-error' : '' }}">
-                                <label for="date_from" class="col-sm-4 control-label">Available neg Annual Days:</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                        <input type="text" id="negannual" class="form-control pull-left" name="val" value=" {{$negannualDays}}" disabled="true">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-xs-6">
-                            <div class="form-group neg-field {{ $errors->has('date_to') ? ' has-error' : '' }}">
-                                <label for="date_to" class="col-sm-3 control-label">Available neg Sick Days:</label>
-                                <div class="col-sm-9">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-calendar"></i>
-                                        </div>
-                                        <input type="text" id="negsick" class="form-control pull-left" name="val" value=" {{$negsickDays}}" disabled="true">
-                                    </div>
-                                </div>
-                            </div>
+                    <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
+                        <label for="Leave_type" class="col-sm-2 control-label"> Application Type</label>
+                        <div class="col-sm-9">
+                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_days" name="application_type" value="1" checked> Days </label>
+                            <label class="radio-inline"><input type="radio" id="rdo_hours" name="application_type" value="2">  Hours</label>
                         </div>
                     </div>
-                    <!--  -->
-
                     <div class="form-group day-field {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Day</label>
                         <div class="col-sm-10">
@@ -144,16 +96,12 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-calendar"></i>
                                 </div>
-<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                <input type="text" class="form-control pull-left" name="day" value=""  />
-
+                                <input type="text" class="form-control pull-left" name="day" id="day" value=""/>
                             </div>
                         </div>
                     </div>
-
                     <!-- time from -->
                     <div class="form-group hours-field" style="display: block;">
-
                         <div class="col-xs-4">
                             <div class="form-group from-field {{ $errors->has('time_from') ? ' has-error' : '' }}">
                                 <label for="time_from" class="col-sm-6 control-label">Date</label>
@@ -162,38 +110,37 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-calendar"></i>
                                         </div>
-                                        <input type="text" class="form-control" id="date" name="date" value="05/24/2017"  placeholder="" data-mask>
+                                        <input type="text" class="form-control" id="date" name="date" value=""  placeholder="" data-mask>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <div class="col-xs-4">
-                            <div class="form-group from-field {{ $errors->has('time_from') ? ' has-error' : '' }}">
-                                <label for="time_from" class="col-sm-4 control-label">Time From</label>
+                            <div class="form-group from-field {{ $errors->has('hours') ? ' has-error' : '' }}">
+                                <label for="hours" class="col-sm-4 control-label">Hour(s)</label>
                                 <div class="col-sm-">
                                     <div class="input-group">
                                         <div class="input-group-addon">
                                             <i class="fa fa-clock-o"></i>
                                         </div>
-                                        <input type="text" class="form-control" id="time_from" name="time_from" value="{{ old('time_from') }}" placeholder="Select Start time...">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xs-4">
-                            <div class="form-group to-field {{ $errors->has('time_to') ? ' has-error' : '' }}">
-                                <label for="time_to" class="col-sm-4 control-label"> To</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-clock-o"></i>
-                                        </div>
-                                        <input type="text" class="form-control" id="time_to" name="time_to" value="{{ old('time_to') }}" placeholder="Select End time...">
+                                        <input type="number" class="form-control" id="hours" name="hours" max="7" value="{{ old('hours') }}" placeholder="Enter Hours...">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
+					<div class="form-group day-field {{ $errors->has('day_requested') ? ' has-error' : '' }}">
+						<label for="day_requested" class="col-sm-2 control-label">Day(s) Requested</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-clock-o"></i>
+								</div>
+								<input type="text" class="form-control" id="days_requested" name="days_requested" value="" disabled>
+								<input type="hidden" id="day_requested" name="day_requested" value="">
+							</div>
+						</div>
+					</div>
                     <div class="form-group notes-field{{ $errors->has('description') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Notes</label>
                         <div class="col-sm-10">
@@ -205,7 +152,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group supDoc-field{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
                         <label for="days" class="col-sm-2 control-label">Supporting Document</label>
                         <div class="col-sm-10">
@@ -219,8 +165,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
-                        <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-primary pull-right" value="Submit">
+                         <input type="submit" id="load-allocation" name="load-allocation" class="btn btn-primary pull-right" value="Submit">
                     </div>
                     <!-- /.box-footer -->
                 </div>
@@ -235,18 +180,15 @@
     @endif
 </div>
 @endsection
-
 @section('page_script')
 <!-- Select2 -->
 <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 <!-- bootstrap datepicker -->
 <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-
 <!-- InputMask -->
 <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
 <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
 <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-
 <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
 <!-- the main fileinput plugin file -->
 <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
@@ -255,98 +197,48 @@
 <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
 <!-- the main fileinput plugin file -->
 <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-
-
 <!-- Date rane picker -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
 <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
-
 <!-- iCheck -->
 <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
 <!-- Ajax dropdown options load -->
 <script src="/custom_components/js/load_dropdown_options.js"></script>
-<!-- Date picker -->
-<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+<!-- Date picker
+<script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-
 <!-- Ajax form submit -->
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
-
-<!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
-<!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
-
 <script type="text/javascript">
 $(function() {
+
 	//Initialize Select2 Elements
 	$(".select2").select2();
-	//Cancel button click event
-	// changetextbox();
-	// $('#cancel').click(function() {
-	//     location.href = '/leave/application';
-	// });
-	function postData(id, data) {
-		alert(id);
-		//if (data == 'approval_id') location.href = "/leave/approval/" + id;
-	}
 	//Phone mask
 	$("[data-mask]").inputmask();
 
-	var bal = $('#availdays').val();
-	var negDays = $('#negsick').val();
-	var negannual = $('#negannual').val();
-	var balance = parseInt(bal);
-	var NegDays = parseInt(negDays);
-	var Negannual = parseInt(negannual);
-
-	var Sick = bal + negDays;
-	var Annual = bal + negannual;
-	// alert (bal)
-	//
 	$('input[name="date"]').daterangepicker({
 		singleDatePicker: true,
 		showDropdowns: false,
-
 	});
-	$('#time_from').datetimepicker({
-		format: 'HH:mm:ss'
-	});
-
-	$('#time_to').datetimepicker({
-		format: 'HH:mm:ss'
-	});
-
 	//Initialise date range picker elements
 	$('input[name="day"]').daterangepicker({
 		timePicker: false,
-		//timePickerIncrement: 30,
 		locale: {
-			//format: 'MM/DD/YYYY h:mm A'
 			format: 'DD/MM/YYYY'
-		},
-		"dateLimit": {
-			"days": Annual
-		},
-	});
-	$('input[name="datetime"]').daterangepicker({
-		timePicker: true,
-		linkedCalendars: true,
-//                timePickerIncrement: 30,
-		locale: {
-			format: 'DD/MM/YYYY h:mm A'
-		},
-		"dateLimit": {
-			"days": 1
 		},
 	});
 
 	$('#hr_person_id , #leave_type').on('change', function() {
-		//  console.log('test message');
 		var hr_person_id = $('#hr_person_id').val();
 		var leave_type = $('#leave_type').val();
 		if (hr_person_id > 0 && leave_type > 0) {
 			avilabledays(hr_person_id, leave_type, 'availdays');
 		}
+	});
+	$('#day').on('change', function() {
+		var day = $('#day').val();
+		numberdays(day, 'day_requested', 'days_requested');
 	});
 	//Initialize iCheck/iRadio Elements
 	$('input').iCheck({
@@ -384,7 +276,6 @@ $(function() {
 	//Show success action modal
 	$('#success-action-modal').modal('show');
 });
-
 //      hide notes field if leave type is maternity
 	function changetextbox() {
 		var levID = document.getElementById("leave_type").value;
@@ -400,7 +291,6 @@ $(function() {
 			$('.neg-field').show();
 		}
 	}
-
 	//function to hide/show fields depending on the allocation  type
 	function hideFields() {
 		var allType = $("input[name='application_type']:checked").val();

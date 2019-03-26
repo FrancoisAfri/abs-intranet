@@ -656,7 +656,7 @@ class QuotesController extends Controller
             'package_quantity.*' => 'bail|required|integer|min:1',
             'service_quantity.*' => 'bail|required|integer|min:1',
             //'price' => 'bail|required_if:quote_type,1',
-            'price.*' => 'bail|required|integer|min:1',
+            //'price.*' => 'bail|required|integer|min:1',
             'package_price.*' => 'bail|required|integer|min:1',
             'service_rate' => 'bail|required_if:quote_type,2|numeric',
             'description' => 'bail|required_if:quote_type,2',

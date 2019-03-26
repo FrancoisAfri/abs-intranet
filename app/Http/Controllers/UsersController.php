@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Mail\ResetPassword;
 use App\Http\Requests;
 use App\HRPerson;
+use App\PublicHoliday;
 use App\User;
 use App\modules;
 use App\LeaveType;
@@ -64,6 +65,13 @@ class UsersController extends Controller
 		DB::table('hr_people')->where('user_id', '=', $user->id)->delete();
 		return redirect('/users')->with('success_delete', "User Successfully Deleted.");
 	}
+	public function deleteHoliday(Request $request, PublicHoliday $holidayId)
+    {
+        $holidayId->delete();
+
+        AuditReportsController::store('Security', 'Public Holiday Deleted', "Deleted by user", 0);
+        return redirect('/users/public-holiday');
+    }
 	public function modules() 
 	{
         $modules = DB::table('security_modules')->orderBy('name', 'asc')->get();
@@ -79,6 +87,70 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Modules Setup Page Accessed', "Accessed By User", 0);
         return view('security.setup')->with($data);
     }
+	public function publicHoliday() 
+	{
+        $holidays = DB::table('public_holidays')->select('public_holidays.*','countries.name as country')
+					->leftJoin('countries', 'public_holidays.country_id', '=', 'countries.id')
+					->orderBy('day', 'asc')->get();
+		$countries = DB::table('countries')->orderBy('name', 'asc')->get();
+		$data['page_title'] = "Public Holidays Management";
+		$data['page_description'] = "Admin page for security related settings";
+		$data['breadcrumb'] = [
+			['title' => 'Security', 'path' => '/users/public-holiday', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+			['title' => 'Public Holidays', 'active' => 1, 'is_module' => 0]
+		];
+		$data['active_mod'] = 'Security';
+        $data['active_rib'] = 'Public Holidays Management';
+		$data['holidays'] = $holidays;
+		$data['countries'] = $countries;
+		AuditReportsController::store('Security', 'Public Holidays Page Accessed', "Accessed By User", 0);
+        return view('security.public_holiday')->with($data);
+    }
+	//
+	public function saveHoliday(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+            'holiday_date' => 'required',
+            'country_id' => 'required',
+        ]);
+		$holidayDate = $request->input('holiday_date');
+		if (!empty($holidayDate)) {
+            $holidayDate = str_replace('/', '-', $holidayDate);
+            $holidayDate = strtotime($holidayDate);
+        }
+		$holiday = new PublicHoliday();
+		$holiday->name = $request->input('name');
+        $holiday->day = $holidayDate;
+        $holiday->country_id = $request->input('country_id');
+        $holiday->year = !empty($request->input('year')) ? date('Y'): 0;
+        $holiday->save();
+        AuditReportsController::store('Security', 'Public Holiday Saved', "Saved by User", 0);
+        return response()->json(['new_name' => $holiday->name, 'new_path' => $holiday->holiday_date], 200);
+    }
+	
+	public function updateHoliday(Request $request, PublicHoliday $holiday)
+	{
+        $this->validate($request, [
+            'name' => 'required',
+            'holiday_date' => 'required',
+            'country_id' => 'required',
+        ]);
+		$holidayDate = $request->input('holiday_date');
+		if (!empty($holidayDate)) {
+            $holidayDate = str_replace('/', '-', $holidayDate);
+            $holidayDate = strtotime($holidayDate);
+        }
+		
+        $holiday->name = $request->input('name');
+        $holiday->day = $holidayDate;
+        $holiday->country_id = $request->input('country_id');
+        $holiday->year = !empty($request->input('year_once')) ? date('Y'): 0;
+        $holiday->update();
+        AuditReportsController::store('Security', 'Module Informations Edited', "Edited by User", 0);
+        return response()->json(['new_name' => $holiday->name, 'new_path' => $holiday->path], 200);
+    }
+	
     public function companySetup()
     {
         $companyDetails = CompanyIdentity::first();

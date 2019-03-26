@@ -1,3 +1,23 @@
+/* function to calculate day requested from dates*/
+function numberdays(datesend, availdaystxt, availdaystxts) {
+	var mystr = datesend;
+	var myarr = mystr.split("-");
+	var dateFrom = myarr[0] ;
+	var dateTo = myarr[1];
+	var dateFrom = dateFrom.replace("/", "-");
+	var dateFrom = dateFrom.replace("/", "-");
+	var dateTo = dateTo.replace("/", "-");
+	var dateTo = dateTo.replace("/", "-");
+
+    postTo = '/api/leave/calleavedays/'+ dateFrom + '/' + dateTo;
+		$.get(postTo, { datesend: datesend},
+        function(data) {
+            var txtBalance = $('#'+availdaystxt);
+            var txtBalances = $('#'+availdaystxts);
+            txtBalance.val(data);
+            txtBalances.val(data);
+        });
+}
 /* function to get leave balance */
 function avilabledays(hr_id, levID, availdaystxt) {
      postTo = '/api/leave/availableBalance/'+ hr_id + '/' + levID;
@@ -7,7 +27,6 @@ function avilabledays(hr_id, levID, availdaystxt) {
             txtBalance.val(data);
         });
 }
-
 /* function to get negative leave days */
 function negativedays(hr_id, levID, negDAYS) {
      postTo = '/api/leave/negativeDays/'+ hr_id + '/' + levID;
@@ -17,8 +36,6 @@ function negativedays(hr_id, levID, negDAYS) {
             txtBalance.val(data);
         });
 }
-
-
 /* function to load [Divisions] drop down options */
 function loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer) {
     parentDDID = parentDDID || '';

@@ -143,71 +143,72 @@ class AllocateLeavedaysFamilyCronController extends Controller {
         return $leaveCredit;
     }
 
-    // public function maternity() {
+    public function maternity() {
+	### BEGIN: Sick maternity ACCRUAL (Leave Type = 3)
 
-    //     ### BEGIN: Sick maternity ACCRUAL (Leave Type = 3)
+         $lev = new LeaveType();
+         $users = HRPerson::where('status', 1)->where('gender', 2)->pluck('id');
+         foreach ($users as $empID) {
+            $maternityID = 3;
+             $leavebalance = leave_credit::where('hr_id', $empID)->where('leave_type_id', $maternityID)->pluck('leave_balance')->first();
+             if ($leavebalance === null) {
+                 $leavebalance = 0;
+             }
+         }
+    }
+	public function paternity() {
+	### BEGIN: Sick maternity ACCRUAL (Leave Type = 3)
 
-    //     $lev = new LeaveType();
-    //     $users = HRPerson::where('status', 1)->pluck('id');
-    //     foreach ($users as $empID) {
-
-    //         $maternityID = 5;
-
-    //         $leavebalance = leave_credit::where('hr_id', $empID)->where('leave_type_id', $maternityID)->pluck('leave_balance')->first();
-    //         if ($leavebalance === null) {
-    //             $leavebalance = 0;
-    //         }
-
-    //         $UserGender = HRPerson::where('user_id', $empID)->pluck('gender');
-    //         if ($UserGender === null) {
-    //            // ask the hr to update the user gender
-    //         }
-    //         ### allocate days only if the gender is female
-    //         if($UserGender > 1){
-    //             // 
-    //         }
-    //     }
-    // }
+         $lev = new LeaveType();
+         $users = HRPerson::where('status', 1)->where('gender', 1)->pluck('id');
+         foreach ($users as $empID) {
+            $maternityID = 3;
+             $leavebalance = leave_credit::where('hr_id', $empID)->where('leave_type_id', $maternityID)->pluck('leave_balance')->first();
+             if ($leavebalance === null) {
+                 $leavebalance = 0;
+             }
+         }
+    }
 
         # Reset family leave after a year.
-//    function resetLeaves() {
-//
-//        $users = HRPerson::where('status', 1)->pluck('user_id');
-//        foreach ($users as $empID) {
-//
-//            $FamilyLeaveTypeID = 2;
-//
-//            $currentDate = time(); //current_date today
-//
-//            ###USER DATEhIRED
-//            $dateofhire = HRPerson::where('user_id', $empID)->pluck('date_joined')->first();
-//            if ($dateofhire == null) {
-//                $dateofhire = 0;
-//            }
-//
-//            ### Resert days only if its users annivesary
-//            if ((date('d', $dateofhire) == date('d', $currentDate)) && (date('n', $currentDate) == date('n', $dateofhire)) && (date('Y', $currentDate) - date('Y', $dateofhire) + 1)) {
-//
-//                $lev = new LeaveType();
-//                $leaveBal = 3 * 8;
-//                $lev->hr_id = $empID;
-//                $lev->leave_balance = $leaveBal;
-//                $lev->leave_type_id = $FamilyLeaveTypeID;
-//                $lev->create_at = time();
-//                $lev->update();
-//
-//            } elseif ((date('d', $dateofhire) == date('d', $currentDate)) && (date('n', $currentDate) == date('n', $dateofhire)) && (date('Y', $currentDate) - date('Y', $dateofhire) + 3)) {
-//
-//                $SickID = 5;
-//                $lev = new LeaveType();
-//                $leaveBal = 3 * 8;
-//                $lev->hr_id = $empID;
-//                $lev->leave_balance = $SickID;
-//                $lev->leave_type_id = $FamilyLeaveTypeID;
-//                $lev->create_at = time();
-//                $lev->update();
-//
-//            }
-//        }
-//    }
+    function resetFamilyLeaves() {
+
+        $users = HRPerson::where('status', 1)->pluck('user_id');
+        foreach ($users as $empID) {
+
+            $FamilyLeaveTypeID = 2;
+
+            $currentDate = time(); //current_date today
+
+            ###USER DATEhIRED
+            $dateofhire = HRPerson::where('user_id', $empID)->pluck('date_joined')->first();
+            if ($dateofhire == null) {
+               $dateofhire = 0;
+            }
+
+            ### Resert days only if its users annivesary
+            if ((date('d', $dateofhire) == date('d', $currentDate)) && (date('n', $currentDate) == date('n', $dateofhire)) && (date('Y', $currentDate) - date('Y', $dateofhire) + 1)) {
+
+                $lev = new LeaveType();
+                $leaveBal = 3 * 8;
+                $lev->hr_id = $empID;
+                $lev->leave_balance = $leaveBal;
+                $lev->leave_type_id = $FamilyLeaveTypeID;
+                $lev->create_at = time();
+                $lev->update();
+
+            } elseif ((date('d', $dateofhire) == date('d', $currentDate)) && (date('n', $currentDate) == date('n', $dateofhire)) && (date('Y', $currentDate) - date('Y', $dateofhire) + 3)) {
+
+                $SickID = 5;
+                $lev = new LeaveType();
+                $leaveBal = 3 * 8;
+				$lev->hr_id = $empID;
+                $lev->leave_balance = $SickID;
+                $lev->leave_type_id = $FamilyLeaveTypeID;
+                $lev->create_at = time();
+				$lev->update();
+
+            }
+        }
+    }
 }

@@ -10,6 +10,7 @@ use App\HRRoles;
 use App\StockSettings;
 use App\stockLevelFive;
 use App\stockLevel;
+use App\CompanyIdentity;
 use App\product_products;
 use App\ProcurementRequest;
 use Illuminate\Support\Facades\Auth;
@@ -57,14 +58,14 @@ class procurementRequestController extends Controller
 		$data['employeesOnBehalf'] = $employeesOnBehalf;
 		$data['products'] = $products;
         $data['procurements'] = $procurements;
-        $data['page_title'] = 'Items Request';
-        $data['page_description'] = 'Request Stock Items';
+        $data['page_title'] = 'Create Request';
+        $data['page_description'] = 'Request Items';
         $data['breadcrumb'] = [
-            ['title' => 'Stock', 'path' => '/stock/request_items', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Request Stock Items', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Procurement', 'path' => '/procurement/create-request', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create Request', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Procurement';
-        $data['active_rib'] = 'Request Items';
+        $data['active_rib'] = 'Create Request';
 
         AuditReportsController::store('Procurement', 'Create Request', 'Accessed By User', 0);
         return view('procurement.create_request')->with($data);
@@ -105,18 +106,156 @@ class procurementRequestController extends Controller
         $data['page_title'] = 'Items Request';
         $data['page_description'] = 'Request Stock Items';
         $data['breadcrumb'] = [
-            ['title' => 'Stock', 'path' => '/stock/request_items', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Stock', 'path' => '/procurement/create-request', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Request Stock Items', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Procurement';
-        $data['active_rib'] = 'Request Items';
+        $data['active_rib'] = 'Create Request';
 
         AuditReportsController::store('Procurement', 'Create Request', 'Accessed By User', 0);
         return view('procurement.new_request')->with($data);
     }
-	
+	// adjust 
+	public function adjustProcurement(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'item_type' => 'bail|required|integer|min:1',
+            'title_name' => 'required',
+        ]);
+        $itemType = $request->input('item_type');
+
+        $currentTime = time();
+        //Get products
+        $productIDs = $request->input('product_id');
+        $products = [];
+        if (count($productIDs) > 0) {
+            $products = product_products::whereIn('id', $productIDs)
+                ->with(['ProductPackages', 'productPrices' => function ($query) {
+                    $query->orderBy('id', 'desc');
+                    $query->limit(1);
+                }])
+                ->orderBy('category_id')
+                ->orderBy('name')
+                ->get();
+            //get products current prices
+            foreach ($products as $product) {
+                $promoDiscount = ($product->promotions->first()) ? $product->promotions->first()->discount : 0;
+                $currentPrice = ($product->productPrices->first())
+                    ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
+                $product->current_price = $currentPrice;
+            }
+        }
+
+        $data['page_title'] = 'Procurement';
+        $data['page_description'] = 'Create Request';
+        $data['breadcrumb'] = [
+            ['title' => 'Quote', 'path' => '/procurement', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Create', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Procurement';
+        $data['active_rib'] = 'create procurement';
+        $data['item_type'] = $request->input('item_type');
+        $data['date_created'] = $request->input('date_created');
+        $data['title_name'] = $request->input('title_name');
+        $data['employee_id'] = $request->input('employee_id');
+        $data['on_behalf'] = $request->input('on_behalf');
+        $data['on_behalf_employee_id'] = $request->input('on_behalf_employee_id');
+        $data['special_instructions'] = $request->input('special_instructions');
+        $data['justification_of_expenditure'] = $request->input('justification_of_expenditure');
+        $data['detail_of_expenditure'] = $request->input('detail_of_expenditure');
+        $data['products'] = $products;
+        //return $data;
+        AuditReportsController::store('Procurement', 'Create Procurement Page Accessed', 'Accessed By User', 0);
+        return view('procurement.adjust_procurement')->with($data);
+    }
 	// save request
-    public function store(Request $request) {
+    public function saveRequest(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'item_type' => 'bail|required|integer|min:1',
+            'employee_id' => 'bail|required|integer|min:1',
+            'date_created' => 'bail|required',
+            'title_name' => 'bail|required',
+            'quantity.*' => 'bail|required|integer|min:1',
+            'service_quantity.*' => 'bail|required|integer|min:1',
+            'price.*' => 'bail|required|integer|min:1',
+            'description' => 'bail|required_if:quote_type,2',
+            'description.*' => 'bail|required|max:1000',
+        ]);
+        $validator->validate();
+
+        //return $request->all();
+        $user = Auth::user()->load('person');
+        $status = 1;
+        //save procurement
+        $procurement = new ProcurementRequest();
+        DB::transaction(function () use ($procurement, $request, $user) {
+			$date = str_replace('/', '-', $request->input('date_created'));
+			$date = strtotime($date);
+            $itemType = $request->input('item_type');
+            $procurement->item_type = ($itemType > 0) ? $itemType : 0;
+            $procurement->on_behalf_of = ($request->input('on_behalf_of')) ? $request->input('on_behalf_of') : 0;
+            $procurement->on_behalf_employee_id = ($request->input('on_behalf_employee_id')) ? $request->input('on_behalf_employee_id') : '';;
+            $procurement->date_created = $date;
+            $procurement->employee_id = $user->person->id;
+            $procurement->title_name = ($request->input('title_name')) ? $request->input('title_name') : '';
+            $procurement->add_vat = ($request->input('add_vat')) ? $request->input('add_vat') : 0;
+            $procurement->special_instructions = ($request->input('special_instructions')) ? $request->input('special_instructions') : '';
+            $procurement->detail_of_expenditure = ($request->input('detail_of_expenditure')) ? $request->input('detail_of_expenditure') : '';
+            $procurement->justification_of_expenditure = ($request->input('justification_of_expenditure')) ? $request->input('justification_of_expenditure') : '';
+            $procurement->status = 1;
+            $procurement->save();
+
+			$poNumber = 'PO' . sprintf('%07d', $procurement->id);
+            $procurement->po_number = $poNumber;
+            $procurement->update();
+
+            if ($itemType == 1) {
+                //save procurement's Stock items
+                $prices = $request->input('price');
+                $quantities = $request->input('quantity');
+                $itemNames = $request->input('item_names');
+                if ($prices) {
+                    foreach ($prices as $productID => $price) {
+						$price = preg_replace('/(?<=\d)\s+(?=\d)/', '', $price);
+						$price = (double) $price;
+						$products = product_products::where('id', $productID)->first();
+						$item = new ProcurementRequestItems();
+						$item->procurement_id = $procurement->id;
+						$item->product_id = $productID;
+						$item->category_id = $products->category_id;
+						$item->quantity = $quantities[$productID];
+						$item->item_name = $itemNames[$productID];
+						$item->item_price = $price;
+						$item->date_added = time();
+						$item->save();
+                    }
+                }
+            } 
+			elseif ($itemType == 2) {
+                //save procurement's Non Stock Items
+                $descriptions = $request->input('description');
+                $prices = $request->input('no_price');
+                $quantities = $request->input('no_quantity');
+                if ($descriptions) {
+                    foreach ($descriptions as $key => $description) {
+                        $service = new ProcurementRequestItems();
+                        $service->procurement_id = $procurement->id;
+						$item->item_name = $itemNames[$productID];
+                        $item->quantity = $quantities[$productID];
+						$item->item_price = $price;
+						$item->date_added = time();
+                        $service->save();
+                    }
+                }
+            }
+        });
+        
+        AuditReportsController::store('Procurement', 'New Procurement Created', 'Create by user', 0);
+        return redirect("/procurement/view/$procurement->id")->with(['success_add' => 'The request has been successfully Created!']);
+    }
+	
+	public function store(Request $request) {
         $this->validate($request, [
 			'title_name' => 'required',
 			'store_id' => 'required',
@@ -255,7 +394,7 @@ class procurementRequestController extends Controller
         $data['page_title'] = 'Items Request';
         $data['page_description'] = 'Request Stock Items';
         $data['breadcrumb'] = [
-            ['title' => 'Stock', 'path' => '/stock/request_items', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Stock', 'path' => '/procurement/create-request', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Request Stock Items', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Procurement';

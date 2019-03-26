@@ -47,7 +47,11 @@ Route::post('users/{user}/pw', 'UsersController@updatePassword');
 Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
 Route::patch('users/{user}', 'UsersController@update');
 Route::get('users/modules', 'UsersController@modules');
+Route::get('users/public-holiday', 'UsersController@publicHoliday');
 Route::get('users/setup', 'UsersController@companySetup');
+Route::post('users/public-holiday/delete/{holidayId}', 'UsersController@deleteHoliday');
+Route::post('users/public-holiday', 'UsersController@saveHoliday');
+Route::patch('/users/holiday_edit/{holiday}', 'UsersController@updateHoliday');
 Route::post('users/setup/modules', 'UsersController@addmodules');
 Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
 Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
@@ -1115,7 +1119,8 @@ Route::get('api/appraisal/emp/topten/{divLvl}/{divID}', 'AppraisalGraphsControll
 Route::get('api/appraisal/emp/bottomten/{divLvl}/{divID}', 'AppraisalGraphsController@getBottomTenEmployees')->name('bottomtenemp');
 Route::get('api/appraisal/staffunder/{managerID}', 'AppraisalGraphsController@getSubordinates')->name('staffperform');
 Route::get('api/leave/availableBalance/{hr_id}/{levID}', 'LeaveApplicationController@availableDays');
-Route::get('api/leave/negativeDays/{hr_id}/{levID}', 'LeaveApplicationController@negativeDays');
+Route::get('api/leave/availableBalance/{hr_id}/{levID}', 'LeaveApplicationController@availableDays');
+Route::get('api/leave/calleavedays/{dateFrom}/{dateTo}', 'LeaveApplicationController@calculatedays');
 
 Route::get('api/tasks/emp/meetingTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getMeetingEmployees')->name('meetingTasksEmployee');
 Route::get('api/tasks/emp/inductionTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getInductionEmployees')->name('inductionTasksEmployee');
@@ -1134,3 +1139,6 @@ Route::get('procurement/process_act/{step}', 'procurementApprovalsController@ste
 Route::patch('procument/edit_step/update/{step}', 'procurementApprovalsController@update');
 Route::get('procurement/create_request', 'procurementRequestController@index');
 Route::get('procurement/create-request', 'procurementRequestController@create');
+Route::post('procurement/adjust-request', 'procurementRequestController@adjustProcurement');
+Route::post('procurement/save', 'procurementRequestController@saveRequest');
+Route::post('procurement/update/{procurement}', 'procurementRequestController@updateQuote');
