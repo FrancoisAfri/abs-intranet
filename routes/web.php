@@ -135,7 +135,7 @@ Route::get('System/policy/viewuserdetails/{policydetails}', 'PolicyEnforcementCo
 Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
-Route::get('leave/approval/{id}', 'LeaveApplicationController@AcceptLeave');
+Route::get('leave/approval/{leaveId}', 'LeaveApplicationController@AcceptLeave');
 //# leavesetup Controller
 Route::get('leave/types', 'LeaveSetupController@setuptypes');
 Route::get('/leave/setup', 'LeaveSetupController@showSetup');

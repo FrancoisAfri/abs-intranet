@@ -82,7 +82,7 @@ class UsersController extends Controller
 			['title' => 'Modules', 'active' => 1, 'is_module' => 0]
 		];
 		$data['active_mod'] = 'Security';
-        $data['active_rib'] = 'modules';
+        $data['active_rib'] = 'Modules';
 		$data['modules'] = $modules;
 		AuditReportsController::store('Security', 'Modules Setup Page Accessed', "Accessed By User", 0);
         return view('security.setup')->with($data);
@@ -223,7 +223,7 @@ class UsersController extends Controller
 			$data['ribbons'] = $mod;
 			$data['arrayRights'] = $aRarrayRights;
 			$data['active_mod'] = 'security';
-			$data['active_rib'] = 'setup';
+			$data['active_rib'] = 'Modules';
 			AuditReportsController::store('Security', 'Ribbons Page Accessed', "Accessed by User", 0);
 			return view('security.ribbons')->with($data);
 		}
