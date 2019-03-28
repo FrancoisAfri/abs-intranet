@@ -161,15 +161,6 @@
 							</td>
 						</tr>
 					</div>
-					<div class = "form-group">         
-						<tr>
-						<td>All managers to approve</td>
-							<td style="text-align: center; vertical-align: middle;">
-								<input type="hidden" name="all_managers_to_approve" value="0">
-								<input  type="checkbox" name="all_managers_to_approve" value="1" {{ $leave_configuration->all_managers_to_approve === 1 ? 'checked ="checked"' : 0 }} >
-							</td>
-						</tr>
-					</div>
 					<div class="form-group">
 						<tr>
 						   <td>Require Department Head approval</td>

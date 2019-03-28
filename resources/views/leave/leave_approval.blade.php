@@ -32,7 +32,6 @@
 									</tr>
                                 </thead>
                                 <tbody>
-									<!--  -->
 									<!-- loop through the leave applications   -->
 									@if(count($leaveApplications) > 0)
 										@foreach($leaveApplications as $approval)
@@ -48,7 +47,7 @@
 														<label for="supporting_doc" class="control-label"></label>
 														@if(!empty($approval->supporting_docs))
 															<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-															   href="{{ $approval->supporting_docs }}" target="_blank"><i
+															   href="{{ Storage::disk('local')->url("Leave/LeaveDocuments/$approval->supporting_docs") }}" target="_blank"><i
 																		class="fa fa-file-pdf-o"></i> View Document</a>
 														@else
 															<a class="btn btn-default pull-centre btn-xs"><i
@@ -57,7 +56,7 @@
 														@endif
 													</div>
 												</td>
-												<td>{{ (!empty($approval->status)) ?  $leaveStatus[$approval->status] : ''}} </td>
+												<td>{{ (!empty($approval->status)) ?  $leaveStatus[$approval->status] : ''}}</td>
 												<td>
 													<button type="button" id="Accept"
 															class="btn btn-success btn-xs btn-detail open-modal"
@@ -80,9 +79,8 @@
                                     <th>Employee name</th>
                                     <th>Leave Type</th>
                                     <th>Date From</th>
-                                    <th>Date TO</th>
-                                    <th>Time From</th>
-                                    <th>Time To</th>
+                                    <th>Date To</th>
+                                    <th>Day(s) Requested</th>
                                     <th>Notes</th>
                                     <th>Supporting Documents</th>
                                     <th>Status</th>

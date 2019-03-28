@@ -470,75 +470,7 @@
                 </div>
                 <!-- /Tasks List End -->
             </div>
-
-            <div class="col-md-6">
-                <!-- /Tasks List -->
-                <div class="box box-info">
-                    <div class="box-header with-border">
-                        <i class="fa fa-hourglass"></i>
-                        <h3 class="box-title">Leave Applied For Status</h3>
-
-                        <div class="box-tools pull-right">
-                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                        class="fa fa-minus"></i>
-                            </button>
-                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
-                                        class="fa fa-times"></i></button>
-                        </div>
-                    </div>
-                    <!-- /.box-header -->
-                    <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-                        <div class="table-responsive">
-                            <table class="table no-margin">
-
-                                <thead>
-                                <tr>
-                                    <th><i class="material-icons">shop_two</i> Leave Type</th>
-                                    <th><i class="fa fa-calendar-o"></i> Date From</th>
-                                    <th><i class="fa fa-calendar-o"></i> Date To</th>
-                                    <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
-                                    <th style="text-align: right;"><i class="fa fa-info-circle"></i> Rejection Reason
-                                    </th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @if (!empty($application))
-                                    @foreach($application as $app)
-                                        <tr>
-                                            <td style="vertical-align: middle;">{{ (!empty($app->leavetype)) ?  $app->leavetype : ''}}</td>
-                                            <td style="vertical-align: middle;">
-                                                {{ !empty($app->start_date) ? date('d M Y ', $app->start_date) : '' }}
-                                            </td>
-                                            <td style="vertical-align: middle;">{{ !empty($app->end_date) ? date('d M Y ', $app->end_date) : '' }}</td>
-                                            <td style="text-align: right; vertical-align: middle;">
-                                                {{ (!empty($app->status) && $app->status > 0) ? $leaveStatusNames[$app->status]." ".$app->reject_reason  : ''}}
-                                            </td>
-                                            <td style="text-align: right; vertical-align: middle;">
-                                                {{ !empty($app->reject_reason) ? $app->reject_reason  : 'N/A'}}
-                                            </td>
-                                            <td class="text-right" style="vertical-align: middle;">
-                                                @if(in_array($app->status, [2, 3, 4, 5]))
-                                                    <button class="btn btn-xs btn-warning"
-                                                            title="Cancel Leave Application" data-toggle="modal"
-                                                            data-target="#cancel-leave-application-modal"
-                                                            data-leave_application_id="{{ $app->id }}"><i
-                                                                class="fa fa-times"></i></button>
-                                                @endif
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                @endif
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <!-- Include cancellation reason modal -->
-                    @include('dashboard.partials.cancel_leave_application_modal')
-                </div>
-            </div>
-
-            <div class="col-md-6">
+			<div class="col-md-6">
                 <div class="box box-info">
                     <div class="box-header with-border">
                         <i class="ion ion-ios-people-outline"></i>
@@ -585,6 +517,78 @@
                         </table>
                     </div>
                     <!-- /.box-body -->
+                </div>
+            </div> 
+        </div>
+		<div class="row">
+			<div class="col-md-12">
+                <!-- /Tasks List -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <i class="fa fa-hourglass"></i>
+                        <h3 class="box-title">My Leave Applications</h3>
+
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                        class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+
+                                <thead>
+                                <tr>
+                                    <th><i class="material-icons">shop_two</i> Leave Type</th>
+                                    <th><i class="fa fa-calendar-o"></i> Date From</th>
+                                    <th><i class="fa fa-calendar-o"></i> Date To</th>
+                                    <th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
+                                    <th style="text-align: right;"><i class="fa fa-info-circle"></i> Rejection/Cancellation Reason
+                                    </th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if (!empty($application))
+                                    @foreach($application as $app)
+                                        <tr>
+                                            <td style="vertical-align: middle;">{{ (!empty($app->leavetype)) ?  $app->leavetype : ''}}</td>
+                                            <td style="vertical-align: middle;">
+                                                {{ !empty($app->start_date) ? date('d M Y ', $app->start_date) : '' }}
+                                            </td>
+                                            <td style="vertical-align: middle;">{{ !empty($app->end_date) ? date('d M Y ', $app->end_date) : '' }}</td>
+                                            <td style="text-align: right; vertical-align: middle;">
+                                                {{ (!empty($app->status) && $app->status > 0) ? $leaveStatusNames[$app->status]." ".$app->reject_reason  : ''}}
+                                            </td>
+                                            <td style="text-align: right; vertical-align: middle;">
+												@if ($app->status == 10)
+													{{ !empty($app->cancellation_reason) ? $app->cancellation_reason  : ''}}
+                                                @else
+													{{ !empty($app->reject_reason) ? $app->reject_reason  : ''}}
+                                                @endif
+                                            </td>
+                                            <td class="text-right" style="vertical-align: middle;">
+                                                @if(in_array($app->status, [2, 3, 4, 5]))
+                                                    <button class="btn btn-xs btn-warning"
+                                                            title="Cancel Leave Application" data-toggle="modal"
+                                                            data-target="#cancel-leave-application-modal"
+                                                            data-leave_application_id="{{ $app->id }}"><i
+                                                                class="fa fa-times"></i></button>
+                                                @endif
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                @endif
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- Include cancellation reason modal -->
+                    @include('dashboard.partials.cancel_leave_application_modal')
                 </div>
             </div>
         </div>

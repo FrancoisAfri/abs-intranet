@@ -107,8 +107,6 @@ class VehicleFleetController extends Controller
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
-
-
         $ID = $maintenance->id;
         $vehicleDocumets = DB::table('vehicle_documets')
             ->select('vehicle_documets.*')
@@ -137,7 +135,6 @@ class VehicleFleetController extends Controller
     public function viewnotes(vehicle_maintenance $maintenance)
     {
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
-
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
@@ -185,22 +182,18 @@ class VehicleFleetController extends Controller
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
-
         $ID = $maintenance->id;
-
         $reminders = DB::table('vehicle_reminders')
             ->select('vehicle_reminders.*')
             ->orderBy('vehicle_reminders.id')
             ->where('vehicleID', $ID)
             ->get();
-
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
             ['title' => 'Fleet  Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
-
         $data['IssuedTo'] = $IssuedTo;
         $data['employees'] = $employees;
         $data['vehiclemaker'] = $vehiclemaker;
@@ -224,7 +217,6 @@ class VehicleFleetController extends Controller
 
         $startdate = $SysData['start_date'] = str_replace('/', '-', $SysData['start_date']);
         $startdate = $SysData['start_date'] = strtotime($SysData['start_date']);
-
         $enddate = $SysData['end_date'] = str_replace('/', '-', $SysData['end_date']);
         $enddate = $SysData['end_date'] = strtotime($SysData['end_date']);
 

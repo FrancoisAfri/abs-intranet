@@ -92,15 +92,19 @@ class LeaveApplicationController extends Controller
         $loggedInEmplID = Auth::user()->person->id;
         $leaveStatus = array(1 => 'Approved', 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 => 'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejected', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr', 9 => 'rejectd_by_payroll', 10 => 'Cancelled');
         $leaveApplications = DB::table('leave_application')
-            ->select('leave_application.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'leave_types.name as leavetype', 'hr_people.manager_id as manager', 'leave_credit.leave_balance as leave_Days')
+            ->select('leave_application.*'
+			, 'hr_people.first_name as firstname'
+			, 'hr_people.surname as surname'
+			, 'leave_types.name as leavetype'
+			, 'hr_people.manager_id as manager')
             ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
             ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
-            ->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id')
+            //->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id')
             ->where('hr_people.manager_id', $loggedInEmplID)
             ->whereNotIn('leave_application.status', [1, 6, 7, 8, 9, 10])
             ->orderBy('leave_application.hr_id')
+            ->orderBy('leave_application.id')
             ->get();
-
         $data['leaveStatus'] = $leaveStatus;
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Approval';
@@ -139,12 +143,12 @@ class LeaveApplicationController extends Controller
     public function ApplicationDetails($status = 0, $hrID = 0)
     {
 		//UserAccess
-		$userAccess = DB::table('security_modules_access')
+		/*$userAccess = DB::table('security_modules_access')
                 ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
                 ->where('code_name', 'leave')
                 ->where('user_id', Auth::user()->person->user_id)
                 ->first();
-				
+				*/
         // query the leave congif table and bring back the values
         $approvals = DB::table('leave_configuration')
             ->select('require_managers_approval', 'require_department_head_approval', 'require_hr_approval', 'require_payroll_approval')
@@ -161,15 +165,16 @@ class LeaveApplicationController extends Controller
 			// array to store manager details
 			$details = array('status' => 2, 'first_name' => $managerDetails->firstname, 'surname' => $managerDetails->surname, 'email' => $managerDetails->email);
 			return $details;
-        } elseif ($approvals->require_department_head_approval == 1) {
+        }
+		elseif ($approvals->require_department_head_approval == 1) {
             # code...  division_level_twos
             // query the hrperon  model and bring back the values of the manager
             $Dept = DivisionLevelTwo::where('id', $hrDetails->division_level_2)->get()->first();
-            $msamgerDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+            $deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
                 ->select('first_name', 'surname', 'email')
                 ->first();
 			// array to store manager details
-			$details = array('status' => 3, 'first_name' => $msamgerDetails->firstname, 'surname' => $msamgerDetails->surname, 'email' => $msamgerDetails->email);
+			$details = array('status' => 3, 'first_name' => $deptDetails->firstname, 'surname' => $deptDetails->surname, 'email' => $deptDetails->email);
 			return $details;
         } #code here .. Require Hr
     }
@@ -184,7 +189,7 @@ class LeaveApplicationController extends Controller
             ->where('leave_type_id', $typID)
             ->get();
 
-        return !empty($balance->first()->leave_balance) ? $balance->first()->leave_balance / 8 : '';
+        return !empty($balance->first()->leave_balance) ? $balance->first()->leave_balance / 8 : 0;
     }
 
     # calculate leave days
@@ -235,7 +240,7 @@ class LeaveApplicationController extends Controller
 		return $days;
     }
 	
-	public function day(Request $request, leave_application $levApp)
+	public function day(Request $request)
     {
 		//Validation
         $validator = Validator::make($request->all(), [
@@ -252,7 +257,7 @@ class LeaveApplicationController extends Controller
             $applicationType = $request->input('application_type');
             $availableBalance = 0;
 			//make sure application doesnot overlaps
-			$day = $leaveApp['day'];
+			$day = $request->input('day');
 			$dates = explode(' - ', $day);
 			$startDate = str_replace('/', '-', $dates[0]);
 			$startDate = strtotime($startDate);
@@ -260,7 +265,7 @@ class LeaveApplicationController extends Controller
 			$endDate = strtotime($endDate);
 			$previousApplication = leave_application::select('id')
 				->where('hr_id', $hrPersonId)
-				->where('leave_type_id', $leaveType)
+				//->where('leave_type_id', $leaveType)
 				->whereIn('status', [1, 2, 3,4,5])
 				->where(function($query) use ($startDate, $endDate){
                   $query->wherebetween('start_date', [$startDate,$endDate])
@@ -333,7 +338,7 @@ class LeaveApplicationController extends Controller
         $ApplicationDetails = LeaveApplicationController::ApplicationDetails(0, $hrID);
         $applicatiionStaus = $ApplicationDetails['status'];
         $levtype = $request->input('leave_type');
-		
+		$levApp = new leave_application();
         $levApp->leave_type_id = $request->input('leave_type');
         $levApp->start_date = $startDate;
         $levApp->end_date = $endDate;
@@ -347,24 +352,24 @@ class LeaveApplicationController extends Controller
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = time() . "_supporting_docs." . $fileExt;
-                $request->file('supporting_docs')->storeAs('Leave Documents', $fileName);
+                $fileName = time() . "_supporting_docs." . $fileExt; 
+                $request->file('supporting_docs')->storeAs('Leave/LeaveDocuments', $fileName);
                 //Update file name in hr table
                 $levApp->supporting_docs = $fileName;
                 $levApp->update();
             }
         }
         // send email to manager
-		if (!empty($ApplicationDetails['email']))
+		/*if (!empty($ApplicationDetails['email']))
 			Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $ApplicationDetails['surname'], $ApplicationDetails['email']));
-
+*/
         AuditReportsController::store('Leave Management', 'Leave day application', "Accessed By User", 0);
         #leave history audit
         LeaveHistoryAuditController::store("Leave application performed by : $username", '', $leaveBalance, $dayRequested, $leaveBalance, $levtype, $hrID);
         return back()->with('success_application', "leave application was successful.");
     }
 
-    public function hours(Request $request, leave_application $levApp)
+    public function hours(Request $request)
     {
 		//Validation
         $validator = Validator::make($request->all(), [
@@ -438,6 +443,7 @@ class LeaveApplicationController extends Controller
             ->first();
         $leave_balance = $Details['leave_balance'];
         #
+		$levApp = new leave_application();
         $levApp->leave_type_id = $typID;
         $levApp->hr_id = $employees;
         $levApp->notes = $request->input('description');
@@ -452,7 +458,7 @@ class LeaveApplicationController extends Controller
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('supporting_docs')->isValid()) {
                 $fileName = time() . "_supporting_docs." . $fileExt;
-                $request->file('supporting_docs')->storeAs('Leave Documents', $fileName);
+                $request->file('supporting_docs')->storeAs('Leave/LeaveDocuments', $fileName);
                 //Update file name in hr table
                 $levApp->supporting_docs = $fileName;
                 $levApp->update();
@@ -482,7 +488,7 @@ class LeaveApplicationController extends Controller
         $surname = $usedetails['surname'];
         $email = $usedetails['email'];
         // #Query the the leave_config days for value
-        $Details = leave_credit::where('hr_id', $hrID)
+        $Details = leave_credit::where('hr_id', $hriD)
             ->where('leave_type_id', $levTyp)
             ->first();
         $leave_balance = $Details->leave_balance;
@@ -493,11 +499,11 @@ class LeaveApplicationController extends Controller
         $newBalance = $leave_balance - $daysApplied;
         #save new leave balance
         DB::table('leave_credit')
-            ->where('hr_id', $hrID)
+            ->where('hr_id', $hriD)
             ->where('leave_type_id', $levTyp)
             ->update(['leave_balance' => $newBalance]);
 		// Update history table
-        $levHist->hr_id = $hrID;
+        $levHist->hr_id = $hriD;
         $levHist->action_date = time();
         $levHist->description_action = "Leave Application Approved";
         $levHist->previous_balance = $leave_balance;
@@ -521,7 +527,7 @@ class LeaveApplicationController extends Controller
             DB::table('leave_application')
                 ->where('id', $iD)
                 ->update(['status' => 3]);
-        } 
+        }
 		else 
 		{
             DB::table('leave_application')
@@ -530,7 +536,7 @@ class LeaveApplicationController extends Controller
         }
         #send email to the user informing that the leave has been accepted
         Mail::to($email)->send(new Accept_application($firstname, $surname, $email));
-        LeaveHistoryAuditController::store("leave application Approved", 0, $leave_balance, $daysApplied, $newBalance, $levTyp, $hrID);
+        LeaveHistoryAuditController::store("leave application Approved", 0, $leave_balance, $daysApplied, $newBalance, $levTyp, $hriD);
         AuditReportsController::store('Leave Management', 'leave_approval Informations accepted', "Edited by User: $levHist->hr_id", 0);
         return back()->with('success_application', "leave application was successful.");
     }
