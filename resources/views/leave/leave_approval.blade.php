@@ -68,8 +68,7 @@
 												<td>
 													<button type="button" id="reject-reason" class="btn btn-danger btn-xs"
 														data-toggle="modal" data-target="#reject-leave-modal"
-														data-id="{{ $approval->id }}"
-														onclick="reject({{$approval->id}}, 'reject_id' data - description ="{{$approval->reject_reason }}")">Decline</button></td>
+														data-id="{{ $approval->id }}">Decline</button></td>
 											</tr>
 										@endforeach
 									@endif
@@ -107,16 +106,13 @@
     <!--  -->
     </div>
 @endsection
-
 @section('page_script')
     <!-- DataTables -->
     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <!-- End Bootstrap File input -->
-
     <script type="text/javascript">
-
         $(function () {
             $('#example2').DataTable({
                 "paging": true,

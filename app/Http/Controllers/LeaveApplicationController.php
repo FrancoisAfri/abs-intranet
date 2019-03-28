@@ -544,7 +544,7 @@ class LeaveApplicationController extends Controller
     public function reject(Request $request, leave_application $levReject)
     {
         $this->validate($request, [
-            // 'description' => 'numeric',
+			'description' => 'required',
         ]);
         $leaveData = $request->all();
         unset($leaveData['_token']);
@@ -557,12 +557,12 @@ class LeaveApplicationController extends Controller
         $email = $usedetails['email'];
 
         $levReject->reject_reason = $request->input('description');
-        $levReject->status = 6;
+		$levReject->status = 6;
         $levReject->update();
         #send rejection email
-        Mail::to($email)->send(new LeaveRejection($firstname, $surname, $email));
+		Mail::to($email)->send(new LeaveRejection($firstname, $surname, $email));
         AuditReportsController::store('Leave Management: ', 'leave rejected', "By User", 0);
-        //LeaveHistoryAuditController::store("leave application Rejected", 0, 0, 0, 0, $levReject->leave_type_id, $levReject->hr_id);
+        LeaveHistoryAuditController::store("leave application Rejected", 0, 0, 0, 0, $levReject->leave_type_id, $levReject->hr_id);
         return response()->json();
     }
 }

@@ -21,7 +21,7 @@
                                     <div class="input-group-addon">
                                        <i class="fa fa-comment-o"></i>
                                     </div>
-                                    <textarea class="form-control" id="description" name="description" placeholder="Enter rejection reason ..." rows="4"></textarea>
+                                    <textarea class="form-control" id="description" name="description" placeholder="Enter Rejection Reason ..." rows="4"></textarea>
                                 </div>
                             </div>
                         </div>

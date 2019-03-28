@@ -59,20 +59,13 @@ class DashboardController extends Controller
         //  CRMAccounts
 
         $clientID = Auth::user()->person->id;
-
         $ClientsCompanyId = ContactPerson::where('id', $clientID)->pluck('company_id')->first();
-
         $Accounts = CRMAccount::where('company_id', $ClientsCompanyId)->get();
-
         $account = $Accounts->load('company', 'client', 'quotations.products.ProductPackages', 'quotations.packages.products_type');
         $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
         $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];
 
-        //  return $account;
-        //check if Ribbon is active
-        //$Ribbon_module = modules::where('active', 1)->get();
         $activeModules = modules::where('active', 1)->get();
-        // return $activeModules;
 
         if ($user->type === 1 || $user->type === 3) {
             $topGroupLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->first();
@@ -124,9 +117,6 @@ class DashboardController extends Controller
             $canViewTaskWidget = ($isSuperuser || $isDivHead || $isSupervisor) ? true : false;
             $canViewEmpRankWidget = ($isSuperuser || $isDivHead) ? true : false;
 
-            //$numManagedDivs = 0;
-            //if ($isSuperuser) $numManagedDivs =
-
             if ($isSuperuser)
                 $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get(); //->load('divisionLevelGroup');
             elseif ($isDivHead) {
@@ -160,15 +150,15 @@ class DashboardController extends Controller
                 ->select('leave_credit.*', 'leave_types.name as leavetype')
                 ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
                 ->where('leave_credit.hr_id', $user->person->id)
-                ->orderBy('leave_credit.id')
+                ->orderBy('leave_types.name')
                 ->get();
-            //return $balances;
             #leave Application
             $application = DB::table('leave_application')
                 ->select('leave_application.*', 'leave_types.name as leavetype')
                 ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
                 ->where('leave_application.hr_id', $user->person->id)
                 ->orderBy('leave_application.id', 'desc')
+				->limit(15)
                 ->get();
             //return $application;
 
