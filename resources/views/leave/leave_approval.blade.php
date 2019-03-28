@@ -14,79 +14,66 @@
                         <i class="fa fa-user pull-right"></i>
                         <h3 class="box-title">Leave Approvals</h3>
                     </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
-
                     <div class="box-body">
                         <div style="overflow-X:auto;">
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
-                                <tr>
-                                    <th>Employee name</th>
-                                    <th>Leave Type</th>
-                                    <th>Date From</th>
-                                    <th>Date TO</th>
-                                    <th>Time From</th>
-                                    <th>Time To</th>
-                                    <th>Notes</th>
-                                    <th>Supporting Documents</th>
-                                    <th>Status</th>
-                                    <!-- <th>Leave Balance</th> -->
-                                    <th>Action</th>
-                                    <th></th>
-                                </tr>
+									<tr>
+										<th>Employee name</th>
+										<th>Leave Type</th>
+										<th>Date From</th>
+										<th>Date To</th>
+										<th>Day(s) Requested</th>
+										<th>Notes</th>
+										<th>Supporting Documents</th>
+										<th>Status</th>
+										<th>Action</th>
+										<th></th>
+									</tr>
                                 </thead>
                                 <tbody>
-                                <!--  -->
-                                <!-- loop through the leave application info   -->
-                                @if(count($leaveApplication) > 0)
+									<!--  -->
+									<!-- loop through the leave applications   -->
+									@if(count($leaveApplications) > 0)
+										@foreach($leaveApplications as $approval)
+											<tr>
+												<td>{{ !empty($approval->firstname) && !empty($approval->surname) ? $approval->firstname.' '.$approval->surname : '' }}</td>
+												<td>{{ !empty($approval->leavetype) ? $approval->leavetype : '' }}</td>
+												<td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
+												<td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
+												<td>{{ !empty($approval->leave_days) ? $approval->leave_days / 8 : '' }}</td>
+												<td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
+												<td>
+													<div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
+														<label for="supporting_doc" class="control-label"></label>
+														@if(!empty($approval->supporting_docs))
+															<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+															   href="{{ $approval->supporting_docs }}" target="_blank"><i
+																		class="fa fa-file-pdf-o"></i> View Document</a>
+														@else
+															<a class="btn btn-default pull-centre btn-xs"><i
+																		class="fa fa-exclamation-triangle"></i> Nothing
+																Uploaded</a>
+														@endif
+													</div>
+												</td>
+												<td>{{ (!empty($approval->status)) ?  $leaveStatus[$approval->status] : ''}} </td>
+												<td>
+													<button type="button" id="Accept"
+															class="btn btn-success btn-xs btn-detail open-modal"
+															value="{{$approval->id}}"
+															onclick="postData({{$approval->id}}, 'approval_id')">Accept
+													</button>
 
-                                @endif
-                                <ul class="products-list product-list-in-box">
-                                    @foreach($leaveApplication as $approval)
-                                        <tr>
-                                            <td>{{ !empty($approval->firstname) && !empty($approval->surname) ? $approval->firstname.' '.$approval->surname : '' }}</td>
-                                            <td>{{ !empty($approval->leavetype) ? $approval->leavetype : '' }}</td>
-                                            <td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
-                                            <td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
-                                            <td>{{ !empty($approval->start_time) ? date('H:i:s',$approval->start_time) : '' }}</td>
-                                            <td>{{ !empty($approval->end_time) ? date('H:i:s',$approval->end_time) : '' }}</td>
-                                            <td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
-
-                                            <td>
-                                                <div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
-                                                    <label for="supporting_doc" class="control-label"></label>
-                                                    @if(!empty($approval->supporting_docs))
-                                                        <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                           href="{{ $approval->supporting_docs }}" target="_blank"><i
-                                                                    class="fa fa-file-pdf-o"></i> View Document</a>
-                                                    @else
-                                                        <a class="btn btn-default pull-centre btn-xs"><i
-                                                                    class="fa fa-exclamation-triangle"></i> Nothing
-                                                            Uploaded</a>
-                                                    @endif
-                                                </div>
-                                            </td>
-
-
-                                        <!--  <td>{{ !empty($approval->status) ? $approval->status : '' }}</td>   -->
-                                            <td>{{ (!empty($approval->status)) ?  $leaveStatus[$approval->status] : ''}} </td>
-                                        <!--  <td>{{ !empty($approval->leave_Days) ? $approval->leave_Days : '' }}</td> -->
-                                            <td>
-                                                <button type="button" id="Accept"
-                                                        class="btn btn-success btn-xs btn-detail open-modal"
-                                                        value="{{$approval->id}}"
-                                                        onclick="postData({{$approval->id}}, 'approval_id')">Accept
-                                                </button>
-
-                                            </td>
-                                            <td>
-                                                <button type="button" id="reject-reason" class="btn btn-danger btn-xs"
-													data-toggle="modal" data-target="#reject-leave-modal"
-													data-id="{{ $approval->id }}"
-													onclick="reject({{$approval->id}}, 'reject_id' data - description ="{{$approval->reject_reason }}")">Decline</button></td>
-
-                                @endforeach
+												</td>
+												<td>
+													<button type="button" id="reject-reason" class="btn btn-danger btn-xs"
+														data-toggle="modal" data-target="#reject-leave-modal"
+														data-id="{{ $approval->id }}"
+														onclick="reject({{$approval->id}}, 'reject_id' data - description ="{{$approval->reject_reason }}")">Decline</button></td>
+											</tr>
+										@endforeach
+									@endif
                                 </tbody>
                                 <tfoot>
                                 <tr>
@@ -102,7 +89,6 @@
                                 </tfoot>
                             </table>
                         </div>
-                        <!-- /.box-body -->
                     </div>
                 </div>
                 <!-- /.box-body -->
@@ -110,8 +96,8 @@
                     <button id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Back</button>
                 </div>
                 <!-- /.box-footer -->
+			</form>
         </div>
-        </form>
         <!-- /.box -->
     </div>
     <!-- Include the reject leave modal-->
