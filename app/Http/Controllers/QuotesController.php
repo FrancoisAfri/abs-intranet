@@ -709,7 +709,6 @@ class QuotesController extends Controller
                         $quote->products()->attach($productID, ['price' => $price, 'quantity' => $quantities[$productID], 'comment' => $comments[$productID]]);
                     }
                 }
-
                 //save quote's packages
                 $packagePrices = $request->input('package_price');
                 $packageQuantities = $request->input('package_quantity');

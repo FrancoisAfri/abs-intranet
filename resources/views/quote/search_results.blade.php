@@ -39,6 +39,8 @@
                         <thead>
                         <tr>
                             <th>#</th>
+                            <th>Quote Title</th>
+                            <th>Quote Number</th>
                             <th>{{ $highestLvl->name }}</th>
                             <th>contact Person</th>
                             <th>Creator</th>
@@ -50,6 +52,8 @@
                         @foreach($quoteApplications as $quoteApplication)
                             <tr>
                                 <td><button type="button" class="btn btn-primary" id="view_quote" onclick="postData({{$quoteApplication->id}}, 'view_quote');">View Quote</button></td>
+                                <td>{{$quoteApplication->quote_title}}</td>
+                                <td>{{$quoteApplication->quote_number}}</td>
                                 <td>{{$quoteApplication->company->name}}</td>
                                 <td>{{!empty($quoteApplication->client->first_name) ? $quoteApplication->client->first_name." ".$quoteApplication->client->surname : ''}}</td>
                                 <td>{{$quoteApplication->person->first_name." ".$quoteApplication->person->surname}}</td>
@@ -61,6 +65,8 @@
                         <tfoot>
                         <tr>
                             <th>#</th>
+							<th>Quote Title</th>
+                            <th>Quote Number</th>
                             <th>{{ $highestLvl->name }}</th>
                             <th>contact Person</th>
                             <th>Creator</th>
