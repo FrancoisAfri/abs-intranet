@@ -94,7 +94,7 @@
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Litres </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="litres" name="litres" value=""
+                            <input type="text" class="form-control" id="litres_new" name="litres_new" value=""
                                        min="0" step="0.001"
                                    placeholder="Enter Litres" required>
                         </div>

@@ -150,7 +150,7 @@
                                     <td>{{ !empty($details->tank_and_other) ?  $status[$details->tank_and_other] : ''}}</td>
                                     <td>{{ !empty($details->tankName) ?  $details->tankName : ''}}</td>
                                     <td>{{ !empty($details->Staion) ?  $details->Staion : ''}}</td>
-                                    <td style="text-align: center">{{ !empty($details->litres) ? number_format($details->litres, 2) : ''}}</td>
+                                    <td style="text-align: center">{{ !empty($details->litres_new) ? number_format($details->litres_new, 2) : ''}}</td>
                                     <td style="text-align: center">{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
                                     <td style="text-align: center">{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
                                     @if (isset($metreType) && $metreType === 1)
@@ -159,9 +159,9 @@
                                     <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' km,l' : ''}}</td>
                                      @endif
                                       @if (isset($metreType) && $metreType === 1)
-                                        <td style="text-align: center">{{ !empty($details->Odometer_reading) ? $details->Odometer_reading / $details->litres : 0}}</td>
+                                        <td style="text-align: center">{{ !empty($details->Odometer_reading) ? $details->Odometer_reading / $details->litres_new : 0}}</td>
                                      @else
-                                    <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading /$details->litres : 0 }}</td>
+                                    <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading /$details->litres_new : 0 }}</td>
                                      @endif
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
                                     <!--  <td style="text-align:center;" colspan="2"> -->
@@ -301,45 +301,45 @@
                 });
 
                 $(document).ready(function () {
-                    $('#litres').change(function () {
-                        var litres = $('#litres').val();
+                    $('#litres_new').change(function () {
+                        var litres_new = $('#litres_new').val();
                         var total_cost = $('#total_cost').val();
                         var litre_cost = $('#cost_per_litre').val();
 
-                        if (litre_cost > 0 && litres > 0) {
-                            var total_cost = (litres * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        if (litre_cost > 0 && litres_new > 0) {
+                            var total_cost = (litres_new * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                             document.getElementById('total_cost').value = total_cost;
                         }
-                        else if (litres > 0 && total_cost > 0) {
-                            var litre_cost = (total_cost / litres).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        else if (litres_new > 0 && total_cost > 0) {
+                            var litre_cost = (total_cost / litres_new).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                             document.getElementById('cost_per_litre').value = litre_cost;
                         }
                     });
 
                     $('#cost_per_litre').change(function () {
-                        var litres = $('#litres').val();
+                        var litres_new = $('#litres_new').val();
                         var total_cost = $('#total_cost').val();
                         var litre_cost = $('#cost_per_litre').val();
-                        if (litre_cost > 0 && litres > 0) {
-                            var total_cost = (litres * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        if (litre_cost > 0 && litres_new > 0) {
+                            var total_cost = (litres_new * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                             document.getElementById('total_cost').value = total_cost;
                         }
                         else if (litre_cost > 0 && total_cost > 0) {
-                            var litres = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            document.getElementById('litres').value = litres;
+                            var litres_new = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            document.getElementById('litres_new').value = litres_new;
                         }
                     });
 
                     $('#total_cost').change(function () {
-                        var litres = $('#litres').val();
+                        var litres_new = $('#litres_new').val();
                         var total_cost = $('#total_cost').val();
                         var litre_cost = $('#cost_per_litre').val();
                         if (litre_cost > 0 && total_cost) {
-                            var litres = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            document.getElementById('litres').value = litres;
+                            var litres_new = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                            document.getElementById('litres_new').value = litres_new;
                         }
-                        else if (litres > 0 && total_cost) {
-                            var litre_cost = (total_cost / litres).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+                        else if (litres_new > 0 && total_cost) {
+                            var litre_cost = (total_cost / litres_new).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                             document.getElementById('cost_per_litre').value = litre_cost;
                         }
                     });

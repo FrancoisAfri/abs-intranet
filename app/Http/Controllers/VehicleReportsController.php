@@ -1113,25 +1113,19 @@ class VehicleReportsController extends Controller
         $actionFrom = $actionTo = 0;
         $vehicle = '';
         $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
-        $reportID = $reportData['report_id'];
-        $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
-        $Destination = $request['destination'];
-        $Purpose = $request['purpose'];
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-
         $currentTime = time();
-
         $vehicleDocumets = DB::table('vehicle_documets')
             ->select('vehicle_documets.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.fleet_number as fleet_number'
-                , 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel', 'vehicle_details.vehicle_registration as vehicle_registration',
+                , 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake'
+				, 'vehicle_model.name as VehicleModel', 'vehicle_details.vehicle_registration as vehicle_registration',
                 'division_level_fives.name as company', 'division_level_fours.name as Department')
             ->leftJoin('vehicle_details', 'vehicle_documets.vehicleID', '=', 'vehicle_details.id')
             ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
@@ -1220,22 +1214,15 @@ class VehicleReportsController extends Controller
         $actionFrom = $actionTo = 0;
         $vehicle = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
         $vehicleArray = (explode(",", $vehicle));
-        $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
-        $Destination = $request['destination'];
-        $Purpose = $request['purpose'];
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-
-
         $currentTime = time();
-
         $vehicleDocumets = DB::table('vehicle_documets')
             ->select('vehicle_documets.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.fleet_number as fleet_number'
                 , 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel', 'vehicle_details.vehicle_registration as vehicle_registration',
@@ -1301,22 +1288,14 @@ class VehicleReportsController extends Controller
         $vehicle = '';
         $vehicle = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
         $vehicleArray = (explode(",", $vehicle));
-        $reportType = $reportData['report_type'];
         $vehicleType = $reportData['vehicle_type'];
-        $driverID = $reportData['driver_id'];
         $actionDate = $request['action_date'];
-        $Destination = $request['destination'];
-        $Purpose = $request['purpose'];
-
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-
-
         $currentTime = time();
-
         $VehicleLicences = DB::table('permits_licence')
             ->select('permits_licence.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.fleet_number as fleet_number'
                 , 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel', 'vehicle_details.vehicle_registration as vehicle_registration',
@@ -1346,8 +1325,6 @@ class VehicleReportsController extends Controller
             ->where('permits_licence.exp_date', '<', $currentTime)
             ->orderby('permits_licence.id', 'desc')
             ->get();
-
-
         $data['VehicleLicences'] = $VehicleLicences;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fleet Cards Report ";

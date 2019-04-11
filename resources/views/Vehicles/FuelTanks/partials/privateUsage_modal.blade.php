@@ -49,9 +49,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="litres" class="col-sm-2 control-label">Litres</label>
+                            <label for="litres_new" class="col-sm-2 control-label">Litres</label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="litres" name="litres" value=""
+                                <input type="text" class="form-control" id="litres_new" name="litres_new" value=""
                                        placeholder="Enter Litres ">
                             </div>
                         </div>

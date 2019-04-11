@@ -342,7 +342,7 @@ class VehicleFleetController extends Controller
         $generalcost->supplier_name = $SysData['supplier_name'];
         $generalcost->cost_type = !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
         $generalcost->cost = $SysData['cost'];
-        $generalcost->litres_new = $SysData['litres'];
+        $generalcost->litres_new = $SysData['litres_new'];
         $generalcost->description = $SysData['description'];
         $generalcost->person_esponsible = !empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
         $generalcost->vehicleID = $SysData['valueID'];
@@ -372,7 +372,7 @@ class VehicleFleetController extends Controller
         $costs->supplier_name = $SysData['supplier_name'];
         $costs->cost_type = !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
         $costs->cost = $SysData['cost'];
-        $costs->litres_new = $SysData['litres'];
+        $costs->litres_new = $SysData['litres_new'];
         $costs->description = $SysData['description'];
         $costs->person_esponsible = !empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
         $costs->update();
@@ -1490,7 +1490,7 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->captured_by = $loggedInEmplID;
         $vehiclefuellog->total_cost = !empty ($totalcost) ? $totalcost : 0;
         $vehiclefuellog->tank_and_other = !empty($fuelData['transaction']) ? $fuelData['transaction'] : 0;
-        $vehiclefuellog->litres_new = !empty($fuelData['litres']) ? $fuelData['litres'] : 0;
+        $vehiclefuellog->litres_new = !empty($fuelData['litres_new']) ? $fuelData['litres_new'] : 0;
         $vehiclefuellog->cost_per_litre = !empty($fuelData['cost_per_litre']) ? $fuelData['cost_per_litre'] : 0;
         $vehiclefuellog->Odometer_reading = !empty($fuelData['Odometer_reading']) ? $fuelData['Odometer_reading'] : 0;
         $vehiclefuellog->status = $BookingDetail['status'];

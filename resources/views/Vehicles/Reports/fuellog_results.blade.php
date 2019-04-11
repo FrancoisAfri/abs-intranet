@@ -33,7 +33,7 @@
 											<th>Destination</th>
 											<th>Service Station</th>
 											<th>Odometer Reading</th>
-											<th>litres</th>
+											<th>Litres</th>
 											<th>Cost</th>
 											<th>Rate per Litre</th>
 										</tr>
@@ -48,7 +48,7 @@
 											<td></td>
 											<td>{{ !empty($details->service_station) ?  $details->service_station: 'Nill' }}</td>
 											<td>{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }}</td>
-											<td>{{ !empty($details->litres) ?  $details->litres: '' }}</td>
+											<td>{{ !empty($details->litres_new) ?  $details->litres_new: '' }}</td>
 											<td>{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
 											<td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
 
@@ -65,7 +65,7 @@
 										<th>Destination</th>
 										<th>Service Station</th>
 										<th>Odometer Reading</th>
-										<th>litres</th>
+										<th>Litres</th>
 										<th>Cost</th>
 										<th>Rate per Litre</th>
 									</tr>

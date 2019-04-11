@@ -74,11 +74,11 @@
                         </div>-->
 
                         <div class="form-group">
-                            <label for="litres" class="col-sm-2 control-label">Litres</label>
+                            <label for="litres_new" class="col-sm-2 control-label">Litres</label>
                             <div class="col-sm-8">
-                                <input type="number" class="form-control" id="litres" name="litres" value="$iLitres"
+                                <input type="number" class="form-control" id="litres_new" name="litres_new" value="$iLitres"
                                        min="0" step="0.001"
-                                       placeholder="Enter litres " required>
+                                       placeholder="Enter litres_new " required>
                             </div>
                         </div>
                         <div class="form-group">

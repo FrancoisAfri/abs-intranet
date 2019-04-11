@@ -63,8 +63,8 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label"> Litre</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="litres" name="litres" value=""
-                                   placeholder="Enter litres" required>
+                            <input type="number" class="form-control" id="litres_new" name="litres_new" value=""
+                                   placeholder="Enter Litres" required>
                         </div>
                     </div>
 

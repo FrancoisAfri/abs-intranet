@@ -58,7 +58,7 @@
                                         <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                         <td>{{ (!empty( $filling->reading_before_filling)) ? 'R'.number_format($filling->reading_before_filling, 2) : 0}} </td>
                                         <td>{{ (!empty( $filling->reading_after_filling)) ? 'R'.number_format($filling->reading_after_filling, 2) : 0}} </td>
-                                        <td>{{ (!empty( $filling->litres)) ?  number_format($filling->litres, 2) : ''}} </td>
+                                        <td>{{ (!empty( $filling->litres_new)) ?  number_format($filling->litres_new, 2) : ''}} </td>
                                         <td>{{ (!empty( $filling->cost_per_litre)) ? 'R'.number_format($filling->cost_per_litre, 2) : ''}} </td>
                                         <td>{{ (!empty( $filling->total_cost)) ? 'R'.number_format($filling->total_cost, 2) : ''}} </td>
                                          <td style='text-align:center'>

@@ -411,10 +411,10 @@ class FuelManagementController extends Controller
             $CurrentAmount = DB::table('fuel_tanks')->where('id', $FueltankData['tank_id'])->pluck('current_fuel_litres')->first();
             $TankCapacity = DB::table('fuel_tanks')->where('id', $FueltankData['tank_id'])->pluck('tank_capacity')->first();
             $tank_capacity = 'tank_capacity';
-            $NewAmount = $CurrentAmount + $FueltankData['litres'];
+            $NewAmount = $CurrentAmount + $FueltankData['litres_new'];
 
             if ($NewAmount > $TankCapacity) {
-                $validator->errors()->add($tank_capacity, 'Error: Cannot exceed tank capacity. Available capacity:' . ($TankCapacity - $CurrentAmount) . " litres");
+                $validator->errors()->add($tank_capacity, 'Error: Cannot exceed tank capacity. Available capacity:' . ($TankCapacity - $CurrentAmount) . " litres_new");
             }
         });
         #Type 1 = incoming , Type 2 = Outgoing Type 3 = Private Usage
@@ -423,7 +423,7 @@ class FuelManagementController extends Controller
         $CurrentAmount = DB::table('fuel_tanks')->where('id', $FueltankData['tank_id'])->pluck('current_fuel_litres')->first();
         $TankCapacity = DB::table('fuel_tanks')->where('id', $FueltankData['tank_id'])->pluck('tank_capacity')->first();
 
-        $NewAmount = $CurrentAmount + $FueltankData['litres'];
+        $NewAmount = $CurrentAmount + $FueltankData['litres_new'];
 
         $totalcost = $FueltankData['total_cost'] = str_replace(',', '', $FueltankData['total_cost']);
         $totalcost = $FueltankData['total_cost'] = str_replace('. 00', '', $FueltankData['total_cost']);
@@ -443,7 +443,7 @@ class FuelManagementController extends Controller
         $topUp->type = 1; //Incoming
         $topUp->reading_before_filling = $CurrentAmount;
         $topUp->reading_after_filling = $NewAmount;
-        $topUp->litres_new = $FueltankData['litres'];
+        $topUp->litres_new = $FueltankData['litres_new'];
         $topUp->cost_per_litre = $FueltankData['cost_per_litre'];
         $topUp->total_cost = $totalcost;
         $topUp->description = $FueltankData['description'];
@@ -486,7 +486,7 @@ class FuelManagementController extends Controller
         $topUp->topup_date = $topupdate;
         $topUp->type = 3; //outgoing
 		$topUp->vehicle_id = $FueltankData['vehicle_id'];
-        $topUp->litres_new = $FueltankData['litres'];
+        $topUp->litres_new = $FueltankData['litres_new'];
         $topUp->description = $FueltankData['description'];
         $topUp->received_by = !empty($FueltankData['received_by']) ? $FueltankData['received_by'] : 0;
         $topUp->captured_by = $loggedInEmplID = Auth::user()->person->id;
@@ -817,7 +817,7 @@ class FuelManagementController extends Controller
 						->first();
 						if(!empty($fuelTankToUp))
 						{
-							//get tanks details and calculate tank new litres
+							//get tanks details and calculate tank new litres_new
 							$fuelTank = Fueltanks::where('id', $fuel->tank_name)->first();
 							$newFuel = $fuelTank->current_fuel_litres - $fuel->litres_new;
 							
@@ -850,7 +850,7 @@ class FuelManagementController extends Controller
 					if (!empty($fuelReject->tank_name))
 					{
 						$tank = Fueltanks::where('id', $fuelReject->tank_name)->first();
-						//get tanks details and calculate tank new litres
+						//get tanks details and calculate tank new litres_new
 						
 						$fuelTankToUp = FueltankTopUp::
 						where('vehicle_fuel_id', $fuelReject->id)

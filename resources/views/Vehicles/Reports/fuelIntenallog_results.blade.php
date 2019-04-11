@@ -46,10 +46,10 @@
 								<td> Internal </td> 
 								<td>{{ (!empty( $internallog->odometer_reading)) ?  $internallog->odometer_reading : 0}}  Km</td> 
 								<td>{{ (!empty( $internallog->hours_reading)) ?  $internallog->hours_reading : 0}} Hrs</td> 
-								<td style="text-align: center">{{ !empty($internallog->litres) ? number_format($internallog->litres, 2) : 0 }}</td>
-								<td>{{ (!empty( $internallog->odometer_reading)) ?  number_format($internallog->odometer_reading/$internallog->litres, 2) : 0}} </td>
-								<td>{{ (!empty( $internallog->hours_reading)) ?  number_format($internallog->hours_reading/$internallog->litres, 2) : 0}} </td>
-								<td> R {{ (!empty( $internallog->litres)) ?  number_format($internallog->total_cost/$internallog->litres, 2) : 0}} </td>
+								<td style="text-align: center">{{ !empty($internallog->litres_new) ? number_format($internallog->litres_new, 2) : 0 }}</td>
+								<td>{{ (!empty( $internallog->odometer_reading)) ?  number_format($internallog->odometer_reading/$internallog->litres_new, 2) : 0}} </td>
+								<td>{{ (!empty( $internallog->hours_reading)) ?  number_format($internallog->hours_reading/$internallog->litres_new, 2) : 0}} </td>
+								<td> R {{ (!empty( $internallog->litres_new)) ?  number_format($internallog->total_cost/$internallog->litres_new, 2) : 0}} </td>
 								<td style="text-align: center"> R {{ !empty($internallog->total_cost) ? number_format($internallog->total_cost, 2) : 0 }}</td>
 							</tr>
 						@endforeach

@@ -55,7 +55,7 @@
                                         <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>
                                         <td>{{ (!empty( $filling->Hoursreading)) ?  $filling->Hoursreading : ''}} </td>
                                         <td>{{ (!empty( $filling->Staion)) ?  $filling->Staion : ''}} </td>
-                                        <td>{{ (!empty( $filling->litres)) ?  number_format($filling->litres, 2) : ''}} </td>
+                                        <td>{{ (!empty( $filling->litres_new)) ?  number_format($filling->litres_new, 2) : ''}} </td>
                                         <td>{{ (!empty( $filling->cost_per_litre)) ?   'R '.number_format($filling->cost_per_litre, 2) : ''}} </td>
                                         <td>{{ (!empty( $filling->total_cost)) ? 'R '.number_format($filling->total_cost, 2) : ''}} </td>
                                         <td style='text-align:center'>

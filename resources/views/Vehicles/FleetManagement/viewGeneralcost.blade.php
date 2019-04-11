@@ -121,7 +121,7 @@
                                                 data-document_number="{{ $reminder->document_number }}"
                                                 data-supplier_name="{{ $reminder->supplier_name }}"
                                                 data-cost_type="{{ $reminder->cost_type }}"
-                                                data-cost="{{ $reminder->cost }}" data-litres="{{ $reminder->litres }}"
+                                                data-cost="{{ $reminder->cost }}" data-litres_new="{{ $reminder->litres_new }}"
                                                 data-description="{{ $reminder->description }}"><i
                                                     class="fa fa-pencil-square-o"></i> Edit
                                         </button>
@@ -131,7 +131,7 @@
                                     <td>{{ !empty($reminder->supplier_name) ?  $reminder->supplier_name : '' }}</td>
                                     <td>{{ (!empty($reminder->cost_type)) ?  $costtype[$reminder->cost_type] : ''}}</td>
                                     <td>{{ !empty($reminder->cost) ?  'R' .number_format($reminder->cost, 2): '' }}</td>
-                                    <td>{{ !empty($reminder->litres) ?  number_format($reminder->litres, 2) : '' }}</td>
+                                    <td>{{ !empty($reminder->litres_new) ?  number_format($reminder->litres_new, 2) : '' }}</td>
                                     <td>{{ !empty($reminder->description) ?  $reminder->description : '' }}</td>
                                     <td>{{ !empty($reminder->first_name . ' ' . $reminder->surname) ? $reminder->first_name . ' ' . $reminder->surname : ''}}</td>
                                     <td>
@@ -298,7 +298,7 @@
                     var supplier_name = btnEdit.data('supplier_name');
                     var cost_type = btnEdit.data('cost_type');
                     var cost = btnEdit.data('cost');
-                    var litres = btnEdit.data('litres');
+                    var litres_new = btnEdit.data('litres_new');
                     var description = btnEdit.data('description');
                     var person_esponsible = btnEdit.data('person_esponsible');
                     var valueID = btnEdit.data('valueID');
@@ -308,7 +308,7 @@
                     modal.find('#supplier_name').val(supplier_name);
                     modal.find('#cost_type').val(cost_type);
                     modal.find('#cost').val(cost);
-                    modal.find('#litres').val(litres);
+                    modal.find('#litres_new').val(litres_new);
                     modal.find('#description').val(description);
                     modal.find('#person_esponsible').val(person_esponsible);
                     modal.find('#valueID').val(valueID);
