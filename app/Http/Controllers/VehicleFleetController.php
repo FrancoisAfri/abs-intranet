@@ -342,7 +342,7 @@ class VehicleFleetController extends Controller
         $generalcost->supplier_name = $SysData['supplier_name'];
         $generalcost->cost_type = !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
         $generalcost->cost = $SysData['cost'];
-        $generalcost->litres = $SysData['litres'];
+        $generalcost->litres_new = $SysData['litres'];
         $generalcost->description = $SysData['description'];
         $generalcost->person_esponsible = !empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
         $generalcost->vehicleID = $SysData['valueID'];
@@ -372,7 +372,7 @@ class VehicleFleetController extends Controller
         $costs->supplier_name = $SysData['supplier_name'];
         $costs->cost_type = !empty($SysData['cost_type']) ? $SysData['cost_type'] : 1;
         $costs->cost = $SysData['cost'];
-        $costs->litres = $SysData['litres'];
+        $costs->litres_new = $SysData['litres'];
         $costs->description = $SysData['description'];
         $costs->person_esponsible = !empty($SysData['person_esponsible']) ? $SysData['person_esponsible'] : 1;
         $costs->update();
@@ -1267,17 +1267,15 @@ class VehicleFleetController extends Controller
         $now = Carbon::now();
 
         $startExplode = explode('_', $date);
-        $imonth = $startExplode[0];
+        $month = $startExplode[0];
         $command = (!empty($startExplode[1]) ? $startExplode[1] : 0);
-        $iYear = (!empty($startExplode[2]) ? $startExplode[2] : 0);
-
-
+        $year = (!empty($startExplode[2]) ? $startExplode[2] : 0);
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
 
         $Details = vehicle_detail::where('id', $maintenance->id)->first();
-        $MetreType = $Details->metre_reading_type;
+        $metreType = $Details->metre_reading_type;
 
-        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $servicestation = fleet_fillingstation::orderBy('id', 'desc')->get();
         $fueltank = Fueltanks::orderBy('id', 'desc')->get();
 
@@ -1285,20 +1283,18 @@ class VehicleFleetController extends Controller
         $commands = $command;
 
         if ($commands === 0) {
-            $imonth = $now->month;
-            $iYear = $now->year;
+            $month = $now->month;
+            $year = $now->year;
         } elseif ($commands === 'p') {
-            if ($imonth == 1) {
-                $iYear = $iYear - 1;
-                $imonth = 12;
-            } else $imonth = $imonth - 1;
-
-
+            if ($month == 1) {
+                $year = $year - 1;
+                $month = 12;
+            } else $month = $month - 1;
         } elseif ($commands === 'n') {
-            if ($imonth == 12) {
-                $iYear = $iYear + 1;
-                $imonth = 1;
-            } else $imonth = $imonth + 1;
+            if ($month == 12) {
+                $year = $year + 1;
+                $month = 1;
+            } else $month = $month + 1;
         }
 
         ################## WELL DETAILS ###############
@@ -1326,14 +1322,13 @@ class VehicleFleetController extends Controller
 
         $datetaken = date('n');
 
-        if ($imonth < 10) {
-            $imonth = 0. . $imonth;
-        } else $imonth = $imonth;
+        if ($month < 10) {
+            $month = 0. . $month;
+        } else $month = $month;
 
         $ID = $maintenance->id;
-        $iTotalLitres = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('litres');
-        $sCurrency = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('total_cost');
-
+        $totalLitres = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('litres_new');
+        $totalCosts = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('total_cost');
 
         $vehiclefuellog = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName')
@@ -1342,13 +1337,10 @@ class VehicleFleetController extends Controller
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
             ->orderBy('vehicle_fuel_log.id')
             ->where('vehicle_fuel_log.vehicleID', $ID)
-            ->whereMonth('vehicle_fuel_log.created_at', '=', $imonth)// show record for this month
-            ->whereYear('vehicle_fuel_log.created_at', '=', $iYear)// show record for this year
+            ->whereMonth('vehicle_fuel_log.created_at', '=', $month)// show record for this month
+            ->whereYear('vehicle_fuel_log.created_at', '=', $year)// show record for this year
             // ->where('vehicle_fuel_log.status','!=', 1)
             ->get();
-
-        //return $vehiclefuellog;
-
 
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
@@ -1361,20 +1353,16 @@ class VehicleFleetController extends Controller
             4 => "Pending Manager Approval",
             1 => "Approved",
             14 => "Rejected");
-
-
-        $icurrentmonth = date('n');
-        if ($icurrentmonth < 10) {
-            $icurrentmonth = 0. . $icurrentmonth;
-        } else $icurrentmonth = $icurrentmonth;
-
-
-        $data['MetreType'] = $MetreType;
-        $data['icurrentmonth'] = $icurrentmonth;
-        $data['imonth'] = $imonth;
-        $data['iYear'] = $iYear;
-        $data['sCurrency'] = $sCurrency;
-        $data['iTotalLitres'] = $iTotalLitres;
+        $currentmonth = date('n');
+        if ($currentmonth < 10) {
+            $currentmonth = 0. . $currentmonth;
+        } else $currentmonth = $currentmonth;
+        $data['metreType'] = $metreType;
+        $data['currentmonth'] = $currentmonth;
+        $data['month'] = $month;
+        $data['year'] = $year;
+        $data['totalCosts'] = $totalCosts;
+        $data['totalLitres'] = $totalLitres;
         $data['datetaken'] = $datetaken;
         $data['ID'] = $ID;
         $data['ContactCompany'] = $ContactCompany;
@@ -1471,34 +1459,27 @@ class VehicleFleetController extends Controller
     public function addvehiclefuellog(Request $request)
     {
         $this->validate($request, [
-            'tank_name' => 'bail|required',
+            'tank_name' => 'required_if:transaction,1',
             //'Odometer_reading' => 'bail|required',
             'document_number' => 'required|unique:vehicle_fuel_log,document_number',
-
         ]);
         $fuelData = $request->all();
         unset($fuelData['_token']);
 
         $currentDate = time();
-
         $bookingStatus = array(10 => "Pending Capturer Ceo Approval",
             4 => "Pending Tank Manager",
             1 => "Approved",
             14 => "Rejected");
-
-        $hrID = $fuelData['rensonsible_person'];
+		$loggedInEmplID = Auth::user()->person->id;
         $tankID = $fuelData['tank_name'];
-
         $BookingDetails = array();
-        $BookingDetail = VehicleFleetController::BookingDetails(0, $hrID, 0, $tankID);
-
+        $BookingDetail = VehicleFleetController::BookingDetails(0, $loggedInEmplID, 0, $tankID);
         $dateofincident = $fuelData['date'] = str_replace('/', '-', $fuelData['date']);
         $dateofincident = $fuelData['date'] = strtotime($fuelData['date']);
 
         $totalcost = $fuelData['total_cost'] = str_replace(',', '', $fuelData['total_cost']);
         $totalcost = $fuelData['total_cost'] = str_replace('. 00', '', $fuelData['total_cost']);
-
-        $loggedInEmplID = Auth::user()->person->id;
 
         $vehiclefuellog = new vehicle_fuel_log($fuelData);
         $vehiclefuellog->date = $dateofincident;
@@ -1506,10 +1487,10 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->driver = !empty($fuelData['driver']) ? $fuelData['driver'] : 0;
         $vehiclefuellog->tank_name = !empty($fuelData['tank_name']) ? $fuelData['tank_name'] : 0;
         $vehiclefuellog->service_station = !empty($fuelData['service_station']) ? $fuelData['service_station'] : 0;
-        $vehiclefuellog->rensonsible_person = !empty($fuelData['rensonsible_person']) ? $fuelData['rensonsible_person'] : 0;
         $vehiclefuellog->captured_by = $loggedInEmplID;
         $vehiclefuellog->total_cost = !empty ($totalcost) ? $totalcost : 0;
         $vehiclefuellog->tank_and_other = !empty($fuelData['transaction']) ? $fuelData['transaction'] : 0;
+        $vehiclefuellog->litres_new = !empty($fuelData['litres']) ? $fuelData['litres'] : 0;
         $vehiclefuellog->cost_per_litre = !empty($fuelData['cost_per_litre']) ? $fuelData['cost_per_litre'] : 0;
         $vehiclefuellog->Odometer_reading = !empty($fuelData['Odometer_reading']) ? $fuelData['Odometer_reading'] : 0;
         $vehiclefuellog->status = $BookingDetail['status'];
@@ -1525,7 +1506,7 @@ class VehicleFleetController extends Controller
 			$topUp->document_date = $dateofincident;
 			$topUp->topup_date = $dateofincident;
 			$topUp->type = 2; //outgoing
-			$topUp->litres = $vehiclefuellog->litres;
+			$topUp->litres_new = $vehiclefuellog->litres_new;
 			$topUp->description = $vehiclefuellog->description;
 			$topUp->received_by = $vehiclefuellog->driver;
 			$topUp->captured_by = $loggedInEmplID; 

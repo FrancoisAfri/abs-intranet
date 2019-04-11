@@ -11,14 +11,23 @@ class DivisionLevelFive extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'name', 'active', 'manager_id'
+        'name', 'active', 'manager_id', 'hr_manager_id', 'payroll_officer'
     ];
 
     //Relationship Division level 5 and hr_person (manager)
     public function manager() {
         return $this->belongsTo(HRPerson::class, 'manager_id');
+    }    
+	
+	//Relationship Division level 5 and hr_person (HRmanager)
+    public function hrManager() {
+        return $this->belongsTo(HRPerson::class, 'hr_manager_id');
     }
-
+	
+	//Relationship Division level 5 and hr_person (payrollofficer)
+    public function payrollOfficer() {
+        return $this->belongsTo(HRPerson::class, 'payroll_officer');
+    }
     //Relationship Division level 5 and Division level
     public function divisionLevel() {
         return $this->belongsTo(DivisionLevel::class, 'division_level_id');

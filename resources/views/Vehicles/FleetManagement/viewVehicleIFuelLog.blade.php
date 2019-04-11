@@ -108,13 +108,13 @@
                         <button type="button" class="btn btn-default pull-left" id="previous_button" value=""><i
                                     class="fa fa-caret-square-o-left"></i> Previous Month
                         </button>
-                        <input type="hidden" name="calendar_month" id="calendar_month" value="{{$imonth}}">
-                        <input type="hidden" name="calendar_year" id="calendar_year" value="{{$iYear}}}">
-                        {{--@if (isset($imonth) && $imonth === $icurrentmonth )--}}
+                        <input type="hidden" name="calendar_month" id="calendar_month" value="{{$month}}">
+                        <input type="hidden" name="calendar_year" id="calendar_year" value="{{$year}}}">
+                        @if (isset($month) && $month < $currentmonth )
                             <button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
                                         class="fa fa-caret-square-o-right"></i> Next Month
                             </button>
-                        {{--@endif--}}
+                        @endif
                     </div>
                     <table class="table table-bordered">
                         <tr>
@@ -127,12 +127,12 @@
                             <th>Fuel in Litres</th>
                             <th>Cost per Litres</th>
                             <th>Cost (R)</th>
-                            @if (isset($MetreType) && $MetreType === 1)
+                            @if (isset($metreType) && $metreType === 1)
                                 <th>Odometer Reading</th>
                             @else
                                 <th>Hours Reading</th>
                             @endif
-                            @if (isset($MetreType) && $MetreType === 1)
+                            @if (isset($metreType) && $metreType === 1)
                             <th>Kilometre Per Litre</th>
                             @else
                             <th>Hours Per Litre</th>
@@ -153,12 +153,12 @@
                                     <td style="text-align: center">{{ !empty($details->litres) ? number_format($details->litres, 2) : ''}}</td>
                                     <td style="text-align: center">{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
                                     <td style="text-align: center">{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
-                                    @if (isset($MetreType) && $MetreType === 1)
+                                    @if (isset($metreType) && $metreType === 1)
                                     <td style="text-align: center">{{ !empty($details->Odometer_reading) ? $details->Odometer_reading : ''}}</td>
                                      @else
                                     <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' km,l' : ''}}</td>
                                      @endif
-                                      @if (isset($MetreType) && $MetreType === 1)
+                                      @if (isset($metreType) && $metreType === 1)
                                         <td style="text-align: center">{{ !empty($details->Odometer_reading) ? $details->Odometer_reading / $details->litres : 0}}</td>
                                      @else
                                     <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading /$details->litres : 0 }}</td>
@@ -176,9 +176,9 @@
                             <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
                             <class="caption">
                             <td colspan="6" style="text-align:right">Total</td>
-                            <td style="text-align: center">{{number_format($iTotalLitres, 2) }}</td>
+                            <td style="text-align: center">{{number_format($totalLitres, 2) }}</td>
                             <td style="text-align: center">&nbsp;</td>
-                            <td style="text-align: center" nowrap>{{'R '.number_format($sCurrency, 2)}}</td>
+                            <td style="text-align: center" nowrap>{{'R '.number_format($totalCosts, 2)}}</td>
                             <td style="text-align: center"><span style="float:right"></span></br><span
                                         style="float:right"></span></td>
                             <td style="text-align: center"></td>
@@ -256,11 +256,11 @@
                 }
 
                 $('#previous_button').click(function () {
-                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$imonth. '_' . 'p' . '_' . $iYear }}';
+                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$month. '_' . 'p' . '_' . $year }}';
                 });
 
                 $('#next_button').click(function () {
-                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$imonth. '_' . 'n' . '_' . $iYear }}';
+                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$month. '_' . 'n' . '_' . $year }}';
                 });
                 var moduleId;
                 //Initialize Select2 Elements

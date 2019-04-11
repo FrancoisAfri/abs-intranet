@@ -29,8 +29,6 @@ class Accept_application extends Mailable
         $this->email = $email;
 
     }
-
-
     /**
      * Build the message.
      *
@@ -45,7 +43,7 @@ class Accept_application extends Mailable
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
-        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['company_logo'] = url('/') .[  $companyDetails['company_logo_url'];
         $data['profile_url'] = url('/users/profile');
 
         return $this->view('mails.approved_leave_application')

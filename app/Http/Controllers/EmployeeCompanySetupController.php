@@ -30,10 +30,9 @@ class EmployeeCompanySetupController extends Controller
 
     public function viewLevel()
     {
-           $jobCategories = JobCategory::orderBy('name', 'asc')->get();
+        $jobCategories = JobCategory::orderBy('name', 'asc')->get();
         if (!empty($leave_customs))
           $jobCategories = $jobCategories->load('catJobTitle');
-        // return $jobCategories ;
         //get the highest active level
         $doc_type = DB::table('doc_type')->orderBy('name', 'description')->get();
         $childLevelname = null;
@@ -41,12 +40,11 @@ class EmployeeCompanySetupController extends Controller
         $Qualif_type = DB::table('Qualification_type')->orderBy('id')->get();
         #Qualification_type::where('status', 1)->get();
         $employees = HRPerson::where('status', 1)->get();
-        $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager');
+        $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager','divisionLevelGroup.hrManager','divisionLevelGroup.payrollOfficer');
         $lowestactiveLvl = DivisionLevel::where('active', 1)->orderBy('level', 'asc')->limit(1)->get()->first()->level;
         if ($highestLvl->level > $lowestactiveLvl) {
             $childLevelname = DivisionLevel::where('level', $highestLvl->level - 1)->get()->first()->plural_name;
         }
-        //return $lowestactiveLvl;
         $data['doc_type'] =$doc_type;
         $data['division_types'] = $division_types;
         $data['Qualif_type'] = $Qualif_type;
@@ -54,24 +52,21 @@ class EmployeeCompanySetupController extends Controller
         $data['highestLvl'] = $highestLvl;
         $data['lowestactiveLvl'] = $lowestactiveLvl;
         $data['childLevelname'] = $childLevelname;
-        $data['page_title'] = "Company Setup";
-        $data['page_description'] = "Company records";
+        $data['page_title'] = "Setup";
+        $data['page_description'] = "Company Records";
         $data['breadcrumb'] = [
             ['title' => 'HR', 'path' => '/hr', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'Company Setup';
-        //return $highestLvl;
 
         AuditReportsController::store('Employee records', 'Setup Search Page Accessed', "Actioned By User", 0);
-        //return $highestLvl->level . ' > '. $lowestactiveLvl;
         return view('hr.company_setup')->with($data);
     }
 
     public function addLevel(Request $request, DivisionLevel $divLevel)
     {
-
         $this->validate($request, [
             'manager_id' => 'required',
             'name' => 'required',
@@ -104,19 +99,14 @@ class EmployeeCompanySetupController extends Controller
     {
         if ($divLevel->level == 5) {
             $childDiv = DivisionLevelFive::find($childID);
-
         } elseif ($divLevel->level == 4) {
             $childDiv = DivisionLevelFour::find($childID);
-
         } elseif ($divLevel->level == 3) {
             $childDiv = DivisionLevelThree::find($childID);
-
         } elseif ($divLevel->level == 2) {
             $childDiv = DivisionLevelTwo::find($childID);
-
         } elseif ($divLevel->level == 1) {
             $childDiv = DivisionLevelOne::find($childID);
-
         }
         if ($childDiv->active == 1) $stastus = 0;
         else $stastus = 1;
@@ -132,7 +122,6 @@ class EmployeeCompanySetupController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'manager_id' => 'numeric|required',
-
         ]);
 
         if ($divLevel->level == 5) {
@@ -151,8 +140,6 @@ class EmployeeCompanySetupController extends Controller
             $childDiv = DivisionLevelOne::find($childID);
             $childDiv->update($request->all());
         }
-
-
         AuditReportsController::store('Employee records', 'division level Informations Edited', "Edited by User", 0);
         return response()->json();
     }
@@ -181,17 +168,13 @@ class EmployeeCompanySetupController extends Controller
             $parentDiv = DivisionLevelOne::find($parent_id);
             $childDiv = null;
             $intCurrentLvl = 0;
-
         }
-        //$division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
-        $employees = HRPerson::where('status', 1)->get();
-        //$highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager', 'divisionLevelGroup.childDiv.divisionLevel');
+		$employees = HRPerson::where('status', 1)->get();
         $lowestactiveLvl = DivisionLevel::where('active', 1)->orderBy('level', 'asc')->limit(1)->get()->first()->level;
         if ($parentLevel > $lowestactiveLvl) {
             $childLevel = DivisionLevel::where('level', $parentLevel - 1)->get()->first();
             $curLvlChild = DivisionLevel::where('level', $childLevel->level - 1)->get()->first();
         }
-        //return $lowestactiveLvl;
         $data['childDiv'] = $childDiv;
         $data['employees'] = $employees;
         $data['parentLevel'] = $parentLevel;
@@ -211,22 +194,17 @@ class EmployeeCompanySetupController extends Controller
         return view('hr.child_setup')->with($data);
     }
 
-
     public function addChild(Request $request, $parentLevel, $parent_id)
     {
-
         $this->validate($request, [
             'manager_id' => 'required',
             'name' => 'required',
         ]);
         $childData = $request->all();
-
-
         if ($parentLevel == 5) {
             $parentDiv = DivisionLevelFive::find($parent_id);
             $childDiv = new DivisionLevelFour($childData);
             $childDiv->division_level_id = 4;
-
         } elseif ($parentLevel == 4) {
             $parentDiv = DivisionLevelFour::find($parent_id);
             $childDiv = new DivisionLevelThree($childData);
@@ -245,23 +223,16 @@ class EmployeeCompanySetupController extends Controller
         }
         $childDiv->active = 1;
         $parentDiv->addChildDiv($childDiv);
-
-        // return $divLevel;
-
         AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
     }
 
     public function updateChild(Request $request, $parentLevel, $childID)
     {
-
         $this->validate($request, [
             'manager_id' => 'required',
             'name' => 'required',
         ]);
-
         $childData = $request->all();
-
-
         if ($parentLevel == 5) {
             $childDiv = DivisionLevelFive::find($childID);
             $childDiv->update($request->all());
@@ -278,10 +249,8 @@ class EmployeeCompanySetupController extends Controller
             $childDiv = DivisionLevelOne::find($childID);
             $childDiv->update($request->all());
         }
-
         AuditReportsController::store('Employee records', 'Employee Group Level Modified', "Actioned By User", 0);
         return response()->json();
-
     }
 
 
@@ -289,7 +258,6 @@ class EmployeeCompanySetupController extends Controller
     {
         if ($parentLevel == 5) {
             $childDiv = DivisionLevelFive::find($childID);
-
         } elseif ($parentLevel == 4) {
             $childDiv = DivisionLevelFour::find($childID);
         } elseif ($parentLevel == 3) {
@@ -313,7 +281,6 @@ class EmployeeCompanySetupController extends Controller
          $this->validate($request, [
             'name' => 'required',
             'description'=> 'required',
-
         ]);
          $Data = $request->all();
         unset($Data['_token']);
@@ -323,23 +290,19 @@ class EmployeeCompanySetupController extends Controller
         AuditReportsController::store('Leave', 'Leave Qualification_type saved ', "Edited by User",0);
         return response()->json();
     }
-     public function editQualType(Request $request, Qualification_type $qul)
+    public function editQualType(Request $request, Qualification_type $qul)
     {
-        //$user = Auth::user()->load('person');
         $this->validate($request, [
             'name' => 'required',
             'description'=> 'required',
-
         ]);
-        //$lev->hr_id = $request->input('hr_id');
-         $qul->name =  $request->input('name');
-         $qul->description = $request->input('description');
-         $qul->update();
-        //return $lev;
-AuditReportsController::store('Leave Qualification Type', 'Qualification Type Informations Edited',"Edited by User", 0);
-         return response()->json();
+        $qul->name =  $request->input('name');
+        $qul->description = $request->input('description');
+        $qul->update();
+		AuditReportsController::store('Leave Qualification Type', 'Qualification Type Informations Edited',"Edited by User", 0);
+        return response()->json();
     }
-     public function QualAct(Qualification_type $sta) 
+    public function QualAct(Qualification_type $sta) 
     {
         if ($sta->status == 1) $stastus = 0;
         else $stastus = 1;
@@ -348,17 +311,14 @@ AuditReportsController::store('Leave Qualification Type', 'Qualification Type In
         $sta->update();
         return back();
     }
+    #Document Type
+    public function addDocType(Request $request  ){
 
-
-      #Document Type
-      public function addDocType(Request $request  ){
-
-         $this->validate($request, [
-            'name' => 'required',
-            'description'=> 'required',
-
+        $this->validate($request, [
+           'name' => 'required',
+           'description'=> 'required',
         ]);
-         $Data = $request->all();
+        $Data = $request->all();
         unset($Data['_token']);
         $Doctype = new doc_type();
         $Doctype->updateOrCreate(['name' => $Data['name']], ['description' => $Data['description']]);
@@ -366,22 +326,20 @@ AuditReportsController::store('Leave Qualification Type', 'Qualification Type In
         AuditReportsController::store('Document Type', 'Document Type saved ', "Edited by User",0);
         return response()->json();
     }
-     public function editDocType(Request $request, doc_type $doc)
+    public function editDocType(Request $request, doc_type $doc)
     {
         $this->validate($request, [
             'name' => 'required',
             'description'=> 'required',
 
         ]);
-        //$lev->hr_id = $request->input('hr_id');
-         $doc->name =  $request->input('name');
-         $doc->description = $request->input('description');
-         $doc->update();
-        //return $lev;
-AuditReportsController::store('Document Type', 'Document  Type Informations Edited',"Edited by User", 0);
-         return response()->json();
+        $doc->name =  $request->input('name');
+        $doc->description = $request->input('description');
+        $doc->update();
+		AuditReportsController::store('Document Type', 'Document  Type Informations Edited',"Edited by User", 0);
+        return response()->json();
     }
-     public function DocAct(doc_type $sta) 
+    public function DocAct(doc_type $sta) 
     {
         if ($sta->active == 1) $stastus = 0;
         else $stastus = 1;
@@ -391,7 +349,3 @@ AuditReportsController::store('Document Type', 'Document  Type Informations Edit
         return back();
     }  
 }
-
-
-
-

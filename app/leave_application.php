@@ -11,20 +11,16 @@ class leave_application extends Model
                           'end_date','status','hr_id','leave_type_id','start_time',
                           'end_time','manager_id','reject_reason','leave_days','leave_hours'
                           ];
-    
-     // public $status = [
-     // 0 => 'Pending', 
-     // 1 => 'require_managers_approval',
-     // 2 => 'require_department_head_approval',
-     // 3 => 'require_hr_approval',
-     // 4 => 'require_payroll_approval',
-     // 5 => 'Approved', 5 => 'Rejected'
-     // ];
-    
+    // public $status = [
+    // 0 => 'Pending', 
+    // 1 => 'require_managers_approval',
+    // 2 => 'require_department_head_approval',
+    // 3 => 'require_hr_approval',
+    // 4 => 'require_payroll_approval',
+    // 5 => 'Approved', 5 => 'Rejected'
+    // ];
     //->status
     //->leave_status
-
-    
     //Relationship leave_application and leave_type
     public function leavetpe(){
        return $this->belongsTo(LeaveType::class, 'leave_type_id'); 
@@ -44,7 +40,6 @@ class leave_application extends Model
     public function canceller() {
         return $this->belongsTo(HRPerson::class, 'canceller_id');
     }
-
     // //Return leave status string valu
     // public function getLeaveStatusAttribute () {
     //   return $status[$this->status];

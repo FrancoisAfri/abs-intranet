@@ -22,6 +22,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 
 class LeaveApplicationController extends Controller
 {
@@ -472,7 +474,31 @@ class LeaveApplicationController extends Controller
         return back()->with('success_application', "leave application was successful.");
     }
 
-    //Function to accept leave applications
+    public function viewApplication(leave_application $leave)
+    {
+		if (!empty($leave)) $leave = $leave->load('person','manager','leavetpe');
+		
+		AuditReportsController::store('Leave Management', 'Leave Application Printed', "Accessed By User");
+		$companyDetails = CompanyIdentity::systemSettings();
+		$companyName = $companyDetails['company_name'];
+		$user = Auth::user()->load('person');
+
+		$data['support_email'] = $companyDetails['support_email'];
+		$data['company_name'] = $companyName;
+		$data['full_company_name'] = $companyDetails['full_company_name'];
+		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+		$data['date'] = date("d-m-Y");
+		$data['user'] = $user;
+		$data['user'] = $leave;
+		$data['file_name'] = 'LeaveApplication';
+		$view = view('leave.leave_application', $data)->render();
+		$pdf = resolve('dompdf.wrapper');
+		$pdf->getDomPDF()->set_option('enable_html5_parser', true);
+		$pdf->loadHTML($view);
+		return $pdf->output();
+    }
+	
+	//Function to accept leave applications
     public function AcceptLeave(Request $request, leave_application $leaveId, leave_history $levHist, leave_credit $credit, leave_configuration $leave_conf)
     {	
         $loggedInEmplID = Auth::user()->person->id;
@@ -534,8 +560,13 @@ class LeaveApplicationController extends Controller
                 ->where('id', $iD)
                 ->update(['status' => 1]);
         }
+		$jcAttachment = $this->viewApplication($iD);
         #send email to the user informing that the leave has been accepted
-        Mail::to($email)->send(new Accept_application($firstname, $surname, $email));
+        Mail::to($email)->send(new Accept_application($firstname, $surname, $email, $jcAttachment));
+        // Send email to employee manager
+		Mail::to($email)->send(new Accept_application($firstname, $surname, $email, $jcAttachment));
+        // send emal to Hr manager
+		Mail::to($email)->send(new Accept_application($firstname, $surname, $email, $jcAttachment));
         LeaveHistoryAuditController::store("leave application Approved", 0, $leave_balance, $daysApplied, $newBalance, $levTyp, $hriD);
         AuditReportsController::store('Leave Management', 'leave_approval Informations accepted', "Edited by User: $levHist->hr_id", 0);
         return back()->with('success_application', "leave application was successful.");

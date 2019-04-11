@@ -13,7 +13,7 @@ class AddHrPersonToDivisionLevelOnes extends Migration
      */
     public function up()
     {
-         Schema::table('division_level_ones', function($table) {
+        Schema::table('division_level_ones', function($table) {
             $table->integer('hr_person_id')->unsigned()->index()->nullable();
             $table->integer('payrollPerson_id')->unsigned()->index()->nullable();
         });
@@ -26,9 +26,9 @@ class AddHrPersonToDivisionLevelOnes extends Migration
      */
     public function down()
     {
-            Schema::table('division_level_ones', function($table) {
-                       $table->dropColumn('hr_person_id');
-                       $table->dropColumn('payrollPerson_id');
-                });  
-    }
+		Schema::table('division_level_ones', function($table) {
+				   $table->dropColumn('hr_person_id');
+				   $table->dropColumn('payrollPerson_id');
+		}); 
+	}
 }

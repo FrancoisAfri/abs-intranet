@@ -89,7 +89,6 @@
                             </select>
                         </div>
                     </div>
-
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Litres </label>
                         <div class="col-sm-8">
@@ -98,7 +97,6 @@
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
-
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Cost per Litre </label>
                         <div class="col-sm-8">
@@ -140,31 +138,8 @@
                                       placeholder="Enter description..." rows="3">{{ old('description') }}</textarea>
                         </div>
                     </div>
-
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Captured By</label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="captured_by" name="captured_by" value="{{ $name }}"
-                                   placeholder="{{ $name }}" required readonly="">
-                        </div>
-                    </div>
-
-                   <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Person Responsible </label>
-                        <div class="col-sm-8">
-                            <select class="form-control select2" style="width: 100%;"
-                                    id="rensonsible_person" name="rensonsible_person">
-                                <option value="0">*** Select User  ***</option>
-                                @foreach($employees as $user)
-                                    <option value="{{ $user->id }}">{{ $user->first_name . ' ' . $user->surname }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
-
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
