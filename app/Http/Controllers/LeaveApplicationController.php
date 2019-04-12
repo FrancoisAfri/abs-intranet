@@ -7,6 +7,7 @@ use App\hr_person;
 use App\HRPerson;
 use App\Http\Requests;
 use APP\leavDetails;
+use APP\DivisionLevelFive;
 use App\leave_application;
 use App\leave_configuration;
 use App\leave_credit;
@@ -14,6 +15,8 @@ use App\leave_custom;
 use App\leave_history;
 use App\LeaveType;
 use App\Mail\Accept_application;
+use App\Mail\SendLeaveApplicationToManager;
+use App\Mail\SendLeaveApplicationToHrManager;
 use App\Mail\leave_applications;
 use App\Mail\LeaveRejection;
 use App\Users;
@@ -507,12 +510,10 @@ class LeaveApplicationController extends Controller
         $levTyp = $leaveId->leave_type_id;
         $hriD = $leaveId->hr_id;
         #query the hr person table
-        $usedetails = HRPerson::where('id', $hriD)
-            ->select('first_name', 'surname', 'email')
-            ->first();
-        $firstname = $usedetails['first_name'];
-        $surname = $usedetails['surname'];
-        $email = $usedetails['email'];
+		$hrDetails = HRPerson::where('id', $hriD)->where('status', 1)->first();
+        $firstname = $hrDetails->first_name;
+        $surname = $hrDetails->surname;
+        $email = $hrDetails->email;
         // #Query the the leave_config days for value
         $Details = leave_credit::where('hr_id', $hriD)
             ->where('leave_type_id', $levTyp)
@@ -560,14 +561,35 @@ class LeaveApplicationController extends Controller
                 ->where('id', $iD)
                 ->update(['status' => 1]);
         }
-		$jcAttachment = $this->viewApplication($iD);
+		$leaveAttachment = $this->viewApplication($iD);
         #send email to the user informing that the leave has been accepted
-        Mail::to($email)->send(new Accept_application($firstname, $surname, $email, $jcAttachment));
+        if (!empty($email))
+			Mail::to($email)->send(new Accept_application($firstname, $leaveAttachment));
         // Send email to employee manager
-		Mail::to($email)->send(new Accept_application($firstname, $surname, $email, $jcAttachment));
-        // send emal to Hr manager
-		Mail::to($email)->send(new Accept_application($firstname, $surname, $email, $jcAttachment));
-        LeaveHistoryAuditController::store("leave application Approved", 0, $leave_balance, $daysApplied, $newBalance, $levTyp, $hriD);
+		if (!empty($hrDetails->manager_id))
+		{
+			$managerDetails = HRPerson::where('id', $hrDetails->manager_id)->where('status',1)
+                ->select('first_name', 'email')
+                ->first();
+			if (!empty($managerDetails->email))
+				Mail::to($managerDetails->email)->send(new SendLeaveApplicationToManager($managerDetails->first_name, $leaveAttachment));
+        
+		}
+		// send emal to Hr manager
+		if (!empty($hrDetails->division_level_5))
+		{
+			$Dept = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+			if (!empty($Dept->manager_id))
+			{
+				$deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+					->select('first_name', 'email')
+					->first();
+				if (!empty($deptDetails->email))
+					Mail::to($deptDetails->email)->send(new SendLeaveApplicationToHrManager($deptDetails->first_name, $leaveAttachment));
+			}
+			
+		}
+		LeaveHistoryAuditController::store("leave application Approved", 0, $leave_balance, $daysApplied, $newBalance, $levTyp, $hriD);
         AuditReportsController::store('Leave Management', 'leave_approval Informations accepted', "Edited by User: $levHist->hr_id", 0);
         return back()->with('success_application', "leave application was successful.");
     }

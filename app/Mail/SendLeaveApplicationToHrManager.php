@@ -1,11 +1,13 @@
 <?php
 
 namespace App\Mail;
-
+use App\CompanyIdentity;
+use App\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Support\Facades\Storage;
 
 class SendLeaveApplicationToHrManager extends Mailable
 {
@@ -16,9 +18,13 @@ class SendLeaveApplicationToHrManager extends Mailable
      *
      * @return void
      */
-    public function __construct()
+	public $first_name;
+    public $leaveAttachment;
+	
+    public function __construct($first_name, $leaveAttachment)
     {
-        //
+        $this->first_name = $first_name;
+        $this->leaveAttachment = $leaveAttachment;
     }
 
     /**
@@ -28,6 +34,21 @@ class SendLeaveApplicationToHrManager extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $subject = "Leave Application Approved on $companyName online system.";
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') .[  $companyDetails['company_logo_url'];
+
+        return $this->view('mails.approved_leave_app')
+            ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
+            ->subject($subject)
+			->attachData($this->leaveAttachment, 'Leave Application.pdf', [
+                'mime' => 'application/pdf',
+            ])
+            ->with($data);
     }
 }

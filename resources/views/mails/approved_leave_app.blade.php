@@ -215,7 +215,7 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that your leave request has been approved.<br>
+													Please find leave application document attached.<br>
                                                 </td>
                                             </tr>
                                             <tr>

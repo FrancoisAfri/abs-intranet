@@ -19,15 +19,12 @@ class Accept_application extends Mailable
      * @return void
      */
     public $first_name;
-    public $surname;
-    public $email;
+    public $leaveAttachment;
 
-    public function __construct($first_name, $surname ,$email)
+    public function __construct($first_name, $leaveAttachment)
     {
         $this->first_name = $first_name;
-        $this->surname = $surname;
-        $this->email = $email;
-
+        $this->leaveAttachment = $leaveAttachment;
     }
     /**
      * Build the message.
@@ -44,11 +41,13 @@ class Accept_application extends Mailable
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') .[  $companyDetails['company_logo_url'];
-        $data['profile_url'] = url('/users/profile');
 
         return $this->view('mails.approved_leave_application')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
+			->attachData($this->leaveAttachment, 'Leave Application.pdf', [
+                'mime' => 'application/pdf',
+            ])
             ->with($data);
     }
 }
