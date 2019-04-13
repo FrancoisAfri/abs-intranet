@@ -58,8 +58,7 @@
 					<th>Vehicle</th>
                     <th>Date</th>
                     <th>Driver</th>
-                    <th>Purpose</th>
-                    <th>Destination</th>
+                    <th>Description</th>
                     <th>Service Station</th>
                     <th>Odometer Reading</th>
                     <th>Litres</th>
@@ -71,13 +70,11 @@
 				@if (count($fuelLog) > 0)
 					@foreach ($fuelLog as $details)
 						<tr>
-							 <td>{{ !empty($details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes) ?  $details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes: '' }}</td>
-                             <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
-                             <td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
-                             <td></td>
-                             <td></td>
-                             <td>{{ !empty($details->service_station) ?  $details->service_station: 'Null' }}</td>
-							<td style="text-align: center">{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }} </td>
+							<td>{{ !empty($details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes) ?  $details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes: '' }}</td>
+                            <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
+                            <td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
+							<td>{{ !empty($details->description) ?  $details->description: '' }}</td>
+							<td>{{ !empty($details->station) ?  $details->station : '' }}</td><td style="text-align: center">{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }} </td>
 							<td style="text-align: center">{{ !empty($details->litres_new) ?  $details->litres_new: '' }}</td>
 							<td style="text-align: center">{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
 							<td style="text-align: center">{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
@@ -90,8 +87,7 @@
 					<th>Vehicle</th>
                     <th>Date</th>
                     <th>Driver</th>
-                    <th>Purpose</th>
-                    <th>Destination</th>
+                    <th>Description</th>
                     <th>Service Station</th>
                     <th>Odometer Reading</th>
                     <th>Litres</th>

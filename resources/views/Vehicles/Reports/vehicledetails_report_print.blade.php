@@ -95,7 +95,7 @@
                                     <td>{{ !empty($details->odometer_reading) ? $details->odometer_reading : ''}}</td>
                                 @endif
                                 <td>{{ !empty($details->company) ? $details->company : ''}}</td>
-                                <td>{{ !empty($details->Department) ? $details->Department : ''}}</td>
+                                <td>{{ !empty($details->department) ? $details->department : ''}}</td>
                             </tr>
                         @endforeach
                     @endif

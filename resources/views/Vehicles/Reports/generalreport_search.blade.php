@@ -125,7 +125,7 @@
                             <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;" id="driver_id"
                                         name="driver_id">
-                                    <option value="">*** Select an Driver ***</option>
+                                    <option value="">*** Select a Driver ***</option>
                                     @foreach($hrDetails as $driver)
                                         <option value="{{ $driver->id }}">{{ $driver->first_name . ' ' . $driver->surname }}</option>
                                     @endforeach
@@ -136,9 +136,6 @@
                             <label for="action_date" class="col-sm-2 control-label">Action Date</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
                                     <input type="text" class="form-control daterangepicker" id="action_date"
                                            name="action_date" value="" placeholder="Select Action Date...">
                                 </div>
@@ -303,7 +300,9 @@
             } else if (reportID == 6) {
                 $('.dest-field').hide();
                 $('.detail-field').show();
-                $('.card-field').show();
+                $('.card-field').hide();
+                $('.day-field ').hide();
+				$('#driver_div').hide();
             }else if (reportID == 7) {
                 $('.dest-field').hide();
                 $('.card-field').show();
@@ -311,6 +310,7 @@
             }else if (reportID == 8) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();
+				$('#driver_div').hide();
             }else if (reportID == 9) {
                 $('.dest-field').hide();
                 $('.detail-field').hide();

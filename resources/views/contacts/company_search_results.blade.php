@@ -1,6 +1,5 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-   
 	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
 @endsection
 @section('content')

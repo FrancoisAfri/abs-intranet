@@ -54,52 +54,49 @@
             <div class="box-body">
                 <table id="example2" class="table table-bordered table-hover">
                     <thead>
-                    <tr>
-                        <th style="width: 10px"></th>
-                        <th>Date</th>
-                        <th>Garage</th>
-                        <th>Next Service Date</th>
-                        <th>Next Service Km</th>
-                        <th>Licence Renewal Date</th>
-                        <th>Invoice Number</th>
-                        <th style="width: 5px; text-align: center;">Total Cost</th>
-                    </tr>
+						<tr>
+							<th>Vehicle</th>
+							<th>Date Serviced</th>
+							<th>Garage</th>
+							<th>Description</th>
+							<th>Next Service Date</th>
+							<th>Next Service Km</th>
+							<th>Invoice Number</th>
+							<th style="width: 5px; text-align: center;">Cost</th>
+						</tr>
                     </thead>
                     <tbody>
                     @if (count($serviceDetails) > 0)
                         @foreach($serviceDetails as $details)
-                            <tr>
-                                <td>{{ (!empty($details->VehicleMake) ) ? $details->VehicleMake." ".$details->VehicleModel." ".$details->vehicle_registration : ''}}</td>
-                                <td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
-                                <td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
-                                <td style="text-align: center">{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
-                                <td style="text-align: center">{{ !empty($details->nxt_service_km) ? date(' d M Y', $details->nxt_service_km) : ''}} </td>
-                                <td></td>
-                                <td style="text-align: center">{{ !empty($details->invoice_number) ?  $details->invoice_number : ''}} </td>
-                                <td style="text-align: center">{{ !empty($details->total_cost) ? 'R' .number_format($details->total_cost, 2) : ''}} </td>
+                            <tr>										
+								<td>{{ (!empty($details->VehicleMake) ) ? $details->VehicleMake." ".$details->VehicleModel." ".$details->vehicle_registration : ''}}</td>
+								<td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
+								<td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
+								<td>{{ !empty($details->description) ? $details->description : '' }}</td>
+								<td style="text-align: center">{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
+								<td style="text-align: center">{{ !empty($details->nxt_service_km) ? $details->nxt_service_km : ''}} </td>
+								<td style="text-align: center">{{ !empty($details->invoice_number) ?  $details->invoice_number : ''}} </td>
+								<td style="text-align: center">{{ !empty($details->total_cost) ? 'R' .number_format($details->total_cost, 2) : ''}} </td>
                             </tr>
                         @endforeach
                     @endif
                     </tbody>
                     <tfoot>
-                    <tr>
-                        <th style="width: 10px"></th>
-                        <th>Date</th>
-                        <th>Garage</th>
-                        <th>Next Service Date</th>
-                        <th>Next Service Km</th>
-                        <th>Licence Renewal Date</th>
-                        <th>Invoice Number</th>
-                        <th style="width: 5px; text-align: center;">Total Cost</th>
-                    </tr>
+						<tr>
+							<th>Vehicle</th>
+							<th>Date Serviced</th>
+							<th>Garage</th>
+							<th>Description</th>
+							<th>Next Service Date</th>
+							<th>Next Service Km</th>
+							<th>Invoice Number</th>
+							<th style="width: 5px; text-align: center;">Cost</th>
+						</tr>
+						<tr>
+							<th colspan="7" style="text-align: right">Total</th>
+							<td style="text-align: right" nowrap>{{ !empty($totalCost) ? 'R' .number_format($totalCost, 2) : '' }}</td>
+						</tr>
                     </tfoot>
-                    <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                    <class
-                    ="caption">
-                    <td></td>
-                    <td colspan="6" style="text-align:right">Total</td>
-                    <td style="text-align: right"
-                        nowrap>{{ !empty($totalamount_paid) ? 'R' .number_format($totalamount_paid, 2) : '' }}</td>
                 </table>
             </div>
         </div>

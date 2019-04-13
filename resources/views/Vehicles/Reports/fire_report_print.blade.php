@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Booking Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
+    <title>Fire Extinguisher Report Printed By {{ $user->person->first_name.' '. $user->person->surname }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
     <!-- Bootstrap 3.3.6 -->
@@ -78,7 +78,7 @@
 								<td>{{ !empty($fireExtinguisher->com_name) ? $fireExtinguisher->com_name : ''}} </td>
 								<td>{{ !empty($fireExtinguisher->Serial_number) ?  $fireExtinguisher->Serial_number : ''}} </td>
 								<td>{{ !empty($fireExtinguisher->Weight) ?  $fireExtinguisher->Weight : ''}} </td>
-								<td>{{ !empty($fireExtinguisher->Cost) ?  $fireExtinguisher->Cost : ''}} </td>
+								<td>{{ !empty($fireExtinguisher->Cost) ?   'R ' .number_format($fireExtinguisher->Cost, 2) : ''}} </td>
 								<td>{{ !empty($fireExtinguisher->purchase_order) ?  $fireExtinguisher->purchase_order : ''}} </td>
 								<td>{{ !empty($fireExtinguisher->Status) ?  $statusArray[$fireExtinguisher->Status] : ''}} </td>
 							</tr>
@@ -94,7 +94,7 @@
 							<th>Service Provier</th>
 							<th>Serial Number</th>
 							<th>Weight</th>
-							<th>Cost</th>
+							<th>Cost </th>
 							<th>PO Number</th>
 							<th>Status</th>
 						</tr>

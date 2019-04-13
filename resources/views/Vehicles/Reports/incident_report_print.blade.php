@@ -55,7 +55,7 @@
                 <table id="example2" class="table table-bordered table-hover">
                     <thead>
                     <tr>
-                        <th style="width: 10px"></th>
+                        <th>Vehicle</th>
                         <th>Date Reported</th>
                         <th>Reported By</th>
                         <th>Odometer Reading Km</th>
@@ -83,7 +83,7 @@
                     </tbody>
                     <tfoot>
                     <tr>
-                        <th style="width: 10px"></th>
+                        <th>Vehicle</th>
                         <th>Date Reported</th>
                         <th>Reported By</th>
                         <th>Odometer Reading Km</th>

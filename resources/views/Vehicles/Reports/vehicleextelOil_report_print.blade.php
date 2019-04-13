@@ -71,15 +71,15 @@
                    @if (count($externalFuelLog) > 0)
 							@foreach ($externalFuelLog as $externallog)
 								<tr>
-									<td>{{ (!empty( $externallog->Supplier)) ?  $externallog->Supplier : ''}} </td> 
+									<td>{{ (!empty( $externallog->supplier)) ?  $externallog->supplier : ''}} </td> 
 									<td>{{ (!empty( $externallog->fleet_number)) ?  $externallog->fleet_number : ''}} </td>                                    
 									<td> External </td> 
 									<td>{{ (!empty( $externallog->Odometer_reading)) ?  $externallog->Odometer_reading : 0}}  Km</td> 
 									<td>{{ (!empty( $externallog->Hoursreading)) ?  $externallog->Hoursreading : 0}} Hrs</td> 
 									<td style="text-align: center">{{ !empty($externallog->litres_new) ? number_format($externallog->litres_new, 2) : 0 }}</td>
-									<td>{{ (!empty( $externallog->Odometer_reading)) ?  number_format($externallog->Odometer_reading/$externallog->litres_new, 2) : 0}} </td>
-									<td>{{ (!empty( $externallog->Hoursreading)) ?  number_format($externallog->Hoursreading/$externallog->litres_new, 2) : 0}} </td>
-									<td> R {{ (!empty( $externallog->litres_new)) ?  number_format($externallog->total_cost/$externallog->litres_new, 2) : 0}} </td>
+									<td>{{ (!empty( $externallog->Odometer_reading) && (!empty( $externallog->litres_new))) ?  number_format($externallog->Odometer_reading/$externallog->litres_new, 2) : 0}} </td>
+									<td>{{ (!empty( $externallog->Hoursreading) && (!empty( $externallog->litres_new))) ?  number_format($externallog->Hoursreading/$externallog->litres_new, 2) : 0}} </td>
+									<td> R {{ (!empty( $externallog->litres_new) && !empty( $externallog->total_cost)) ?  number_format($externallog->total_cost/$externallog->litres_new, 2) : 0}} </td>
 									<td style="text-align: center"> R {{ !empty($externallog->total_cost) ? number_format($externallog->total_cost, 2) : 0 }}</td>
 								</tr>
 							@endforeach

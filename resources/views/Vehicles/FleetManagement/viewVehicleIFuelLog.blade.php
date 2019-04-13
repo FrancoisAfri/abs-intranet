@@ -149,19 +149,19 @@
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
                                     <td>{{ !empty($details->tank_and_other) ?  $status[$details->tank_and_other] : ''}}</td>
                                     <td>{{ !empty($details->tankName) ?  $details->tankName : ''}}</td>
-                                    <td>{{ !empty($details->Staion) ?  $details->Staion : ''}}</td>
+                                    <td>{{ !empty($details->station) ?  $details->station : ''}}</td>
                                     <td style="text-align: center">{{ !empty($details->litres_new) ? number_format($details->litres_new, 2) : ''}}</td>
                                     <td style="text-align: center">{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
                                     <td style="text-align: center">{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
                                     @if (isset($metreType) && $metreType === 1)
-                                    <td style="text-align: center">{{ !empty($details->Odometer_reading) ? $details->Odometer_reading : ''}}</td>
+                                    <td style="text-align: center">{{ !empty($details->Odometer_reading) ? number_format($details->Odometer_reading, 2) . ' kms' : ''}}</td>
                                      @else
-                                    <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading. ' km,l' : ''}}</td>
+                                    <td style="text-align: center">{{ !empty($details->Hoursreading) ? number_format($details->Hoursreading, 2) . ' hrs' : ''}}</td>
                                      @endif
                                       @if (isset($metreType) && $metreType === 1)
-                                        <td style="text-align: center">{{ !empty($details->Odometer_reading) ? $details->Odometer_reading / $details->litres_new : 0}}</td>
+                                        <td style="text-align: center">{{ !empty($details->Odometer_reading) && !empty($details->litres_new) ? number_format($details->Odometer_reading / $details->litres_new, 2) . ' km/l' : 0}}</td>
                                      @else
-                                    <td style="text-align: center">{{ !empty($details->Hoursreading) ? $details->Hoursreading /$details->litres_new : 0 }}</td>
+                                    <td style="text-align: center">{{ !empty($details->Hoursreading) && !empty($details->litres_new) ? number_format($details->Hoursreading /$details->litres_new, 2) . ' hr/l' : 0 }}</td>
                                      @endif
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
                                     <!--  <td style="text-align:center;" colspan="2"> -->

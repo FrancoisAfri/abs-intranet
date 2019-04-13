@@ -98,15 +98,13 @@
                         <th>Amount Paid</th>
                         <th>Status</th>
                     </tr>
+					<tr>
+						<th colspan="7" style="text-align:right">Total</th>
+						<td style="text-align: center">{{  'R '.number_format($total, 2) }}</td>
+						<td style="text-align: center">{{  'R '.number_format($totalamount_paid, 2) }}</td>
+						<td style="text-align: right" nowrap></td>
+					</tr>
                     </tfoot>
-                    <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                    <class
-                    ="caption">
-                    <td style="text-align: right" nowrap></td>
-                    <th colspan="6" style="text-align:right">Total</th>
-                    <td style="text-align: right">{{'R '.number_format($total, 2) }}</td>
-                    <td style="text-align: right">{{'R '.number_format($totalamount_paid, 2) }}</td>
-                    <td style="text-align: right" nowrap></td>
                 </table>
             </div>
         </div>

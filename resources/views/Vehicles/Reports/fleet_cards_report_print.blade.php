@@ -55,8 +55,8 @@
                 <table id="example2" class="table table-bordered table-hover">
                     <thead>
 						<tr>
-							<th>Fleet Card Type</th>
-							<th>Vehicle Fleet Number</th>
+							<th>Fleet Number</th>
+							<th>Card Type</th>
 							<th>Card Holder</th>
 							<th>Card Number</th>
 							<th>CVS Number</th>
@@ -70,8 +70,8 @@
 						@if (count($fleetcards) > 0)
 							@foreach ($fleetcards as $fleetcard)
 								<tr>
-									<td>{{ !empty($fleetcard->type_name ) ? $fleetcard->type_name : '' }}</td>
 									<td style="width:50px;">{{ !empty($fleetcard->fleetnumber ) ? $fleetcard->fleetnumber : '' }}</td>
+									<td>{{ !empty($fleetcard->type_name ) ? $fleetcard->type_name : '' }}</td>
 									<td>{{ !empty($fleetcard->first_name . '' . $fleetcard->surname ) ? $fleetcard->first_name . '' . $fleetcard->surname : ''}}</td>
 									<td>{{ !empty($fleetcard->card_number) ? $fleetcard->card_number : ''}}</td>
 									<td>{{ !empty($fleetcard->cvs_number) ? $fleetcard->cvs_number : ''}}</td>
@@ -85,8 +85,8 @@
 						</tbody>
 						<tfoot>
 						<tr>
-							<th>Fleet Card Type</th>
-							<th>Vehicle Fleet Number</th>
+							<th>Fleet Number</th>
+							<th>Card Type</th>
 							<th>Card Holder</th>
 							<th>Card Number</th>
 							<th>CVS Number</th>

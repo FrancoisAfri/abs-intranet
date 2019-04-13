@@ -1260,12 +1260,7 @@ class VehicleFleetController extends Controller
         ]);
         $FueltankData = $request->all();
         unset($FueltankData['_token']);
-
-        // return  date('Y', $date);
-        //return $date;
-
         $now = Carbon::now();
-
         $startExplode = explode('_', $date);
         $month = $startExplode[0];
         $command = (!empty($startExplode[1]) ? $startExplode[1] : 0);
@@ -1276,7 +1271,7 @@ class VehicleFleetController extends Controller
         $metreType = $Details->metre_reading_type;
 
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-        $servicestation = fleet_fillingstation::orderBy('id', 'desc')->get();
+        $servicestation = fleet_fillingstation::orderBy('name', 'asc')->get();
         $fueltank = Fueltanks::orderBy('id', 'desc')->get();
 
         $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
@@ -1331,7 +1326,7 @@ class VehicleFleetController extends Controller
         $totalCosts = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('total_cost');
 
         $vehiclefuellog = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName')
+            ->select('vehicle_fuel_log.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as station', 'fuel_tanks.tank_name as tankName')
             ->leftJoin('fuel_tanks', 'vehicle_fuel_log.tank_name', '=', 'fuel_tanks.id')
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
