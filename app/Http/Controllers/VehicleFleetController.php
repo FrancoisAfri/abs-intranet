@@ -1537,8 +1537,6 @@ class VehicleFleetController extends Controller
 
         $status = array(1 => 'Tank', 2 => 'Other');
         $transType = array(1 => 'Full Tank', 2 => 'Top Up');
-
-
         $vehicleID = $maintenance->id;
 
         $bookingStatus = array(2 => "Pending Capturer Manager Approval",
@@ -1553,7 +1551,7 @@ class VehicleFleetController extends Controller
 
         $usageType = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
 
-        $vehiclebookinglog = DB::table('vehicle_booking')
+        $vehiclebooking = DB::table('vehicle_booking')
             ->select('vehicle_booking.*', 'vehicle_make.name as vehicleMake',
                 'vehicle_model.name as vehicleModel', 'vehicle_managemnet.name as vehicleType',
                 'hr_people.first_name as firstname', 'hr_people.surname as surname'
@@ -1565,8 +1563,7 @@ class VehicleFleetController extends Controller
             ->orderBy('vehicle_booking.id', 'desc')
             ->where('vehicle_booking.vehicle_id', $vehicleID)
             ->get();
-        $vehiclebooking = $vehiclebookinglog->unique('id');
-
+       
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [

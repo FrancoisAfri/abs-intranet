@@ -36,6 +36,7 @@
 							<th>Starting Kms</th>
 							<th>Ending Kms</th>
 							<th>Kms Travelled</th>
+							<th>Status</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -52,6 +53,7 @@
 									<td style="text-align: center">{{ (!empty( $booking->start_mileage_id)) ?  $booking->start_mileage_id : ''}} </td>
 									<td style="text-align: center">{{ (!empty( $booking->end_mileage_id)) ?  $booking->end_mileage_id : ''}} </td>
 									<td style="text-align: center">{{ (!empty( $booking->end_mileage_id) && !empty($booking->start_mileage_id)) ?  $booking->end_mileage_id - $booking->start_mileage_id : ''}} </td>
+									 <td>{{ !empty($booking->status) ? $bookingStatus[$booking->status] : ''}}</td>
 								</tr>
 							@endforeach
 						@endif
@@ -68,6 +70,7 @@
 							<th>Starting Kms</th>
 							<th>Ending Kms</th>
 							<th>Kms Travelled</th>
+							<th>Status</th>
 						</tr>
 						</tfoot>
 					</table>
