@@ -104,21 +104,25 @@
                                    class="btn btn-app"><i class="fa fa-money"></i> Communications</a>
                         <!--  -->
                     </div>
-                    <div class="box-changedate">
-                        <button type="button" class="btn btn-default pull-left" id="previous_button" value=""><i
-                                    class="fa fa-caret-square-o-left"></i> Previous Month
-                        </button>
-                        <input type="hidden" name="calendar_month" id="calendar_month" value="{{$month}}">
-                        <input type="hidden" name="calendar_year" id="calendar_year" value="{{$year}}}">
-                        @if (isset($month) && $month < $currentmonth )
-                            <button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
-                                        class="fa fa-caret-square-o-right"></i> Next Month
-                            </button>
-                        @endif
-                    </div>
                     <table class="table table-bordered">
+						<tr>
+							<th>
+								<button type="button" class="btn btn-default pull-left" id="previous_button" value=""><i
+                                    class="fa fa-caret-square-o-left"></i> Previous Month
+								</button>
+								<input type="hidden" name="calendar_month" id="calendar_month" value="{{$month}}">
+								<input type="hidden" name="calendar_year" id="calendar_year" value="{{$year}}}">
+							</th>
+							<th colspan="11" style="text-align: center"><font size="5">Fuel Transactions For: {{$month}} - {{$year}}</font></th>
+							<th>@if (isset($month) && $month < $currentmonth )
+									<button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
+												class="fa fa-caret-square-o-right"></i> Next Month
+									</button>
+								@endif
+							</th>
+						</tr>
                         <tr>
-                            <th> Date Taken</th>
+                            <th>Date Taken</th>
                             <th>Transaction Type</th>
                             <th>Filled By</th>
                             <th>Tanks and Other</th>
@@ -206,240 +210,212 @@
                         </button>
                     </div>
                 </div>
-            </div>
-            
-        @include('Vehicles.partials.add_fuelrecord_modal')
-        <!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
-        <!--  @include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal') -->
-
+            </div>       
+			@include('Vehicles.partials.add_fuelrecord_modal')
+			<!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
+			<!--  @include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal') -->
             @if (count($vehiclefuellog) > 0)
                 @include('Vehicles.warnings.fuellog_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Vehicle Fuel Log? This action cannot be undone.'])
             @endif
-
-
         </div>
+    </div>
+@endsection
+@section('page_script')
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+	<!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+			type="text/javascript"></script>
+	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+			type="text/javascript"></script>
+	<!-- the main fileinput plugin file -->
+	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
-        @endsection
+	<!-- InputMask -->
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<!-- time picker -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+	<script>
+		function postData(id, data) {
+			if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
 
-        @section('page_script')
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-            <!-- iCheck -->
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                    type="text/javascript"></script>
-            <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-                    type="text/javascript"></script>
-            <!-- the main fileinput plugin file -->
-            <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-            <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-            <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+		}
+		$('#previous_button').click(function () {
+			location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$month. '_' . 'p' . '_' . $year }}';
+		});
+		$('#next_button').click(function () {
+			location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$month. '_' . 'n' . '_' . $year }}';
+		});
+		var moduleId;
+		//Initialize Select2 Elements
+		$(".select2").select2();
+		$('.zip-field').hide();
+		$('.transaction-field').hide();
+		//Tooltip
+		$('[data-toggle="tooltip"]').tooltip();
+		//Vertically center modals on page
+		function reposition() {
+			var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+			modal.css('display', 'block');
 
-            <!-- InputMask -->
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <!-- time picker -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-            <script>
-                function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
+			// Dividing by two centers the modal exactly, but dividing by three
+			// or four works better for larger screens.
+			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+		}
+		// Reposition when a modal is shown
+		$('.modal').on('show.bs.modal', reposition);
+		// Reposition when the window is resized
+		$(window).on('resize', function () {
+			$('.modal:visible').each(reposition);
+		});
+		//Show success action modal
+		$('#success-action-modal').modal('show');
+		//
+		$(".js-example-basic-multiple").select2();
+		//Initialize iCheck/iRadio Elements
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-blue',
+			radioClass: 'iradio_square-blue',
+			increaseArea: '10%' // optional
+		});
+		$(document).ready(function () {
+			$('#litres_new').change(function () {
+				var litres_new = $('#litres_new').val();
+				var total_cost = $('#total_cost').val();
+				var litre_cost = $('#cost_per_litre').val();
 
-                }
+				if (litre_cost > 0 && litres_new > 0) {
+					var total_cost = (litres_new * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('total_cost').value = total_cost;
+				}
+				else if (litres_new > 0 && total_cost > 0) {
+					var litre_cost = (total_cost / litres_new).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('cost_per_litre').value = litre_cost;
+				}
+			});
+			$('#cost_per_litre').change(function () {
+				var litres_new = $('#litres_new').val();
+				var total_cost = $('#total_cost').val();
+				var litre_cost = $('#cost_per_litre').val();
+				if (litre_cost > 0 && litres_new > 0) {
+					var total_cost = (litres_new * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('total_cost').value = total_cost;
+				}
+				else if (litre_cost > 0 && total_cost > 0) {
+					var litres_new = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('litres_new').value = litres_new;
+				}
+			});
+			$('#total_cost').change(function () {
+				var litres_new = $('#litres_new').val();
+				var total_cost = $('#total_cost').val();
+				var litre_cost = $('#cost_per_litre').val();
+				if (litre_cost > 0 && total_cost) {
+					var litres_new = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('litres_new').value = litres_new;
+				}
+				else if (litres_new > 0 && total_cost) {
+					var litre_cost = (total_cost / litres_new).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('cost_per_litre').value = litre_cost;
+				}
+			});
+		});
+		$(document).ready(function () {
+			$('#date').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			$('#dateofincident').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
 
-                $('#previous_button').click(function () {
-                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$month. '_' . 'p' . '_' . $year }}';
-                });
+		}); 
+		$('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
+			var allType = hideFields();
 
-                $('#next_button').click(function () {
-                    location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$month. '_' . 'n' . '_' . $year }}';
-                });
-                var moduleId;
-                //Initialize Select2 Elements
-                $(".select2").select2();
-                $('.zip-field').hide();
-                $('.transaction-field').hide();
-                //Tooltip
-                $('[data-toggle="tooltip"]').tooltip();
-
-                //Vertically center modals on page
-                function reposition() {
-                    var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
-                    modal.css('display', 'block');
-
-                    // Dividing by two centers the modal exactly, but dividing by three
-                    // or four works better for larger screens.
-                    dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                }
-
-                // Reposition when a modal is shown
-                $('.modal').on('show.bs.modal', reposition);
-                // Reposition when the window is resized
-                $(window).on('resize', function () {
-                    $('.modal:visible').each(reposition);
-                });
-
-                //Show success action modal
-                $('#success-action-modal').modal('show');
-                //
-                $(".js-example-basic-multiple").select2();
-
-                //Initialize iCheck/iRadio Elements
-                $('input').iCheck({
-                    checkboxClass: 'icheckbox_square-blue',
-                    radioClass: 'iradio_square-blue',
-                    increaseArea: '10%' // optional
-                });
-
-                $(document).ready(function () {
-                    $('#litres_new').change(function () {
-                        var litres_new = $('#litres_new').val();
-                        var total_cost = $('#total_cost').val();
-                        var litre_cost = $('#cost_per_litre').val();
-
-                        if (litre_cost > 0 && litres_new > 0) {
-                            var total_cost = (litres_new * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            document.getElementById('total_cost').value = total_cost;
-                        }
-                        else if (litres_new > 0 && total_cost > 0) {
-                            var litre_cost = (total_cost / litres_new).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            document.getElementById('cost_per_litre').value = litre_cost;
-                        }
-                    });
-
-                    $('#cost_per_litre').change(function () {
-                        var litres_new = $('#litres_new').val();
-                        var total_cost = $('#total_cost').val();
-                        var litre_cost = $('#cost_per_litre').val();
-                        if (litre_cost > 0 && litres_new > 0) {
-                            var total_cost = (litres_new * litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            document.getElementById('total_cost').value = total_cost;
-                        }
-                        else if (litre_cost > 0 && total_cost > 0) {
-                            var litres_new = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            document.getElementById('litres_new').value = litres_new;
-                        }
-                    });
-
-                    $('#total_cost').change(function () {
-                        var litres_new = $('#litres_new').val();
-                        var total_cost = $('#total_cost').val();
-                        var litre_cost = $('#cost_per_litre').val();
-                        if (litre_cost > 0 && total_cost) {
-                            var litres_new = (total_cost / litre_cost).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            document.getElementById('litres_new').value = litres_new;
-                        }
-                        else if (litres_new > 0 && total_cost) {
-                            var litre_cost = (total_cost / litres_new).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-                            document.getElementById('cost_per_litre').value = litre_cost;
-                        }
-                    });
-
-                });
-
-                $(document).ready(function () {
-
-                    $('#date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                    //
-                    $('#dateofincident').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                });
-
-                // 
-                $('#rdo_transaction, #rdo_Other').on('ifChecked', function () {
-                    var allType = hideFields();
-
-                });
-
-                function hideFields() {
-                    var allType = $("input[name='transaction']:checked").val();
-                    if (allType == 1) {
-                        $('.transaction-field').hide();
-                        $('.Tanks-field').show();
-                    }
-                    else if (allType == 2) {
-                        $('.transaction-field').show();
-                        $('.Tanks-field').hide();
-                    }
-                    return allType;
-                }
-
-                //Post perk form to server using ajax (add)
-                $('#add_vehiclefuellog').on('click', function () {
-                    var strUrl = '/vehicle_management/addvehiclefuellog';
-                    var formName = 'add-fuel-form';
-                    var modalID = 'add-fuel-modal';
-                    var submitBtnID = 'add_vehiclefuellog';
-                    var redirectUrl = '/vehicle_management/fuel_log/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
-
-
-                var incidentID;
-                $('#edit-incidents-modal').on('show.bs.modal', function (e) {
-                    var btnEdit = $(e.relatedTarget);
-                    incidentID = btnEdit.data('id');
-                    var date_of_incident = btnEdit.data('dateofincident');
-                    var incident_type = btnEdit.data('incident_type');
-                    var severity = btnEdit.data('severity');
-                    var reported_by = btnEdit.data('reported_by');
-                    var odometer_reading = btnEdit.data('odometer_reading');
-                    var status = btnEdit.data('status');
-                    var description = btnEdit.data('description');
-                    var claim_number = btnEdit.data('claim_number');
-                    var Cost = btnEdit.data('cost');
-                    var documents = btnEdit.data('documents');
-                    var documents1 = btnEdit.data('documents1');
-                    var valueID = btnEdit.data('valueID');
-                    var name = btnEdit.data('name');
-                    var modal = $(this);
-                    modal.find('#date_of_incident').val(date_of_incident);
-                    modal.find('#name').val(name);
-                    modal.find('#incident_type').val(incident_type);
-                    modal.find('#severity').val(severity);
-                    modal.find('#reported_by').val(reported_by);
-                    modal.find('#odometer_reading').val(odometer_reading);
-                    modal.find('#status').val(status);
-                    modal.find('#description').val(description);
-                    modal.find('#claim_number').val(claim_number);
-                    modal.find('#Cost').val(Cost);
-                    modal.find('#documents').val(documents);
-                    modal.find('#documents1').val(documents1);
-                    modal.find('#valueID').val(valueID);
-                });
-
-                $('#edit_vehicleincidents').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_vehicleincidents/' + incidentID;
-                    var formName = 'edit-incidents-form';
-                    var modalID = 'edit-incidents-modal';
-                    var submitBtnID = 'edit_fines';
-                    var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    var Method = 'PATCH'
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
-                });
-
-
-            </script>
+		});
+		function hideFields() {
+			var allType = $("input[name='transaction']:checked").val();
+			if (allType == 1) {
+				$('.transaction-field').hide();
+				$('.Tanks-field').show();
+			}
+			else if (allType == 2) {
+				$('.transaction-field').show();
+				$('.Tanks-field').hide();
+			}
+			return allType;
+		}
+		//Post perk form to server using ajax (add)
+		$('#add_vehiclefuellog').on('click', function () {
+			var strUrl = '/vehicle_management/addvehiclefuellog';
+			var formName = 'add-fuel-form';
+			var modalID = 'add-fuel-modal';
+			var submitBtnID = 'add_vehiclefuellog';
+			var redirectUrl = '/vehicle_management/fuel_log/{{ $maintenance->id }}';
+			var successMsgTitle = 'New Record Added!';
+			var successMsg = 'The Record  has been updated successfully.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+		var incidentID;
+		$('#edit-incidents-modal').on('show.bs.modal', function (e) {
+			var btnEdit = $(e.relatedTarget);
+			incidentID = btnEdit.data('id');
+			var date_of_incident = btnEdit.data('dateofincident');
+			var incident_type = btnEdit.data('incident_type');
+			var severity = btnEdit.data('severity');
+			var reported_by = btnEdit.data('reported_by');
+			var odometer_reading = btnEdit.data('odometer_reading');
+			var status = btnEdit.data('status');
+			var description = btnEdit.data('description');
+			var claim_number = btnEdit.data('claim_number');
+			var Cost = btnEdit.data('cost');
+			var documents = btnEdit.data('documents');
+			var documents1 = btnEdit.data('documents1');
+			var valueID = btnEdit.data('valueID');
+			var name = btnEdit.data('name');
+			var modal = $(this);
+			modal.find('#date_of_incident').val(date_of_incident);
+			modal.find('#name').val(name);
+			modal.find('#incident_type').val(incident_type);
+			modal.find('#severity').val(severity);
+			modal.find('#reported_by').val(reported_by);
+			modal.find('#odometer_reading').val(odometer_reading);
+			modal.find('#status').val(status);
+			modal.find('#description').val(description);
+			modal.find('#claim_number').val(claim_number);
+			modal.find('#Cost').val(Cost);
+			modal.find('#documents').val(documents);
+			modal.find('#documents1').val(documents1);
+			modal.find('#valueID').val(valueID);
+		});
+		$('#edit_vehicleincidents').on('click', function () {
+			var strUrl = '/vehicle_management/edit_vehicleincidents/' + incidentID;
+			var formName = 'edit-incidents-form';
+			var modalID = 'edit-incidents-modal';
+			var submitBtnID = 'edit_fines';
+			var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
+			var successMsgTitle = 'New Record Added!';
+			var successMsg = 'The Record  has been updated successfully.';
+			var Method = 'PATCH'
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+		});
+	</script>
 @endsection

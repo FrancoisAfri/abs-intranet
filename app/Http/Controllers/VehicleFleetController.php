@@ -601,8 +601,6 @@ class VehicleFleetController extends Controller
 
         $inceptiondate = $SysData['inception_date'] = str_replace('/', '-', $SysData['inception_date']);
         $inceptiondate = $SysData['inception_date'] = strtotime($SysData['inception_date']);
-
-
         $insurance = new vehicle_insurance($SysData);
         $insurance->inception_date = $inceptiondate;
         $insurance->service_provider = !empty($SysData['company_id']) ? $SysData['company_id'] : 0;
@@ -1260,6 +1258,7 @@ class VehicleFleetController extends Controller
         ]);
         $FueltankData = $request->all();
         unset($FueltankData['_token']);
+		
         $now = Carbon::now();
         $startExplode = explode('_', $date);
         $month = $startExplode[0];
