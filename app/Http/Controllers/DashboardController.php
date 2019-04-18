@@ -261,11 +261,7 @@ class DashboardController extends Controller
             } else {
                 $package = $packages->first()->id;
             }
-
-
             #cms
-            #cms
-
             // return $clientID;
             $employee = Auth::user()->load('person');
 
@@ -308,11 +304,8 @@ class DashboardController extends Controller
 
 			$cms_rating =   cms_rating::all();
 			//return $cms_rating;
-
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
-
             $ceonews = ceoNews::where('status', 1)->latest()->first();
-
             $ClientInduction = ClientInduction::
             select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
                 ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
@@ -378,8 +371,6 @@ class DashboardController extends Controller
             $helpdeskTickets = HelpDesk::orderBy('id', 'asc')->distinct()->get();
             $ticketcount = ticket::where('client_id', $clientID)->count();
             $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
-
-
             //return $account;
             $email = $user->email;
             //getclient names
@@ -389,16 +380,10 @@ class DashboardController extends Controller
 
             $purchaseStatus = ['' => '', 5 => ' Waiting For My Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
             $labelColors = ['' => 'danger', 5 => 'warning', 6 => 'primary', 7 => 'primary', 8 => 'success'];
-
-
             //$packages = product_packages::where('status', 1)->orderBy('name', 'asc')->get();
-
-
             $packages = product_packages::orderBy('name', 'asc')->get();
             if (!empty($packages))
                 $packages = $packages->load('products_type');
-
-
             //calculate the package price
             foreach ($packages as $package) {
                 $packageProducts = $package->products_type;
@@ -414,8 +399,6 @@ class DashboardController extends Controller
                 //$packagePrice = $packagePrice - (($packagePrice * $promoDiscount) / 100);
                 $package->price = $packagePrice;
             }
-
-
             //Get products
             $products = product_products::where('status', 1)->orderBy('category_id', 'asc')->get();
             if (!empty($products))
@@ -426,10 +409,7 @@ class DashboardController extends Controller
                 $currentPrice = $currentPrice - (($currentPrice * $promoDiscount) / 100);
                 $product->current_price = $currentPrice;
             }
-
             //return $currentPrice;
-
-
             $data['products'] = $products;
             $data['packages'] = $packages;
             $data['helpdeskTickets'] = $helpdeskTickets;
@@ -450,6 +430,4 @@ class DashboardController extends Controller
             return view('dashboard.client_dashboard')->with($data); //Clients Dashboard
         }
     }
-
-
 }

@@ -4,11 +4,8 @@
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-
 @endsection
 @section('content')
-    {{----}}
-    {{----}}
     @if($activeModules->where('code_name', 'cms')->first())
         <div class="row">
             <div class="col-md-6">
@@ -55,7 +52,6 @@
                 </div>
                 @include('dashboard.partials.view_news_modal')
             </div>
-
             <div class="col-md-6">
                 <div class="box box-muted same-height-widget">
                     <div class="box-header with-border">
@@ -121,7 +117,6 @@
                                 <p class="text-center">
                                     <strong>My Performance For {{ date('Y') }}</strong>
                                 </p>
-
                                 <div class="chart">
                                     <!-- Sales Chart Canvas-->
                                     <canvas id="empMonthlyPerformanceChart" style="height: 220px;"></canvas>

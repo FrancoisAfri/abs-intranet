@@ -113,7 +113,7 @@
 								<input type="hidden" name="calendar_month" id="calendar_month" value="{{$month}}">
 								<input type="hidden" name="calendar_year" id="calendar_year" value="{{$year}}}">
 							</th>
-							<th colspan="11" style="text-align: center"><font size="5">Fuel Transactions For: {{$month}} - {{$year}}</font></th>
+							<th colspan="11" style="text-align: center"><font size="5">Fuel Transactions For: {{$monthText}}</font></th>
 							<th>@if (isset($month) && $month < $currentmonth )
 									<button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
 												class="fa fa-caret-square-o-right"></i> Next Month
@@ -132,14 +132,14 @@
                             <th>Cost per Litres</th>
                             <th>Cost (R)</th>
                             @if (isset($metreType) && $metreType === 1)
-                                <th>Odometer Reading</th>
+                                <th>Km Reading</th>
                             @else
-                                <th>Hours Reading</th>
+                                <th>Hour Reading</th>
                             @endif
                             @if (isset($metreType) && $metreType === 1)
-                            <th>Kilometre Per Litre</th>
+                            <th>Km Per Litre</th>
                             @else
-                            <th>Hours Per Litre</th>
+                            <th>Hour Per Litre</th>
                             @endif
                             <th style="width: 5px; text-align: center;">Status</th>
                             <th style="width: 5px; text-align: center;"></th>
@@ -158,11 +158,11 @@
                                     <td style="text-align: center">{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
                                     <td style="text-align: center">{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
                                     @if (isset($metreType) && $metreType === 1)
-                                    <td style="text-align: center">{{ !empty($details->Odometer_reading) ? number_format($details->Odometer_reading, 2) . ' kms' : ''}}</td>
-                                     @else
-                                    <td style="text-align: center">{{ !empty($details->Hoursreading) ? number_format($details->Hoursreading, 2) . ' hrs' : ''}}</td>
-                                     @endif
-                                      @if (isset($metreType) && $metreType === 1)
+										<td style="text-align: center">{{ !empty($details->Odometer_reading) ? number_format($details->Odometer_reading, 2) . ' kms' : ''}}</td>
+                                    @else
+										<td style="text-align: center">{{ !empty($details->Hoursreading) ? number_format($details->Hoursreading, 2) . ' hrs' : ''}}</td>
+                                    @endif
+                                    @if (isset($metreType) && $metreType === 1)
                                         <td style="text-align: center">{{ !empty($details->Odometer_reading) && !empty($details->litres_new) ? number_format($details->Odometer_reading / $details->litres_new, 2) . ' km/l' : 0}}</td>
                                      @else
                                     <td style="text-align: center">{{ !empty($details->Hoursreading) && !empty($details->litres_new) ? number_format($details->Hoursreading /$details->litres_new, 2) . ' hr/l' : 0 }}</td>

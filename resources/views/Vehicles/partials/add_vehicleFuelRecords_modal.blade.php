@@ -3,7 +3,6 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-fuel-form">
                 {{ csrf_field() }}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -12,9 +11,8 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
-                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Driver </label>
+                    <div class="form-group">
+                        <label for="driver" class="col-sm-2 control-label">Driver </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
                                     id="driver" name="driver">
@@ -25,15 +23,13 @@
                             </select>
                         </div>
                     </div>
-
-                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Document Number</label>
+                    <div class="form-group">
+                        <label for="document_number" class="col-sm-2 control-label">Document Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="document_number" name="document_number" value=" "
                                    placeholder="Enter Document Number" required>
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Date </label>
                         <div class="col-sm-8">
@@ -41,14 +37,13 @@
                                    value="{{ old('date') }}" placeholder="Select  date   ...">
                         </div>
                     </div>
-
                     <div class="form-group{{ $errors->has('transaction') ? ' has-error' : '' }}">
                         <label for="transaction" class="col-sm-2 control-label"> Tanks and Other </label>
                             <div class="col-sm-8">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_transaction"
                                         name="transaction" value="1" checked>Tank
-                             </label>
-                                 <label class="radio-inline"><input type="radio" id="rdo_Other" name="transaction" value="2">
+								</label>
+                                <label class="radio-inline"><input type="radio" id="rdo_Other" name="transaction" value="2">
                                         Other
                                 </label>
                             </div>
@@ -64,9 +59,8 @@
                             </label>
                         </div>
                     </div>
-
                     <div class="form-group Tanks-field">
-                        <label for="path" class="col-sm-2 control-label">Tanks </label>
+                        <label for="tank_name" class="col-sm-2 control-label">Tanks </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
                                     id="tank_name" name="tank_name">
@@ -77,9 +71,8 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group  transaction-field">
-                        <label for="path" class="col-sm-2 control-label">Service Station </label>
+                        <label for="litres_new" class="col-sm-2 control-label">Service Station </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
                                     id="service_station" name="service_station">
@@ -90,40 +83,45 @@
                             </select>
                         </div>
                     </div>
-
-                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Litres </label>
+                    <div class="form-group">
+                        <label for="litres_new" class="col-sm-2 control-label">Litres </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="litres_new" name="litres_new" value=""
                                        min="0" step="0.001"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
-
                     <div class="form-group  transaction-field">
-                        <label for="path" class="col-sm-2 control-label">Cost per Litre </label>
+                        <label for="cost_per_litre" class="col-sm-2 control-label">Cost per Litre </label>
                         <div class="col-sm-8">
                             <input type="teXt" class="form-control" id="cost_per_litre" name="cost_per_litre" value=" "  min="0" step="0.01"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
-
                     <div class="form-group  transaction-field">
-                        <label for="path" class="col-sm-2 control-label">Total Cost</label>
+                        <label for="total_cost" class="col-sm-2 control-label">Total Cost</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="total_cost" name="total_cost" value="0"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
-
-                      <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Hours Reading </label>
-                        <div class="col-sm-8">
-                            <input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
-                                   placeholder="Enter Hours Reading" required>
-                        </div>
-                    </div>
-
+					@if (isset($metreType) && $metreType === 1)	
+						<div class="form-group">
+							<label for="Odometer_reading" class="col-sm-2 control-label">Km Reading</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="Odometer_reading" name="Odometer_reading" value=""
+									   placeholder="Enter Hours Reading">
+							</div>
+						</div>
+					@else
+						<div class="form-group">
+							<label for="hours_reading" class="col-sm-2 control-label">Hour Reading</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
+									   placeholder="Enter Hours Reading">
+							</div>
+						</div>
+					@endif
                     <div class="form-group ">
                         <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-8">
@@ -132,7 +130,6 @@
                                       placeholder="Enter description..." rows="3">{{ old('description') }}</textarea>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Captured By</label>
                         <div class="col-sm-8">
@@ -140,8 +137,7 @@
                                    placeholder="{{ $name }}" required readonly="">
                         </div>
                     </div>
-
-                   <div class="form-group">
+					<div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
@@ -153,10 +149,8 @@
                             </select>
                         </div>
                     </div>
-
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
-
                 </div>
                 <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
@@ -167,7 +161,4 @@
             </form>
         </div>
     </div>
-</div>
-</div>
-
-           
+</div>   

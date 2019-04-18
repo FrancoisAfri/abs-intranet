@@ -7,7 +7,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title"> Add new Fuel Record</h4>
+                    <h4 class="modal-title"> Add New Fuel Record</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -113,9 +113,9 @@
                         </div>
                     </div>
 
-                    @if (isset($MetreType) && $MetreType === 1)
+                    @if (isset($metreType) && $metreType== 1)
                       <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Odometer Reading </label>
+                        <label for="path" class="col-sm-2 control-label">Km Reading </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="Odometer_reading" name="Odometer_reading" value=""
                                    placeholder="Enter Odometer reading Reading" required>
@@ -123,7 +123,7 @@
                     </div>
                         @else
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Hours Reading</label>
+                        <label for="path" class="col-sm-2 control-label">Hour Reading</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
                                    placeholder="Enter Hours Reading" required>

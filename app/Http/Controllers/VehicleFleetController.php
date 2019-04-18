@@ -1265,14 +1265,11 @@ class VehicleFleetController extends Controller
         $command = (!empty($startExplode[1]) ? $startExplode[1] : 0);
         $year = (!empty($startExplode[2]) ? $startExplode[2] : 0);
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
-
         $Details = vehicle_detail::where('id', $maintenance->id)->first();
         $metreType = $Details->metre_reading_type;
-
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $servicestation = fleet_fillingstation::orderBy('name', 'asc')->get();
         $fueltank = Fueltanks::orderBy('id', 'desc')->get();
-
         $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
         $commands = $command;
 
@@ -1319,6 +1316,13 @@ class VehicleFleetController extends Controller
         if ($month < 10) {
             $month = 0. . $month;
         } else $month = $month;
+		$monthSend = strtotime("$year-$month");
+		$monthText = date("F Y", $monthSend);
+		$fuelMonth = date("M Y", $monthSend);
+
+		$monthStart = strtotime(new Carbon("first day of $fuelMonth"));
+        $monthEnd = new Carbon("last day of $fuelMonth");
+        $monthEnd = strtotime($monthEnd->endOfDay());
 
         $ID = $maintenance->id;
         $totalLitres = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('litres_new');
@@ -1329,10 +1333,12 @@ class VehicleFleetController extends Controller
             ->leftJoin('fuel_tanks', 'vehicle_fuel_log.tank_name', '=', 'fuel_tanks.id')
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
+            //->whereMonth('vehicle_fuel_log.date', '=', $month)// show record for this month
+            //->whereYear('vehicle_fuel_log.date', '=', $year)// show record for this year
+            ->whereBetween('date', [$monthStart, $monthEnd])
+			->where('vehicle_fuel_log.vehicleID', $ID)
+            ->orderBy('vehicle_fuel_log.date')
             ->orderBy('vehicle_fuel_log.id')
-            ->where('vehicle_fuel_log.vehicleID', $ID)
-            ->whereMonth('vehicle_fuel_log.created_at', '=', $month)// show record for this month
-            ->whereYear('vehicle_fuel_log.created_at', '=', $year)// show record for this year
             // ->where('vehicle_fuel_log.status','!=', 1)
             ->get();
 
@@ -1355,6 +1361,7 @@ class VehicleFleetController extends Controller
         $data['currentmonth'] = $currentmonth;
         $data['month'] = $month;
         $data['year'] = $year;
+        $data['monthText'] = $monthText;
         $data['totalCosts'] = $totalCosts;
         $data['totalLitres'] = $totalLitres;
         $data['datetaken'] = $datetaken;
@@ -1383,12 +1390,12 @@ class VehicleFleetController extends Controller
     public static function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
     {
         $approvals = DB::table('vehicle_configuration')->select('fuel_auto_approval', 'fuel_require_tank_manager_approval', 'fuel_require_ceo_approval')->first();
-
         $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
         $driverDetails = HRPerson::where('id', $driverID)->where('status', 1)->first();
-        $fueltanks = Fueltanks::where('id', $tankID)->orderBy('id', 'desc')->get();
-        if (!empty($fueltanks))
-            $fueltanks = HRPerson::where('id', $hrID)->where('status', 1)->first(); // to be changed to ceo
+        if (!empty($tankID))
+			$fueltanks = Fueltanks::where('id', $tankID)->orderBy('id', 'desc')->get();
+        //if (!empty($fueltanks))
+            //$fueltanks = HRPerson::where('id', $hrID)->where('status', 1)->first(); // to be changed to ceo
 
         //     if (!empty($leave_customs))
         // $leave_customs = $leave_customs->load('userCustom');
