@@ -27,11 +27,11 @@ class EmailTemplatesController extends Controller
             $emailTemplate->template_content = $request->input('template_content');
             $emailTemplate->update();
         }
-        else {
+        else 
+		{
             $emailTemplate = new EmailTemplate($request->all());
             $emailTemplate->save();
         }
-
         return back();
     }
 }

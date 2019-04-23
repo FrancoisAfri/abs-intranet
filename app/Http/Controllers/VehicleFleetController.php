@@ -637,7 +637,6 @@ class VehicleFleetController extends Controller
         return response()->json();
     }
 
-
     public function editInsurance(Request $request, vehicle_insurance $policy)
     {
         $this->validate($request, [
@@ -1271,21 +1270,29 @@ class VehicleFleetController extends Controller
         $servicestation = fleet_fillingstation::orderBy('name', 'asc')->get();
         $fueltank = Fueltanks::orderBy('id', 'desc')->get();
         $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
-        $commands = $command;
-
-        if ($commands === 0) {
+		
+        if ($command === 0) 
+		{
             $month = $now->month;
             $year = $now->year;
-        } elseif ($commands === 'p') {
-            if ($month == 1) {
+        } 
+		elseif ($command === 'p') 
+		{
+            if ($month == 1) 
+			{
                 $year = $year - 1;
                 $month = 12;
-            } else $month = $month - 1;
-        } elseif ($commands === 'n') {
-            if ($month == 12) {
+            } 
+			else $month = $month - 1;
+        } 
+		elseif ($command === 'n') 
+		{
+            if ($month == 12) 
+			{
                 $year = $year + 1;
                 $month = 1;
-            } else $month = $month + 1;
+            } 
+			else $month = $month + 1;
         }
 
         ################## WELL DETAILS ###############
@@ -1461,7 +1468,7 @@ class VehicleFleetController extends Controller
     {
         $this->validate($request, [
             'tank_name' => 'required_if:transaction,1',
-            //'Odometer_reading' => 'bail|required',
+            'date' => 'bail|required',
             'document_number' => 'required|unique:vehicle_fuel_log,document_number',
         ]);
         $fuelData = $request->all();
@@ -1476,14 +1483,27 @@ class VehicleFleetController extends Controller
         $tankID = $fuelData['tank_name'];
         $BookingDetails = array();
         $BookingDetail = VehicleFleetController::BookingDetails(0, $loggedInEmplID, 0, $tankID);
-        $dateofincident = $fuelData['date'] = str_replace('/', '-', $fuelData['date']);
-        $dateofincident = $fuelData['date'] = strtotime($fuelData['date']);
+        $fuelDate = $fuelData['date'];
+        $fuelDate = str_replace('/', '-', $fuelDate);
+        $fuelDate = strtotime($fuelDate);
 
         $totalcost = $fuelData['total_cost'] = str_replace(',', '', $fuelData['total_cost']);
         $totalcost = $fuelData['total_cost'] = str_replace('. 00', '', $fuelData['total_cost']);
-
+		// get the last meter reading
+		$fuelMonth = date("M Y", $fuelDate);
+		$monthStart = strtotime(new Carbon("first day of $fuelMonth"));
+        $monthEnd = new Carbon("last day of $fuelMonth");
+        $monthEnd = strtotime($monthEnd->endOfDay());
+		$meterType = DB::table('vehicle_details')
+			->select('vehicle_details.metre_reading_type')
+			->first();
+		$lastMeter = vehicle_fuel_log::
+			where('vehicleID', $fuelData['valueID'])
+			->whereBetween('date', [$monthStart, $monthEnd])
+			->orderBy('date', 'desc')
+			->first();
         $vehiclefuellog = new vehicle_fuel_log($fuelData);
-        $vehiclefuellog->date = $dateofincident;
+        $vehiclefuellog->date = $fuelDate;
         $vehiclefuellog->vehicleID = !empty($fuelData['valueID']) ? $fuelData['valueID'] : 0;
         $vehiclefuellog->driver = !empty($fuelData['driver']) ? $fuelData['driver'] : 0;
         $vehiclefuellog->tank_name = !empty($fuelData['tank_name']) ? $fuelData['tank_name'] : 0;
@@ -1494,18 +1514,27 @@ class VehicleFleetController extends Controller
         $vehiclefuellog->litres_new = !empty($fuelData['litres_new']) ? $fuelData['litres_new'] : 0;
         $vehiclefuellog->cost_per_litre = !empty($fuelData['cost_per_litre']) ? $fuelData['cost_per_litre'] : 0;
         $vehiclefuellog->Odometer_reading = !empty($fuelData['Odometer_reading']) ? $fuelData['Odometer_reading'] : 0;
-        $vehiclefuellog->status = $BookingDetail['status'];
         $vehiclefuellog->Hoursreading = !empty($fuelData['hours_reading']) ? $fuelData['hours_reading'] : '';
+        if ($meterType->metre_reading_type == 1)
+		{
+			$actualkm = $fuelData['Odometer_reading'] - $lastMeter->Odometer_reading;
+			$vehiclefuellog->actual_km_reading = $actualkm;
+		}
+		else
+		{
+			$actualhr = $fuelData['hours_reading'] - $lastMeter->Hoursreading;
+			$vehiclefuellog->actual_hr_reading = $actualhr;
+        }
+		$vehiclefuellog->status = $BookingDetail['status'];
         $vehiclefuellog->published_at = date("Y-m-d H:i:s");
         $vehiclefuellog->vehiclebookingID = !empty($fuelData['vehiclebookingID']) ? $fuelData['vehiclebookingID'] : 0;
         $vehiclefuellog->save();
 		if (!empty($fuelData['transaction']) &&  $fuelData['transaction'] == 1)
 		{
-			//FueltankTopUp FueltankTopUp
 			$topUp = new FueltankTopUp();
 			$topUp->document_no = $vehiclefuellog->document_number;
-			$topUp->document_date = $dateofincident;
-			$topUp->topup_date = $dateofincident;
+			$topUp->document_date = $fuelDate;
+			$topUp->topup_date = $fuelDate;
 			$topUp->type = 2; //outgoing
 			$topUp->litres_new = $vehiclefuellog->litres_new;
 			$topUp->description = $vehiclefuellog->description;

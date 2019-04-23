@@ -204,7 +204,6 @@ class ContactsController extends Controller
     }*/
     public function edit(ContactPerson $person)
     {
-		
         $loggedInUser = Auth::user();
         $person->load('user', 'company');
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();

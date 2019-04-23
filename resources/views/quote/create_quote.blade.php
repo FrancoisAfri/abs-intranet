@@ -32,7 +32,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
                             <label for="Leave_type" class="col-sm-2 control-label"> Quote Type</label>
 
@@ -124,7 +123,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div
+                        </div>
                         <hr class="hr-text packages-field" data-content="OR SELECT PACKAGES">
 
                         <div class="form-group packages-field{{ $errors->has('package_id') ? ' has-error' : '' }}">

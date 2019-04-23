@@ -23,7 +23,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Vehicle Fuel Record(s) </h3>
+                    <h3 class="box-title">Fuel Record(s) </h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -102,7 +102,6 @@
                         </a>
 						<a href="{{ '/vehicle_management/fleet-communications/' . $maintenance->id }}"
                                    class="btn btn-app"><i class="fa fa-money"></i> Communications</a>
-                        <!--  -->
                     </div>
                     <table class="table table-bordered">
 						<tr>
@@ -114,11 +113,10 @@
 								<input type="hidden" name="calendar_year" id="calendar_year" value="{{$year}}}">
 							</th>
 							<th colspan="11" style="text-align: center"><font size="5">Fuel Transactions For: {{$monthText}}</font></th>
-							<th>@if (isset($month) && $month < $currentmonth )
-									<button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
-												class="fa fa-caret-square-o-right"></i> Next Month
-									</button>
-								@endif
+							<th>
+								<button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
+											class="fa fa-caret-square-o-right"></i> Next Month
+								</button>
 							</th>
 						</tr>
                         <tr>
@@ -163,10 +161,10 @@
 										<td style="text-align: center">{{ !empty($details->Hoursreading) ? number_format($details->Hoursreading, 2) . ' hrs' : ''}}</td>
                                     @endif
                                     @if (isset($metreType) && $metreType === 1)
-                                        <td style="text-align: center">{{ !empty($details->Odometer_reading) && !empty($details->litres_new) ? number_format($details->Odometer_reading / $details->litres_new, 2) . ' km/l' : 0}}</td>
-                                     @else
-                                    <td style="text-align: center">{{ !empty($details->Hoursreading) && !empty($details->litres_new) ? number_format($details->Hoursreading /$details->litres_new, 2) . ' hr/l' : 0 }}</td>
-                                     @endif
+                                        <td style="text-align: center">{{!empty($details->actual_km_reading) && !empty($details->litres_new) ? number_format($details->actual_km_reading / $details->litres_new, 2) .' km/l' : 0}}</td>
+                                    @else
+										<td style="text-align: center">{{!empty($details->actual_hr_reading) && !empty($details->litres_new) ? number_format($details->actual_hr_reading / $details->litres_new, 2) .' hr/l' : 0 }}</td>
+                                    @endif
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
                                     <!--  <td style="text-align:center;" colspan="2"> -->
                                     <td>
