@@ -44,7 +44,7 @@
                                         @foreach ($tankResults as $filling)
                                             <tr id="categories-list">
                                                 <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
-                                                <td>{{ (!empty( $filling->type)) ?  $status[$filling->type] : ''}} </td>
+                                                <td>{{ (!empty( $filling->type) && $filling->type < 3) ?  $status[$filling->type] : ''}} </td>
                                                 <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                                 <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                                 <td>{{ (!empty( $filling->Supplier)) ?  $filling->Supplier : ''}} </td>
@@ -101,7 +101,6 @@
                                 <table id="example" class="table table-bordered table-hover">
                                     <thead>
                                     <tr>
-                                        <th style="width: 5px; text-align: center;"></th>
                                         <th style="width: 5px; text-align: center;">Date Taken</th>
                                         <th>Vehicle Fleet No. </th>
                                         <th>Vehicle Reg. No.</th>
@@ -116,17 +115,17 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @if (count($stationResukts) > 0)
-                                        @foreach ($stationResukts as $filling)
+                                    @if (count($stationResults) > 0)
+                                        @foreach ($stationResults as $filling)
                                             <tr id="categories-list">
-                                                <td nowrap>
+                                                <!--<td nowrap>
                                                     <button details="button" id="edit_compan"
                                                             class="btn btn-warning  btn-xs"
                                                             data-toggle="modal" data-target="#edit-fuelRecords-modal"
                                                             data-id="{{ $filling->id }}"><i
                                                                 class="fa fa-pencil-square-o"></i> Edit
                                                     </button>
-                                                </td>
+                                                </td>-->
                                                 <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
                                                 <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                                 <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>

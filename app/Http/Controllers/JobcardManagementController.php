@@ -41,14 +41,11 @@ class JobcardManagementController extends Controller
         //$jobcardMaintance = job_maintanace::orderBy('id', 'asc')->get();
         $Vehicle_managemnt = Vehicle_managemnt::orderBy('id', 'asc')->get();
 
-        // 
         $jobcardMaintance = DB::table('job_maintanace')
             ->select('job_maintanace.*', 'vehicle_managemnet.name as vehicle_name')
             ->leftJoin('vehicle_managemnet', 'job_maintanace.vehicle', '=', 'vehicle_managemnet.id')
             ->orderBy('job_maintanace.id')
             ->get();
-        //return $jobcardMaintance;
-
 
         $data['page_title'] = " Job Card Management";
         $data['page_description'] = " Job Card Management";
@@ -72,8 +69,6 @@ class JobcardManagementController extends Controller
         ]);
         $jobData = $request->all();
         unset($jobData['_token']);
-
-
         $jobmaintanace->vehicle = $jobData['vehicle'];
 
         $jobcarddate = $jobData['job_card_date'];

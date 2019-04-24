@@ -25,7 +25,7 @@
                 <form name="fuel-search-form" class="form-horizontal" method="POST" action=" "
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
-
+					<input type="hidden" name="no_errors" value="1" id="no_errors">
                     <div class="box-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">

@@ -36,6 +36,7 @@
                                 <th>Litres</th>
                                 <th>Rate Per Litre</th>
                                 <th>Cost</th>
+                                <th>Status</th>
                                 <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
                                                                                           id="checkallaccept"
                                                                                           onclick="checkAllboxAccept()"/>
@@ -58,6 +59,7 @@
                                         <td>{{ (!empty( $filling->litres_new)) ?  number_format($filling->litres_new, 2) : ''}} </td>
                                         <td>{{ (!empty( $filling->cost_per_litre)) ?   'R '.number_format($filling->cost_per_litre, 2) : ''}} </td>
                                         <td>{{ (!empty( $filling->total_cost)) ? 'R '.number_format($filling->total_cost, 2) : ''}} </td>
+                                        <td>{{ !empty($filling->fuel_status) ?  $bookingStatus[$filling->fuel_status] : ''}}</td>
                                         <td style='text-align:center'>
                                             <input type="hidden" class="checkbox selectall"
                                                    id="vehicleappprove_{{ $filling->fuelLogID }}"
@@ -84,7 +86,7 @@
                                 @endforeach
                             @else
                                 <tr id="categories-list">
-                                    <td colspan="15">
+                                    <td colspan="16">
                                         <div class="alert alert-danger alert-dismissable">
                                             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                                 &times;

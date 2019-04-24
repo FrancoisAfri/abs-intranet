@@ -25,15 +25,13 @@
                             </select>
                         </div>
                     </div>
-
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Document Number</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="document_number" name="document_number" value=" "
                                    placeholder="Enter Document Number" required>
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Date </label>
                         <div class="col-sm-8">
@@ -41,7 +39,6 @@
                                    value="{{ old('date') }}" placeholder="Select  date   ...">
                         </div>
                     </div>
-
                     <div class="form-group{{ $errors->has('transaction') ? ' has-error' : '' }}">
                         <label for="transaction" class="col-sm-2 control-label"> Tanks and Other </label>
                             <div class="col-sm-8">
@@ -63,7 +60,6 @@
                             <label class="radio-inline"><input type="radio" id="rdo_topup" name="transaction_type" value="2"> Top Up </label>  
                         </div>
                     </div>
-
                     <div class="form-group Tanks-field">
                         <label for="path" class="col-sm-2 control-label">Tanks </label>
                         <div class="col-sm-8">
@@ -76,7 +72,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Service Station </label>
                         <div class="col-sm-8">
@@ -89,7 +84,7 @@
                             </select>
                         </div>
                     </div>
-                     <div class="form-group">
+                    <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Litres </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="litres_new" name="litres_new" value=""
@@ -104,7 +99,6 @@
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
-
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Total Cost</label>
                         <div class="col-sm-8">
@@ -112,7 +106,6 @@
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
-
                     @if (isset($metreType) && $metreType== 1)
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Km Reading </label>
@@ -150,7 +143,4 @@
             </form>
         </div>
     </div>
-</div>
-</div>
-
-           
+</div>     

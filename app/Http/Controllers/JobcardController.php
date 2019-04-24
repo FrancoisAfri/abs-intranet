@@ -141,7 +141,6 @@ class JobcardController extends Controller
 
         AuditReportsController::store('Job Card Management', ' service Type Deleted', "Deleted Service Type", $service->id);
         return redirect('/jobcards/servicetype');
-
     }
     
     public function jobcardimages(jobcard_maintanance $images){

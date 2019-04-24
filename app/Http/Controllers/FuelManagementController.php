@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Users;
 use App\DivisionLevel;
+use App\DivisionLevelFive;
 use App\Vehicle_managemnt;
 use App\HRPerson;
 use App\vehiclemodel;
@@ -26,7 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
-
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 class FuelManagementController extends Controller
 {
 
@@ -390,7 +391,6 @@ class FuelManagementController extends Controller
         return view('Vehicles.FuelTanks.bothtank_results')->with($data);
     }
 
-
     public function TanktopUp(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -433,7 +433,7 @@ class FuelManagementController extends Controller
 
         $documentdate = $FueltankData['document_date'] = str_replace('/', '-', $FueltankData['document_date']);
         $documentdate = $FueltankData['document_date'] = strtotime($FueltankData['document_date']);
-		$BookingDetail = VehicleFleetController::BookingDetails(0, $FueltankData['received_by'], 0, $FueltankData['tank_id']);
+		$status = VehicleFleetController::BookingDetails(0);
         
         $topUp = new FueltankTopUp();
         $topUp->supplier_id = !empty($FueltankData['supplier_id']) ? $FueltankData['supplier_id'] : 0;
@@ -450,7 +450,7 @@ class FuelManagementController extends Controller
         $topUp->received_by = !empty($FueltankData['received_by']) ? $FueltankData['received_by'] : 0;
         $topUp->captured_by = $loggedInEmplID = Auth::user()->person->id;
         $topUp->tank_id = !empty($FueltankData['tank_id']) ? $FueltankData['tank_id'] : 0;
-        $topUp->status = $BookingDetail['status'];
+        $topUp->status = $status;
         $topUp->save();
 
         AuditReportsController::store('Fleet Management', 'Fuel Tank Top Up', "Accessed By User", 0);
@@ -479,7 +479,7 @@ class FuelManagementController extends Controller
 
         $documentdate = $FueltankData['documents_date'] = str_replace('/', '-', $FueltankData['documents_date']);
         $documentdate = $FueltankData['documents_date'] = strtotime($FueltankData['documents_date']);
-		$BookingDetail = VehicleFleetController::BookingDetails(0, $FueltankData['person_responsible'], 0, $FueltankData['tank_id']);
+		$status = VehicleFleetController::BookingDetails(0);
         $topUp = new FueltankTopUp();
         $topUp->document_no = $FueltankData['document_no'];
         $topUp->document_date = $documentdate;
@@ -491,14 +491,14 @@ class FuelManagementController extends Controller
         $topUp->received_by = !empty($FueltankData['received_by']) ? $FueltankData['received_by'] : 0;
         $topUp->captured_by = $loggedInEmplID = Auth::user()->person->id;
         $topUp->tank_id = !empty($FueltankData['tank_id']) ? $FueltankData['tank_id'] : 0;
-        $topUp->status = $BookingDetail['status'];
+        $topUp->status = $status;
         $topUp->save();
         
         AuditReportsController::store('Fleet Management', 'Fuel Tank Private Use', "Accessed By User", 0);
         return response()->json();
     }
 
-    public function tank_approval(Request $request)
+    public function tank_approval()
     {
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('id', 'asc')->get();
@@ -596,34 +596,34 @@ class FuelManagementController extends Controller
             ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
             ->leftJoin('fuel_tank_topUp', 'fuel_tanks.id', '=', 'fuel_tank_topUp.tank_id')
             ->leftJoin('contact_companies', 'fuel_tank_topUp.supplier_id', '=', 'contact_companies.id')//CONTACT COMPANY
-            ->where(function ($query) use ($FleetNo) {
-                if (!empty($FleetNo)) {
+            ->where(function ($query) use ($vehicleID) {
+                if (!empty($vehicleID)) {
                     $query->where('vehicle_fuel_log.vehicleID', $vehicleID);
                 }
             })
 			->where('vehicle_fuel_log.tank_and_other', 1)
-            ->get();
-
-        $stationResukts = DB::table('vehicle_fuel_log')
+            ->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
+			->get();
+			//return $tankResults;
+        $stationResults = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as iStatus', 'vehicle_fuel_log.id as fuelLogID',
                 'vehicle_details.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname',
                 'fleet_fillingstation.name as Staion')
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->leftJoin('hr_people', 'vehicle_fuel_log.captured_by', '=', 'hr_people.id')
             ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
-            ->where(function ($query) use ($FleetNo) {
-                if (!empty($FleetNo)) {
-                    $query->where('fleet_number', 'ILIKE', "%$FleetNo%");
-                }
-            })
-            ->where(function ($query) use ($vehicleType) {
-                if (!empty($vehicleType)) {
-                    $query->where('vehicle_type', $vehicleType);
+            ->where(function ($query) use ($vehicleID) {
+                if (!empty($vehicleID)) {
+                    $query->where('vehicle_fuel_log.vehicleID', $vehicleID);
                 }
             })
             ->where('vehicle_fuel_log.tank_and_other', 2)
-            ->get();
-        $status = array(1 => 'Incoming', 2 => '= Outgoing',);
+            ->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
+			->get();
+//return $stationResults;
+        $status = array(1 => 'Incoming', 2 => 'Outgoing',);
 
         $booking = array(10 => "Pending Capturer Ceo Approval",
             4 => "Pending Manager Approval",
@@ -635,13 +635,13 @@ class FuelManagementController extends Controller
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Fuel Search Details ', 'active' => 1, 'is_module' => 0]
         ];
-
+//return $tankResults;
         $data['employees'] = $employees;
         $data['servicestation'] = $servicestation;
         $data['fueltank'] = $fueltank;
         $data['booking'] = $booking;
         $data['status'] = $status;
-        $data['stationResukts'] = $stationResukts;
+        $data['stationResults'] = $stationResults;
         $data['hrDetails'] = $hrDetails;
         $data['contactcompanies'] = $contactcompanies;
         $data['Vehicle_types'] = $Vehicle_types;
@@ -656,9 +656,29 @@ class FuelManagementController extends Controller
 
     public function tankApproval(Request $request)
     {
-        $this->validate($request, [
-
+        $validator = Validator::make($request->all(), [
+			'no_errors' => 'required',
         ]);
+        $validator->after(function ($validator) use($request) {
+			$userID = Auth::user()->person->id;
+			$roles = DB::table('hr_roles')->select('hr_roles.id as role_id', 'hr_roles.description as role_name'
+				, 'hr_users_roles.id as user_role' , 'hr_users_roles.date_allocated')
+				 ->leftjoin("hr_users_roles",function($join) use ($userID) {
+						$join->on("hr_roles.id","=","hr_users_roles.role_id")
+							->on("hr_users_roles.hr_id","=",DB::raw($userID));
+					})
+				->where('hr_roles.status', 1)
+				->where('hr_roles.description', 'Fuel Approval')
+				->first();
+			$managerID = DivisionLevelFive::where('active', 1)->where('manager_id', $userID)->first();
+			if (!empty($roles->role_name) && empty($managerID->id))
+				$validator->errors()->add('no_errors', "Sorry you do not have required access to view informations on this page. Please contact your system administrator.");
+        });
+        if ($validator->fails()) {
+            return redirect("/vehicle_management/tank_approval")
+                ->withErrors($validator)
+                ->withInput();
+        }
         $fuelData = $request->all();
         unset($fuelData['_token']);
 
@@ -717,15 +737,36 @@ class FuelManagementController extends Controller
         $data['Approvals'] = $Approvals;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Fuel Approvals';
-//return $Approvals;
+
         AuditReportsController::store('Fleet Management', 'Vehicle Approvals Page Accessed', "Accessed By User", 0);
         return view('Vehicles.FuelTanks.Tank Approvals.tanks_approvals')->with($data);
     }
 
     public function other(Request $request)
     {
-        $this->validate($request, [
+		$validator = Validator::make($request->all(), [
+			'no_errors' => 'required',
         ]);
+        $validator->after(function ($validator) use($request) {
+			$userID = Auth::user()->person->id;
+			$roles = DB::table('hr_roles')->select('hr_roles.id as role_id', 'hr_roles.description as role_name'
+				, 'hr_users_roles.id as user_role' , 'hr_users_roles.date_allocated')
+				 ->leftjoin("hr_users_roles",function($join) use ($userID) {
+						$join->on("hr_roles.id","=","hr_users_roles.role_id")
+							->on("hr_users_roles.hr_id","=",DB::raw($userID));
+					})
+				->where('hr_roles.status', 1)
+				->where('hr_roles.description', 'Fuel Approval')
+				->first();
+			$managerID = DivisionLevelFive::where('active', 1)->where('manager_id', $userID)->first();
+			if (!empty($roles->role_name) && empty($managerID->id))
+				$validator->errors()->add('no_errors', "Sorry you do not have required access to view informations on this page. Please contact your system administrator.");
+        });
+        if ($validator->fails()) {
+            return redirect("/vehicle_management/tank_approval")
+                ->withErrors($validator)
+                ->withInput();
+        }
         $fuelData = $request->all();
         unset($fuelData['_token']);
 
@@ -734,7 +775,10 @@ class FuelManagementController extends Controller
         $hrDetails = HRPerson::where('status', 1)->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_maintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
-
+		$bookingStatus = array(10 => "Pending Capturer Ceo Approval",
+            4 => "Pending Tank Manager",
+            1 => "Approved",
+            14 => "Rejected");
         $vehicleID = $fuelData['vehicle_id'];
         $actionFrom = $actionTo = 0;
         $actionDate = $request['action_date'];
@@ -745,7 +789,11 @@ class FuelManagementController extends Controller
         }
         
         $Approvals = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.id as fuelLogID', 'vehicle_details.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion', 'fuel_tanks.tank_name as tankName')
+            ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.id as fuelLogID'
+			, 'vehicle_fuel_log.status as fuel_status'
+			, 'vehicle_details.*', 'hr_people.first_name as firstname'
+			, 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion'
+			, 'fuel_tanks.tank_name as tankName')
             ->leftJoin('fuel_tanks', 'vehicle_fuel_log.tank_name', '=', 'fuel_tanks.id')
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
@@ -760,8 +808,9 @@ class FuelManagementController extends Controller
                     $query->whereBetween('vehicle_fuel_log.date', [$actionFrom, $actionTo]);
                 }
             })
-            ->orderBy('vehicle_details.id')
             ->whereNotIn('vehicle_fuel_log.status', [1, 14])
+			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
             ->get();
 
         $data['page_title'] = "Other Fuel Approvals";
@@ -771,6 +820,7 @@ class FuelManagementController extends Controller
             ['title' => 'Manage Other Fuel Approvals ', 'active' => 1, 'is_module' => 0]
         ];
 
+        $data['bookingStatus'] = $bookingStatus;
         $data['hrDetails'] = $hrDetails;
         $data['contactcompanies'] = $contactcompanies;
         $data['Vehicle_types'] = $Vehicle_types;
@@ -788,6 +838,7 @@ class FuelManagementController extends Controller
         $this->validate($request, [
             // 'date_uploaded' => 'required',
         ]);
+		$loggedInEmplID = Auth::user()->person->id;
         $results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
@@ -804,15 +855,15 @@ class FuelManagementController extends Controller
                 if ($sValue == 1) {
 					$fuel = vehicle_fuel_log::where('id', $fuelLogId)->first();
 					
-					$BookingDetail = VehicleFleetController::BookingDetails($fuel->status, $fuel->rensonsible_person, 0, $fuel->tank_name);
-					$fuel->status = $BookingDetail['status'];
+					$status = VehicleFleetController::BookingDetails($fuel->status);
+					$fuel->status = $status;
 					$fuel->update();
 					// Query Vehicle Fueltank
 					if (!empty($fuel->tank_name))
 					{
 						$fuelTankToUp = FueltankTopUp::
 						where('vehicle_fuel_id', $fuel->id)
-						->where('tank_id', $fuelTank->id)
+						->where('tank_id', $fuel->tank_name)
 						->whereNotIn('status', [1, 14])
 						->first();
 						if(!empty($fuelTankToUp))
@@ -908,8 +959,8 @@ class FuelManagementController extends Controller
 				
                 if ($newAmount > 0 && $newAmount < $tankcapacity) 
 				{
-					$BookingDetail = VehicleFleetController::BookingDetails($TopUp->status, $TopUp->rensonsible_person, 0, $tankID);
-					$TopUp->status = $BookingDetail['status'];
+					$status = VehicleFleetController::BookingDetails($TopUp->status);
+					$TopUp->status = $status;
 					$TopUp->available_litres = $newAmount;
 					$TopUp->update();
 					

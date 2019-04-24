@@ -184,9 +184,10 @@ class HrController extends Controller {
 
         $hrID = $request->input('hr_id');
         $roleUsers = $request->input('role_users');
+		HRUserRoles::where('hr_id', $hrID)->delete();
         if (count($roleUsers) > 0) {
+            
             foreach ($roleUsers as $roleID => $accessLevel) {
-                HRUserRoles::where('hr_id', $hrID)->where('role_id', $roleID)->delete();
                 $HRUserRoles = new HRUserRoles();
                 $HRUserRoles->hr_id = $hrID;
                 $HRUserRoles->role_id = $roleID;

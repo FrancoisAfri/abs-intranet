@@ -1530,9 +1530,11 @@ class VehicleReportsController extends Controller
         $totalHours = $externalFuelLog->sum('Hoursreading');
         $totalLitres = $externalFuelLog->sum('litres_new');
         $totalCost = $externalFuelLog->sum('total_cost');
-        if (!empty($totalKms) && !empty($totalLitres)) $totalAvgKms = $totalKms / $totalLitres;
+        $totalActualHours = $externalFuelLog->sum('actual_hr_reading');
+		$totalActualKms = $externalFuelLog->sum('actual_km_reading');
+		if (!empty($totalActualKms) && !empty($totalLitres)) $totalAvgKms = $totalActualKms / $totalLitres;
         else $totalAvgKms = 0;
-        if (!empty($totalHours) && !empty($totalLitres)) $totAlavgHrs = $totalHours / $totalLitres;
+        if (!empty($totalActualHours) && !empty($totalLitres)) $totAlavgHrs = $totalActualHours / $totalLitres;
         else $totAlavgHrs = 0;
         if (!empty($totalCost) && !empty($totalLitres)) $totalAvgCost = $totalCost / $totalLitres;
         else $totalAvgCost = 0;

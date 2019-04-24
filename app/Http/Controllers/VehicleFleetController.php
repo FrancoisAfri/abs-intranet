@@ -1336,7 +1336,11 @@ class VehicleFleetController extends Controller
         $totalCosts = DB::table('vehicle_fuel_log')->where('vehicleID', $ID)->sum('total_cost');
 
         $vehiclefuellog = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'fleet_fillingstation.name as station', 'fuel_tanks.tank_name as tankName')
+            ->select('vehicle_fuel_log.*'
+			, 'hr_people.first_name as firstname'
+			, 'hr_people.surname as surname'
+			, 'fleet_fillingstation.name as station'
+			, 'fuel_tanks.tank_name as tankName')
             ->leftJoin('fuel_tanks', 'vehicle_fuel_log.tank_name', '=', 'fuel_tanks.id')
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
@@ -1394,73 +1398,23 @@ class VehicleFleetController extends Controller
         return view('Vehicles.FleetManagement.viewVehicleIFuelLog')->with($data);
     }
 
-    public static function BookingDetails($status = 0, $hrID = 0, $driverID = 0, $tankID = 0)
+    public static function BookingDetails($status = 0)
     {
         $approvals = DB::table('vehicle_configuration')->select('fuel_auto_approval', 'fuel_require_tank_manager_approval', 'fuel_require_ceo_approval')->first();
-        $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
-        $driverDetails = HRPerson::where('id', $driverID)->where('status', 1)->first();
-        if (!empty($tankID))
-			$fueltanks = Fueltanks::where('id', $tankID)->orderBy('id', 'desc')->get();
-        //if (!empty($fueltanks))
-            //$fueltanks = HRPerson::where('id', $hrID)->where('status', 1)->first(); // to be changed to ceo
-
-        //     if (!empty($leave_customs))
-        // $leave_customs = $leave_customs->load('userCustom');
-
-        $managerID = HRPerson::where('id', $hrID)->where('status', 1)->first();
-        $driverHead = $managerID->manager_id;
-
-        if ($approvals->fuel_auto_approval == 1) {
-            # code...
-            // query the hrperon  model and bring back the values of the manager
-            $loggedInEmplID = Auth::user()->person->id;
-            $User = HRPerson::where('id', $loggedInEmplID)->where('status', 1)->select('first_name', 'surname', 'email')->first();
-
-            $details = array('status' => 1, 'first_name' => $User->first_name, 'surname' => $User->surname, 'email' => $User->email);
-            return $details;
-
-        } elseif ($approvals->fuel_require_tank_manager_approval == 1 && $status < 4) {
-
-            //
-            if (!empty($fueltanks)) {
-                $fueltanks = HRPerson::where('id', $hrID)->where('status', 1)->first(); // to be changed to ceo
-                $userID = $fueltanks->id;
-            } else
-                $userID = $fueltanks->first()->tank_manager;
-
-            $UserDetails = HRPerson::where('id', $userID)->where('status', 1)->select('first_name', 'surname', 'email')->first();
-            
-            if ($UserDetails == null) {
-                $details = array('status' => 4, 'first_name' => $UserDetails->first_name, 'surname' => $UserDetails->surname, 'email' => $UserDetails->email);
-                return $details;
-            } else {
-
-                $details = array('status' => 4, 'first_name' => $UserDetails->first_name, 'surname' => $UserDetails->surname, 'email' => $UserDetails->email);
-                return $details;
-            }
-        } elseif ($approvals->fuel_require_ceo_approval == 1 && $status < 10) {
-
-            $Dept = DivisionLevelFive::where('manager_id', $hrDetails->division_level_5)->get()->first();
-			if (!empty($Dept->manager_id))
-			{
-				$hodmamgerDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)->select('first_name', 'surname', 'email')->first();
-
-				if ($hodmamgerDetails == null) {
-					$details = array('status' => 10, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
-					return $details;
-				} else {
-
-					$details = array('status' => 10, 'first_name' => $hodmamgerDetails->firstname, 'surname' => $hodmamgerDetails->surname, 'email' => $hodmamgerDetails->email);
-					return $details;
-				}
-			}
-        }
+		$userID = Auth::user()->person->id;
+		$managerID = DivisionLevelFive::where('active', 1)->where('manager_id', $userID)->first();
+		if (!empty($managerID->id)) return 1;
+        if ($approvals->fuel_auto_approval == 1)
+            return 1;
+		elseif ($approvals->fuel_require_tank_manager_approval == 1 && $status < 4)
+           return 4;
+		elseif ($approvals->fuel_require_ceo_approval == 1 && $status < 10)
+			return 10;
 		else 
 		{
 			if ($status == 4 || $status == 10) $newStatus = 1;
 			else  $newStatus = 4;
-            $details = array('status' => $newStatus, 'first_name' => $hrDetails->first_name, 'surname' => $hrDetails->surname, 'email' => $hrDetails->email);
-            return $details;
+            return $newStatus;
         }
     }
 
@@ -1481,8 +1435,7 @@ class VehicleFleetController extends Controller
             14 => "Rejected");
 		$loggedInEmplID = Auth::user()->person->id;
         $tankID = $fuelData['tank_name'];
-        $BookingDetails = array();
-        $BookingDetail = VehicleFleetController::BookingDetails(0, $loggedInEmplID, 0, $tankID);
+        $status = VehicleFleetController::BookingDetails(0);
         $fuelDate = $fuelData['date'];
         $fuelDate = str_replace('/', '-', $fuelDate);
         $fuelDate = strtotime($fuelDate);
@@ -1525,7 +1478,7 @@ class VehicleFleetController extends Controller
 			$actualhr = $fuelData['hours_reading'] - $lastMeter->Hoursreading;
 			$vehiclefuellog->actual_hr_reading = $actualhr;
         }
-		$vehiclefuellog->status = $BookingDetail['status'];
+		$vehiclefuellog->status = $status;
         $vehiclefuellog->published_at = date("Y-m-d H:i:s");
         $vehiclefuellog->vehiclebookingID = !empty($fuelData['vehiclebookingID']) ? $fuelData['vehiclebookingID'] : 0;
         $vehiclefuellog->save();
