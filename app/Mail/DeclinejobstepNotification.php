@@ -48,7 +48,7 @@ class DeclinejobstepNotification extends Mailable
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['jobcard_url'] = url("/jobcards/appovecards");
+        $data['jobcard_url'] = url("/jobcards/approval");
 
 
         return $this->view('mails.decline_jobcard')

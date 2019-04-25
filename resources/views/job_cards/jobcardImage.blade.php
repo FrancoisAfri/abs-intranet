@@ -192,7 +192,7 @@
 				var modalID = 'upload-image-modal';
 				//var modal = $('#'+modalID);
 				var submitBtnID = 'add-vehicle_image';
-				var redirectUrl = '/jobcards/jobcardimages/{{$images->id}}';
+				var redirectUrl = '/jobcards/jobcardimages/{{$card->id}}';
 				var successMsgTitle = 'Image Added!';
 				var successMsg = 'The Image  has been updated successfully.';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

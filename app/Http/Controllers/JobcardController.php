@@ -491,6 +491,8 @@ class JobcardController extends Controller
                 ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
                 ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
                 ->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+				->orderBy('vehicle_details.fleet_number', 'ASC')
+				->where('vehicle_details.status', 1)
 				->get();
 
             $data['page_title'] = "Job Card";
@@ -909,7 +911,7 @@ HTML;
 		$JobCardHistory->job_card_id = $card->id;
 		$JobCardHistory->user_id = Auth::user()->person->id;
 		$JobCardHistory->status = $processflow->step_number;
-		$JobCardHistory->comment = "Job Card Moved to Next Step.";
+		$JobCardHistory->comment = "Job Card Moved to Document Processing.";
 		$JobCardHistory->action_date = time();
 		$JobCardHistory->save();
 		//send email to the next person the step
@@ -1466,6 +1468,15 @@ HTML;
         $jobcardnote->user_id = Auth::user()->person->id;
         $jobcardnote->date_default = time();
         $jobcardnote->save();
+		// send email to other user
+		$histories = jobcardnote::where('jobcard_id', $jobcardnote->jobcard_id)->distinct('user_id')->get();
+        foreach ($histories as $history) {
+            $usedetails = HRPerson::where('id', $history->user_id)->select('first_name', 'surname', 'email')->first();
+            $email = $usedetails->email;
+            $firstname = $usedetails->first_name;
+            $email = $usedetails->email;
+            Mail::to($email)->send(new NoteCommunications($firstname,$SysData['note']));
+        }
 		
 		$flow = jobcard_maintanance::where('id', $jobcardnote->jobcard_id)->first();
 		//Jobcard history
@@ -1477,14 +1488,6 @@ HTML;
 		$JobCardHistory->action_date = time();
 		$JobCardHistory->save();
 		
-		/*$histories = JobCardHistory::where('job_card_id', $jobcardnote->jobcard_id)->get();
-        foreach ($histories as $history) {
-            $usedetails = HRPerson::where('id', $history->user_id)->select('first_name', 'surname', 'email')->first();
-            $email = $usedetails->email;
-            $firstname = $usedetails->first_name;
-            $email = $usedetails->email;
-            Mail::to($email)->send(new NoteCommunications($firstname,$SysData['note']));
-        }*/
         AuditReportsController::store('Job Card Management', ' Job card note created', "Accessed By User", $jobcardnote->id);
         return response()->json();
     }

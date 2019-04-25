@@ -768,12 +768,8 @@ class VehicleManagemntController extends Controller
         $registration_number = $request['registration_number'];
         $promotionID = $request['promotion_type'];
         $statusType = $request['status_type'];
-
-      
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        
         $vehiclestatus = array(1 => 'Active', 2 => 'Require Approval', 3 => 'Rejected', 4 => 'Inactive');
-		
         $vehiclemaintenance = DB::table('vehicle_details')
             ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
                 'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',

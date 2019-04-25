@@ -26,7 +26,7 @@
 					</div>
 				</div>
 				<!-- /.box-header -->
-				<div class="box-body" style="max-height: 190px; overflow-y: scroll;">
+				<div class="box-body" style="max-height: 500px; overflow-y: scroll;">
 					<table id="example2" class="table table-bordered table-hover">
 						<thead>
 						<tr>

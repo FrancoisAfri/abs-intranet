@@ -40,7 +40,7 @@ class MechanicEmailJC extends Mailable
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['dashboard_url'] = url('/');
-        $data['jobcard_url'] = url("/jobcards/jobcardsearch");
+        $data['jobcard_url'] = url("/jobcards/approval");
 
         return $this->view('mails.send_jobcard_mechanic')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])

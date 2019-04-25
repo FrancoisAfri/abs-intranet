@@ -214,7 +214,7 @@
                                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Hi {{ $first_name . ' ' . $surname }},<br><br>
+                                                    Hi {{ $first_name}},<br><br>
                                                     We would like to inform you that a Job Card requires your attention To view  and approve the new Job Card please follow this link <a target="_blank" href="{{ $jobcard_url }}">click here.</a>
                                                 </td>
                                             </tr>
