@@ -2093,14 +2093,11 @@ HTML;
 		->where(function ($query) use ($productID) {
 			if (!empty($productID)) {
 				$query->where('jobcard__order_parts.product_id', $productID);
-
 			}
 		})
-		
 		->where(function ($query) use ($vehicleID) {
 			if (!empty($vehicleID)) {
-				$query->where('jobcard__order_parts.vehicle_id', $vehicleID);
-
+				$query->where('jobcard_maintanance.vehicle_id', $vehicleID);
 			}
 		})
 		->where(function ($query) use ($actionFrom, $actionTo) {

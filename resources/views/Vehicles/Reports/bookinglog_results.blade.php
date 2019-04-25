@@ -74,10 +74,10 @@
 							</table>
 							<div class="box-footer">
 								<div class="row no-print">
-									<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Report</button>
 									<button type="button" id="cancel" class="btn btn-default pull-right"><i
 												class="fa fa-arrow-left"></i> Back
 									</button>
+									<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Report</button>
 								</div>
 							</div>
 						</form>
