@@ -671,7 +671,7 @@ class FuelManagementController extends Controller
 				->where('hr_roles.description', 'Fuel Approval')
 				->first();
 			$managerID = DivisionLevelFive::where('active', 1)->where('manager_id', $userID)->first();
-			if (!empty($roles->role_name) || empty($managerID->id))
+			if (!empty($roles->role_name) && empty($managerID->id))
 				$validator->errors()->add('no_errors', "Sorry you do not have required access to view informations on this page. Please contact your system administrator.");
         });
         if ($validator->fails()) {
