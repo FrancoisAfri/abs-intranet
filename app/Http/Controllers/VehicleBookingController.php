@@ -58,7 +58,7 @@ class VehicleBookingController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $usageType = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
-        $bookingStatus = array(2 => "Pending Capturer Manager Approval",
+        $bookingStatus = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
@@ -243,7 +243,7 @@ class VehicleBookingController extends Controller
         $vehicleTypes = Vehicle_managemnt::where('id', $vehicle->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
 		$usageTypes = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
-		$bookingStatuses = array(2 => "Pending Capturer Manager Approval",
+		$bookingStatuses = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
@@ -373,7 +373,7 @@ class VehicleBookingController extends Controller
 
     public function status($status = 0)
     {
-        $aStatusses = array(2 => "Pending Capturer Manager Approval",
+        $aStatusses = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
@@ -544,7 +544,7 @@ class VehicleBookingController extends Controller
 
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $usageType = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
-        $bookingStatus = array(2 => "Pending Capturer Manager Approval",
+        $bookingStatus = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
@@ -598,7 +598,7 @@ class VehicleBookingController extends Controller
     {
         $usageType = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
 
-        $bookingStatus = array(2 => "Pending Capturer Manager Approval",
+        $bookingStatus = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
@@ -1134,7 +1134,7 @@ class VehicleBookingController extends Controller
         
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $usageType = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
-        $bookingStatus = array(2 => "Pending Capturer Manager Approval",
+        $bookingStatus = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
@@ -1185,7 +1185,7 @@ class VehicleBookingController extends Controller
 		}
 				
 		$usageTypes = array(1 => ' Usage', 2 => ' Service', 3 => 'Maintenance', 4 => 'Repair');
-        $bookingStatuses = array(2 => "Pending Capturer Manager Approval",
+        $bookingStatuses = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",

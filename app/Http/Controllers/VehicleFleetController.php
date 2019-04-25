@@ -1360,7 +1360,7 @@ class VehicleFleetController extends Controller
             ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
         ];
 
-        $bookingStatus = array(10 => "Pending Capturer Ceo Approval",
+        $bookingStatus = array(10 => "Pending Ceo Approval",
             4 => "Pending Manager Approval",
             1 => "Approved",
             14 => "Rejected");
@@ -1429,7 +1429,7 @@ class VehicleFleetController extends Controller
         unset($fuelData['_token']);
 
         $currentDate = time();
-        $bookingStatus = array(10 => "Pending Capturer Ceo Approval",
+        $bookingStatus = array(10 => "Pending Ceo Approval",
             4 => "Pending Tank Manager",
             1 => "Approved",
             14 => "Rejected");
@@ -1527,7 +1527,7 @@ class VehicleFleetController extends Controller
         $transType = array(1 => 'Full Tank', 2 => 'Top Up');
         $vehicleID = $maintenance->id;
 
-        $bookingStatus = array(2 => "Pending Capturer Manager Approval",
+        $bookingStatus = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",

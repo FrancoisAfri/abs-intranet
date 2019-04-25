@@ -365,7 +365,7 @@ class FuelManagementController extends Controller
         $FueltankTopUp = FueltankTopUp::orderBy('id', 'desc')->get();
         $Fueltanks = Fueltanks::where('id', $ID)->orderBy('id', 'desc')->first();
 		
-		$bookingStatus = array(10 => "Pending Capturer Ceo Approval",
+		$bookingStatus = array(10 => "Pending Ceo Approval",
             4 => "Pending Manager Approval", 1 => "Approved", 2 => "N/A",14 => "Rejected");
 			
         $data['page_title'] = " Fleet Management";
@@ -625,7 +625,7 @@ class FuelManagementController extends Controller
 //return $stationResults;
         $status = array(1 => 'Incoming', 2 => 'Outgoing',);
 
-        $booking = array(10 => "Pending Capturer Ceo Approval",
+        $booking = array(10 => "Pending Ceo Approval",
             4 => "Pending Manager Approval",
             1 => "Approved",
             14 => "Rejected");
@@ -771,7 +771,7 @@ class FuelManagementController extends Controller
         $hrDetails = HRPerson::where('status', 1)->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_maintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
-		$bookingStatus = array(10 => "Pending Capturer Ceo Approval",
+		$bookingStatus = array(10 => "Pending Ceo Approval",
             4 => "Pending Tank Manager",
             1 => "Approved",
             14 => "Rejected");

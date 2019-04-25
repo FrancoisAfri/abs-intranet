@@ -45,7 +45,7 @@ class vehiclealertController extends Controller {
 		$alertDays = !empty($configuration->alert_days) ? $configuration->alert_days : 0;
 		$todayDate = strtotime(date('Y-m-d'));
 		$thirthyDate =  mktime(0, 0, 0, date('m'), date('d')-30, date('Y'));
-        $bookingStatus = array(2 => "Pending Capturer Manager Approval",
+        $bookingStatus = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
@@ -213,7 +213,7 @@ class vehiclealertController extends Controller {
 		$alertDays = !empty($configuration->alert_days) ? $configuration->alert_days : 0;
 		$todayDate = strtotime(date('Y-m-d'));
 		$thirthyDate =  mktime(0, 0, 0, date('m'), date('d')-30, date('Y'));
-        $bookingStatus = array(2 => "Pending Capturer Manager Approval",
+        $bookingStatus = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",

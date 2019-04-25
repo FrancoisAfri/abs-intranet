@@ -163,7 +163,7 @@ class VehicleReportsController extends Controller
         for ($i = 0; $i < count($vehicleArray); $i++) {
             $vehicle .= $vehicleArray[$i] . ',';
         }
-		$bookingStatus = array(2 => "Pending Capturer Manager Approval",
+		$bookingStatus = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
@@ -262,7 +262,7 @@ class VehicleReportsController extends Controller
             ->orderBy('vehicle_id', 'desc')
             ->orderBy('id', 'desc')
             ->get();
-		$bookingStatus = array(2 => "Pending Capturer Manager Approval",
+		$bookingStatus = array(2 => "Pending Manager Approval",
             1 => "Pending Driver Manager Approval",
             3 => "Pending HOD Approval",
             4 => "Pending Admin Approval",
