@@ -1979,7 +1979,7 @@ HTML;
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Reports';
 		AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
-        return view('job_cards.Jobcard_card')->with($data);    
+        return view('job_cards.jobcard_card')->with($data);    
    }
    
    public function printscard( Request $request ){
@@ -2132,7 +2132,7 @@ HTML;
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Reports';
         AuditReportsController::store('Job Card Management', 'Job Card print parts Page Accessed', "Accessed By User", 0);
-        return view('job_cards.Jobcard_parts')->with($data);
+        return view('job_cards.jobcard_parts')->with($data);
     }
     
     public function printsparts(Request $request){
