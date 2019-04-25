@@ -1161,44 +1161,44 @@ HTML;
 			{
 				list($sUnit, $iID) = explode("_", $sKey);
 				if ($sUnit == 'declined' && !empty($sValue)) {
-
-					$getStatus = DB::table('jobcard_maintanance')->where('id', $iID)->first();
-					$statusflow = $getStatus->status;
-
-					$jobcard = jobcard_maintanance::where('id', $iID)->first();  // when declined move back to the last step
+					$jobCard = jobcard_maintanance::where('id', $iID)->first();  // when declined move back to the last step
+					$statusflow = $jobCard->status;
 					if ($statusflow === 0) {
 						// status 0 means declined
-						$jobcard->status = 0;
+						$jobCard->status = 0;
 					} elseif ($statusflow === 1) {
-						$jobcard->status = 0;
+						$jobCard->status = 0;
 					} else
-						$jobcard->status = $statusflow - 1;
-					$jobcard->reject_reason = $sValue;
-					$jobcard->reject_timestamp = time();
-					$jobcard->rejector_id = Auth::user()->person->id;
-					$jobcard->update();
+						$jobCard->status = $statusflow - 1;
+					$jobCard->reject_reason = $sValue;
+					$jobCard->reject_timestamp = time();
+					$jobCard->rejector_id = Auth::user()->person->id;
+					$jobCard->update();
 					
-					//Jobcard history
+					//jobCard history
 					$JobCardHistory = new JobCardHistory();
 					$JobCardHistory->job_card_id = $jobCard->id;
 					$JobCardHistory->user_id = Auth::user()->person->id;
-					$JobCardHistory->status = $jobcard->status;
+					$JobCardHistory->status = $jobCard->status;
 					$JobCardHistory->comment = "New Job Card Status Updated";
 					$JobCardHistory->action_date = time();
 					$JobCardHistory->save();
 					
 					if ($statusflow != 0) {
 						$processflow = processflow::where('step_number', $statusflow - 1)->where('status', 1)->orderBy('step_number', 'asc')->first();
-						$user = HRUserRoles::where('role_id', $processflow->job_title)->pluck('hr_id');
-						foreach ($user as $manID) 
+						if (!empty($processflow->job_title))
 						{
-							$usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
-							$email = $usedetails->email;
-							$firstname = $usedetails->first_name;
-							$surname = $usedetails->surname;
-							$email = $usedetails->email;
-							$reason = $sValue;
-							Mail::to($email)->send(new DeclinejobstepNotification($firstname, $surname, $email, $reason));
+							$user = HRUserRoles::where('role_id', $processflow->job_title)->pluck('hr_id');
+							foreach ($user as $manID) 
+							{
+								$usedetails = HRPerson::where('id', $manID)->select('first_name', 'surname', 'email')->first();
+								$email = $usedetails->email;
+								$firstname = $usedetails->first_name;
+								$surname = $usedetails->surname;
+								$email = $usedetails->email;
+								$reason = $sValue;
+								Mail::to($email)->send(new DeclinejobstepNotification($firstname, $surname, $email, $reason));
+							}
 						}
 					}
 				}
@@ -1477,14 +1477,14 @@ HTML;
 		$JobCardHistory->action_date = time();
 		$JobCardHistory->save();
 		
-		$histories = JobCardHistory::where('job_card_id', $jobcardnote->jobcard_id)->get();
+		/*$histories = JobCardHistory::where('job_card_id', $jobcardnote->jobcard_id)->get();
         foreach ($histories as $history) {
             $usedetails = HRPerson::where('id', $history->user_id)->select('first_name', 'surname', 'email')->first();
             $email = $usedetails->email;
             $firstname = $usedetails->first_name;
             $email = $usedetails->email;
             Mail::to($email)->send(new NoteCommunications($firstname,$SysData['note']));
-        }
+        }*/
         AuditReportsController::store('Job Card Management', ' Job card note created', "Accessed By User", $jobcardnote->id);
         return response()->json();
     }
