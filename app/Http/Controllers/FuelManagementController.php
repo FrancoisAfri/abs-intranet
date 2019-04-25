@@ -663,15 +663,13 @@ class FuelManagementController extends Controller
 			$userID = Auth::user()->person->id;
 			$roles = DB::table('hr_roles')->select('hr_roles.id as role_id', 'hr_roles.description as role_name'
 				, 'hr_users_roles.id as user_role' , 'hr_users_roles.date_allocated')
-				 ->leftjoin("hr_users_roles",function($join) use ($userID) {
-						$join->on("hr_roles.id","=","hr_users_roles.role_id")
-							->on("hr_users_roles.hr_id","=",DB::raw($userID));
-					})
+				->leftJoin('hr_users_roles', 'hr_roles.id', '=', 'hr_users_roles.role_id')
 				->where('hr_roles.status', 1)
 				->where('hr_roles.description', 'Fuel Approval')
+				->where('hr_users_roles.hr_id',$userID)
 				->first();
 			$managerID = DivisionLevelFive::where('active', 1)->where('manager_id', $userID)->first();
-			if (!empty($roles->role_name))
+			if (!empty($roles->role_name) && empty($managerID->id))
 				$validator->errors()->add('no_errors', "Sorry you do not have required access to view informations on this page. Please contact your system administrator.");
         });
         if ($validator->fails()) {
