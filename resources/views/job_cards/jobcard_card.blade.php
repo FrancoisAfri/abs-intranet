@@ -1,8 +1,7 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/buttons.dataTables.min.css">
 @endsection
 @section('content')
     <div class="row">
@@ -73,11 +72,11 @@
                                     </table>
                                     <div class="box-footer">
                                         <div class="row no-print">
-                                            <button type="button" id="cancel" class="btn btn-default pull-left"><i
+											<button type="button" id="cancel" class="btn btn-default pull-right"><i
                                                         class="fa fa-arrow-left"></i> Back
                                             </button>
-                                             <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> 
-                                        </div>
+                                            <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> 
+										</div>
                                     </div>
 								</form>
                             </div>
@@ -93,15 +92,13 @@
 	<!-- DataTables -->
 	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-	<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
-	<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.buttons.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.flash.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/jszip.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/pdfmake.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/vfs_fonts.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.html5.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.print.min.js"></script>
 	<!-- End Bootstrap File input -->
 	<script>
 		function postData(id, data) {
@@ -118,13 +115,26 @@
 			$('#example2').DataTable({
 				"paging": true,
 				"lengthChange": true,
+				"lengthMenu": [ 50, 75, 100, 150, 200, 250 ],
+				"pageLength": 50,
 				"searching": true,
 				"ordering": true,
 				"info": true,
 				"autoWidth": true,
-				dom: 'Bfrtip',
+				dom: 'lfrtipB',
 				buttons: [
-					'copy', 'csv', 'excel'
+					{
+						extend: 'excelHtml5',
+						title: 'Bookings Report'
+					},
+					{
+						extend: 'csvHtml5',
+						title: 'Bookings Report'
+					},
+					{
+						extend: 'copyHtml5',
+						title: 'Bookings Report'
+					}
 				]
 			});
 		});
