@@ -68,7 +68,8 @@ class VehicleReportsController extends Controller
             ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
             ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->orderBy('vehicle_details.id', 'desc')
+			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
             ->get();
 
         $data['page_title'] = " Fleet Management ";
@@ -359,7 +360,15 @@ class VehicleReportsController extends Controller
         for ($i = 0; $i < count($vehicleArray); $i++) {
             $vehicle .= $vehicleArray[$i] . ',';
         }
-
+		$totalKms = $fuelLog->sum('Odometer_reading');
+        $totalHours = $fuelLog->sum('Hoursreading');
+        $totalLitres = $fuelLog->sum('litres_new');
+        $totalCost = $fuelLog->sum('total_cost');
+		
+		$data['totalKms'] = $totalKms;
+        $data['totalHours'] = $totalHours;
+        $data['totalLitres'] = $totalLitres;
+        $data['totalCost'] = $totalCost;
         $data['fuelLog'] = $fuelLog;
         $data['vehicle_id'] = rtrim($vehicle, ",");
         $data['vehicle_type'] = $vehicleType;
@@ -437,7 +446,16 @@ class VehicleReportsController extends Controller
             })
             ->orderBy('id', 'desc')
             ->get();
-
+		
+		$totalKms = $fuelLog->sum('Odometer_reading');
+        $totalHours = $fuelLog->sum('Hoursreading');
+        $totalLitres = $fuelLog->sum('litres_new');
+        $totalCost = $fuelLog->sum('total_cost');
+		
+		$data['totalKms'] = $totalKms;
+        $data['totalHours'] = $totalHours;
+        $data['totalLitres'] = $totalLitres;
+        $data['totalCost'] = $totalCost;
         $data['fuelLog'] = $fuelLog;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "Fuel Report ";

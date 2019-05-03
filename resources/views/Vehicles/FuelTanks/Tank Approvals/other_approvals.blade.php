@@ -26,7 +26,6 @@
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
-
                                 <th> Date Taken</th>
                                 <th>Vehicle Fleet No.</th>
                                 <th>Vehicle Reg. No.</th>

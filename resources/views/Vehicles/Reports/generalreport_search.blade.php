@@ -91,7 +91,7 @@
                             </div>
                         @endforeach
                         <div class="form-group {{ $errors->has('vehicle_id') ? ' has-error' : '' }}">
-                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle </label>
+                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle</label>
                             <div class="col-sm-8">
 
                                 <select class="form-control select2" multiple="multiple" style="width: 100%;"
@@ -99,7 +99,7 @@
                                         name="vehicle_id[]">
                                     <option value="">*** Select an Vehicle ***</option>
                                     @foreach($vehicledetail as $vehicle)
-                                        <option value="{{ $vehicle->id }}">{{ $vehicle->vehicle_registration.' '.$vehicle->vehicle_make.' '.$vehicle->vehicle_model}}</option>
+                                        <option value="{{ $vehicle->id }}">{{ $vehicle->fleet_number}}</option>
                                     @endforeach
                                 </select>
                             </div>

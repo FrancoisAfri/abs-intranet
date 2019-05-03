@@ -513,8 +513,6 @@ class FleetManagementController extends Controller
 
     public function viewImage(vehicle_maintenance $maintenance)
     {
-        //return $maintenance;
-
         $ID = $maintenance->id;
         $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
         ################## WELL DETAILS ###############
@@ -570,12 +568,10 @@ class FleetManagementController extends Controller
 		foreach ($images as $image)
 		{
 			//Upload Image picture
-			
 			$count ++;
 			$imageArray = explode(".",$image);
 			$vehicleImages = new images();
 			$vehicleImages->name = $imageArray[0];
-			// $vehicleImages->description = $SysData['description'];
 			$vehicleImages->vehicle_maintanace = $SysData['valueID'];
 			$vehicleImages->upload_date = $currentDate;
 			$vehicleImages->user_name = $userLogged->person->id;
