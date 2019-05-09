@@ -1258,11 +1258,6 @@ class VehicleFleetController extends Controller
         $FueltankData = $request->all();
         unset($FueltankData['_token']);
 		
-		$dateofyear = date("Y-m-d",mktime(0,0,0,1,1,date('Y')));
-		echo $dateofyear."</br>";
-		$datevalue =  date('z', mktime(0,0,0,1,1,date('Y')));
-		echo $datevalue;
-		die;
         $now = Carbon::now();
         $startExplode = explode('_', $date);
         $month = $startExplode[0];
