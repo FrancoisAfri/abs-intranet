@@ -384,11 +384,7 @@ function loadContactPeopleOptions(ddID, selectedOption, companyID, incInactive, 
             }
         });
 }
-
-//   
-// 
-// // **********************************************
-
+// **********************************************
 /* function to load vehicle make  drop down options */
     function vehiclemakeDDOnChange(dropDownObj, vehiclemomdeDDID, selectedOption) {
        // console.log('gets here');
@@ -436,7 +432,6 @@ function loadVehicleModelOptions(ddID, selectedOption, makeID, incInactive, load
 }
 
 // // **********************************************
-
     /* function to load job card categories drop down options */
     function productcategoryDDOnChange(dropDownObj, productCategoryDDID, selectedOption) {
         productCategoryDDID = productCategoryDDID || 'product_id';

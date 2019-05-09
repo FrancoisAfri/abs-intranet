@@ -31,7 +31,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
                             <label for="Leave_type" class="col-sm-2 control-label"> Quote Type</label>
 
@@ -59,7 +58,6 @@
 						</div>
                         <div class="form-group{{ $errors->has('division_id') ? ' has-error' : '' }}">
                             <label for="division_id" class="col-sm-2 control-label">{{ $highestLvl->name }}</label>
-
                             <div class="col-sm-10">
                                 <select id="division_id" name="division_id" class="form-control select2" style="width: 100%;">
                                     <option value="">*** Please Select a {{ $highestLvl->name }} ***</option>
@@ -86,7 +84,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
                             <label for="contact_person_id" class="col-sm-2 control-label">Contact Person</label>
-
                             <div class="col-sm-10">
                                 <select id="contact_person_id" name="contact_person_id" class="form-control select2" style="width: 100%;">
                                     <option value="">*** Please Select a Company First ***</option>
@@ -184,10 +181,8 @@
     <!-- DataTables -->
     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-
     <script>
         $(function () {
 			//Cancel button click event

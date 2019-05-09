@@ -124,7 +124,7 @@
 										<td>
 										@if ($card->status <= 1)
 											<a href="{{ '/jobcards/edit_instructions/' . $instruction->id }}"
-											id="edit_instructions/" class="btn btn-sm btn-default btn-flat">Modify</a>
+											id="edit_instructions" class="btn btn-sm btn-default btn-flat">Modify</a>
 										@endif
 										</td>
 										<td>

@@ -203,7 +203,7 @@ class VehicleManagemntController extends Controller
 
     public function Fleet_fillingstaion(Request $request)
     {
-        $fleetfillingstation = fleet_fillingstation::orderBy('id', 'asc')->get();
+        $fleetfillingstation = fleet_fillingstation::orderBy('name', 'asc')->get();
 
         $data['page_title'] = "Fleet Filling Station";
         $data['page_description'] = "Filling Station Management";
