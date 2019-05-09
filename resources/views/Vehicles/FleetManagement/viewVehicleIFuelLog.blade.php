@@ -1,22 +1,9 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <!-- bootstrap datepicker -->
-    <!-- Include Date Range Picker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
     <!-- iCheck -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
-    <!-- bootstrap file input -->
-    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"/>
-    <!-- Time picker -->
-    <!--  -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
-          rel="stylesheet">
 @endsection
 @section('content')
     <div class="row">
@@ -221,35 +208,12 @@
 @section('page_script')
 	<script src="/custom_components/js/modal_ajax_submit.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
 	<!-- iCheck -->
 	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-			type="text/javascript"></script>
-	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-			type="text/javascript"></script>
-	<!-- the main fileinput plugin file -->
-	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
-	<!-- InputMask -->
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<!-- time picker -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 	<script>
 		function postData(id, data) {
 			if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
-
 		}
 		$('#previous_button').click(function () {
 			location.href = '/vehicle_management/fuel_log/{{$ID}}/{{$month. '_' . 'p' . '_' . $year }}';
