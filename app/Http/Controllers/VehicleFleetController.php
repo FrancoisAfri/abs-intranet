@@ -1472,14 +1472,14 @@ class VehicleFleetController extends Controller
 		{
 			if (!empty($lastMeter->Odometer_reading))
 				$actualkm = $fuelData['Odometer_reading'] - $lastMeter->Odometer_reading;
-			else $actualkm = 0;
+			else $actualkm = $fuelData['Odometer_reading'];
 			$vehiclefuellog->actual_km_reading = $actualkm;
 		}
 		else
 		{
 			if (!empty($lastMeter->Hoursreading))
 				$actualhr = $fuelData['hours_reading'] - $lastMeter->Hoursreading;
-			else $actualhr = 0;
+			else $actualhr = $fuelData['hours_reading'];
 			$vehiclefuellog->actual_hr_reading = $actualhr;
         }
 		$vehiclefuellog->status = $status;
