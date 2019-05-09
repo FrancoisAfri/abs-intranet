@@ -1449,6 +1449,7 @@ class VehicleFleetController extends Controller
         $monthEnd = strtotime($monthEnd->endOfDay());
 		$meterType = DB::table('vehicle_details')
 			->select('vehicle_details.metre_reading_type')
+			->where('id', $fuelData['valueID'])
 			->first();
 		$lastMeter = vehicle_fuel_log::
 			where('vehicleID', $fuelData['valueID'])
