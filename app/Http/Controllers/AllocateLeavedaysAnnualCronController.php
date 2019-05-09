@@ -64,7 +64,7 @@ class AllocateLeavedaysAnnualCronController extends Controller {
 				{
 					$previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
 					$currentBalance =  $previousBalance + $days;
-					if (!empty($minimum->max) && $currentBalance < $minimum->max)
+					if (!empty($minimum->max) && $currentBalance <= ($minimum->max * 8))
 					{
 						$credits->leave_balance = $currentBalance;
 						$credits->update();
@@ -82,7 +82,6 @@ class AllocateLeavedaysAnnualCronController extends Controller {
 				}
 			}
         }
-
         AuditReportsController::store('Leave Annual Management', "Cron leaveAllocationAnnual Ran", "Automatic Ran by Server", 0);
     }
 }

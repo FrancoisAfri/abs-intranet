@@ -34,21 +34,31 @@ class AllocateLeavedaysFamilyCronController extends Controller {
      */
 
     public function execute() {
-        ### BEGIN: FAMILY RESPONSIBILITY LEAVE ACCRUAL (Leave Type = 2)
+        ### BEGIN: FAMILY RESPONSIBILITY LEAVE ACCRUAL
         $familyLeaveTypeID = 2;
         $employees = HRPerson::where('status', 1)->get();
         foreach ($employees as $employee) {
-            if ($employee->date_joined && $employee->date_joined > 0) {
-                $dateJoined = Carbon::createFromTimestamp($employee->date_joined);
-                $todayDate = Carbon::now();
-                if ($todayDate->isBirthday($dateJoined)) {
+            if (!empty($employee->date_joined) && $employee->date_joined > 0) {
+				$dateJoined = date('Y-m-d',$employee->date_joined);
+				// get today
+				$today = date("Y-m-d");
+				$otoday = new DateTime($today);
+				// convert date joined
+				$odateJoined = new DateTime($dateJoined);
+				$diff = $odateJoined->diff($otoday);
+				$years = $diff->y;
+				$months = $diff->m;
+				$days = $diff->d;
+				if ($years == 0 && $months == 4)
+				{
                     //set family leave to 3 days
                     $leaveCredit = $this->getLeaveCredit($employee->id, $familyLeaveTypeID);
                     if ($leaveCredit) {
                         $leaveCredit->leave_balance = 3 * 8;
                         $leaveCredit->update();
                     }
-                    else {
+                    else 
+					{
                         $leaveCredit = new leave_credit();
                         $leaveCredit->hr_id = $employee->id;
                         $leaveCredit->leave_type_id = $familyLeaveTypeID;
@@ -109,21 +119,6 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                         }
                     }
                 }
-                elseif (($dateJoined->diffInYears($todayDate) >= 3) && ($dateJoined->diffInYears($todayDate) % 3 == 0) && $todayDate->isBirthday($dateJoined)) {
-                    //reset sick leave balance to 30 days
-                    $leaveCredit = $this->getLeaveCredit($employee->id, SICK_LEAVE_ID);
-                    if ($leaveCredit) {
-                        $leaveCredit->leave_balance = (30 * 8);
-                        $leaveCredit->update();
-                    }
-                    else {
-                        $leaveCredit = new leave_credit();
-                        $leaveCredit->hr_id = $employee->id;
-                        $leaveCredit->leave_type_id = SICK_LEAVE_ID;
-                        $leaveCredit->leave_balance = (30 * 8);
-                        $leaveCredit->save();
-                    }
-                }
             }
         }
     }
@@ -143,7 +138,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
         return $leaveCredit;
     }
 
-    public function maternity() {
+    /*public function maternity() {
 	### BEGIN: Sick maternity ACCRUAL (Leave Type = 3)
 
          $lev = new LeaveType();
@@ -155,58 +150,103 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                  $leavebalance = 0;
              }
          }
-    }
+    }*/
 	public function paternity() {
-	### BEGIN: Sick maternity ACCRUAL (Leave Type = 3)
+	### BEGIN: Sick paternity ACCRUAL (Leave Type = 9)
 
-         $lev = new LeaveType();
-         $users = HRPerson::where('status', 1)->where('gender', 1)->pluck('id');
-         foreach ($users as $empID) {
-            $maternityID = 3;
-             $leavebalance = leave_credit::where('hr_id', $empID)->where('leave_type_id', $maternityID)->pluck('leave_balance')->first();
-             if ($leavebalance === null) {
-                 $leavebalance = 0;
-             }
-         }
+         $employees = HRPerson::where('status', 1)->where('gender', 1)->get();
+        foreach ($employees as $employee) {
+
+			$leaveCredit = $this->getLeaveCredit($employee->id, 9);
+			if ($leaveCredit) {
+				
+			}
+			else {
+				$leaveCredit = new leave_credit();
+				$leaveCredit->hr_id = $employee->id;
+				$leaveCredit->leave_type_id = 9;
+				$leaveCredit->leave_balance = (3 * 8);
+				$leaveCredit->save();
+			}
+        }
     }
 
         # Reset family leave after a year.
     function resetFamilyLeaves() {
 
-        $users = HRPerson::where('status', 1)->pluck('user_id');
-        foreach ($users as $empID) {
+        $employees = HRPerson::where('status', 1)->get();
+        foreach ($employees as $employee) {
 
-            $FamilyLeaveTypeID = 2;
+			$datevalue =  date('z', mktime(0,0,0,date('n'),date('j'),date('Y')));
+			if ($datevalue == 0) {
 
-            $currentDate = time(); //current_date today
+				$leaveCredit = $this->getLeaveCredit($employee->id, 2);
+				if ($leaveCredit) {
+					$leaveCredit->leave_balance = (3 * 8);
+					$leaveCredit->update();
+				}
+				else {
+					$leaveCredit = new leave_credit();
+					$leaveCredit->hr_id = $employee->id;
+					$leaveCredit->leave_type_id = 2;
+					$leaveCredit->leave_balance = (3 * 8);
+					$leaveCredit->save();
+				}
 
-            ###USER DATEhIRED
-            $dateofhire = HRPerson::where('user_id', $empID)->pluck('date_joined')->first();
-            if ($dateofhire == null) {
-               $dateofhire = 0;
             }
+        }
+    }
+	
+	    # Reset sick leave after a year.
+    function resetSickLeaves() {
+		define('SICK_LEAVE_ID', 5);
+		$employees = HRPerson::where('status', 1)->get();
+        foreach ($employees as $employee) {
+            
+			if ($employee->date_joined && $employee->date_joined > 0) {
+                $dateJoined = Carbon::createFromTimestamp($employee->date_joined);
+                $todayDate = Carbon::now();
+                //return $dateJoined . ' --- ' . $todayDate . ' --- ' . $dateJoined->diffInMonths($todayDate);
+				if (($dateJoined->diffInYears($todayDate) >= 3) && ($dateJoined->diffInYears($todayDate) % 3 == 0) && $todayDate->isBirthday($dateJoined)) {
+					//reset sick leave balance to 30 days
+					$leaveCredit = $this->getLeaveCredit($employee->id, SICK_LEAVE_ID);
+					if ($leaveCredit) {
+						$leaveCredit->leave_balance = (30 * 8);
+						$leaveCredit->update();
+					}
+					else {
+						$leaveCredit = new leave_credit();
+						$leaveCredit->hr_id = $employee->id;
+						$leaveCredit->leave_type_id = SICK_LEAVE_ID;
+						$leaveCredit->leave_balance = (30 * 8);
+						$leaveCredit->save();
+					}
+				}
+			}
+        }
+    }
+	
+	    # Reset paternity leave after a year.
+    function resetPaternityLeaves() {
 
-            ### Resert days only if its users annivesary
-            if ((date('d', $dateofhire) == date('d', $currentDate)) && (date('n', $currentDate) == date('n', $dateofhire)) && (date('Y', $currentDate) - date('Y', $dateofhire) + 1)) {
+        $employees = HRPerson::where('status', 1)->where('gender', 1)->get();
+        foreach ($employees as $employee) {
 
-                $lev = new LeaveType();
-                $leaveBal = 3 * 8;
-                $lev->hr_id = $empID;
-                $lev->leave_balance = $leaveBal;
-                $lev->leave_type_id = $FamilyLeaveTypeID;
-                $lev->create_at = time();
-                $lev->update();
+			$datevalue =  date('z', mktime(0,0,0,date('n'),date('j'),date('Y')));
+			if ($datevalue == 0) {
 
-            } elseif ((date('d', $dateofhire) == date('d', $currentDate)) && (date('n', $currentDate) == date('n', $dateofhire)) && (date('Y', $currentDate) - date('Y', $dateofhire) + 3)) {
-
-                $SickID = 5;
-                $lev = new LeaveType();
-                $leaveBal = 3 * 8;
-				$lev->hr_id = $empID;
-                $lev->leave_balance = $SickID;
-                $lev->leave_type_id = $FamilyLeaveTypeID;
-                $lev->create_at = time();
-				$lev->update();
+				$leaveCredit = $this->getLeaveCredit($employee->id, 9);
+				if ($leaveCredit) {
+					$leaveCredit->leave_balance = (3 * 8);
+					$leaveCredit->update();
+				}
+				else {
+					$leaveCredit = new leave_credit();
+					$leaveCredit->hr_id = $employee->id;
+					$leaveCredit->leave_type_id = 9;
+					$leaveCredit->leave_balance = (3 * 8);
+					$leaveCredit->save();
+				}
 
             }
         }

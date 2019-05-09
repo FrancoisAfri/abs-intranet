@@ -173,7 +173,6 @@
                             <td style="text-align: center"></td>
                             <td>&nbsp;</td>
                             <td>&nbsp;</td><!--$iTotalKilo km's,$iTotalHrs hrs-->
-
                         @else
                             <tr id="categories-list">
                                 <td colspan="15">
