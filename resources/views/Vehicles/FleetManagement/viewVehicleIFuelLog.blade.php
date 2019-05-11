@@ -147,11 +147,7 @@
                                     @else
 										<td style="text-align: center">{{ !empty($details->Hoursreading) ? number_format($details->Hoursreading, 2) . ' hrs' : ''}}</td>
                                     @endif
-                                    @if (isset($metreType) && $metreType === 1)
-                                        <td style="text-align: center">{{!empty($details->actual_km_reading) && !empty($details->litres_new) ? number_format($details->actual_km_reading / $details->litres_new, 2) .' km/l' : 0}}</td>
-                                    @else
-										<td style="text-align: center">{{!empty($details->actual_hr_reading) && !empty($details->litres_new) ? number_format($details->actual_hr_reading / $details->litres_new, 2) .' hr/l' : 0 }}</td>
-                                    @endif
+                                    <td style="text-align: center">{{!empty($details->km_travelled) && !empty($details->litres_new) ? number_format($details->km_travelled / $details->litres_new, 2) .' km/l' : 0}}</td>
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
                                     <!--  <td style="text-align:center;" colspan="2"> -->
                                     <td>

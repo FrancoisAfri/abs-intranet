@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class vehicle_fuel_log extends Model
 {
 
-	 protected $table = 'vehicle_fuel_log';
+	protected $table = 'vehicle_fuel_log';
 
     protected $fillable = ['driver', 'document_number', 'date','tank_type','tank_name',
 								'Hoursreading' ,'description', 'captured_by','vehicleID',
@@ -19,5 +19,5 @@ class vehicle_fuel_log extends Model
 
 	public function fuellogVehicle() {
 			return $this->belongsTo(vehicle_detail::class, 'vehicle_id');
-		}					
+		}
 }

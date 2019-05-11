@@ -34,14 +34,9 @@
                             <textarea class="form-control" id="summary" name="summary" placeholder="summary" rows="10"
                             >{{ old('summary') }}</textarea>
                     </div>
-
-
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-
                 </div>
             </form>
         </div>
