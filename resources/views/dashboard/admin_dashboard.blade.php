@@ -589,7 +589,6 @@
         </div>
     @endif
 @endsection
-
 @section('page_script')
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>

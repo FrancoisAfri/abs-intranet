@@ -248,12 +248,7 @@
 		//Initialize Select2 Elements
 		$(".select2").select2();
 		$('.zip-field').hide();
-
-
-		//Tooltip
-
 		$('[data-toggle="tooltip"]').tooltip();
-
 		//Vertically center modals on page
 		function reposition() {
 			var modal = $(this),
@@ -264,22 +259,15 @@
 			// or four works better for larger screens.
 			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
 		}
-
 		// Reposition when a modal is shown
 		$('.modal').on('show.bs.modal', reposition);
 		// Reposition when the window is resized
 		$(window).on('resize', function () {
 			$('.modal:visible').each(reposition);
 		});
-
 		//Show success action modal
 		$('#success-action-modal').modal('show');
-
-		//
-
 		$(".js-example-basic-multiple").select2();
-
-
 		$(document).ready(function () {
 
 			$('#date_of_incident').datepicker({
@@ -287,16 +275,12 @@
 				autoclose: true,
 				todayHighlight: true
 			});
-
-			//
 			$('#dateofincident').datepicker({
 				format: 'dd/mm/yyyy',
 				autoclose: true,
 				todayHighlight: true
 			});
-
 		});
-
 		//Post perk form to server using ajax (add)
 		$('#add_vehicleincidents').on('click', function () {
 			var strUrl = '/vehicle_management/addvehicleincidents';
@@ -308,8 +292,6 @@
 			var successMsg = 'The Record  has been updated successfully.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
-
-
 		var incidentID;
 		$('#edit-incidents-modal').on('show.bs.modal', function (e) {
 			var btnEdit = $(e.relatedTarget);
@@ -345,7 +327,6 @@
 			modal.find('#documents1').val(documents1);
 			modal.find('#valueID').val(valueID);
 		});
-
 		$('#edit_vehicleincidents').on('click', function () {
 			var strUrl = '/vehicle_management/edit_vehicleincidents/' + incidentID;
 			var formName = 'edit-incidents-form';
@@ -358,7 +339,6 @@
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
 	});
-	
 	function clone(id, file_index, child_id) {
 		var clone = document.getElementById(id).cloneNode(true);
 		clone.setAttribute("id", file_index);

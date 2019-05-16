@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         //\App\Console\Commands\Inspire::class,
-        \App\Console\Commands\EmployeeTasksOverdue::class,
+        //\App\Console\Commands\EmployeeTasksOverdue::class,
          \App\Console\Commands\leavemanagementAnnual::class,
 		  \App\Console\Commands\leavemanagementFamily::class,
 		  \App\Console\Commands\LeaveManagementSickLeave::class,

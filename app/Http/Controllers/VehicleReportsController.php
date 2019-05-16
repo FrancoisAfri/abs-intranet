@@ -1417,7 +1417,9 @@ class VehicleReportsController extends Controller
             ->select('vehicle_fuel_log.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.fleet_number as fleet_number'
                 , 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype'
                 , 'fleet_fillingstation.name as supplier', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel'
-                , 'vehicle_details.vehicle_registration as vehicle_registration')
+                , 'vehicle_details.vehicle_registration as vehicle_registration'
+				, 'vehicle_details.metre_reading_type'
+				, 'vehicle_details.id as vehicle_id')
             ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
             ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
             ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
@@ -1444,12 +1446,27 @@ class VehicleReportsController extends Controller
 				}
             })
             ->where('vehicle_fuel_log.tank_and_other', '=', 2)
+            ->orderby('vehicle_fuel_log.vehicleID', 'asc')
             ->orderby('vehicle_fuel_log.date', 'asc')
             ->orderby('supplier', 'asc')
             ->get();
 		
 		for ($i = 0; $i < count($vehicleArray); $i++) {
 			$vehicle .= $vehicleArray[$i] . ',';
+		}
+		if (!empty($externalFuelLog))
+		{
+			return $externalFuelLog;
+			$oldkm = $count = 0;
+			foreach ($externalFuelLog as $fuellog) {
+				
+				if ($count == 0)
+					$kmTravelled = $fuellog->$field - $prevMonthkm;
+				else $kmTravelled = $fuellog->$field - $oldkm;
+				$fuellog->km_travelled = $kmTravelled;
+				$count ++;
+				$oldkm = $fuellog->$field;
+            }
 		}
         $totalKms = $externalFuelLog->sum('Odometer_reading');
         $totalActualKms = $externalFuelLog->sum('actual_km_reading');

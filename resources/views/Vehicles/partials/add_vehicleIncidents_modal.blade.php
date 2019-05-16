@@ -7,7 +7,6 @@
 				<input type="hidden" name="file_index" id="file_index" value="1"/>
 				<input type="hidden" name="total_files" id="total_files" value="1"/>
                 {{ csrf_field() }}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
