@@ -506,27 +506,24 @@ class FleetManagementController extends Controller
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Fleet Management', 'Vehicle Details Accessed', "Accessed by User", 0);
-
+	
         return view('Vehicles.FleetManagement.viewfleetDetails')->with($data);
     }
 
 
     public function viewImage(vehicle_maintenance $maintenance)
     {
-        $ID = $maintenance->id;
-        $vehicle_maintenance = vehicle_maintenance::where('id', $ID)->get()->first();
+        $vehicle_maintenance = vehicle_maintenance::where('id', $maintenance->id)->get()->first();
         ################## WELL DETAILS ###############
         $vehiclemaker = vehiclemake::where('id', $maintenance->vehicle_make)->get()->first();
         $vehiclemodeler = vehiclemodel::where('id', $maintenance->vehicle_model)->get()->first();
         $vehicleTypes = Vehicle_managemnt::where('id', $maintenance->vehicle_type)->get()->first();
         ################## WELL DETAILS ###############
 
-        $ID = $maintenance->id;
-
         $vehiclemaintenance = DB::table('vehicle_image')
             ->select('vehicle_image.*', 'hr_people.first_name as first_name', 'hr_people.surname as surname')
             ->leftJoin('hr_people', 'vehicle_image.user_name', '=', 'hr_people.id')
-            ->where('vehicle_image.vehicle_maintanace', $ID)
+            ->where('vehicle_image.vehicle_maintanace', $maintenance->id)
             ->get();
 
 
@@ -540,58 +537,73 @@ class FleetManagementController extends Controller
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehiclemaker'] = $vehiclemaker;
-        $data['ID'] = $ID;
         $data['vehiclemaintenance'] = $vehiclemaintenance;
         $data['vehicle_maintenance'] = $vehicle_maintenance;
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Fleet Management', 'Vehicle Images Accessed', "Accessed by User", 0);
-        //return view('products.products')->with($data);
         return view('Vehicles.FleetManagement.viewfleetImage')->with($data);
     }
 
-    public function addImages(Request $request)
+	// upload image
+	public function uploadImages(vehicle_maintenance $maintenance)
+    {
+        $data['page_title'] = "Upload Fleet ";
+        $data['page_description'] = "Images";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['maintenance'] = $maintenance;
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Manage Fleet';
+        AuditReportsController::store('Fleet Management', 'Vehicle Images Accessed', "Accessed by User", 0);
+        return view('Vehicles.FleetManagement.add_vehicle_images')->with($data);
+    }
+	// save images
+    public function addImages(Request $request, vehicle_maintenance $maintenance)
     {
         $this->validate($request, [
             //'name' => 'required',
             // 'description' => 'required',
             'images.*' => 'required',
-            'valueID' => 'required',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
 		$images = !empty($SysData['images']) ? $SysData['images'] : array();
-        $currentDate = time();
+        $Files = isset($_FILES['images']) ? $_FILES['images'] : array();
+		$currentDate = time();
         $userLogged = Auth::user()->load('person');
-		$count = 0;
-		foreach ($images as $image)
+		$count = 0; 
+//echo count($images);
+//die;
+		while ($count < count($images)) 
 		{
-			//Upload Image picture
-			$count ++;
-			$imageArray = explode(".",$image);
+			//echo $count;
+			$imageArray = explode(".",$images[$count]);
 			$vehicleImages = new images();
 			$vehicleImages->name = $imageArray[0];
-			$vehicleImages->vehicle_maintanace = $SysData['valueID'];
+			$vehicleImages->vehicle_maintanace = $maintenance->id;
 			$vehicleImages->upload_date = $currentDate;
 			$vehicleImages->user_name = $userLogged->person->id;
 			$vehicleImages->default_image = 1;
 			$vehicleImages->save();
-			
 			//Upload Image picture
-			if ($request->hasFile('images')) {
-				$fileExt = $image->extension();
-				if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
+			if ($request->hasFile($images[$count])) {
+				$fileExt = $images[$count]->extension();
+				if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $images[$count]->isValid()) {
 					$fileName = "image" . time() . '.' . $fileExt;
-					$image->storeAs('Vehicle/images', $fileName);
+					$images[$count]->storeAs('Vehicle/images', $fileName);
 					//Update file name in the database
 					$vehicleImages->image = $fileName;
 					$vehicleImages->update();
 				}
 			}
-			$image = '';
+			$count = $count + 1;
 		}
-        return response()->json();
+       // return redirect("/vehicle_management/viewImage/$maintenance->id");
     }
 
     public function editImage(Request $request, images $image)

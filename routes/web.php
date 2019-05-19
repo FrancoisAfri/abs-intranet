@@ -525,6 +525,7 @@ Route::get('/vehicle_management/vehicles_Act/{vehiclemaintenance}', 'FleetManage
 
 //******************** post redirects ****************
 Route::get('vehicle_management/viewImage/{maintenance}', 'FleetManagementController@viewImage');
+Route::get('fleet/add_images/{maintenance}', 'FleetManagementController@uploadImages');
 Route::get('vehicle_management/keys/{maintenance}', 'FleetManagementController@keys');
 Route::get('vehicle_management/document/{maintenance}', 'VehicleFleetController@document');
 Route::get('vehicle_management/contracts/{maintenance}', 'VehicleFleetController@contracts');
@@ -596,7 +597,7 @@ Route::get('vehicle_management/permits_licences/{maintenance}', 'FleetManagement
 Route::post('vehicle_management/addPermit', 'FleetManagementController@addPermit');
 Route::patch('vehicle_management/edit_permit/{permit}', 'FleetManagementController@editPermit');
 
-Route::post('vehicle_management/add_images', 'FleetManagementController@addImages');
+Route::post('vehicle_management/add_images/{maintenance}', 'FleetManagementController@addImages');
 Route::post('vehicle_management/add_keys', 'FleetManagementController@addkeys');
 Route::patch('vehicle_management/edit_images/{image}', 'FleetManagementController@editImage');
 

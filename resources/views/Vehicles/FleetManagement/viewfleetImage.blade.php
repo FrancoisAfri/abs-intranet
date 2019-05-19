@@ -1,6 +1,5 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"/>
@@ -161,9 +160,8 @@
 						</table>
 						<div class="box-footer">
 							<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-							<button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-									data-target="#upload-image-modal">Upload New Image
-							</button>
+							<a href="/fleet/add_images/{{$maintenance->id}}" id="add_images"
+                                               class="btn btn-warning pull-right"> Upload New Image</a>
 						</div>
 						@include('Vehicles.partials.edit_image_modal')
 						@include('Vehicles.partials.upload_newImage_modal')
@@ -250,7 +248,7 @@
 				var modalID = 'upload-image-modal';
 				//var modal = $('#'+modalID);
 				var submitBtnID = 'add-vehicle_image';
-				var redirectUrl = '/vehicle_management/viewImage/{{ $ID}}';
+				var redirectUrl = '/vehicle_management/viewImage/{{$maintenance->id}}';
 				var successMsgTitle = 'Image Added!';
 				var successMsg = 'The Image  has been updated successfully.';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
