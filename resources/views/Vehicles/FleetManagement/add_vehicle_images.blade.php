@@ -24,7 +24,7 @@
 						</div>
 						<!-- /.box-header -->
 						<!-- form start -->
-						<form class="form-horizontal" method="POST" action="/vehicle_management/add_images/{{$maintenance->id}}" >
+						<form class="form-horizontal" method="POST" action="/vehicle_management/add_images/{{$maintenance->id}}" enctype="multipart/form-data">
 							<input type="hidden" name="file_index" id="file_index" value="1"/>
 							<input type="hidden" name="total_files" id="total_files" value="1"/>
 							{{ csrf_field() }}

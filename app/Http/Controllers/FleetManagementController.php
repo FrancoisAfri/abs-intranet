@@ -526,7 +526,6 @@ class FleetManagementController extends Controller
             ->where('vehicle_image.vehicle_maintanace', $maintenance->id)
             ->get();
 
-
         $data['page_title'] = " View Fleet Details";
         $data['page_description'] = "FleetManagement";
         $data['breadcrumb'] = [
@@ -542,6 +541,7 @@ class FleetManagementController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
+			
         AuditReportsController::store('Fleet Management', 'Vehicle Images Accessed', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewfleetImage')->with($data);
     }
@@ -572,38 +572,66 @@ class FleetManagementController extends Controller
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
-		$images = !empty($SysData['images']) ? $SysData['images'] : array();
-        $Files = isset($_FILES['images']) ? $_FILES['images'] : array();
-		$currentDate = time();
+		$images = $request->file('images');
         $userLogged = Auth::user()->load('person');
-		$count = 0; 
-//echo count($images);
-//die;
-		while ($count < count($images)) 
+		if ($request->hasFile('images')) 
 		{
-			//echo $count;
+			$oldFile = '';
+			foreach ($images as $image)
+			{
+			
+				$imageArray = explode(".",$image);
+				$fileExt = $image->extension();
+				if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
+					$fileName = "image" . time() . '.' . $fileExt;
+					$image->storeAs('Vehicle/images', $fileName);
+					if ($oldFile != $fileName)
+					{
+						//Update file name in the database
+						$vehicleImages = new images();
+						$vehicleImages->name = $imageArray[0];
+						$vehicleImages->vehicle_maintanace = $maintenance->id;
+						$vehicleImages->upload_date = time();
+						$vehicleImages->user_name = $userLogged->person->id;
+						$vehicleImages->default_image = 1;
+						$vehicleImages->image = $fileName;
+						$vehicleImages->save();
+					}
+				}
+				$oldFile = $fileName;
+				$image  = $fileName = '';
+					echo $image."</br>";
+			}
+		}	
+		//die;
+		/*while ($count < count($images)) 
+		{
+			
 			$imageArray = explode(".",$images[$count]);
-			$vehicleImages = new images();
-			$vehicleImages->name = $imageArray[0];
-			$vehicleImages->vehicle_maintanace = $maintenance->id;
-			$vehicleImages->upload_date = $currentDate;
-			$vehicleImages->user_name = $userLogged->person->id;
-			$vehicleImages->default_image = 1;
-			$vehicleImages->save();
 			//Upload Image picture
-			if ($request->hasFile($images[$count])) {
+			if ($request->hasFile('images')) 
+			{
+				//die('do you cme here');
 				$fileExt = $images[$count]->extension();
 				if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $images[$count]->isValid()) {
 					$fileName = "image" . time() . '.' . $fileExt;
 					$images[$count]->storeAs('Vehicle/images', $fileName);
 					//Update file name in the database
+					$vehicleImages = new images();
+					$vehicleImages->name = $imageArray[0];
+					$vehicleImages->vehicle_maintanace = $maintenance->id;
+					$vehicleImages->upload_date = $currentDate;
+					$vehicleImages->user_name = $userLogged->person->id;
+					$vehicleImages->default_image = 1;
 					$vehicleImages->image = $fileName;
-					$vehicleImages->update();
+					$vehicleImages->save();
 				}
 			}
-			$count = $count + 1;
-		}
-       // return redirect("/vehicle_management/viewImage/$maintenance->id");
+			$count ++;
+			echo $count ;
+			die('herehefrfrf');
+		}*/
+        return redirect("/vehicle_management/viewImage/$maintenance->id");
     }
 
     public function editImage(Request $request, images $image)
