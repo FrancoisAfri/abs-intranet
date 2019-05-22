@@ -537,7 +537,7 @@ class UsersController extends Controller
                 }
             })
             ->orderBy('first_name')
-            ->limit(100)
+            //->limit(100)
             ->get();
 
             

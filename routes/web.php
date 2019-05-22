@@ -1143,3 +1143,4 @@ Route::get('procurement/create-request', 'procurementRequestController@create');
 Route::post('procurement/adjust-request', 'procurementRequestController@adjustProcurement');
 Route::post('procurement/save', 'procurementRequestController@saveRequest');
 Route::post('procurement/update/{procurement}', 'procurementRequestController@updateQuote');
+Route::get('procurement/viewrequest/{procurement}', 'procurementRequestController@viewRequest');

@@ -18,10 +18,10 @@
                     <input type="hidden" name="title_name" value="{{ $title_name }}">
                     <input type="hidden" name="employee_id" value="{{ $employee_id }}">
                     <input type="hidden" name="on_behalf" value="{{ $on_behalf }}">
-                    <input type="hidden" name="on_behalf_employee_id" value="{{ $on_behalf }}">
-                    <input type="hidden" name="special_instructions" value="{{ $on_behalf }}">
-                    <input type="hidden" name="justification_of_expenditure" value="{{ $on_behalf }}">
-                    <input type="hidden" name="detail_of_expenditure" value="{{ $on_behalf }}">
+                    <input type="hidden" name="on_behalf_employee_id" value="{{ $on_behalf_employee_id }}">
+                    <input type="hidden" name="special_instructions" value="{{ $special_instructions }}">
+                    <input type="hidden" name="justification_of_expenditure" value="{{ $justification_of_expenditure }}">
+                    <input type="hidden" name="detail_of_expenditure" value="{{ $detail_of_expenditure }}">
                     <div class="box-header with-border">
                         <h3 class="box-title">Procurement Request</h3>
                     </div>

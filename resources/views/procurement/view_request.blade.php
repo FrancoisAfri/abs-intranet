@@ -27,126 +27,132 @@
                    <table class="table table-striped table-bordered">
 						<tr>
 							<td><b>Date Requeted:</b></td>
-							<td>{{ !empty($stock->date_created) ? date(' d M Y', $stock->date_created) : '' }}</b></td>
+							<td>{{ !empty($procurement->date_created) ? date(' d M Y', $procurement->date_created) : '' }}</b></td>
 							<td><b>Title:</b></td>
-							<td>{{ !empty($stock->title_name) ? $stock->title_name : '' }}</b></td>
+							<td>{{ !empty($procurement->title_name) ? $procurement->title_name : '' }}</b></td>
 						</tr>
 						<tr>
 							<td><b>Employee:</b></td>
-							<td>{{ (!empty($stock->employees)) ?  $stock->employees->first_name . ' ' .  $stock->employees->surname : ''}}</b></td>
+							<td>{{ (!empty($procurement->employees)) ?  $procurement->employees->first_name . ' ' .  $procurement->employees->surname : ''}}</b></td>
 							<td><b>On Behalf Of:</td>
-							<td>{{ (!empty($stock->employeeOnBehalf)) ?  $stock->employeeOnBehalf->first_name . ' ' .  $stock->employeeOnBehalf->surname : ''}}</b></td>
+							<td>{{ (!empty($procurement->employeeOnBehalf)) ?  $procurement->employeeOnBehalf->first_name . ' ' .  $procurement->employeeOnBehalf->surname : ''}}</b></td>
 						</tr>
 						<tr>
-							<td><b>Remarks:</b></td>
-							<td>{{ (!empty($stock->request_remarks)) ?  $stock->request_remarks : ''}}</b></td>
+							<td><b>Detail of Expenditure:</b></td>
+							<td>{{ (!empty($procurement->detail_of_expenditure)) ?  $procurement->detail_of_expenditure : ''}}</b></td>
+							<td><b>Justification of Expenditure:</b></td>
+							<td>{{ !empty($procurement->justification_of_expenditure) ? $procurement->justification_of_expenditure : '' }}</b></td>
+						</tr>
+						<tr>
+							<td><b>Special Instructions:</b></td>
+							<td>{{ (!empty($procurement->special_instructions)) ?  $procurement->special_instructions : ''}}</b></td>
 							<td><b>Status:</b></td>
-							<td>{{ !empty($stock->status) ? $stock->requestStatus->step_name : 'Rejected' }}</b></td>
+							<td>{{ !empty($procurement->status) ? $procurement->requestStatus->step_name : '' }}</b></td>
 						</tr>
 						<tr>
 							<td><b>Rejection Reason:</b></td>
-							<td>{{ (!empty($stock->rejection_reason)) ?  $stock->rejection_reason : ''}}</b></td>
-							<td><b>Rejected By:</b></td>
-							<td>{{ !empty($stock->rejectedPerson) ? $stock->rejectedPerson->first_name . ' ' .  $stock->rejectedPerson->surname : '' }}</b></td>
-						</tr>
-						<tr>
-							<td><b>Date Rejected:</b></td>
-							<td>{{ (!empty($stock->rejection_date)) ? date(' d M Y', $stock->rejection_date) : ''}}</b></td>
-							<td>Collected</td>
-							<td>{{ (!empty($stock->request_collected)) ? 'Yes' : 'No'}}</td>
-						</tr>
-						<tr>
-							<td><b>Collection Document:</b></td>
-							<td>
-								@if(!empty($stock->collection_document))
-									<br><a class="btn btn-default btn-flat btn-block btn-xs"
-										   href="{{ $collection_document }}"
-										   target="_blank"><i class="fa fa-file-pdf-o"></i> View
-										Document</a>
-								@else
-									<br><a class="btn btn-default btn-flat btn-block"><i
-										class="fa fa-exclamation-triangle"></i> Nothing Was Uploaded</a>
-								@endif
-							</b></td>
-							<td>Collection Note</td>
-							<td>{{ (!empty($stock->collection_note)) ? $stock->collection_note : 'No'}}</td>
+							<td></b></td>
+							<td><b>PO Number:</b></td>
+							<td>{{ (!empty($procurement->po_number)) ?  $procurement->po_number : ''}}</td>
 						</tr>
 					</table>
 					<table class="table table-striped table-bordered">
-						<hr class="hr-text" data-content="Stock Items">
+						<hr class="hr-text" data-content="Procurement Request Items">
 						<tr>
 							<td>#</td>
 							<td><b>Category</b></td>
 							<td><b>Product</b></td>
 							<td style="text-align:center"><b>Quantity</b></td>
+							<td style="text-align:center"><b>Price</b></td>
 							<td></td>
 						</tr>
-						@if (count($stock->stockItems) > 0)
-							@foreach ($stock->stockItems as $items)
-								<tr>
-									<td>{{ $loop->iteration }}</td>
-									<td>{{ !empty($items->categories->name) ? $items->categories->name : '' }}</td>
-									<td>{{ !empty($items->products->name) ? $items->products->name : '' }}</td>
-									<td style="text-align:center">{{ !empty($items->quantity) ? $items->quantity : '' }}</td>
-									<td>
-										@if ($stock->status == 1)
-											<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-												data-target="#remove-items-warning-modal"
-												data-id="{{ $items->id }}"><i class="fa fa-trash"></i>  Remove
-											</button>
-										@endif
-									</td>
-								</tr>
-							@endforeach
+						@if (count($procurement->procurementItems) > 0)
+							@if ($procurement->item_type == 1)
+								@foreach ($procurement->procurementItems as $items)
+									<tr>
+										<td>{{ $loop->iteration }}</td>
+										<td>{{ !empty($items->categories->name) ? $items->categories->name : '' }}</td>
+										<td>{{ !empty($items->products->name) ? $items->products->name : '' }}</td>
+										<td style="text-align:center">{{ !empty($items->quantity) ? $items->quantity : '' }}</td>
+										<td style="text-align:center">{{ !empty($items->item_price) ? $items->item_price : '' }}</td>
+										<td>
+											@if ($procurement->status == 1)
+												<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+													data-target="#remove-items-warning-modal"
+													data-id="{{ $items->id }}"><i class="fa fa-trash"></i>  Remove
+												</button>
+											@endif
+										</td>
+									</tr>
+								@endforeach
+							@else
+								@foreach ($procurement->procurementItems as $items)
+									<tr>
+										<td>{{ $loop->iteration }}</td>								<td>N/A</td>
+										<td>{{ !empty($items->item_name) ? $items->item_name : '' }}</td>
+										<td style="text-align:center">{{ !empty($items->quantity) ? $items->quantity : '' }}</td>
+										<td style="text-align:center">{{ !empty($items->item_price) ? $items->item_price : '' }}</td>
+										<td>
+											@if ($procurement->status == 1)
+												<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+													data-target="#remove-items-warning-modal"
+													data-id="{{ $items->id }}"><i class="fa fa-trash"></i>  Remove
+												</button>
+											@endif
+										</td>
+									</tr>
+								@endforeach
+							@endif
 						@else
-							<tr><td colspan="4"></td></tr>
+							<tr><td colspan="5"></td><td style="text-align:center">{{ !empty($items->item_price) ? $items->item_price : '' }}</td><td></td></tr>
 						@endif
+						<tr><td colspan="3"><br>Total Price</br></td></tr>
 					</table>
                     <!-- /.box-body -->
                     <div class="box-footer">
 						<button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Back</button>
-						@if ($stock->status == 1)
+						@if ($procurement->status == 1)
 							<button vehice="button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal"
-                            data-target="#edit-request-modal" data-id="{{ $stock->id }}"
-                            data-store_id="{{ !empty($stock->store_id) ? $stock->store_id : ''}}"
-                            data-employee_id="{{ !empty($stock->employee_id) ? $stock->employee_id : ''}}"
-                            data-on_behalf_employee_id="{{ !empty($stock->on_behalf_employee_id) ? $stock->on_behalf_employee_id : ''}}"
-                            data-on_behalf_of="{{ !empty($stock->on_behalf_of) ? $stock->on_behalf_of : ''}}"
-                            data-request_remarks="{{ !empty($stock->request_remarks) ? $stock->request_remarks : ''}}"
-                            data-title_name="{{ !empty($stock->title_name) ? $stock->title_name : ''}}"
+                            data-target="#edit-request-modal" data-id="{{ $procurement->id }}"
+                            data-store_id="{{ !empty($procurement->store_id) ? $procurement->store_id : ''}}"
+                            data-employee_id="{{ !empty($procurement->employee_id) ? $procurement->employee_id : ''}}"
+                            data-on_behalf_employee_id="{{ !empty($procurement->on_behalf_employee_id) ? $procurement->on_behalf_employee_id : ''}}"
+                            data-on_behalf_of="{{ !empty($procurement->on_behalf_of) ? $procurement->on_behalf_of : ''}}"
+                            data-request_remarks="{{ !empty($procurement->request_remarks) ? $procurement->request_remarks : ''}}"
+                            data-title_name="{{ !empty($procurement->title_name) ? $procurement->title_name : ''}}"
 							><i class="fa fa-pencil-square-o"></i> Edit
 							</button>
 						@endif
-						@if(!empty($stock->status) && $flow->step_number > $stock->status)
+						@if(!empty($procurement->status) && $flow->step_number > $procurement->status)
 							<button type="button" class="btn btn-primary btn-success pull-right" 
-								id="request_approved" onclick="postData({{$stock->id}}, 'request_approval');">
+								id="request_approved" onclick="postData({{$procurement->id}}, 'request_approval');">
 								<i class="fa fa-check"></i> Approve Request</button>
 							<button type="button" class="btn btn-primary btn-danger pull-right" data-toggle="modal"
-                            data-target="#stock-reject-modal" data-id="{{ $stock->id }}"
+                            data-target="#procurement-reject-modal" data-id="{{ $procurement->id }}"
 							><i class="fa fa-times"></i> Reject Request
 							</button>
 						@endif
-						@if(!empty($stock->status) && $flow->step_number == $stock->status)
+						@if(!empty($procurement->status) && $flow->step_number == $procurement->status)
 							<button vehice="button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal"
-                            data-target="#edit-request-modal" data-id="{{ $stock->id }}"
-                            data-store_id="{{ !empty($stock->store_id) ? $stock->store_id : ''}}"
-                            data-employee_id="{{ !empty($stock->employee_id) ? $stock->employee_id : ''}}"
-                            data-on_behalf_employee_id="{{ !empty($stock->on_behalf_employee_id) ? $stock->on_behalf_employee_id : ''}}"
-                            data-on_behalf_of="{{ !empty($stock->on_behalf_of) ? $stock->on_behalf_of : ''}}"
-                            data-request_remarks="{{ !empty($stock->request_remarks) ? $stock->request_remarks : ''}}"
-                            data-title_name="{{ !empty($stock->title_name) ? $stock->title_name : ''}}"
+                            data-target="#edit-request-modal" data-id="{{ $procurement->id }}"
+                            data-store_id="{{ !empty($procurement->store_id) ? $procurement->store_id : ''}}"
+                            data-employee_id="{{ !empty($procurement->employee_id) ? $procurement->employee_id : ''}}"
+                            data-on_behalf_employee_id="{{ !empty($procurement->on_behalf_employee_id) ? $procurement->on_behalf_employee_id : ''}}"
+                            data-on_behalf_of="{{ !empty($procurement->on_behalf_of) ? $procurement->on_behalf_of : ''}}"
+                            data-request_remarks="{{ !empty($procurement->request_remarks) ? $procurement->request_remarks : ''}}"
+                            data-title_name="{{ !empty($procurement->title_name) ? $procurement->title_name : ''}}"
 							><i class="fa fa-pencil-square-o"></i> Close Request
 							</button>
 						@endif
-						<a href="{{ '/stock/print_delivery_note/' . $stock->id }}"
+						<a href="{{ '/procurement/print_delivery_note/' . $procurement->id }}"
 						   class="btn btn-sm btn-default btn-flat pull-right" target=”_blank”">Print Delivery Note</a>
                     </div>
                 </div>
             </div>
-			@include('stock.partials.edit_request_modal')
-			@include('stock.partials.stock_request_rejection')
-			@if (count($stock) > 0)
-                @include('stock.warnings.items_warning_action', ['modal_title' => 'Remove Item', 'modal_content' => 'Are you sure you want to remove this item? This action cannot be undone.'])
+			@include('procurement.partials.edit_request_modal')
+			@include('procurement.partials.stock_request_rejection')
+			@if (count($procurement) > 0)
+                @include('procurement.warnings.items_warning_action', ['modal_title' => 'Remove Item', 'modal_content' => 'Are you sure you want to remove this item? This action cannot be undone.'])
             @endif
 
 		</div>
@@ -206,9 +212,9 @@
 		//Cancel button click event
             document.getElementById("cancel").onclick = function () {
 				if ("{{$back}}" === '')
-					location.href = "/stock/request_items";
-				else if ("{{$back}}" === 'stock') location.href = "/stock/request_approval";
-				else location.href = "/stock/seach_request";
+					location.href = "/procurement/request_items";
+				else if ("{{$back}}" === 'procurement') location.href = "/procurement/request_approval";
+				else location.href = "/procurement/seach_request";
             };
 		//Vertically center modals on page
 		function reposition() {
@@ -275,12 +281,12 @@
 		});
 	  
 		$('#update_request').on('click', function () {
-			var strUrl = '/stock/updateitems/' + {{$stock->id}};
+			var strUrl = '/procurement/updateitems/' + {{$procurement->id}};
 			console.log(strUrl);
 			var formName = 'edit-request-form';
 			var modalID = 'edit-request-modal';
 			var submitBtnID = 'update_request';
-			var redirectUrl = '/stock/viewrequest/{{ $stock->id }}';
+			var redirectUrl = '/procurement/viewrequest/{{ $procurement->id }}';
 			var successMsgTitle = 'Record Updated!';
 			var successMsg = 'The Record  has been updated successfully.';
 			var Method = 'PATCH'
@@ -292,11 +298,11 @@
 			stockID = btnDelete.data('id');
 		});
 		$('#remove_item').on('click', function () {
-			var strUrl = '/stock/remove/items/' + stockID;
+			var strUrl = '/procurement/remove/items/' + stockID;
 			var formName = 'remove-item-warning-modal-form';
 			var modalID = 'remove-items-warning-modal';
 			var submitBtnID = 'remove_item';
-			var redirectUrl = '/stock/viewrequest/{{ $stock->id }}';
+			var redirectUrl = '/procurement/viewrequest/{{ $procurement->id }}';
 			var successMsgTitle = 'Item Successfully Removed!';
 			var successMsg = 'Item has been removed successfully.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -304,11 +310,11 @@
 		
 				//Post form to server using ajax (add)
 		$('#save-rejection-reason').on('click', function () {
-			var strUrl = '/stock/reject-reason/' + {{$stock->id}};
-			var formName = 'decline-stock-request-modal';
-			var modalID = 'stock-reject-modal';
+			var strUrl = '/procurement/reject-reason/' + {{$procurement->id}};
+			var formName = 'decline-procurement-request-modal';
+			var modalID = 'procurement-reject-modal';
 			var submitBtnID = 'save-rejection-reason';
-			var redirectUrl = '/stock/viewrequest/{{ $stock->id }}';
+			var redirectUrl = '/procurement/viewrequest/{{ $procurement->id }}';
 			var successMsgTitle = 'Rejection Reason Saved!';
 			var successMsg = 'The rejection reason has been successfully saved.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -359,7 +365,7 @@
 	function postData(id, data)
 	{
 		if (data == 'request_approval')
-			location.href = "/stock/approve-request-single/" + id;
+			location.href = "/procurement/approve-request-single/" + id;
 	}
 	</script>
 @endsection

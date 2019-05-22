@@ -14,19 +14,6 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-					@if (!empty($approvals->require_store_manager_approval) && $approvals->require_store_manager_approval == 1)
-						<div class="form-group">
-							<label for="store_id" class="col-sm-2 control-label">Stores</label>
-							<div class="col-sm-8">
-								<select id="store_id" name="store_id" style="width: 100%;" class="form-control">
-									<option value="0">*** Select a Store ***</option>
-									@foreach($stockLevelFives as $stockLevelFive)
-										<option value="{{ $stockLevelFive->id }}">{{ $stockLevelFive->name}}</option>
-									@endforeach
-								</select>
-							</div>
-						</div>
-					@endif
 					<div class="form-group">
                         <label for="title_name" class="col-sm-2 control-label">Title</label>
                         <div class="col-sm-8">
@@ -48,7 +35,7 @@
                         <label for="date" class="col-sm-2 control-label"> On Behalf Of</label>
                         <div class="col-sm-8">
                             <input type="checkbox" id="on_behalf" value="1" name="on_behalf"
-							{{ ($stock->title_type === 1) ? ' checked' : '' }}
+							{{ ($procurement->title_type === 1) ? ' checked' : '' }}
                                    onclick="showHide();">
                         </div>
                     </div>
@@ -120,5 +107,4 @@
         </div>
     </div>
 </div>
-</div>
-           
+</div>         
