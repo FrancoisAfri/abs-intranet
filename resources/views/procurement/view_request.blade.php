@@ -21,7 +21,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title"> View Request </h3>
+                    <h3 class="box-title">Request Details</h3>
                 </div>
                 <div style="overflow-X:auto;">
                    <table class="table table-striped table-bordered">
@@ -106,22 +106,31 @@
 						@else
 							<tr><td colspan="5"></td><td style="text-align:center">{{ !empty($items->item_price) ? $items->item_price : '' }}</td><td></td></tr>
 						@endif
-						<tr><td colspan="3"><br>Total Price</br></td></tr>
+						<tr>
+							<th style="text-align: center;"  colspan="5">Totals</th>
+						</tr>
+						<tr>
+							<th style="text-align: right;"  colspan="4">Subtotal:</th>
+							<td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right; vertical-align: middle;"  colspan="4">VAT:</th>
+							<td style="text-align: right; vertical-align: middle;" id="vat-amount" nowrap>{{ ($vatAmount > 0) ? 'R ' . number_format($vatAmount, 2) : '&mdash;' }}</td>
+							<td></td>
+						</tr>
+						<tr>
+							<th style="text-align: right; vertical-align: middle;"  colspan="4">Total:</th>
+							<td style="text-align: right; vertical-align: middle;" id="total-amount" nowrap>{{ 'R ' . number_format($total, 2) }}</td>
+							<td></td>
+						</tr>
 					</table>
                     <!-- /.box-body -->
                     <div class="box-footer">
 						<button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Back</button>
 						@if ($procurement->status == 1)
-							<button vehice="button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal"
-                            data-target="#edit-request-modal" data-id="{{ $procurement->id }}"
-                            data-store_id="{{ !empty($procurement->store_id) ? $procurement->store_id : ''}}"
-                            data-employee_id="{{ !empty($procurement->employee_id) ? $procurement->employee_id : ''}}"
-                            data-on_behalf_employee_id="{{ !empty($procurement->on_behalf_employee_id) ? $procurement->on_behalf_employee_id : ''}}"
-                            data-on_behalf_of="{{ !empty($procurement->on_behalf_of) ? $procurement->on_behalf_of : ''}}"
-                            data-request_remarks="{{ !empty($procurement->request_remarks) ? $procurement->request_remarks : ''}}"
-                            data-title_name="{{ !empty($procurement->title_name) ? $procurement->title_name : ''}}"
-							><i class="fa fa-pencil-square-o"></i> Edit
-							</button>
+							<button type="button" class="btn btn-sm btn-default btn-flat pull-right">
+								<i class="fa fa-pencil-square-o"></i> Edit</button>
 						@endif
 						@if(!empty($procurement->status) && $flow->step_number > $procurement->status)
 							<button type="button" class="btn btn-primary btn-success pull-right" 
@@ -132,20 +141,6 @@
 							><i class="fa fa-times"></i> Reject Request
 							</button>
 						@endif
-						@if(!empty($procurement->status) && $flow->step_number == $procurement->status)
-							<button vehice="button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal"
-                            data-target="#edit-request-modal" data-id="{{ $procurement->id }}"
-                            data-store_id="{{ !empty($procurement->store_id) ? $procurement->store_id : ''}}"
-                            data-employee_id="{{ !empty($procurement->employee_id) ? $procurement->employee_id : ''}}"
-                            data-on_behalf_employee_id="{{ !empty($procurement->on_behalf_employee_id) ? $procurement->on_behalf_employee_id : ''}}"
-                            data-on_behalf_of="{{ !empty($procurement->on_behalf_of) ? $procurement->on_behalf_of : ''}}"
-                            data-request_remarks="{{ !empty($procurement->request_remarks) ? $procurement->request_remarks : ''}}"
-                            data-title_name="{{ !empty($procurement->title_name) ? $procurement->title_name : ''}}"
-							><i class="fa fa-pencil-square-o"></i> Close Request
-							</button>
-						@endif
-						<a href="{{ '/procurement/print_delivery_note/' . $procurement->id }}"
-						   class="btn btn-sm btn-default btn-flat pull-right" target=”_blank”">Print Delivery Note</a>
                     </div>
                 </div>
             </div>

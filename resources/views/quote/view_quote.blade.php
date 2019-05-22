@@ -146,7 +146,6 @@
                                                 </tr>
                                             @endforeach
                                         </tbody>
-
                                         <tfoot>
                                             <tr>
                                                 <th colspan="3" class="text-right">Total</th>

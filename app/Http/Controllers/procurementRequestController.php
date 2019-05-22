@@ -360,19 +360,29 @@ class procurementRequestController extends Controller
 			->orderBy('first_name', 'asc')
 			->orderBy('surname', 'asc')
 			->get();
-			//return $procurement;
-		//$collectionDocument = $procurement->collection_document;
+		// calculate totals and subtotal
+		$subtotal = 0;
+		foreach ($procurement->procurementItems as $item) {
+            $subtotal += ($item->item_price * $item->quantity);
+		}
+		// calculate VAT amount
+        $vatAmount = ($procurement->add_vat == 1) ? $subtotal * 0.15 : 0;
+		// calculate total amount
+		$total = $subtotal + $vatAmount;
+
 		$data['back'] = '';
 		if (!empty($back) && empty($app)) $data['back'] = "/procurement/seach_request";
 		if (!empty($app)) $data['back'] = "procurement";
-		//$data['collection_document'] = (!empty($collectionDocument)) ? Storage::disk('local')->url("Procurement/Collection_document/$collectionDocument") : '';
 
+		$data['total'] = $total;
+		$data['vatAmount'] = $vatAmount;
+		$data['subtotal'] = $subtotal;
 		$data['flow'] = $flow;
 		$data['employees'] = $employees;
 		$data['employeesOnBehalf'] = $employeesOnBehalf;
 		$data['products'] = $products;
         $data['procurement'] = $procurement;
-		$data['page_title'] = 'Items Request';
+		$data['page_title'] = 'View Procurment Request';
         $data['page_description'] = 'Request Procurement Items';
         $data['breadcrumb'] = [
             ['title' => 'Procurement', 'path' => '/procurement/create-request', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
