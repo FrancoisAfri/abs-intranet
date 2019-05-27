@@ -73,8 +73,8 @@
 										<td>{{ $loop->iteration }}</td>
 										<td>{{ !empty($items->categories->name) ? $items->categories->name : '' }}</td>
 										<td>{{ !empty($items->products->name) ? $items->products->name : '' }}</td>
-										<td style="text-align:center">{{ !empty($items->quantity) ? $items->quantity : '' }}</td>
-										<td style="text-align:center">{{ !empty($items->item_price) ? $items->item_price : '' }}</td>
+										<td style="text-align:right">{{ !empty($items->quantity) ? $items->quantity : '' }}</td>
+										<td style="text-align:right">{{ !empty($items->item_price) ? $items->item_price : '' }}</td>
 										<td>
 											@if ($procurement->status == 1)
 												<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
@@ -207,7 +207,7 @@
 		//Cancel button click event
             document.getElementById("cancel").onclick = function () {
 				if ("{{$back}}" === '')
-					location.href = "/procurement/request_items";
+					location.href = "/procurement/create_request";
 				else if ("{{$back}}" === 'procurement') location.href = "/procurement/request_approval";
 				else location.href = "/procurement/seach_request";
             };

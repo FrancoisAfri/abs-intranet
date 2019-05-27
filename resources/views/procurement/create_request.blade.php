@@ -68,7 +68,7 @@
                     </table>
                     <!-- /.box-body -->
                     <div class="box-footer">
-						<button type="button" id="send_communication" class="btn btn-warning pull-right">New Request
+						<button type="button" id="create_request" class="btn btn-warning pull-right">New Request
                         </button>
                     </div>
                 </div>
@@ -124,21 +124,16 @@
 			"autoWidth": true
 		});
 	});
-	$('#send_communication').click(function () {
+	$('#create_request').click(function () {
 		location.href = '/procurement/create-request';
 	});
 	$(function () {
-
-		//Tooltip
-
 		$('[data-toggle="tooltip"]').tooltip();
-
 		//Vertically center modals on page
 		function reposition() {
 			var modal = $(this),
 				dialog = modal.find('.modal-dialog');
 			modal.css('display', 'block');
-
 			// Dividing by two centers the modal exactly, but dividing by three
 			// or four works better for larger screens.
 			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));

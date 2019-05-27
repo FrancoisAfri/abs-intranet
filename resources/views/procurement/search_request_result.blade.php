@@ -8,7 +8,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
-                    <h3 class="box-title">Job Card Search</h3>
+                    <h3 class="box-title">Search Results</h3>
                 </div>
                 <div class="box-body">
                 <div class="box-body">
@@ -18,32 +18,28 @@
                             <div style="overflow-X:auto;">
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
-                                    <tr>
-                                        <th style="width: 5px; text-align: center;"></th>
-                                        <th>Store</th>
-                                        <th>Date Requeted</th>
-										<th>Title</th>
-										<th>Employee</th>
-										<th>On Behalf Of</th>
-										<th>Remarks</th>
-										<th>Status</th>
-                                    </tr>
+										<tr>
+											<th style="width: 5px; text-align: center;"></th>
+											<th>Date Requeted</th>
+											<th>Po Nunber</th>
+											<th>Title</th>
+											<th>Created By</th>
+											<th>Status</th>
+										</tr>
                                     </thead>
                                     <tbody>
-                                    @if (count($stocks) > 0)
-                                        @foreach ($stocks as $stock)
+                                    @if (count($procurements) > 0)
+                                        @foreach ($procurements as $procurement)
                                             <tr id="categories-list">
                                                 <td>
-                                                    <a href="{{ '/stock/viewrequest/' . $stock->id.'/back' }}" id="edit_compan"
+                                                    <a href="{{ '/procurement/viewrequest/' . $procurement->id.'/back' }}" id="edit_compan"
 														class="btn btn-warning  btn-xs"><i class="fa fa-money"></i> View More</a>
 												</td>
-												<td>{{ !empty($stock->store_name) ? $stock->store_name : '' }}</td>
-												<td>{{ !empty($stock->date_created) ? date(' d M Y', $stock->date_created) : '' }}</td>
-												<td>{{ !empty($stock->title_name) ? $stock->title_name : '' }}</td>
-												<td>{{ (!empty($stock->firstname)) ?  $stock->firstname . ' ' .  $stock->surname : ''}} </td>
-												<td>{{ (!empty($stock->hp_first_name)) ?  $stock->hp_first_name . ' ' .  $stock->hp_surname : ''}} </td>
-												<td>{{ (!empty($stock->request_remarks)) ?  $stock->request_remarks : ''}} </td>
-												<td>{{ !empty($stock->status_name) ? $stock->status_name : '' }}</td>
+												<td>{{ !empty($procurement->date_created) ? date(' d M Y', $procurement->date_created) : '' }}</td>
+												<td>{{ !empty($procurement->po_number) ? $procurement->po_number : '' }}</td>
+												<td>{{ !empty($procurement->title_name) ? $procurement->title_name : '' }}</td>
+												<td>{{ (!empty($procurement->firstname)) ?  $procurement->firstname . ' ' .  $procurement->surname : ''}} </td>
+												<td>{{ !empty($procurement->status_name) ? $procurement->status_name : '' }}</td>
                                             </tr>
                                         @endforeach
                                     @endif
@@ -84,7 +80,7 @@
 			
 			//Cancel button click event
 			document.getElementById("cancel").onclick = function () {
-				location.href = "/stock/seach_request";
+				location.href = "/procurement/seach_request";
 			};
 			$(function () {
 				$('#example2').DataTable({

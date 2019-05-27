@@ -1143,4 +1143,8 @@ Route::get('procurement/create-request', 'procurementRequestController@create');
 Route::post('procurement/adjust-request', 'procurementRequestController@adjustProcurement');
 Route::post('procurement/save', 'procurementRequestController@saveRequest');
 Route::post('procurement/update/{procurement}', 'procurementRequestController@updateQuote');
+Route::get('procurement/seach_request', 'procurementRequestController@requestSearch');
 Route::get('procurement/viewrequest/{procurement}', 'procurementRequestController@viewRequest');
+Route::get('procurement/viewrequest/{procurement}/{back}', 'procurementRequestController@viewRequest');
+Route::get('procurement/viewrequest/{procurement}/{back}/{app}', 'procurementRequestController@viewRequest');
+Route::post('procurement/search_results', 'procurementRequestController@requestResults');

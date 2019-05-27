@@ -27,7 +27,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-truck pull-right"></i>
                 </div>
-                <form class="form-horizontal" method="POST" action="/stock/search_results">
+                <form class="form-horizontal" method="POST" action="/procurement/search_results">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -48,25 +48,21 @@
                                 <div class="box-header with-border" align="center">
                                     <h3 class="box-title">Search Criteria</h3>
                                 </div>
-									@if (!empty($approvals->require_store_manager_approval) && $approvals->require_store_manager_approval == 1)
-                                    <div class="form-group {{ $errors->has('store_id') ? ' has-error' : '' }}">
-                                        <label for="store_id" class="col-sm-2 control-label">Stores</label>
+                                    <div class="form-group {{ $errors->has('po_order') ? ' has-error' : '' }}">
+                                        <label for="po_order" class="col-sm-2 control-label">Po Nunber</label>
                                         <div class="col-sm-8">
-                                            <select id="store_id" name="store_id" style="width: 100%;" class="form-control select2">
-												<option value="0">*** Select a Store ***</option>
-												@foreach($stockLevelFives as $stockLevelFive)
-													<option value="{{ $stockLevelFive->id }}">{{ $stockLevelFive->name}}</option>
-												@endforeach
-											</select>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="po_order" name="po_order"
+													value="" placeholder="Enter Purchase Order Number">
+                                            </div>
                                         </div>
                                     </div>
-									@endif
-                                    <div class="form-group {{ $errors->has('title_name') ? ' has-error' : '' }}">
+									<div class="form-group {{ $errors->has('title_name') ? ' has-error' : '' }}">
                                         <label for="title_name" class="col-sm-2 control-label">Title</label>
                                         <div class="col-sm-8">
                                             <div class="input-group">
                                                 <input type="text" class="form-control" id="title_name" name="title_name"
-															value="" placeholder="Enter Request Title">
+															value="" placeholder="Enter Title">
                                             </div>
                                         </div>
                                     </div>
@@ -93,25 +89,34 @@
 											</select>
                                         </div>
                                     </div>
-                                    <!--<div class="form-group {{ $errors->has('product_id') ? ' has-error' : '' }}">
-                                        <label for="kpa_id" class="col-sm-2 control-label"> Products</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control select2" style="width: 100%;"
-												id="product_id" name="product_id">
-												<option value="0">*** Select a Product  ***</option>
-												@foreach($products as $product)
-													<option value="{{ $product->id }}">{{ $product->name }}</option>
-												@endforeach
-											</select>
-                                        </div>
-                                    </div>-->
-									<div class="form-group day-field {{ $errors->has('requested_date') ? ' has-error' : '' }}">
-                                        <label for="requested_date" class="col-sm-2 control-label">Requested Date</label>
+									<div class="form-group{{ $errors->has('requested_date') ? ' has-error' : '' }}">
+                                        <label for="requested_date" class="col-sm-2 control-label">Date Created</label>
                                         <div class="col-sm-8">
                                             <div class="input-group">
                                                 <input type="text" class="form-control daterangepicker" id="requested_date"
-                                                       name="requested_date" value="" placeholder="Select Requested Date...">
+                                                       name="requested_date" value="" placeholder="Select Date Created...">
                                             </div>
+                                        </div>
+                                    </div>
+									<div class="form-group{{ $errors->has('approved_date') ? ' has-error' : '' }}">
+                                        <label for="approved_date" class="col-sm-2 control-label">Date Approved</label>
+                                        <div class="col-sm-8">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control daterangepicker" id="approved_date"
+                                                       name="approved_date" value="" placeholder="Select Approved Date...">
+                                            </div>
+                                        </div>
+                                    </div>
+									<div class="form-group {{ $errors->has('on_behalf_employee_id') ? ' has-error' : '' }}">
+                                        <label for="status" class="col-sm-2 control-label">Status</label>
+                                        <div class="col-sm-8">
+                                            <select id="status" name="status"
+												style="width: 100%;" class="form-control select2">
+													<option value="0">*** Select a Status ***</option>
+													@foreach($approvals as $approval)
+														<option value="{{ $approval->id }}">{{ $approval->step_name}}</option>
+													@endforeach
+											</select>
                                         </div>
                                     </div>
                                 <div class="box-footer">
@@ -128,7 +133,6 @@
 		</div>
     </div>
 @endsection
-
 @section('page_script')
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- bootstrap datepicker -->
@@ -145,13 +149,10 @@
     <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
             type="text/javascript"></script>
     <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-
     <!-- the main fileinput plugin file -->
     <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Ajax form submit -->

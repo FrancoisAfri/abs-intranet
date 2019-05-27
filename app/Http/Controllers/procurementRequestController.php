@@ -13,6 +13,7 @@ use App\CompanyIdentity;
 use App\product_products;
 use App\ProcurementRequest;
 use App\ProcurementRequestItems;
+use App\Mail\stockDeliveryNote;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -28,31 +29,14 @@ class procurementRequestController extends Controller
 	}
 	// Procurement Request index Page
 	public function index()
-    {		
+    {	
 		$hrID = Auth::user()->person->id;
-		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
-		$procurements = ProcurementRequest::where('employee_id',$hrID)->orderBy('date_created', 'asc')->get();
+		$procurements = ProcurementRequest::where('employee_id',$hrID)->orderBy('date_created', 'desc')->limit(50)->get();
 		if (!empty($procurements)) $procurements = $procurements->load('procurementItems','employees','employeeOnBehalf','requestStatus');
-		$employees = DB::table('hr_people')
-                ->select('hr_people.*')
-                ->where('hr_people.status', 1)
-                ->where('hr_people.id', $hrID)
-				->orderBy('first_name', 'asc')
-				->orderBy('surname', 'asc')
-				->get();
 
-		$employeesOnBehalf = DB::table('hr_people')
-			->select('hr_people.*')
-			->where('hr_people.status', 1)
-			->orderBy('first_name', 'asc')
-			->orderBy('surname', 'asc')
-			->get();
-		$data['employees'] = $employees;
-		$data['employeesOnBehalf'] = $employeesOnBehalf;
-		$data['products'] = $products;
         $data['procurements'] = $procurements;
-        $data['page_title'] = 'Create Request';
-        $data['page_description'] = 'Request Items';
+        $data['page_title'] = 'My Request(s)';
+        $data['page_description'] = 'Procurement Request';
         $data['breadcrumb'] = [
             ['title' => 'Procurement', 'path' => '/procurement/create-request', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
             ['title' => 'Create Request', 'active' => 1, 'is_module' => 0]
@@ -152,7 +136,6 @@ class procurementRequestController extends Controller
         $data['justification_of_expenditure'] = $request->input('justification_of_expenditure');
         $data['detail_of_expenditure'] = $request->input('detail_of_expenditure');
         $data['products'] = $products;
-        //return $data;
         AuditReportsController::store('Procurement', 'Create Procurement Page Accessed', 'Accessed By User', 0);
         return view('procurement.adjust_procurement')->with($data);
     }
@@ -174,10 +157,12 @@ class procurementRequestController extends Controller
 
         //return $request->all();
         $user = Auth::user()->load('person');
+		$flow = ProcurementApproval_steps::where('status',1)->orderBy('id', 'asc')->first();
+        $flowprocee = !empty($flow->step_number) ? $flow->step_number : 0;
+
         //save procurement request
-		
         $procurement = new ProcurementRequest();
-        DB::transaction(function () use ($procurement, $request, $user) {
+        DB::transaction(function () use ($procurement, $request, $user, $flowprocee) {
 			$date = str_replace('/', '-', $request->input('date_created'));
 			$date = strtotime($date);
             $itemType = $request->input('item_type');
@@ -191,13 +176,13 @@ class procurementRequestController extends Controller
             $procurement->special_instructions = ($request->input('special_instructions')) ? $request->input('special_instructions') : '';
             $procurement->detail_of_expenditure = ($request->input('detail_of_expenditure')) ? $request->input('detail_of_expenditure') : '';
             $procurement->justification_of_expenditure = ($request->input('justification_of_expenditure')) ? $request->input('justification_of_expenditure') : '';
-            $procurement->status = 1;
+            $procurement->status = $flowprocee;
             $procurement->save();
 
-			$poNumber = 'PO' . sprintf('%07d', $procurement->id);
+			/*$poNumber = 'PO' . sprintf('%07d', $procurement->id);
             $procurement->po_number = $poNumber;
             $procurement->update();
-
+*/
             if ($itemType == 1) {
                 //save procurement's Procurement items
                 $prices = $request->input('price');
@@ -238,8 +223,68 @@ class procurementRequestController extends Controller
                 }
             }
         });
+        // get approver ID and send them email
+		if (!empty($flow->employee_id))
+			$ApproverDetails = HRPerson::where('id', $flow->employee_id)->where('status', 1)->first();
+		elseif (!empty($flow->role_id))
+		{
+			$users = DB::table('hr_users_roles')
+			->where('status', 1)
+			->where('role_id', $flow->role_id)
+			->pluck('hr_id');
+
+			foreach ($users as $user) {
+				$usedetails = HRPerson::where('id', $user)->select('first_name','email')->first();
+				$email = !empty($usedetails->email) ? $usedetails->email : ''; 
+				$firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
+				if (!empty($email))
+					Mail::to($email)->send(new ProcurementNextStep($firstname));
+            }   
+			
+		}
+		else
+		{
+			if (!empty($flow->division_level_1) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelOne::where('id', $flow->division_level_1)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+			elseif(!empty($flow->division_level_2) && empty($flow->division_level_1) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelTwo::where('id', $flow->division_level_2)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+			elseif(!empty($flow->division_level_3) && empty($flow->division_level_2) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelThree::where('id', $flow->division_level_3)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+			elseif(!empty($flow->division_level_4) && empty($flow->division_level_3) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelFour::where('id', $flow->division_level_4)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+			elseif(!empty($flow->division_level_5) && empty($flow->division_level_4) && empty($flow->employee_id))
+			{
+				$Dept = DivisionLevelFive::where('id', $flow->division_level_5)->first();
+				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+			}
+		}
+		// send email
+		if (!empty($ApproverDetails->email) && !empty($ApproverDetails->first_name))
+			Mail::to($ApproverDetails->email)->send(new ProcurementNextStep($ApproverDetails->first_name));
         
-        AuditReportsController::store('Procurement', 'New Procurement Created', 'Create by user', 0);
+		AuditReportsController::store('Procurement', 'New Procurement Created', 'Create by user', 0);
         return redirect("/procurement/viewrequest/$procurement->id")->with(['success_add' => 'The request has been successfully Created!']);
     }
 	
@@ -389,7 +434,7 @@ class procurementRequestController extends Controller
             ['title' => 'Request Procurement Items', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Procurement';
-        $data['active_rib'] = 'Request Items';
+        $data['active_rib'] = 'Search';
 
         AuditReportsController::store('Procurement', 'View Request', 'Accessed By User', 0);
         return view('procurement.view_request')->with($data);
@@ -467,8 +512,7 @@ class procurementRequestController extends Controller
 	public function requestSearch()
     {
         $hrID = Auth::user()->person->id;
-		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
-
+		$approvals = ProcurementApproval_steps::where('status', 1)->orderBy('id', 'desc')->get();
 		$employees = DB::table('hr_people')
                 ->select('hr_people.*')
                 ->where('hr_people.status', 1)
@@ -482,12 +526,10 @@ class procurementRequestController extends Controller
 			->orderBy('first_name', 'asc')
 			->orderBy('surname', 'asc')
 			->get();
-		$data['stockLevel'] = $stockLevel;
-		$data['stockLevelFives'] = $stockLevelFives;
+
 		$data['approvals'] = $approvals;
 		$data['employees'] = $employees;
 		$data['employeesOnBehalf'] = $employeesOnBehalf;
-		$data['products'] = $products;
 		$data['page_title'] = 'Search Request';
         $data['page_description'] = 'Search Request Items';
         $data['breadcrumb'] = [
@@ -495,72 +537,78 @@ class procurementRequestController extends Controller
             ['title' => 'Search Request', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Procurement';
-        $data['active_rib'] = 'Search Request';
+        $data['active_rib'] = 'Search';
 
         AuditReportsController::store('Procurement', 'Job Card card search Page Accessed', "Job Card card search Page Accessed", 0);
         return view('procurement.search_request')->with($data);
     }
-	// Search request
-	
-	// Search results	
+	// Search request	
 	public function requestResults(Request $request)
     {
         $SysData = $request->all();
         unset($SysData['_token']);
-        $storeID = $request['store_id'];
         $titleName = $request['title_name'];
+        $poOrder = $request['po_order'];
         $employeeID = $request['employee_id'];
         $onBehalf = $request['on_behalf_employee_id'];
         $status = $request['status'];
-        $actionFrom = $actionTo = 0;
-        $actionDate = $request['requested_date'];
-        if (!empty($actionDate)) {
-            $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+        $createFrom = $createTo = $approvedFrom = $approvedTo = 0;
+        $createdDate = $request['requested_date'];
+        $approvedDate = $request['approved_date'];
+        if (!empty($createdDate)) {
+            $createExplode = explode('-', $createdDate);
+            $createFrom = strtotime($createExplode[0]);
+            $createTo = strtotime($createExplode[1]);
+        }        
+		if (!empty($approvedDate)) {
+            $approedExplode = explode('-', $approvedDate);
+            $approvedFrom = strtotime($approedExplode[0]);
+            $approvedTo = strtotime($approedExplode[1]);
         }
-        $procurements = DB::table('request_stocks')
-            ->select('request_stocks.*','hr_people.first_name as firstname'
+        $procurements = DB::table('procurement_requests')
+            ->select('procurement_requests.*','hr_people.first_name as firstname'
 			, 'hr_people.surname as surname'
-			, 'hp.first_name as hp_first_name', 'hp.surname as hp_surname'
-			, 'stock_level_fives.name as store_name'
-			, 'stock_approvals_levels.step_name as status_name')
-            ->leftJoin('hr_people', 'request_stocks.employee_id', '=', 'hr_people.id')
-            ->leftJoin('hr_people as hp', 'request_stocks.on_behalf_employee_id', '=', 'hp.id')
-            ->leftJoin('stock_approvals_levels','request_stocks.status', '=', 'stock_approvals_levels.id')
-            ->leftJoin('stock_level_fives', 'request_stocks.store_id', '=', 'stock_level_fives.id')
-			->where(function ($query) use ($storeID) {
-                if (!empty($storeID)) {
-                    $query->where('request_stocks.store_id', $storeID);
+			, 'procurement_approval_steps.step_name as status_name')
+            ->leftJoin('hr_people', 'procurement_requests.employee_id', '=', 'hr_people.id')
+            ->leftJoin('procurement_approval_steps','procurement_requests.status', '=', 'procurement_approval_steps.id')
+			->where(function ($query) use ($poOrder) {
+                if (!empty($poOrder)) {
+                    $query->where('procurement_requests.po_number', 'ILIKE', "%$poOrder%");
                 }
             })
             ->where(function ($query) use ($titleName) {
                 if (!empty($titleName)) {
-                    $query->where('request_stocks.title_name', 'ILIKE', "%$titleName%");
+                    $query->where('procurement_requests.title_name', 'ILIKE', "%$titleName%");
                 }
             })
             ->where(function ($query) use ($employeeID) {
                 if (!empty($employeeID)) {
-                    $query->where('request_stocks.employee_id', $employeeID);
+                    $query->where('procurement_requests.employee_id', $employeeID);
                 }
             })
 			->where(function ($query) use ($onBehalf) {
                 if (!empty($onBehalf)) {
-                    $query->where('request_stocks.on_behalf_employee_id', $onBehalf);
+                    $query->where('procurement_requests.on_behalf_employee_id', $onBehalf);
                 }
             })
 			->where(function ($query) use ($status) {
                 if (!empty($status)) {
-                    $query->where('request_stocks.status', $status);
+                    $query->where('procurement_requests.status', $status);
                 }
             })
-			->where(function ($query) use ($actionFrom, $actionTo) {
-				if ($actionFrom > 0 && $actionTo > 0) {
-						$query->whereBetween('request_stocks.date_created', [$actionFrom, $actionTo]);
+			->where(function ($query) use ($createFrom, $createTo) {
+				if ($createFrom > 0 && $createTo > 0) {
+						$query->whereBetween('procurement_requests.date_created', [$createFrom, $createTo]);
+				}
+			})			
+			->where(function ($query) use ($approvedFrom, $approvedTo) {
+				if ($approvedFrom > 0 && $approvedTo > 0) {
+						$query->whereBetween('procurement_requests.date_approved', [$createFrom, $createTo]);
 				}
 			})
-            ->orderBy('request_stocks.id', 'asc')
+            ->orderBy('procurement_requests.date_created', 'desc')
             ->get();
+			//return $procurements;  
         $data['procurements'] = $procurements;
         $data['page_title'] = "Request Search Results";
         $data['active_mod'] = 'Procurement';
@@ -570,7 +618,7 @@ class procurementRequestController extends Controller
             ['title' => 'Request Search ', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Procurement';
-        $data['active_rib'] = 'Search Request';
+        $data['active_rib'] = 'Search';
 		
         AuditReportsController::store('Procurement', 'Job Card Search Page Accessed', "Job Card card search Page Accessed", 0);
         return view('procurement.search_request_result')->with($data);
@@ -607,26 +655,26 @@ class procurementRequestController extends Controller
                 $statuses = (explode(",", $status));
             }
 
-            $procurements = DB::table('request_stocks')
-                ->select('request_stocks.*','hr_people.first_name as firstname', 'hr_people.surname as surname'
+            $procurements = DB::table('procurement_requests')
+                ->select('procurement_requests.*','hr_people.first_name as firstname', 'hr_people.surname as surname'
 				,'hp.first_name as hp_firstname', 'hp.surname as hp_surname'
 				, 'stock_approvals_levels.step_name as step_name'
 				, 'stock_level_fives.name as store_name')
-               ->leftJoin('hr_people', 'request_stocks.employee_id', '=', 'hr_people.id')
-                ->leftJoin('hr_people as hp', 'request_stocks.on_behalf_employee_id', '=', 'hp.id')
-				->leftJoin('stock_approvals_levels', 'request_stocks.status', '=', 'stock_approvals_levels.step_number')
-				->leftJoin('stock_level_fives', 'request_stocks.store_id', '=', 'stock_level_fives.id')
+               ->leftJoin('hr_people', 'procurement_requests.employee_id', '=', 'hr_people.id')
+                ->leftJoin('hr_people as hp', 'procurement_requests.on_behalf_employee_id', '=', 'hp.id')
+				->leftJoin('stock_approvals_levels', 'procurement_requests.status', '=', 'stock_approvals_levels.step_number')
+				->leftJoin('stock_level_fives', 'procurement_requests.store_id', '=', 'stock_level_fives.id')
                 ->where(function ($query) use ($statuses) {
                     if (!empty($statuses)) {
-                        $query->whereIn('request_stocks.status', $statuses);
+                        $query->whereIn('procurement_requests.status', $statuses);
                     }
                 })
                 ->where(function ($query) use ($lastStepNumber) {
                     if (!empty($lastStepNumber)) {
-                        $query->where('request_stocks.status', '!=', $lastStepNumber);
+                        $query->where('procurement_requests.status', '!=', $lastStepNumber);
                     }
                 })
-                ->orderBy('request_stocks.date_created', 'desc')
+                ->orderBy('procurement_requests.date_created', 'desc')
                 ->get();
 
             $steps = Stock_Approvals_level::latest()->first();
