@@ -28,11 +28,11 @@
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Document Number</label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="document_number" name="document_number" value=" "
+                            <input type="text" class="form-control" id="document_number" name="document_number" value=""
                                    placeholder="Enter Document Number" required>
                         </div>
                     </div>
-                    <div class="form-group ">
+                    <div class="form-group">
                         <label for="date" class="col-sm-2 control-label">Date </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date" name="date"

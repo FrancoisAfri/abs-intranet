@@ -300,7 +300,6 @@ class procurementRequestController extends Controller
 		
 		$flow = Stock_Approvals_level::where('status',1)->orderBy('id', 'asc')->first();
         $flowprocee = !empty($flow->step_number) ? $flow->step_number : 0;
-
 		// Save
 		$requestStock = new ProcurementRequest();
         $requestStock->employee_id = !empty($stockRequest['employee_id']) ? $stockRequest['employee_id'] : 0;

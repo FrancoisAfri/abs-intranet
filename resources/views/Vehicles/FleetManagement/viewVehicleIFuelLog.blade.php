@@ -132,7 +132,6 @@
                         @if (count($vehiclefuellog) > 0)
                             @foreach ($vehiclefuellog as $details)
                                 <tr id="categories-list">
-
                                     <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
                                     <td>{{ !empty($details->transaction_type) ?  $transType[$details->transaction_type] : ''}}</td>
                                     <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
@@ -147,7 +146,7 @@
                                     @else
 										<td style="text-align: center">{{ !empty($details->Hoursreading) ? number_format($details->Hoursreading, 2) . ' hrs' : ''}}</td>
                                     @endif
-                                    <td style="text-align: center">{{!empty($details->km_travelled) && !empty($details->litres_new) ? number_format($details->km_travelled / $details->litres_new, 2) .' km/l' : 0}}</td>
+                                    <td style="text-align: center">{{!empty($details->per_litre) ? number_format($details->per_litre, 2) .' km/l' : 0}}</td>
                                     <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
                                     <!--  <td style="text-align:center;" colspan="2"> -->
                                     <td>

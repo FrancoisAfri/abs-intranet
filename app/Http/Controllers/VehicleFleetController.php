@@ -1386,14 +1386,24 @@ class VehicleFleetController extends Controller
 			->where('vehicle_fuel_log.vehicleID',  $maintenance->id)
             ->orderBy('vehicle_fuel_log.date')
             ->get();
+			//return $vehiclefuellog;
 		if (!empty($vehiclefuellog))
 		{
-			$oldkm = $count = 0;
+			$oldkm = $count = $litreTopUp = $perLitre = 0;
 			foreach ($vehiclefuellog as $fuellog) {
 				if ($count == 0)
 					$kmTravelled = $fuellog->$field - $prevMonthkm;
 				else $kmTravelled = $fuellog->$field - $oldkm;
-				$fuellog->km_travelled = $kmTravelled;
+				if ($fuellog->transaction_type == 1)
+				{
+					$fuellog->per_litre = $kmTravelled / ($fuellog->litres_new + $litreTopUp);
+					$litreTopUp = 0;
+				}
+				else 
+				{
+					$fuellog->per_litre = 0;
+					$litreTopUp = $litreTopUp + $fuellog->litres_new;
+				}			
 				$count ++;
 				$oldkm = $fuellog->$field;
             }
