@@ -1148,3 +1148,4 @@ Route::get('procurement/viewrequest/{procurement}', 'procurementRequestControlle
 Route::get('procurement/viewrequest/{procurement}/{back}', 'procurementRequestController@viewRequest');
 Route::get('procurement/viewrequest/{procurement}/{back}/{app}', 'procurementRequestController@viewRequest');
 Route::post('procurement/search_results', 'procurementRequestController@requestResults');
+Route::get('procurement/request_approval', 'procurementRequestController@requestApprovals');

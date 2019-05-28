@@ -1,7 +1,7 @@
 <div id="edit-category-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-module-form">
+            <form class="form-horizontal" method="POST" name="edit-category-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
@@ -28,12 +28,9 @@
                              </div>  
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="edit_category" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
+                    <button type="button" id="update-category" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
             </form>
-
-            </div>
-         </div>
-            </div>
-        
-           
+        </div>
+    </div>
+</div>       

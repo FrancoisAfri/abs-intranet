@@ -239,8 +239,7 @@ class procurementRequestController extends Controller
 				$firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
 				if (!empty($email))
 					Mail::to($email)->send(new ProcurementNextStep($firstname));
-            }   
-			
+            }
 		}
 		else
 		{
@@ -288,97 +287,6 @@ class procurementRequestController extends Controller
         return redirect("/procurement/viewrequest/$procurement->id")->with(['success_add' => 'The request has been successfully Created!']);
     }
 	
-	public function store(Request $request) {
-        $this->validate($request, [
-			'title_name' => 'required',
-			'store_id' => 'required',
-			'employee_id' => 'required',
-			'on_behalf_employee_id' => 'required_if:on_behalf,1',
-        ]);
-        $stockRequest = $request->all();
-        unset($stockRequest['_token']);
-		
-		$flow = Stock_Approvals_level::where('status',1)->orderBy('id', 'asc')->first();
-        $flowprocee = !empty($flow->step_number) ? $flow->step_number : 0;
-		// Save
-		$requestStock = new ProcurementRequest();
-        $requestStock->employee_id = !empty($stockRequest['employee_id']) ? $stockRequest['employee_id'] : 0;
-        $requestStock->on_behalf_of = !empty($stockRequest['on_behalf_of']) ? $stockRequest['on_behalf_of'] : 0;
-        $requestStock->on_behalf_employee_id = !empty($stockRequest['on_behalf_employee_id']) ? $stockRequest['on_behalf_employee_id'] : 0;
-        $requestStock->date_created = time();
-        $requestStock->status = $flowprocee;
-        $requestStock->title_name = !empty($stockRequest['title_name']) ? $stockRequest['title_name'] : 0;
-        $requestStock->store_id = !empty($stockRequest['store_id']) ? $stockRequest['store_id'] : 0;
-        $requestStock->request_remarks = !empty($stockRequest['request_remarks']) ? $stockRequest['request_remarks'] : 0;
-        $requestStock->save();
-		// Save Procurement Items
-        $numFiles = $index = 0;
-        $totalFiles = !empty($stockRequest['total_files']) ? $stockRequest['total_files'] : 0;
-        while ($numFiles != $totalFiles) {
-            $index++;
-			$productID = $request->product_id[$index];
-            $quantity = $request->quantity[$index];
-            $products = product_products::where('id',$productID)->first();
-			$requestStockItems = new RequestStockItems();
-			$requestStockItems->product_id = $productID;
-			$requestStockItems->category_id = $products->category_id;
-			$requestStockItems->quantity = $quantity;
-			$requestStockItems->date_added = time();
-			$requestStockItems->request_stocks_id = $requestStock->id;
-			$requestStockItems->save();
-			// next
-            $numFiles++;
-        }
-		$requestStock->request_number = "ST".$requestStock->id;
-		$requestStock->invoice_number = "INV".$requestStock->id;
-		$requestStock->update();
-		
-		// get approver ID and send them email
-		if (!empty($flow->employee_id))
-			$ApproverDetails = HRPerson::where('id', $flow->employee_id)->where('status', 1)->first();
-		else
-		{
-			if (!empty($flow->division_level_1) && empty($flow->employee_id))
-			{
-				$Dept = DivisionLevelOne::where('id', $flow->division_level_1)->first();
-				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
-                ->select('first_name', 'surname', 'email')
-                ->first();
-			}
-			elseif(!empty($flow->division_level_2) && empty($flow->division_level_1) && empty($flow->employee_id))
-			{
-				$Dept = DivisionLevelTwo::where('id', $flow->division_level_2)->first();
-				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
-                ->select('first_name', 'surname', 'email')
-                ->first();
-			}
-			elseif(!empty($flow->division_level_3) && empty($flow->division_level_2) && empty($flow->employee_id))
-			{
-				$Dept = DivisionLevelThree::where('id', $flow->division_level_3)->first();
-				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
-                ->select('first_name', 'surname', 'email')
-                ->first();
-			}
-			elseif(!empty($flow->division_level_4) && empty($flow->division_level_3) && empty($flow->employee_id))
-			{
-				$Dept = DivisionLevelFour::where('id', $flow->division_level_4)->first();
-				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
-                ->select('first_name', 'surname', 'email')
-                ->first();
-			}
-			elseif(!empty($flow->division_level_5) && empty($flow->division_level_4) && empty($flow->employee_id))
-			{
-				$Dept = DivisionLevelFive::where('id', $flow->division_level_5)->first();
-				$ApproverDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
-                ->select('first_name', 'surname', 'email')
-                ->first();
-			}
-		}
-		if (!empty($ApproverDetails->email))
-			Mail::to($ApproverDetails->email)->send(new stockApprovals($ApproverDetails->first_name, $requestStock->request_number));
-        AuditReportsController::store('Procurement', 'Procurement Request Created', 'Created by User', 0);
-        return response()->json();
-    }
 	
 	// View Request items
 	public function viewRequest(ProcurementRequest $procurement, $back='', $app='')
@@ -634,10 +542,10 @@ class procurementRequestController extends Controller
             ->where('security_modules_access.user_id', $user_id)
             ->pluck('user_id')->first();
 
-        $processflow = Stock_Approvals_level::where('status', 1)->Where('employee_id',$user_id)->orderBy('id', 'asc')
+        $processflow = ProcurementApproval_steps::where('status', 1)->Where('employee_id',$user_id)->orderBy('id', 'asc')
 		->first();
 
-        $lastProcess = Stock_Approvals_level::where('status', 1)->orderBy('id', 'desc')->first();
+        $lastProcess = ProcurementApproval_steps::where('status', 1)->orderBy('id', 'desc')->first();
         $lastStepNumber = !empty($lastProcess->step_number) ? $lastProcess->step_number : 0;
 
         $statuses = array();
@@ -676,7 +584,7 @@ class procurementRequestController extends Controller
                 ->orderBy('procurement_requests.date_created', 'desc')
                 ->get();
 
-            $steps = Stock_Approvals_level::latest()->first();
+            $steps = ProcurementApproval_steps::latest()->first();
             $stepnumber = !empty($steps->step_number) ? $steps->step_number : 0;
 
             $data['page_title'] = "Procurement";
@@ -732,13 +640,13 @@ class procurementRequestController extends Controller
 					$totalPrice = $totalPrice + $currentPrice;
 				}
 				// get max amount allow for this step
-				$currentStep = Stock_Approvals_level::where('step_number', $sValue)->where('status', 1)->first();
+				$currentStep = ProcurementApproval_steps::where('step_number', $sValue)->where('status', 1)->first();
 				$maxAmount = !empty($currentStep->max_amount) ? $currentStep->max_amount : 0; 
 				
 				if ($totalPrice <= $maxAmount)
 				{
 					// Approve request
-					$steps = Stock_Approvals_level::latest()->first();
+					$steps = ProcurementApproval_steps::latest()->first();
 					$procurement->status = $steps->step_number;
 					$procurement->update();
 					// Procurement History and deduct from procurement
@@ -788,7 +696,7 @@ class procurementRequestController extends Controller
 				}
 				else
 				{
-					$processflow = Stock_Approvals_level::where('step_number', '>', $sValue)->where('status', 1)->orderBy('step_number', 'asc')->first();
+					$processflow = ProcurementApproval_steps::where('step_number', '>', $sValue)->where('status', 1)->orderBy('step_number', 'asc')->first();
 					$procurement->status = $processflow->step_number;
 					$procurement->update();
 							// get approver ID and send them email
@@ -886,13 +794,13 @@ class procurementRequestController extends Controller
 			$totalPrice = $totalPrice + $currentPrice;
 		}
 		// get max amount allow for this step
-		$currentStep = Stock_Approvals_level::where('step_number', $procurement->status)->where('status', 1)->first();
+		$currentStep = ProcurementApproval_steps::where('step_number', $procurement->status)->where('status', 1)->first();
 		$maxAmount = !empty($currentStep->max_amount) ? $currentStep->max_amount : 0; 
 		
 		if ($totalPrice <= $maxAmount)
 		{
 			// Approve request
-			$steps = Stock_Approvals_level::latest()->first();
+			$steps = ProcurementApproval_steps::latest()->first();
 			$procurement->status = $steps->step_number;
 			$procurement->update();
 			// Procurement History and deduct from procurement
@@ -941,7 +849,7 @@ class procurementRequestController extends Controller
 		}
 		else
 		{
-			$processflow = Stock_Approvals_level::where('step_number', '>', $procurement->status)->where('status', 1)->orderBy('step_number', 'asc')->first();
+			$processflow = ProcurementApproval_steps::where('step_number', '>', $procurement->status)->where('status', 1)->orderBy('step_number', 'asc')->first();
 			$procurement->status = $processflow->step_number;
 			$procurement->update();
 					// get approver ID and send them email
