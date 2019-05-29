@@ -130,11 +130,8 @@
 	});
 
 	$(function () {
-
 		//Tooltip
-
 		$('[data-toggle="tooltip"]').tooltip();
-
 		//Vertically center modals on page
 		function reposition() {
 			var modal = $(this),

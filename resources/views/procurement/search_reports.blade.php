@@ -58,7 +58,6 @@
                                             <select id="category_id" name="category_id" class="form-control select2"
                                                     style="width: 100%;" onchange="productcategoryDDOnChange(this)">
                                                 <option value="">*** Please Select a Product Category ***</option>
-                                                <option value="0"></option>
                                                 @foreach($productCategories as $product)
                                                     <option value="{{ $product->id }}">{{ $product->name }}</option>
                                                 @endforeach

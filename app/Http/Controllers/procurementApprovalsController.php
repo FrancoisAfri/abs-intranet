@@ -7,6 +7,7 @@ use App\ProcurementApproval_steps;
 use App\DivisionLevel;
 use App\HRPerson;
 use App\HRRoles;
+use App\DivisionLevelFive;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
@@ -31,6 +32,7 @@ class procurementApprovalsController extends Controller
         $flow = ProcurementApproval_steps::orderBy('id', 'desc')->latest()->first();
         $flowprocee = !empty($flow->step_number) ? $flow->step_number : 0;
         $newstep = $flowprocee + 1;
+		$divisionFive = DivisionLevelFive::where('active', 1)->orderBy('name', 'desc')->get();
 		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 		$LevelFive = DivisionLevel::where('active', 1)->where('level', 5)->first();
 		$LevelFour = DivisionLevel::where('active', 1)->where('level', 4)->first();
@@ -54,6 +56,7 @@ class procurementApprovalsController extends Controller
             ['title' => 'Approval Steps', 'active' => 1, 'is_module' => 0]
         ];
 
+        $data['divisionFives'] = $divisionFive;
         $data['LevelFive'] = $LevelFive;
         $data['LevelFour'] = $LevelFour;
         $data['LevelTHree'] = $LevelTHree;
@@ -78,6 +81,7 @@ class procurementApprovalsController extends Controller
             'step_number' => 'required',
 			'division_level_5' => 'integer|required_if:approval_type,2|min:1',
 			'role_id' => 'integer|required_if:approval_type,1|min:1',
+			'division_id' => 'integer|required_if:approval_type,1|min:1',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -93,6 +97,7 @@ class procurementApprovalsController extends Controller
         $approvalsLevel->division_level_3 = !empty($SysData['division_level_3']) ? $SysData['division_level_3'] : 0;
         $approvalsLevel->division_level_2 = !empty($SysData['division_level_2']) ? $SysData['division_level_2'] : 0;
         $approvalsLevel->division_level_1 = !empty($SysData['division_level_1']) ? $SysData['division_level_1'] : 0;
+        $approvalsLevel->division_id = !empty($SysData['division_id']) ? $SysData['division_id'] : 0;
         $approvalsLevel->employee_id = !empty($SysData['hr_person_id']) ? $SysData['hr_person_id'] : 0;
         $approvalsLevel->max_amount = !empty($SysData['max_amount']) ? $SysData['max_amount'] : 0;
         $approvalsLevel->role_id = !empty($SysData['role_id']) ? $SysData['role_id'] : 0;
@@ -111,6 +116,7 @@ class procurementApprovalsController extends Controller
             'step_number' => 'required',
             'division_level_5' => 'integer|required_if:approval_types,2|min:1',
 			'role_id' => 'integer|required_if:approval_types,1|min:1',
+			'division_id' => 'integer|required_if:approval_type,1|min:1',
         ]);
         $SysData = $request->all();
         unset($SysData['_token']);
@@ -124,7 +130,8 @@ class procurementApprovalsController extends Controller
         $step->division_level_3 = !empty($SysData['division_level_3']) ? $SysData['division_level_3'] : 0;
         $step->division_level_2 = !empty($SysData['division_level_2']) ? $SysData['division_level_2'] : 0;
         $step->division_level_1 = !empty($SysData['division_level_1']) ? $SysData['division_level_1'] : 0;
-        $step->employee_id = !empty($SysData['hr_person_id']) ? $SysData['hr_person_id'] : 0;
+        $step->division_id = !empty($SysData['division_id']) ? $SysData['division_id'] : 0;
+		$step->employee_id = !empty($SysData['hr_person_id']) ? $SysData['hr_person_id'] : 0;
         $step->max_amount = !empty($SysData['max_amount']) ? $SysData['max_amount'] : 0;
         $step->role_id = !empty($SysData['role_id']) ? $SysData['role_id'] : 0;
         $step->update();

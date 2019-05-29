@@ -10,7 +10,7 @@ class ProcurementApproval_steps extends Model
 	
 	protected $fillable = ['division_level_5', 'division_level_4', 'division_level_3'
 	, 'division_level_2', 'division_level_1', 'employee_id', 'step_name', 'step_number'
-	, 'max_amount', 'role_id', 'status' ,'date_added'];
+	, 'max_amount', 'role_id', 'division_id', 'status' ,'date_added'];
 	
 	//relationship division level details and each specific division level(one to many)
     public function divisionLevelFive() {

@@ -517,7 +517,7 @@
             @endif
         });
 
-          //Load divisions drop down
+        //Load divisions drop down
 
 		function postData(id, data)
 		{

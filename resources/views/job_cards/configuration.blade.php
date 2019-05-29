@@ -41,7 +41,6 @@
 
                                     </td>
                                 </tr>
-
                                 <tr>
                                     <td class="caption" colspan="2">Send sms to mechanic</td>
                                     <input type="hidden" name="mechanic_sms" value="0">
@@ -50,7 +49,6 @@
 
                                     </td>
                                 </tr>
-
                             </table>
                         </div>
                         <br>

@@ -64,7 +64,6 @@
                     @endforeach
 					<div class="form-group emp-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
 						<label for="hr_person_id" class="col-sm-2 control-label">Employee</label>
-
 						<div class="col-sm-10">
 							<div class="input-group">
 								<div class="input-group-addon">
@@ -81,7 +80,6 @@
                     </div>
 					<div class="form-group role-field{{ $errors->has('role_id') ? ' has-error' : '' }}">
 						<label for="role_id" class="col-sm-2 control-label">Roles</label>
-
 						<div class="col-sm-10">
 							<div class="input-group">
 								<div class="input-group-addon">
@@ -91,6 +89,22 @@
 									<option value="">*** Select a Role ***</option>
 									@foreach($roles as $role)
 										<option value="{{ $role->role_id }}">{{ $role->role_name }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
+                    </div>
+					<div class="form-group role-field{{ $errors->has('division_id') ? ' has-error' : '' }}">
+						<label for="division_id" class="col-sm-2 control-label">Company</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-user"></i>
+								</div>
+								<select id="division_id" name="division_id" class="form-control select2" style="width: 100%;">
+									<option value="">*** Select a Company ***</option>
+									@foreach($divisionFives as $divisionFive)
+										<option value="{{ $divisionFive->id }}">{{ $divisionFive->name }}</option>
 									@endforeach
 								</select>
 							</div>

@@ -224,16 +224,28 @@ class procurementRequestController extends Controller
                 }
             }
         });
+		$setup = ProcurementSetup::orderBy('id', 'desc')->first();
         // get approver ID and send them email
 		if (!empty($flow->employee_id))
 			$ApproverDetails = HRPerson::where('id', $flow->employee_id)->where('status', 1)->first();
 		elseif (!empty($flow->role_id))
 		{
-			$users = DB::table('hr_users_roles')
-			->where('status', 1)
-			->where('role_id', $flow->role_id)
-			->pluck('hr_id');
-
+			if (empty($setup->is_role_general) && $flow->division_id)0
+			{
+				$users = DB::table('hr_users_roles')
+				->leftJoin('hr_people', 'hr_users_roles.hr_id', '=', 'hr_people.id')
+				->where('status', 1)
+				->where('hr_people.division_level_5', $flow->division_id)
+				->where('hr_users_roles.role_id', $flow->role_id)
+				->pluck('hr_users_roles.hr_id');
+			}
+			else
+			{
+				$users = DB::table('hr_users_roles')
+				->where('status', 1)
+				->where('role_id', $flow->role_id)
+				->pluck('hr_id');
+			}
 			foreach ($users as $user) {
 				$usedetails = HRPerson::where('id', $user)->select('first_name','email')->first();
 				$email = !empty($usedetails->email) ? $usedetails->email : ''; 
@@ -952,8 +964,12 @@ class procurementRequestController extends Controller
 	public function showSetup()
     {
         $procurementSetup = ProcurementSetup::orderBy('id', 'desc')->first();
-
+		$roles = DB::table('hr_roles')
+				->where('status', 1)
+				->get();
+		//return $procurementSetup;
         $data['procurementSetup'] = $procurementSetup;
+        $data['roles'] = $roles;
         $data['page_title'] = "Procurement";
         $data['page_description'] = " Procurement Setup";
         $data['breadcrumb'] = [
@@ -966,5 +982,23 @@ class procurementRequestController extends Controller
 
         AuditReportsController::store('Stock Management', 'view Stock Setup Page', "Accessed By User", 0);
         return view('procurement.setup')->with($data);
+    }
+	
+	public function addSetup(Request $request,ProcurementSetup $setup)
+    {
+         $this->validate($request, [
+        ]);
+
+        $SysData = $request->all();
+        unset($SysData['_token']);
+
+        $setup->is_role_general = $request->input('is_role_general');
+        $setup->email_po_to_supplier = $request->input('email_po_to_supplier');
+        $setup->amount_required_double = $request->input('amount_required_double');
+        $setup->email_role = $request->input('email_role');
+        $setup->save();
+        return back();
+
+        AuditReportsController::store('Stock Management', 'Add Stock Settinfs', "Added By User", 0);
     }
 }

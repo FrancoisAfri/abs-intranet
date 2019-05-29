@@ -57,6 +57,7 @@
                                                 data-max_amount="{{$processflow->max_amount}}"
                                                 data-employee_id="{{$processflow->employee_id}}"
                                                 data-role_id="{{$processflow->role_id}}"
+                                                data-division_id="{{!empty($processflow->division_id) ? $processflow->division_id : 0}}"
                                                 data-division_level_5="{{!empty($processflow->division_level_5) ? $processflow->division_level_5 : 0}}"
                                                 data-division_level_4="{{!empty($processflow->division_level_4) ? $processflow->division_level_4 : 0 }}"
                                                 data-division_level_3="{{!empty($processflow->division_level_3) ? $processflow->division_level_3 : 0 }}"
@@ -134,7 +135,6 @@
 		function postData(id, data) {
 			if (data == 'actdeac') location.href = "/procurement/process_act/" + id;
 		}
-
 		$('#back_button').click(function () {
 			location.href = '/jobcards/set_up';
 		});
@@ -142,11 +142,8 @@
 			var moduleId;
 			//Initialize Select2 Elements
 			$(".select2").select2();
-
 			//Tooltip
-
 			$('[data-toggle="tooltip"]').tooltip();
-
 			//Vertically center modals on page
 			function reposition() {
 				var modal = $(this),
@@ -163,22 +160,17 @@
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
-
 			// Reposition when a modal is shown
 			$('.modal').on('show.bs.modal', reposition);
 			// Reposition when the window is resized
 			$(window).on('resize', function () {
 				$('.modal:visible').each(reposition);
 			});
-
 			//Show success action modal
 			$('#success-action-modal').modal('show');
-
 			$(".js-example-basic-multiple").select2();
-
 			//Post module form to server using ajax (ADD)
 			$('#add_step').on('click', function () {
-			
 				var strUrl = '/procurement/add_step';
 				var formName = 'add-new-step-form';
 				var modalID = 'add-new-step-modal';
@@ -205,11 +197,13 @@
 				var dept2 = btnEdit.data('division_level_2');
 				var dept1 = btnEdit.data('division_level_1');
 				var dept1 = btnEdit.data('division_level_1');
+				var divisionID = btnEdit.data('division_id');
 				var modal = $(this);
 				modal.find('#step_number').val(step_number);
 				modal.find('#step_name').val(step_name);
 				modal.find('#max_amount').val(maxAmount);
 				modal.find('select#role_id').val(roleID);
+				modal.find('select#division_id').val(divisionID);
 				//Load divisions drop down
 				var parentDDID = '';
 				var loadAllDivs = 1;
