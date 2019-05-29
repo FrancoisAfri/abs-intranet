@@ -59,7 +59,7 @@
                                             <td style='text-align:center'>
                                                 <input type="checkbox" class="checkbox selectall"
                                                        id="stockappprove_{{ $stock->id }}"
-                                                       name="cardappprove_{{ $stock->id }}"
+                                                       name="stockappprove_{{ $stock->id }}"
                                                        value="{{$stock->status}}">
                                             </td>
                                         @endif

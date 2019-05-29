@@ -12,6 +12,7 @@ use App\stockLevel;
 use App\CompanyIdentity;
 use App\product_products;
 use App\ProcurementRequest;
+use App\ProcurementSetup;
 use App\ProcurementRequestItems;
 use App\Mail\stockDeliveryNote;
 use Illuminate\Support\Facades\Auth;
@@ -287,7 +288,6 @@ class procurementRequestController extends Controller
         return redirect("/procurement/viewrequest/$procurement->id")->with(['success_add' => 'The request has been successfully Created!']);
     }
 	
-	
 	// View Request items
 	public function viewRequest(ProcurementRequest $procurement, $back='', $app='')
     {
@@ -409,7 +409,7 @@ class procurementRequestController extends Controller
 	// remove items
 	public function removeItems(Request $request, RequestStockItems $item)
     {
-		$stockID = $item->request_stocks_id;
+		$procurementID = $item->request_stocks_id;
         $item->delete();
 
         AuditReportsController::store('Procurement', 'Requested Item Removed', "Removed By User");
@@ -535,45 +535,71 @@ class procurementRequestController extends Controller
     {
 		$roleArray = array();
         $user_id = Auth::user()->person->user_id;
+		$userID = Auth::user()->person->id;
+		$roles = DB::table('hr_roles')
+			->select('hr_roles.id as role_id')
+			->leftJoin('hr_users_roles', 'hr_roles.id', '=', 'hr_users_roles.role_id')
+			->where('hr_roles.status', 1)
+			->where('hr_users_roles.hr_id',$userID)
+			->get();
+		//
+		foreach ($roles as &$role) {
+			$roleArray[] = $role->role_id;
+		}
+		// get role status
         $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
             ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
-            ->where('security_modules.code_name', 'stock_management')
+            ->where('security_modules.code_name', 'procurement')
             ->where('security_modules_access.access_level', '>=', 4)
             ->where('security_modules_access.user_id', $user_id)
             ->pluck('user_id')->first();
-
-        $processflow = ProcurementApproval_steps::where('status', 1)->Where('employee_id',$user_id)->orderBy('id', 'asc')
-		->first();
-
+        //
+		$processflow = ProcurementApproval_steps::where('status', 1)->Where('employee_id',$userID)->orderBy('id', 'asc')
+		->get();
+		 // get status from roles
+		 $roleFlow = ProcurementApproval_steps::where('status', 1)
+		->Where(function ($query) use ($roleArray) {
+			if (!empty($roleArray)) {
+				$query->whereIn('role_id', $roleArray);
+			}
+        })
+		->orderBy('id', 'asc')
+		->get();
         $lastProcess = ProcurementApproval_steps::where('status', 1)->orderBy('id', 'desc')->first();
         $lastStepNumber = !empty($lastProcess->step_number) ? $lastProcess->step_number : 0;
 
-        $statuses = array();
-        $status = '';
+        $statuses = $statusesRole = $statusArray = array();
+        $status = $statusRole = '';
         $rowcolumn = $processflow->count();
+		
         if ($rowcolumn > 0 || !empty($userAccess)) 
 		{
             if (empty($userAccess))
 			{
+				foreach ($roleFlow as $process) {
+                    $statusRole .= $process->step_number . ',';
+                }
+                $statusRole = rtrim($statusRole, ",");
+                $statusesRole = (explode(",", $statusRole));
+				
                 foreach ($processflow as $process) {
                     $status .= $process->step_number . ',';
                 }
                 $status = rtrim($status, ",");
                 $statuses = (explode(",", $status));
+				$statusArray  = array_merge($statuses, $statusesRole);
             }
 
             $procurements = DB::table('procurement_requests')
                 ->select('procurement_requests.*','hr_people.first_name as firstname', 'hr_people.surname as surname'
 				,'hp.first_name as hp_firstname', 'hp.surname as hp_surname'
-				, 'stock_approvals_levels.step_name as step_name'
-				, 'stock_level_fives.name as store_name')
+				, 'procurement_approval_steps.step_name')
                ->leftJoin('hr_people', 'procurement_requests.employee_id', '=', 'hr_people.id')
                 ->leftJoin('hr_people as hp', 'procurement_requests.on_behalf_employee_id', '=', 'hp.id')
-				->leftJoin('stock_approvals_levels', 'procurement_requests.status', '=', 'stock_approvals_levels.step_number')
-				->leftJoin('stock_level_fives', 'procurement_requests.store_id', '=', 'stock_level_fives.id')
-                ->where(function ($query) use ($statuses) {
-                    if (!empty($statuses)) {
-                        $query->whereIn('procurement_requests.status', $statuses);
+				->leftJoin('procurement_approval_steps', 'procurement_requests.status', '=', 'procurement_approval_steps.step_number')
+				->where(function ($query) use ($statusArray) {
+                    if (!empty($statusArray)) {
+                        $query->whereIn('procurement_requests.status', $statusArray);
                     }
                 })
                 ->where(function ($query) use ($lastStepNumber) {
@@ -600,9 +626,9 @@ class procurementRequestController extends Controller
 			$data['active_rib'] = 'Request Approval';
 		
             AuditReportsController::store('Procurement', 'Job Card Approvals Page Accessed', "Accessed By User", 0);
-            return view('procurement.stock_approval')->with($data);
+            return view('procurement.procurement_approval')->with($data);
         }
-		else return back()->with('success_edit', "The are not permitted to view this page.");
+		else return back()->with('success_edit', "you are not permitted to view this page.");
     }
 	// Approve Request
 	public function appoveRequest(Request $request)
@@ -612,23 +638,22 @@ class procurementRequestController extends Controller
         ]);
         $results = $request->all();
         //Exclude empty fields from query
-		//return $jobcards;
         unset($results['_token']);
-        
+
         foreach ($results as $key => $value) {
             if (empty($results[$key])) {
                 unset($results[$key]);
             }
         }
         foreach ($results as $key => $sValue) {
-            if (strlen(strstr($key, 'stockappprove'))) {
+            if (strlen(strstr($key, 'procurementappprove_'))) {
                 $aValue = explode("_", $key);
                 $name = $aValue[0];
-                $stockID = $aValue[1];
-				$procurement = ProcurementRequest::where('id', $stockID)->first();
+                $procurementID = $aValue[1];
+				$procurement = ProcurementRequest::where('id', $procurementID)->first();
 				$totalPrice = 0;
 				// get all product attached to this request and calculate total price pluck('product_id')
-				$items = RequestStockItems::where('request_stocks_id',$stockID)->get();
+				$items = RequestStockItems::where('request_stocks_id',$procurementID)->get();
 			
 				foreach ($items as $item) {
 					$product = product_products::where('id',$item->product_id)->first();
@@ -922,5 +947,24 @@ class procurementRequestController extends Controller
 				Mail::to($empDetails->email)->send(new stockRequestRejected($empDetails->first_name,$procurement->request_number));
 		}
         return back();
+    }
+	
+	public function showSetup()
+    {
+        $procurementSetup = ProcurementSetup::orderBy('id', 'desc')->first();
+
+        $data['procurementSetup'] = $procurementSetup;
+        $data['page_title'] = "Procurement";
+        $data['page_description'] = " Procurement Setup";
+        $data['breadcrumb'] = [
+            ['title' => 'Procurement', 'path' => 'procurement/setup', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Procurement';
+        $data['active_rib'] = 'Setup';
+
+        AuditReportsController::store('Stock Management', 'view Stock Setup Page', "Accessed By User", 0);
+        return view('procurement.setup')->with($data);
     }
 }

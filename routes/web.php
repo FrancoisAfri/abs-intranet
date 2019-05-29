@@ -1149,3 +1149,7 @@ Route::get('procurement/viewrequest/{procurement}/{back}', 'procurementRequestCo
 Route::get('procurement/viewrequest/{procurement}/{back}/{app}', 'procurementRequestController@viewRequest');
 Route::post('procurement/search_results', 'procurementRequestController@requestResults');
 Route::get('procurement/request_approval', 'procurementRequestController@requestApprovals');
+Route::post('procurement/appoverequests', 'procurementRequestController@appoveRequest');
+Route::get('procurement/setup', 'procurementRequestController@showSetup');
+Route::post('procurement/setups/{setup}', 'procurementRequestController@addSetup');
+Route::post('procurement/setups', 'procurementRequestController@addSetup');

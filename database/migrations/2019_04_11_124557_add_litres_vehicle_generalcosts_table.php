@@ -25,8 +25,8 @@ class AddLitresVehicleGeneralcostsTable extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_generalcosts', function (Blueprint $table) {
+		Schema::table('vehicle_generalcosts', function (Blueprint $table) {
             $table->dropColumn('litres_new');
-      });
+		});
     }
 }

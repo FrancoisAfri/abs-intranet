@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ProcurementRequestItems extends Model
 {
-     protected $table = 'procurement_request_items';
+    protected $table = 'procurement_request_items';
 	
 	protected $fillable = ['procurement_id', 'product_id', 'category_id'
 	, 'quantity', 'item_name', 'date_added', 'item_price'];

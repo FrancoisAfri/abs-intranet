@@ -24,7 +24,7 @@
                 <form name="load-kpi-form" class="form-horizontal" method="POST" action="/appraisal/search_results" >
                     {{ csrf_field() }}
 
-                    <div class="box-body">
+                    <div class="box-body"  id="view_users">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -39,13 +39,12 @@
 						@foreach($division_levels as $division_level)
 							<div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
 								<label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
 								<div class="col-sm-10">
 									<div class="input-group">
 										<div class="input-group-addon">
 											<i class="fa fa-black-tie"></i>
 										</div>
-										<select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
+										<select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this, null, 'view_users')">
 										</select>
 									</div>
 								</div>
@@ -53,7 +52,6 @@
 						@endforeach
 						<div class="form-group manual-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
 							<label for="hr_person_id" class="col-sm-2 control-label">Employee</label>
-
 							<div class="col-sm-10">
 								<div class="input-group">
 									<div class="input-group-addon">

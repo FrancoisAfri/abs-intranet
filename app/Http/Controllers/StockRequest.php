@@ -504,7 +504,7 @@ class StockRequest extends Controller
             AuditReportsController::store('Stock Management', 'Job Card Approvals Page Accessed', "Accessed By User", 0);
             return view('stock.stock_approval')->with($data);
         }
-		else return back()->with('success_edit', "The are not permitted to view this page.");
+		else return back()->with('success_edit', "You are not permitted to view this page.");
     }
 	// Approve Request
 	public function appoveRequest(Request $request)

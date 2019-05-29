@@ -1,7 +1,7 @@
 @extends('layouts.main_layout')
 
 @section('content')
-    <div class="row">
+   <!-- <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
@@ -12,9 +12,6 @@
                     </div>
                 </div>
                 <form class="form-horizontal" method="POST" action="/hr/grouplevel">
-                  <!--   {{ csrf_field() }}
-                    {{ method_field('PATCH') }} -->
-                    <!-- /.box-header -->
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
@@ -40,27 +37,23 @@
                             @endforeach
                         </table>
                     </div>
-
-                        <!-- /.box-body -->
-
                 </form>
 			</div>
-        <!-- Include add new prime rate modal -->
           @include('stock.partials.edit_group_level')
 		</div>
-    </div>
+    </div>-->
 	<div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Stock Settings</h3>
+                    <h3 class="box-title">Procurement Setup</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
                 <form class="form-horizontal" method="POST" 
-				action="{{!empty($stockSettings->id) ? '/stock/settings/'.$stockSettings->id : '/stock/settings'}}">
+				action="{{!empty($procurementSetup->id) ? '/procurement/setups/'.$procurementSetup->id : '/procurement/setups'}}">
                     {{ csrf_field() }}
                     <!-- /.box-header -->
                     <div class="box-body">
