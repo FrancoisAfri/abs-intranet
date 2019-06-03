@@ -15,7 +15,7 @@ use App\product_products;
 use App\ProcurementRequest;
 use App\ProcurementSetup;
 use App\ProcurementRequestItems;
-use App\Mail\stockDeliveryNote;
+use App\Mail\ProcurementNextStep;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
