@@ -1385,6 +1385,7 @@ class VehicleFleetController extends Controller
             ->whereBetween('date', [$monthStart, $monthEnd])
 			->where('vehicle_fuel_log.vehicleID',  $maintenance->id)
             ->orderBy('vehicle_fuel_log.date')
+            ->orderBy("vehicle_fuel_log.$field")
             ->get();
 			//return $vehiclefuellog;
 		if (!empty($vehiclefuellog))
