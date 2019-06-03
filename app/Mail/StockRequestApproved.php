@@ -12,16 +12,16 @@ class StockRequestApproved extends Mailable
 {
     use Queueable, SerializesModels;
 	public $first_name;
-	public $requestNo;
+	public $request_no;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($first_name,$requestNo)
+    public function __construct($first_name,$request_no)
     {
         $this->first_name = $first_name;
-        $this->request_no = $first_name;
+        $this->request_no = $request_no;
     }
 
     /**

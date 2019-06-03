@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\DivisionLevel;
 use App\HRPerson;
 use App\HRRoles;
+use App\ProcurementHistory;
 use App\ProcurementApproval_steps;
 use App\stockLevelFive;
 use App\stockLevel;
@@ -21,6 +22,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 
 class procurementRequestController extends Controller
 {
@@ -223,6 +225,14 @@ class procurementRequestController extends Controller
                     }
                 }
             }
+			// Save procurement history
+			$history = new ProcurementHistory();
+			$history->action_date = time();
+			$history->user_id = Auth::user()->person->id;
+			$history->action = 'Procurement Request Created';
+			$history->procurement_id = $procurement->id;
+			$history->status = $flowprocee;
+			$history->save();
         });
 		$setup = ProcurementSetup::orderBy('id', 'desc')->first();
         // get approver ID and send them email
@@ -230,7 +240,7 @@ class procurementRequestController extends Controller
 			$ApproverDetails = HRPerson::where('id', $flow->employee_id)->where('status', 1)->first();
 		elseif (!empty($flow->role_id))
 		{
-			if (empty($setup->is_role_general) && $flow->division_id)0
+			if (empty($setup->is_role_general) && $flow->division_id)
 			{
 				$users = DB::table('hr_users_roles')
 				->leftJoin('hr_people', 'hr_users_roles.hr_id', '=', 'hr_people.id')
@@ -295,7 +305,7 @@ class procurementRequestController extends Controller
 		// send email
 		if (!empty($ApproverDetails->email) && !empty($ApproverDetails->first_name))
 			Mail::to($ApproverDetails->email)->send(new ProcurementNextStep($ApproverDetails->first_name));
-        
+
 		AuditReportsController::store('Procurement', 'New Procurement Created', 'Create by user', 0);
         return redirect("/procurement/viewrequest/$procurement->id")->with(['success_add' => 'The request has been successfully Created!']);
     }
@@ -306,7 +316,15 @@ class procurementRequestController extends Controller
 		if (!empty($procurement)) $procurement = $procurement->load('procurementItems','procurementItems.products','procurementItems.categories','employees','employeeOnBehalf','requestStatus');
 		//return $procurement;
 		$hrID = Auth::user()->person->id;
-		
+		// Save procurement history
+		$history = new ProcurementHistory();
+		$history->action_date = time();
+		$history->user_id = Auth::user()->person->id;
+		$history->action = 'Procurement Request Viewed';
+		$history->procurement_id = $procurement->id;
+		$history->status = $procurement->status;
+		$history->save();
+			
 		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
 		$flow = ProcurementApproval_steps::where('status', 1)->orderBy('id', 'desc')->latest()->first();
 		
@@ -648,7 +666,9 @@ class procurementRequestController extends Controller
         $this->validate($request, [
             // 'date_uploaded' => 'required',
         ]);
-        $results = $request->all();
+		$setup = ProcurementSetup::orderBy('id', 'desc')->first();
+        //$setup->email_po_to_supplier
+		$results = $request->all();
         //Exclude empty fields from query
         unset($results['_token']);
 
@@ -658,87 +678,102 @@ class procurementRequestController extends Controller
             }
         }
         foreach ($results as $key => $sValue) {
-            if (strlen(strstr($key, 'procurementappprove_'))) {
+            if (strlen(strstr($key, 'procurementappprove_'))) 
+			{
                 $aValue = explode("_", $key);
                 $name = $aValue[0];
                 $procurementID = $aValue[1];
 				$procurement = ProcurementRequest::where('id', $procurementID)->first();
-				$totalPrice = 0;
-				// get all product attached to this request and calculate total price pluck('product_id')
-				$items = RequestStockItems::where('request_stocks_id',$procurementID)->get();
-			
-				foreach ($items as $item) {
-					$product = product_products::where('id',$item->product_id)->first();
-					$productPrice = product_price::where('product_product_id',$item->product_id)
-							->orderBy('id', 'desc')
-							->first();
-					$currentPrice = !empty($productPrice->price) 
-						? $productPrice->price : !empty($product->price) ? $product->price : 0;
-					$totalPrice = $totalPrice + $currentPrice;
+				if (!empty($procurement)) $procurement = $procurement->load('procurementItems');
+
+				$subtotal = 0;
+				foreach ($procurement->procurementItems as $item) {
+					$subtotal += ($item->item_price * $item->quantity);
 				}
+				// calculate VAT amount
+				$vatAmount = ($procurement->add_vat == 1) ? $subtotal * 0.15 : 0;
+				// calculate total amount
+				$total = $subtotal + $vatAmount;
+				
 				// get max amount allow for this step
 				$currentStep = ProcurementApproval_steps::where('step_number', $sValue)->where('status', 1)->first();
 				$maxAmount = !empty($currentStep->max_amount) ? $currentStep->max_amount : 0; 
-				
-				if ($totalPrice <= $maxAmount)
+				if ($total <= $maxAmount)
 				{
 					// Approve request
 					$steps = ProcurementApproval_steps::latest()->first();
 					$procurement->status = $steps->step_number;
 					$procurement->update();
-					// Procurement History and deduct from procurement
-					foreach ($items as $item) {
-						
-						$stockA = procurement::where('product_id', $item->product_id)->where('store_id',$procurement->store_id)->first();
-						if (!empty($stockA->id))
-						{
-							$availblebalance = !empty($stockA->avalaible_stock) ? $stockA->avalaible_stock : 0;
-							$transactionbalance = $availblebalance - $item->quantity;
-
-							// Update procurement availble balance
-							$stockA->avalaible_stock = $transactionbalance;
-							$stockA->update();
-							// Update procurement history
-							$category = product_products::where('id',$item->product_id)->first();
-							$history = new stockhistory();
-							$history->product_id = $item->product_id;
-							$history->category_id = $category->category_id;
-							$history->avalaible_stock = $transactionbalance;
-							$history->action_date = time();
-							$history->balance_before = $availblebalance;
-							$history->balance_after = $transactionbalance;
-							$history->action = 'Procurement Items Out';
-							$history->user_id = Auth::user()->person->id;
-							$history->user_allocated_id = 0;
-							$history->save();
+					if (!empty($setup->email_po_to_supplier) && !empty($setup->email_role))
+					{
+						$jcAttachment = $this->viewRequestPrint($procurement);
+						$users = HRUserRoles::
+						leftJoin('procurement_history,', 'hr_users_roles.hr_id', '=', 'hr_people.id')
+						->where('status', 1)
+						->where('role_id', $setup->email_role)->pluck('hr_id');
+						foreach ($users as $userID) {
+							$userDetails = HRPerson::where('id', $userID)->select('first_name', 'email')->first();
+							Mail::to($userDetails->email)->send(new stockDeliveryNote($userDetails->first_name, $jcAttachment,$procurement->request_number));
 						}
 					}
-					// send email for request approval to request creator
-					
-					// sendemail to procurement controller delivery note
-					$jcAttachment = $this->viewDeliveryNote($procurement->id);
-					$role = HRRoles::where('description', 'Procurement Controller')->first();
-					$users = HRUserRoles::where('role_id', $role->id)->pluck('hr_id');
-					foreach ($users as $userID) {
-						$userDetails = HRPerson::where('id', $userID)->select('first_name', 'email')->first();
-						Mail::to($userDetails->email)->send(new stockDeliveryNote($userDetails->first_name, $jcAttachment,$procurement->request_number));
-					}
-					//// Send sms and email to mechanic
+					//// Send email to employee who did the request
 					if (!empty($procurement->employee_id))
 					{
 						$empDetails = HRPerson::where('id', $procurement->employee_id)->select('first_name', 'email')->first();
 						if (!empty($empDetails->email))
 						Mail::to($empDetails->email)->send(new StockRequestApproved($empDetails->first_name,$procurement->request_number));
 					}
+					// Save procurement history
+					$history = new ProcurementHistory();
+					$history->action_date = time();
+					$history->user_id = Auth::user()->person->id;
+					$history->action = 'Procurement Request Approved';
+					$history->procurement_id = $procurement->id;
+					$history->status = $steps->step_number;
+					$history->save();
 				}
 				else
 				{
 					$processflow = ProcurementApproval_steps::where('step_number', '>', $sValue)->where('status', 1)->orderBy('step_number', 'asc')->first();
 					$procurement->status = $processflow->step_number;
 					$procurement->update();
-							// get approver ID and send them email
+					// Save procurement history
+					$history = new ProcurementHistory();
+					$history->action_date = time();
+					$history->user_id = Auth::user()->person->id;
+					$history->action = 'Procurement Request Approved';
+					$history->procurement_id = $procurement->id;
+					$history->status = $processflow->step_number;
+					$history->save();
+					// get approver ID and send them email
 					if (!empty($processflow->employee_id))
 						$ApproverDetails = HRPerson::where('id', $processflow->employee_id)->where('status', 1)->first();
+					elseif (!empty($processflow->role_id))
+					{
+						if (empty($setup->is_role_general) && $processflow->division_id)
+						{
+							$users = DB::table('hr_users_roles')
+							->leftJoin('hr_people', 'hr_users_roles.hr_id', '=', 'hr_people.id')
+							->where('status',1)
+							->where('hr_people.division_level_5', $processflow->division_id)
+							->where('hr_users_roles.role_id', $processflow->role_id)
+							->pluck('hr_users_roles.hr_id');
+						}
+						else
+						{
+							$users = DB::table('hr_users_roles')
+							->where('status', 1)
+							->where('role_id', $processflow->role_id)
+							->pluck('hr_id');
+						}
+						foreach ($users as $user) {
+							$usedetails = HRPerson::where('id', $user)->select('first_name','email')->first();
+							$email = !empty($usedetails->email) ? $usedetails->email : ''; 
+							$firstname = !empty($usedetails->first_name) ? $usedetails->first_name : ''; 
+							if (!empty($email))
+								Mail::to($email)->send(new ProcurementNextStep($firstname));
+						}
+					}
 					else
 					{
 						if (!empty($processflow->division_level_1) && empty($processflow->employee_id))
@@ -777,9 +812,9 @@ class procurementRequestController extends Controller
 							->first();
 						}
 					}
-					// send email to nextstep employeeID
-					if (!empty($ApproverDetails->email))
-						Mail::to($ApproverDetails->email)->send(new stockApprovals($ApproverDetails->first_name, $requestStock->request_number));
+					// send email
+					if (!empty($ApproverDetails->email) && !empty($ApproverDetails->first_name))
+						Mail::to($ApproverDetails->email)->send(new ProcurementNextStep($ApproverDetails->first_name));
 				}
             }
             // decline
@@ -869,7 +904,7 @@ class procurementRequestController extends Controller
 			// send email for request approval to request creator
 			
 			// sendemail to procurement controller delivery note
-			$jcAttachment = $this->viewDeliveryNote($procurement->id);
+			$jcAttachment = $this->viewRequestPrint($procurement);
 			$role = HRRoles::where('description', 'Procurement Controller')->first();
 			$users = HRUserRoles::where('role_id', $role->id)->pluck('hr_id');
 			foreach ($users as $userID) {
@@ -1000,5 +1035,30 @@ class procurementRequestController extends Controller
         return back();
 
         AuditReportsController::store('Stock Management', 'Add Stock Settinfs', "Added By User", 0);
+    }
+	// ViewPrintrequest
+	public function viewRequestPrint(procurement $procurement)
+    {
+		if (!empty($procurement)) $procurement = $procurement->load('procurementItems','procurementItems.products','procurementItems.categories','employees','employeeOnBehalf','requestStatus');
+				
+		$data['procurement'] = $procurement;	
+
+		AuditReportsController::store('Procurement', 'Request Printed For Email', "Accessed By User");
+		$companyDetails = CompanyIdentity::systemSettings();
+		$companyName = $companyDetails['company_name'];
+		$user = Auth::user()->load('person');
+
+		$data['support_email'] = $companyDetails['support_email'];
+		$data['company_name'] = $companyName;
+		$data['full_company_name'] = $companyDetails['full_company_name'];
+		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+		$data['date'] = date("d-m-Y");
+		$data['user'] = $user;
+		$data['file_name'] = 'ProcurementResquest';
+		$view = view('procurement.request_to_email', $data)->render();
+		$pdf = resolve('dompdf.wrapper');
+		$pdf->getDomPDF()->set_option('enable_html5_parser', true);
+		$pdf->loadHTML($view);
+		return $pdf->output();
     }
 }

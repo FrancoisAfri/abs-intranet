@@ -1085,6 +1085,8 @@ HTML;
                         $query->where('jobcard_maintanance.status', '!=', $lastStepNumber);
                     }
                 })
+                ->where('jobcard_maintanance.status', '>=',1)
+				//->whereNotNull('jobcard_maintanance.status')
                 ->orderBy('jobcard_maintanance.id', 'asc')
                 ->get();
 

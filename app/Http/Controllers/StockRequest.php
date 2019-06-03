@@ -581,7 +581,7 @@ class StockRequest extends Controller
 					// send email for request approval to request creator
 					
 					// sendemail to stock controller delivery note
-					$jcAttachment = $this->viewDeliveryNote($stock->id);
+					$jcAttachment = $this->viewDeliveryNote($stock);
 					$role = HRRoles::where('description', 'Stock Controller')->first();
 					$users = HRUserRoles::where('role_id', $role->id)->pluck('hr_id');
 					foreach ($users as $userID) {
@@ -734,7 +734,7 @@ class StockRequest extends Controller
 			// send email for request approval to request creator
 			
 			// sendemail to stock controller delivery note
-			$jcAttachment = $this->viewDeliveryNote($stock->id);
+			$jcAttachment = $this->viewDeliveryNote($stock);
 			$role = HRRoles::where('description', 'Stock Controller')->first();
 			$users = HRUserRoles::where('role_id', $role->id)->pluck('hr_id');
 			foreach ($users as $userID) {
@@ -825,6 +825,7 @@ class StockRequest extends Controller
 		}
         return back();
     }
+	//
 	public function viewDeliveryNote(RequestStock $stock)
     {
 		if (!empty($stock)) $stock = $stock->load('stockItems','stockItems.products','stockItems.categories','employees','employeeOnBehalf');

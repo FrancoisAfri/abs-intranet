@@ -772,7 +772,7 @@ Route::get('stock/request_items', 'StockRequest@create');
 Route::get('stock/request_collection', 'StockRequest@collectRequest');
 Route::post('stock/addstockrequest', 'StockRequest@store');
 Route::get('stock/request_approval', 'StockRequest@requestApprovals');
-Route::post('stock/appoverequests', 'StockRequest@appoveRequest');
+Route::post('stock/appoverequest', 'StockRequest@appoveRequest');
 Route::get('stock/approve-request-single/{stock}', 'StockRequest@appoveRequestSingle');
 Route::get('stock/stocklocation/{product}', 'Product_categoryController@stockLocation');
 Route::post('stock/stock_loc/add/{product}', 'Product_categoryController@addStockLocation');

@@ -20,9 +20,7 @@
                 </div>
                 <form name="leave-application-form" class="form-horizontal" method="POST"
                       action="/jobcards/appovecards" enctype="multipart/form-data">
-
                     {{ csrf_field() }}
-
                     <div style="overflow-X:auto;">
                         <table id="example2" class="table table-bordered table-hover">
                             <tr>
@@ -53,7 +51,7 @@
                                         <td>{{ (!empty( $maintanance->fleet_number . ' ' .  $maintanance->vehicle_registration . ' ' . $maintanance->vehicle_make . ' ' . $maintanance->vehicle_model))
                                     ?  $maintanance->fleet_number . ' ' .  $maintanance->vehicle_registration . ' ' . $maintanance->vehicle_make . ' ' . $maintanance->vehicle_model : ''}} </td>
                                         <td>{{ !empty($maintanance->vehicle_registration ) ? $maintanance->vehicle_registration : '' }}</td>
-                                        <td>{{ !empty($maintanance->completion_date ) ? date(' d M Y', $maintanance->completion_date) : 'Nill' }}</td>
+                                        <td>{{ !empty($maintanance->completion_date ) ? date(' d M Y', $maintanance->completion_date) : '' }}</td>
                                         <td>{{ !empty($maintanance->firstname.' '. $maintanance->surname ) ? $maintanance->firstname.' '. $maintanance->surname : '' }}</td>
                                         <td>{{ !empty($maintanance->servicetype ) ? $maintanance->servicetype : '' }}</td>
                                         <td>{{ !empty($maintanance->instruction ) ? $maintanance->instruction : '' }}</td>
