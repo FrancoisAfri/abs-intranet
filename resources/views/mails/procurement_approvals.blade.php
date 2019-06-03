@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - Stock Request Approval</title>
+    <title>{{ $company_name }} - Procurement Request Approval</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -215,7 +215,7 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that, There is a new procurement request on {{ $company_name }},  with ref #: {{$request_no}}, that requires your attention! For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
+                                                    We would like to inform you that, There is a new procurement request on {{ $company_name }}, that requires your attention! For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
                                                 </td>
                                             </tr>
                                             <tr>

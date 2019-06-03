@@ -39,7 +39,7 @@ class ProcurementNextStep extends Mailable
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['dashboard_url'] = url('/procurement/request_approval');
 
-        return $this->view('mails.stock_approvals')
+        return $this->view('mails.procurement_approvals')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);
