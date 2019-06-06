@@ -883,7 +883,7 @@ Route::post('/hr/upload/{docs}', 'EmployeeQualificationsController@uploadDocs');
 
 //Employees upload
 Route::get('/employee_upload', 'EmployeeUploadController@index');
-Route::get('/employees_upload', 'EmployeeUploadController@store');
+Route::post('/hr/employees_upload', 'EmployeeUploadController@store');
 
 //Employee Search
 Route::get('/hr/emp_search', 'EmployeeSearchController@index');
