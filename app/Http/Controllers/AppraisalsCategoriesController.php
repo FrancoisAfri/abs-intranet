@@ -40,7 +40,7 @@ class AppraisalsCategoriesController extends Controller
             ['title' => 'Manage Categories', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Performance Appraisal';
-        $data['active_rib'] = 'Categories';
+        $data['active_rib'] = 'KPA Categories';
         $data['Categories'] = $Categories;
 		//return $data;
 		AuditReportsController::store('Performance Appraisal', 'Categories Page Accessed', "Actioned By User", 0);
@@ -103,7 +103,7 @@ class AppraisalsCategoriesController extends Controller
 				['title' => 'Categories', 'active' => 1, 'is_module' => 0]];
 			$data['categories'] = $category;
 			$data['active_mod'] = 'Performance Appraisal';
-			$data['active_rib'] = 'Categories';
+			$data['active_rib'] = 'KPA Categories';
 			AuditReportsController::store('Performance Appraisal', 'KPas Details Page Accessed', "Accessed by User", 0);
 			return view('appraisals.kpas')->with($data);
 		}
