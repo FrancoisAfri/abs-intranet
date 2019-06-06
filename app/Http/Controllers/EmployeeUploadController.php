@@ -7,6 +7,7 @@ use App\AppraisalKPIResult;
 use App\appraisalsKpis;
 use App\DivisionLevel;
 use App\HRPerson;
+use App\JobTitle;
 use App\User;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
@@ -76,12 +77,14 @@ class EmployeeUploadController extends Controller
 					{
 						if (!empty($value['email']))
 						{
-							$employees = HRPerson::where('employee_number', $value['job_number'])->first();
-							$email = !empty($employees->email) ? $employees->email : '';
-							
+							$employees = HRPerson::where('email', $value['email'])->first();
+							//$email = !empty($employees->email) ? $employees->email : '';
+							// get employee jobtille
+							$jobTitle = JobTitle::where('name', $value['job_titlle'])->first();
+							$position = !empty($jobTitle->id) ? $jobTitle->id : 0;
 							if (empty($employees))
 							{
-								if ($email == $value['email']) continue;
+								//if ($email == $value['email']) continue;
 								$password = EmployeeUploadController::randomPass();
 								$user = new User;
 								$user->email = $value['email'];
@@ -95,12 +98,13 @@ class EmployeeUploadController extends Controller
 								$person->email = $value['email'];
 								$person->first_name = $value['firstname'];
 								$person->surname = $value['surname'];
-								$person->employee_number = $value['job_number'];
+								$person->employee_number = $value['employee_number'];
+								$person->position = $position;
 								$person->status = 1;
 								$user->addPerson($person);
 
 								//Send email
-								Mail::to("$user->email")->send(new ConfirmRegistration($user, $password));
+								//Mail::to("$user->email")->send(new ConfirmRegistration($user, $password));
 								AuditReportsController::store('Security', 'New User Created', "Login Details Sent To User $user->email", 0);
 							}
 						}

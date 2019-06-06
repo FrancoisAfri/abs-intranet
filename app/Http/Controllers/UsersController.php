@@ -540,7 +540,6 @@ class UsersController extends Controller
             //->limit(100)
             ->get();
 			if (!empty($persons)) $persons = $persons->load('jobTitle');
-//return $persons;
             
         $data['page_title'] = "Users";
         $data['page_description'] = "List of users found";
