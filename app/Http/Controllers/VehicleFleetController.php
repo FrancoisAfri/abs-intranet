@@ -1565,10 +1565,13 @@ class VehicleFleetController extends Controller
 	public function updateFuelLog(Request $request, vehicle_fuel_log $fuel)
     {
 		$this->validate($request, [
+            'date_captured' => 'required',
+            'document_number' => 'required',
+			'tank_name' => 'required_if:transaction,1',
         ]);
         $fuelData = $request->all();
         unset($fuelData['_token']);
-print_r($fuelData);
+
 		$loggedInEmplID = Auth::user()->person->id;
         ///$tankID = $fuelData['tank_name'];
         $fuelDate = $fuelData['date_captured'];
