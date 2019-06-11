@@ -213,7 +213,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-body" align="center">
-                    <button vehice="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
+                    <button type="button" id="edit_compan" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
                             data-target="#edit-vehicledetails-modal" data-id="{{ $vehiclemaintenance->id }}"
                             data-status="{{$vehiclemaintenance->status}}"
                             data-division_level_5="{{$vehiclemaintenance->division_level_5 }}"
@@ -324,7 +324,6 @@
         $('#cancel').click(function () {
             location.href = '/vehicle_management/manage_fleet';
         });
-//
         $(function () {
 			if ({{$maintenance->title_type}}  === 1)
 			{
@@ -352,7 +351,6 @@
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
-
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -363,14 +361,12 @@
                 // or four works better for larger screens.
                 dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
             }
-
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
             $(window).on('resize', function () {
                 $('.modal:visible').each(reposition);
             });
-
             //
             $('.datepicker').datepicker({
                 format: 'dd/mm/yyyy',
@@ -386,7 +382,6 @@
             });
 
             $(document).ready(function () {
-
                 $('#year').datepicker({
                     minViewMode: 'years',
                     autoclose: true,
@@ -401,14 +396,11 @@
                 else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
             });
 
-            //
-
             $('#rdo_fin, #rdo_comp').on('ifChecked', function () {
                 var allType = hidenFields();
                 if (allType == 1) $('#box-subtitle').html('Site Address');
                 else if (allType == 2) $('#box-subtitle').html('Temo Site Address');
             });
-
 
             function hideFields() {
                 var allType = $("input[name='promotion_type']:checked").val();
@@ -423,7 +415,6 @@
                 return allType;
             }
 
-            //
             function hidenFields() {
                 var allType = $("input[name='title_type']:checked").val();
                 if (allType == 1) {
@@ -508,7 +499,6 @@
                 modal.find('#image').val(image);
                 modal.find('#registration_papers').val(registration_papers);
                 modal.find('#promotion_type').val(promotion_type);
-
             });
 
             $('#edit_vehicle').on('click', function () {

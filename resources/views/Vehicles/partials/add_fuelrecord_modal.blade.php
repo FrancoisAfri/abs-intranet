@@ -12,7 +12,6 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Driver </label>
                         <div class="col-sm-8">
@@ -39,11 +38,11 @@
                                    value="{{ old('date') }}" placeholder="Select  date   ...">
                         </div>
                     </div>
-                    <div class="form-group{{ $errors->has('transaction') ? ' has-error' : '' }}">
-                        <label for="transaction" class="col-sm-2 control-label"> Tanks and Other </label>
+                    <div class="form-group{{ $errors->has('tank_and_other') ? ' has-error' : '' }}">
+                        <label for="tank_and_other" class="col-sm-2 control-label"> Tanks and Other </label>
                             <div class="col-sm-8">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_transaction"
-                                        name="transaction" value="1" checked>Tank
+                                        name="tank_and_other" value="1" checked>Tank
                              </label>
                                  <label class="radio-inline"><input type="radio" id="rdo_Other" name="transaction" value="2">
                                         Other
@@ -61,7 +60,7 @@
                         </div>
                     </div>
                     <div class="form-group Tanks-field">
-                        <label for="path" class="col-sm-2 control-label">Tanks </label>
+                        <label for="tank_name" class="col-sm-2 control-label">Tanks </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
                                     id="tank_name" name="tank_name">
@@ -73,7 +72,7 @@
                         </div>
                     </div>
                     <div class="form-group  transaction-field">
-                        <label for="path" class="col-sm-2 control-label">Service Station </label>
+                        <label for="service_station" class="col-sm-2 control-label">Service Station </label>
                         <div class="col-sm-8">
                             <select class="form-control select2" style="width: 100%;"
                                     id="service_station" name="service_station">
@@ -85,7 +84,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Litres </label>
+                        <label for="litres_new" class="col-sm-2 control-label">Litres </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="litres_new" name="litres_new" value=""
                                        min="0" step="0.001"
@@ -93,14 +92,14 @@
                         </div>
                     </div>
                     <div class="form-group  transaction-field">
-                        <label for="path" class="col-sm-2 control-label">Cost per Litre </label>
+                        <label for="cost_per_litre" class="col-sm-2 control-label">Cost per Litre </label>
                         <div class="col-sm-8">
                             <input type="teXt" class="form-control" id="cost_per_litre" name="cost_per_litre" value=""  min="0" step="0.01"
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
                     <div class="form-group  transaction-field">
-                        <label for="path" class="col-sm-2 control-label">Total Cost</label>
+                        <label for="total_cost" class="col-sm-2 control-label">Total Cost</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="total_cost" name="total_cost" value="0"
                                    placeholder="Enter Litres" required>
@@ -108,7 +107,7 @@
                     </div>
                     @if (isset($metreType) && $metreType== 1)
                       <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Km Reading </label>
+                        <label for="Odometer_reading" class="col-sm-2 control-label">Km Reading </label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="Odometer_reading" name="Odometer_reading" value=""
                                    placeholder="Enter Odometer reading Reading" required>
@@ -116,7 +115,7 @@
                     </div>
                         @else
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Hour Reading</label>
+                        <label for="hours_reading" class="col-sm-2 control-label">Hour Reading</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="hours_reading" name="hours_reading" value=""
                                    placeholder="Enter Hours Reading" required>
@@ -126,7 +125,6 @@
                     <div class="form-group ">
                         <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-8">
-
                             <textarea class="form-control" id="description" name="description"
                                       placeholder="Enter description..." rows="3">{{ old('description') }}</textarea>
                         </div>

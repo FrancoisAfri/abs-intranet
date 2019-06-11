@@ -90,98 +90,124 @@
 						<a href="{{ '/vehicle_management/fleet-communications/' . $maintenance->id }}"
                                    class="btn btn-app"><i class="fa fa-money"></i> Communications</a>
                     </div>
-                    <table class="table table-bordered">
-						<tr>
-							<th>
-								<button type="button" class="btn btn-default pull-left" id="previous_button" value=""><i
-                                    class="fa fa-caret-square-o-left"></i> Previous Month
-								</button>
-								<input type="hidden" name="calendar_month" id="calendar_month" value="{{$month}}">
-								<input type="hidden" name="calendar_year" id="calendar_year" value="{{$year}}}">
-							</th>
-							<th colspan="11" style="text-align: center"><font size="5">Fuel Transactions For: {{$monthText}}</font></th>
-							<th>
-								<button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
-											class="fa fa-caret-square-o-right"></i> Next Month
-								</button>
-							</th>
-						</tr>
-                        <tr>
-                            <th>Date Taken</th>
-                            <th>Transaction Type</th>
-                            <th>Filled By</th>
-                            <th>Tanks and Other</th>
-                            <th>Tank Name</th>
-                            <th>Service Station</th>
-                            <th>Fuel in Litres</th>
-                            <th>Cost per Litres</th>
-                            <th>Cost (R)</th>
-                            @if (isset($metreType) && $metreType === 1)
-                                <th>Km Reading</th>
-                            @else
-                                <th>Hour Reading</th>
-                            @endif
-                            @if (isset($metreType) && $metreType === 1)
-                            <th>Km Per Litre</th>
-                            @else
-                            <th>Hour Per Litre</th>
-                            @endif
-                            <th style="width: 5px; text-align: center;">Status</th>
-                            <th style="width: 5px; text-align: center;"></th>
-                        </tr>
-                        @if (count($vehiclefuellog) > 0)
-                            @foreach ($vehiclefuellog as $details)
-                                <tr id="categories-list">
-                                    <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
-                                    <td>{{ !empty($details->transaction_type) ?  $transType[$details->transaction_type] : ''}}</td>
-                                    <td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
-                                    <td>{{ !empty($details->tank_and_other) ?  $status[$details->tank_and_other] : ''}}</td>
-                                    <td>{{ !empty($details->tankName) ?  $details->tankName : ''}}</td>
-                                    <td>{{ !empty($details->station) ?  $details->station : ''}}</td>
-                                    <td style="text-align: center">{{ !empty($details->litres_new) ? number_format($details->litres_new, 2) : ''}}</td>
-                                    <td style="text-align: center">{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
-                                    <td style="text-align: center">{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
-                                    @if (isset($metreType) && $metreType === 1)
-										<td style="text-align: center">{{ !empty($details->Odometer_reading) ? number_format($details->Odometer_reading, 2) . ' kms' : ''}}</td>
-                                    @else
-										<td style="text-align: center">{{ !empty($details->Hoursreading) ? number_format($details->Hoursreading, 2) . ' hrs' : ''}}</td>
-                                    @endif
-                                    <td style="text-align: center">{{!empty($details->per_litre) ? number_format($details->per_litre, 2) .' km/l' : 0}}</td>
-                                    <td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
-                                    <!--  <td style="text-align:center;" colspan="2"> -->
-                                    <td>
-                                        <button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-                                                data-target="#delete-fuellog-warning-modal"><i class="fa fa-trash"></i>
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            <input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
-                            <class="caption">
-                            <td colspan="6" style="text-align:right">Total</td>
-                            <td style="text-align: center">{{number_format($totalLitres, 2) }}</td>
-                            <td style="text-align: center">&nbsp;</td>
-                            <td style="text-align: center" nowrap>{{'R '.number_format($totalCosts, 2)}}</td>
-                            <td style="text-align: center"><span style="float:right"></span></br><span
-                                        style="float:right"></span></td>
-                            <td style="text-align: center"></td>
-                            <td>&nbsp;</td>
-                            <td>&nbsp;</td><!--$iTotalKilo km's,$iTotalHrs hrs-->
-                        @else
-                            <tr id="categories-list">
-                                <td colspan="15">
-                                    <div class="alert alert-danger alert-dismissable">
-                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-                                            &times;
-                                        </button>
-                                        No Record for this vehicle, please start by adding a new Record for this
-                                        vehicle..
-                                    </div>
-                                </td>
-                            </tr>
-                        @endif
-                    </table>
+                    <div style="overflow-X:auto;">
+						<table class="table table-bordered">
+							<tr>
+								<th>
+									<button type="button" class="btn btn-default pull-left" id="previous_button" value=""><i
+										class="fa fa-caret-square-o-left"></i> Previous Month
+									</button>
+									<input type="hidden" name="calendar_month" id="calendar_month" value="{{$month}}">
+									<input type="hidden" name="calendar_year" id="calendar_year" value="{{$year}}}">
+								</th>
+								<th colspan="11" style="text-align: center"><font size="5">Fuel Transactions For: {{$monthText}}</font></th>
+								<th>
+									<button type="button" class="btn btn-default pull-right" id="next_button" value=""><i
+												class="fa fa-caret-square-o-right"></i> Next Month
+									</button>
+								</th>
+							</tr>
+							<tr>
+								<th></th>
+								<th>Date Taken</th>
+								<th>Transaction Type</th>
+								<th>Filled By</th>
+								<th>Tanks and Other</th>
+								<th>Tank Name</th>
+								<th>Service Station</th>
+								<th>Fuel in Litres</th>
+								<th>Cost per Litres</th>
+								<th>Cost (R)</th>
+								@if (isset($metreType) && $metreType === 1)
+									<th>Km Reading</th>
+								@else
+									<th>Hour Reading</th>
+								@endif
+								@if (isset($metreType) && $metreType === 1)
+								<th>Km Per Litre</th>
+								@else
+								<th>Hour Per Litre</th>
+								@endif
+								<th style="width: 5px; text-align: center;">Status</th>
+								<th style="width: 5px; text-align: center;"></th>
+							</tr>
+							@if (count($vehiclefuellog) > 0)
+								@foreach ($vehiclefuellog as $details)
+									<tr id="categories-list">
+										<td>
+										@if ($details->status == 4)
+											<button type="button" id="edit_fuel_record" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
+											data-target="#edit-fuel-records-modal" data-id="{{ $details->id }}"
+											data-driver="{{$details->driver}}"
+											data-document_number="{{$details->document_number }}"
+											data-date="{{ date(' d M Y', $details->date) }}"
+											data-tank_and_other="{{ $details->tank_and_other }}"
+											data-tank_name="{{ $details->tank_name }}"
+											data-service_station="{{ $details->service_station }}"
+											data-transaction_type="{{ $details->transaction_type}}"
+											data-cost_per_litre="{{ $details->cost_per_litre}}"
+											data-litres_new="{{ $details->litres_new}}"
+											data-total_cost="{{ $details->total_cost}}"
+											data-odometer_reading="{{ $details->Odometer_reading}}"
+											data-hours_reading="{{ $details->hours_reading}}"
+											data-description="{{ $details->description}}"
+											>
+												<i class="fa fa-pencil-square-o"></i> Edit
+											</button>
+										@endif
+										</td>
+										<td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
+										<td>{{ !empty($details->transaction_type) ?  $transType[$details->transaction_type] : ''}}</td>
+										<td>{{ !empty($details->firstname . ' ' . $details->surname) ? $details->firstname . ' ' . $details->surname : '' }}</td>
+										<td>{{ !empty($details->tank_and_other) ?  $status[$details->tank_and_other] : ''}}</td>
+										<td>{{ !empty($details->tankName) ?  $details->tankName : ''}}</td>
+										<td>{{ !empty($details->station) ?  $details->station : ''}}</td>
+										<td style="text-align: center">{{ !empty($details->litres_new) ? number_format($details->litres_new, 2) : ''}}</td>
+										<td style="text-align: center">{{ !empty($details->cost_per_litre) ?  'R '.number_format($details->cost_per_litre, 2) : ''}} </td>
+										<td style="text-align: center">{{ !empty($details->total_cost) ? 'R '.number_format($details->total_cost, 2) : ''}} </td>
+										@if (isset($metreType) && $metreType === 1)
+											<td style="text-align: center">{{ !empty($details->Odometer_reading) ? number_format($details->Odometer_reading, 2) . ' kms' : ''}}</td>
+										@else
+											<td style="text-align: center">{{ !empty($details->Hoursreading) ? number_format($details->Hoursreading, 2) . ' hrs' : ''}}</td>
+										@endif
+										<td style="text-align: center">{{!empty($details->per_litre) ? number_format($details->per_litre, 2) .' km/l' : 0}}</td>
+										<td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
+										<td>
+											@if ($details->status == 4)
+												<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+														data-target="#delete-fuellog-warning-modal"><i class="fa fa-trash"></i>
+													Delete
+												</button>
+											@endif
+										</td>
+									</tr>
+								@endforeach
+								<input type="hidden" name="vehicle_id" size="10" value="$iVehicleID">
+								<class="caption">
+								<td colspan="6" style="text-align:right">Total</td>
+								<td style="text-align: center">{{number_format($totalLitres, 2) }}</td>
+								<td style="text-align: center">&nbsp;</td>
+								<td style="text-align: center" nowrap>{{'R '.number_format($totalCosts, 2)}}</td>
+								<td style="text-align: center"><span style="float:right"></span></br><span
+											style="float:right"></span></td>
+								<td style="text-align: center"></td>
+								<td>&nbsp;</td>
+								<td>&nbsp;</td>
+							@else
+								<tr id="categories-list">
+									<td colspan="15">
+										<div class="alert alert-danger alert-dismissable">
+											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+												&times;
+											</button>
+											No Record for this vehicle, please start by adding a new Record for this
+											vehicle..
+										</div>
+									</td>
+								</tr>
+							@endif
+						</table>
+					</div>
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
@@ -192,7 +218,7 @@
             </div>       
 			@include('Vehicles.partials.add_fuelrecord_modal')
 			<!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
-			<!--  @include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal') -->
+			@include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal')
             @if (count($vehiclefuellog) > 0)
                 @include('Vehicles.warnings.fuellog_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Vehicle Fuel Log? This action cannot be undone.'])
             @endif
@@ -217,6 +243,7 @@
 		});
 		var moduleId;
 		//Initialize Select2 Elements
+		$(".js-example-basic-multiple").select2();
 		$(".select2").select2();
 		$('.zip-field').hide();
 		$('.transaction-field').hide();
@@ -225,9 +252,8 @@
 		//Vertically center modals on page
 		function reposition() {
 			var modal = $(this),
-				dialog = modal.find('.modal-dialog');
+			dialog = modal.find('.modal-dialog');
 			modal.css('display', 'block');
-
 			// Dividing by two centers the modal exactly, but dividing by three
 			// or four works better for larger screens.
 			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
@@ -240,8 +266,7 @@
 		});
 		//Show success action modal
 		$('#success-action-modal').modal('show');
-		//
-		$(".js-example-basic-multiple").select2();
+
 		//Initialize iCheck/iRadio Elements
 		$('input').iCheck({
 			checkboxClass: 'icheckbox_square-blue',
@@ -289,6 +314,47 @@
 					document.getElementById('cost_per_litre').value = litre_cost;
 				}
 			});
+			// edit update
+			$('#litres_new_one').change(function () {
+				var litres_new_one = $('#litres_new_one').val();
+				var total_cost_one = $('#total_cost_one').val();
+				var litre_cost_one = $('#cost_per_litre_one').val();
+
+				if (litre_cost_one > 0 && litres_new_one > 0) {
+					var total_cost_one = (litres_new_one * litre_cost_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('total_cost_one').value = total_cost_one;
+				}
+				else if (litres_new_one > 0 && total_cost_one > 0) {
+					var litre_cost_one = (total_cost_one / litres_new_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('cost_per_litre_one').value = litre_cost_one;
+				}
+			});
+			$('#cost_per_litre_one').change(function () {
+				var litres_new_one = $('#litres_new_one').val();
+				var total_cost_one = $('#total_cost_one').val();
+				var litre_cost_one = $('#cost_per_litre_one').val();
+				if (litre_cost_one > 0 && litres_new_one > 0) {
+					var total_cost_one = (litres_new_one * litre_cost_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('total_cost_one').value = total_cost_one;
+				}
+				else if (litre_cost_one > 0 && total_cost_one > 0) {
+					var litres_new_one = (total_cost_one / litre_cost_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('litres_new_one').value = litres_new_one;
+				}
+			});
+			$('#total_cost_one').change(function () {
+				var litres_new_one = $('#litres_new_one').val();
+				var total_cost_one = $('#total_cost_one').val();
+				var litre_cost_one = $('#cost_per_litre_one').val();
+				if (litre_cost_one > 0 && total_cost_one) {
+					var litres_new_one = (total_cost_one / litre_cost_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('litres_new_one').value = litres_new_one;
+				}
+				else if (litres_new_one > 0 && total_cost) {
+					var litre_cost_one = (total_cost_one / litres_new_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+					document.getElementById('cost_per_litre_one').value = litre_cost_one;
+				}
+			});
 		});
 		$(document).ready(function () {
 			$('#date').datepicker({
@@ -296,7 +362,7 @@
 				autoclose: true,
 				todayHighlight: true
 			});
-			$('#dateofincident').datepicker({
+			$('#date_captured').datepicker({
 				format: 'dd/mm/yyyy',
 				autoclose: true,
 				todayHighlight: true
@@ -330,45 +396,64 @@
 			var successMsg = 'The Record  has been updated successfully.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
-		var incidentID;
-		$('#edit-incidents-modal').on('show.bs.modal', function (e) {
+		var fuelID;
+		$('#edit-fuel-records-modal').on('shown.bs.modal', function (e) {
 			var btnEdit = $(e.relatedTarget);
-			incidentID = btnEdit.data('id');
-			var date_of_incident = btnEdit.data('dateofincident');
-			var incident_type = btnEdit.data('incident_type');
-			var severity = btnEdit.data('severity');
-			var reported_by = btnEdit.data('reported_by');
-			var odometer_reading = btnEdit.data('odometer_reading');
-			var status = btnEdit.data('status');
-			var description = btnEdit.data('description');
-			var claim_number = btnEdit.data('claim_number');
-			var Cost = btnEdit.data('cost');
-			var documents = btnEdit.data('documents');
-			var documents1 = btnEdit.data('documents1');
-			var valueID = btnEdit.data('valueID');
-			var name = btnEdit.data('name');
+			fuelID = btnEdit.data('id');
+			var Driver = btnEdit.data('driver');
+			var documentNumber = btnEdit.data('document_number');
+			var Date = btnEdit.data('date');
+			var tankAndOther = btnEdit.data('tank_and_other');
+			var tankName = btnEdit.data('tank_name');
+			var serviceStation = btnEdit.data('service_station');
+			var transactionType = btnEdit.data('transaction_type');
+			var costPerLitre = btnEdit.data('cost_per_litre');
+			var litresNew = btnEdit.data('litres_new');
+			var totalCost = btnEdit.data('total_cost');
+			var hoursReading = btnEdit.data('hours_reading');
+			var odometerReading = btnEdit.data('odometer_reading');
+			var Description = btnEdit.data('description');
+			//console.log(btnEdit.data('Odometer_reading'));
+			//console.log(transactionType);
 			var modal = $(this);
-			modal.find('#date_of_incident').val(date_of_incident);
-			modal.find('#name').val(name);
-			modal.find('#incident_type').val(incident_type);
-			modal.find('#severity').val(severity);
-			modal.find('#reported_by').val(reported_by);
-			modal.find('#odometer_reading').val(odometer_reading);
-			modal.find('#status').val(status);
-			modal.find('#description').val(description);
-			modal.find('#claim_number').val(claim_number);
-			modal.find('#Cost').val(Cost);
-			modal.find('#documents').val(documents);
-			modal.find('#documents1').val(documents1);
-			modal.find('#valueID').val(valueID);
+			//modal.find('#driver').val(Driver);
+			modal.find('#document_number').val(documentNumber);
+			modal.find('#date_captured').val(Date);
+			modal.find('#tank_and_other').val(tankAndOther);
+			modal.find('#transaction_type').val(transactionType);
+			modal.find('#cost_per_litre_one').val(costPerLitre);
+			modal.find('#litres_new_one').val(litresNew);
+			modal.find('#total_cost_one').val(totalCost);
+			modal.find('#Odometer_reading').val(odometerReading);
+			modal.find('#hours_reading').val(hoursReading);
+			modal.find('#description').val(Description);
+			modal.find('select#driver').val(Driver).trigger("change");
+			modal.find('select#service_station').val(serviceStation).trigger("change");
+			modal.find('select#tank_name').val(tankName).trigger("change");			
+			if (tankAndOther == 2)
+			{
+				$('.transaction-field').show();
+				$('.Tanks-field').hide();
+				//$('#rdo_Other').iCheck('check');
+				if (transactionType == 1)
+					$('#rdo_Other, #rdo_fulltank').iCheck('check');
+				else
+					$('#rdo_Other, #rdo_topup').iCheck('check');
+			}
+			else
+			{
+				$('.Tanks-field').show();
+				$('.transaction-field').hide();
+				$('#rdo_transaction, #rdo_transaction').iCheck('check');
+			}
 		});
-		$('#edit_vehicleincidents').on('click', function () {
-			var strUrl = '/vehicle_management/edit_vehicleincidents/' + incidentID;
-			var formName = 'edit-incidents-form';
-			var modalID = 'edit-incidents-modal';
-			var submitBtnID = 'edit_fines';
-			var redirectUrl = '/vehicle_management/incidents/{{ $maintenance->id }}';
-			var successMsgTitle = 'New Record Added!';
+		$('#update_fuel').on('click', function () {
+			var strUrl = '/vehicle_management/update_fuel_record/' + fuelID;
+			var formName = 'edit-fuel-form';
+			var modalID = 'edit-fuel-records-modal';
+			var submitBtnID = 'update_fuel';
+			var redirectUrl = '/vehicle_management/fuel_log/{{ $maintenance->id }}';
+			var successMsgTitle = 'Fuel Record Updated!';
 			var successMsg = 'The Record  has been updated successfully.';
 			var Method = 'PATCH'
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);

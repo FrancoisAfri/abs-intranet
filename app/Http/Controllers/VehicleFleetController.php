@@ -1562,6 +1562,56 @@ class VehicleFleetController extends Controller
         return response()->json();
     }
 
+	public function updateFuelLog(Request $request, vehicle_fuel_log $fuel)
+    {
+		$this->validate($request, [
+        ]);
+        $fuelData = $request->all();
+        unset($fuelData['_token']);
+print_r($fuelData);
+		$loggedInEmplID = Auth::user()->person->id;
+        ///$tankID = $fuelData['tank_name'];
+        $fuelDate = $fuelData['date_captured'];
+        $fuelDate = str_replace('/', '-', $fuelDate);
+        $fuelDate = strtotime($fuelDate);
+
+        $totalcost = $fuelData['total_cost'] = str_replace(',', '', $fuelData['total_cost']);
+        $totalcost = $fuelData['total_cost'] = str_replace('. 00', '', $fuelData['total_cost']);
+
+        $fuel->date = $fuelDate;
+        $fuel->driver = !empty($fuelData['driver']) ? $fuelData['driver'] : 0;
+        $fuel->document_number = !empty($fuelData['document_number']) ? $fuelData['document_number'] : 0;
+        $fuel->tank_name = !empty($fuelData['tank_name']) ? $fuelData['tank_name'] : 0;
+        $fuel->service_station = !empty($fuelData['service_station']) ? $fuelData['service_station'] : 0;
+        $fuel->captured_by = $loggedInEmplID;
+        $fuel->total_cost = !empty ($totalcost) ? $totalcost : 0;
+        $fuel->tank_and_other = !empty($fuelData['transaction']) ? $fuelData['transaction'] : 0;
+        $fuel->description = !empty($fuelData['description']) ? $fuelData['description'] : 0;
+        $fuel->litres_new = !empty($fuelData['litres_new']) ? $fuelData['litres_new'] : 0;
+        $fuel->cost_per_litre = !empty($fuelData['cost_per_litre']) ? $fuelData['cost_per_litre'] : 0;
+        $fuel->Odometer_reading = !empty($fuelData['Odometer_reading']) ? $fuelData['Odometer_reading'] : 0;
+        $fuel->Hoursreading = !empty($fuelData['hours_reading']) ? $fuelData['hours_reading'] : '';
+        $fuel->update();
+		if (!empty($fuelData['transaction']) &&  $fuelData['transaction'] == 1)
+		{
+			// update fuel tank
+			DB::table('fuel_tank_topUp')
+				->where('vehicle_fuel_id', $fuel->id)
+				->update([
+					'document_no' => $fuel->document_number,
+					'document_date' => $fuelDate,
+					'topup_date' => $fuelDate,
+					'litres_new' => $fuel->litres_new,
+					'description' => $fuel->description,
+					'received_by' => $fuel->driver,
+					'captured_by' => $loggedInEmplID,
+					'tank_id' => $fuel->tank_name
+				]);
+		}
+        AuditReportsController::store('Fleet Management', 'Vehicle Fuel Transaction Updated', "Accessed by User", 0);
+        return response()->json();
+    }
+	
     public function viewBookingLog(vehicle_maintenance $maintenance)
     {
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();

@@ -109,7 +109,7 @@
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
+                dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
 
                 // Dividing by two centers the modal exactly, but dividing by three

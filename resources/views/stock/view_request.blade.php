@@ -276,7 +276,6 @@
 	  
 		$('#update_request').on('click', function () {
 			var strUrl = '/stock/updateitems/' + {{$stock->id}};
-			console.log(strUrl);
 			var formName = 'edit-request-form';
 			var modalID = 'edit-request-modal';
 			var submitBtnID = 'update_request';
