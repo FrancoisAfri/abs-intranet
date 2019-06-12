@@ -537,6 +537,7 @@ Route::post('vehicle_management/addvehiclefuellog', 'VehicleFleetController@addv
 Route::patch('vehicle_management/update_fuel_record/{fuel}', 'VehicleFleetController@updateFuelLog');
 Route::get('vehice/Manage_fuullog/{fuel}/delete', 'VehicleFleetController@deletefuelLog');
 Route::get('vehicle_management/fuel_log/{maintenance}/{date}', 'VehicleFleetController@viewFuelLog');
+Route::get('vehicle-management/fuel-log-edit/{fuel}', 'VehicleFleetController@editFuel');
 #
 Route::get('vehicle_management/bookin_log/{maintenance}', 'VehicleFleetController@viewBookingLog');
 

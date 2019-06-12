@@ -1453,7 +1453,7 @@ class VehicleFleetController extends Controller
         $data['maintenance'] = $maintenance;
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
-        AuditReportsController::store('FleetManagement', 'Job Titles Page Accessed', "Accessed by User", 0);
+        AuditReportsController::store('FleetManagement', 'View Fuel Log Record', "Accessed by User", 0);
         return view('Vehicles.FleetManagement.viewVehicleIFuelLog')->with($data);
     }
 
@@ -1462,7 +1462,7 @@ class VehicleFleetController extends Controller
         $approvals = DB::table('vehicle_configuration')->select('fuel_auto_approval', 'fuel_require_tank_manager_approval', 'fuel_require_ceo_approval')->first();
 		$userID = Auth::user()->person->id;
 		$managerID = DivisionLevelFive::where('active', 1)->where('manager_id', $userID)->first();
-		if (!empty($managerID->id)) return 1;
+		//if (!empty($managerID->id)) return 1;
         if ($approvals->fuel_auto_approval == 1)
             return 1;
 		elseif ($approvals->fuel_require_tank_manager_approval == 1 && $status < 4)
@@ -1482,6 +1482,7 @@ class VehicleFleetController extends Controller
         $this->validate($request, [
             'tank_name' => 'required_if:transaction,1',
             'date' => 'bail|required',
+            'transaction' => 'required',
             'document_number' => 'required|unique:vehicle_fuel_log,document_number',
         ]);
         $fuelData = $request->all();
@@ -1562,19 +1563,46 @@ class VehicleFleetController extends Controller
         return response()->json();
     }
 
+	public function editFuel(vehicle_fuel_log $fuel)
+    {
+		$employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+        $servicestation = fleet_fillingstation::orderBy('name', 'asc')->get();
+        $fueltank = Fueltanks::orderBy('id', 'desc')->get();
+        $vehicle_config = vehicle_config::orderBy('id', 'desc')->get();
+		$fleet = vehicle_maintenance::where('id', $fuel->vehicleID)->first();
+		$metreType = $fleet->metre_reading_type;
+        
+		$data['metreType'] = $metreType;
+		$data['employees'] = $employees;
+        $data['fuel'] = $fuel;
+		$data['servicestation'] = $servicestation;
+        $data['fueltank'] = $fueltank;
+        $data['active_mod'] = 'Fleet Management';
+        $data['active_rib'] = 'Manage Fleet';
+        AuditReportsController::store('Fleet Management', 'Edit Fuel Log', "Accessed by User", 0);
+        return view('Vehicles.FleetManagement.edit_fuel_log')->with($data);
+    }
+	
 	public function updateFuelLog(Request $request, vehicle_fuel_log $fuel)
     {
 		$this->validate($request, [
-            'date_captured' => 'required',
+            'date' => 'required',
+            'tank_and_other' => 'required',
             'document_number' => 'required',
 			'tank_name' => 'required_if:transaction,1',
         ]);
         $fuelData = $request->all();
         unset($fuelData['_token']);
-
 		$loggedInEmplID = Auth::user()->person->id;
-        ///$tankID = $fuelData['tank_name'];
-        $fuelDate = $fuelData['date_captured'];
+        if ($fuelData['tank_and_other'] == 1)
+		{
+			$fuelData['service_station'] = 0;
+			$fuelData['cost_per_litre'] = 0;
+			$fuelData['total_cost'] = 0;
+		}
+		else 
+			$fuelData['tank_name'] = 0;
+        $fuelDate = $fuelData['date'];
         $fuelDate = str_replace('/', '-', $fuelDate);
         $fuelDate = strtotime($fuelDate);
 
@@ -1588,14 +1616,14 @@ class VehicleFleetController extends Controller
         $fuel->service_station = !empty($fuelData['service_station']) ? $fuelData['service_station'] : 0;
         $fuel->captured_by = $loggedInEmplID;
         $fuel->total_cost = !empty ($totalcost) ? $totalcost : 0;
-        $fuel->tank_and_other = !empty($fuelData['transaction']) ? $fuelData['transaction'] : 0;
+        $fuel->tank_and_other = !empty($fuelData['tank_and_other']) ? $fuelData['tank_and_other'] : 0;
         $fuel->description = !empty($fuelData['description']) ? $fuelData['description'] : 0;
         $fuel->litres_new = !empty($fuelData['litres_new']) ? $fuelData['litres_new'] : 0;
         $fuel->cost_per_litre = !empty($fuelData['cost_per_litre']) ? $fuelData['cost_per_litre'] : 0;
         $fuel->Odometer_reading = !empty($fuelData['Odometer_reading']) ? $fuelData['Odometer_reading'] : 0;
         $fuel->Hoursreading = !empty($fuelData['hours_reading']) ? $fuelData['hours_reading'] : '';
         $fuel->update();
-		if (!empty($fuelData['transaction']) &&  $fuelData['transaction'] == 1)
+		if (!empty($fuelData['tank_and_other']) &&  $fuelData['tank_and_other'] == 1)
 		{
 			// update fuel tank
 			DB::table('fuel_tank_topUp')
@@ -1612,7 +1640,7 @@ class VehicleFleetController extends Controller
 				]);
 		}
         AuditReportsController::store('Fleet Management', 'Vehicle Fuel Transaction Updated', "Accessed by User", 0);
-        return response()->json();
+        return redirect("/vehicle_management/fuel_log/$fuel->vehicleID")->with('success_sent', "Record Updated.");
     }
 	
     public function viewBookingLog(vehicle_maintenance $maintenance)

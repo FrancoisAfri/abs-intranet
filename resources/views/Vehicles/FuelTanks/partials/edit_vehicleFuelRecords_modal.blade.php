@@ -28,15 +28,15 @@
 						<div class="form-group">
 							<label for="document_number" class="col-sm-2 control-label">Document Number</label>
 							<div class="col-sm-8">
-								<input type="text" class="form-control" id="document_number" name="document_number" value=""
-									   placeholder="Enter Document Number" required>
+								<input type="text" class="form-control" id="document_number" name="document_number" 
+								value="{{$details->document_number }}" placeholder="Enter Document Number" required>
 							</div>
 						</div>
 						<div class="form-group ">
 							<label for="date_captured" class="col-sm-2 control-label">Date </label>
 							<div class="col-sm-8">
 								<input type="text" class="form-control" id="date_captured" name="date_captured"
-									   value="{{ old('date_captured') }}" placeholder="Select date ...">
+									   value="{{ date(' d M Y', $details->date) }}" placeholder="Select date ...">
 							</div>
 						</div>
 						<div class="form-group{{ $errors->has('tank_and_other') ? ' has-error' : '' }}">

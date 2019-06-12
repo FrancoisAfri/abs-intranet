@@ -136,24 +136,9 @@
 									<tr id="categories-list">
 										<td>
 										@if ($details->status == 4)
-											<button type="button" id="edit_fuel_record" class="btn btn-sm btn-default btn-flat" data-toggle="modal"
-											data-target="#edit-fuel-records-modal" data-id="{{ $details->id }}"
-											data-driver="{{$details->driver}}"
-											data-document_number="{{$details->document_number }}"
-											data-date="{{ date(' d M Y', $details->date) }}"
-											data-tank_and_other="{{ $details->tank_and_other }}"
-											data-tank_name="{{ $details->tank_name }}"
-											data-service_station="{{ $details->service_station }}"
-											data-transaction_type="{{ $details->transaction_type}}"
-											data-cost_per_litre="{{ $details->cost_per_litre}}"
-											data-litres_new="{{ $details->litres_new}}"
-											data-total_cost="{{ $details->total_cost}}"
-											data-odometer_reading="{{ $details->Odometer_reading}}"
-											data-hours_reading="{{ $details->hours_reading}}"
-											data-description="{{ $details->description}}"
-											>
-												<i class="fa fa-pencil-square-o"></i> Edit
 											</button>
+											<a href="/vehicle-management/fuel-log-edit/{{$details->id}}" id="edit_fuel"
+                                               class="btn btn-warning pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
 										@endif
 										</td>
 										<td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
@@ -314,47 +299,6 @@
 					document.getElementById('cost_per_litre').value = litre_cost;
 				}
 			});
-			// edit update
-			$('#litres_new_one').change(function () {
-				var litres_new_one = $('#litres_new_one').val();
-				var total_cost_one = $('#total_cost_one').val();
-				var litre_cost_one = $('#cost_per_litre_one').val();
-
-				if (litre_cost_one > 0 && litres_new_one > 0) {
-					var total_cost_one = (litres_new_one * litre_cost_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-					document.getElementById('total_cost_one').value = total_cost_one;
-				}
-				else if (litres_new_one > 0 && total_cost_one > 0) {
-					var litre_cost_one = (total_cost_one / litres_new_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-					document.getElementById('cost_per_litre_one').value = litre_cost_one;
-				}
-			});
-			$('#cost_per_litre_one').change(function () {
-				var litres_new_one = $('#litres_new_one').val();
-				var total_cost_one = $('#total_cost_one').val();
-				var litre_cost_one = $('#cost_per_litre_one').val();
-				if (litre_cost_one > 0 && litres_new_one > 0) {
-					var total_cost_one = (litres_new_one * litre_cost_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-					document.getElementById('total_cost_one').value = total_cost_one;
-				}
-				else if (litre_cost_one > 0 && total_cost_one > 0) {
-					var litres_new_one = (total_cost_one / litre_cost_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-					document.getElementById('litres_new_one').value = litres_new_one;
-				}
-			});
-			$('#total_cost_one').change(function () {
-				var litres_new_one = $('#litres_new_one').val();
-				var total_cost_one = $('#total_cost_one').val();
-				var litre_cost_one = $('#cost_per_litre_one').val();
-				if (litre_cost_one > 0 && total_cost_one) {
-					var litres_new_one = (total_cost_one / litre_cost_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-					document.getElementById('litres_new_one').value = litres_new_one;
-				}
-				else if (litres_new_one > 0 && total_cost) {
-					var litre_cost_one = (total_cost_one / litres_new_one).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-					document.getElementById('cost_per_litre_one').value = litre_cost_one;
-				}
-			});
 		});
 		$(document).ready(function () {
 			$('#date').datepicker({
@@ -395,68 +339,6 @@
 			var successMsgTitle = 'New Record Added!';
 			var successMsg = 'The Record  has been updated successfully.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-		});
-		var fuelID;
-		$('#edit-fuel-records-modal').on('shown.bs.modal', function (e) {
-			var btnEdit = $(e.relatedTarget);
-			fuelID = btnEdit.data('id');
-			var Driver = btnEdit.data('driver');
-			var documentNumber = btnEdit.data('document_number');
-			var Date = btnEdit.data('date');
-			var tankAndOther = btnEdit.data('tank_and_other');
-			var tankName = btnEdit.data('tank_name');
-			var serviceStation = btnEdit.data('service_station');
-			var transactionType = btnEdit.data('transaction_type');
-			var costPerLitre = btnEdit.data('cost_per_litre');
-			var litresNew = btnEdit.data('litres_new');
-			var totalCost = btnEdit.data('total_cost');
-			var hoursReading = btnEdit.data('hours_reading');
-			var odometerReading = btnEdit.data('odometer_reading');
-			var Description = btnEdit.data('description');
-			//console.log(btnEdit.data('Odometer_reading'));
-			//console.log(transactionType);
-			var modal = $(this);
-			//modal.find('#driver').val(Driver);
-			modal.find('#document_number').val(documentNumber);
-			modal.find('#date_captured').val(Date);
-			modal.find('#tank_and_other').val(tankAndOther);
-			modal.find('#transaction_type').val(transactionType);
-			modal.find('#cost_per_litre_one').val(costPerLitre);
-			modal.find('#litres_new_one').val(litresNew);
-			modal.find('#total_cost_one').val(totalCost);
-			modal.find('#Odometer_reading').val(odometerReading);
-			modal.find('#hours_reading').val(hoursReading);
-			modal.find('#description').val(Description);
-			modal.find('select#driver').val(Driver).trigger("change");
-			modal.find('select#service_station').val(serviceStation).trigger("change");
-			modal.find('select#tank_name').val(tankName).trigger("change");			
-			if (tankAndOther == 2)
-			{
-				$('.transaction-field').show();
-				$('.Tanks-field').hide();
-				//$('#rdo_Other').iCheck('check');
-				if (transactionType == 1)
-					$('#rdo_Other, #rdo_fulltank').iCheck('check');
-				else
-					$('#rdo_Other, #rdo_topup').iCheck('check');
-			}
-			else
-			{
-				$('.Tanks-field').show();
-				$('.transaction-field').hide();
-				$('#rdo_transaction, #rdo_transaction').iCheck('check');
-			}
-		});
-		$('#update_fuel').on('click', function () {
-			var strUrl = '/vehicle_management/update_fuel_record/' + fuelID;
-			var formName = 'edit-fuel-form';
-			var modalID = 'edit-fuel-records-modal';
-			var submitBtnID = 'update_fuel';
-			var redirectUrl = '/vehicle_management/fuel_log/{{ $maintenance->id }}';
-			var successMsgTitle = 'Fuel Record Updated!';
-			var successMsg = 'The Record  has been updated successfully.';
-			var Method = 'PATCH'
-			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
 		});
 	</script>
 @endsection
