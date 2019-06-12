@@ -1462,7 +1462,7 @@ class VehicleFleetController extends Controller
         $approvals = DB::table('vehicle_configuration')->select('fuel_auto_approval', 'fuel_require_tank_manager_approval', 'fuel_require_ceo_approval')->first();
 		$userID = Auth::user()->person->id;
 		$managerID = DivisionLevelFive::where('active', 1)->where('manager_id', $userID)->first();
-		//if (!empty($managerID->id)) return 1;
+		if (!empty($managerID->id)) return 1;
         if ($approvals->fuel_auto_approval == 1)
             return 1;
 		elseif ($approvals->fuel_require_tank_manager_approval == 1 && $status < 4)
@@ -1577,6 +1577,12 @@ class VehicleFleetController extends Controller
         $data['fuel'] = $fuel;
 		$data['servicestation'] = $servicestation;
         $data['fueltank'] = $fueltank;
+		$data['page_title'] = " Edit Fuel Record";
+        $data['page_description'] = "FleetManagement";
+        $data['breadcrumb'] = [
+            ['title' => 'Fleet Management', 'path' => '/leave/Apply', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+        ];
         $data['active_mod'] = 'Fleet Management';
         $data['active_rib'] = 'Manage Fleet';
         AuditReportsController::store('Fleet Management', 'Edit Fuel Log', "Accessed by User", 0);
