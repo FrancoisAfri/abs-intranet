@@ -138,7 +138,7 @@
 										@if ($details->status == 4)
 											</button>
 											<a href="/vehicle-management/fuel-log-edit/{{$details->id}}" id="edit_fuel"
-                                               class="btn btn-warning pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                                               class="btn btn-warning pull-right" target="_blank"><i class="fa fa-pencil-square-o"></i> Edit</a>
 										@endif
 										</td>
 										<td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
@@ -158,9 +158,10 @@
 										<td style="text-align: center">{{!empty($details->per_litre) ? number_format($details->per_litre, 2) .' km/l' : 0}}</td>
 										<td>{{ !empty($details->status) ?  $bookingStatus[$details->status] : ''}}</td>
 										<td>
-											@if ($details->status == 4)
+											@if ($details->status == 4 || !empty($userAccess))
 												<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-														data-target="#delete-fuellog-warning-modal"><i class="fa fa-trash"></i>
+														data-target="#delete-fuellog-warning-modal"
+														data-id="{{ $details->id }}"><i class="fa fa-trash"></i>
 													Delete
 												</button>
 											@endif
@@ -205,7 +206,7 @@
 			<!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
 			@include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal')
             @if (count($vehiclefuellog) > 0)
-                @include('Vehicles.warnings.fuellog_warning_action', ['modal_title' => 'Delete Task', 'modal_content' => 'Are you sure you want to delete this Vehicle Fuel Log? This action cannot be undone.'])
+                @include('Vehicles.warnings.fuellog_warning_action', ['modal_title' => 'Delete Fuel Record', 'modal_content' => 'Are you sure you want to delete this fuel record? This action cannot be undone.'])
             @endif
         </div>
     </div>
@@ -338,6 +339,21 @@
 			var redirectUrl = '/vehicle_management/fuel_log/{{ $maintenance->id }}';
 			var successMsgTitle = 'New Record Added!';
 			var successMsg = 'The Record  has been updated successfully.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+		var fuelID;
+		$('#delete-fuellog-warning-modal').on('shown.bs.modal', function (e) {
+			var btnDelete = $(e.relatedTarget);
+			fuelID = btnDelete.data('id');
+		});
+		$('#delete_fuellog').on('click', function () {
+			var strUrl = '/vehice/Manage_fuellog/' + fuelID + '/delete';
+			var formName = 'delete-fuellog-warning-modal-form';
+			var modalID = 'delete-fuellog-warning-modal';
+			var submitBtnID = 'delete_fuellog';
+			var redirectUrl = '/vehicle_management/fuel_log/{{ $maintenance->id }}';
+			var successMsgTitle = 'Fuel Record Successfully Deleted!';
+			var successMsg = 'Fuel Record has been deleted successfully.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
 	</script>

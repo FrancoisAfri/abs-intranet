@@ -1427,6 +1427,16 @@ class VehicleFleetController extends Controller
         if ($currentmonth < 10) {
             $currentmonth = 0. . $currentmonth;
         } else $currentmonth = $currentmonth;
+		// get user access level
+		$user_id = Auth::user()->person->user_id;
+		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
+            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+            ->where('security_modules.code_name', 'vehicle')
+            ->where('security_modules_access.access_level', '>=', 4)
+            ->where('security_modules_access.user_id', $user_id)
+            ->pluck('user_id')->first();
+		
+        $data['userAccess'] = $userAccess;
         $data['metreType'] = $metreType;
         $data['currentmonth'] = $currentmonth;
         $data['month'] = $month;
@@ -1730,9 +1740,9 @@ class VehicleFleetController extends Controller
 
     public function deletefuelLog(Request $request, vehicle_fuel_log $fuel)
     {
+        AuditReportsController::store('Fleet Management', "Vehicle Fuel Log  Deleted ($fuel->vehicleID)", "deleted", 0);
         $fuel->delete();
-        AuditReportsController::store('Fleet Management', 'Vehicle Fuel Log  Deleted', "Document Type has been deleted", 0);
-        return back();
+        return response()->json();
     }
 	
 	public function viewCommunications(vehicle_maintenance $maintenance)

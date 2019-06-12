@@ -9,7 +9,7 @@
         <div class="col-md-12">
             <div class="box box-warning">
                 <div class="box-header with-border">
-                    <h3 class="box-title"> Add Fuel tank(s)</h3>
+                    <h3 class="box-title">Fuel tank(s)</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                     class="fa fa-minus"></i></button>
@@ -103,7 +103,7 @@
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
                                         </button>
-                                        No Fuel tanks to display, please start by adding a new Fuel Tank Type..
+                                        No Fuel tanks to display, please start by adding a new Fuel Tank..
                                     </div>
                                 </td>
                             </tr>
@@ -114,7 +114,7 @@
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-tank-modal">Add new Fuel Tanks
+                                data-target="#add-tank-modal">Add Fuel Tanks
                         </button>
                     </div>
                 </div>

@@ -51,11 +51,11 @@ class FuelManagementController extends Controller
             ->orderBy('fuel_tanks.id')
             ->get();
 
-        $data['page_title'] = "Fleet Types";
-        $data['page_description'] = "Fleet Types Management";
+        $data['page_title'] = "Fuel Management";
+        $data['page_description'] = "Tank Management";
         $data['breadcrumb'] = [
             ['title' => 'Fleet Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet Types ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Fuel Tank', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['employees'] = $employees;
@@ -176,10 +176,10 @@ class FuelManagementController extends Controller
         $Department = $vehiclemaintenance->first()->Department;
 
         $data['page_title'] = " Fleet Management";
-        $data['page_description'] = " FleetManagement";
+        $data['page_description'] = " Tank Management";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet  Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fleet ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Tank', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['ID'] = $ID;
@@ -607,7 +607,7 @@ class FuelManagementController extends Controller
 			->get();
 			//return $tankResults;
         $stationResults = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as iStatus', 'vehicle_fuel_log.id as fuelLogID',
+            ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as iStatus', 'vehicle_fuel_log.id as fuel_id',
                 'vehicle_details.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname',
                 'fleet_fillingstation.name as Staion')
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
@@ -622,20 +622,20 @@ class FuelManagementController extends Controller
             ->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
 			->orderBy('vehicle_details.fleet_number', 'ASC')
 			->get();
-//return $stationResults;
+			
         $status = array(1 => 'Incoming', 2 => 'Outgoing',);
 
         $booking = array(10 => "Pending Ceo Approval",
             4 => "Pending Manager Approval",
             1 => "Approved",
             14 => "Rejected");
-        $data['page_title'] = "Fuel Search Details";
-        $data['page_description'] = "Fuel Search Details";
+        $data['page_title'] = "Fuel Search";
+        $data['page_description'] = "Details";
         $data['breadcrumb'] = [
-            ['title' => 'Fleet Management', 'path' => '/vehicle_management/create_request', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Fuel Search Details ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Fleet Management', 'path' => '/vehicle_management/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Fuel Search', 'active' => 1, 'is_module' => 0]
         ];
-//return $tankResults;
+		
         $data['employees'] = $employees;
         $data['servicestation'] = $servicestation;
         $data['fueltank'] = $fueltank;
