@@ -204,8 +204,7 @@
             </div>       
 			@include('Vehicles.partials.add_fuelrecord_modal')
 			<!--  @include('Vehicles.partials.add_vehicleFuelRecords_modal') -->
-			@include('Vehicles.FuelTanks.partials.edit_vehicleFuelRecords_modal')
-            @if (count($vehiclefuellog) > 0)
+			@if (count($vehiclefuellog) > 0)
                 @include('Vehicles.warnings.fuellog_warning_action', ['modal_title' => 'Delete Fuel Record', 'modal_content' => 'Are you sure you want to delete this fuel record? This action cannot be undone.'])
             @endif
         </div>
