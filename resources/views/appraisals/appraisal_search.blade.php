@@ -24,7 +24,7 @@
                 <form name="load-kpi-form" class="form-horizontal" method="POST" action="/appraisal/search_results" >
                     {{ csrf_field() }}
 
-                    <div class="box-body"  id="view_users">
+                    <div class="box-body" id="view_users">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

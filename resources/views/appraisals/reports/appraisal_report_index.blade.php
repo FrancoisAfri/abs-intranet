@@ -22,7 +22,7 @@
                 <form name="load-kpi-form" class="form-horizontal" method="POST" action="/appraisal/reports/result" >
                     {{ csrf_field() }}
 
-                    <div class="box-body">
+                    <div class="box-body" id="view_users">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -52,7 +52,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-black-tie"></i>
                                         </div>
-                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this)" style="width: 100%">
+                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control select2" onchange="divDDOnChange(this, null, 'view_users')" style="width: 100%">
                                         </select>
                                     </div>
                                 </div>
