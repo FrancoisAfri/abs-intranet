@@ -37,6 +37,7 @@
 										</tr>
 									</thead>
 									<tbody>
+									<?php $prevVehicleID = 0; ?>
 									@foreach($fuelLog as $details)
 										<tr>
 											<td>{{ !empty($details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes) ?  $details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes: '' }}</td>
@@ -50,6 +51,39 @@
 											<td>{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
 											<td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
 										</tr>
+										@if(($prevVehicleID != 0) && $prevVehicleID != $details->vehicleID))
+                                            <tr>
+                                                <td class="success"></td>
+												<td class="success"></td>
+												<td class="success"></td>
+												<td class="success"></td>
+												<td class="success" style="text-align: right;">
+                                                    <i>SubTotals</i>
+                                                </td>
+												<td class="success" style="text-align: center;"> <i>{{ !empty($details->total_kms) ? number_format($details->total_kms, 2): 0 }} kms</i></td> 
+												<td class="success" style="text-align: center;"> <i>{{ !empty($details->total_hours) ? number_format($details->total_hours, 2): 0 }} hrs</i></td> 
+												<td class="success" style="text-align: center;"> <i>{{ !empty($details->total_litres) ? number_format($details->total_litres, 2): 0 }} l</i></td>  
+												<td class="success" style="text-align: center;">R <i>{{ !empty($details->total_costs) ? number_format($details->total_costs, 2) : 0 }}</i></td>
+												<td class="success" style="text-align: center;"><i></i></td>
+                                            </tr>
+                                        @endif
+										@if($loop->last)
+											<tr>
+                                                <td class="success"></td>
+												<td class="success"></td>
+												<td class="success"></td>
+												<td class="success"></td>
+												<td class="success" style="text-align: right;">
+                                                    <i>SubTotals</i>
+                                                </td>
+												<td class="success" style="text-align: center;"> <i>{{ !empty($details->total_kms) ? number_format($details->total_kms, 2): 0 }} kms</i></td> 
+												<td class="success" style="text-align: center;"> <i>{{ !empty($details->total_hours) ? number_format($details->total_hours, 2): 0 }} hrs</i></td> 
+												<td class="success" style="text-align: center;"> <i>{{ !empty($details->total_litres) ? number_format($details->total_litres, 2): 0 }} l</i></td>  
+												<td class="success" style="text-align: center;">R <i>{{ !empty($details->total_costs) ? number_format($details->total_costs, 2) : 0 }}</i></td>
+												<td class="success" style="text-align: center;"><i></i></td>
+                                            </tr>
+										@endif
+										<?php $prevVehicleID = $details->vehicleID; ?>
 									@endforeach
 									</tbody>
 									<tfoot>

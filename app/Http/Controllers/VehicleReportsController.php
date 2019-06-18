@@ -355,11 +355,47 @@ class VehicleReportsController extends Controller
                     $query->whereIn('vehicleID', $vehicleArray);
 				}
             })
+			//->where('vehicleID',6)
+			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
+			->orderBy('vehicle_fuel_log.date', 'desc')
             ->get();
 
         for ($i = 0; $i < count($vehicleArray); $i++) {
             $vehicle .= $vehicleArray[$i] . ',';
         }
+		// get total per vehicle
+		
+		if (!empty($fuelLog))
+		{
+			$totalHours = $totalKms = $totalLitres = $totalCost = 0;
+			$vehicleID = $count = 0;
+			$numItems = count($fuelLog);			
+			foreach ($fuelLog as $fuel) {
+				$totalHours = $totalHours + $fuel->Hoursreading;
+				$totalKms = $totalKms + $fuel->Odometer_reading;
+				$totalLitres = $totalLitres + $fuel->litres_new;
+				$totalCost = $totalCost + $fuel->total_cost;
+				if ($vehicleID != $fuel->vehicleID && $vehicleID != 0)
+				{
+					// reset total to zero
+					$fuel->total_hours = $totalHours;
+					$fuel->total_kms = $totalKms;
+					$fuel->total_litres = $totalLitres;
+					$fuel->total_costs = $totalCost;
+					$totalHours = $totalKms = $totalLitres = $totalCost = 0;
+				}
+				if(++$count === $numItems) {
+					$fuel->total_hours = $totalHours;
+					$fuel->total_kms = $totalKms;
+					$fuel->total_litres = $totalLitres;
+					$fuel->total_costs = $totalCost;
+				}
+				$vehicleID = $fuel->vehicleID;
+            }
+		}
+		//return $fuelLog;
+		//
 		$totalKms = $fuelLog->sum('Odometer_reading');
         $totalHours = $fuelLog->sum('Hoursreading');
         $totalLitres = $fuelLog->sum('litres_new');
@@ -480,10 +516,7 @@ class VehicleReportsController extends Controller
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('Vehicles.Reports.fuel_report_print')->with($data);
-
     }
-
-
     public function vehicleFineDetails(Request $request)
     {
         $reportData = $request->all();
