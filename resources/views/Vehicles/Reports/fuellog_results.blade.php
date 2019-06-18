@@ -51,7 +51,7 @@
 											<td>{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
 											<td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
 										</tr>
-										@if(($prevVehicleID != 0) && $prevVehicleID != $details->vehicleID))
+										@if(($prevVehicleID != 0) && $prevVehicleID != $details->vehicleID)
                                             <tr>
                                                 <td class="success"></td>
 												<td class="success"></td>

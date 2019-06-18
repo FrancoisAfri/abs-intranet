@@ -372,10 +372,7 @@ class VehicleReportsController extends Controller
 			$vehicleID = $count = 0;
 			$numItems = count($fuelLog);			
 			foreach ($fuelLog as $fuel) {
-				$totalHours = $totalHours + $fuel->Hoursreading;
-				$totalKms = $totalKms + $fuel->Odometer_reading;
-				$totalLitres = $totalLitres + $fuel->litres_new;
-				$totalCost = $totalCost + $fuel->total_cost;
+				
 				if ($vehicleID != $fuel->vehicleID && $vehicleID != 0)
 				{
 					// reset total to zero
@@ -385,6 +382,10 @@ class VehicleReportsController extends Controller
 					$fuel->total_costs = $totalCost;
 					$totalHours = $totalKms = $totalLitres = $totalCost = 0;
 				}
+				$totalHours = $totalHours + $fuel->Hoursreading;
+				$totalKms = $totalKms + $fuel->Odometer_reading;
+				$totalLitres = $totalLitres + $fuel->litres_new;
+				$totalCost = $totalCost + $fuel->total_cost;
 				if(++$count === $numItems) {
 					$fuel->total_hours = $totalHours;
 					$fuel->total_kms = $totalKms;
