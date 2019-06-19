@@ -358,7 +358,7 @@ class VehicleReportsController extends Controller
 			//->where('vehicleID',6)
 			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
 			->orderBy('vehicle_details.fleet_number', 'ASC')
-			->orderBy('vehicle_fuel_log.date', 'desc')
+			->orderBy('vehicle_fuel_log.date')
             ->get();
 
         for ($i = 0; $i < count($vehicleArray); $i++) {
