@@ -37,23 +37,10 @@
 										</tr>
 									</thead>
 									<tbody>
-									
+									<?php $prevVehicleID = 0; ?>
 									@foreach($fuelLog as $details)
+										@if(($prevVehicleID > 0) && $prevVehicleID != $details->vehicleID)
 										
-										<tr>
-											<td>{{ !empty($details->fleet_number) ?  $details->fleet_number: '' }}</td>
-											<td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
-											<td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
-											<td>{{ !empty($details->description) ?  $details->description: '' }}</td>
-											<td>{{ !empty($details->station) ?  $details->station : '' }}</td>
-											<td>{{ !empty($details->Odometer_reading) ?  $details->Odometer_reading: '' }}</td>
-											<td>{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }}</td>
-											<td>{{ !empty($details->litres_new) ?  $details->litres_new: '' }}</td>
-											<td>{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
-											<td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
-										</tr>
-										@if(isset($prevVehicleID) && $prevVehicleID != $details->vehicleID)
-										<?php $prevVehicleID = 0; ?>
                                             <tr>
                                                 <td class="success"></td>
 												<td class="success"></td>
@@ -69,6 +56,18 @@
 												<td class="success" style="text-align: center;"><i></i></td>
                                             </tr>
                                         @endif
+										<tr>
+											<td>{{ !empty($details->fleet_number) ?  $details->fleet_number: '' }}</td>
+											<td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
+											<td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
+											<td>{{ !empty($details->description) ?  $details->description: '' }}</td>
+											<td>{{ !empty($details->station) ?  $details->station : '' }}</td>
+											<td>{{ !empty($details->Odometer_reading) ?  $details->Odometer_reading: '' }}</td>
+											<td>{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }}</td>
+											<td>{{ !empty($details->litres_new) ?  $details->litres_new: '' }}</td>
+											<td>{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
+											<td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
+										</tr>
 										@if($loop->last)
 											<tr>
                                                 <td class="success"></td>
