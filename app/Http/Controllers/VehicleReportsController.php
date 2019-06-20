@@ -321,6 +321,7 @@ class VehicleReportsController extends Controller
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Status'
 			, 'vehicle_fuel_log.id as fuelLogID'
 			, 'vehicle_details.fleet_number as fleet_number'
+			, 'vehicle_details.metre_reading_type as metre_reading_type'
 			, 'hr_people.first_name as firstname'
 			, 'hr_people.surname as surname'
 			, 'fleet_fillingstation.name as station')
@@ -361,9 +362,27 @@ class VehicleReportsController extends Controller
 		if (!empty($fuelLog))
 		{
 			$totalHours = $totalKms = $totalLitres = $totalCost = 0;
-			$vehicleID = $count = 0;
+			$vehicleID = $count = $grandTotalHours = $grandTotalkms = 0;
+			$oldkm = $oldhr = $litreTopUp = $perLitre = $kmTravelled = $hrTravelled = 0;
 			$numItems = count($fuelLog);			
 			foreach ($fuelLog as $fuel) {
+				$metreType = $fuel->metre_reading_type;
+				if ($count == 0)
+				{ 
+					if ($metreType === 1)
+						$kmTravelled = $fuel->Odometer_reading - 0;
+					else $hrTravelled = $fuel->Hoursreading - 0;
+				}
+				else 
+				{
+					if ($metreType === 1)
+						$kmTravelled = $fuel->Odometer_reading - $oldkm;
+					else $hrTravelled = $fuel->Hoursreading - $oldhr;
+				}
+				if ($metreType === 1)
+					$fuel->km_travelled = $kmTravelled;
+				else $fuel->hr_travelled = $hrTravelled;		
+				$count ++;
 				
 				if ($vehicleID != $fuel->vehicleID && $vehicleID != 0)
 				{
@@ -372,30 +391,33 @@ class VehicleReportsController extends Controller
 					$fuel->total_kms = $totalKms;
 					$fuel->total_litres = $totalLitres;
 					$fuel->total_costs = $totalCost;
-					$totalHours = $totalKms = $totalLitres = $totalCost = 0;
+					$grandTotalHours = $grandTotalHours + $totalHours;
+					$grandTotalkms = $grandTotalkms + $totalKms;
+					$totalHours = $totalKms = $oldkm = $oldhr =
+					$totalLitres = $totalCost = $kmTravelled = $hrTravelled = 0;
 				}
-				$totalHours = $totalHours + $fuel->Hoursreading;
-				$totalKms = $totalKms + $fuel->Odometer_reading;
+				$totalKms = $totalKms + $kmTravelled;
+				$totalHours = $totalHours + $hrTravelled;
 				$totalLitres = $totalLitres + $fuel->litres_new;
 				$totalCost = $totalCost + $fuel->total_cost;
-				if(++$count === $numItems) {
+				if($count === $numItems) {
+					
 					$fuel->total_hours = $totalHours;
 					$fuel->total_kms = $totalKms;
 					$fuel->total_litres = $totalLitres;
 					$fuel->total_costs = $totalCost;
 				}
+				$oldkm = $fuel->Odometer_reading;
+				$oldhr = $fuel->Hoursreading;
 				$vehicleID = $fuel->vehicleID;
             }
 		}
-		//return $fuelLog;
-		//
-		$totalKms = $fuelLog->sum('Odometer_reading');
-        $totalHours = $fuelLog->sum('Hoursreading');
-        $totalLitres = $fuelLog->sum('litres_new');
+
+		$totalLitres = $fuelLog->sum('litres_new');
         $totalCost = $fuelLog->sum('total_cost');
 		
-		$data['totalKms'] = $totalKms;
-        $data['totalHours'] = $totalHours;
+		$data['totalKms'] = $grandTotalkms;
+        $data['totalHours'] = $grandTotalHours ;
         $data['totalLitres'] = $totalLitres;
         $data['totalCost'] = $totalCost;
         $data['fuelLog'] = $fuelLog;

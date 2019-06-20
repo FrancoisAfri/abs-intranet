@@ -24,13 +24,13 @@
                                 <table id="example2" class="table table-bordered table-hover">
                                     <thead>
 										<tr>
-											<th>Vehicle</th>
+											<th>Fleet No.</th>
 											<th>Date</th>
 											<th>Driver</th>
 											<th>Description</th>
-											<th>Service Station</th>
-											<th>km Reading</th>
-											<th>Hour Reading</th>
+											<th>Station</th>
+											<th>Travelled km</th>
+											<th>Travelled Hr</th>
 											<th>Litres</th>
 											<th>Cost</th>
 											<th>Rate per Litre</th>
@@ -40,7 +40,6 @@
 									<?php $prevVehicleID = 0; ?>
 									@foreach($fuelLog as $details)
 										@if(($prevVehicleID > 0) && $prevVehicleID != $details->vehicleID)
-										
                                             <tr>
                                                 <td class="success"></td>
 												<td class="success"></td>
@@ -62,8 +61,8 @@
 											<td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
 											<td>{{ !empty($details->description) ?  $details->description: '' }}</td>
 											<td>{{ !empty($details->station) ?  $details->station : '' }}</td>
-											<td>{{ !empty($details->Odometer_reading) ?  $details->Odometer_reading: '' }}</td>
-											<td>{{ !empty($details->Hoursreading) ?  $details->Hoursreading: '' }}</td>
+											<td>{{ !empty($details->km_travelled) ?  $details->km_travelled: '' }}</td>
+											<td>{{ !empty($details->hr_travelled) ?  $details->hr_travelled: '' }}</td>
 											<td>{{ !empty($details->litres_new) ?  $details->litres_new: '' }}</td>
 											<td>{{ !empty($details->total_cost) ?  $details->total_cost: '' }}</td>
 											<td>{{ !empty($details->cost_per_litre) ?  $details->cost_per_litre: '' }}</td>
@@ -89,21 +88,21 @@
 									</tbody>
 									<tfoot>
 										<tr>
-											<th>Vehicle</th>
+											<th>Fleet No.</th>
 											<th>Date</th>
 											<th>Driver</th>
 											<th>Description</th>
-											<th>Service Station</th>
-											<th>km Reading</th>
-											<th>Hour Reading</th>
+											<th>Station</th>
+											<th>Travelled km</th>
+											<th>Travelled Hr</th>
 											<th>Litres</th>
 											<th>Cost</th>
 											<th>Rate per Litre</th>
 										</tr>
 										<tr class="caption">
-											<th colspan="5" style="text-align:right;"> Totals</th> 
-											<th>kms</th>  
-											<th>Hrs</th>  
+											<th colspan="5" style="text-align:right;">Grand Totals</th> 
+											<th>Travelled kms</th>  
+											<th>Travelled Hrs</th>  
 											<th>Litres</th>
 											<th>Cost</th>
 											<th></th>
