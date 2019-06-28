@@ -55,7 +55,6 @@ class procurementRequestController extends Controller
 	public function create()
     {		
 		$hrID = Auth::user()->person->id;
-
 		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
 		$procurements = ProcurementRequest::where('employee_id',$hrID)->orderBy('date_created', 'asc')->get();
 		if (!empty($procurements)) $procurements = $procurements->load('procurementItems','employees','employeeOnBehalf','requestStatus');

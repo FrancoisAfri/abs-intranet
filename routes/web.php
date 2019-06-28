@@ -1129,9 +1129,7 @@ Route::get('api/tasks/emp/meetingTask/{divLvl}/{divID}', 'EmployeeTasksWidgetCon
 Route::get('api/tasks/emp/inductionTask/{divLvl}/{divID}', 'EmployeeTasksWidgetController@getInductionEmployees')->name('inductionTasksEmployee');
 Route::get('api/tasks/{task}/duration/{timeInSeconds}', 'TaskTimerController@updateDuration');
 Route::get('api/tasks/{task}/get-duration', 'TaskTimerController@getDuration');
-
 Route::post('api/contact-people-dropdown', 'DropDownAPIController@contactPeopleDD')->name('contactsdropdown');
-
 //Test leave cron
 Route::get('test/cron', 'AllocateLeavedaysFamilyCronController@sickDays');
 
@@ -1155,3 +1153,13 @@ Route::post('procurement/appoverequests', 'procurementRequestController@appoveRe
 Route::get('procurement/setup', 'procurementRequestController@showSetup');
 Route::post('procurement/setups/{setup}', 'procurementRequestController@addSetup');
 Route::post('procurement/setups', 'procurementRequestController@addSetup');
+// Complaints & Compliments
+Route::get('complaints/create', 'ComplaintsController@create');
+Route::post('complaints/add', 'ComplaintsController@store');
+Route::get('complaints/view/{complaint}', 'ComplaintsController@show');
+Route::get('complaints/search', 'ComplaintsController@index');
+Route::get('complaint/edit/{complaint}', 'ComplaintsController@edit');
+Route::patch('complaint/update/{complaint}', 'ComplaintsController@update');
+Route::post('conplaints/search_results', 'ComplaintsController@searchResults');
+Route::get('complaints/reports', 'ComplaintsController@reports');
+Route::post('conplaints/reports_results', 'ComplaintsController@reportSearchResults');
