@@ -128,7 +128,7 @@ class procurementRequestController extends Controller
             ['title' => 'Create', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Procurement';
-        $data['active_rib'] = 'create procurement';
+        $data['active_rib'] = 'create Request';
         $data['item_type'] = $request->input('item_type');
         $data['date_created'] = $request->input('date_created');
         $data['title_name'] = $request->input('title_name');
