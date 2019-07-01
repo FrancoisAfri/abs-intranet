@@ -43,6 +43,7 @@
                             <th>{{$LevelOne->name}}</th>
 							@endif
 							<th>Employee</th>
+							<th>Enforce Upload</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         @if (count($processflows) > 0)
@@ -62,7 +63,8 @@
                                                 data-division_level_4="{{!empty($processflow->division_level_4) ? $processflow->division_level_4 : 0 }}"
                                                 data-division_level_3="{{!empty($processflow->division_level_3) ? $processflow->division_level_3 : 0 }}"
                                                 data-division_level_2="{{!empty($processflow->division_level_2) ? $processflow->division_level_2 : 0 }}"
-                                                data-division_level_1="{{!empty($processflow->division_level_1) ? $processflow->division_level_1 : 0 }}">
+                                                data-division_level_1="{{!empty($processflow->division_level_1) ? $processflow->division_level_1 : 0 }}"
+                                                data-enforce_upload="{{!empty($processflow->enforce_upload) ? $processflow->enforce_upload : 0 }}">
                                             <i class="fa fa-pencil-square-o"></i> Edit
                                         </button>
                                     </td>
@@ -85,7 +87,8 @@
 									@if (!empty($LevelOne))
 										<td>{{ (!empty($processflow->divisionLevelOne->name)) ?  $processflow->divisionLevelOne->name : ''}}</td>
 									@endif
-										<td>{{ (!empty($processflow->employeeDetails->first_name)) ?  $processflow->employeeDetails->first_name ." ".$processflow->employeeDetails->surname : ''}}</td>
+									<td>{{ (!empty($processflow->employeeDetails->first_name)) ?  $processflow->employeeDetails->first_name ." ".$processflow->employeeDetails->surname : ''}}</td>
+									<td>{{ (!empty($processflow->enforce_upload)) ?  $uploadArray[$processflow->enforce_upload] : 'None'}}</td>
 									<td>
                                         <button type="button" id="view_ribbons"
                                                 class="btn {{ (!empty($processflow->status) && $processflow->status == 1) ? " btn-danger " : "btn-success " }}
@@ -110,7 +113,6 @@
                         @endif
                     </table>
                     <div class="box-footer">
-                        <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
                         <button type="button" id="step" class="btn btn-warning pull-right" data-toggle="modal"
                                 data-target="#add-new-step-modal">Add new Step
                         </button>
@@ -183,7 +185,6 @@
 
 			var stepID;
 			$('#edit-step-modal').on('show.bs.modal', function (e) {
-				//console.log('kjhsjs');
 				var btnEdit = $(e.relatedTarget);
 				stepID = btnEdit.data('id');
 				var step_number = btnEdit.data('step_number');
@@ -191,6 +192,7 @@
 				var maxAmount = btnEdit.data('max_amount');
 				var EmployeeID = btnEdit.data('employee_id');
 				var roleID = btnEdit.data('role_id');
+				var enforceUpload = btnEdit.data('enforce_upload');
 				var dept5 = btnEdit.data('division_level_5');
 				var dept4 = btnEdit.data('division_level_4');
 				var dept3 = btnEdit.data('division_level_3');
@@ -203,8 +205,10 @@
 				modal.find('#step_name').val(step_name);
 				modal.find('#max_amount').val(maxAmount);
 				modal.find('select#role_id').val(roleID);
+				modal.find('select#enforce_upload').val(enforceUpload);
 				modal.find('select#division_id').val(divisionID);
 				//Load divisions drop down
+				//console.log(enforceUpload);
 				var parentDDID = '';
 				var loadAllDivs = 1;
 				var firstDivDDID = null;
@@ -258,9 +262,7 @@
 				var redirectUrl = '/procurement/approval_level';
 				var successMsg = 'Step Details has been updated successfully.';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-				
 			});
-			
 			//Load divisions drop down
 			var parentDDID = '';
 			var loadAllDivs = 1;
@@ -276,10 +278,8 @@
 			parentDDID = ddID;
 			loadAllDivs = -1;
 			@endforeach
-			
 			//call hide/show fields functions on doc ready
 			hideFields();
-
 			//show/hide file upload or manual fields on radio checked
 			$('#rdo_role, #rdo_emp').on('ifChecked', function(){
 				hideFields();
@@ -301,7 +301,6 @@
 				$('.role-field').hide();
 			}
 		}
-		
 		//function to hide/show fields
 		function hideField() {
 			var approvalType = $("input[name='approval_types']:checked").val();
@@ -314,6 +313,5 @@
 				$('.role-field').hide();
 			}
 		}
-	
 	</script>
 @endsection

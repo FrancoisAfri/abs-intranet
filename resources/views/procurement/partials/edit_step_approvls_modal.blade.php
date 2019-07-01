@@ -4,7 +4,6 @@
             <form class="form-horizontal" method="POST" name="edit-step-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -13,7 +12,6 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-					
                     <div class="form-group">
                         <label for="step_number" class="col-sm-2 control-label"> Step number</label>
                         <div class="col-sm-8">
@@ -38,7 +36,6 @@
                     </div>
 					<div class="form-group{{ $errors->has('approval_types') ? ' has-error' : '' }}">
 						<label for="approval_types" class="col-sm-2 control-label">Approval Type</label>
-
 						<div class="col-sm-10">
 							<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_roles" name="approval_types" value="1"> Role</label>
 							<label class="radio-inline"><input type="radio" id="rdo_emps" name="approval_types" value="2"> Employees</label>
@@ -47,7 +44,6 @@
 					@foreach($division_levels as $division_level)
 						<div class="form-group emp-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
 							<label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
 							<div class="col-sm-10">
 								<div class="input-group">
 									<div class="input-group-addon">
@@ -77,7 +73,6 @@
                     </div>
 					<div class="form-group role-field{{ $errors->has('role_id') ? ' has-error' : '' }}">
 						<label for="role_id" class="col-sm-2 control-label">Roles</label>
-
 						<div class="col-sm-10">
 							<div class="input-group">
 								<div class="input-group-addon">
@@ -88,6 +83,21 @@
 									@foreach($roles as $role)
 										<option value="{{ $role->role_id }}">{{ $role->role_name }}</option>
 									@endforeach
+								</select>
+							</div>
+						</div>
+                    </div>
+					<div class="form-group {{ $errors->has('enforce_upload') ? ' has-error' : '' }}">
+						<label for="enforce_upload" class="col-sm-2 control-label">Enforce Docunent(s) Upload</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-user"></i>
+								</div>
+								<select id="enforce_upload" name="enforce_upload" class="form-control" style="width: 100%;">
+									<option value="">*** Select an Option ***</option>
+									<option value="1">Single Docunent</option>
+									<option value="2">Multiple Docunents</option>
 								</select>
 							</div>
 						</div>
@@ -117,5 +127,4 @@
         </div>
         <!-- /.modal-content -->
     </div>
-    <!-- /.modal-dialog -->
 </div>

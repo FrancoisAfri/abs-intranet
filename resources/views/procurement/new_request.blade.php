@@ -43,15 +43,6 @@
                             </div>
                         </div>
 						<div class="form-group">
-							<label for="date_created" class="col-sm-2 control-label">Date Created</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-									<input type="text" class="form-control" id="date_created" name="date_created"
-                                   value="{{ old('date_created') }}" placeholder="Select Date Created  ...">
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
 							<label for="title_name" class="col-sm-2 control-label">Title</label>
 							<div class="col-sm-10">
 								<div class="input-group">

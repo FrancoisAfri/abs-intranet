@@ -3,7 +3,6 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-new-step-form">
                 {{ csrf_field() }}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -106,6 +105,21 @@
 									@foreach($divisionFives as $divisionFive)
 										<option value="{{ $divisionFive->id }}">{{ $divisionFive->name }}</option>
 									@endforeach
+								</select>
+							</div>
+						</div>
+                    </div>
+					<div class="form-group {{ $errors->has('enforce_upload') ? ' has-error' : '' }}">
+						<label for="enforce_upload" class="col-sm-2 control-label">Enforce Docunent(s) Upload</label>
+						<div class="col-sm-10">
+							<div class="input-group">
+								<div class="input-group-addon">
+									<i class="fa fa-user"></i>
+								</div>
+								<select id="enforce_upload" name="enforce_upload" class="form-control select2" style="width: 100%;">
+									<option value="">*** Select an Option ***</option>
+									<option value="1">Single Docunent</option>
+									<option value="2">Multiple Docunents</option>
 								</select>
 							</div>
 						</div>

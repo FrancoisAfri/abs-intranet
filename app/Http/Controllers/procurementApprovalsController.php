@@ -55,7 +55,8 @@ class procurementApprovalsController extends Controller
             ['title' => 'Procurement', 'path' => 'stock/approval_level', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Approval Steps', 'active' => 1, 'is_module' => 0]
         ];
-
+		$uploadArray = array(1=>"Single Docunent", 2=>"Multiple Docunents");
+        $data['uploadArray'] = $uploadArray;
         $data['divisionFives'] = $divisionFive;
         $data['LevelFive'] = $LevelFive;
         $data['LevelFour'] = $LevelFour;
@@ -101,6 +102,7 @@ class procurementApprovalsController extends Controller
         $approvalsLevel->employee_id = !empty($SysData['hr_person_id']) ? $SysData['hr_person_id'] : 0;
         $approvalsLevel->max_amount = !empty($SysData['max_amount']) ? $SysData['max_amount'] : 0;
         $approvalsLevel->role_id = !empty($SysData['role_id']) ? $SysData['role_id'] : 0;
+        $approvalsLevel->enforce_upload = !empty($SysData['enforce_upload']) ? $SysData['enforce_upload'] : 0;
         $approvalsLevel->status = 1;
         $approvalsLevel->date_added = time();
         $approvalsLevel->save();
@@ -134,6 +136,7 @@ class procurementApprovalsController extends Controller
 		$step->employee_id = !empty($SysData['hr_person_id']) ? $SysData['hr_person_id'] : 0;
         $step->max_amount = !empty($SysData['max_amount']) ? $SysData['max_amount'] : 0;
         $step->role_id = !empty($SysData['role_id']) ? $SysData['role_id'] : 0;
+        $step->enforce_upload = !empty($SysData['enforce_upload']) ? $SysData['enforce_upload'] : 0;
         $step->update();
 
         AuditReportsController::store('Procurement', 'Step edited', "Proces flow Edited");

@@ -46,13 +46,14 @@
                                         <th style="width: 10px">#</th>
                                         <th>Product</th>
                                         <th>Quantity</th>
-                                        <th style="text-align: right;">Unit Price</th>
+                                        <th style="text-align: center;">Unit Price</th>
+                                        <th style="text-align: right;">Total</th>
                                     </tr>
                                     @foreach ($products as $product)
                                         @if($loop->first || (isset($prevCategory) && $prevCategory != $product->category_id))
                                             <?php $prevCategory = 0; ?>
                                             <tr>
-                                                <th class="success" colspan="4" style="text-align: center;">
+                                                <th class="success" colspan="5" style="text-align: center;">
                                                     <i>{{ $product->ProductPackages->name }}</i>
                                                 </th>
                                             </tr>
@@ -70,6 +71,7 @@
 											<td style="vertical-align: middle; width: 100px;">
 												<input type="text" name="price[{{ $product->id }}]" class="form-control items-price" value="{{ ($product->current_price) ? $product->current_price : '' }}" onchange="subtotal()">
                                             </td>
+											<td style="text-align: right;" id="total_price_{{ $loop->iteration - 1 }}">{{ ($product->total_price) ? $product->total_price : '' }}</td>										
                                         </tr>
                                         <?php $prevCategory = $product->category_id; ?>
                                     @endforeach
@@ -82,6 +84,7 @@
                                                 <th>Description</th>
                                                 <th style="width: 20px" nowrap class="text-center">Unit Price</th>
                                                 <th nowrap>Quantity</th>
+                                                <th style="width: 20px" nowrap class="text-center">Total</th>
                                                 <th style="width: 20px" nowrap class="text-center"></th>
                                             </tr>
                                         </thead>
@@ -97,13 +100,13 @@
                                                 <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
                                                     <input type="number" name="no_quantity[]" class="form-control item-quantity" onchange="subtotal()">
                                                 </td>
-                                                <td style="width: 10px; vertical-align: middle;" nowrap class="text-center"></td>
+												<td style="width: 10px; vertical-align: middle;" nowrap class="text-center" id="total_price_0"></td>
+												<td style="width: 10px; vertical-align: middle;" nowrap class="text-center"></td>
                                             </tr>
                                         </tbody>
-
                                         <tfoot>
                                             <tr>
-                                                <td colspan="5">
+                                                <td colspan="6">
                                                     <button id="add_row" type="button" class="btn btn-primary btn-flat btn-block"><i class="fa fa-files-o"></i> Add New Row</button>
                                                 </td>
                                             </tr>
@@ -123,7 +126,7 @@
                                             <div class="form-group no-margin">
                                                 <label for="" class="col-sm-4 control-label"></label>
                                                 <div class="col-sm-8">
-                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1"></label>
+                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1" checked></label>
                                                 </div>
                                             </div>
                                         </td>
@@ -154,37 +157,30 @@
         @endif
     </div>
 @endsection
-
 @section('page_script')
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-
     <script>
         $(function () {
             //Initialize Select2 Elements
             $(".select2").select2();
-
             //Initialize iCheck/iRadio Elements
             $('.rdo-iCheck').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
-
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
-
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
                     dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
-
                 // Dividing by two centers the modal exactly, but dividing by three
                 // or four works better for larger screens.
                 dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
@@ -195,21 +191,21 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
-
             //Show success action modal
             @if(Session('changes_saved'))
                 $('#success-action-modal').modal('show');
             @endif
-
             //Add more modules
             var max_fields      = 15; //maximum input boxes allowed
             var wrapper         = $(".input-fields-wrap"); //Fields wrapper
             var add_button      = $("#add_row"); //Add button ID
             var x = 1; //initial text box count
+            var xp = 0; //initial text box count
             $(add_button).click(function(e){ //on add input button click
                 e.preventDefault();
                 if(x < max_fields){ //max input box allowed
                     x++; //text box increment
+                    xp++; //text box increment
                     $(wrapper).append(`
                         <tr>
                             <td style="width: 10px; vertical-align: middle;" nowrap>${x}</td>
@@ -221,6 +217,7 @@
                             <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
                                 <input type="number" name="no_quantity[]" class="form-control item-quantity" onchange="subtotal()" required>
                             </td>
+				<td style="width: 10px; vertical-align: middle;" nowrap class="text-center" id="total_price_${xp}"></td>
                             <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">
                                 <button type="button" class="btn btn-link btn-xs remove_row" title="Remove"><i class="fa fa-times"></i></button>
                             </td>
@@ -228,21 +225,17 @@
                     `); //add input box
                 }
             });
-
             $(wrapper).on("click",".remove_row", function(e){ //user click on remove text
                 e.preventDefault(); $(this).parent('td').parent('tr').remove(); x--; subtotal();
             });
-
             //call the function to calculate the subtotal
             subtotal();
-
             //VAT checkbox event handler
             var addVATCheckbox = $('#rdo_add_vat');
             addVATCheckbox.on('ifChanged', function(event){
                 subtotal();
             });
         });
-
         //function to calculate the subtotal
         function subtotal() {
             var itemType = parseInt($('#item_type').val());
@@ -257,7 +250,8 @@
 				$( ".items-price" ).each(function( index ) {
                     var price = parseInt($( this ).val()) || 0;
 					
-                    totalPrices[index] = price * quantitys[index] ;
+                    totalPrices[index] = price * quantitys[index];
+					$("#total_price_" + index ).html('R ' + totalPrices[index].formatMoney(2));
                 });
 				const sums = totalPrices.reduce(add);
 				function add(accumulator, a) {
@@ -276,8 +270,9 @@
 				$( ".item-price" ).each(function( index ) {
 					//console.log( index + ": " + $( this ).val() );
                     var price = parseInt($( this ).val()) || 0;
-					
-                    totalPrice[index] = price * quantities[index] ;
+                    console.log(index);
+					totalPrice[index] = price * quantities[index] ;
+					$("#total_price_" + index ).html('R ' + totalPrice[index].formatMoney(2));
                 });
 				const sum = totalPrice.reduce(add);
 				function add(accumulator, a) {

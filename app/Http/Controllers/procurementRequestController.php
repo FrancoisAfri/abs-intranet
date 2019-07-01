@@ -32,7 +32,7 @@ class procurementRequestController extends Controller
 	}
 	// Procurement Request index Page
 	public function index()
-    {	
+    {
 		$hrID = Auth::user()->person->id;
 		$procurements = ProcurementRequest::where('employee_id',$hrID)->orderBy('date_created', 'desc')->limit(50)->get();
 		if (!empty($procurements)) $procurements = $procurements->load('procurementItems','employees','employeeOnBehalf','requestStatus');
@@ -53,7 +53,7 @@ class procurementRequestController extends Controller
 	
 	// Procurement Request index Page
 	public function create()
-    {		
+    {
 		$hrID = Auth::user()->person->id;
 		$products = product_products::where('stock_type', '<>',2)->whereNotNull('stock_type')->orderBy('name', 'asc')->get();
 		$procurements = ProcurementRequest::where('employee_id',$hrID)->orderBy('date_created', 'asc')->get();
@@ -77,11 +77,11 @@ class procurementRequestController extends Controller
 		$data['employeesOnBehalf'] = $employeesOnBehalf;
 		$data['products'] = $products;
         $data['procurements'] = $procurements;
-        $data['page_title'] = 'Items Request';
-        $data['page_description'] = 'Request Procurement Items';
+        $data['page_title'] = 'Procurement Request';
+        $data['page_description'] = 'Request Procurement';
         $data['breadcrumb'] = [
             ['title' => 'Procurement', 'path' => '/procurement/create-request', 'icon' => 'fa fa-cart-arrow-down', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Request Procurement Items', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Request Procurement', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Procurement';
         $data['active_rib'] = 'Create Request';
@@ -113,17 +113,18 @@ class procurementRequestController extends Controller
                 ->get();
             //get products current prices
             foreach ($products as $product) {
-                $promoDiscount = ($product->promotions->first()) ? $product->promotions->first()->discount : 0;
                 $currentPrice = ($product->productPrices->first())
                     ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
                 $product->current_price = $currentPrice;
+                $product->total_price = $currentPrice ;
             }
         }
+		
 
         $data['page_title'] = 'Procurement';
         $data['page_description'] = 'Create Request';
         $data['breadcrumb'] = [
-            ['title' => 'Quote', 'path' => '/procurement', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Procurement', 'path' => '/procurement', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
             ['title' => 'Create', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Procurement';
@@ -147,7 +148,6 @@ class procurementRequestController extends Controller
         $validator = Validator::make($request->all(), [
             'item_type' => 'bail|required|integer|min:1',
             'employee_id' => 'bail|required|integer|min:1',
-            'date_created' => 'bail|required',
             'title_name' => 'bail|required',
             'quantity.*' => 'bail|required|integer|min:1',
             'service_quantity.*' => 'bail|required|integer|min:1',
@@ -165,13 +165,11 @@ class procurementRequestController extends Controller
         //save procurement request
         $procurement = new ProcurementRequest();
         DB::transaction(function () use ($procurement, $request, $user, $flowprocee) {
-			$date = str_replace('/', '-', $request->input('date_created'));
-			$date = strtotime($date);
             $itemType = $request->input('item_type');
             $procurement->item_type = ($itemType > 0) ? $itemType : 0;
             $procurement->on_behalf_of = ($request->input('on_behalf_of')) ? $request->input('on_behalf_of') : 0;
             $procurement->on_behalf_employee_id = ($request->input('on_behalf_employee_id')) ? $request->input('on_behalf_employee_id') : 0;
-            $procurement->date_created = $date;
+            $procurement->date_created =  time();
             $procurement->employee_id = $user->person->id;
             $procurement->title_name = ($request->input('title_name')) ? $request->input('title_name') : '';
             $procurement->add_vat = ($request->input('add_vat')) ? $request->input('add_vat') : 0;

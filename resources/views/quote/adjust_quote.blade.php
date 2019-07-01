@@ -199,7 +199,6 @@
                                         <td style="width: 250px; vertical-align: middle;">
                                             <div class="form-group no-margin{{ $errors->has('discount_percent') ? ' has-error' : '' }}">
                                                 <label for="{{ 'discount_percent' }}" class="col-sm-4 control-label">Discount</label>
-
                                                 <div class="col-sm-8">
                                                     <div class="input-group">
                                                         <div class="input-group-addon"><i class="fa fa-percent"></i></div>
