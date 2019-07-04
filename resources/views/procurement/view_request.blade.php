@@ -107,7 +107,7 @@
 							<tr><td colspan="5"></td><td style="text-align:center">{{ !empty($items->item_price) ? $items->item_price : '' }}</td><td></td></tr>
 						@endif
 						<tr>
-							<th style="text-align: center;"  colspan="5">Totals</th>
+							<th style="text-align: center;"  colspan="6">Totals</th>
 						</tr>
 						<tr>
 							<th style="text-align: right;"  colspan="4">Subtotal:</th>
@@ -129,8 +129,8 @@
                     <div class="box-footer">
 						<button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Back</button>
 						@if ($procurement->status == 1)
-							<button type="button" class="btn btn-sm btn-default btn-flat pull-right">
-								<i class="fa fa-pencil-square-o"></i> Edit</button>
+							<button type="button" class="btn btn-sm btn-default btn-flat pull-right"  onclick="postData({{$procurement->id}}, 'edit_request');">
+								<i class="fa fa-pencil-square-o"></i> Modify</button>
 						@endif
 						@if(!empty($procurement->status) && $flow->step_number > $procurement->status)
 							<button type="button" class="btn btn-primary btn-success pull-right" 
@@ -361,6 +361,8 @@
 	{
 		if (data == 'request_approval')
 			location.href = "/procurement/approve-request-single/" + id;
+		else if (data == 'edit_request')
+			location.href = "/procuremnt/modify_request/" + id;
 	}
 	</script>
 @endsection

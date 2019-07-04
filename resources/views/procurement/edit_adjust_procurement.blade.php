@@ -11,19 +11,18 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/procurement/save">
+                <form class="form-horizontal" method="POST" action="/procuremnt/update/{{ $procurement->id }}">
                     {{ csrf_field() }}
-                    <input type="hidden" name="item_type" id="item_type" value="{{ $item_type }}">
-                    <input type="hidden" name="date_created" value="{{ $date_created }}">
-                    <input type="hidden" name="title_name" value="{{ $title_name }}">
-                    <input type="hidden" name="employee_id" value="{{ $employee_id }}">
+                    <input type="hidden" name="item_type" id="item_type" value="{{ $itemType }}">
+                    <input type="hidden" name="title_name" id="title_name" value="{{ $title_name }}">
+                    <input type="hidden" name="employee_id" id="employee_id" value="{{ $employee_id }}">
                     <input type="hidden" name="on_behalf" value="{{ $on_behalf }}">
                     <input type="hidden" name="on_behalf_employee_id" value="{{ $on_behalf_employee_id }}">
                     <input type="hidden" name="special_instructions" value="{{ $special_instructions }}">
                     <input type="hidden" name="justification_of_expenditure" value="{{ $justification_of_expenditure }}">
                     <input type="hidden" name="detail_of_expenditure" value="{{ $detail_of_expenditure }}">
                     <div class="box-header with-border">
-                        <h3 class="box-title">Procurement Request</h3>
+                        <h3 class="box-title">Modify Request</h3>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -38,9 +37,8 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div style="overflow-x:auto;">
-                            @if($item_type == 1)
+                            @if($itemType == 1)
                                 <table class="table table-striped table-bordered">
                                     <tr>
                                         <th style="width: 10px">#</th>
@@ -76,7 +74,8 @@
                                         <?php $prevCategory = $product->category_id; ?>
                                     @endforeach
                                 </table>
-                            @elseif($item_type == 2)
+                            @elseif($itemType == 2)
+                                @if($procurement->procurementItems)
                                     <table class="table table-striped table-bordered">
                                         <thead>
                                             <tr>
@@ -89,20 +88,28 @@
                                             </tr>
                                         </thead>
                                         <tbody class="input-fields-wrap">
-                                            <tr>
-                                                <td style="width: 10px; vertical-align: middle;" nowrap>1</td>
-                                                <td>
-                                                    <textarea name="description[]" rows="2" class="form-control"></textarea>
-                                                </td>
-                                                <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
-													<input type="text" name="no_price[]" class="form-control item-price" onchange="subtotal()">
-												</td>
-                                                <td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
-                                                    <input type="number" name="no_quantity[]" class="form-control item-quantity" onchange="subtotal()">
-                                                </td>
-												<td style="width: 10px; vertical-align: middle;" nowrap class="text-center" id="total_price_0"></td>
-												<td style="width: 10px; vertical-align: middle;" nowrap class="text-center"></td>
-                                            </tr>
+                                            @foreach($procurement->procurementItems as $items)
+                                                <tr>
+													<td style="width: 10px; vertical-align: middle;" nowrap>{{ $loop->iteration }}</td>
+													<td>
+														<textarea name="description[]" rows="2" class="form-control">{{ $items->item_name }}</textarea>
+													</td>
+													<td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
+														<input type="text" name="no_price[]" class="form-control item-price" value="{{ $items->item_price }}" onchange="subtotal()">
+													</td>
+													<td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
+														<input type="number" name="no_quantity[]" class="form-control item-quantity" onchange="subtotal()" value="{{ $items->quantity }}">
+													</td>
+													<td style="width: 10px; vertical-align: middle;" nowrap class="text-center" id="total_price_{{$loop->iteration - 1}}">{{ $items->item_price * $items->quantity }}</td>
+													@if(! $loop->first)
+                                                        <td style="width: 10px; vertical-align: middle;" nowrap class="text-center">
+                                                            <button type="button" class="btn btn-link btn-xs remove_row" title="Remove"><i class="fa fa-times"></i></button>
+                                                        </td>
+                                                    @else
+                                                        <td style="width: 10px; vertical-align: middle;" nowrap class="text-center"></td>
+                                                    @endif
+												</tr>
+                                            @endforeach
                                         </tbody>
                                         <tfoot>
                                             <tr>
@@ -112,6 +119,13 @@
                                             </tr>
                                         </tfoot>
                                     </table>
+                                @else
+                                    <div class="alert alert-danger alert-dismissible">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+                                        <h4><i class="icon fa fa-database"></i> Services Settings Not Found!</h4>
+                                        Please go to Products > Setup and enter the Services Settings.
+                                    </div>
+                                @endif
                             @endif
                             <!-- Total cost section -->
                             <div class="col-sm-6 col-sm-offset-6 no-padding">
@@ -126,7 +140,7 @@
                                             <div class="form-group no-margin">
                                                 <label for="" class="col-sm-4 control-label"></label>
                                                 <div class="col-sm-8">
-                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1" checked></label>
+                                                    <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">Add VAT <input class="rdo-iCheck" type="checkbox" id="rdo_add_vat" name="add_vat" value="1" {{ ($procurement->add_vat == 1) ? ' checked' : '' }}></label>
                                                 </div>
                                             </div>
                                         </td>
@@ -144,13 +158,13 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-send"></i> Submit</button>
+					<button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
+                        <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
                     </div>
                     <!-- /.box-footer -->
                 </form>
             </div>
         </div>
-
         <!-- Include modal -->
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])
@@ -176,6 +190,10 @@
             });
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
+			//Cancel button click event
+            $('#back_button').click(function () {
+                location.href = '/procuremnt/modify_request/{{$procurement->id}}';
+            });
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -195,17 +213,19 @@
             @if(Session('changes_saved'))
                 $('#success-action-modal').modal('show');
             @endif
+
             //Add more modules
             var max_fields      = 15; //maximum input boxes allowed
             var wrapper         = $(".input-fields-wrap"); //Fields wrapper
             var add_button      = $("#add_row"); //Add button ID
-            var x = 1; //initial text box count
-            var xp = 0; //initial text box count
-            $(add_button).click(function(e){ //on add input button click
+            var x = {{ ($procurement->procurementItems && $itemType == 2) ? count($procurement->procurementItems) : 1 }}; //initial text box count
+            var xp = {{ ($procurement->procurementItems && $itemType == 2) ? count($procurement->procurementItems) - 1 : 1 }}; //initial text box count
+            console.log(xp);
+			$(add_button).click(function(e){ //on add input button click
                 e.preventDefault();
                 if(x < max_fields){ //max input box allowed
                     x++; //text box increment
-                    xp++; //text box increment
+					xp++; //text box increment
                     $(wrapper).append(`
                         <tr>
                             <td style="width: 10px; vertical-align: middle;" nowrap>${x}</td>
@@ -225,6 +245,7 @@
                     `); //add input box
                 }
             });
+
             $(wrapper).on("click",".remove_row", function(e){ //user click on remove text
                 e.preventDefault(); $(this).parent('td').parent('tr').remove(); x--; subtotal();
             });
@@ -270,7 +291,8 @@
 				$( ".item-price" ).each(function( index ) {
 					//console.log( index + ": " + $( this ).val() );
                     var price = parseInt($( this ).val()) || 0;
-					totalPrice[index] = price * quantities[index] ;
+					totalPrice[index] = price * quantities[index];
+					//console.log(index);
 					$("#total_price_" + index ).html('R ' + totalPrice[index].formatMoney(2));
                 });
 				const sum = totalPrice.reduce(add);

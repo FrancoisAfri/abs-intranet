@@ -1153,6 +1153,9 @@ Route::post('procurement/appoverequests', 'procurementRequestController@appoveRe
 Route::get('procurement/setup', 'procurementRequestController@showSetup');
 Route::post('procurement/setups/{setup}', 'procurementRequestController@addSetup');
 Route::post('procurement/setups', 'procurementRequestController@addSetup');
+Route::get('procuremnt/modify_request/{procurement}', 'procurementRequestController@updateproIndex');
+Route::post('procuremnt/adjust_modification/{procurement}', 'procurementRequestController@adjustProcurementEdit');
+Route::post('procuremnt/update/{procurement}', 'procurementRequestController@updateProcurement');
 // Complaints & Compliments
 Route::get('complaints/create', 'ComplaintsController@create');
 Route::post('complaints/add', 'ComplaintsController@store');

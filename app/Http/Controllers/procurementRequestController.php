@@ -120,7 +120,6 @@ class procurementRequestController extends Controller
             }
         }
 		
-
         $data['page_title'] = 'Procurement';
         $data['page_description'] = 'Create Request';
         $data['breadcrumb'] = [
@@ -999,7 +998,6 @@ class procurementRequestController extends Controller
 		$roles = DB::table('hr_roles')
 				->where('status', 1)
 				->get();
-		//return $procurementSetup;
         $data['procurementSetup'] = $procurementSetup;
         $data['roles'] = $roles;
         $data['page_title'] = "Procurement";
@@ -1012,7 +1010,7 @@ class procurementRequestController extends Controller
         $data['active_mod'] = 'Procurement';
         $data['active_rib'] = 'Setup';
 
-        AuditReportsController::store('Stock Management', 'view Stock Setup Page', "Accessed By User", 0);
+        AuditReportsController::store('Procurement', 'view Stock Setup Page', "Accessed By User", 0);
         return view('procurement.setup')->with($data);
     }
 	
@@ -1058,4 +1056,187 @@ class procurementRequestController extends Controller
 		$pdf->loadHTML($view);
 		return $pdf->output();
     }
+	// procurement edit
+	public function updateproIndex(ProcurementRequest $procurement)
+    {
+        $procurement->load('procurementItems','procurementItems.products');
+		$products = product_products::where('status', 1)->where('stock_type', '<>',1)->orderBy('name', 'asc')->get();
+		$employees = DB::table('hr_people')
+                ->select('hr_people.*')
+                ->where('hr_people.status', 1)
+                ->where('hr_people.id', $procurement->employee_id)
+				->orderBy('first_name', 'asc')
+				->orderBy('surname', 'asc')
+				->get();
+
+		$employeesOnBehalf = DB::table('hr_people')
+			->select('hr_people.*')
+			->where('hr_people.status', 1)
+			->orderBy('first_name', 'asc')
+			->orderBy('surname', 'asc')
+			->get();
+
+		$data['employees'] = $employees;
+		$data['employeesOnBehalf'] = $employeesOnBehalf;
+        $data['page_title'] = 'Procurement';
+        $data['page_description'] = 'Modify Request';
+        $data['breadcrumb'] = [
+            ['title' => 'Procurement', 'path' => '/procurement/seach_request', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Modify', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Procurement';
+        $data['active_rib'] = 'search';
+        $data['procurement'] = $procurement;
+        $data['products'] = $products;
+        AuditReportsController::store('Procurement', 'Update Procurement Request page Accessed', 'Accessed By User', 0);
+
+        return view('procurement.edit_procurement')->with($data);
+    }
+	
+	public function adjustProcurementEdit(Request $request, ProcurementRequest $procurement)
+    {
+        $procurement->load('procurementItems','procurementItems.products');
+		$validator = Validator::make($request->all(), [
+            'item_type' => 'bail|required|integer|min:1',
+            'title_name' => 'required',
+        ]);
+		
+        $itemType = $request->input('item_type');
+
+        $validator->after(function ($validator) use ($request, $itemType) {
+            $products = $request->input('product_id');
+
+            if (($itemType == 1) && !$products) {
+                $validator->errors()->add('product_id', 'Please make sure you select at least a product or a package.');
+            }
+        });
+
+        $validator->validate();
+        //Get products
+        $productIDs = $request->input('product_id');
+        $products = [];
+        if (count($productIDs) > 0) {
+            $products = product_products::whereIn('id', $productIDs)
+                ->with(['ProductPackages', 'productPrices' => function ($query) {
+                    $query->orderBy('id', 'desc');
+                    $query->limit(1);
+                }])
+                ->orderBy('category_id')
+                ->orderBy('name')
+                ->get();
+            //get products current prices
+            foreach ($products as $product) {
+                $currentPrice = ($product->productPrices->first())
+                    ? $product->productPrices->first()->price : (($product->price) ? $product->price : 0);
+                $product->current_price = $currentPrice;
+                $product->total_price = $currentPrice ;
+            }
+        }
+
+        $data['page_title'] = 'Procurement';
+        $data['page_description'] = 'Modify Request';
+        $data['breadcrumb'] = [
+            ['title' => 'Procurement', 'path' => '/procurement/seach_request', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Search', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Procurement';
+        $data['active_rib'] = 'Search';
+        $data['itemType'] = $itemType;
+        $data['title_name'] = $request->input('title_name');
+        $data['employee_id'] = $request->input('employee_id');
+        $data['on_behalf'] = $request->input('on_behalf');
+        $data['on_behalf_employee_id'] = $request->input('on_behalf_employee_id');
+        $data['special_instructions'] = $request->input('special_instructions');
+        $data['justification_of_expenditure'] = $request->input('justification_of_expenditure');
+        $data['detail_of_expenditure'] = $request->input('detail_of_expenditure');
+        $data['procurement'] = $procurement;
+        $data['products'] = $products;
+        AuditReportsController::store('Procurement', 'Create Quote Page Accessed', 'Accessed By User', 0);
+
+        return view('procurement.edit_adjust_procurement')->with($data);
+    }
+
+    /**
+     * Update a quotation
+     *
+     * @return \Illuminate\Contracts\View\View
+     */
+    public function updateProcurement(Request $request, ProcurementRequest $procurement)
+    {
+        $validator = Validator::make($request->all(), [
+            'item_type' => 'bail|required|integer|min:1',
+            'title_name' => 'required',
+        ]);
+        $validator->validate();
+		
+		DB::transaction(function () use ($procurement, $request) {
+            $itemType = $request->input('item_type');
+            $procurement->item_type = ($itemType > 0) ? $itemType : null;
+            $procurement->title_name = ($request->input('title_name')) ? $request->input('title_name') : '';
+            $procurement->employee_id = $request->input('employee_id');
+            $procurement->on_behalf_of = ($request->input('on_behalf') > 0) ? $request->input('on_behalf') : null;
+            $procurement->on_behalf_employee_id = $request->input('on_behalf_employee_id');
+			$procurement->special_instructions = $request->input('special_instructions');
+            $procurement->justification_of_expenditure = $request->input('justification_of_expenditure');
+            $procurement->detail_of_expenditure = $request->input('detail_of_expenditure');
+            $procurement->add_vat = ($request->input('add_vat')) ? $request->input('add_vat') : null;
+            $procurement->update();
+
+            if ($itemType == 1) {
+                //save procurement's Procurement items
+                $prices = $request->input('price');
+                $quantities = $request->input('quantity');
+                $itemNames = $request->input('item_names');
+				// delete all previous record from table
+				DB::table('procurement_request_items')->where('procurement_id', $procurement->id)->delete();
+                if ($prices) {
+                    foreach ($prices as $productID => $price) {
+						$price = preg_replace('/(?<=\d)\s+(?=\d)/', '', $price);
+						$price = (double) $price;
+						$products = product_products::where('id', $productID)->first();
+						$item = new ProcurementRequestItems();
+						$item->procurement_id = $procurement->id;
+						$item->product_id = $productID;
+						$item->category_id = $products->category_id;
+						$item->quantity = $quantities[$productID];
+						$item->item_name = $itemNames[$productID];
+						$item->item_price = $price;
+						$item->date_added = time();
+						$item->save();
+                    }
+                }
+				
+            } 
+			elseif ($itemType == 2) {
+                //save procurement's Non Procurement Items
+                $descriptions = $request->input('description');
+                $prices = $request->input('no_price');
+                $quantities = $request->input('no_quantity');
+				// delete all previous record from table
+				DB::table('procurement_request_items')->where('procurement_id', $procurement->id)->delete();
+                if ($descriptions) {
+                    foreach ($descriptions as $key => $description) {
+                        $item = new ProcurementRequestItems();
+                        $item->procurement_id = $procurement->id;
+						$item->item_name = $description;
+                        $item->quantity = $quantities[$key];
+						$item->item_price = $prices[$key];
+						$item->date_added = time();
+                        $item->save();
+                    }
+                }
+            }
+			});
+			// Save procurement history
+			$history = new ProcurementHistory();
+			$history->action_date = time();
+			$history->user_id = Auth::user()->person->id;
+			$history->action = 'Procurement Request Modified';
+			$history->procurement_id = $procurement->id;
+			$history->status = $procurement->status;
+			$history->save();
+		
+        AuditReportsController::store('Procurement', 'Procurement Request Modified', 'Modified by user', 0);
+        return redirect("/procurement/viewrequest/$procurement->id")->with(['success_add' => 'The procurement request has been successfully updated!']);
+	}
 }
