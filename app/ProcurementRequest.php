@@ -39,4 +39,12 @@ class ProcurementRequest extends Model
     {
         return $this->belongsTo(ProcurementApproval_steps::class, 'status');
     }
+	public function histories()
+    {
+        return $this->hasMany(ProcurementHistory::class, 'procurement_id');
+    }
+	public function quotations()
+    {
+        return $this->hasMany(ProcurementQuotations::class, 'procurement_id');
+    }
 }

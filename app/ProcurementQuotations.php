@@ -16,4 +16,13 @@ class ProcurementQuotations extends Model
          return $this->belongsTo(ProcurementRequest::class, 'procurement_id');
         
     }
+	
+	public function companyQuote()
+    {
+        return $this->belongsTo(ContactCompany::class, 'supplier_id');
+    }
+	public function clientQuote()
+    {
+        return $this->belongsTo(ContactPerson::class, 'contact_id');
+    }
 }

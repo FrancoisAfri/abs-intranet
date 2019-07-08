@@ -16,8 +16,12 @@ class ProcurementHistory extends Model
      *
      * @return  \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function requestStatus()
+    public function statusHistory()
     {
         return $this->belongsTo(ProcurementApproval_steps::class, 'status');
+    }
+	public function historyEmployees()
+    {
+        return $this->belongsTo(HRPerson::class, 'user_id');
     }
 }

@@ -1,4 +1,4 @@
-<div id="stock-reject-modal" class="modal modal-default fade">
+<div id="request-reject-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="decline-stock-request-modal">

@@ -1,19 +1,8 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
- <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <!-- bootstrap datepicker -->
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
-    <!--  -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
-          rel="stylesheet">
-    <!-- iCheck -->
-	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
-	<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/green.css">
+    <!-- bootstrap file input -->
+    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 @endsection
 @section('content')
 	<div class="row">
@@ -57,7 +46,7 @@
 						</tr>
 					</table>
 					<table class="table table-striped table-bordered">
-						<hr class="hr-text" data-content="Procurement Request Items">
+						<hr class="hr-text" data-content="PROCUREMENT REQUEST ITEMS">
 						<tr>
 							<td>#</td>
 							<td><b>Category</b></td>
@@ -125,6 +114,71 @@
 							<td></td>
 						</tr>
 					</table>
+					<!-- procurement histories-->
+					<hr class="hr-text" data-content="PROCUREMENT AUDIT TRAIL">
+					<div class="timeline-panel" style="max-height: 300px; overflow-y: scroll; overflow-x: scroll;">
+						<table class="table table-striped table-bordered">
+							<tr>
+								<td>#</td>
+								<td><b>Date</b></td>
+								<td><b>Employee</b></td>
+								<td><b>Note</b></td>
+								<td><b>Status</b></td>
+							</tr>
+							@if (count($procurement->histories) > 0)
+								@foreach ($procurement->histories as $history)
+									<tr>
+										<td>{{ $loop->iteration }}</td>
+										<td>{{ !empty($history->action_date) ? date('d M Y H i s', $history->action_date) : '' }}</td>
+										<td>{{ !empty($history->historyEmployees->first_name) ? $history->historyEmployees->first_name." ".$history->historyEmployees->surname : '' }}</td>
+										<td>{{ !empty($history->action) ? $history->action : '' }}</td>
+										<td>{{ !empty($history->statusHistory) ? $history->statusHistory->step_name : '' }}</td>
+									</tr>
+								@endforeach
+							@else
+								<tr><td colspan="5"></td><td style="text-align:center"></td></tr>
+							@endif
+						</table>
+					</div>
+					<!-- procurement quotations-->
+					<hr class="hr-text" data-content="PROCUREMENT  QUOTATIONS">
+					<div class="timeline-panel" style="max-height: 300px; overflow-y: scroll; overflow-x: scroll;">
+						<table class="table table-striped table-bordered">
+							<tr>
+								<td>#</td>
+								<td><b>Date Added</b></td>
+								<td><b>Supplier</b></td>
+								<td><b>Contact Person</b></td>
+								<td style="text-align:center"><b>Total Price</b></td>
+								<td><b>Comment</b></td>
+								<td><b>Attachment</b></td>
+							</tr>
+							@if (count($procurement->quotations) > 0)
+								@foreach ($procurement->quotations as $quotation)
+									<tr>
+										<td>{{ $loop->iteration }}</td>
+										<td>{{ !empty($quotation->date_added) ? date('d M Y H i s', $quotation->date_added) : '' }}</td>
+										<td>{{ !empty($quotation->companyQuote->name) ? $quotation->companyQuote->name : '' }}</td>
+										<td>{{ !empty($quotation->clientQuote->first_name) ? $quotation->clientQuote->first_name." ".$quotation->clientQuote->surname : '' }}</td>
+										<td style="text-align:center">{{ !empty($quotation->total_cost) ? $quotation->total_cost : '' }}</td>
+										<td>{{ !empty($quotation->comment) ? $quotation->comment : '' }}</td>
+										<td> @if(!empty($quotation->attachment))
+                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                                   href="{{ Storage::disk('local')->url("Procurement Quotations/$quotation->attachment") }}"
+                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+                                            @else
+                                                <a class="btn btn-default pull-centre btn-xs"><i
+                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+                                            @endif
+										</td>
+									</tr>
+								@endforeach
+							@else
+								<tr><td colspan="7"></td></tr>
+							@endif
+							<tr><td  colspan="7"><button type="button" id="add_quotations" class="btn btn-primary pull-right" data-toggle="modal" data-target="#quotation-add-modal"><i class="fa fa-plus-circle"></i> Add Quotation</button></td></tr>
+						</table>
+					</div>
                     <!-- /.box-body -->
                     <div class="box-footer">
 						<button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Back</button>
@@ -137,156 +191,75 @@
 								id="request_approved" onclick="postData({{$procurement->id}}, 'request_approval');">
 								<i class="fa fa-check"></i> Approve Request</button>
 							<button type="button" class="btn btn-primary btn-danger pull-right" data-toggle="modal"
-                            data-target="#procurement-reject-modal" data-id="{{ $procurement->id }}"
+                            data-target="#request-reject-modal" data-id="{{ $procurement->id }}"
 							><i class="fa fa-times"></i> Reject Request
 							</button>
 						@endif
                     </div>
                 </div>
             </div>
-			@include('procurement.partials.edit_request_modal')
-			@include('procurement.partials.stock_request_rejection')
+			@include('procurement.partials.edit_quotation')
+			@include('procurement.partials.quotation_add_modal')
+			@include('procurement.partials.request_rejection')
 			@if (count($procurement) > 0)
                 @include('procurement.warnings.items_warning_action', ['modal_title' => 'Remove Item', 'modal_content' => 'Are you sure you want to remove this item? This action cannot be undone.'])
             @endif
-
 		</div>
     </div>
 @endsection
 @section('page_script')
-<!-- DataTables -->
-	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-	<script src="/custom_components/js/modal_ajax_submit.js"></script>
-	<!-- time picker -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-	<!-- Select2 -->
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<!-- End Bootstrap File input -->
-	<script src="/custom_components/js/modal_ajax_submit.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-	<!-- iCheck -->
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-			type="text/javascript"></script>
-	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-			type="text/javascript"></script>
-	<!-- the main fileinput plugin file -->
-	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+    <!-- Start Bootstrap File input -->
+    <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
+    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
+    <!-- the main fileinput plugin file -->
+    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+    <!-- optionally if you need translation for your language then include locale file as mentioned below
+    <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
+    <!-- End Bootstrap File input -->
 
-	<!-- InputMask -->
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
 	<script type="text/javascript">
-		//Cancel button click event
-	$(function () {
-		$('#example2').DataTable({
-			"paging": true,
-			"lengthChange": true,
-			"searching": true,
-			"ordering": true,
-			"info": true,
-			"autoWidth": true
-		});
-	});
 
 	$(function () {
 		//Tooltip
 		$('[data-toggle="tooltip"]').tooltip();
 		//Cancel button click event
-            document.getElementById("cancel").onclick = function () {
-				if ("{{$back}}" === '')
-					location.href = "/procurement/create_request";
-				else if ("{{$back}}" === 'procurement') location.href = "/procurement/request_approval";
-				else location.href = "/procurement/seach_request";
-            };
+		document.getElementById("cancel").onclick = function () {
+			if ("{{$back}}" === '')
+				location.href = "/procurement/create_request";
+			else if ("{{$back}}" === 'procurement') location.href = "/procurement/request_approval";
+			else location.href = "/procurement/seach_request";
+		};
 		//Vertically center modals on page
 		function reposition() {
 			var modal = $(this),
-				dialog = modal.find('.modal-dialog');
+					dialog = modal.find('.modal-dialog');
 			modal.css('display', 'block');
 
 			// Dividing by two centers the modal exactly, but dividing by three
 			// or four works better for larger screens.
 			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
 		}
-
 		// Reposition when a modal is shown
 		$('.modal').on('show.bs.modal', reposition);
 		// Reposition when the window is resized
-		$(window).on('resize', function () {
+		$(window).on('resize', function() {
 			$('.modal:visible').each(reposition);
 		});
-
 		//Show success action modal
 		$('#success-action-modal').modal('show');
-
-		$(".js-example-basic-multiple").select2();
-
 		$(".select2").select2();
-		// call hide on_behalf_field
-		$('.on_behalf_field').hide();
-		$('input').iCheck({
-			checkboxClass: 'icheckbox_square-green',
-			radioClass: 'iradio_square-green',
-			increaseArea: '20%' // optional
-		});
-		$('#on_behalf').on('ifChecked', function(event){
-			$('.on_behalf_field').show();
-		});
-		$('#on_behalf').on('ifUnchecked', function(event){
-			$('.on_behalf_field').hide();
-			$('#on_behalf_employee_id').val('');
-		});
-
-		//Post form to server using ajax (add)
-		$('#edit-request-modal').on('shown.bs.modal', function (e) {
-			var btnEdit = $(e.relatedTarget);
-			JobId = btnEdit.data('id');
-			var storeID = btnEdit.data('store_id');
-			var employeeID = btnEdit.data('employee_id');
-			var onBehalfEmployeeID = btnEdit.data('on_behalf_employee_id');
-			var requestRemarks = btnEdit.data('request_remarks');
-			var titleName = btnEdit.data('title_name');
-			var onBehalfOf = btnEdit.data('on_behalf_of');
-			
-			var modal = $(this);
-			modal.find('#on_behalf_of').val(onBehalfOf);
-			modal.find('#request_remarks').val(requestRemarks);
-			modal.find('#title_name').val(titleName);
-			modal.find('select#on_behalf_employee_id').val(onBehalfEmployeeID);
-			modal.find('select#employee_id').val(employeeID);
-			modal.find('select#store_id').val(storeID);
-			
-			if (onBehalfEmployeeID > 0)
-			{
-				$('.on_behalf_field').show();
-			}
-		});
-	  
-		$('#update_request').on('click', function () {
-			var strUrl = '/procurement/updateitems/' + {{$procurement->id}};
-			console.log(strUrl);
-			var formName = 'edit-request-form';
-			var modalID = 'edit-request-modal';
-			var submitBtnID = 'update_request';
-			var redirectUrl = '/procurement/viewrequest/{{ $procurement->id }}';
-			var successMsgTitle = 'Record Updated!';
-			var successMsg = 'The Record  has been updated successfully.';
-			var Method = 'PATCH'
-			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-		});
 		var stockID;
 		$('#remove-items-warning-modal').on('shown.bs.modal', function (e) {
 			var btnDelete = $(e.relatedTarget);
@@ -302,8 +275,7 @@
 			var successMsg = 'Item has been removed successfully.';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
-		
-				//Post form to server using ajax (add)
+		//Post form to server using ajax (add)
 		$('#save-rejection-reason').on('click', function () {
 			var strUrl = '/procurement/reject-reason/' + {{$procurement->id}};
 			var formName = 'decline-procurement-request-modal';
@@ -315,48 +287,50 @@
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 		});
 		//
+		//Post perk form to server using ajax (add)
+		$('#save-quote').on('click', function() {
+			var strUrl = '/procuremnt/quote/new/'+ {{$procurement->id}};
+			var formName = 'add-quote-form';
+			var modalID = 'quotation-add-modal';
+			var submitBtnID = 'save-quote';
+			var redirectUrl = '/procurement/viewrequest/'+ {{$procurement->id}} +'/back';
+			var successMsgTitle = 'Quotation Added!';
+			var successMsg = 'The new quotation has been added successfully!';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+
+		//Post quotation form to server using ajax (edit)
+		$('#update-quotation').on('click', function() {
+			var strUrl = '/appraisal/perks/' + perkID;
+			var formName = 'edit-perk-form';
+			var modalID = 'edit-perk-modal';
+			var submitBtnID = 'update-perk';
+			var redirectUrl = '/appraisal/perks';
+			var successMsgTitle = 'Changes Saved!';
+			var successMsg = 'The perk details have been updated successfully!';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+
+		//pass perk data to the edit perk modal
+		var perkID;
+		$('#edit-quotation-modal').on('show.bs.modal', function (e) {
+			var btnEdit = $(e.relatedTarget);
+			perkID = btnEdit.data('id');
+			var name = btnEdit.data('name');
+			var desc = btnEdit.data('description');
+			var percent = btnEdit.data('req_percent');
+			var perkImg = btnEdit.data('img');
+			var modal = $(this);
+			modal.find('#name').val(name);
+			modal.find('#description').val(desc);
+			modal.find('#req_percent').val(percent);
+			//show perk image if any
+			var imgDiv = modal.find('#perk-img');
+			imgDiv.empty();
+			var htmlImg = $("<img>").attr('src', perkImg).attr('class', 'img-responsive img-thumbnail').attr('style', 'max-height: 235px;');
+			imgDiv.html(htmlImg);
+		});
 	});
-	function clone(id, file_index, child_id) {
-		var clone = document.getElementById(id).cloneNode(true);
-		clone.setAttribute("id", file_index);
-		clone.setAttribute("name", file_index);
-		clone.style.display = "table-row";
-		clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
-		clone.querySelector('#' + child_id).disabled = false;
-		clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
-		return clone;
-	}
-	function addFile() {
-		var table = document.getElementById("tab_tab");
-		var file_index = document.getElementById("file_index");
-		file_index.value = ++file_index.value;
-		var file_clone = clone("product_row", file_index.value, "product_id");
-		var name_clone = clone("quantity_row", file_index.value, "quantity");
-		var final_row = document.getElementById("final_row").cloneNode(false);
-		table.appendChild(file_clone);
-		table.appendChild(name_clone);
-		table.appendChild(final_row);
-		var total_files = document.getElementById("total_files");
-		total_files.value = ++total_files.value;
-		//change the following using jquery if necessary
-		var remove = document.getElementsByName("remove");
-		for (var i = 0; i < remove.length; i++)
-			remove[i].style.display = "inline";
-	}
-	
-	function removeFile(row_name)
-	{
-		var row=row_name.parentNode.parentNode.id;
-		var rows=document.getElementsByName(row);
-		while(rows.length>0)
-			rows[0].parentNode.removeChild(rows[0]);
-		var total_files = document.getElementById("total_files");
-		total_files.value=--total_files.value;
-		var remove=document.getElementsByName("remove");
-		if(total_files.value == 1)
-			remove[1].style.display='none';
-	}
-	
 	function postData(id, data)
 	{
 		if (data == 'request_approval')

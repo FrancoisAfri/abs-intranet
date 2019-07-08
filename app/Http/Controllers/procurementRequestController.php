@@ -7,6 +7,7 @@ use App\DivisionLevel;
 use App\HRPerson;
 use App\HRRoles;
 use App\ProcurementHistory;
+use App\ProcurementQuotations;
 use App\ProcurementApproval_steps;
 use App\stockLevelFive;
 use App\stockLevel;
@@ -15,6 +16,8 @@ use App\product_products;
 use App\ProcurementRequest;
 use App\ProcurementSetup;
 use App\ProcurementRequestItems;
+use App\ContactCompany;
+use App\ContactPerson;
 use App\Mail\ProcurementNextStep;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
@@ -309,7 +312,7 @@ class procurementRequestController extends Controller
 	// View Request items
 	public function viewRequest(ProcurementRequest $procurement, $back='', $app='')
     {
-		if (!empty($procurement)) $procurement = $procurement->load('procurementItems','procurementItems.products','procurementItems.categories','employees','employeeOnBehalf','requestStatus');
+		if (!empty($procurement)) $procurement = $procurement->load('procurementItems','procurementItems.products','procurementItems.categories','employees','employeeOnBehalf','requestStatus','histories','histories.historyEmployees','histories.statusHistory','quotations','quotations.companyQuote','quotations.clientQuote');
 		//return $procurement;
 		$hrID = Auth::user()->person->id;
 		// Save procurement history
@@ -338,6 +341,8 @@ class procurementRequestController extends Controller
 			->orderBy('first_name', 'asc')
 			->orderBy('surname', 'asc')
 			->get();
+		$companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
 		// calculate totals and subtotal
 		$subtotal = 0;
 		foreach ($procurement->procurementItems as $item) {
@@ -356,6 +361,8 @@ class procurementRequestController extends Controller
 		$data['vatAmount'] = $vatAmount;
 		$data['subtotal'] = $subtotal;
 		$data['flow'] = $flow;
+		$data['companies'] = $companies;
+        $data['contactPeople'] = $contactPeople;
 		$data['employees'] = $employees;
 		$data['employeesOnBehalf'] = $employeesOnBehalf;
 		$data['products'] = $products;
@@ -371,6 +378,67 @@ class procurementRequestController extends Controller
 
         AuditReportsController::store('Procurement', 'View Request', 'Accessed By User', 0);
         return view('procurement.view_request')->with($data);
+    }
+	
+	// save quotation
+	public function saveQuote(Request $request, ProcurementRequest $procurement)
+    {
+        $this->validate($request, [
+            'company_id' => 'required',
+            'contact_person_id' => 'required',
+            'attachment' => 'required',
+        ]);
+
+        $quotation = new ProcurementQuotations();
+        $quotation->procurement_id = $procurement->id;
+        $quotation->supplier_id = ($request->input('company_id')) ? $request->input('company_id') : 0;;
+        $quotation->contact_id = ($request->input('contact_person_id')) ? $request->input('contact_person_id') : 0;;
+        $quotation->comment = ($request->input('comment')) ? $request->input('comment') : 0;;
+        $quotation->date_added = time();
+        $quotation->total_cost = ($request->input('total_cost')) ? $request->input('total_cost') : 0;;
+        $quotation->save();
+
+        //Upload the quotation's doc
+        if ($request->hasFile('attachment')) {
+            $fileExt = $request->file('attachment')->extension();
+            if (in_array($fileExt, ['pdf', 'doc']) && $request->file('attachment')->isValid()) {
+                $fileName = time() . "_procurement_document_" . '.' . $fileExt;
+                $request->file('attachment')->storeAs('Procurement Quotations', $fileName);
+                //Update file name in the table
+                $quotation->attachment = $fileName;
+                $quotation->update();  
+            }
+        }
+
+        AuditReportsController::store('Procurement', 'Procurement Quotation Added', "Added By User", 0);
+        return response()->json();
+    }
+	// update quotation
+	
+	public function updateQuote(Request $request, AppraisalPerk $perk)
+    {
+        $this->validate($request, [
+            'name' => 'bail|required|min:2',
+            'req_percent' => 'bail|required|numeric|min:1',
+        ]);
+
+        $perkData = $request->all();
+        $perk->update($perkData);
+
+        //Upload the perk's image
+        if ($request->hasFile('img')) {
+            $fileExt = $request->file('img')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('img')->isValid()) {
+                $fileName = $perk->id . "_perk_img_" . '.' . $fileExt;
+                $request->file('img')->storeAs('perks', $fileName);
+                //Update file name in the appraisal_perks table
+                $perk->img = $fileName;
+                $perk->update();
+            }
+        }
+
+        AuditReportsController::store('Performance Appraisal', 'Perk Details Edited By User', "Perk ID: $perk->id, Perk Name: $perk->name", 0);
+        return response()->json(['perk_id' => $perk->id, 'perk_name' => $perk->name], 200);
     }
 	
 	// Cancel Request 
