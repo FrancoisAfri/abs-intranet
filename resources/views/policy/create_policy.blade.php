@@ -74,13 +74,11 @@
                                             @endif
                                         </div>
                                     </td>
-
                                     <td nowrap>
                                         <a href="{{ '/system/policy/viewUsers/' . $policy->id }}" id="policy_users"
                                            class="btn btn-primary  btn-xs"><i class="fa fa-user"> </i> View Users</a>
                                     </td>
                                     </td>
-
                                 </tr>
                             @endforeach
                         @else

@@ -103,6 +103,13 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group{{ $errors->has('delivery_type') ? ' has-error' : '' }}">
+                            <label for="delivery_type" class="col-sm-2 control-label"> Delivery / Collection</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_delivery" name="delivery_type" value="1"  {{ ($procurement->delivery_type == 1) ? 'checked' : '' }}> Delivery</label>
+                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_collection" name="delivery_type" value="2"  {{ ($procurement->delivery_type == 2) ? 'checked' : '' }}>  Collection</label>
+                            </div>
+                        </div>
                         <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
                         <div class="form-group products-field{{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-sm-2 control-label">Products</label>

@@ -22,6 +22,7 @@
                     <input type="hidden" name="special_instructions" value="{{ $special_instructions }}">
                     <input type="hidden" name="justification_of_expenditure" value="{{ $justification_of_expenditure }}">
                     <input type="hidden" name="detail_of_expenditure" value="{{ $detail_of_expenditure }}">
+                    <input type="hidden" name="delivery_type" value="{{ $delivery_type }}">
                     <div class="box-header with-border">
                         <h3 class="box-title">Procurement Request</h3>
                     </div>

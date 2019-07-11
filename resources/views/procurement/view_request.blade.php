@@ -39,8 +39,8 @@
 							<td>{{ !empty($procurement->status) ? $procurement->requestStatus->step_name : '' }}</b></td>
 						</tr>
 						<tr>
-							<td><b>Rejection Reason:</b></td>
-							<td></b></td>
+							<td><b>Delivery / Collection:</b></td>
+							<td>{{ (!empty($procurement->delivery_type)) ?  $deleiveryType[$procurement->delivery_type] : ''}}</td>
 							<td><b>PO Number:</b></td>
 							<td>{{ (!empty($procurement->po_number)) ?  $procurement->po_number : ''}}</td>
 						</tr>
@@ -63,7 +63,7 @@
 										<td>{{ !empty($items->categories->name) ? $items->categories->name : '' }}</td>
 										<td>{{ !empty($items->products->name) ? $items->products->name : '' }}</td>
 										<td style="text-align:right">{{ !empty($items->quantity) ? $items->quantity : '' }}</td>
-										<td style="text-align:right">{{ !empty($items->item_price) ? $items->item_price : '' }}</td>
+										<td style="text-align:right">{{ !empty($items->item_price) ? 'R ' .number_format($items->item_price, 2) : '' }}</td>
 										<td>
 											@if ($procurement->status == 1)
 												<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
@@ -80,7 +80,7 @@
 										<td>{{ $loop->iteration }}</td>								<td>N/A</td>
 										<td>{{ !empty($items->item_name) ? $items->item_name : '' }}</td>
 										<td style="text-align:center">{{ !empty($items->quantity) ? $items->quantity : '' }}</td>
-										<td style="text-align:center">{{ !empty($items->item_price) ? $items->item_price : '' }}</td>
+										<td style="text-align:center">{{ !empty($items->item_price) ? 'R ' .number_format($items->item_price, 2) : '' }}</td>
 										<td>
 											@if ($procurement->status == 1)
 												<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
@@ -93,24 +93,21 @@
 								@endforeach
 							@endif
 						@else
-							<tr><td colspan="5"></td><td style="text-align:center">{{ !empty($items->item_price) ? $items->item_price : '' }}</td><td></td></tr>
+							<tr><td colspan="6"></td></tr>
 						@endif
 						<tr>
-							<th style="text-align: center;"  colspan="6">Totals</th>
-						</tr>
-						<tr>
 							<th style="text-align: right;"  colspan="4">Subtotal:</th>
-							<td style="text-align: right;" id="subtotal" nowrap>{{ 'R ' . number_format($subtotal, 2) }}</td>
+							<td style="text-align: center;" id="subtotal" nowrap><b>{{ 'R ' . number_format($subtotal, 2) }}</b></td>
 							<td></td>
 						</tr>
 						<tr>
-							<th style="text-align: right; vertical-align: middle;"  colspan="4">VAT:</th>
-							<td style="text-align: right; vertical-align: middle;" id="vat-amount" nowrap>{{ ($vatAmount > 0) ? 'R ' . number_format($vatAmount, 2) : '&mdash;' }}</td>
+							<th style="text-align: right;"  colspan="4">VAT:</th>
+							<td style="text-align: center;" id="vat-amount" nowrap><b>{{ ($vatAmount > 0) ? 'R ' . number_format($vatAmount, 2) : '&mdash;' }}</b></td>
 							<td></td>
 						</tr>
 						<tr>
-							<th style="text-align: right; vertical-align: middle;"  colspan="4">Total:</th>
-							<td style="text-align: right; vertical-align: middle;" id="total-amount" nowrap>{{ 'R ' . number_format($total, 2) }}</td>
+							<th style="text-align: right;"  colspan="4">Total:</th>
+							<td style="text-align: center;" id="total-amount" nowrap><b>{{ 'R ' . number_format($total, 2) }}</b></td>
 							<td></td>
 						</tr>
 					</table>
@@ -160,7 +157,7 @@
 										<td>{{ !empty($quotation->date_added) ? date('d M Y H i s', $quotation->date_added) : '' }}</td>
 										<td>{{ !empty($quotation->companyQuote->name) ? $quotation->companyQuote->name : '' }}</td>
 										<td>{{ !empty($quotation->clientQuote->first_name) ? $quotation->clientQuote->first_name." ".$quotation->clientQuote->surname : '' }}</td>
-										<td style="text-align:center">{{ !empty($quotation->total_cost) ? $quotation->total_cost : '' }}</td>
+										<td style="text-align:center">{{ !empty($quotation->total_cost) ? 'R ' .number_format($quotation->total_cost, 2) : '' }}</td>
 										<td>{{ !empty($quotation->comment) ? $quotation->comment : '' }}</td>
 										<td> @if(!empty($quotation->attachment))
                                                 <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
@@ -195,6 +192,7 @@
 							><i class="fa fa-times"></i> Reject Request
 							</button>
 						@endif
+						<a href="/procurement/print/{{ $procurement->id }}/pdf" target="_blank" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Request</a>
                     </div>
                 </div>
             </div>

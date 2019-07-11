@@ -31,7 +31,6 @@
                 </div>
                 <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
@@ -45,8 +44,7 @@
                             </div>
                         @endif
                             <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
-                                <label for="Leave_type" class="col-sm-2 control-label"> Report Type</label>
-
+                                <label for="application_type" class="col-sm-2 control-label"> Report Type</label>
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Leave Taken </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Leave Balance</label>
@@ -57,7 +55,6 @@
 
                                 </div>
                             </div>
-
                           <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employee</label>
                             <div class="col-sm-10">

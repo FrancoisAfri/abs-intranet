@@ -109,6 +109,13 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group{{ $errors->has('delivery_type') ? ' has-error' : '' }}">
+                            <label for="delivery_type" class="col-sm-2 control-label"> Delivery / Collection</label>
+                            <div class="col-sm-9">
+                                <label class="radio-inline rdo-iCheck" style="padding-left: 0px;"><input type="radio" id="rdo_delivery" name="delivery_type" value="1" checked> Delivery</label>
+                                <label class="radio-inline rdo-iCheck"><input type="radio" id="rdo_collection" name="delivery_type" value="2">  Collection</label>
+                            </div>
+                        </div>
                         <hr class="hr-text products-field" data-content="SELECT PRODUCTS">
 						<div class="form-group products-field {{ $errors->has('product_id') ? ' has-error' : '' }}">
                             <label for="product_id" class="col-sm-2 control-label">Products</label>
@@ -130,7 +137,6 @@
                 </form>
             </div>
         </div>
-
         <!-- Include modal -->
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])

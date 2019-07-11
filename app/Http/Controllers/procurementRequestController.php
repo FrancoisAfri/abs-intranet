@@ -131,6 +131,7 @@ class procurementRequestController extends Controller
         ];
         $data['active_mod'] = 'Procurement';
         $data['active_rib'] = 'create Request';
+        $data['delivery_type'] = $request->input('delivery_type');
         $data['item_type'] = $request->input('item_type');
         $data['date_created'] = $request->input('date_created');
         $data['title_name'] = $request->input('title_name');
@@ -170,6 +171,7 @@ class procurementRequestController extends Controller
             $itemType = $request->input('item_type');
             $procurement->item_type = ($itemType > 0) ? $itemType : 0;
             $procurement->on_behalf_of = ($request->input('on_behalf_of')) ? $request->input('on_behalf_of') : 0;
+            $procurement->delivery_type = ($request->input('delivery_type')) ? $request->input('delivery_type') : 0;
             $procurement->on_behalf_employee_id = ($request->input('on_behalf_employee_id')) ? $request->input('on_behalf_employee_id') : 0;
             $procurement->date_created =  time();
             $procurement->employee_id = $user->person->id;
@@ -356,10 +358,11 @@ class procurementRequestController extends Controller
 		$data['back'] = '';
 		if (!empty($back) && empty($app)) $data['back'] = "/procurement/seach_request";
 		if (!empty($app)) $data['back'] = "procurement";
-
+		$deleiveryType = array(1 => "Delivery", 2=> "Collection");
 		$data['total'] = $total;
 		$data['vatAmount'] = $vatAmount;
 		$data['subtotal'] = $subtotal;
+		$data['deleiveryType'] = $deleiveryType;
 		$data['flow'] = $flow;
 		$data['companies'] = $companies;
         $data['contactPeople'] = $contactPeople;
@@ -379,8 +382,33 @@ class procurementRequestController extends Controller
         AuditReportsController::store('Procurement', 'View Request', 'Accessed By User', 0);
         return view('procurement.view_request')->with($data);
     }
-	
-	// save quotation
+	//
+	// ViewPrintrequest
+	public function printRequest(procurement $procurement)
+    {
+		if (!empty($procurement)) $procurement = $procurement->load('procurementItems','procurementItems.products');
+		return $procurement;
+		$data['procurement'] = $procurement;	
+
+		AuditReportsController::store('Procurement', 'Request Printed For Email', "Accessed By User");
+		$companyDetails = CompanyIdentity::systemSettings();
+		$companyName = $companyDetails['company_name'];
+		$user = Auth::user()->load('person');
+
+		$data['support_email'] = $companyDetails['support_email'];
+		$data['company_name'] = $companyName;
+		$data['full_company_name'] = $companyDetails['full_company_name'];
+		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+		$data['date'] = date("d-m-Y");
+		$data['user'] = $user;
+		$data['file_name'] = 'ProcurementResquest';
+		$view = view('procurement.pdf_procurement', $data)->render();
+		$pdf = resolve('dompdf.wrapper');
+		$pdf->getDomPDF()->set_option('enable_html5_parser', true);
+		$pdf->loadHTML($view);
+		return $pdf->output();
+    }
+	// save procurement quotation
 	public function saveQuote(Request $request, ProcurementRequest $procurement)
     {
         $this->validate($request, [
@@ -409,13 +437,20 @@ class procurementRequestController extends Controller
                 $quotation->update();  
             }
         }
-
+		// Save procurement history
+		$history = new ProcurementHistory();
+		$history->action_date = time();
+		$history->user_id = Auth::user()->person->id;
+		$history->action = 'New Quotation Added';
+		$history->procurement_id = $procurement->id;
+		$history->status = $procurement->status;
+		$history->save();
         AuditReportsController::store('Procurement', 'Procurement Quotation Added', "Added By User", 0);
         return response()->json();
     }
 	// update quotation
 	
-	public function updateQuote(Request $request, AppraisalPerk $perk)
+	/*public function updateQuote(Request $request, AppraisalPerk $perk)
     {
         $this->validate($request, [
             'name' => 'bail|required|min:2',
@@ -439,24 +474,8 @@ class procurementRequestController extends Controller
 
         AuditReportsController::store('Performance Appraisal', 'Perk Details Edited By User', "Perk ID: $perk->id, Perk Name: $perk->name", 0);
         return response()->json(['perk_id' => $perk->id, 'perk_name' => $perk->name], 200);
-    }
+    }*/
 	
-	// Cancel Request 
-	public function cancelRequest(Request $request, ProcurementRequest $procurement)
-    {
-        if ($procurement && in_array($procurement->status, [2, 3, 4, 5])) {
-            $this->validate($request, [
-                'cancellation_reason' => 'required'
-            ]);
-            $user = Auth::user()->load('person');
-            $procurement->status = 10;
-            $procurement->canceller_id = $user->person->id;
-            $procurement->cancellation_reason = $request->input('cancellation_reason');
-            $procurement->update();
-
-            return response()->json(['success' => 'Request application successfully cancelled.'], 200);
-        }
-    }
 	//update
 	public function updateRequest(Request $request, ProcurementRequest $procurement) {
         $this->validate($request, [
@@ -509,6 +528,23 @@ class procurementRequestController extends Controller
         AuditReportsController::store('Procurement', 'Requested Item Removed', "Removed By User");
         return response()->json();
 
+    }
+	//
+	// Cancel Request 
+	public function cancelRequest(Request $request, ProcurementRequest $procurement)
+    {
+        if ($procurement && in_array($procurement->status, [2, 3, 4, 5])) {
+            $this->validate($request, [
+                'cancellation_reason' => 'required'
+            ]);
+            $user = Auth::user()->load('person');
+            $procurement->status = 10;
+            $procurement->canceller_id = $user->person->id;
+            $procurement->cancellation_reason = $request->input('cancellation_reason');
+            $procurement->update();
+
+            return response()->json(['success' => 'Request application successfully cancelled.'], 200);
+        }
     }
 	public function requestSearch()
     {
@@ -1099,31 +1135,7 @@ class procurementRequestController extends Controller
 
         AuditReportsController::store('Stock Management', 'Add Stock Settinfs', "Added By User", 0);
     }
-	// ViewPrintrequest
-	public function viewRequestPrint(procurement $procurement)
-    {
-		if (!empty($procurement)) $procurement = $procurement->load('procurementItems','procurementItems.products','procurementItems.categories','employees','employeeOnBehalf','requestStatus');
-				
-		$data['procurement'] = $procurement;	
-
-		AuditReportsController::store('Procurement', 'Request Printed For Email', "Accessed By User");
-		$companyDetails = CompanyIdentity::systemSettings();
-		$companyName = $companyDetails['company_name'];
-		$user = Auth::user()->load('person');
-
-		$data['support_email'] = $companyDetails['support_email'];
-		$data['company_name'] = $companyName;
-		$data['full_company_name'] = $companyDetails['full_company_name'];
-		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-		$data['date'] = date("d-m-Y");
-		$data['user'] = $user;
-		$data['file_name'] = 'ProcurementResquest';
-		$view = view('procurement.request_to_email', $data)->render();
-		$pdf = resolve('dompdf.wrapper');
-		$pdf->getDomPDF()->set_option('enable_html5_parser', true);
-		$pdf->loadHTML($view);
-		return $pdf->output();
-    }
+	
 	// procurement edit
 	public function updateproIndex(ProcurementRequest $procurement)
     {
@@ -1210,6 +1222,7 @@ class procurementRequestController extends Controller
         $data['active_mod'] = 'Procurement';
         $data['active_rib'] = 'Search';
         $data['itemType'] = $itemType;
+        $data['delivery_type'] = $request->input('delivery_type');
         $data['title_name'] = $request->input('title_name');
         $data['employee_id'] = $request->input('employee_id');
         $data['on_behalf'] = $request->input('on_behalf');
@@ -1225,7 +1238,7 @@ class procurementRequestController extends Controller
     }
 
     /**
-     * Update a quotation
+     * Update a procurement
      *
      * @return \Illuminate\Contracts\View\View
      */
@@ -1241,6 +1254,7 @@ class procurementRequestController extends Controller
             $itemType = $request->input('item_type');
             $procurement->item_type = ($itemType > 0) ? $itemType : null;
             $procurement->title_name = ($request->input('title_name')) ? $request->input('title_name') : '';
+            $procurement->delivery_type = ($request->input('delivery_type')) ? $request->input('delivery_type') : 0;
             $procurement->employee_id = $request->input('employee_id');
             $procurement->on_behalf_of = ($request->input('on_behalf') > 0) ? $request->input('on_behalf') : null;
             $procurement->on_behalf_employee_id = $request->input('on_behalf_employee_id');
