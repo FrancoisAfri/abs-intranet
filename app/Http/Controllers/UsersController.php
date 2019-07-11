@@ -325,6 +325,7 @@ class UsersController extends Controller
     public function store(Request $request ) {
         $this->validate($request, [
             'email' => 'unique:users,email',
+            'email' => 'unique:hr_people,email',
         ]);
 		//Save usr
 		$compDetails = CompanyIdentity::first();
