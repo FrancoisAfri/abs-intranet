@@ -41,7 +41,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div style="overflow-x:auto;">
                             @if($quoteType == 1)
                                 <table class="table table-striped table-bordered">
@@ -69,7 +68,7 @@
 
                                             <td style="vertical-align: middle;">{{ $loop->iteration }}</td>
                                             <td style="vertical-align: middle;">
-                                                {{ $product->name }}
+												{{ $product->name }}
                                                 @if($product->promotions->first())
                                                     &nbsp;<i class="fa fa-info-circle"></i>
                                                 @endif
@@ -400,5 +399,6 @@
                 j = (j = i.length) > 3 ? j % 3 : 0;
             return s + (j ? i.substr(0, j) + t : "") + i.substr(j).replace(/(\d{3})(?=\d)/g, "$1" + t) + (c ? d + Math.abs(n - i).toFixed(c).slice(2) : "");
         };
+		
     </script>
 @endsection

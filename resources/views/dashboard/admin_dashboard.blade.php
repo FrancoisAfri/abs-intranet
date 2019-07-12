@@ -12,7 +12,7 @@
                 <div class="box box-muted same-height-widget">
                     <div class="box-header with-border">
                         <i class="fa fa-comments-o"></i>
-                        <h3 class="box-title"> Company News</h3>
+                        <h3 class="box-title"> News Flash</h3>
                     </div>
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
@@ -32,7 +32,7 @@
                                            class="btn btn-default  btn-xs" target="_blank"><i class=""></i> Read more
                                         </a>
 										<b>{{$Cmsnews->description}}</b>
-                                        <img src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}" width="400" height="400">
+                                        <img class="img-responsive pad" src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}" width="400" height="400">
 
                                     </div>
                                 @endforeach
@@ -53,45 +53,25 @@
                 @include('dashboard.partials.view_news_modal')
             </div>
             <div class="col-md-6">
-                <div class="box box-muted same-height-widget">
-                    <div class="box-header with-border">
-                        <i class="fa fa-comments-o"></i>
-                        <h3 class="box-title"> Company CEO Message</h3>
-                    </div>
-                    <div class="container">
-                        <!--  <div class="page-header">
-                             <h1 id="timeline">Timeline</h1>
-                         </div> -->
-                        @if (!empty($ceonews))
-                            <ul class="timeline">
-                                <li>
-                                    <div class="timeline-badge"><i class="glyphicon glyphicon-check"></i></div>
-                                    <div class="timeline-panel" style="max-height: 300px; max-width: 450px; overflow-y: scroll; overflow-x: scroll;">
-                                        {{--<div class="no-padding" style="max-height: 220px; overflow-y: scroll;">--}}
-                                        <div class="timeline-heading">
-                                            <h4 class="timeline-title">
-												<p style="padding:0 15 px; float: left"><img src="{{ Storage::disk('local')->url("CMS/images/$ceonews->image") }}" width="250" height="220"></p>
-                                                <p style="margin-top:20px;"><N>{{!empty($ceonews->name) ? $ceonews->name : ''}}</N></p>
-                                            </h4>
-                                            <p>
-                                                <small class="text-muted"><i
-                                                            class="glyphicon glyphicon-time"></i> {{!empty($ceonews->date) ? date(' d M Y', $ceonews->date) : ''}}
-                                                </small>
-                                            </p>
-                                        </div>
-                                        <div class="timeline-body">
-                                            <p><font size="3">{!!$ceonews->summary!!}.</font></p>
-                                            <div>
-                                        </div>
-                                        <hr>
-                                    </div>
-                                </li>
-                            </ul>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
+				<div class="box box-widget">
+					<div class="box-header with-border">
+						<div class="user-block">
+							<span class="username">CEO Communication</span>
+							<span class="description">Posted - {{!empty($ceonews->date) ? date(' d M Y', $ceonews->date) : ''}}</span>
+						</div>
+						<div class="box-tools">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+							</button>
+							<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+						</div>
+					</div>
+					<div class="box-body" style="max-height: 400px; overflow-y: scroll;">
+						<img class="img-responsive pad" style="padding:0 15 px; float: left" width="250" height="220" alt="{{!empty($ceonews->name) ? $ceonews->name : ''}}" src="{{ Storage::disk('local')->url("CMS/images/$ceonews->image") }}">
+						<p><font size="3">{!!$ceonews->summary!!}</font></p>
+					</div>
+				</div>
+			</div>
+		</div>
     @endif
     @if($activeModules->where('code_name', 'appraisal')->first())
         <div class="row">
@@ -100,7 +80,6 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <h3 class="box-title">Employee Monthly Appraisal</h3>
-
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i>

@@ -115,7 +115,7 @@
     <script>
 
         $('#back_button').click(function () {
-            location.href = '/cms/viewnews';
+            location.href = '/cms/ceo/add_news';
         });
 
         $(function () {
