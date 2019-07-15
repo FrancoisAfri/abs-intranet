@@ -673,8 +673,6 @@ class QuotesController extends Controller
         //return $request->all();
         $user = Auth::user()->load('person');
         $status = 1;
-		$prices = $request->input('current_price');
-				return $prices;
         //save quote
         $quote = new Quotation();
         DB::transaction(function () use ($quote, $request, $highestLvl, $user) {
@@ -702,7 +700,6 @@ class QuotesController extends Controller
             if ($quoteType == 1) {
                 //save quote's products
                 $prices = $request->input('current_price');
-				return $prices;
                 $quantities = $request->input('quantity');
 				$comments = $request->input('comment');
                 if ($prices) {
