@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -40,6 +39,8 @@ use App\vehicle_config;
 use App\ContactPerson;
 use App\SmS_Configuration;
 use App\vehicle;
+use App\jobcard_maintanance;
+use App\jobcards_config;
 use App\FueltankTopUp;
 use App\vehicle_detail;
 use App\DivisionLevelFour;
@@ -53,6 +54,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\VehicleCommunication;
 use App\Mail\VehicleCommunicationsEmployees;
+use Illuminate\Contracts\Filesystem\Factory;
+
 class VehicleFleetController extends Controller
 {
 

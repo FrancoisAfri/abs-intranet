@@ -38,7 +38,6 @@
                                     <input type="hidden" name="use_procurement" value="0">
                                     <td colspan="3"><input type="checkbox" name="use_procurement"
                                                            value="1" {{(!empty($configuration->use_procurement) && $configuration->use_procurement === 1) ? 'checked ="checked"' : 0 }}>
-
                                     </td>
                                 </tr>
                                 <tr>
@@ -50,6 +49,33 @@
                                     </td>
                                 </tr>
                             </table>
+							<table class="table table-striped table-bordered">
+                                <hr class="hr-text" data-content="Directories">
+								<tr>
+                                    <td class="caption" colspan="2">Service File From</td>
+                                    <td colspan="3"><input type="text" class="form-control" id="service_file_from" name="service_file_from"
+												value="{{(!empty($configuration->service_file_from)) ? $configuration->service_file_from : '' }}" placeholder="Enter Service File From ...">				   
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="caption" colspan="2">Service File To</td>
+                                    <td colspan="3"><input type="text" class="form-control" id="service_file_to" name="service_file_to"
+												value="{{(!empty($configuration->service_file_to)) ? $configuration->service_file_to : '' }}" placeholder="Enter Service File To Directory  ...">				   
+                                    </td>
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Break Test From</td>
+                                    <td colspan="3"><input type="text" class="form-control" id="break_test_from" name="break_test_from"
+												value="{{(!empty($configuration->break_test_from)) ? $configuration->break_test_from : '' }}" placeholder="Enter Break Test From Directory ...">				   
+                                    </td>
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Break Test To</td>
+                                    <td colspan="3"><input type="text" class="form-control" id="break_test_to" name="break_test_to"
+												value="{{(!empty($configuration->break_test_to)) ? $configuration->break_test_to : '' }}" placeholder="Enter Break Test To Directory ...">				   
+                                    </td>
+                                </tr>
+							</table>
                         </div>
                         <br>
                         <div class="box-footer">

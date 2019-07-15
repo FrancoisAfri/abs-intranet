@@ -260,7 +260,7 @@ class JobcardController extends Controller
 
         $data['configuration'] = $configuration;
         $data['active_mod'] = 'Job Card Management';
-        $data['active_rib'] = 'SetUp';
+        $data['active_rib'] = 'Setup';
 
         AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed',"Job Card configuration Page Accessed", 0);
         return view('job_cards.configuration')->with($data);
@@ -273,6 +273,10 @@ class JobcardController extends Controller
 
         $config->use_procurement = !empty($SysData['use_procurement']) ? $SysData['use_procurement'] : 0;
         $config->mechanic_sms = !empty($SysData['mechanic_sms']) ? $SysData['mechanic_sms'] : 0;
+        $config->service_file_from = !empty($SysData['service_file_from']) ? $SysData['service_file_from'] : '';
+        $config->service_file_to = !empty($SysData['service_file_to']) ? $SysData['service_file_to'] : '';
+        $config->break_test_from = !empty($SysData['break_test_from']) ? $SysData['break_test_from'] : '';
+        $config->break_test_to = !empty($SysData['break_test_to']) ? $SysData['break_test_to'] : '';
         $config->update();
 
         AuditReportsController::store('Job Card Management', 'Job Card configuration Page Accessed',"Job Card configuration Page Accessed", 0);

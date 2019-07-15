@@ -23,6 +23,7 @@ class Kernel extends ConsoleKernel
 		  \App\Console\Commands\LeaveManagementResetFamilyLeave::class,
 		  \App\Console\Commands\LeaveManagementResetPaternityLeave::class,
 		  \App\Console\Commands\LeaveManagementResetSickLeave::class,
+		  \App\Console\Commands\FleetManagementDocsUpload::class,
     ];
 
     /**
@@ -43,6 +44,8 @@ class Kernel extends ConsoleKernel
 		$schedule->command('schedule:leaveResetSick')->dailyAt('06:00');
 		$schedule->command('schedule:leaveResetPartenity')->cron('0 0 1 1 * *');
 		$schedule->command('schedule:leaveResetFamily')->cron('0 1 1 1 * *');
+		$schedule->command('fleet:documentsUpload')->everyTenMinutes();
+		//$schedule->command('fleet:documentsUpload')->cron('0 1 1 1 * *');
     }
 
     /**
