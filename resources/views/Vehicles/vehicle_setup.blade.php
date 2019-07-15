@@ -345,10 +345,131 @@
                                 </tr>
 								<tr>
                                     <td class="caption" colspan="2">Alerts Days</td>
-
                                     <td colspan="6"><input type="text" name="alert_days"
                                                            value="{{ !empty($configuration->alert_days) ? $configuration->alert_days : 0}}" 
                                                            placeholder="Days">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Brake Test From Directory</td>
+                                    <td colspan="6"><input type="text" name="brake_test_from"
+                                                           value="{{ $configuration->brake_test_from }}" 
+                                                           placeholder="Enter Brake Test From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Brake Test To</td>
+                                    <td colspan="6"><input type="text" name="brake_test_to"
+                                                           value="{{ $configuration->brake_test_to }}" 
+                                                           placeholder="Enter Brake Test To Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Fire Extinguisher From Directory</td>
+                                    <td colspan="6"><input type="text" name="fire_extinguisher_from"
+                                                           value="{{ $configuration->fire_extinguisher_from }}" 
+                                                           placeholder="Enter Fire Extinguisher From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Fire Extinguisher To Directory</td>
+                                    <td colspan="6"><input type="text" name="fire_extinguisher_to"
+                                                           value="{{ $configuration->fire_extinguisher_to }}" 
+                                                           placeholder="Enter Fire Extinguisher To Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Fuel Transaction From Directory</td>
+                                    <td colspan="6"><input type="text" name="fuel_transaction_from"
+                                                           value="{{ $configuration->fuel_transaction_from }}" 
+                                                           placeholder="Enter Fuel Transaction From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Fuel Transaction To Directory</td>
+
+                                    <td colspan="6"><input type="text" name="fuel_transaction_to"
+                                                           value="{{ $configuration->fuel_transaction_to }}" 
+                                                           placeholder="Enter Fuel Transaction To Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">GET Fitment From Directory</td>
+                                    <td colspan="6"><input type="text" name="get_fitment_from"
+                                                           value="{{ $configuration->get_fitment_from }}" 
+                                                           placeholder="Enter GET Fitment From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">GET Fitment To Directory</td>
+                                    <td colspan="6"><input type="text" name="get_fitment_to"
+                                                           value="{{ $configuration->get_fitment_to }}" 
+                                                           placeholder="Enter GET Fitment To Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">LDV Car Inspection From Directory</td>
+                                    <td colspan="6"><input type="text" name="ldv_car_inspection_from"
+                                                           value="{{ $configuration->ldv_car_inspection_from }}" 
+                                                           placeholder="Enter LDV Car Inspection From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">LDV Car Inspection To Directory</td>
+
+                                    <td colspan="6"><input type="text" name="ldv_car_inspection_to"
+                                                           value="{{ $configuration->ldv_car_inspection_to }}" 
+                                                           placeholder="Enter LDV Car Inspection To Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">LDV Pre Use Inspections From Directory</td>
+                                    <td colspan="6"><input type="text" name="ldv_pre_use_inspections_from"
+                                                           value="{{ $configuration->ldv_pre_use_inspections_from }}" 
+                                                           placeholder="Enter LDV Pre Use Inspections From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">LDV Pre Use Inspections To Directory</td>
+                                    <td colspan="6"><input type="text" name="ldv_pre_use_inspections_to"
+                                                           value="{{ $configuration->ldv_pre_use_inspections_to }}" 
+                                                           placeholder="Enter LDV Pre Use Inspections From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Mechanic Plant Inspections From Directory</td>
+
+                                    <td colspan="6"><input type="text" name="mechanic_plant_inspections_from"
+                                                           value="{{ $configuration->mechanic_plant_inspections_from }}" 
+                                                           placeholder="Enter Mechanic Plant Inspections From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Mechanic Plant Inspections To Directory</td>
+                                    <td colspan="6"><input type="text" name="mechanic_plant_inspections_to"
+                                                           value="{{ $configuration->mechanic_plant_inspections_to }}" 
+                                                           placeholder="Enter Mechanic Plant Inspections To Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Truck Tractor Rigid Chassis From Directory</td>
+                                    <td colspan="6"><input type="text" name="truck_tractor_rigid_chassis_from"
+                                                           value="{{ $configuration->truck_tractor_rigid_chassis_from }}" 
+                                                           placeholder="Enter Truck Tractor Rigid Chassis From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Truck Tractor Rigid Chassis To Directory</td>
+                                    <td colspan="6"><input type="text" name="truck_tractor_rigid_chassis_to"
+                                                           value="{{ $configuration->truck_tractor_rigid_chassis_to }}" 
+                                                           placeholder="Enter Truck Tractor Rigid Chassis To Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Tyre Survey Reports From Directory</td>
+                                    <td colspan="6"><input type="text" name="tyre_survey_reports_from"
+                                                           value="{{ $configuration->tyre_survey_reports_from }}" 
+                                                           placeholder="Enter Tyre Survey Reports From Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Tyre Survey Reports To Directory</td>
+                                    <td colspan="6"><input type="text" name="tyre_survey_reports_to"
+                                                           value="{{ $configuration->tyre_survey_reports_to }}" 
+                                                           placeholder="Enter Tyre Survey Reports To Directory">
+                                </tr>
+								<tr>
+                                    <td class="caption" colspan="2">Job Card Inspection From Directory</td>
+                                    <td colspan="6"><input type="text" name="job_card_inspection_from"
+                                                           value="{{ $configuration->job_card_inspection_from }}" 
+                                                           placeholder="Enter Job Card Inspection From Directory">
+                                </tr><tr>
+                                    <td class="caption" colspan="2">Job Card Inspection To Directory</td>
+                                    <td colspan="6"><input type="text" name="job_card_inspection_to"
+                                                           value="{{ $configuration->job_card_inspection_to }}" 
+                                                           placeholder="Enter Job Card Inspection To Directory">
                                 </tr>
                             </table>
                         </div>

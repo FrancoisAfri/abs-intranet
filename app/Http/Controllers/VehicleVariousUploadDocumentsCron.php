@@ -3,36 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Http\Requests;
-use App\Users;
-use App\HRPerson;
-use App\vehicle_documets;
-use App\jobcards_config;
-use App\jobcard_maintanance;
-use App\vehicle_config;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Storage;
 
-class FleetManagementUploadDocumentsCron extends Controller
+class VehicleVariousUploadDocumentsCron extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function execute() {
         $location = jobcards_config::first();
-        $fleetLocation = vehicle_config::first();
 		$serviceFileFrom = !empty($location->service_file_from) ? $location->service_file_from : '';
 		$serviceFileTo = !empty($location->service_file_to) ? $location->service_file_to : '';
 		$breakTestFrom = !empty($location->break_test_from) ? $location->break_test_from : '';
 		$breakTestTo = !empty($location->break_test_to) ? $location->break_test_to : '';
-		// Brake test from fleet location
-		$fleetBreakTestFrom = !empty($location->brake_test_from) ? $location->brake_test_from : '';
-		$fleetBreakTestTo = !empty($location->brake_test_to) ? $location->brake_test_to : '';
-		
 		// service files
 		if (!empty($serviceFileFrom) && !empty($serviceFileTo))
 		{
@@ -67,7 +46,6 @@ class FleetManagementUploadDocumentsCron extends Controller
 		{
 			$files = $files = scandir($breakTestFrom);
 			foreach($files as $file) {
-
 				$filename =  $breakTestFrom.$file;
 				if (file_exists($filename) && $file != '.' && $file != '..') 
 				{
@@ -81,30 +59,10 @@ class FleetManagementUploadDocumentsCron extends Controller
 						$jobCard = jobcard_maintanance::where('id',$jcNumber)->first();
 						if (!empty($jobCard))
 						{
-							// update job card
 							$jobCard->service_file_upload = $file;
 							$jobCard->update();
-							// move file
+							
 							$sNewName = $breakTestTo.$file;
-							rename($filename,$sNewName);
-						}
-						if ($jobCard->vehicle_id && !empty($fleetBreakTestTo))
-						{
-							// Update fleet document 
-							$vehicleID = $jobCard->vehicle_id;
-							$vehicledocumets = new vehicle_documets();
-							$vehicledocumets->type = 5;
-							$vehicledocumets->description = "brake Test Report";
-							$vehicledocumets->date_from = time();
-							$vehicledocumets->upload_date = time();
-							$vehicledocumets->vehicleID = $jobCard->vehicle_id;
-							$vehicledocumets->expiry_type = 0;
-							$vehicledocumets->status = 1;
-							$vehicledocumets->currentdate = time();
-							$vehicledocumets->document = $file;
-							$vehicledocumets->save();
-							// move docs
-							$sNewName = $fleetBreakTestTo.$file;
 							rename($filename,$sNewName);
 						}
 					}

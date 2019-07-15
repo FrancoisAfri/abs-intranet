@@ -248,8 +248,6 @@ class JobcardController extends Controller
             $config->save();
         } elseif ($row > 1)
             $configuration = jobcards_config::first();
-
-
         $configuration = jobcards_config::first();
         $data['page_title'] = "Job Card Settings";
         $data['page_description'] = "Job Card Management";

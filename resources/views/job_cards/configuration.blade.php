@@ -64,13 +64,13 @@
                                     </td>
                                 </tr>
 								<tr>
-                                    <td class="caption" colspan="2">Break Test From</td>
+                                    <td class="caption" colspan="2">Brake Test From</td>
                                     <td colspan="3"><input type="text" class="form-control" id="break_test_from" name="break_test_from"
 												value="{{(!empty($configuration->break_test_from)) ? $configuration->break_test_from : '' }}" placeholder="Enter Break Test From Directory ...">				   
                                     </td>
                                 </tr>
 								<tr>
-                                    <td class="caption" colspan="2">Break Test To</td>
+                                    <td class="caption" colspan="2">Brake Test To</td>
                                     <td colspan="3"><input type="text" class="form-control" id="break_test_to" name="break_test_to"
 												value="{{(!empty($configuration->break_test_to)) ? $configuration->break_test_to : '' }}" placeholder="Enter Break Test To Directory ...">				   
                                     </td>

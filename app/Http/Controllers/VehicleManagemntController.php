@@ -589,7 +589,6 @@ class VehicleManagemntController extends Controller
 
     public function Configuration(Request $request, vehicle_config $configuration)
     {
-
         $config = $request->all();
         unset($config['_token']);
 		
@@ -742,7 +741,6 @@ class VehicleManagemntController extends Controller
 
     public function deleteVehiclemodel(Request $request, vehiclemodel $vmodel)
     {
-
         $vmodel->delete();
 
         AuditReportsController::store('Vehicle Model', 'Vehicle Model Deleted', "Vehicle Model has been deleted", 0);
@@ -845,7 +843,6 @@ class VehicleManagemntController extends Controller
 
     public function safe()
     {
-
         $safe = safe::orderBy('id', 'asc')->get();
 
         $data['page_title'] = "Safe";
@@ -915,6 +912,4 @@ class VehicleManagemntController extends Controller
         AuditReportsController::store('Vehicle Model', 'safe  Deleted', "safe has been deleted", 0);
         return redirect('/vehicle_management/safe');
     }
-
-
 }

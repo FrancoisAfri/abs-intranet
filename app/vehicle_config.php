@@ -16,6 +16,10 @@ class vehicle_config extends Model
         'incident_major_hod', 'incident_critical_hod', 'incident_minor_admin', 'incident_major_admin', 'incident_critical_admin',
         'submit_on_behalf', 'allow_past_bookings', 'notification_method', 'service_days', 'service_km', 'service_overdue_days',
         'service_overdue_km', 'no_bookings_days', 'no_bookings_km', 'no_bookings_minor', ' no_bookings_major', 'no_bookings_critical',
-        'inforce_vehicle_image','inforce_vehicle_documents','incidents_upload_directory','alert_days'];
-
+        'inforce_vehicle_image','inforce_vehicle_documents','incidents_upload_directory','alert_days'
+		,'brake_test_from','brake_test_to','fire_extinguisher_from','fire_extinguisher_to','fuel_transaction_from','fuel_transaction_to'
+		,'get_fitment_from','get_fitment_to','ldv_car_inspection_from','ldv_car_inspection_to','ldv_pre_use_inspections_from'
+		,'ldv_pre_use_inspections_to','mechanic_plant_inspections_from','mechanic_plant_inspections_to','truck_tractor_rigid_chassis_from'
+		,'truck_tractor_rigid_chassis_to','tyre_survey_reports_from','tyre_survey_reports_to'
+		,'job_card_inspection_from','job_card_inspection_to'];
 }
