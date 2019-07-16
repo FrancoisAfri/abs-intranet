@@ -45,7 +45,7 @@ class Kernel extends ConsoleKernel
 		$schedule->command('schedule:leaveResetPartenity')->cron('0 0 1 1 * *');
 		$schedule->command('schedule:leaveResetFamily')->cron('0 1 1 1 * *');
 		$schedule->command('fleet:documentsUpload')->everyTenMinutes();
-		$schedule->command('vehicle:variouDocumentsUpload')->everyFifteenMinutes();
+		$schedule->command('vehicle:variouDocumentsUpload')->everyThirtyMinutes();
 		//$schedule->command('fleet:documentsUpload')->cron('0 1 1 1 * *');
     }
 
