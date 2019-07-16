@@ -24,6 +24,7 @@ class Kernel extends ConsoleKernel
 		  \App\Console\Commands\LeaveManagementResetPaternityLeave::class,
 		  \App\Console\Commands\LeaveManagementResetSickLeave::class,
 		  \App\Console\Commands\FleetManagementDocsUpload::class,
+		  \App\Console\Commands\VehicleDocsUpload::class,
     ];
 
     /**
