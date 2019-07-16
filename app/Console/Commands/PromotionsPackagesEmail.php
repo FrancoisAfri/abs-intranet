@@ -12,7 +12,7 @@ class PromotionsPackagesEmail extends Command
      * @var string
      */
     protected $signature = 'promemails:sent';
-    protected $signature = 'emptask:overdue';
+    //protected $signature = 'emptask:overdue';
     /**
      * The console command description.
      *

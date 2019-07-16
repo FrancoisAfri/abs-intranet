@@ -36,7 +36,7 @@ class FleetManagementUploadDocumentsCron extends Controller
 		// service files
 		if (!empty($serviceFileFrom) && !empty($serviceFileTo))
 		{
-			$files = $files = scandir($serviceFileFrom);
+			$files = scandir($serviceFileFrom);
 			foreach($files as $file) {
 
 				$filename =  $serviceFileFrom.$file;
@@ -65,9 +65,9 @@ class FleetManagementUploadDocumentsCron extends Controller
 		// break Test files
 		if (!empty($breakTestFrom) && !empty($breakTestTo))
 		{
-			$files = $files = scandir($breakTestFrom);
-			foreach($files as $file) {
-
+			$files = scandir($breakTestFrom);
+			foreach($files as $file) 
+			{
 				$filename =  $breakTestFrom.$file;
 				if (file_exists($filename) && $file != '.' && $file != '..') 
 				{

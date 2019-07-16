@@ -38,6 +38,6 @@ class FleetManagementDocsUpload extends Command
     public function handle()
     {
         app('App\Http\Controllers\FleetManagementUploadDocumentsCron')->execute();
-        \Log::info('Cron - FleetManagementUploadDocumentsCron, artisan command fleet:documentsUpload ran successfully @ ' . \Carbon\Carbon::now());
+        \Log::info('Cron - FleetManagementDocsUpload, artisan command fleet:documentsUpload ran successfully @ ' . \Carbon\Carbon::now());
     }
 }
