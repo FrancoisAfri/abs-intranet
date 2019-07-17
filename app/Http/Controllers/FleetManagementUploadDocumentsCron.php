@@ -30,7 +30,7 @@ class FleetManagementUploadDocumentsCron extends Controller
 		$breakTestFrom = !empty($location->break_test_from) ? $location->break_test_from : '';
 		$breakTestTo = !empty($location->break_test_to) ? $location->break_test_to : '';
 		// Brake test from fleet location
-		$fleetBreakTestFrom = !empty($fleetLocation->brake_test_from) ? $locationfleetLocation->brake_test_from : '';
+		$fleetBreakTestFrom = !empty($fleetLocation->brake_test_from) ? $fleetLocation->brake_test_from : '';
 		$fleetBreakTestTo = !empty($fleetLocation->brake_test_to) ? $fleetLocation->brake_test_to : '';
 		
 		// service files
@@ -88,7 +88,7 @@ class FleetManagementUploadDocumentsCron extends Controller
 							$sNewName = $breakTestTo.$file;
 							rename($filename,$sNewName);
 						}
-						if ($jobCard->vehicle_id && !empty($fleetBreakTestTo))
+						if (!empty($jobCard->vehicle_id) && !empty($fleetBreakTestTo))
 						{
 							// Update fleet document 
 							
@@ -105,7 +105,8 @@ class FleetManagementUploadDocumentsCron extends Controller
 							$vehicledocumets->save();
 							// move docs
 							$sNewName = $fleetBreakTestTo.$file;
-							rename($filename,$sNewName);
+							//rename($filename,$sNewName);
+							copy($breakTestTo.$file,$sNewName);
 						}
 					}
 				}
