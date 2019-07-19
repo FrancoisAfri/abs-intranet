@@ -220,9 +220,7 @@
 												Email </label>
 											<label class="radio-inline"><input type="radio" id="rdo_communication" name="communication_type" value="2">
 												SMS</label>
-											 <label class="radio-inline"><input type="radio" id="rdo_communication" name="communication_type" value="3">
-												Both </label>
-											<label class="radio-inline"><input type="radio" id="rdo_communication" name="communication_type" checked value="4">
+											 <label class="radio-inline"><input type="radio" id="rdo_communication" name="communication_type" checked value="3">
 												Both </label>
 										</div>
 									</div>

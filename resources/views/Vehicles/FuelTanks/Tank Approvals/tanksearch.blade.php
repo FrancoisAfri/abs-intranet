@@ -40,29 +40,28 @@
                             </div>
                         @endif
 						<div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
-                            <label for="Leave_type" class="col-sm-2 control-label">Search Type</label>
-
+                            <label for="application_type" class="col-sm-2 control-label">Search Type</label>
                             <div class="col-sm-8">
-                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                              id="rdo_levTkn"
-                                                                                              name="application_type"
-                                                                                              value="1" checked> Search
+                                <label class="radio-inline" style="padding-left: 0px;">
+									<input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Search
                                 </label>
-                                <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type"
-                                                                   value="2"> Tank Fuel Approval</label>
-                                <label class="radio-inline"><input type="radio" id="rdo_po" name="application_type"
-                                                                   value="3"> Other </label>
+                                <label class="radio-inline">
+									<input type="radio" id="rdo_bal" name="application_type"
+										value="2"> Tank Fuel Approval</label>
+                                <label class="radio-inline">
+									<input type="radio" id="rdo_po" name="application_type"
+                                         value="3"> Other </label>
                             </div>
                         </div>
                         <div class="form-group" id="vehicle-field">
-                            <label for="path" class="col-sm-2 control-label">Vehicle</label>
+                            <label for="vehicle_id" class="col-sm-2 control-label">Vehicle</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-truck"></i>
                                     </div>
                                     <select class="form-control select2" style="width: 100%;"
-                                            id="vehicle_type" name="vehicle_id">
+                                            id="vehicle_id" name="vehicle_id">
                                         <option value="0">*** Select a Vehicle ***</option>
                                         @foreach($vehicleDetails as $vehicle)
                                             <option value="{{ $vehicle->id }}">{{ $vehicle->fleet_number."|".$vehicle->vehicle_registration}} </option>
@@ -72,7 +71,7 @@
                             </div>
                         </div>
 						<div class="form-group tank-field">
-                            <label for="path" class="col-sm-2 control-label">Tank</label>
+                            <label for="vehicle_type" class="col-sm-2 control-label">Tank</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -89,14 +88,13 @@
                             </div>
                         </div>
                         <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
-                            <label for="days" class="col-sm-2 control-label">Transaction Date</label>
+                            <label for="action_date" class="col-sm-2 control-label">Transaction Date</label>
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-                                    <!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                    <input type="text" class="form-control daterangepicker" id="action_date"
+										<input type="text" class="form-control daterangepicker" id="action_date"
                                            name="action_date" value="" placeholder="Select Action Date...">
                                 </div>
                             </div>
@@ -118,13 +116,7 @@
                                 </div>
                             </div>
                         </div>
-                        <!-- /.box-body -->
-                        <!-- <div class="box-footer">
-                            <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Cancel</button>
-                            <button type="submit" id="gen_report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
-                        </div> -->
                         <div class="box-footer">
-                            {{--  <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>  --}}
                             <button type="submit" id="gen-report" name="gen-report" class="btn btn-default pull-right">
                                 <i class="fa fa-search"></i> Submit
                             </button>
@@ -135,14 +127,11 @@
             </div>
             <!-- /.box -->
         </div>
-        <!-- End new User Form-->
-        <!-- Confirmation Modal -->
         @if(Session('success_add'))
             @include('contacts.partials.success_action', ['modal_title' => "Registration Successful!", 'modal_content' => session('success_add')])
         @endif
     </div>
 @endsection
-
 @section('page_script')
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
@@ -183,8 +172,6 @@
     <!--Time Charger-->
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-
-
     <script type="text/javascript">
         $(function () {
             //Initialize Select2 Elements
@@ -285,13 +272,12 @@
                 $('#gen-report').val("Submit");
             }
             else if (allType == 3) {
-                $('.search-field').hide();
+                $('.search-field').show();
                 $('.tank-field').hide();
 				$('#vehicle-field').show();
                 $('form[name="fuel-search-form"]').attr('action', '/vehicle_management/other');
                 $('#gen-report').val("Submit");
             }
-
             return allType;
         }
     </script>
