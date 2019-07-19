@@ -571,7 +571,9 @@ class FuelManagementController extends Controller
         unset($fuelData['_token']);
 
         $vehicleID = $fuelData['vehicle_id'];
-        $actionFrom = $actionTo = 0;
+        $status = !empty($fuelData['status']) ? $fuelData['status'] : 0;
+        
+		$actionFrom = $actionTo = 0;
         $actionDate = $request['action_date'];
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
@@ -601,6 +603,11 @@ class FuelManagementController extends Controller
                     $query->where('vehicle_fuel_log.vehicleID', $vehicleID);
                 }
             })
+			->where(function ($query) use ($status) {
+                if (!empty($status)) {
+                    $query->where('vehicle_fuel_log.status', $status);
+                }
+            })
 			->where('vehicle_fuel_log.tank_and_other', 1)
             ->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
 			->orderBy('vehicle_details.fleet_number', 'ASC')
@@ -619,10 +626,15 @@ class FuelManagementController extends Controller
                 }
             })
             ->where('vehicle_fuel_log.tank_and_other', 2)
+			->where(function ($query) use ($status) {
+                if (!empty($status)) {
+                    $query->where('vehicle_fuel_log.status', $status);
+                }
+            })
             ->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
 			->orderBy('vehicle_details.fleet_number', 'ASC')
 			->get();
-			
+		
         $status = array(1 => 'Incoming', 2 => 'Outgoing',);
 
         $booking = array(10 => "Pending Ceo Approval",
@@ -765,14 +777,14 @@ class FuelManagementController extends Controller
         }
         $fuelData = $request->all();
         unset($fuelData['_token']);
-
+		$status = !empty($fuelData['status']) ? $fuelData['status'] : 0;;
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
         $hrDetails = HRPerson::where('status', 1)->get();
         $contactcompanies = ContactCompany::where('status', 1)->orderBy('id', 'desc')->get();
         $vehicle_maintenance = vehicle_maintenance::orderBy('id', 'asc')->get();
 		$bookingStatus = array(10 => "Pending Ceo Approval",
-            4 => "Pending Tank Manager",
+            4 => "Pending Manager Approval",
             1 => "Approved",
             14 => "Rejected");
         $vehicleID = $fuelData['vehicle_id'];
@@ -802,6 +814,11 @@ class FuelManagementController extends Controller
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('vehicle_fuel_log.date', [$actionFrom, $actionTo]);
+                }
+            })
+			->where(function ($query) use ($status) {
+                if (!empty($status)) {
+                    $query->where('vehicle_fuel_log.status', $status);
                 }
             })
             ->whereNotIn('vehicle_fuel_log.status', [1, 14])

@@ -1503,7 +1503,7 @@ class VehicleFleetController extends Controller
 
         $currentDate = time();
         $bookingStatus = array(10 => "Pending Ceo Approval",
-            4 => "Pending Tank Manager",
+            4 => "Pending Manager Approval",
             1 => "Approved",
             14 => "Rejected");
 		$loggedInEmplID = Auth::user()->person->id;

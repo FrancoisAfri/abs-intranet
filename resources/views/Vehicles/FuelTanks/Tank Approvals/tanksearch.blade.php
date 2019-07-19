@@ -108,10 +108,10 @@
                                     </div>
                                     <select id="status" name="status" class="form-control">
                                         <option value="0">*** Select Status ***</option>
-                                        <option value="1"> Rejected</option>
-                                        <option value="2"> Manager Approval</option>
-                                        <option value="3"> Approved</option>
-                                        <option value="4"> CEO Approval</option>
+                                        <option value="14"> Rejected</option>
+                                        <option value="4"> Manager Approval</option>
+                                        <option value="1"> Approved</option>
+                                        <option value="10"> CEO Approval</option>
                                     </select>
                                 </div>
                             </div>
