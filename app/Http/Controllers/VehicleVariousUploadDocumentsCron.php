@@ -71,6 +71,7 @@ class VehicleVariousUploadDocumentsCron extends Controller
 			}
 		}
 		// GET Fitment files
+		// service files
 		if (!empty($getFitmentFrom) && !empty($getFitmentTo))
 		{
 			$files = scandir($getFitmentFrom);
@@ -82,26 +83,19 @@ class VehicleVariousUploadDocumentsCron extends Controller
 					$fileArray = explode(" ",$file);
 					$end =  end($fileArray);
 					$endArray = explode(".",$end);
-					$fleetNo = $endArray[0];
-					// get fleet details
-					$fleetDetails = vehicle_detail::where('fleet_number', 'ILIKE', "%$fleetNo%")->first(); 
-
-					if (!empty($fleetDetails))
+					$jc = $endArray[0];
+					if (strpos($jc, 'JC') !== false) 
 					{
-						$vehicledocumets = new vehicle_documets();
-						$vehicledocumets->type = 5;
-						$vehicledocumets->description = "GET Fitment Report";
-						$vehicledocumets->date_from = time();
-						$vehicledocumets->upload_date = time();
-						$vehicledocumets->vehicleID = $fleetDetails->id;
-						$vehicledocumets->expiry_type = 0;
-						$vehicledocumets->status = 1;
-						$vehicledocumets->currentdate = time();
-						$vehicledocumets->document = $file;
-						$vehicledocumets->save();
-						
-						$sNewName = $getFitmentTo.$file;
-						rename($filename,$sNewName);
+						$jcNumber = str_replace("JC","",$jc);
+						$jobCard = jobcard_maintanance::where('id',$jcNumber)->first();
+						if (!empty($jobCard))
+						{
+							$jobCard->service_file_upload = $file;
+							$jobCard->update();
+							
+							$sNewName = $getFitmentTo.$file;
+							rename($filename,$sNewName);
+						}
 					}
 				}
 			}

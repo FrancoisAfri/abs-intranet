@@ -631,8 +631,8 @@ $instructions
 HTML;
 					$mobileArray[] = $this->formatCellNo($mechanicdetails->cell_number);
 					$message = str_replace("<br>", "", $message);
-					$message = str_replace(">", "-", $message);
-					$message = str_replace("<", "-", $message);
+					//$message = str_replace(">", "-", $message);
+					//$message = str_replace("<", "-", $message);
 					BulkSMSController::send($mobileArray, $message);
 				}
 			}
@@ -658,8 +658,8 @@ $instructions
 HTML;
 					$mobileArray[] = $this->formatCellNo($mechanicdetails->cell_number);
 					$message = str_replace("<br>", "", $message);
-					$message = str_replace(">", "-", $message);
-					$message = str_replace("<", "-", $message);
+					//$message = str_replace(">", "-", $message);
+					//$message = str_replace("<", "-", $message);
 					BulkSMSController::send($mobileArray, $message);
 				}
 			}
