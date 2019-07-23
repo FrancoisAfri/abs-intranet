@@ -42,8 +42,8 @@
 										@foreach ($vehiclebookings as $booking)
 											<tr>
 												<td>{{ (!empty($booking->vehicle_make) ) ? $booking->vehicle_make." ".$booking->vehicle_model." ".$booking->vehicle_type." ".$booking->v_registration : ''}}</td>
-												<td>{{ (!empty($booking->collect_timestamp)) ? date(' d M Y', $booking->collect_timestamp) : ''}} </td>
-												<td>{{ (!empty($booking->return_timestamp)) ? date(' d M Y', $booking->return_timestamp) : ''}} </td>
+												<td>{{ (!empty($booking->collect_timestamp)) ? date('Y M d', $booking->collect_timestamp) : ''}} </td>
+												<td>{{ (!empty($booking->return_timestamp)) ? date('Y M d', $booking->return_timestamp) : ''}} </td>
 												<td>{{ (!empty($booking->driver_name)&& !empty($booking->driver_surname)) ? $booking->driver_name." ".$booking->driver_surname: ''}} </td>
 												<td>{{ (!empty($booking->apr_firstname)&& !empty($booking->apr_surname)) ? $booking->apr_firstname." ".$booking->apr_surname: ''}} </td>
 												<td>{{ (!empty($booking->purpose)) ?  $booking->purpose : ''}} </td>

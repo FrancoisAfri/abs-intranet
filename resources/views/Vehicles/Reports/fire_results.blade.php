@@ -39,7 +39,7 @@
 												@foreach ($fireExtinguishers as $fireExtinguisher)
 													<tr>
 														<td>{{ !empty($fireExtinguisher->fleet_number) ? $fireExtinguisher->fleet_number : ''}}</td>
-														<td>{{ !empty($fireExtinguisher->date_purchased) ? date(' d M Y', $fireExtinguisher->date_purchased) : ''}} </td>
+														<td>{{ !empty($fireExtinguisher->date_purchased) ? date('Y M d', $fireExtinguisher->date_purchased) : ''}} </td>
 														<td>{{ !empty($fireExtinguisher->bar_code) ? $fireExtinguisher->bar_code : ''}} </td>
 														<td>{{ !empty($fireExtinguisher->item_no) ? $fireExtinguisher->item_no : ''}} </td>
 														<td>{{ !empty($fireExtinguisher->com_name) ? $fireExtinguisher->com_name : ''}} </td>

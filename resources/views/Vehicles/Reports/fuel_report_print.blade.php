@@ -72,7 +72,7 @@
 					@foreach ($fuelLog as $details)
 						<tr>
 							<td>{{ !empty($details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes) ?  $details->VehicleMake .''.$details->VehicleModel.''.$details->vehicletypes: '' }}</td>
-                            <td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
+                            <td>{{ !empty($details->date) ? date('Y M d', $details->date) : '' }}</td>
                             <td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
 							<td>{{ !empty($details->description) ?  $details->description: '' }}</td>
 							<td>{{ !empty($details->station) ?  $details->station : '' }}</td>

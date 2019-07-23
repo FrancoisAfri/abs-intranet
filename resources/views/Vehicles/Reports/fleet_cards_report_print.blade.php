@@ -76,8 +76,8 @@
 									<td>{{ !empty($fleetcard->card_number) ? $fleetcard->card_number : ''}}</td>
 									<td>{{ !empty($fleetcard->cvs_number) ? $fleetcard->cvs_number : ''}}</td>
 									<td style="width:50px;">{{ !empty($fleetcard->Vehicle_Owner) ? $fleetcard->Vehicle_Owner : ''}}</td>
-									<td>{{ !empty($fleetcard->issued_date ) ? date("d/m/Y", $fleetcard->issued_date) : ''}}</td>
-									<td>{{ !empty($fleetcard->expiry_date ) ? date("d/m/Y",  $fleetcard->expiry_date) : ''}}</td>
+									<td>{{ !empty($fleetcard->issued_date ) ? date("Y M d", $fleetcard->issued_date) : ''}}</td>
+									<td>{{ !empty($fleetcard->expiry_date ) ? date("Y M d",  $fleetcard->expiry_date) : ''}}</td>
 									<td>{{ !empty($fleetcard->status) ? $status[$fleetcard->status] : ''}}</td>
 								</tr>
 							@endforeach

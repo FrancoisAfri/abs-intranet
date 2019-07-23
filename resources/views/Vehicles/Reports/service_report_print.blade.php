@@ -70,10 +70,10 @@
                         @foreach($serviceDetails as $details)
                             <tr>										
 								<td>{{ (!empty($details->VehicleMake) ) ? $details->VehicleMake." ".$details->VehicleModel." ".$details->vehicle_registration : ''}}</td>
-								<td>{{ !empty($details->date_serviced) ? date(' d M Y', $details->date_serviced) : '' }}</td>
+								<td>{{ !empty($details->date_serviced) ? date('Y M d', $details->date_serviced) : '' }}</td>
 								<td>{{ !empty($details->garage) ? $details->garage : '' }}</td>
 								<td>{{ !empty($details->description) ? $details->description : '' }}</td>
-								<td style="text-align: center">{{ !empty($details->nxt_service_date) ? date(' d M Y', $details->nxt_service_date) : '' }}</td>
+								<td style="text-align: center">{{ !empty($details->nxt_service_date) ? date('Y M d', $details->nxt_service_date) : '' }}</td>
 								<td style="text-align: center">{{ !empty($details->nxt_service_km) ? $details->nxt_service_km : ''}} </td>
 								<td style="text-align: center">{{ !empty($details->invoice_number) ?  $details->invoice_number : ''}} </td>
 								<td style="text-align: center">{{ !empty($details->total_cost) ? 'R' .number_format($details->total_cost, 2) : ''}} </td>

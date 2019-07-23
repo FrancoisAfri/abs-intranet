@@ -79,7 +79,7 @@
                               <td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
                               <td>{{ (!empty( $filling->supplier)) ?  $filling->supplier : ''}}</td>
                               <td>{{ (!empty( $filling->captured_by)) ?  $filling->captured_by : ''}} </td>
-                              <td>{{ (!empty( $filling->exp_date)) ?   date(' d M Y', $filling->exp_date) : ''}} </td>
+                              <td>{{ (!empty( $filling->exp_date)) ?   date('Y M d', $filling->exp_date) : ''}} </td>
                               <td bgcolor="red"> Expired </td>
                             </tr>
                         @endforeach

@@ -57,7 +57,7 @@
                                         @endif
 										<tr>
 											<td>{{ !empty($details->fleet_number) ?  $details->fleet_number: '' }}</td>
-											<td>{{ !empty($details->date) ? date(' d M Y', $details->date) : '' }}</td>
+											<td>{{ !empty($details->date) ? date('Y M d', $details->date) : '' }}</td>
 											<td>{{ !empty($details->firstname.''.$details->surname) ? $details->firstname.''.$details->surname: '' }}</td>
 											<td>{{ !empty($details->description) ?  $details->description: '' }}</td>
 											<td>{{ !empty($details->station) ?  $details->station : '' }}</td>

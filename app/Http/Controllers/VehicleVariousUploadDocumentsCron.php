@@ -48,7 +48,7 @@ class VehicleVariousUploadDocumentsCron extends Controller
 					$endArray = explode(".",$end);
 					$fleetNo = $endArray[0];
 					// get fleet details
-					$fleetDetails = vehicle_detail::where('fleet_number', 'ILIKE', "%$fleetNo%")->first(); 
+					$fleetDetails = vehicle_detail::where('fleet_number',"$fleetNo")->first(); 
 
 					if (!empty($fleetDetails))
 					{
@@ -115,7 +115,7 @@ class VehicleVariousUploadDocumentsCron extends Controller
 					$endArray = explode(".",$end);
 					$fleetNo = $endArray[0];
 					// get fleet details
-					$fleetDetails = vehicle_detail::where('fleet_number', 'ILIKE', "%$fleetNo%")->first(); 
+					$fleetDetails = vehicle_detail::where('fleet_number',"$fleetNo")->first(); 
 
 					if (!empty($fleetDetails))
 					{
@@ -152,7 +152,7 @@ class VehicleVariousUploadDocumentsCron extends Controller
 					$endArray = explode(".",$end);
 					$fleetNo = $endArray[0];
 					// get fleet details
-					$fleetDetails = vehicle_detail::where('fleet_number', 'ILIKE', "%$fleetNo%")->first(); 
+					$fleetDetails = vehicle_detail::where('fleet_number',"$fleetNo")->first(); 
 
 					if (!empty($fleetDetails))
 					{
@@ -189,7 +189,7 @@ class VehicleVariousUploadDocumentsCron extends Controller
 					$endArray = explode(".",$end);
 					$fleetNo = $endArray[0];
 					// get fleet details
-					$fleetDetails = vehicle_detail::where('fleet_number', 'ILIKE', "%$fleetNo%")->first(); 
+					$fleetDetails = vehicle_detail::where('fleet_number',"$fleetNo")->first(); 
 
 					if (!empty($fleetDetails))
 					{
@@ -226,7 +226,7 @@ class VehicleVariousUploadDocumentsCron extends Controller
 					$endArray = explode(".",$end);
 					$fleetNo = $endArray[0];
 					// get fleet details
-					$fleetDetails = vehicle_detail::where('fleet_number', 'ILIKE', "%$fleetNo%")->first(); 
+					$fleetDetails = vehicle_detail::where('fleet_number',"$fleetNo")->first(); 
 
 					if (!empty($fleetDetails))
 					{
@@ -263,7 +263,7 @@ class VehicleVariousUploadDocumentsCron extends Controller
 					$endArray = explode(".",$end);
 					$fleetNo = $endArray[0];
 					// get fleet details
-					$fleetDetails = vehicle_detail::where('fleet_number', 'ILIKE', "%$fleetNo%")->first(); 
+					$fleetDetails = vehicle_detail::where('fleet_number',"$fleetNo")->first(); 
 
 					if (!empty($fleetDetails))
 					{
@@ -300,7 +300,7 @@ class VehicleVariousUploadDocumentsCron extends Controller
 					$endArray = explode(".",$end);
 					$fleetNo = $endArray[0];
 					// get fleet details
-					$fleetDetails = vehicle_detail::where('fleet_number', 'ILIKE', "%$fleetNo%")->first(); 
+					$fleetDetails = vehicle_detail::where('fleet_number',"$fleetNo")->first(); 
 
 					if (!empty($fleetDetails))
 					{

@@ -43,7 +43,7 @@
                                             @foreach($vehicleincidents as $details)
                                                 <tr>
                                                     <td>{{ (!empty($details->VehicleMake) ) ? $details->VehicleMake." ".$details->VehicleModel." ".$details->vehicle_registration : ''}}</td>
-                                                    <td>{{ !empty($details->date_of_incident) ? date(' d M Y', $details->date_of_incident) : '' }}</td>
+                                                    <td>{{ !empty($details->date_of_incident) ? date('Y M d', $details->date_of_incident) : '' }}</td>
                                                     <td>{{ !empty($details->firstname.''.$details->surname) ?  $details->firstname.''.$details->surname: '' }}</td>
                                                     <td>{{ !empty($details->odometer_reading) ?  $details->odometer_reading: '' }}</td>
                                                     <td>{{ !empty($details->IncidentType) ?  $details->IncidentType: 'Nill' }}</td>

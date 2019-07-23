@@ -47,7 +47,7 @@
 														<td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
 														<td>{{ (!empty( $filling->company)) ?  $filling->company : ''}} </td>
 														<td>{{ (!empty( $filling->Department)) ?  $filling->Department : ''}} </td>
-														<td>{{ (!empty( $filling->exp_date)) ?   date(' d M Y', $filling->exp_date) : ''}} </td>
+														<td>{{ (!empty( $filling->exp_date)) ?   date('Y M d', $filling->exp_date) : ''}} </td>
 														<td bgcolor="red"> Expired </td>
 
 													</tr>

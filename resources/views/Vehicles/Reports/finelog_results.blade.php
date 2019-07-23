@@ -41,8 +41,8 @@
 										@foreach($vehiclefines as $fine)
 											<tr>
 												<td>{{ (!empty($fine->vehicle_make) ) ? $fine->vehicle_make." ".$fine->vehicle_model." ".$fine->vehicle_types." ".$fine->vehicle_registration : ''}}</td>
-												<td>{{ !empty($fine->date_of_fine) ? date(' d M Y', $fine->date_of_fine) : '' }}</td>
-												<td>{{ !empty($fine->time_of_fine) ? date(' h:m:z', $fine->time_of_fine) : '' }}</td>
+												<td>{{ !empty($fine->date_of_fine) ? date('Y M d', $fine->date_of_fine) : '' }}</td>
+												<td>{{ !empty($fine->time_of_fine) ? date('h:m:z', $fine->time_of_fine) : '' }}</td>
 												<td>{{ !empty($fine->fine_ref) ? $fine->fine_ref : '' }}</td>
 												<td>{{ !empty($fine->location) ?  $fine->location : '' }}</td>
 												<td>{{ !empty($fine->fine_type) ?  $fineType[$fine->fine_type] : '' }}</td>

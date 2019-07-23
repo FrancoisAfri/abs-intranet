@@ -178,6 +178,8 @@ class VehicleFleetController extends Controller
 
     public function reminders(vehicle_maintenance $maintenance)
     {
+		$fleetDetails = vehicle_detail::where('fleet_number', "5")->get(); 
+		return $fleetDetails;
         $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
         $IssuedTo = array(1 => 'Employee', 2 => 'Safe');
         ################## WELL DETAILS ###############
