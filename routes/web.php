@@ -638,6 +638,7 @@ Route::post('fleet/reports/fireExtinguisher/print', 'VehicleReportsController@fi
 
 //Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
+Route::get('vehicle/overview', 'VehicleDashboard@index');
   // ***************
 Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
 Route::get('vehicle_management/vehicle_reports/viewfinedetails/{vehicleID}', 'VehicleReportsController@vehicleFineDetails');
@@ -1105,6 +1106,7 @@ Route::get('cms/cms_newsrankings/{news}', 'CmsController@cms_Star_rankings');
 Route::post('email-template/save', 'EmailTemplatesController@saveOrUpdate');
 
 //General Use (API)
+Route::get('api/vehiclestatusgraphdata', 'VehicleDashboard@vehicleStatus')->name('vehiclestatus');
 Route::post('api/productCategorydropdown', 'DropDownAPIController@productCategoryDDID')->name('pcdropdown');
 Route::post('api/jobcategorymodeldropdown', 'DropDownAPIController@jobcategorymomdelDDID')->name('jcmdropdown');
 Route::post('api/vehiclemodeldropdown', 'DropDownAPIController@vehiclemomdeDDID')->name('Vmmdropdown');
