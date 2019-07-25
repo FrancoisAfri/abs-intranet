@@ -799,12 +799,8 @@ class FuelManagementController extends Controller
         $Approvals = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.id as fuelLogID'
 			, 'vehicle_fuel_log.status as fuel_status'
-			, 'vehicle_details.*', 'hr_people.first_name as firstname'
-			, 'hr_people.surname as surname', 'fleet_fillingstation.name as Staion'
-			, 'fuel_tanks.tank_name as tankName')
-            ->leftJoin('fuel_tanks', 'vehicle_fuel_log.tank_name', '=', 'fuel_tanks.id')
+			, 'vehicle_details.*', 'fleet_fillingstation.name as Staion')
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
-            ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
             ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
             ->where(function ($query) use ($vehicleID) {
                 if (!empty($vehicleID)) {
@@ -822,7 +818,9 @@ class FuelManagementController extends Controller
                 }
             })
             ->whereNotIn('vehicle_fuel_log.status', [1, 14])
-			->get();
+			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
+            ->get();
 
         $data['page_title'] = "Other Fuel Approvals";
         $data['page_description'] = "Other Fuel Approvals";
