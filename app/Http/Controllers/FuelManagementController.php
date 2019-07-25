@@ -800,8 +800,8 @@ class FuelManagementController extends Controller
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.id as fuelLogID'
 			, 'vehicle_fuel_log.status as fuel_status'
 			, 'vehicle_details.*', 'fleet_fillingstation.name as Staion')
-            ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->leftJoin('vehicle_fuel_log', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
+            ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->where(function ($query) use ($vehicleID) {
                 if (!empty($vehicleID)) {
                     $query->where('vehicleID', $vehicleID);
