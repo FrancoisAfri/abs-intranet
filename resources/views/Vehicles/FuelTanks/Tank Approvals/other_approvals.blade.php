@@ -49,7 +49,7 @@
                                         <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
                                         <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                         <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
-                                        <td>{{ (!empty( $filling->odometer_reading)) ?  $filling->odometer_reading : ''}} </td>
+                                        <td>{{ (!empty( $filling->Odometer_reading)) ?  $filling->Odometer_reading : ''}} </td>
                                         <td>{{ (!empty( $filling->Hoursreading)) ?  $filling->Hoursreading : ''}} </td>
                                         <td>{{ (!empty( $filling->Staion)) ?  $filling->Staion : ''}} </td>
                                         <td>{{ (!empty( $filling->litres_new)) ?  number_format($filling->litres_new, 2) : ''}} </td>
