@@ -22,7 +22,6 @@
                       action="/vehicle_management/otherApproval"
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         <table class="table table-bordered">
                             <tr>
@@ -47,8 +46,6 @@
                             @if (count($Approvals) > 0)
                                 @foreach ($Approvals as $filling)
                                     <tr style="text-align:center">
-
-
                                         <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
                                         <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                         <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>

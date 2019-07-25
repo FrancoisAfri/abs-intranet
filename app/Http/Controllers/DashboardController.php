@@ -47,7 +47,6 @@ class DashboardController extends Controller
 
     public function index()
     {
-
         $loggedInEmplID = Auth::user()->person->id;
 
         $data['breadcrumb'] = [
