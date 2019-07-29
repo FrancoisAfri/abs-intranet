@@ -1,7 +1,7 @@
 <div id="forgot-password-modal" class="modal fade" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="recover_password">
+            <form class="form-horizontal" method="POST" action="{{ url('/users/recoverpw') }}">
                 {{ csrf_field() }}
 
                 <div class="modal-header">

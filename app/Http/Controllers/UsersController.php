@@ -621,11 +621,11 @@ class UsersController extends Controller
 	// Reset Password
 	public function recoverPassword(Request $request) {
 
-        /*$validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(),[
             'reset_email' => 'required',
-        ]);*/
+        ]);
 
-        //$validator->validate();
+        $validator->validate();
 
         //find the user
         $user = User::where('email', $request['reset_email'])->first();
@@ -640,5 +640,4 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'User Password Recoverd', "User Password Recoverd; ".$request['reset_email'], 0);
         return response()->json(['success' => 'Password successfully reset.'], 200);
     }
-
 }

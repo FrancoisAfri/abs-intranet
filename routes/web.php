@@ -967,7 +967,7 @@ Route::post('/task/meeting/print', 'TaskManagementController@printreport');
 //Clients (contacts) registration
 //Route::post('contacts/register', 'ContactsRegisterController@register');
 //Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
-Route::post('users/recoverpw', 'UsersController@recoverPassword');
+Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 
 //Route
 
