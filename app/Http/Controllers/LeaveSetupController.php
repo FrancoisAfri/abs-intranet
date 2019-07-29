@@ -296,7 +296,7 @@ class LeaveSetupController extends Controller {
 		if(!empty($empl))
 			$employees = $empl;
 		elseif(!empty($div1))
-			$employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+			$employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('id');
 		elseif(!empty($div2))
 			$employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
 		elseif(!empty($div3))
@@ -306,7 +306,7 @@ class LeaveSetupController extends Controller {
 		elseif(!empty($div5))
 			$employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
 		
-			return $employees;
+			//return $employees;
 		foreach ($employees as $empID) {
 			$emp = HRPerson::find($empID);
 			$custLeave = leave_custom::where('hr_id', $empID)->first();

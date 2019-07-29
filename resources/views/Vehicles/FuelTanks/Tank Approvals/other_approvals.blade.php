@@ -46,7 +46,7 @@
                             @if (count($Approvals) > 0)
                                 @foreach ($Approvals as $filling)
                                     <tr style="text-align:center">
-                                        <td>{{ (!empty( $filling->date)) ?   date(' d M Y', $filling->date) : ''}} </td>
+                                        <td>{{ (!empty( $filling->date)) ?   date('Y M d', $filling->date) : ''}} </td>
                                         <td>{{ (!empty( $filling->fleet_number)) ?  $filling->fleet_number : ''}} </td>
                                         <td>{{ (!empty( $filling->vehicle_registration)) ?  $filling->vehicle_registration : ''}} </td>
                                         <td>{{ (!empty( $filling->Odometer_reading)) ?  $filling->Odometer_reading : ''}} </td>

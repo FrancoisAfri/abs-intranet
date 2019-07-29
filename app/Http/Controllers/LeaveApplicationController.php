@@ -365,9 +365,9 @@ class LeaveApplicationController extends Controller
             }
         }
         // send email to manager
-		/*if (!empty($ApplicationDetails['email']))
+		if (!empty($ApplicationDetails['email']))
 			Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $ApplicationDetails['surname'], $ApplicationDetails['email']));
-*/
+
         AuditReportsController::store('Leave Management', 'Leave day application', "Accessed By User", 0);
         #leave history audit
         LeaveHistoryAuditController::store("Leave application performed by : $username", '', $leaveBalance, $dayRequested, $leaveBalance, $levtype, $hrID);
