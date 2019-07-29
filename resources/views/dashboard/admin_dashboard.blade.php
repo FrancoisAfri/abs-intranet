@@ -66,7 +66,7 @@
 						</div>
 					</div>
 					<div class="box-body" style="max-height: 400px; overflow-y: scroll;">
-						<img class="img-responsive pad" style="padding:0 15 px; float: left" width="250" height="220" alt="{{!empty($ceonews->name) ? $ceonews->name : ''}}" src="{{ Storage::disk('local')->url("CMS/images/$ceonews->image") }}">
+						<img class="img-responsive pad" style="padding:0 15 px;  float: left" width="250" height="220" alt="{{!empty($ceonews->name) ? $ceonews->name : ''}}" src="{{ Storage::disk('local')->url("CMS/images/$ceonews->image") }}">
 						<p><font size="3">{!!$ceonews->summary!!}</font></p>
 					</div>
 				</div>
