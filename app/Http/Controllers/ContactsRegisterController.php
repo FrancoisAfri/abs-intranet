@@ -88,7 +88,7 @@ class ContactsRegisterController extends Controller
 
         //email new password to user
         Mail::to("$user->email")->send(new ResetPassword($user, $randomPass));
-		AuditReportsController::store('Contact', 'Contact Password Recoverd', "Contact Password Recoverd", 0);
+		AuditReportsController::store('Security', 'User Password Recoverd', "User Password Recoverd", 0);
         return response()->json(['success' => 'Password successfully reset.'], 200);
     }
 }
