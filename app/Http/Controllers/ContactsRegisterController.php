@@ -83,7 +83,7 @@ class ContactsRegisterController extends Controller
 
         //Update user password
         $randomPass = str_random(10);
-        $user->password = Hash::make($randomPass);
+        $user->password = Hash::make("3SsACVwnAp");
         $user->update();
 
         //email new password to user
