@@ -74,11 +74,10 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Task timer -->
     <script src="/custom_components/js/tasktimer.js"></script>
-    
     <script>
         $(function () {
             // hide end button when page load
-            //$("#end-button").show();
+            // $("#end-button").show();
             //Initialize Select2 Elements
             $(".select2").select2();
 
