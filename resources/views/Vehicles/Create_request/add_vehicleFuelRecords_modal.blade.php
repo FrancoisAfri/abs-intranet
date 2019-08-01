@@ -12,7 +12,6 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Driver </label>
                         <div class="col-sm-8">
@@ -25,7 +24,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Document Number</label>
                         <div class="col-sm-8">
@@ -33,7 +31,6 @@
                                    placeholder="Enter Document Number" required>
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Date </label>
                         <div class="col-sm-8">
@@ -56,14 +53,10 @@
                     <div class="form-group transaction-field{{ $errors->has('transaction_type') ? ' has-error' : '' }}">
                         <label for="transaction_type" class="col-sm-2 control-label"> Transaction Type </label>
                         <div class="col-sm-8">
-                            <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="empty"
-                                                                                          name="transaction_type" value="0" checked disabled>
-                            </label>
                             <label class="radio-inline" ><input type="radio" id="rdo_fulltank"  name="transaction_type" value="1">Full Tank </label>
                             <label class="radio-inline"><input type="radio" id="rdo_topup" name="transaction_type" value="2"> Top Up </label>
                         </div>
                     </div>
-
                     <div class="form-group Tanks-field">
                         <label for="path" class="col-sm-2 control-label">Tanks </label>
                         <div class="col-sm-8">
@@ -76,7 +69,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Service Station </label>
                         <div class="col-sm-8">
@@ -89,7 +81,6 @@
                             </select>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Litres</label>
                         <div class="col-sm-8">
@@ -98,7 +89,6 @@
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
-
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Cost per Litre </label>
                         <div class="col-sm-8">
@@ -106,7 +96,6 @@
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
-
                     <div class="form-group  transaction-field">
                         <label for="path" class="col-sm-2 control-label">Total Cost</label>
                         <div class="col-sm-8">
@@ -114,7 +103,6 @@
                                    placeholder="Enter Litres" required>
                         </div>
                     </div>
-
                     @if (isset($MetreType) && $MetreType === 1)
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Odometer Reading </label>
@@ -148,7 +136,6 @@
                                    placeholder="{{ $name }}" required readonly="">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Person Responsible </label>
                         <div class="col-sm-8">
@@ -161,15 +148,10 @@
                             </select>
                         </div>
                     </div>
-
-
                 <input type="hidden" id="valueID" name="valueID"
                 value="{{ !empty($vehiclebookings->vehicle_id) ? $vehiclebookings->vehicle_id : ''}}">
-               
-                
                 <input type="hidden" id="vehiclebookingID" name="vehiclebookingID"
                 value="{{ !empty($returnVeh->id) ? $returnVeh->id : ''}}">
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

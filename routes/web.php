@@ -726,6 +726,7 @@ Route::post('jobcards/reports/printparts', 'JobcardController@printsparts');
 Route::post('jobcards/reports/notesprint', 'JobcardController@printnotes');
 Route::post('jobcards/reports/parts', 'JobcardController@parts');
 Route::post('jobcards/reports/notes', 'JobcardController@notes');
+Route::post('jobcard/{jobcard}/delete', 'JobcardController@deleteJobcard');
 
 // stock
 Route::get('/stock/approval_level', 'StockApprovalsController@index');

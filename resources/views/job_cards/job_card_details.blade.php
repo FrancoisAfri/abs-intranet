@@ -188,12 +188,19 @@
 						</button>
 					@endif
 					@if (!empty($userAccess))
-					<a href="{{ '/jobcard/jobcard_history/' . $card->id }}"
+						<a href="{{ '/jobcard/jobcard_history/' . $card->id }}"
 						   class="btn btn-sm btn-default btn-flat" target=”_blank”">History</a>
 					@endif
                     <button class="btn btn-sm btn-default btn-flat" id="print" name="print" onclick="myFunction()">
                         Print
                     </button>
+					@if (!empty($userAccess))
+						<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+								data-target="#delete-jobcard-warning-modal"
+								data-id="{{ $card->id }}"><i class="fa fa-trash"></i>
+							Delete
+						</button>
+					@endif
                     <div id="myDIV">
                         <br>
                         <form class="form-horizontal" method="get" action="/jobcards/print/{{$card->id}}">
@@ -224,6 +231,9 @@
         @include('job_cards.partials.edit_jobcard_modal')
         @include('job_cards.partials.document_jobcard_modal')
         @include('job_cards.partials.conclude_jobcard_modal')
+		@if (!empty($userAccess))
+			@include('job_cards.partials.delete_jobcard_warning_action', ['modal_title' => 'Delete Job Card', 'modal_content' => 'Are you sure you want to delete this job card? This action cannot be undone.'])
+		@endif
     </div>
 @endsection
 @section('page_script')
@@ -417,6 +427,22 @@
                 var Method = 'PATCH'
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+			
+			var jobID;
+			$('#delete-jobcard-warning-modal').on('shown.bs.modal', function (e) {
+				var btnDelete = $(e.relatedTarget);
+				jobID = btnDelete.data('id');
+			});
+			$('#delete_jobcard').on('click', function () {
+				var strUrl = '/jobcard/' + jobID + '/delete';
+				var formName = 'delete-jobcard-warning-modal-form';
+				var modalID = 'delete-jobcard-warning-modal';
+				var submitBtnID = 'delete_jobcard';
+				var redirectUrl = '/jobcards/mycards';
+				var successMsgTitle = 'Job Card Successfully Deleted!';
+				var successMsg = 'Job Card has been deleted successfully.';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
         });
 	function clone(id, file_index, child_id) {
 		var clone = document.getElementById(id).cloneNode(true);

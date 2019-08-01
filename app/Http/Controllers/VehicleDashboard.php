@@ -68,7 +68,7 @@ class VehicleDashboard extends Controller
 	public function index()
     {
         $loggedInEmplID = Auth::user()->person->id;
-
+		$thirthyDate =  mktime(0, 0, 0, date('m'), date('d')-30, date('Y'));
         $data['breadcrumb'] = [
             ['title' => 'Vehicle Dashboard', 'path' => '/vehicle/overview', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
         ];
@@ -79,7 +79,23 @@ class VehicleDashboard extends Controller
         $inactivevehicles = vehicle_detail::Where('status',4)->get()->count();
         $requiereApprovalVehicles = vehicle_detail::Where('status',2)->get()->count();
         $rejectedVehicles = vehicle_detail::Where('status',3)->get()->count();
+		///
+		$incidentsAlerts = DB::table('vehicle_details')
+			->select('vehicle_details.*', 'vehicle_incidents.severity as incidents_severity'
+					, 'incident_type.name as incident_type_name')
+			->leftJoin('vehicle_incidents', 'vehicle_details.id', '=', 'vehicle_incidents.vehicleID')
+			->leftJoin('incident_type', 'vehicle_incidents.incident_type', '=', 'incident_type.id')
+			->where('vehicle_incidents.vehicle_fixed', 2)
+			->orderBy('id', 'asc')
+			->get()->count();
 
+		$servicesAlerts = DB::table('vehicle_details')
+			->select('vehicle_details.*', 'vehicle_serviceDetails.nxt_service_date')
+			->leftJoin('vehicle_serviceDetails', 'vehicle_details.id', '=', 'vehicle_serviceDetails.vehicleID')
+			->where('vehicle_serviceDetails.nxt_service_date', '>=', $thirthyDate)
+			->orderBy('id', 'asc')
+			->get();
+			
 		$data['activeVehicles'] = $activeVehicles;
 		$data['inactivevehicles'] = $inactivevehicles;
 		$data['requiereApprovalVehicles'] = $requiereApprovalVehicles;

@@ -464,10 +464,7 @@ function round(value, decimals) {
   //-------------
   //- PIE CHART -
   //-------------
-  // Get context with jQuery - using jQuery's .get() method.
-  var pieChartCanvas = $("#pieChart").get(0).getContext("2d");
-  var pieChart = new Chart(pieChartCanvas);
-  
+    
   //function to return the chart data
 function vehicleChartData(activeVehicles,inactivevehicles,requiereApprovalVehicles,rejectedVehicles) {
     
@@ -528,14 +525,7 @@ function vehicleChartData(activeVehicles,inactivevehicles,requiereApprovalVehicl
   //Create pie or douhnut chart
   // You can switch between pie and douhnut using the method below.
 
-  //Get data with ajax
-$.get("/api/vehiclestatusgraphdata",
-    function(data) {
-        var PieData = vehicleChartData(data['activeVehicles'], data['inactivevehicles'], data['requiereApprovalVehicles'], data['rejectedVehicles']);
-
-        //Create the line chart
-        pieChart.Doughnut(PieData, pieOptions);
-    });
-  //-----------------
-  //- END PIE CHART -
-  //-----------------
+	
+	//-----------------
+	//- END PIE CHART -
+	//-----------------

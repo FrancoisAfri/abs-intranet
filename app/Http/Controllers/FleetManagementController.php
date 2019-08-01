@@ -46,7 +46,7 @@ class FleetManagementController extends Controller
     public function fleetManagent()
     {
         $vehicle = vehicle::orderBy('id', 'asc')->get();
-        $Vehicle_types = Vehicle_managemnt::orderBy('id', 'asc')->get();
+        $Vehicle_types = Vehicle_managemnt::orderBy('name', 'asc')->get();
         $vehiclemake = vehiclemake::orderBy('name', 'asc')->get();
         $vehiclemodel = vehiclemodel::orderBy('name', 'asc')->get();
 		$divisionLevels  = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();

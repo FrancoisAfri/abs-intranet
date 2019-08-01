@@ -96,7 +96,6 @@
             @if (count($Ceo_news) > 0)
                 @include('cms.partials.ceo_news_warning_action', ['modal_title' => 'Delete Record', 'modal_content' => 'Are you sure you want to delete this Record? This action cannot be undone.'])
             @endif
-
         </div>
         @endsection
 

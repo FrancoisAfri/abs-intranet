@@ -9,6 +9,7 @@ use App\HRPerson;
 use App\Http\Requests;
 use App\images;
 use App\incident_type;
+use App\fleet_fillingstation;
 use App\Mail\confirm_collection;
 use App\Mail\vehicle_bookings;
 use App\Mail\vehiclebooking_approval;
@@ -922,10 +923,10 @@ class VehicleBookingController extends Controller
         $name = $Employee->first_name . ' ' . $Employee->surname;
         ###################>>>>>#################
 
-        $employees = HRPerson::where('status', 1)->orderBy('id', 'desc')->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $vehicle_fuel_log = vehicle_fuel_log::orderBy('id', 'desc')->get();
         $fueltank = tank::orderBy('id', 'desc')->get();
-        $servicestation = service_station::orderBy('id', 'desc')->get();
+        $servicestation = fleet_fillingstation::orderBy('name', 'asc')->get();
         $bookingID = $returnVeh->id;
         $doc = vehicle_return_documents::count();
         $image = vehicle_return_images::count();

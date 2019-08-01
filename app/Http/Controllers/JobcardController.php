@@ -1280,16 +1280,21 @@ HTML;
 		
 		$instructions = JobCardInstructions::where('job_card_id',$card->id)->orderBy('instruction_details', 'asc')->get();
         $vehicledetails = DB::table('vehicle_details')
-            ->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
-                'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
-                'division_level_fives.name as company', 'division_level_fours.name as Department')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
-            ->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
-            ->get();
-
+			->select('vehicle_details.*', 'vehicle_make.name as vehicle_make',
+				'vehicle_model.name as vehicle_model', 'vehicle_managemnet.name as vehicle_type',
+				'division_level_fives.name as company', 'division_level_fours.name as Department')
+			->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
+			->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
+			->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
+			->leftJoin('division_level_fives', 'vehicle_details.division_level_5', '=', 'division_level_fives.id')
+			->leftJoin('division_level_fours', 'vehicle_details.division_level_4', '=', 'division_level_fours.id')
+			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
+			->where('vehicle_details.status', 1)
+			->get();
+		//
+		
+		//
         $jobcard = DB::table('jobcard_maintanance')
             ->select('jobcard_maintanance.*', 'vehicle_details.*',
                 'contact_companies.name as Supplier', 'vehicle_make.name as vehicle_make',
@@ -2355,5 +2360,20 @@ HTML;
 
         AuditReportsController::store('Job Card Management', 'Job Card print parts Page Accessed', "Accessed By User", 0);
         return view('job_cards.notes_print')->with($data);
+    }
+	// Delete Jobcard
+	public function deleteJobcard(Request $request, jobcard_maintanance $jobcard)
+    {
+		$this->validate($request, [
+             'reason' => 'required',
+        ]);
+		$SysData = $request->all();
+        unset($SysData['_token']);
+		// get fleet details
+		$fleet = vehicle_detail::where('id',$jobcard->vehicle_id)->first();
+        $reason = $SysData['reason'];
+        AuditReportsController::store('Job Card Management', "Job card Deleted on Fleet No :($fleet->fleet_number)", "Reason: $reason", 0);
+        $jobcard->delete();
+        return response()->json();
     }
 }

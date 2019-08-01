@@ -44,7 +44,7 @@
                                              ?  $jobcard->fleet_number . ' ' .  $jobcard->vehicle_registration . ' ' . $jobcard->vehicle_make . ' ' . $jobcard->vehicle_model : ''}} </td>
                                                 <td>{{ (!empty( $jobcard->vehicle_registration)) ?  $jobcard->vehicle_registration : ''}} </td>
                                                 <td>{{ !empty($jobcard->card_date) ? date(' d M Y', $jobcard->card_date) : '' }}</td>
-                                                <td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : 'Nill' }}</td>
+                                                <td>{{ !empty($jobcard->completion_date ) ? date(' d M Y', $jobcard->completion_date) : '' }}</td>
                                                 <td>{{ !empty($jobcard->instruction) ? $jobcard->instruction : '' }}</td>
                                                 <td>{{ !empty($jobcard->servicetype) ? $jobcard->servicetype : '' }}</td>
                                                 <td>{{ !empty($jobcard->Supplier) ? $jobcard->Supplier : '' }}</td>
