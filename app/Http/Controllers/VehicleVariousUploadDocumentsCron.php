@@ -7,6 +7,7 @@ use App\Http\Requests;
 use App\vehicle_detail;
 use App\vehicle_documets;
 use App\vehicle_config;
+use App\jobcard_maintanance;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;

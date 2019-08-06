@@ -94,7 +94,7 @@ class VehicleDashboard extends Controller
 			->leftJoin('vehicle_serviceDetails', 'vehicle_details.id', '=', 'vehicle_serviceDetails.vehicleID')
 			->where('vehicle_serviceDetails.nxt_service_date', '>=', $thirthyDate)
 			->orderBy('id', 'asc')
-			->get();
+			->get()->count();
 			
 		$data['activeVehicles'] = $activeVehicles;
 		$data['inactivevehicles'] = $inactivevehicles;
