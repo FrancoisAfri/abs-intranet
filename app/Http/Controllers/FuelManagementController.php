@@ -819,7 +819,8 @@ class FuelManagementController extends Controller
             })
             ->whereNotIn('vehicle_fuel_log.status', [1, 14])
 			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
-			->orderBy('vehicle_details.fleet_number', 'ASC')
+			->orderBy('vehicle_details.fleet_number', 'asc')
+			->orderBy('vehicle_fuel_log.date', 'asc')
             ->get();
 
         $data['page_title'] = "Other Fuel Approvals";
