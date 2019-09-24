@@ -300,12 +300,46 @@ class VehicleReportsController extends Controller
         return view('Vehicles.Reports.booking_report_print')->with($data);
     }
 
-    public function fuelReports(Request $request)
+    // Get previous Killometers reading
+	function getLastMeterReading($month, $year, $vehicleID,$field,$carKm)
+	{
+		// get dates
+		$monthSend = strtotime("$year-$month");
+		$monthText = date("F Y", $monthSend);
+		$fuelMonth = date("M Y", $monthSend);
+		$prevMonth = ($month == 1) ? 12 : $month-1;
+		$monthStart = strtotime(new Carbon("first day of $fuelMonth"));
+        $monthEnd = new Carbon("last day of $fuelMonth");
+        $monthEnd = strtotime($monthEnd->endOfDay());
+
+		$lastMonthMeter = vehicle_fuel_log::
+		select($field)
+			->where('vehicleID', $vehicleID)
+			->whereBetween('date', [$monthStart, $monthEnd])
+			->orderBy('date', 'desc')
+			->first();
+
+		if (!empty($lastMonthMeter->$field))
+			return $lastMonthMeter->$field;
+		else
+		{
+			$lastMeterReading = vehicle_fuel_log::
+			select($field)
+			->where('vehicleID', $vehicleID)
+			->where('date', '<',$monthStart)
+			->orderBy('date', 'desc')
+			->first();
+			if (!empty($lastMeterReading->$field)) return $lastMeterReading->$field;
+			else return $carKm;
+		}
+	}
+	
+	public function fuelReports(Request $request)
     {
         $reportData = $request->all();
         unset($reportData['_token']);
 
-        $actionFrom = $actionTo = 0;
+        $actionFrom = $actionTo = $actionMonth = $actionYear = 0;
         $vehicle = '';
         $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
         $vehicleType = $reportData['vehicle_type'];
@@ -316,7 +350,11 @@ class VehicleReportsController extends Controller
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
+			$fromExplode = explode('/', $startExplode[0]);
+			$actionMonth = $fromExplode[0];
+			$actionYear = $fromExplode[2];
         }
+		
         $fuelLog = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Status'
 			, 'vehicle_fuel_log.id as fuelLogID'
@@ -366,22 +404,39 @@ class VehicleReportsController extends Controller
 			$oldkm = $oldhr = $litreTopUp = $perLitre = $kmTravelled = $hrTravelled = 0;
 			$numItems = count($fuelLog);			
 			foreach ($fuelLog as $fuel) {
-				$metreType = $fuel->metre_reading_type;
-				if ($count == 0)
-				{ 
-					if ($metreType === 1)
-						$kmTravelled = $fuel->Odometer_reading - 0;
-					else $hrTravelled = $fuel->Hoursreading - 0;
+				$maintenance = vehicle_maintenance::where('id', $fuel->vehicleID)->first();
+				if ($fuel->metre_reading_type == 1) 
+				{
+					$carKm = $maintenance->odometer_reading;
+					$field = 'Odometer_reading';
 				}
 				else 
 				{
-					if ($metreType === 1)
-						$kmTravelled = $fuel->Odometer_reading - $oldkm;
-					else $hrTravelled = $fuel->Hoursreading - $oldhr;
+					$field = 'Hoursreading';
+					$carKm = $maintenance->hours_reading;
 				}
-				if ($metreType === 1)
+				$prevMonth = ($actionFrom == 1) ? 12 : $actionFrom -1;
+				if ($actionFrom > 0 && $actionTo > 0)
+				{
+					if ($actionMonth == 1)
+					{
+						$iprevYear = $actionYear - 1;
+						$prevMonthkm = VehicleReportsController::getLastMeterReading($prevMonth, $iprevYear,$maintenance->id,$field,$carKm);
+					}
+					else
+					{
+						$prevMonthkm = VehicleReportsController::getLastMeterReading($prevMonth, $actionYear,$maintenance->id,$field,$carKm);
+					}
+				}
+				else $prevMonthkm = $carKm;
+
+				if ($count == 0)
+					$kmTravelled = $fuel->$field - $prevMonthkm;
+				else $kmTravelled = $fuel->$field - $oldkm;
+					
+				if ($fuel->metre_reading_type === 1)
 					$fuel->km_travelled = $kmTravelled;
-				else $fuel->hr_travelled = $hrTravelled;		
+				else $fuel->hr_travelled = $kmTravelled;		
 				$count ++;
 				
 				if ($vehicleID != $fuel->vehicleID && $vehicleID != 0)
@@ -442,7 +497,7 @@ class VehicleReportsController extends Controller
     {
         $reportData = $request->all();
         unset($reportData['_token']);
-        $actionFrom = $actionTo = 0;
+        $actionFrom = $actionTo = $actionMonth = $actionYear = 0;;
 		$vehicleArray = array();
         $vehicle = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
         if (!empty($vehicle))
@@ -455,26 +510,22 @@ class VehicleReportsController extends Controller
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
+			$fromExplode = explode('/', $startExplode[0]);
+			$actionMonth = $fromExplode[0];
+			$actionYear = $fromExplode[2];
         }
 
         $fuelLog = DB::table('vehicle_fuel_log')
             ->select('vehicle_fuel_log.*', 'vehicle_fuel_log.status as Status'
 			, 'vehicle_fuel_log.id as fuelLogID'
-			, 'vehicle_details.vehicle_make as vehiclemake'
-			, 'vehicle_details.vehicle_model as vehiclemodel'
-			, 'vehicle_details.vehicle_type as vehicletype'
-			, 'vehicle_make.name as VehicleMake'
-			, 'vehicle_model.name as VehicleModel'
-			, 'vehicle_managemnet.name as vehicletypes'
+			, 'vehicle_details.fleet_number as fleet_number'
+			, 'vehicle_details.metre_reading_type as metre_reading_type'
 			, 'hr_people.first_name as firstname'
 			, 'hr_people.surname as surname'
 			, 'fleet_fillingstation.name as station')
-            ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
-			->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.vehicle_make', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.vehicle_model', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.vehicle_type', '=', 'vehicle_managemnet.id')
-            ->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
+			->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
+            ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
+			->leftJoin('hr_people', 'vehicle_fuel_log.driver', '=', 'hr_people.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
                     $query->where('vehicle_details.vehicle_type', $vehicleType);
@@ -495,16 +546,87 @@ class VehicleReportsController extends Controller
                     $query->whereIn('vehicleID', $vehicleArray);
 				}
             })
-            ->orderBy('id', 'desc')
+			//->where('vehicleID',6)
+			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
+			->orderBy('vehicle_fuel_log.date')
             ->get();
-		
-		$totalKms = $fuelLog->sum('Odometer_reading');
-        $totalHours = $fuelLog->sum('Hoursreading');
-        $totalLitres = $fuelLog->sum('litres_new');
+		//
+			if (!empty($fuelLog))
+			{
+				$totalHours = $totalKms = $totalLitres = $totalCost = 0;
+				$vehicleID = $count = $grandTotalHours = $grandTotalkms = 0;
+				$oldkm = $oldhr = $litreTopUp = $perLitre = $kmTravelled = $hrTravelled = 0;
+				$numItems = count($fuelLog);			
+				foreach ($fuelLog as $fuel) {
+					$maintenance = vehicle_maintenance::where('id', $fuel->vehicleID)->first();
+					if ($fuel->metre_reading_type == 1) 
+					{
+						$carKm = $maintenance->odometer_reading;
+						$field = 'Odometer_reading';
+					}
+					else 
+					{
+						$field = 'Hoursreading';
+						$carKm = $maintenance->hours_reading;
+					}
+					$prevMonth = ($actionFrom == 1) ? 12 : $actionFrom -1;
+					if ($actionFrom > 0 && $actionTo > 0)
+					{
+						if ($actionMonth == 1)
+						{
+							$iprevYear = $actionYear - 1;
+							$prevMonthkm = VehicleReportsController::getLastMeterReading($prevMonth, $iprevYear,$maintenance->id,$field,$carKm);
+						}
+						else
+						{
+							$prevMonthkm = VehicleReportsController::getLastMeterReading($prevMonth, $actionYear,$maintenance->id,$field,$carKm);
+						}
+					}
+					else $prevMonthkm = $carKm;
+
+					if ($count == 0)
+						$kmTravelled = $fuel->$field - $prevMonthkm;
+					else $kmTravelled = $fuel->$field - $oldkm;
+						
+					if ($fuel->metre_reading_type === 1)
+						$fuel->km_travelled = $kmTravelled;
+					else $fuel->hr_travelled = $kmTravelled;		
+					$count ++;
+					
+					if ($vehicleID != $fuel->vehicleID && $vehicleID != 0)
+					{
+						// reset total to zero
+						$fuel->total_hours = $totalHours;
+						$fuel->total_kms = $totalKms;
+						$fuel->total_litres = $totalLitres;
+						$fuel->total_costs = $totalCost;
+						$grandTotalHours = $grandTotalHours + $totalHours;
+						$grandTotalkms = $grandTotalkms + $totalKms;
+						$totalHours = $totalKms = $oldkm = $oldhr =
+						$totalLitres = $totalCost = $kmTravelled = $hrTravelled = 0;
+					}
+					$totalKms = $totalKms + $kmTravelled;
+					$totalHours = $totalHours + $hrTravelled;
+					$totalLitres = $totalLitres + $fuel->litres_new;
+					$totalCost = $totalCost + $fuel->total_cost;
+					if($count === $numItems) {
+						
+						$fuel->total_hours = $totalHours;
+						$fuel->total_kms = $totalKms;
+						$fuel->total_litres = $totalLitres;
+						$fuel->total_costs = $totalCost;
+					}
+					$oldkm = $fuel->Odometer_reading;
+					$oldhr = $fuel->Hoursreading;
+					$vehicleID = $fuel->vehicleID;
+				}
+			}
+		$totalLitres = $fuelLog->sum('litres_new');
         $totalCost = $fuelLog->sum('total_cost');
 		
-		$data['totalKms'] = $totalKms;
-        $data['totalHours'] = $totalHours;
+		$data['totalKms'] = $grandTotalkms;
+        $data['totalHours'] = $grandTotalHours ;
         $data['totalLitres'] = $totalLitres;
         $data['totalCost'] = $totalCost;
         $data['fuelLog'] = $fuelLog;
