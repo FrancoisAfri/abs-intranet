@@ -24,11 +24,10 @@
 									<table id="example2" class="table table-bordered table-hover">
 										<thead>
 											<tr>
-												<th>Supplier</th>
 												<th>Fleet Number</th>
-												<th>Fuel Supplier</th>
-												<th>km Reading</th>
-												<th>Hour Reading</th>
+												<th>Supplier</th>
+												<th>Travelled km</th>
+												<th>Travelled Hr</th>
 												<th>Litres</th>
 												<th>Avg Cons (Odo)</th>
 												<th>Avg Cons (Hrs)</th>
@@ -37,38 +36,28 @@
 											</tr>
 										</thead>
 										<tbody>
+											<?php $prevVehicleID = 0; ?>
 											@if (count($externalFuelLog) > 0)
 												@foreach ($externalFuelLog as $externallog)
-													<tr>
-														<td>{{ (!empty( $externallog->supplier)) ?  $externallog->supplier : ''}} </td> 
-														<td>{{ (!empty( $externallog->fleet_number)) ?  $externallog->fleet_number : ''}} </td>                                    
-														<td> External </td> 
-														<td>{{ (!empty( $externallog->Odometer_reading)) ?  $externallog->Odometer_reading : 0}}  Km</td> 
-														<td>{{ (!empty( $externallog->Hoursreading)) ?  $externallog->Hoursreading : 0}} Hrs</td> 
-														<td style="text-align: center">{{ !empty($externallog->litres_new) ? number_format($externallog->litres_new, 2) : 0 }}</td>
-														<td>{{ (!empty($externallog->Odometer_reading) && (!empty( $externallog->litres_new))) ?  number_format($externallog->Odometer_reading/$externallog->litres_new, 2) : 0}} </td>
-														<td>{{ (!empty($externallog->Hoursreading) && (!empty( $externallog->litres_new))) ?  number_format($externallog->Hoursreading/$externallog->litres_new, 2) : 0}} </td>
-														<td> R {{ (!empty( $externallog->litres_new) && !empty( $externallog->total_cost)) ?  number_format($externallog->total_cost/$externallog->litres_new, 2) : 0}} </td>
-														<td style="text-align: center"> R {{ !empty($externallog->total_cost) ? number_format($externallog->total_cost, 2) : 0 }}</td>
-													</tr>
+												
+													<?php $prevVehicleID = $externallog->vehicleID; ?>
 												@endforeach
 											@endif
 										</tbody>
 										<tfoot>
 											<tr>
-												<th></th>
 												<th>Fleet Number</th>
-												<th>Fuel Supplier</th>
-												<th>km Reading</th>
-												<th>Hour Reading</th>
+												<th>Supplier</th>
+												<th>Travelled km</th>
+												<th>Travelled Hr</th>
 												<th>Litres</th>
 												<th>Avg Cons (Odo)</th>
 												<th>Avg Cons (Hrs)</th>
 												<th>Avg price per Litre </th>
 												<th>Amount </th>
 											</tr>
-											<tr class="caption">
-												<th colspan="3" style="text-align:right;"> Totals</th> 
+											<tr>
+												<th colspan="2" style="text-align:right;"> Totals</th> 
 												<th> kms </th>  
 												<th> Hrs </th>  
 												<th> Litres </th>
@@ -78,7 +67,7 @@
 												<th> Amount </th>
 											</tr>
 											<tr>
-												<td colspan="3" style="text-align:right;"></td> 
+												<td colspan="2" style="text-align:right;"></td> 
 													<td>{{ !empty($totalKms) ? number_format($totalKms, 2) : 0 }} kms</td> 
 													<td>{{ !empty($totalHours) ? number_format($totalHours, 2) : 0 }} hrs</td> 
 													<td>{{ !empty($totalLitres) ? number_format($totalLitres, 2) : 0 }} l</td> 

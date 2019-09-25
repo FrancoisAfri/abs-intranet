@@ -386,7 +386,6 @@ class VehicleReportsController extends Controller
                     $query->whereIn('vehicleID', $vehicleArray);
 				}
             })
-			//->where('vehicleID',6)
 			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
 			->orderBy('vehicle_details.fleet_number', 'ASC')
 			->orderBy('vehicle_fuel_log.date')
@@ -546,7 +545,6 @@ class VehicleReportsController extends Controller
                     $query->whereIn('vehicleID', $vehicleArray);
 				}
             })
-			//->where('vehicleID',6)
 			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
 			->orderBy('vehicle_details.fleet_number', 'ASC')
 			->orderBy('vehicle_fuel_log.date')
@@ -570,7 +568,7 @@ class VehicleReportsController extends Controller
 						$field = 'Hoursreading';
 						$carKm = $maintenance->hours_reading;
 					}
-					$prevMonth = ($actionFrom == 1) ? 12 : $actionFrom -1;
+					$prevMonth = ($actionMonth == 1) ? 12 : $actionMonth -1;
 					if ($actionFrom > 0 && $actionTo > 0)
 					{
 						if ($actionMonth == 1)
@@ -1570,7 +1568,7 @@ class VehicleReportsController extends Controller
         $reportData = $request->all();
         unset($reportData['_token']);
 
-        $actionFrom = $actionTo = 0;
+        $actionFrom = $actionTo = $actionMonth =$actionYear = 0;
         $vehicle = '';
         $vehicleArray = isset($reportData['vehicle_id']) ? $reportData['vehicle_id'] : array();
 		$vehicleType = $reportData['vehicle_type'];
@@ -1581,19 +1579,17 @@ class VehicleReportsController extends Controller
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
+			$fromExplode = explode('/', $startExplode[0]);
+			$actionMonth = $fromExplode[0];
+			$actionYear = $fromExplode[2];
         }
 
         $externalFuelLog = DB::table('vehicle_fuel_log')
-            ->select('vehicle_fuel_log.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.fleet_number as fleet_number'
-                , 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype'
-                , 'fleet_fillingstation.name as supplier', 'vehicle_make.name as VehicleMake', 'vehicle_model.name as VehicleModel'
-                , 'vehicle_details.vehicle_registration as vehicle_registration'
-				, 'vehicle_details.metre_reading_type'
+            ->select('vehicle_fuel_log.*', 'vehicle_details.fleet_number as fleet_number'
+                , 'fleet_fillingstation.name as supplier'
+                , 'vehicle_details.metre_reading_type'
 				, 'vehicle_details.id as vehicle_id')
             ->leftJoin('vehicle_details', 'vehicle_fuel_log.vehicleID', '=', 'vehicle_details.id')
-            ->leftJoin('vehicle_make', 'vehicle_details.id', '=', 'vehicle_make.id')
-            ->leftJoin('vehicle_model', 'vehicle_details.id', '=', 'vehicle_model.id')
-            ->leftJoin('vehicle_managemnet', 'vehicle_details.id', '=', 'vehicle_managemnet.id')
             ->leftJoin('fleet_fillingstation', 'vehicle_fuel_log.service_station', '=', 'fleet_fillingstation.id')
             ->where(function ($query) use ($vehicleType) {
                 if (!empty($vehicleType)) {
@@ -1616,38 +1612,91 @@ class VehicleReportsController extends Controller
 				}
             })
             ->where('vehicle_fuel_log.tank_and_other', '=', 2)
-            ->orderby('vehicle_fuel_log.vehicleID', 'asc')
-            ->orderby('vehicle_fuel_log.date', 'asc')
+			->orderByRaw('LENGTH(vehicle_details.fleet_number) asc')
+			->orderBy('vehicle_details.fleet_number', 'ASC')
+			->orderBy('vehicle_fuel_log.date')
             ->orderby('supplier', 'asc')
             ->get();
 		
 		for ($i = 0; $i < count($vehicleArray); $i++) {
 			$vehicle .= $vehicleArray[$i] . ',';
 		}
+		$totalHours = $totalKms = $totalLitres = $totalCost = 0;
+		$vehicleID = $count = $grandTotalHours = $grandTotalkms = 0;
 		if (!empty($externalFuelLog))
 		{
-			return $externalFuelLog;
-			$oldkm = $count = 0;
-			foreach ($externalFuelLog as $fuellog) {
-				
+			$oldkm = $oldhr = $litreTopUp = $perLitre = $kmTravelled = $hrTravelled = 0;
+			$numItems = count($externalFuelLog);			
+			foreach ($externalFuelLog as $fuel) {
+				$maintenance = vehicle_maintenance::where('id', $fuel->vehicleID)->first();
+				if ($fuel->metre_reading_type == 1) 
+				{
+					$carKm = $maintenance->odometer_reading;
+					$field = 'Odometer_reading';
+				}
+				else 
+				{
+					$field = 'Hoursreading';
+					$carKm = $maintenance->hours_reading;
+				}
+				$prevMonth = ($actionMonth == 1) ? 12 : $actionMonth -1;
+				if ($actionFrom > 0 && $actionTo > 0)
+				{
+					if ($actionMonth == 1)
+					{
+						$iprevYear = $actionYear - 1;
+						$prevMonthkm = VehicleReportsController::getLastMeterReading($prevMonth, $iprevYear,$maintenance->id,$field,$carKm);
+					}
+					else
+					{
+						$prevMonthkm = VehicleReportsController::getLastMeterReading($prevMonth, $actionYear,$maintenance->id,$field,$carKm);
+					}
+				}
+				else $prevMonthkm = $carKm;
+
 				if ($count == 0)
-					$kmTravelled = $fuellog->$field - $prevMonthkm;
-				else $kmTravelled = $fuellog->$field - $oldkm;
-				$fuellog->km_travelled = $kmTravelled;
+					$kmTravelled = $fuel->$field - $prevMonthkm;
+				else $kmTravelled = $fuel->$field - $oldkm;
+					
+				if ($fuel->metre_reading_type === 1)
+					$fuel->km_travelled = $kmTravelled;
+				else $fuel->hr_travelled = $kmTravelled;		
 				$count ++;
-				$oldkm = $fuellog->$field;
-            }
+				
+				if ($vehicleID != $fuel->vehicleID && $vehicleID != 0)
+				{
+					// reset total to zero
+					$fuel->total_hours = $totalHours;
+					$fuel->total_kms = $totalKms;
+					$fuel->total_litres = $totalLitres;
+					$fuel->total_costs = $totalCost;
+					$grandTotalHours = $grandTotalHours + $totalHours;
+					$grandTotalkms = $grandTotalkms + $totalKms;
+					$totalHours = $totalKms = $oldkm = $oldhr =
+					$totalLitres = $totalCost = $kmTravelled = $hrTravelled = 0;
+				}
+				$totalKms = $totalKms + $kmTravelled;
+				$totalHours = $totalHours + $hrTravelled;
+				$totalLitres = $totalLitres + $fuel->litres_new;
+				$totalCost = $totalCost + $fuel->total_cost;
+				if($count === $numItems) {
+					
+					$fuel->total_hours = $totalHours;
+					$fuel->total_kms = $totalKms;
+					$fuel->total_litres = $totalLitres;
+					$fuel->total_costs = $totalCost;
+				}
+				$oldkm = $fuel->Odometer_reading;
+				$oldhr = $fuel->Hoursreading;
+				$vehicleID = $fuel->vehicleID;
+			}
 		}
-        $totalKms = $externalFuelLog->sum('Odometer_reading');
-        $totalActualKms = $externalFuelLog->sum('actual_km_reading');
-        $totalHours = $externalFuelLog->sum('Hoursreading');
-        $totalActualHours = $externalFuelLog->sum('actual_hr_reading');
         $totalLitres = $externalFuelLog->sum('litres_new');
         $totalCost = $externalFuelLog->sum('total_cost');
-        if (!empty($totalActualKms) && !empty($totalLitres)) $totalAvgKms = $totalActualKms / $totalLitres;
+        if (!empty($grandTotalkms) && !empty($totalLitres)) $totalAvgKms = $grandTotalkms / $totalLitres;
         else $totalAvgKms = 0;
-        if (!empty($totalActualHours) && !empty($totalLitres)) $totAlavgHrs = $totalActualHours / $totalLitres;
-        else $totAlavgHrs = 0;
+        if (!empty($grandTotalHours) && !empty($totalLitres)) $totalAvgHrs = $grandTotalHours / $totalLitres;
+        else $totalAvgHrs = 0;
         if (!empty($totalCost) && !empty($totalLitres)) $totalAvgCost = $totalCost / $totalLitres;
         else $totalAvgCost = 0;
 
@@ -1656,12 +1705,12 @@ class VehicleReportsController extends Controller
         $data['driver_id'] = $driverID;
         $data['action_date'] = $actionDate;
         $data['externalFuelLog'] = $externalFuelLog;
-        $data['totalKms'] = $totalKms;
-        $data['totalHours'] = $totalHours;
+        $data['grandTotalHours'] = $grandTotalHours;
+        $data['grandTotalkms'] = $grandTotalkms;
         $data['totalLitres'] = $totalLitres;
         $data['totalCost'] = $totalCost;
         $data['totalAvgKms'] = $totalAvgKms;
-        $data['totAlavgHrs'] = $totAlavgHrs;
+        $data['totAlavgHrs'] = $totalAvgHrs;
         $data['totalAvgCost'] = $totalAvgCost;
         $data['page_title'] = " Fleet Management ";
         $data['page_description'] = "External Fuel Report ";
