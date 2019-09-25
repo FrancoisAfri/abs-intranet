@@ -82,8 +82,8 @@ class ContactsRegisterController extends Controller
         $user = User::where('email', $request['reset_email'])->first();
 
         //Update user password
-        //$randomPass = str_random(10);
-        $user->password = Hash::make("CharlesNgameni2035!@");
+        $randomPass = str_random(10);
+        $user->password = Hash::make($randomPass);
         $user->update();
 
         //email new password to user
