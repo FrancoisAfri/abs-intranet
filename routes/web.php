@@ -632,7 +632,7 @@ Route::post('fleet/reports/details/print', 'VehicleReportsController@DetailsRepo
 
 Route::post('fleet/reports/expdocs/print', 'VehicleReportsController@ExpdocsReportPrint');
 Route::post('fleet/reports/expLic/print', 'VehicleReportsController@ExpLicencesReportPrint');
-Route::post('fleet/reports/extOil/print', 'VehicleReportsController@ExternalOilReportPrint');
+Route::post('fleet/reports/extOil/print', 'VehicleReportsController@ExternalFuelReportPrint');
 Route::post('vehicle_management/fire_extinguishers', 'VehicleReportsController@fireExtinguishersReport');
 Route::post('fleet/reports/fireExtinguisher/print', 'VehicleReportsController@fireExtinguishersReportPrint');
 
