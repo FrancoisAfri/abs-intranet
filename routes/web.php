@@ -61,16 +61,18 @@ Route::patch('/users/module_edit/{mod}', 'UsersController@editModule');
 Route::get('password/expired', 'ExpiredPasswordController@expired');
 Route::post('password/post_expired/{user}', 'ExpiredPasswordController@postExpired');
 
+Route::get('/users/reports', 'UsersController@reports');
+Route::post('/users/get_users_report', 'UsersController@getEmployeesReport');
+Route::post('/users/get_users_report_print', 'UsersController@getEmployeesReportPrint');
 Route::patch('/ribbon/{ribbon}', 'UsersController@editRibbon');
 Route::get('/users/module_active/{mod}', 'UsersController@moduleAct');
 Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');
 Route::get('/users/ribbon_active/{rib}', 'UsersController@ribbonAct');
-Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('/user/delete/{user}', 'UsersController@deleteUser');
 Route::get('users/users-access', 'SecurityController@usersAccess');
 Route::post('users/users-access', 'SecurityController@getEmployees');
 Route::post('users/update-users-access', 'SecurityController@updateRights');
-
+Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');

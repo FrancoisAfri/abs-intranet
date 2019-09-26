@@ -9,7 +9,7 @@
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/users/users-access">
+                <form class="form-horizontal" method="POST" action="/users/get_users_report">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
                         <h3 class="box-title">Users Access</h3>
@@ -46,15 +46,19 @@
                                 </div>
                             </div>
                         @endforeach
-                        <div class="form-group{{ $errors->has('employee_name') ? ' has-error' : '' }}">
-                            <label for="{{ 'employee_name' }}" class="col-sm-2 control-label">Employee Name</label>
-
+						<div class="form-group manual-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                            <label for="hr_person_id" class="col-sm-2 control-label">Employee</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" name="employee_name" id="employee_name" value="{{ old('employee_name') }}">
+                                    <select id="hr_person_id" name="hr_person_id" class="form-control select2" style="width: 100%;">
+                                        <option value="">*** Select an Employee ***</option>
+                                        @foreach($employees as $employee)
+                                            <option value="{{ $employee->id }}">{{ $employee->full_name }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -78,7 +82,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="submit" id="add-new-module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-module-modal"><i class="fa fa-search"></i> Load Employees</button>
+                        <button type="submit" id="add-new-module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-new-module-modal"><i class="fa fa-search"></i> Generate</button>
                     </div>
                 </form>
             </div>
