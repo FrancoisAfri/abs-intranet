@@ -114,12 +114,9 @@
 	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.print.min.js"></script>
 		<!-- End Bootstrap File input -->
 	<script>
-		function postData(id, data) {
-			if (data == 'actdeac') location.href = "/vehicle_management/vehicles_Act/" + id;
-		}
 		//Cancel button click event
 		document.getElementById("cancel").onclick = function () {
-			location.href = "/vehicle_management/vehicle_reports";
+			location.href = "/users/reports";
 		};
 		$(function () {
 			$('#example2').DataTable({
