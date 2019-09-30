@@ -241,7 +241,7 @@
             $(".select2").select2();
             //Date Range picker
             $('.daterangepicker').daterangepicker({
-                format: 'DD/MM/YYYY',
+				locale:{ format:'DD/MM/YYYY' },
                 endDate: '-1d',
                 autoclose: true
             });
