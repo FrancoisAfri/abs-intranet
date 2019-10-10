@@ -4,7 +4,6 @@
             <form class="form-horizontal" method="POST" name="edit-policy-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -13,7 +12,18 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
+					<div class="form-group {{ $errors->has('category_id') ? ' has-error' : '' }}">
+                        <label for="category_id" class="col-sm-2 control-label">Category</label>
+                        <div class="col-sm-8">
+							<select class="form-control" style="width: 100%;"
+									id="category_id" name="category_id">
+								<option value="">*** Select a Category ***</option>
+								@foreach($categories as $category)
+									<option value="{{ $category->id }}">{{ $category->name }}</option>
+								@endforeach
+							</select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-8">
@@ -28,9 +38,7 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
-
                     <hr class="hr-text" data-content="DOCUMENTS UPLOAD">
-
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -46,7 +54,6 @@
                                    value="{{ old('date') }}" placeholder="Select  Inception date  ...">
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

@@ -15,24 +15,20 @@
             <div class="box box-primary">
                 <form class="form-horizontal" method="POST" action="/System/policy/viewUsers">
                     {{ csrf_field() }}
-
                     <div class="box-header with-border">
-                        <h3 class="box-title">Policy Users For - {{$Policy->name}} </h3>
+                        <h3 class="box-title">Policy Users For - {{$policy->name}} </h3>
 						</br>
                          <h3 class="box-title">
-							@if(!empty($Policy->document))
+							@if(!empty($policy->document))
 								<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-								   href="{{ Storage::disk('local')->url("Policies/policy/$Policy->document") }}"
+								   href="{{ Storage::disk('local')->url("Policies/policy/$policy->document") }}"
 								   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
 							@else
 								<a class="btn btn-default pull-centre btn-xs"><i
 											class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
 							@endif							
 						</h3>
-
                         <button type="button" class="btn btn-default pull-right" id="print"><i class="fa fa-print"></i> Print</button>
-
-
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -55,7 +51,7 @@
                                                                                           id="checkallaccept"
                                                                                           onclick="checkAllboxAccept()"/>
                                 </th>
-                                <th> Employee Name</th>
+                                <th>Employee Name</th>
                                 <th>Company</th>
                                 <th>Department</th>
                                 <th>Date Added</th>
@@ -66,7 +62,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($Policies as $policy)
+                            @foreach($policies as $policy)
                                 <tr>
                                     <td style="width: 5px; text-align: center;">
                                         <input type="hidden" class="checkbox selectall"
@@ -167,7 +163,7 @@
         });
 
         $('#print').click(function () {
-            location.href = '/System/policy/print/{{ $Policy->id }}';
+            location.href = '/System/policy/print/{{ $policy->id }}';
         });
 
 

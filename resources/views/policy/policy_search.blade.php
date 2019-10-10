@@ -23,7 +23,18 @@
                     {{ csrf_field() }}
 
                     <div class="box-body">
-
+						<div class="form-group {{ $errors->has('category_id') ? ' has-error' : '' }}">
+							<label for="category_id" class="col-sm-2 control-label">Category</label>
+							<div class="col-sm-8">
+								<select class="form-control select2" style="width: 100%;"
+										id="category_id" name="category_id">
+									<option value="">*** Select a Category ***</option>
+									@foreach($categories as $category)
+										<option value="{{ $category->id }}">{{ $category->name }}</option>
+									@endforeach
+								</select>
+							</div>
+						</div>
                         <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="leave_types_id" class="col-sm-2 control-label">Policy Name </label>
                             <div class="col-sm-8">

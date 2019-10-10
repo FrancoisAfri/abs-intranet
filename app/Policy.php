@@ -9,7 +9,8 @@ class Policy extends Model
     public $table = 'policy';
 
     // Mass assignable fields
-    protected $fillable = ['name', 'description', 'document', 'status', 'date'];
+    protected $fillable = ['name', 'description', 'document', 'status'
+	, 'date', 'category_id'];
 
 
     /**
@@ -20,5 +21,10 @@ class Policy extends Model
     public function policyUsers()
     {
         return $this->hasMany(Policy_users::class, 'policy_id')->orderBy('id');
+    }
+	
+	public function policyCategory()
+    {
+        return $this->belongsTo(Policy_Category::class, 'category_id')->orderBy('id');
     }
 }

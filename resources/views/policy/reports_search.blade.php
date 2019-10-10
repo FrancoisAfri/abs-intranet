@@ -36,7 +36,19 @@
                                     <h3 class="box-title">Search Criteria</h3>
                                 </div>
                                 <div class="box-body" id="vehicle_details">
-                                    <div class="form-group {{ $errors->has('policy_name') ? ' has-error' : '' }}">
+                                    <div class="form-group {{ $errors->has('category_id') ? ' has-error' : '' }}">
+										<label for="category_id" class="col-sm-2 control-label">Category</label>
+										<div class="col-sm-8">
+											<select class="form-control select2" style="width: 100%;"
+													id="category_id" name="category_id">
+												<option value="">*** Select a Category ***</option>
+												@foreach($categories as $category)
+													<option value="{{ $category->id }}">{{ $category->name }}</option>
+												@endforeach
+											</select>
+										</div>
+									</div>
+									<div class="form-group {{ $errors->has('policy_name') ? ' has-error' : '' }}">
                                         <label for="policy_name" class="col-sm-2 control-label">Policy Name</label>
                                         <div class="col-sm-10">
                                             <select class="form-control select2" style="width: 100%;" id="policy_name"
@@ -48,6 +60,14 @@
                                             </select>
                                         </div>
                                     </div>
+									<div class="form-group">
+										<label for="policy_date" class="col-sm-2 control-label">Policy Date</label>
+										<div class="col-sm-10">
+											<div class="input-group">
+												<input type="text" class="form-control daterangepicker" id="policy_date" name="policy_date" value="" placeholder="Select Policy Date...">
+											</div>
+										</div>
+									</div>
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary pull-right"><i
                                                     class="fa fa-search"></i> Search

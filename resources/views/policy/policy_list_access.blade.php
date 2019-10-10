@@ -41,8 +41,9 @@
                         <thead>
                         <tr>
                             <th style="vertical-align: middle; text-align: center;"></th>
-                            <th>Policy Name</th>
-                            <th>Policy Description</th>
+                            <th>Category</th>
+                            <th>Name</th>
+                            <th>Description</th>
                             <th>Expiry Date </th>
                             <th style="vertical-align: middle; text-align: center;">Read and understood</th>
                             <th style="vertical-align: middle; text-align: center;">Read but not understood</th>
@@ -56,9 +57,9 @@
                                 <td style="vertical-align: middle;" nowrap>
                                     <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
                                         <label for="document" class="control-label"></label>
-                                        @if(!empty($policy->policyDoc))
+                                        @if(!empty($policy->policy_doc))
                                             <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                               href="{{ Storage::disk('local')->url("Policies/policy/$policy->policyDoc") }}"
+                                               href="{{ Storage::disk('local')->url("Policies/policy/$policy->policy_doc") }}"
                                                target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
                                         @else
                                             <a class="btn btn-default pull-centre btn-xs"><i
@@ -66,18 +67,31 @@
                                         @endif
                                     </div>
                                 </td>
-                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->policyName)) ?  $policy->policyName : ''}}</td>
-                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->policyDescription)) ?  $policy->policyDescription : ''}}</td>
-                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->Expiry)) ?  date(' d M Y', $policy->Expiry) : ''}}</td>
-
+								<td>{{ (!empty( $policy->cat_name)) ?  $policy->cat_name : ''}} </td>
+                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->policy_name)) ?  $policy->policy_name : ''}}</td>
+                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->policy_description)) ?  $policy->policy_description : ''}}</td>
+                                <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->expiry)) ?  date('d M Y', $policy->expiry) : ''}}</td>
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" value="{{ "1-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>
+									@if(!empty($policy->read_understood) ||  !empty($policy->read_not_understood)  || !empty($policy->read_not_sure))
+											<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "1-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>
+									@else 
+										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" value="{{ "1-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>	
+									@endif
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" value="{{ "2-$policy->user_id" }}"  {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>
+								@if(!empty($policy->read_understood) ||  !empty($policy->read_not_understood)  || !empty($policy->read_not_sure))
+										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "2-$policy->user_id" }}"  {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>
+									@else 
+										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" value="{{ "2-$policy->user_id" }}"  {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>	
+									@endif
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
-                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" value="{{ "3-$policy->user_id" }}" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>
+									@if(!empty($policy->read_understood) ||  !empty($policy->read_not_understood)  || !empty($policy->read_not_sure))
+										 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "3-$policy->user_id" }}" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>
+									@else 
+										 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" value="{{ "3-$policy->user_id" }}" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>	
+									@endif
+                                   
                                 </td>
                                 @endforeach
                             </tr>
@@ -86,8 +100,9 @@
                         <tfoot>
                         <tr>
                             <th style="vertical-align: middle; text-align: center;"></th>
-                            <th>Policy Name</th>
-                            <th>Policy Description</th>
+                            <th>Category</th>
+                            <th>Name</th>
+                            <th>Description</th>
                             <th>Expiry Date </th>
                             <th style="vertical-align: middle; text-align: center;">Read and understood</th>
                             <th style="vertical-align: middle; text-align: center;">Read but not understood</th>

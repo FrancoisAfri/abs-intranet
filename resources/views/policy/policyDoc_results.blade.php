@@ -86,9 +86,9 @@
                         <button type="button" id="cancel" class="btn btn-default pull-left"><i
                                     class="fa fa-arrow-left"></i> Back
                         </button>
-                        <button type="submit" id="add-new-module" class="btn btn-primary pull-right"><i
+                        <!--<button type="submit" id="add-new-module" class="btn btn-primary pull-right"><i
                                     class="fa fa-floppy-o"></i> Save Changes
-                        </button>
+                        </button>-->
                     </div>
                 </form>
             </div>
@@ -156,7 +156,7 @@
 
             //Cancel button
             $('#cancel').click(function () {
-                location.href = '/users/users-access';
+                location.href = '/System/policy/search_policies';
             });
 
             //Vertically center modals on page

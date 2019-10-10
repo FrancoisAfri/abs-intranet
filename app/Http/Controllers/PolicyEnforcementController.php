@@ -7,6 +7,7 @@ use App\ContactCompany;
 use App\DivisionLevel;
 use App\DivisionLevelFive;
 use App\HRPerson;
+use App\Policy_Category;
 use App\Http\Requests;
 use App\Mail\createPolicy;
 use App\modules;
@@ -27,19 +28,16 @@ class PolicyEnforcementController extends Controller
 
     public function create()
     {
-        $Policy = Policy::all();
+        $policies = Policy::all();
+		if (!empty($policies)) $policies = $policies->load('policyCategory');
+		//return $policies;
         $employees = HRPerson::where('status', 1)->get();
-        // return $employees;
+        $categories = Policy_Category::where('status', 1)->get();
 
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
-
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
-
         $users = HRPerson::where('status', 1)->get();
-        // $DivFive = DivisionLevel::where('level', 5)->orderBy('id', 'desc')->get();
-        //return $users;
 
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
@@ -51,10 +49,11 @@ class PolicyEnforcementController extends Controller
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Add Policy';
         $data['employees'] = $employees;
-        $data['Policy'] = $Policy;
+        $data['policies'] = $policies;
         $data['division_levels'] = $divisionLevels;
         $data['ContactCompany'] = $ContactCompany;
         $data['DivisionLevelFive'] = $DivisionLevelFive;
+        $data['categories'] = $categories;
 
 
         AuditReportsController::store('Policy Enforcement', 'Policy Enforcement Page Accessed', "Accessed By User", 0);
@@ -66,6 +65,7 @@ class PolicyEnforcementController extends Controller
     {
         $this->validate($request, [
             'division_level_5' => 'required',
+            'category_id' => 'required',
             'name' => 'required|unique:policy,name',
             'description' => 'required',
             'date' => 'required',
@@ -81,6 +81,7 @@ class PolicyEnforcementController extends Controller
         }
 
         $policy = new Policy();
+        $policy->category_id = $policyData['category_id'];
         $policy->name = $policyData['name'];
         $policy->description = $policyData['description'];
         $policy->date = $dates;
@@ -191,12 +192,11 @@ class PolicyEnforcementController extends Controller
     public function editPolicy(Request $request, Policy $policy)
     {
         $this->validate($request, [
-//            'division_level_5' => 'required',
-//            'name' => 'required',
-//            'description' => 'required',
-//            'date' => 'required',
-//            'hr_person_id' => 'required',
-        ]);
+            'category_id' => 'required',
+            'name' => 'required',
+            'description' => 'required',
+            'date' => 'required',
+			]);
         $policyData = $request->all();
         unset($policyData['_token']);
 
@@ -206,6 +206,7 @@ class PolicyEnforcementController extends Controller
             $dates = $policyData['date'] = strtotime($policyData['date']);
         }
 
+        $policy->category_id = $policyData['category_id'];
         $policy->name = $policyData['name'];
         $policy->description = $policyData['description'];
         $policy->date = $dates;
@@ -302,22 +303,23 @@ class PolicyEnforcementController extends Controller
         return response()->json();
     }
 
-
     public function viewPolicies()
     {
         $policies = Policy::where('status', 1)->orderBy('name', 'asc')->get();
-        $policy = $policies->load('policyUsers');
-
+        //$policy = $policies->load('policyUsers');
+		if (!empty($policies)) $policies = $policies->load('policyCategory');
+		//return $policies;
         $users = Auth::user()->person->id;
         $today = time();
 
         $policyUsers = DB::table('policy_users')
-            ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
-                'policy.description as policyDescription', 'policy.document as policyDoc',
+            ->select('policy_users.*', 'policy.date as expiry', 'policy.name as policy_name',
+                'policy.description as policy_description', 'policy.document as policy_doc',
                 'hr_people.first_name as firstname',
-                'hr_people.surname as surname')
+                'hr_people.surname as surname', 'policy_category.name as cat_name')
             ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
             ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
+            ->leftJoin('policy_category', 'policy.category_id', '=', 'policy_category.id')
             ->where('policy.date', '>', $today)
             ->where('policy_users.user_id', $users)
             ->orderBy('policy_users.id')
@@ -336,7 +338,7 @@ class PolicyEnforcementController extends Controller
 
         $data['policyUsers'] = $policyUsers;
         $data['policies'] = $policies;
-        $data['policy'] = $policy;
+       // $data['policy'] = $policy;
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'My Policies';
         $data['modules'] = $modules;
@@ -377,12 +379,11 @@ class PolicyEnforcementController extends Controller
             }
         }
         return back();
-
-
     }
 
     public function policySearchindex()
     {
+		$categories = Policy_Category::where('status', 1)->get();
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
         $data['breadcrumb'] = [
@@ -392,6 +393,7 @@ class PolicyEnforcementController extends Controller
 
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Search Policies';
+        $data['categories'] = $categories;
 
         AuditReportsController::store('Policy Enforcement', 'Policy Search Page Accessed', "Accessed By User", 0);
         return view('policy.policy_search')->with($data);
@@ -404,6 +406,7 @@ class PolicyEnforcementController extends Controller
 
         $actionFrom = $actionTo = 0;
         $name = $policyData['policy_name'];
+        $categoryID = $policyData['category_id'];
         $actionDate = $request['action_date'];
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
@@ -422,8 +425,13 @@ class PolicyEnforcementController extends Controller
                     $query->where('policy.name', 'ILIKE', "%$name%");
                 }
             })
+			->where(function ($query) use ($categoryID) {
+                if (!empty($categoryID)) {
+                    $query->where('policy.category_id',$categoryID);
+                }
+            })
             ->limit(100)
-            ->orderBy('policy.id')
+            ->orderBy('policy.name')
             ->get();
 
         //return $policyUsers;
@@ -448,7 +456,8 @@ class PolicyEnforcementController extends Controller
     public function reports()
     {
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $policy = Policy::where('status', 1)->get();
+        $categories = Policy_Category::where('status', 1)->get();
+		$policy = Policy::where('status', 1)->get();
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
         $data['breadcrumb'] = [
@@ -460,6 +469,8 @@ class PolicyEnforcementController extends Controller
         $data['policy'] = $policy;
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Reports';
+        
+		$data['categories'] = $categories;
 
         AuditReportsController::store('Policy Enforcement', 'Policy Reports Page Accessed', "Accessed By User", 0);
         return view('policy.reports_search')->with($data);
@@ -471,22 +482,20 @@ class PolicyEnforcementController extends Controller
         unset($policyData['_token']);
 
         $actionFrom = $actionTo = 0;
-
+		$categoryID = $policyData['category_id'];
         $DivFive = !empty($policyData['division_level_5']) ? $policyData['division_level_5'] : 0;
         $DivFour = !empty($policyData['division_level_4']) ? $policyData['division_level_4'] : 0;
         $DivThree = !empty($policyData['division_level_3']) ? $policyData['division_level_3'] : 0;
         $DivTwo = !empty($policyData['division_level_2']) ? $policyData['division_level_2'] : 0;
         $DivOne = !empty($policyData['division_level_1']) ? $policyData['division_level_1'] : 0;
-
-
         $name = !empty($policyData['policy_name']) ? $policyData['policy_name'] : 0;
-        $actionDate = $request['action_date'];
+        $actionDate = $request['policy_date'];
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $Policiereports = Policy::where(function ($query) use ($actionFrom, $actionTo) {
+        $policies = Policy::where(function ($query) use ($actionFrom, $actionTo) {
             if ($actionFrom > 0 && $actionTo > 0) {
                 $query->whereBetween('policy.date', [$actionFrom, $actionTo]);
             }
@@ -496,12 +505,17 @@ class PolicyEnforcementController extends Controller
                     $query->where('policy.id', $name);
                 }
             })
+			->where(function ($query) use ($categoryID) {
+                if (!empty($categoryID)) {
+                    $query->where('policy.category_id',$categoryID);
+                }
+            })
             ->orderBy('policy.name')
             ->get();
-        if (!empty($Policiereports))
-            $Policiereports = $Policiereports->load('policyUsers');
+        if (!empty($policies))
+            $policies = $policies->load('policyUsers','policyCategory');
 
-        $data['Policies'] = $Policiereports;
+        $data['policies'] = $policies;
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
         $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -517,7 +531,7 @@ class PolicyEnforcementController extends Controller
     public function viewdetails(Policy $policydetails)
     {
 
-        $Policies = DB::table('policy_users')
+        $policies = DB::table('policy_users')
             ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
                 'policy.description as policyDescription', 'policy.document as policyDoc',
                 'hr_people.first_name as firstname', 'hr_people.surname as surname',
@@ -533,11 +547,11 @@ class PolicyEnforcementController extends Controller
             ->get();
 
 
-        $PolicyID = $Policies->first()->policy_id;
-        $Policy = Policy::where('id', $PolicyID)->first();
+        $policyID = $policies->first()->policy_id;
+        $policy = Policy::where('id', $policyID)->first();
 
-        $data['Policies'] = $Policies;
-        $data['Policy'] = $Policy;
+        $data['policies'] = $policies;
+        $data['policy'] = $policy;
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
         $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
@@ -553,7 +567,7 @@ class PolicyEnforcementController extends Controller
 
     public function viewuserdetails(Policy $policydetails)
     {
-        $Policies = DB::table('policy_users')
+        $policies = DB::table('policy_users')
             ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
                 'policy.description as policyDescription', 'policy.document as policyDoc',
                 'hr_people.first_name as firstname', 'hr_people.surname as surname',
@@ -569,10 +583,10 @@ class PolicyEnforcementController extends Controller
             ->limit(100)
             ->get();
 
-        $PolicyID = $Policies->first()->policy_id;
+        $PolicyID = $policies->first()->policy_id;
         $Policy = Policy::where('id', $PolicyID)->first();
 
-        $data['Policies'] = $Policies;
+        $data['policies'] = $policies;
         $data['Policy'] = $Policy;
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
@@ -589,7 +603,7 @@ class PolicyEnforcementController extends Controller
 
     public function viewuserprint(Policy $policydetails)
     {
-        $Policies = DB::table('policy_users')
+        $policies = DB::table('policy_users')
             ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
                 'policy.description as policyDescription', 'policy.document as policyDoc',
                 'hr_people.first_name as firstname', 'hr_people.surname as surname',
@@ -605,10 +619,10 @@ class PolicyEnforcementController extends Controller
             ->limit(100)
             ->get();
 
-        $PolicyID = $Policies->first()->policy_id;
+        $PolicyID = $policies->first()->policy_id;
         $Policy = Policy::where('id', $PolicyID)->first();
 
-        $data['Policies'] = $Policies;
+        $data['policies'] = $policies;
         $data['Policy'] = $Policy;
 
 //
@@ -635,7 +649,6 @@ class PolicyEnforcementController extends Controller
 
     public function viewpolicyUsers(Request $request)
     {
-
         $results = $request->all();
         unset($results['_token']);
         unset($results['emp-list-table_length']);
@@ -662,5 +675,67 @@ class PolicyEnforcementController extends Controller
         }
         AuditReportsController::store('Policy Enforcement', 'Email Sent to Users', "Accessed By User", 0);
         return back();
+    }
+	
+	# View all Categories
+    public function viewCategories()
+    {
+		$Categories = Policy_Category::orderBy('name', 'asc')->get();
+        $data['page_title'] = "Categories";
+        $data['page_description'] = "Manage Categories";
+        $data['breadcrumb'] = [
+            ['title' => 'Policy Enforcement', 'path' => '/policy/category', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Categories', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Policy Enforcement';
+        $data['active_rib'] = 'Categories';
+        $data['Categories'] = $Categories;
+		//return $data;
+		AuditReportsController::store('Policy Enforcement', 'Categories Page Accessed', "Actioned By User", 0);
+        return view('policy.categories')->with($data);
+    }
+
+	# Act/deac Category
+	public function categoryAct(Policy_Category $category) 
+	{
+		if ($category->status == 1) $stastus = 0;
+		else $stastus = 1;
+		
+		$category->status = $stastus;	
+		$category->update();
+		return back();
+    }
+	
+	# Save Category 
+    public function categorySave(Request $request)
+	{
+		$this->validate($request, [
+            'name' => 'required',       
+            'description' => 'required',       
+        ]);
+		$categoryData = $request->all();
+		unset($categoryData['_token']);
+		$category = new Policy_Category($categoryData);
+		$category->status = 1;
+		$category->name = $categoryData['name'];
+		$category->description = $categoryData['description'];
+        $category->save();
+		$newname = $categoryData['name'];
+		AuditReportsController::store('Policy Enforcement', 'Category Added', "Category Name: $categoryData[name]", 0);
+		return response()->json(['new_category' => $newname], 200);
+    }	
+	public function editCategory(Request $request, Policy_Category $category)
+	{
+        $this->validate($request, [
+            'name' => 'required',       
+            'description' => 'required',       
+        ]);
+
+        $category->name = $request->input('name');
+        $category->description = $request->input('description');
+        $category->update();
+		$newtemplate = $request->input('name');
+        AuditReportsController::store('Policy Enforcement', 'Category Informations Edited', "Edited by User", 0);
+        return response()->json(['new_category' => $newtemplate], 200);
     }
 }

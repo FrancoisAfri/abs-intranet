@@ -132,6 +132,11 @@ Route::get('System/policy/viewdetails/{policydetails}', 'PolicyEnforcementContro
 Route::post('System/policy/viewUsers', 'PolicyEnforcementController@viewpolicyUsers');
 Route::patch('System/policy/edit_policy/{policy}', 'PolicyEnforcementController@editPolicy');
 Route::get('System/policy/print/{policydetails}', 'PolicyEnforcementController@viewuserprint');
+Route::get('policy/category', 'PolicyEnforcementController@viewCategories');
+Route::post('policy/category', 'PolicyEnforcementController@categorySave');
+Route::patch('policy/cat_edit/{category}', 'PolicyEnforcementController@editCategory');
+Route::get('policy/cat_active/{category}', 'PolicyEnforcementController@categoryAct');
+
 
 Route::get('System/policy/viewuserdetails/{policydetails}', 'PolicyEnforcementController@viewuserdetails');
 Route::get('leave/application', 'LeaveApplicationController@index');

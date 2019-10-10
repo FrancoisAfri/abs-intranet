@@ -44,15 +44,16 @@
                             <thead>
                             <tr>
                                 <th style="vertical-align: middle; text-align: center;"></th>
-                                <th> Name</th>
-                                <th>Assigned Users</th>
+                                <th>Category</th>
+                                <th>Name</th>
+                                <th>Employee</th>
                                 <th>Understood</th>
                                 <th>Not Understood</th>
-                                <th>Read but not sure</th>
+                                <th>Not sure</th>
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach($Policies as $policy)
+                            @foreach($policies as $policy)
                                 <tr>
                                     <td style="vertical-align: middle;"
                                         nowrap>
@@ -61,6 +62,8 @@
                                         ><i class="	fa fa-files-o"></i>
                                             View Details</a></td>
                                     <td style="vertical-align: middle;"
+                                        nowrap>{{ (!empty( $policy->policyCategory->name)) ?  $policy->policyCategory->name : ''}}</td>
+										<td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>
                                     <td><span class="label label-primary ">{{ $policy->policyUsers->count() }}</span>
                                     </td>
@@ -75,29 +78,26 @@
                                     </td>
                                     @endforeach
                                 </tr>
-
                             </tbody>
                             <tfoot>
                             <tr>
                                 <th style="vertical-align: middle; text-align: center;"></th>
-                                <th> Name</th>
-                                <th>Assigned Users</th>
+                                <th>Category</th>
+								<th>Name</th>
+                                <th>Employee</th>
                                 <th>Understood</th>
                                 <th>Not Understood</th>
-                                <th>Read but not sure</th>
+                                <th>Not sure</th>
                             </tr>
                             </tfoot>
                         </table>
                     </div>
                     <!-- /.box-body -->
-
                 </form>
             </div>
         </div>
-
     </div>
 @endsection
-
 @section('page_script')
     <!-- Start Bootstrap File input -->
     <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
@@ -115,7 +115,6 @@
     <!-- optionally if you need translation for your language then include locale file as mentioned below
     <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
     <!-- End Bootstrap File input -->
-
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- iCheck -->
@@ -125,7 +124,6 @@
     <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-
     <script>
         $(function () {
             //Initialize Select2 Elements

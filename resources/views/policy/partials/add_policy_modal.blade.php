@@ -12,6 +12,18 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
+					<div class="form-group {{ $errors->has('category_id') ? ' has-error' : '' }}">
+                        <label for="category_id" class="col-sm-2 control-label">Category</label>
+                        <div class="col-sm-8">
+							<select class="form-control select2" style="width: 100%;"
+									id="category_id" name="category_id">
+								<option value="">*** Select a Category ***</option>
+								@foreach($categories as $category)
+									<option value="{{ $category->id }}">{{ $category->name }}</option>
+								@endforeach
+							</select>
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-8">
@@ -26,9 +38,7 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
-
                     <hr class="hr-text" data-content="DOCUMENTS UPLOAD">
-
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -44,9 +54,7 @@
                                    value="{{ old('date') }}" placeholder="Select  Inception date  ...">
                         </div>
                     </div>
-
                     <hr class="hr-text" data-content="Add Policy Users">
-
                     @foreach($division_levels as $division_level)
                         <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"
@@ -60,7 +68,6 @@
                             </div>
                         </div>
                     @endforeach
-
                     <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                         <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                         <div class="col-sm-8">
@@ -73,8 +80,6 @@
                                 </select>
                         </div>
                     </div>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

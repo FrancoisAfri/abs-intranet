@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\DivisionLevelTwo;
 use App\hr_person;
 use App\HRPerson;
+use App\CompanyIdentity;
 use App\Http\Requests;
 use APP\leavDetails;
 use APP\DivisionLevelFive;
@@ -561,8 +562,10 @@ class LeaveApplicationController extends Controller
                 ->where('id', $iD)
                 ->update(['status' => 1]);
         }
-		$leaveAttachment = $this->viewApplication($iD);
-        #send email to the user informing that the leave has been accepted
+		
+		$leaveAttachment = $this->viewApplication($leaveId);
+      
+		#send email to the user informing that the leave has been accepted
         if (!empty($email))
 			Mail::to($email)->send(new Accept_application($firstname, $leaveAttachment));
         // Send email to employee manager
@@ -573,7 +576,6 @@ class LeaveApplicationController extends Controller
                 ->first();
 			if (!empty($managerDetails->email))
 				Mail::to($managerDetails->email)->send(new SendLeaveApplicationToManager($managerDetails->first_name, $leaveAttachment));
-        
 		}
 		// send emal to Hr manager
 		if (!empty($hrDetails->division_level_5))
@@ -587,7 +589,6 @@ class LeaveApplicationController extends Controller
 				if (!empty($deptDetails->email))
 					Mail::to($deptDetails->email)->send(new SendLeaveApplicationToHrManager($deptDetails->first_name, $leaveAttachment));
 			}
-			
 		}
 		LeaveHistoryAuditController::store("leave application Approved", 0, $leave_balance, $daysApplied, $newBalance, $levTyp, $hriD);
         AuditReportsController::store('Leave Management', 'leave_approval Informations accepted', "Edited by User: $levHist->hr_id", 0);
