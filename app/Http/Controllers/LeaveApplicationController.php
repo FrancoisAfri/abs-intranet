@@ -179,7 +179,7 @@ class LeaveApplicationController extends Controller
                 ->select('first_name', 'surname', 'email')
                 ->first();
 			// array to store manager details
-			$details = array('status' => 2, 'first_name' => $managerDetails->firstname, 'surname' => $managerDetails->surname, 'email' => $managerDetails->email);
+			$details = array('status' => 2, 'first_name' => $managerDetails->first_name, 'surname' => $managerDetails->surname, 'email' => $managerDetails->email);
 			return $details;
         }
 		elseif ($approvals->require_department_head_approval == 1) {
@@ -190,7 +190,7 @@ class LeaveApplicationController extends Controller
                 ->select('first_name', 'surname', 'email')
                 ->first();
 			// array to store manager details
-			$details = array('status' => 3, 'first_name' => $deptDetails->firstname, 'surname' => $deptDetails->surname, 'email' => $deptDetails->email);
+			$details = array('status' => 3, 'first_name' => $deptDetails->first_name, 'surname' => $deptDetails->surname, 'email' => $deptDetails->email);
 			return $details;
         } #code here .. Require Hr
     }
@@ -375,9 +375,11 @@ class LeaveApplicationController extends Controller
                 $levApp->update();
             }
         }
+		// get leave type value
+		$leaveTypes = LeaveType::where('id', $request->input('leave_type'))->where('status', 1)->first();
         // send email to manager
 		if (!empty($ApplicationDetails['email']))
-			Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $ApplicationDetails['surname'], $ApplicationDetails['email']));
+			Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $leaveTypes->name, $ApplicationDetails['email']));
 
         AuditReportsController::store('Leave Management', 'Leave day application', "Accessed By User", 0);
         #leave history audit

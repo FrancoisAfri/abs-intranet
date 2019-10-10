@@ -16,7 +16,7 @@ class leave_applications extends Mailable
     use Queueable, SerializesModels;
 
     public $first_name;
-    public $surname;
+    public $leave_type;
     public $email;
     /**
      * Create a new message instance.
@@ -27,11 +27,11 @@ class leave_applications extends Mailable
    
     // public $company_url = '/contacts/company/';
 
-    public function __construct($first_name, $surname, $email)
+    public function __construct($first_name, $leave_type, $email)
     {
         // $this->user = $user->load('person');
         $this->first_name = $first_name;
-        $this->surname = $surname;
+        $this->leave_type = $leave_type;
         $this->email = $email;
     }
 
