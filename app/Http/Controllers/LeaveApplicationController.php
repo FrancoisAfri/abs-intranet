@@ -8,7 +8,7 @@ use App\HRPerson;
 use App\CompanyIdentity;
 use App\Http\Requests;
 use APP\leavDetails;
-use APP\DivisionLevelFive;
+use App\DivisionLevelFive;
 use App\leave_application;
 use App\leave_configuration;
 use App\leave_credit;
@@ -41,7 +41,7 @@ class LeaveApplicationController extends Controller
         $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
         if (!empty($leave_customs))
             $leave_customs = $leave_customs->load('userCustom');
-        //
+
 		$hrID = Auth::user()->id;
 		$currentUser = Auth::user()->person->id;
 		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
@@ -99,7 +99,8 @@ class LeaveApplicationController extends Controller
             ['title' => 'Leave Management', 'path' => 'leave/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'leave Approval', 'active' => 1, 'is_module' => 0]
         ];
-        $people = DB::table('hr_people')->orderBy('id', 'asc')->get();
+		
+		$people = DB::table('hr_people')->orderBy('id', 'asc')->get();
         $leaveTypes = LeaveType::where('status', 1)->get()->load(['leave_profle' => function ($query) {
             $query->orderBy('name', 'asc');
         }]);
