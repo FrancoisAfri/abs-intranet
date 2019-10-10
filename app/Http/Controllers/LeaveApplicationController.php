@@ -316,11 +316,20 @@ class LeaveApplicationController extends Controller
 				$validator->errors()->add('hr_person_id', "Please Select an employee.");
 				$validator->errors()->add('leave_type', "Please Select a leave type.");
 			}
+			// check if the employee report to someone.
 			$managerDetails = HRPerson::where('id', $hrPersonId)
             ->select('manager_id')->first();
 			if (empty($managerDetails['manager_id']))
 				$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a manager. please go to the employee profile and assign one.");
-        
+			// check there is document if leave is family, sick and study leave.
+			if ($leaveType == 2 || $leaveType == 5  || $leaveType == 6)
+			{
+				if ($leaveType == 2) $leaveName = 'family leave';
+				elseif ($leaveType == 5) $leaveName = 'sick leave';
+				else $leaveName = 'study leave';
+				if (!$request->hasFile('supporting_docs'))
+					$validator->errors()->add('supporting_docs', "Sorry!!! Your application cannot be completed, this $leaveName applicatiion required a supporting document to be uploaded.");
+			}
         });
         if ($validator->fails()) {
             return redirect("/leave/application")
@@ -482,9 +491,13 @@ class LeaveApplicationController extends Controller
                 $levApp->update();
             }
         }
-        #mail
-        Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $ApplicationDetails['surname'], $ApplicationDetails['email']));
-        #$action='',$descriptionAction ='',$previousBalance='',$transcation='' ,$currentBalance ='',$leave_type ='')
+        // get leave type value
+		$leaveTypes = LeaveType::where('id', $request->input('leave_type'))->where('status', 1)->first();
+        // send email to manager
+		if (!empty($ApplicationDetails['email']))
+			Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $leaveTypes->name, $ApplicationDetails['email']));
+
+		#$action='',$descriptionAction ='',$previousBalance='',$transcation='' ,$currentBalance ='',$leave_type ='')
         AuditReportsController::store('Leave Management', 'Leave hours application ', "Accessed By User", 0);
         LeaveHistoryAuditController::store("Hours leave application performed by : $username", 0, $leave_balance, 0, $leave_balance, $typID, $employees);
         return back()->with('success_application', "leave application was successful.");
