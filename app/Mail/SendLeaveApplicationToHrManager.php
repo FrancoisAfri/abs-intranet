@@ -41,7 +41,7 @@ class SendLeaveApplicationToHrManager extends Mailable
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
-        $data['company_logo'] = url('/') .[  $companyDetails['company_logo_url'];
+        $data['company_logo'] = url('/') .$companyDetails['company_logo_url'];
 
         return $this->view('mails.approved_leave_app')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
