@@ -804,7 +804,7 @@ class ContactCompaniesController extends Controller
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Report';
         AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
-        return view('contacts.contacts_note_report_result')->with($data);
+        return view('contacts.reports.contacts_note_report_result')->with($data);
     }
 
     public function meetings(Request $request)
@@ -862,7 +862,7 @@ class ContactCompaniesController extends Controller
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Report';
         AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
-        return view('contacts.meeting_minutes_report_result')->with($data);
+        return view('contacts.reports.meeting_minutes_report_result')->with($data);
     }
 
     ##print reports
@@ -1183,7 +1183,6 @@ class ContactCompaniesController extends Controller
 	//
     public function printclientReport(Request $request)
     {
-
         $userID = $request['hr_person_id'];
         $companyID = $request['company_id'];
         $personID = $request['user_id'];
@@ -1221,11 +1220,17 @@ class ContactCompaniesController extends Controller
         ];
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Reports';
+
+		$companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
         $user = Auth::user()->load('person');
-        $data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'Afrixcel Business Solution';
-        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
-        $data['date'] = date("d-m-Y");
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+		$data['date'] = date("d-m-Y");
+		
         AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
         return view('contacts.reports.contacts_note_print')->with($data);
     }
