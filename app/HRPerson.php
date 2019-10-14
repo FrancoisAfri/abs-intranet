@@ -123,6 +123,4 @@ class HRPerson extends Model
             ->pluck('id', 'full_name');
         return $hrPeople;
     }
-
-
 }

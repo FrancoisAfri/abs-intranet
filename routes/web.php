@@ -62,8 +62,10 @@ Route::get('password/expired', 'ExpiredPasswordController@expired');
 Route::post('password/post_expired/{user}', 'ExpiredPasswordController@postExpired');
 
 Route::get('/users/reports', 'UsersController@reports');
-Route::post('/users/get_users_report', 'UsersController@getEmployeesReport');
+Route::post('/users/get_users_access_report', 'UsersController@getEmployeesReport');
 Route::post('/users/get_users_report_print', 'UsersController@getEmployeesReportPrint');
+Route::post('/users/get_users_report', 'UsersController@getUsersReport');
+Route::post('/users/get_users_print', 'UsersController@getUsersReportPrint');
 Route::patch('/ribbon/{ribbon}', 'UsersController@editRibbon');
 Route::get('/users/module_active/{mod}', 'UsersController@moduleAct');
 Route::get('/users/module_access/{user}', 'UsersController@moduleAccess');

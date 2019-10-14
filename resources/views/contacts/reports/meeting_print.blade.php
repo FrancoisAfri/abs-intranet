@@ -46,23 +46,23 @@
 			<div class="box-body">
 				<table class="table table-striped">
 					<tr>
-					<th>Meeting Name</th>
-          <th>Meeting Date</th>
-          <th>Meeting Location</th>
-          <th>Meeting Agenda</th>
-          <th>Meeting Minutes</th>
+						<th>Meeting Name</th>
+						<th>Meeting Date</th>
+						<th>Meeting Location</th>
+						<th>Meeting Agenda</th>
+						<th>Meeting Minutes</th>
 					</tr>
 					@if(count($meetingminutes) > 0)
-							@foreach($meetingminutes as $meeting)
+						@foreach($meetingminutes as $meeting)
 							<tr>
-						<td>{{ (!empty($meeting->meeting_name)) ?  $meeting->meeting_name : ''}} </td>
-            <td>{{ !empty($meeting->meeting_date) ? date('d M Y ', $meeting->meeting_date) : '' }}</td>
-            <td>{{ (!empty($meeting->meeting_location)) ?  $meeting->meeting_location : ''}} </td>
-            <td>{{ (!empty($meeting->meeting_agenda)) ?  $meeting->meeting_agenda : ''}} </td> 
-            <td>{{ (!empty($meeting->meeting_minutes)) ?  $meeting->meeting_minutes : ''}} </td>   
-						</tr>
-					@endforeach
-				@endif
+								<td>{{ (!empty($meeting->meeting_name)) ?  $meeting->meeting_name : ''}} </td>
+								<td>{{ !empty($meeting->meeting_date) ? date('d M Y ', $meeting->meeting_date) : '' }}</td>
+								<td>{{ (!empty($meeting->meeting_location)) ?  $meeting->meeting_location : ''}} </td>
+								<td>{{ (!empty($meeting->meeting_agenda)) ?  $meeting->meeting_agenda : ''}} </td> 
+								<td>{{ (!empty($meeting->meeting_minutes)) ?  $meeting->meeting_minutes : ''}} </td>   
+							</tr>
+						@endforeach
+					@endif
 				</table>
 			</div>
 		</div>

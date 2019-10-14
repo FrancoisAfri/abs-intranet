@@ -1,15 +1,21 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
+<!-- bootstrap datepicker -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
+    <!-- bootstrap datepicker -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
+<!-- iCheck -->
+<link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @endsection
 
 @section('content')
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
-                <form class="form-horizontal" method="POST" action="/users/get_users_report">
+                <form name="users-report-form" class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
                         <h3 class="box-title">Users Access</h3>
@@ -31,10 +37,16 @@
                                 </ul>
                             </div>
                         @endif
+						<div class="form-group{{ $errors->has('report_type') ? ' has-error' : '' }}">
+                            <label for="report_type" class="col-sm-2 control-label"> Report Type</label>
+							<div class="col-sm-10">
+								<label class="radio-inline"><input type="radio" id="rdo_users_access" name="report_type" value="2" checked> Users Access</label>
+								<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_users" name="report_type" value="1"> Users List </label>
+							</div>
+						</div>
                         @foreach($division_levels as $division_level)
-                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                            <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                 <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
@@ -46,7 +58,7 @@
                                 </div>
                             </div>
                         @endforeach
-						<div class="form-group manual-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+						<div class="form-group{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employee</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -62,7 +74,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group{{ $errors->has('module_id') ? ' has-error' : '' }}">
+                        <div class="form-group users-access-field {{ $errors->has('module_id') ? ' has-error' : '' }}">
                             <label for="{{ 'module_id' }}" class="col-sm-2 control-label">Module</label>
 
                             <div class="col-sm-10">
@@ -87,35 +99,32 @@
                 </form>
             </div>
         </div>
-
         <!-- Include modal -->
         @if(Session('changes_saved'))
             @include('contacts.partials.success_action', ['modal_title' => "Users Access Updated!", 'modal_content' => session('changes_saved')])
         @endif
     </div>
 @endsection
-
 @section('page_script')
-    <!-- Start Bootstrap File input -->
-    <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/canvas-to-blob.min.js" type="text/javascript"></script>
-    <!-- the main fileinput plugin file -->
-    <!-- sortable.min.js is only needed if you wish to sort / rearrange files in initial preview. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js" type="text/javascript"></script>
-    <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-    <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js" type="text/javascript"></script>
-    <!-- the main fileinput plugin file -->
-    <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-    <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-    <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-    <!-- optionally if you need translation for your language then include locale file as mentioned below
-    <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
-    <!-- End Bootstrap File input -->
-
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+     <!-- InputMask -->
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+    <!-- Date rane picker -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.2/moment.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
+        <!-- Date Picker -->
+    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+    <!-- iCheck -->
+    <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
+            <!-- Date picker -->
+    <!-- Ajax form submit -->
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
     <script>
         $(function () {
@@ -141,7 +150,20 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
+			//Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '20%' // optional
+            });
+			hideFields();
+			//Date Range picker
+            //show/hide fields on radio button toggles (depending on registration type)
 
+            $('#rdo_users, #rdo_users_access').on('ifChecked', function(){      
+				var allType = hideFields();
+               
+            });
             //Show success action modal
             @if(Session('changes_saved'))
                 $('#success-action-modal').modal('show');
@@ -163,5 +185,24 @@
                 loadAllDivs = -1;
             @endforeach
         });
+		
+		//function to hide/show fields depending on the allocation  type
+        function hideFields() {
+            var allType = $("input[name='report_type']:checked").val();
+            if (allType == 1) { //users report
+			//alert('ddddd');
+                 $('.users-field').show();
+                 $('.users-access-field').hide();
+                 $('form[name="users-report-form"]').attr('action', '/users/get_users_report');
+                 $('#gen-report').val("Submit");        
+            }
+            else if (allType == 2) { //users access report
+                 $('.users-field').hide();
+                 $('.users-access-field').show();
+                 $('form[name="users-report-form"]').attr('action', '/users/get_users_access_report');
+                 $('#gen-report').val("Submit"); 
+            }
+            return allType;      
+        }
     </script>
 @endsection

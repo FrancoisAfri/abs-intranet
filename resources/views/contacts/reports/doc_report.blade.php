@@ -1,6 +1,7 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/buttons.dataTables.min.css">
 @endsection
 @section('content')
     <div class="row">
@@ -54,41 +55,40 @@
 						</tfoot>
 					</table>
 					<hr class="hr-text" data-content="Client's Documents">
-					<table id="example2" class="table table-bordered table-hover">
+					<table id="example3" class="table table-bordered table-hover">
 						<thead>
-						<tr>
-							<th>Client Name</th>
-							<th>Document Name</th>
-							<th>Document Description</th>
-							<th>Start Date</th>
-							<th>Expiring Date</th>
-						</tr>
+							<tr>
+								<th>Client Name</th>
+								<th>Document Name</th>
+								<th>Document Description</th>
+								<th>Start Date</th>
+								<th>Expiring Date</th>
+							</tr>
 						</thead>
 						<tbody>
-						@if (count($contactsDocs) > 0)
-							@foreach($contactsDocs as $contactsDoc)
-							   <tr>
-									<td>{{ (!empty($contactsDoc->first_name)) ?  $contactsDoc->first_name." ".$contactsDoc->surname : ''}} </td>
-									<td>{{ !empty($contactsDoc->document_name) ?  $contactsDoc->document_name : '' }}</td>
-									<td>{{ !empty($contactsDoc->description) ? $contactsDoc->description : '' }}</td>
-									<td>{{ !empty($contactsDoc->date_from) ? date('d M Y ', $contactsDoc->date_from) : '' }}</td>
-									<td>{{ !empty($contactsDoc->expirydate) ? date('d M Y ', $contactsDoc->expirydate) : '' }}</td> 
-								</tr>
-							@endforeach
-						@endif
+							@if (count($contactsDocs) > 0)
+								@foreach($contactsDocs as $contactsDoc)
+								   <tr>
+										<td>{{ (!empty($contactsDoc->first_name)) ?  $contactsDoc->first_name." ".$contactsDoc->surname : ''}} </td>
+										<td>{{ !empty($contactsDoc->document_name) ?  $contactsDoc->document_name : '' }}</td>
+										<td>{{ !empty($contactsDoc->description) ? $contactsDoc->description : '' }}</td>
+										<td>{{ !empty($contactsDoc->date_from) ? date('d M Y ', $contactsDoc->date_from) : '' }}</td>
+										<td>{{ !empty($contactsDoc->expirydate) ? date('d M Y ', $contactsDoc->expirydate) : '' }}</td> 
+									</tr>
+								@endforeach
+							@endif
 						</tbody>
 						<tfoot>
-						<tr>
-							<th>Client Name</th>
-							<th>Document Name</th>
-							<th>Document Description</th>
-							<th>Start Date</th>
-							<th>Expiring Date</th>
-						</tr>
+							<tr>
+								<th>Client Name</th>
+								<th>Document Name</th>
+								<th>Document Description</th>
+								<th>Start Date</th>
+								<th>Expiring Date</th>
+							</tr>
 						</tfoot>
 					</table>
 			<div class="box-footer">
-				
 				<div class="row no-print">
 					<button type="button" id="cancel" class="btn btn-default pull-left"><i
 								class="fa fa-arrow-left"></i> Back to Search Page
@@ -103,26 +103,71 @@
 
 @section('page_script')
 	<!-- DataTables -->
-		<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-		<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-<!-- End Bootstrap File input -->
-		<script>
-			document.getElementById("cancel").onclick = function () {
-				location.href = '/contacts/Clients-reports';
-			};
-			/*$(function () {
+	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.buttons.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.flash.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/jszip.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/pdfmake.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/vfs_fonts.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.html5.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.print.min.js"></script><!-- End Bootstrap File input -->
+    <script>
+		document.getElementById("cancel").onclick = function () {
+			location.href = '/contacts/Clients-reports';
+		};
+			$(function () {
 				$('#example2').DataTable({
-					"paging": true,
-					"lengthChange": true,
-					"searching": true,
-					"ordering": true,
-					"info": true,
-					"autoWidth": true,
-					dom: 'Bfrtip',
-					buttons: [
-						'copy', 'csv', 'excel'
-					]
+				"paging": true,
+				"lengthChange": true,
+				"lengthMenu": [ 50, 75, 100, 150, 200, 250 ],
+				"pageLength": 50,
+				"searching": true,
+				"ordering": true,
+				"info": true,
+				"autoWidth": true,
+				dom: 'lfrtipB',
+				buttons: [
+					{
+						extend: 'excelHtml5',
+					title: 'Company Documents Expiring Report'
+					},
+					{
+						extend: 'csvHtml5',
+						title: 'Company Documents Expiring Report'
+					},
+					{
+						extend: 'copyHtml5',
+						title: 'Company Documents Expiring Report'
+					}
+				]
 				});
-			});*/
-		</script>
+				
+				$('#example3').DataTable({
+				"paging": true,
+				"lengthChange": true,
+				"lengthMenu": [ 50, 75, 100, 150, 200, 250 ],
+				"pageLength": 50,
+				"searching": true,
+				"ordering": true,
+				"info": true,
+				"autoWidth": true,
+				dom: 'lfrtipB',
+				buttons: [
+					{
+						extend: 'excelHtml5',
+					title: 'Client Documents Expiring Report'
+					},
+					{
+						extend: 'csvHtml5',
+						title: 'Client Documents Expiring Report'
+					},
+					{
+						extend: 'copyHtml5',
+						title: 'Client Documents Expiring Report'
+					}
+				]
+				});
+			});
+	</script>
 @endsection

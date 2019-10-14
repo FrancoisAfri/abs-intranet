@@ -23,7 +23,6 @@
                 <!-- Form Start -->
                 <form name="upload employee" class="form-horizontal" method="POST" action="employees_upload" enctype="multipart/form-data" required>
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         <div class="form-group file-upload-field {{ $errors->has('file_input') ? ' has-error' : '' }}">
                             <label for="file_input" class="col-sm-2 control-label">File input</label>
@@ -40,7 +39,7 @@
                     <!-- /.box-body -->
                     <div class="box-footer">
                         <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                        <button type="submit" id="load-kpis" class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Submit</button>
+                        <button type="submit" id="upload-employee" class="btn btn-primary pull-right"><i class="fa fa-cloud-download"></i> Submit</button>
                     </div>
                 </form>
             </div>
@@ -51,11 +50,11 @@
         @if (session('error_add'))
         @include('appraisals.partials.success_action', ['modal_title' => 'An Error Occurred!', 'modal_content' => session('error')])
         @endif
-                <!-- Include add new modal -->
+        <!-- Include add new modal -->
     </div>
-    @endsection
+@endsection
 
-    @section('page_script')
+@section('page_script')
             <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- Date Picker -->
@@ -66,15 +65,4 @@
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-    <script>
-        $(function () {
-
-            //Cancel button click event
-            $('#back_button').click(function () {
-                location.href = '/appraisal/load_appraisals';
-            });
-        });
-
-
-    </script>
 @endsection

@@ -22,6 +22,11 @@ use Illuminate\Support\Facades\Mail;
 use Excel;
 class EmployeeUploadController extends Controller
 {
+	
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -29,16 +34,16 @@ class EmployeeUploadController extends Controller
      */
     public function index()
     {
-		//phpinfo();
-        $data['page_title'] = "Employee Appraisals";
+        $data['page_title'] = "Employee Records";
         $data['page_description'] = "Upload Employees From Excel Sheet";
         $data['breadcrumb'] = [
             ['title' => 'Employee Records', 'path' => '/employee_upload', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Employees Upload', 'active' => 1, 'is_module' => 0]
         ];
+		
         $data['active_mod'] = 'Employee records';
         $data['active_rib'] = 'Employees Upload';
-        AuditReportsController::store('Performance Appraisal', 'Upload page accessed', "Accessed by User", 0);
+        AuditReportsController::store('Employee Records', 'Upload page accessed', "Accessed by User", 0);
         return view('hr.employee_upload')->with($data);
     }
 
@@ -119,12 +124,12 @@ class EmployeeUploadController extends Controller
         $data['page_title'] = "Employee Appraisals";
         $data['page_description'] = "Load Appraisals KPI's";
         $data['breadcrumb'] = [
-            ['title' => 'Performance Appraisal', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Employee Records', 'path' => '/appraisal/load_appraisals', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Appraisals', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Performance Appraisal';
+        $data['active_mod'] = 'Employee Records';
         $data['active_rib'] = 'Appraisals';
-        AuditReportsController::store('Performance Appraisal', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
+        AuditReportsController::store('Employee Records', "$uploadTypes[$uploadType] uploaded", "Accessed by User", 0);
     }
 
     /**

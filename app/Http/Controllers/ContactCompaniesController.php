@@ -802,7 +802,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts Notes Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Contacts';
-        $data['active_rib'] = 'Report';
+        $data['active_rib'] = 'Reports';
         AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
         return view('contacts.reports.contacts_note_report_result')->with($data);
     }
@@ -853,14 +853,14 @@ class ContactCompaniesController extends Controller
         $data['Datefrom'] = $Datefrom;
         $data['Dateto'] = $Dateto;
         $data['meetingminutes'] = $meetingminutes;
-        $data['page_title'] = "Notes  Report";
-        $data['page_description'] = "Notes Report";
+        $data['page_title'] = "Meetings ";
+        $data['page_description'] = "Report";
         $data['breadcrumb'] = [
-            ['title' => 'Contacts Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Contacts Notes Report', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Contacts Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Contacts Meeting Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Contacts';
-        $data['active_rib'] = 'Report';
+        $data['active_rib'] = 'Reports';
         AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
         return view('contacts.reports.meeting_minutes_report_result')->with($data);
     }
@@ -872,7 +872,6 @@ class ContactCompaniesController extends Controller
         $Datefrom = $request['date_from'];
         $Dateto = $request['date_to'];
         $companyID = $request['company_id'];
-
 
         $meetingminutes = DB::table('meeting_minutes')
             ->select('meeting_minutes.*', 'meetings_minutes.minutes as meeting_minutes', 'contact_companies.name as companyname')
@@ -904,11 +903,16 @@ class ContactCompaniesController extends Controller
         ];
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Reports';
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
         $user = Auth::user()->load('person');
-        $data['support_email'] = 'support@afrixcel.co.za';
-        $data['company_name'] = 'Afrixcel Business Solution';
-        $data['company_logo'] = url('/') . Storage::disk('local')->url('logos/logo.jpg');
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
         AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
         return view('contacts.reports.meeting_print')->with($data);
     }
@@ -970,7 +974,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts Notes Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Contacts';
-        $data['active_rib'] = 'Report';
+        $data['active_rib'] = 'Reports';
         AuditReportsController::store('Contacts', 'View Contacts Communications Search Results', "view Contacts Results", 0);
         return view('contacts.reports.communications_report_result')->with($data);
     }
@@ -1029,7 +1033,7 @@ class ContactCompaniesController extends Controller
             ->orderBy('client_documents.client_id')
             ->orderBy('client_documents.expirydate')
             ->get();
-//return $contactsDocs;
+        //return $contactsDocs;
         $data['company_id'] = $companyID;
         $data['contact_id'] = $personID;
         $data['Datefrom'] = $Datefrom;
@@ -1043,7 +1047,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts Document Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Contacts';
-        $data['active_rib'] = 'Report';
+        $data['active_rib'] = 'Reports';
         AuditReportsController::store('Contacts', 'View Contacts Expiring Document Search Results', "view Contacts Results", 0);
         return view('contacts.reports.doc_report')->with($data);
     }
@@ -1060,7 +1064,7 @@ class ContactCompaniesController extends Controller
         $Datefrom = strtotime($communicationsdata['date_from']);
         $Dateto = str_replace('/', '-', $communicationsdata['date_to']);
         $Dateto = strtotime($communicationsdata['date_to']);
-       $companyDocs = DB::table('company_documents')
+		$companyDocs = DB::table('company_documents')
             ->select('company_documents.*',
 			'contact_companies.name as companyname')
             ->leftJoin('contact_companies', 'contact_companies.id', '=', 'company_documents.company_id')
@@ -1102,7 +1106,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts Document Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Contacts';
-        $data['active_rib'] = 'Report';
+        $data['active_rib'] = 'Reports';
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
         $user = Auth::user()->load('person');
@@ -1218,7 +1222,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Leave Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Notes Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Leave Management';
+        $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Reports';
 
 		$companyDetails = CompanyIdentity::systemSettings();

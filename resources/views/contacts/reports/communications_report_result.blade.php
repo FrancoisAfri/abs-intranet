@@ -1,8 +1,7 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/buttons.dataTables.min.css">
 @endsection
 @section('content')
     <div class="row">
@@ -24,15 +23,15 @@
                         <input type="hidden" name="date_to" value="{{ !empty($Dateto) ? $Dateto : ''  }}">				
 					<table id="example2" class="table table-bordered table-hover">
 						<thead>
-						<tr>
-							 <th>Company Name</th>
-							<th>Contact person</th>
-							<th>Communication Date</th>
-							<th>Communication Time</th>
-							<th>Communication Type</th>
-							<th>Message</th>
-							 <th>Sent By</th>
-						</tr>
+							<tr>
+								<th>Company Name</th>
+								<th>Contact person</th>
+								<th>Communication Date</th>
+								<th>Communication Time</th>
+								<th>Communication Type</th>
+								<th>Message</th>
+								<th>Sent By</th>
+							</tr>
 						</thead>
 						<tbody>
 						@if (count($contactsCommunications) > 0)
@@ -77,35 +76,46 @@
 
 @section('page_script')
 	<!-- DataTables -->
-		<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-		<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-		<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-		<script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
-		<script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
-        <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.buttons.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.flash.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/jszip.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/pdfmake.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/vfs_fonts.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.html5.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.print.min.js"></script>
 		<!-- End Bootstrap File input -->
 		<script>
 			document.getElementById("cancel").onclick = function () {
 				location.href = '/contacts/Clients-reports';
 			};
-			$(function () {
-				$('#example2').DataTable({
-					"paging": true,
-					"lengthChange": true,
-					"searching": true,
-					"ordering": true,
-					"info": true,
-					"autoWidth": true,
-					dom: 'Bfrtip',
-					buttons: [
-						'copy', 'csv', 'excel'
-					]
-				});
+				$(function () {
+			$('#example2').DataTable({
+				"paging": true,
+				"lengthChange": true,
+				"lengthMenu": [ 50, 75, 100, 150, 200, 250 ],
+				"pageLength": 50,
+				"searching": true,
+				"ordering": true,
+				"info": true,
+				"autoWidth": true,
+				dom: 'lfrtipB',
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						title: 'Communication Report'
+					},
+					{
+						extend: 'csvHtml5',
+						title: 'Communication Report'
+					},
+					{
+						extend: 'copyHtml5',
+						title: 'Communication Report'
+					}
+				]
 			});
+		});
 		</script>
 @endsection

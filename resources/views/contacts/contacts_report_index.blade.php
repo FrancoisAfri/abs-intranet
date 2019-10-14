@@ -26,7 +26,7 @@
                     <h3 class="box-title">Contacts Reports Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
-                         <form name="contact-report-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
+                    <form name="contact-report-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                     {{ csrf_field() }}
 
                     <div class="box-body">
@@ -41,9 +41,8 @@
                                 </ul>
                             </div>
                         @endif
-                          <div class="form-group{{ $errors->has('report_type') ? ' has-error' : '' }}">
+                        <div class="form-group{{ $errors->has('report_type') ? ' has-error' : '' }}">
                                 <label for="Leave_type" class="col-sm-2 control-label"> Report Type</label>
-
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="report_type" value="1" checked> Client Note </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="2"> Meetings</label>
@@ -51,9 +50,8 @@
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="4"> Documents Expiring</label>
                                       
                                 </div>
-                            </div>
-
-                          <div class="form-group employee-field {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                        </div>
+                        <div class="form-group employee-field {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -171,10 +169,7 @@
             <!-- Date picker -->
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-        
-<!--        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>-->
-<!--    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>-->
-        
+      
    <script type="text/javascript">
         $(function () {
             //Initialize Select2 Elements
@@ -185,29 +180,28 @@
                 location.href = '/leave/reports';
             });
              function postData(id, data) {
-        alert(id);
+				 
          //if (data == 'approval_id') location.href = "/leave/approval/" + id;
             }
              //Phone mask
             $("[data-mask]").inputmask();
             //Date picker
-              $('input[name="date_from"]').daterangepicker({
-                  singleDatePicker: true,
-                  showDropdowns: false,
-               });
-               $('input[name="date_to"]').daterangepicker({
-                  singleDatePicker: true,
-                  showDropdowns: false,
-               });
+			$('input[name="date_from"]').daterangepicker({
+				singleDatePicker: true,
+				showDropdowns: false,
+			});
+			$('input[name="date_to"]').daterangepicker({
+				singleDatePicker: true,
+				showDropdowns: false,
+			});
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
-                hideFields();
-                //Date Range picker
-      
+			hideFields();
+			//Date Range picker
             //show/hide fields on radio button toggles (depending on registration type)
 
             $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH').on('ifChecked', function(){      
