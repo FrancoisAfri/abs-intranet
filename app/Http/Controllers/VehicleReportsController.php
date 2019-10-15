@@ -350,10 +350,11 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
+			$startExplode[0] =  str_replace("/","-",$startExplode[0]);
             $actionFrom = strtotime($startExplode[0]);
 			$startExplode[1] =  str_replace("/","-",$startExplode[1]);
             $actionTo = strtotime($startExplode[1]);
-			$fromExplode = explode('/', $startExplode[0]);
+			$fromExplode = explode('-', $startExplode[0]);
 			$actionMonth = $fromExplode[0];
 			$actionYear = $fromExplode[2];
         }
