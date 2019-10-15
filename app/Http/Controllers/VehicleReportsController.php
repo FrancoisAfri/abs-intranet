@@ -6,6 +6,7 @@ use App\CompanyIdentity;
 use App\ContactCompany;
 use App\DivisionLevel;
 use App\fleet_licence_permit;
+use App\vehicle_fuel_log;
 use App\FleetType;
 use App\HRPerson;
 use App\vehicle_fire_extinguishers;
@@ -350,6 +351,7 @@ class VehicleReportsController extends Controller
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
+			$startExplode[1] =  str_replace("/","-",$startExplode[1]);
             $actionTo = strtotime($startExplode[1]);
 			$fromExplode = explode('/', $startExplode[0]);
 			$actionMonth = $fromExplode[0];
@@ -379,7 +381,7 @@ class VehicleReportsController extends Controller
             })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('date', [$actionFrom, $actionTo]);
+                    $query->whereBetween('vehicle_fuel_log.date', [$actionFrom, $actionTo]);
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
