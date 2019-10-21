@@ -3,19 +3,15 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-user-form">
                 {{ csrf_field() }}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add more Users </h4>
+                    <h4 class="modal-title">Add More Users </h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
-
                     <hr class="hr-text" data-content="Add Policy Users">
-
                     @foreach($division_levels as $division_level)
                         <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                             <label for="{{ 'division_level_' . $division_level->level }}"
@@ -29,7 +25,6 @@
                             </div>
                         </div>
                     @endforeach
-
                     <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                         <label for="hr_person_id" class="col-sm-2 control-label">Employees</label>
                         <div class="col-sm-8">
@@ -42,7 +37,6 @@
                                 </select>
                         </div>
                     </div>
-
                     <input type="hidden" id="policyID" name="policyID"
                            value="{{ !empty($policyID) ? $policyID : ''}}">
 
@@ -58,5 +52,4 @@
         </div>
     </div>
 </div>
-</div>
-           
+</div> 

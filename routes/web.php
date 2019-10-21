@@ -130,6 +130,7 @@ Route::get('System/policy/search_policies', 'PolicyEnforcementController@policyS
 Route::post('System/policy/docsearch', 'PolicyEnforcementController@docsearch');
 Route::get('System/policy/reports', 'PolicyEnforcementController@reports');
 Route::post('System/policy/reportsearch', 'PolicyEnforcementController@reportsearch');
+Route::get('System/policy/view/{policy}', 'PolicyEnforcementController@viewPolicy');
 Route::get('System/policy/viewdetails/{policydetails}', 'PolicyEnforcementController@viewdetails');
 Route::post('System/policy/viewUsers', 'PolicyEnforcementController@viewpolicyUsers');
 Route::patch('System/policy/edit_policy/{policy}', 'PolicyEnforcementController@editPolicy');

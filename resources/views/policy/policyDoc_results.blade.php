@@ -16,7 +16,6 @@
             <div class="box box-primary">
                 <form class="form-horizontal" method="POST" action="/System/policy/update_status">
                     {{ csrf_field() }}
-                   
                     <div class="box-header with-border">
                         <h3 class="box-title">Available Policies </h3>
                         <div class="box-tools pull-right">
@@ -52,17 +51,10 @@
                             @foreach($policyUsers as $policy)
                                 <tr>
                                     <td style="vertical-align: middle;" nowrap>
-                                        <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                                            <label for="document" class="control-label"></label>
-                                            @if(!empty($policy->document))
-                                                <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                                   href="{{ Storage::disk('local')->url("Policies/policy/$policy->document") }}"
-                                                   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
-                                            @else
-                                                <a class="btn btn-default pull-centre btn-xs"><i
-                                                            class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
-                                            @endif
-                                        </div>
+											<a href="{{ '/System/policy/view/' . $policy->id }}" id="edit_compan"
+                                           class="btn btn-primary  btn-xs" data-id="{{ $policy->id }}"
+                                        ><i class="	fa fa-files-o"></i>
+                                            View Details</a>
                                     </td>
                                     <td style="vertical-align: middle;"
                                         nowrap>{{ (!empty( $policy->name)) ?  $policy->name : ''}}</td>

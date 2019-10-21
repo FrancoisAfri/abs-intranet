@@ -30,13 +30,13 @@ class PolicyEnforcementController extends Controller
     {
         $policies = Policy::all();
 		if (!empty($policies)) $policies = $policies->load('policyCategory');
-		//return $policies;
-        $employees = HRPerson::where('status', 1)->get();
+		
+		$employees = HRPerson::where('status', 1)->get();
         $categories = Policy_Category::where('status', 1)->get();
 
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
+        $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $users = HRPerson::where('status', 1)->get();
 
         $data['page_title'] = "Policy Enforcement System";
@@ -54,8 +54,6 @@ class PolicyEnforcementController extends Controller
         $data['ContactCompany'] = $ContactCompany;
         $data['DivisionLevelFive'] = $DivisionLevelFive;
         $data['categories'] = $categories;
-
-
         AuditReportsController::store('Policy Enforcement', 'Policy Enforcement Page Accessed', "Accessed By User", 0);
 
         return view('policy.create_policy')->with($data);
@@ -168,14 +166,14 @@ class PolicyEnforcementController extends Controller
             ->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $employees = HRPerson::where('status', 1)->get();
-
+		$DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
+        
         $data['page_title'] = "Policy Enforcement System";
         $data['page_description'] = "Policy Enforcement System";
         $data['breadcrumb'] = [
             ['title' => 'Policy Enforcement', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
         ];
-
         $policyID = $users->id;
         $policyname = $users->name;
         $data['policyname'] = $policyname;
@@ -306,9 +304,7 @@ class PolicyEnforcementController extends Controller
     public function viewPolicies()
     {
         $policies = Policy::where('status', 1)->orderBy('name', 'asc')->get();
-        //$policy = $policies->load('policyUsers');
-		if (!empty($policies)) $policies = $policies->load('policyCategory');
-		//return $policies;
+        if (!empty($policies)) $policies = $policies->load('policyCategory');
         $users = Auth::user()->person->id;
         $today = time();
 
@@ -433,9 +429,7 @@ class PolicyEnforcementController extends Controller
             ->limit(100)
             ->orderBy('policy.name')
             ->get();
-
-        //return $policyUsers;
-
+			
         $data['policyUsers'] = $policyUsers;
 
         $data['page_title'] = "Policy Enforcement System";
@@ -451,8 +445,32 @@ class PolicyEnforcementController extends Controller
         AuditReportsController::store('Policy Enforcement', 'Policy Document Search Page Accessed', "Accessed By User", 0);
         return view('policy.policyDoc_results')->with($data);
     }
+	//
+	public function viewPolicy(Policy $policy)
+    {
+		$policy = $policy->load('policyCategory','policyUsers.employees');
+		//return $policy;
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $employees = HRPerson::where('status', 1)->get();
+		$DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
+        
+        $data['division_levels'] = $divisionLevels;
+        $data['policyID'] = $policy->id;
+        $data['employees'] = $employees;
+        $data['DivisionLevelFive'] = $DivisionLevelFive;
+        $data['policy'] = $policy;
+        $data['page_title'] = "Policy Enforcement System";
+        $data['page_description'] = "Policy Enforcement System";
+        $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]];
 
+        $data['active_mod'] = 'Policy Enforcement';
+        $data['active_rib'] = 'Search Policies';
 
+        AuditReportsController::store('Policy Enforcement', 'Policy Users Details Page Accessed', "Accessed By User", 0);
+        return view('policy.view_policy_details')->with($data);
+    }
+	
     public function reports()
     {
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
@@ -530,7 +548,6 @@ class PolicyEnforcementController extends Controller
 
     public function viewdetails(Policy $policydetails)
     {
-
         $policies = DB::table('policy_users')
             ->select('policy_users.*', 'policy.date as Expiry', 'policy.name as policyName',
                 'policy.description as policyDescription', 'policy.document as policyDoc',

@@ -40,6 +40,8 @@ class UsersController extends Controller
             ['title' => 'Security', 'path' => '/users', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Search user', 'active' => 1, 'is_module' => 0]
         ];
+		$data['active_mod'] = 'Security';
+        $data['active_rib'] = 'Search users';
 		AuditReportsController::store('Security', 'Search User Page Accessed', "Accessed By User", 0);
         return view('security.search_user')->with($data);
     }
@@ -798,7 +800,7 @@ class UsersController extends Controller
 			, 'hr_positions.name as job_title', 'hp.first_name as manager_first_name'
 			, 'hp.surname as manager_surname')
 			->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
-			->leftJoin('hr_people as hp', 'hp.manager_id', '=', 'hr_people.id')
+			->leftJoin('hr_people as hp', 'hr_people.manager_id', '=', 'hp.id ')
             ->whereNotNull('hr_people.user_id')
             ->where('hr_people.status', 1)->where(function ($query) use($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5){
             if ($divLevel1 > 0) $query->where('hr_people.division_level_1', $divLevel1);
@@ -814,7 +816,7 @@ class UsersController extends Controller
 		->orderBy('hr_people.first_name', 'asc')
 		->orderBy('hr_people.surname', 'asc')
 		->get();
-
+		
         $data['page_title'] = "Users Report";
         $data['page_description'] = "Admin page to manage users";
         $data['breadcrumb'] = [

@@ -112,7 +112,7 @@
                         Back
                     </button>
                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal"
-                            data-target="#add-user-modal">Add Users
+                            data-target="#add-user-modal">Add More Employees
                     </button>
                 </div>
                 </form>
@@ -158,7 +158,6 @@
     <script>
         function postData(id, data) {
             if (data == 'actdeac') location.href = "/System/add_user_act/" + id;
-
         }
 
         $('#cancel').click(function () {
@@ -170,8 +169,6 @@
             //Initialize Select2 Elements
             $(".select2").select2();
             $('.zip-field').hide();
-
-
             //Tooltip
 
             //Phone mask
@@ -188,8 +185,6 @@
                 "info": false,
                 "autoWidth": true
             });
-
-
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
@@ -210,9 +205,7 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-
             //
-
             $(".js-example-basic-multiple").select2();
 
             //Initialize iCheck/iRadio Elements
@@ -221,7 +214,6 @@
 //                radioClass: 'iradio_square-blue',
 //                increaseArea: '10%' // optional
 //            });
-
 
             $('#add-user').on('click', function () {
                 var strUrl = '/System/policy/add_policyUsers';

@@ -60,7 +60,7 @@
                                         @if(!empty($policy->policy_doc))
                                             <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
                                                href="{{ Storage::disk('local')->url("Policies/policy/$policy->policy_doc") }}"
-                                               target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+                                               target="_blank"><i class="fa fa-file-pdf-o"></i> {{$policy->policy_name}}</a>
                                         @else
                                             <a class="btn btn-default pull-centre btn-xs"><i
                                                         class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>

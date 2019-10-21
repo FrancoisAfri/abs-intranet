@@ -76,7 +76,7 @@
                                     <td>
                                         <span class="label label-primary ">{{ $policy->policyUsers->where('read_not_sure', 1)->count() }}</span>
                                     </td>
-                                    @endforeach
+                                @endforeach
                                 </tr>
                             </tbody>
                             <tfoot>
