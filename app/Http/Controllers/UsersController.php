@@ -800,7 +800,7 @@ class UsersController extends Controller
 			, 'hr_positions.name as job_title', 'hp.first_name as manager_first_name'
 			, 'hp.surname as manager_surname')
 			->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
-			->leftJoin('hr_people as hp', 'hr_people.manager_id', '=', 'hp.id ')
+			->leftJoin('hr_people as hp', 'hr_people.manager_id', '=', 'hp.id')
             ->whereNotNull('hr_people.user_id')
             ->where('hr_people.status', 1)->where(function ($query) use($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5){
             if ($divLevel1 > 0) $query->where('hr_people.division_level_1', $divLevel1);
