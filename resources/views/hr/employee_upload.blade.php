@@ -19,9 +19,8 @@
                     </div>
                 </div>
                 <!-- /.box-header -->
-
                 <!-- Form Start -->
-                <form name="upload employee" class="form-horizontal" method="POST" action="employees_upload" enctype="multipart/form-data" required>
+                <form name="upload employee" class="form-horizontal" method="POST" action="hr/employees_upload" enctype="multipart/form-data" required>
                     {{ csrf_field() }}
                     <div class="box-body">
                         <div class="form-group file-upload-field {{ $errors->has('file_input') ? ' has-error' : '' }}">

@@ -61,6 +61,7 @@ Route::patch('/users/module_edit/{mod}', 'UsersController@editModule');
 Route::get('password/expired', 'ExpiredPasswordController@expired');
 Route::post('password/post_expired/{user}', 'ExpiredPasswordController@postExpired');
 
+Route::get('users/approval', 'UsersController@usersApproval');
 Route::get('/users/reports', 'UsersController@reports');
 Route::post('/users/get_users_access_report', 'UsersController@getEmployeesReport');
 Route::post('/users/get_users_report_print', 'UsersController@getEmployeesReportPrint');
@@ -97,7 +98,6 @@ Route::post('contacts/add_document', 'ContactsController@addDocumets');
 Route::get('contacts/clientdoc_act/{document}', 'ContactsController@clientdocAct');
 Route::get('contacts/clientdoc/{document}/delete', 'ContactsController@deleteClientDoc');
 Route::patch('contacts/editClientdoc/{document}', 'ContactsController@editClientdoc');
-
 
 Route::patch('contacts/{contactPerson}', 'ContactsController@update');
 Route::get('contacts/send-message', 'ContactsController@sendMessageIndex');

@@ -85,7 +85,7 @@ class EmployeeUploadController extends Controller
 							$employees = HRPerson::where('email', $value['email'])->first();
 							//$email = !empty($employees->email) ? $employees->email : '';
 							// get employee jobtille
-							$jobTitle = JobTitle::where('name', $value['job_titlle'])->first();
+							$jobTitle = JobTitle::where('name', $value['job_title'])->first();
 							$position = !empty($jobTitle->id) ? $jobTitle->id : 0;
 							if (empty($employees))
 							{

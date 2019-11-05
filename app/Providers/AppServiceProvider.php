@@ -29,9 +29,9 @@ class AppServiceProvider extends ServiceProvider
 
             $defaultAvatar = ($user->person->gender === 0) ? 'avatars/f-silhouette.jpg' : 'avatars/m-silhouette.jpg';
             $avatar = $user->person->profile_pic;
-            $position = ($user->person->position) ? DB::table('hr_positions')->find($user->person->position)->name : '';
+            $position = (!empty($user->person->position)) ? DB::table('hr_positions')->find($user->person->position)->name : '';
             
-              $row = business_card::count();
+            $row = business_card::count();
                      
                   if ($row<1) {  $status = 0;     
                     }else{$business_card = DB::table('business_card')->where('hr_id' , $user->id)->get();          

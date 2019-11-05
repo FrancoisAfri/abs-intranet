@@ -7,6 +7,7 @@ use App\DivisionLevel;
 use App\Mail\ConfirmRegistration;
 use Illuminate\Http\Request;
 use App\Mail\ResetPassword;
+use App\Mail\NewUsers;
 use App\Http\Requests;
 use App\HRPerson;
 use App\PublicHoliday;
@@ -53,7 +54,8 @@ class UsersController extends Controller
             ['title' => 'Create user', 'active' => 1, 'is_module' => 0]
         ];
 		$data['active_mod'] = 'Security';
-        $data['active_rib'] = 'Create user';
+        $data['active_rib'] = 'Create user';		
+				
 		AuditReportsController::store('Security', 'Create User Page Accessed', "Accessed By User", 0);
         return view('security.add_user')->with($data);
     }
@@ -330,6 +332,14 @@ class UsersController extends Controller
             'email' => 'unique:hr_people,email',
         ]);
 		//Save usr
+		$userID = Auth::user()->id;
+        $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
+            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+            ->where('security_modules.code_name', 'security')->where('security_modules_access.access_level', '>=', 4)
+            ->where('security_modules_access.user_id', $userID)->pluck('user_id')->first();
+
+		if (!empty($userAccess)) $status = 1;
+		else $status = 2;
 		$compDetails = CompanyIdentity::first();
 		$iduration = !empty($compDetails->password_expiring_month) ? $compDetails->password_expiring_month : 0;
 		$expiredDate = !empty($iduration) ? mktime(0,0,0,date('m')+ $iduration,date('d'),date('Y')) : 0;
@@ -348,7 +358,6 @@ class UsersController extends Controller
                 unset($personData[$key]);
             }
         }
-
         //Save HR record
         $person = new HRPerson($personData);
         $person->status = 1;
@@ -357,7 +366,21 @@ class UsersController extends Controller
         //Send email
         Mail::to("$user->email")->send(new ConfirmRegistration($user, $request->password));
 		AuditReportsController::store('Security', 'New User Created', "Login Details Sent To User $user->email", 0);
-        //Redirect to all usr view
+        // email admin for user approval
+		if ($status == 2)
+		{
+			$admins = DB::table('security_modules_access')->select('security_modules_access.user_id')
+			->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+			->where('security_modules.code_name', 'security')
+			->where('security_modules_access.access_level', '>=', 4)
+			->get();
+			
+			foreach ($admins as $admin) {
+				$user = HRPerson::where('user_id', $admin->user_id)->first();
+				Mail::to("$user->email")->send(new NewUsers($user->email));
+			}
+		}
+		//Redirect to all usr view
         return redirect('/users')->with('success_add', "The user has been added successfully. \nYou can use the search menu to view the user details.");
     }
 
@@ -894,5 +917,21 @@ class UsersController extends Controller
 
         AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('security.users_list_report_print')->with($data);
+    }
+	public function usersApproval() {
+		
+		$users = User::where('status',2)->get();
+		if (!empty($users)) $users = $users->load('person');
+        //return $users;
+		$data['users'] = $users;
+		$data['page_title'] = "Security";
+        $data['page_description'] = "Users Approval";
+        $data['breadcrumb'] = [
+            ['title' => 'Security', 'path' => '/user', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Users Approval', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Security';
+        $data['active_rib'] = 'search';
+        return view('security.users_approval_access')->with($data);
     }
 }
