@@ -198,7 +198,8 @@ Route::post('leave_taken/print', 'LeaveHistoryAuditController@takenPrint');
 Route::post('leave/custom/add_leave', 'LeaveController@addcustom');
 Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAct');
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
-
+Route::get('leave/upload', 'LeaveSetupController@upload');
+Route::post('leave/leave_upload', 'LeaveSetupController@leaveUpload');
 //Contacts related requests
 //Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');

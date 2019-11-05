@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
-
+use Excel;
 class LeaveSetupController extends Controller {
 
     /**
@@ -400,5 +400,69 @@ class LeaveSetupController extends Controller {
 		//return $leavecredit;
         $levg->update($leavecredit);
         return back();
+    }
+	// upload leave balance
+	public function upload()
+    {
+        $data['page_title'] = "Leave Management";
+        $data['page_description'] = "Upload Leave From Excel Sheet";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave', 'path' => '/employee_upload', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Leave Balance Upload', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Leave Upload';
+        AuditReportsController::store('Leave', 'Upload page accessed', "Accessed by User", 0);
+        return view('leave.leave_upload')->with($data);
+    }
+	// upload
+	public function leaveUpload(Request $request)
+    {
+		if($request->hasFile('input_file'))
+		{
+			$path = $request->file('input_file')->getRealPath();
+			$data = Excel::load($path, function($reader) {})->get();
+			if(!empty($data) && $data->count())
+			{
+				foreach ($data->toArray() as $key => $value) 
+				{
+					if(!empty($value))
+					{
+						if (!empty($value['employee_number']))	
+						{
+							$employees = HRPerson::where('employee_number', $value['employee_number'])->first();
+							if (!empty($employees))
+							{
+								$days = !empty($value['annual'])? $value['annual'] : 0 ;
+								if (!empty($days))
+								{
+									$credit = new leave_credit();
+									$credit->leave_balance = ($days * 8);
+									$credit->hr_id = $employees->id;
+									$credit->leave_type_id = 1;
+									$credit->save();
+									LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', 0 ,($days * 8),($days * 8),1, $employees->id);
+								}
+								AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");
+							}
+						}
+					}
+				}
+				return back()->with('success_add',"Records were successfully inserted.");
+			}
+			else return back()->with('error_add','Please Check your file, Something is wrong there.');
+		}
+		else return back()->with('error_add','Please Upload A File.');
+		
+        $data['page_title'] = "Leave Management";
+        $data['page_description'] = "Upload Leave Balance";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave Management', 'path' => '/leave/upload', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Leave Balance', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Appraisals';
+        AuditReportsController::store('Leave Management', "Leave Balance uploaded", "Accessed by User", 0);
     }
 }
