@@ -434,13 +434,13 @@ class LeaveSetupController extends Controller {
 							$employees = HRPerson::where('employee_number', $value['employee_number'])->first();
 							if (!empty($employees))
 							{
-								$days = !empty($value['sick'])? $value['sick'] : 0 ;
+								$days = !empty($value['Other/Specia'])? $value['Other/Specia'] : 0 ;
 								if (!empty($days))
 								{
 									$credit = new leave_credit();
 									$credit->leave_balance = ($days * 8);
 									$credit->hr_id = $employees->id;
-									$credit->leave_type_id = 5;
+									$credit->leave_type_id = 4;
 									$credit->save();
 									LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', 0 ,($days * 8),($days * 8),1, $employees->id);
 								}
