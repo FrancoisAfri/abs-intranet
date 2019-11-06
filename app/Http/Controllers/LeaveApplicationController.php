@@ -518,7 +518,7 @@ class LeaveApplicationController extends Controller
 		$data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
 		$data['date'] = date("d-m-Y");
 		$data['user'] = $user;
-		$data['user'] = $leave;
+		$data['leave'] = $leave;
 		$data['file_name'] = 'LeaveApplication';
 		$view = view('leave.leave_application', $data)->render();
 		$pdf = resolve('dompdf.wrapper');

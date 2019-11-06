@@ -434,7 +434,7 @@ class LeaveSetupController extends Controller {
 							$employees = HRPerson::where('employee_number', $value['employee_number'])->first();
 							if (!empty($employees))
 							{
-								$days = !empty($value['Other/Specia'])? $value['Other/Specia'] : 0 ;
+								$days = !empty($value['Other'])? $value['Other/Specia'] : 0 ;
 								if (!empty($days))
 								{
 									$credit = new leave_credit();
