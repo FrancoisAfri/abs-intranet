@@ -45,11 +45,11 @@
 						<td class="caption"><b>Leave Type</b></td>
 						<td>{{ !empty($leave->leavetpe->name) ? $leave->leavetpe->name: '' }}</td>
 						<td class="caption"><b>Employee</b></td>
-						<td>{{ (!empty($leave->person)) ?  $leave->person->first_name . ' ' .  $leave->person->surname : '' }}</td>
+						<td>{{ (!empty($leave->person->first_name)) ?  $leave->person->first_name.' '.$leave->person->surname : '' }}</td>
 					</tr>
 					<tr>
 						<td class="caption"><b>Manager</b></td>
-						<td>{{ (!empty($leave->manager)) ?  $leave->manager->first_name . ' ' .  $leave->manager->surname : ''}}</td>
+						<td>{{ (!empty($leave->manager->first_name)) ?  $leave->manager->first_name.' '.$leave->manager->surname : ''}}</td>
 						<td class="caption"></td>
 						<td></td>
 					</tr>
