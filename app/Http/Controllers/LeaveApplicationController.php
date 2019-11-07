@@ -589,7 +589,7 @@ class LeaveApplicationController extends Controller
         }
 		
 		$leaveAttachment = $this->viewApplication($leaveId);
-      
+      //complaints@nexustravel.co.za
 		#send email to the user informing that the leave has been accepted
         if (!empty($email))
 			Mail::to($email)->send(new Accept_application($firstname, $leaveAttachment));

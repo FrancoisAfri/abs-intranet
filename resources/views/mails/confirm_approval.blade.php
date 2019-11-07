@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - New User</title>
+    <title>{{ $company_name }} - User Confirmation Email</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -214,14 +214,14 @@
                                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that there is a new user that requires your approval. Please Log on to the system and attend to it.<a href="{{ $dashboard_url }}">Click Here</a>.
+                                                    Hi {{ $firstName }},<br><br>
+                                                    We would like you to know that your user have been approved! Use the credentials previouly sent to login to the system.
                                                 </td>
                                             </tr>
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
                                                     Best regards,<br>
-                                                    {{ $company_name }} Online System
+                                                    {{ $company_name }} online system
                                                 </td>
                                             </tr>
                                         </table>

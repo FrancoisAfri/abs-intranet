@@ -62,6 +62,7 @@ Route::get('password/expired', 'ExpiredPasswordController@expired');
 Route::post('password/post_expired/{user}', 'ExpiredPasswordController@postExpired');
 
 Route::get('users/approval', 'UsersController@usersApproval');
+Route::post('users/users-approval', 'UsersController@approvalUsers');
 Route::get('/users/reports', 'UsersController@reports');
 Route::post('/users/get_users_access_report', 'UsersController@getEmployeesReport');
 Route::post('/users/get_users_report_print', 'UsersController@getEmployeesReportPrint');

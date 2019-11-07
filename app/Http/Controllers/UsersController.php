@@ -8,6 +8,7 @@ use App\Mail\ConfirmRegistration;
 use Illuminate\Http\Request;
 use App\Mail\ResetPassword;
 use App\Mail\NewUsers;
+use App\Mail\UserApproval;
 use App\Http\Requests;
 use App\HRPerson;
 use App\PublicHoliday;
@@ -347,7 +348,7 @@ class UsersController extends Controller
         $user->email = $request->email;
         $user->password = Hash::make($request->password);
         $user->type = 1;
-        $user->status = 1;
+        $user->status = $status;
 		$user->password_changed_at = $expiredDate;
         $user->save();
 
@@ -931,7 +932,25 @@ class UsersController extends Controller
             ['title' => 'Users Approval', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Security';
-        $data['active_rib'] = 'search';
+        $data['active_rib'] = 'User Approval';
         return view('security.users_approval_access')->with($data);
+    }
+	// Approve Users
+	public function approvalUsers(Request $request)
+    {
+        $approves = $request->input('approve');
+        if (count($approves) > 0) {
+            foreach ($approves as $userID => $app) {
+                
+				$user = User::where('id',$userID)->first();
+				//update client approval
+				$user->status = 1;
+				$user->update();
+				$firstName = $user->first_name;
+				// email client
+				 Mail::to("$user->email")->send(new UserApproval($firstName));
+            }
+        }
+        return back()->with('changes_saved', "Your changes have been saved successfully.");
     }
 }
