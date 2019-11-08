@@ -393,7 +393,7 @@ class UsersController extends Controller
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
-        $employees = HRPerson::where('status', 1)->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $businessCard = DB::table('business_card')->get();
         $positions = DB::table('hr_positions')->where('status', 1)->get();
         // return $businessCard;
