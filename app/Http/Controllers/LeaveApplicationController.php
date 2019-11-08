@@ -392,7 +392,7 @@ class LeaveApplicationController extends Controller
 
         AuditReportsController::store('Leave Management', 'Leave day application', "Accessed By User", 0);
         #leave history audit
-        LeaveHistoryAuditController::store("Leave application performed by : $username", '', $leaveBalance, $dayRequested, $leaveBalance, $levtype, $hrID);
+        LeaveHistoryAuditController::store("Leave application submitted by : $username", '', $leaveBalance, $dayRequested, $leaveBalance, $levtype, $hrID);
         return back()->with('success_application', "leave application was successful.");
     }
 
@@ -499,7 +499,7 @@ class LeaveApplicationController extends Controller
 
 		#$action='',$descriptionAction ='',$previousBalance='',$transcation='' ,$currentBalance ='',$leave_type ='')
         AuditReportsController::store('Leave Management', 'Leave hours application ', "Accessed By User", 0);
-        LeaveHistoryAuditController::store("Hours leave application performed by : $username", 0, $leave_balance, 0, $leave_balance, $typID, $employees);
+        LeaveHistoryAuditController::store("Hours leave application submitted by : $username", 0, $leave_balance, 0, $leave_balance, $typID, $employees);
         return back()->with('success_application', "leave application was successful.");
     }
 
@@ -540,6 +540,7 @@ class LeaveApplicationController extends Controller
         $firstname = $hrDetails->first_name;
         $surname = $hrDetails->surname;
         $email = $hrDetails->email;
+		$managerId = !empty($hrDetails->manager_id) ? $hrDetails->manager_id: 0;
         // #Query the the leave_config days for value
         $Details = leave_credit::where('hr_id', $hriD)
             ->where('leave_type_id', $levTyp)
@@ -615,8 +616,8 @@ class LeaveApplicationController extends Controller
 					Mail::to($deptDetails->email)->send(new SendLeaveApplicationToHrManager($deptDetails->first_name, $leaveAttachment));
 			}
 		}
-		LeaveHistoryAuditController::store("leave application Approved", 0, $leave_balance, $daysApplied, $newBalance, $levTyp, $hriD);
-        AuditReportsController::store('Leave Management', 'leave_approval Informations accepted', "Edited by User: $levHist->hr_id", 0);
+		LeaveHistoryAuditController::store("leave application Approved", 0, $leave_balance, $daysApplied, $newBalance, $levTyp, $managerId);
+        AuditReportsController::store('Leave Management', 'leave_approval Informations accepted', "Edited by User: $managerId", 0);
         return back()->with('success_application', "leave application was successful.");
     }
 
@@ -629,11 +630,12 @@ class LeaveApplicationController extends Controller
         unset($leaveData['_token']);
 
         $usedetails = HRPerson::where('id', $levReject->hr_id)
-            ->select('first_name', 'surname', 'email')
+            ->select('first_name', 'surname', 'email', 'manager_id')
             ->first();
         $firstname = $usedetails['first_name'];
         $surname = $usedetails['surname'];
         $email = $usedetails['email'];
+        $manager_id = !empty($usedetails['manager_id']) ? $usedetails['manager_id']: 0;
 
         $levReject->reject_reason = $request->input('description');
 		$levReject->status = 6;
@@ -641,7 +643,7 @@ class LeaveApplicationController extends Controller
         #send rejection email
 		Mail::to($email)->send(new LeaveRejection($firstname, $surname, $email));
         AuditReportsController::store('Leave Management: ', 'leave rejected', "By User", 0);
-        LeaveHistoryAuditController::store("leave application Rejected", 0, 0, 0, 0, $levReject->leave_type_id, $levReject->hr_id);
+        LeaveHistoryAuditController::store("leave application Rejected", 0, 0, 0, 0, $levReject->leave_type_id, $manager_id);
         return response()->json();
     }
 }

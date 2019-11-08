@@ -71,7 +71,7 @@ class LeaveHistoryAuditController extends Controller {
         $leave_history->hr_id = $hrID;
         $leave_history->added_by = $user->person->id;
         $leave_history->added_by_name = $user->person->first_name." ".$user->person->surname;
-        //$leave_history->action = $action;
+        $leave_history->action = $action;
         $leave_history->description_action = $descriptionAction;
         $leave_history->previous_balance = $previousBalance;
         $leave_history->transcation = $transcation;
