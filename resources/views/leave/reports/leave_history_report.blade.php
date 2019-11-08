@@ -13,7 +13,7 @@
                 <!-- /.box-header -->
 				<form class="form-horizontal" method="POST" action="/leave/print">
                  <input type="hidden" name="actionDate" value="{{!empty($actionDate) ? $actionDate : ''}}">
-                 <input type="hidden" name="hr_person_id" value="{{!empty($userID) ? $userID : ''}}">
+                 <input type="hidden" name="hr_person_id" value="{{!empty($hr_person_id) ? $hr_person_id : ''}}">
                  <input type="hidden" name="report" value="{{!empty($report) ? $report : ''}}">
                  <input type="hidden" name="leave_types_id" value="{{!empty($leave_types_id) ? $leave_types_id : ''}}">
 					{{ csrf_field() }}

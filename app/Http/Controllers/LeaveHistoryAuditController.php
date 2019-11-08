@@ -113,7 +113,7 @@ class LeaveHistoryAuditController extends Controller {
         unset($request['_token']);
 
         $actionFrom = $actionTo = 0;
-        $userID = $request['hr_person_id'];
+        $hr_person_id = $request['hr_person_id'];
         $LevTypID = !empty($request['leave_types_id']) ? $request['leave_types_id'] : 0;
         $actionDate = $request['action_date'];
         if (!empty($actionDate)) {
@@ -122,31 +122,31 @@ class LeaveHistoryAuditController extends Controller {
             $actionTo = strtotime($startExplode[1]);
         }
         $historyAudit = DB::table('leave_history')
-                ->select('leave_history.*', 'hr_people.employee_number as employee_number '
-				, 'hr_people.first_name as firstname'
-				, 'hr_people.surname as surname', 'leave_types.name as leave_type')
-                ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
-                ->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
-                ->where(function ($query) use ($actionFrom, $actionTo) {
-                    if ($actionFrom > 0 && $actionTo > 0) {
-                        $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
-                    }
-                })
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('leave_history.hr_id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('leave_history.leave_type_id', $LevTypID);
-                    }
-                })
-                ->orderBy('leave_history.id')
-                ->get();
+			->select('leave_history.*', 'hr_people.employee_number as employee_number '
+			, 'hr_people.first_name as firstname'
+			, 'hr_people.surname as surname', 'leave_types.name as leave_type')
+			->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
+			->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
+			->where(function ($query) use ($actionFrom, $actionTo) {
+				if ($actionFrom > 0 && $actionTo > 0) {
+					$query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
+				}
+			})
+			->where(function ($query) use ($hr_person_id) {
+				if (!empty($hr_person_id)) {
+					$query->where('leave_history.hr_id', $hr_person_id);
+				}
+			})
+			->where(function ($query) use ($LevTypID) {
+				if (!empty($LevTypID)) {
+					$query->where('leave_history.leave_type_id', $LevTypID);
+				}
+			})
+			->orderBy('leave_history.id')
+			->get();
 
         $data['actionFrom'] = $actionFrom;
-        $data['hr_person_id'] = $userID;
+        $data['hr_person_id'] = $hr_person_id;
         $data['actionDate'] = $actionDate;
         $data['leave_types_id'] = $LevTypID;
         $data['historyAudit'] = $historyAudit;
@@ -161,7 +161,66 @@ class LeaveHistoryAuditController extends Controller {
         AuditReportsController::store('Leave Management', 'Viewed Leave History report Results', "view Audit Results", 0);
         return view('leave.reports.leave_history_report')->with($data);
     }
+	#
+    public function printlevhistoReport(Request $request) {
 
+        $actionFrom = $actionTo = 0;
+        $hr_person_id = $request['hr_person_id'];
+        $LevTypID = !empty($request['leave_types_id']) ? $request['leave_types_id'] : 0;
+        $actionDate = $request['actionDate'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+        $historyAudit = DB::table('leave_history')
+			->select('leave_history.*', 'hr_people.employee_number as employee_number '
+			, 'hr_people.first_name as firstname'
+			, 'hr_people.surname as surname', 'leave_types.name as leave_type')
+			->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
+			->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
+			->where(function ($query) use ($actionFrom, $actionTo) {
+				if ($actionFrom > 0 && $actionTo > 0) {
+					$query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
+				}
+			})
+			->where(function ($query) use ($hr_person_id) {
+				if (!empty($hr_person_id)) {
+					$query->where('leave_history.hr_id', $hr_person_id);
+				}
+			})
+			->where(function ($query) use ($LevTypID) {
+				if (!empty($LevTypID)) {
+					$query->where('leave_history.leave_type_id', $LevTypID);
+				}
+			})
+			->orderBy('leave_history.id')
+			->get();
+
+        $data['user_id'] = $userID;
+        $data['action_date'] = $actionDate;
+        $data['historyAudit'] = $historyAudit;
+        $data['page_title'] = "Leave history Audit Report";
+        $data['page_description'] = "Leave history Audit Report";
+        $data['breadcrumb'] = [
+                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Reports';
+        $user = Auth::user()->load('person');
+		$companyDetails = CompanyIdentity::systemSettings();
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyDetails['company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+		
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['user'] = $user;
+
+        AuditReportsController::store('Leave Management', 'Printed Leave History Report Results', "view Audit Results", 0);
+        return view('leave.reports.leave_history_print')->with($data);
+    }
     public function cancelledLeaves(Request $request) {
 
         $reportData = $request->all();
@@ -229,66 +288,6 @@ class LeaveHistoryAuditController extends Controller {
             AuditReportsController::store('Leave Management', 'Generate Cancelled Leaves Report', "Generated by user", 0);
             return view('leave.reports.cancelled_leaves_report')->with($data);
         }
-    }
-
-    #
-    public function printlevhistoReport(Request $request) {
-
-        $actionFrom = $actionTo = 0;
-        $userID = $request['hr_person_id'];
-        $LevTypID = !empty($request['leave_types_id']) ? $request['leave_types_id'] : 0;
-        $actionDate = $request['actionDate'];
-        if (!empty($actionDate)) {
-            $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
-        }
-        $historyAudit = DB::table('leave_history')
-                ->select('leave_history.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname','leave_types.name as leave_type')
-                ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.user_id')
-				->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
-                ->where(function ($query) use ($actionFrom, $actionTo) {
-                    if ($actionFrom > 0 && $actionTo > 0) {
-                        $query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
-                    }
-                })
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('leave_history.hr_id', $userID);
-                    }
-                })
-				->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('leave_history.leave_type_id', $LevTypID);
-                    }
-                })
-                ->limit(100)
-                ->orderBy('leave_history.id')
-                ->get();
-
-        $data['user_id'] = $userID;
-        $data['action_date'] = $actionDate;
-        $data['historyAudit'] = $historyAudit;
-        $data['page_title'] = "Leave history Audit Report";
-        $data['page_description'] = "Leave history Audit Report";
-        $data['breadcrumb'] = [
-                ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
-            ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Reports';
-        $user = Auth::user()->load('person');
-		$companyDetails = CompanyIdentity::systemSettings();
-        $data['support_email'] = $companyDetails['support_email'];
-        $data['company_name'] = $companyDetails['company_name'];
-        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['date'] = date("d-m-Y");
-		
-        $data['full_company_name'] = $companyDetails['full_company_name'];
-        $data['user'] = $user;
-
-        AuditReportsController::store('Leave Management', 'Printed Leave History Report Results', "view Audit Results", 0);
-        return view('leave.reports.leave_history_print')->with($data);
     }
 
     public function leavebalance(Request $request) {
