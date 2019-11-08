@@ -146,7 +146,7 @@ class LeaveHistoryAuditController extends Controller {
                 ->get();
 
         $data['actionFrom'] = $actionFrom;
-        $data['userID'] = $userID;
+        $data['hr_person_id'] = $userID;
         $data['actionDate'] = $actionDate;
         $data['leave_types_id'] = $LevTypID;
         $data['historyAudit'] = $historyAudit;
