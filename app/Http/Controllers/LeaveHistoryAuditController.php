@@ -197,8 +197,6 @@ class LeaveHistoryAuditController extends Controller {
 			->orderBy('leave_history.id')
 			->get();
 
-        $data['user_id'] = $userID;
-        $data['action_date'] = $actionDate;
         $data['historyAudit'] = $historyAudit;
         $data['page_title'] = "Leave history Audit Report";
         $data['page_description'] = "Leave history Audit Report";
