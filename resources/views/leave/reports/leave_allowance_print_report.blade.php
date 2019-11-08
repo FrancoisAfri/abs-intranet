@@ -49,34 +49,33 @@
 						<tr>
 							<th>Employee Number </th>
 							<th>Employee Name </th>
-							<th>Leave Type</th>
-							<th>Date taken</th>
-							<th>Day(s)</th>
+							<th>Leave Type </th>
+							<th>Min Day(s)</th>
+							<th>Max Day(s)</th>
 						</tr>
 					</thead>
-                    <tbody>
-					@if(count($leaveTakens) > 0)
-						@foreach($leaveTakens as $leaveTaken)
+					<tbody>
+					 @if(count($allowances) > 0)
+						@foreach($allowances as $allowance)
 							<tr>
-							   <td>{{ !empty($leaveTaken->employee_number) ? $leaveTaken->employee_number : '' }}</td>
-								<td>{{ !empty($leaveTaken->first_name) && !empty($leaveTaken->surname) ? $leaveTaken->first_name.' '.$leaveTaken->surname : '' }}</td>
-								<td>{{ !empty($leaveTaken->leaveTypename) ? $leaveTaken->leaveTypename : '' }}</td>
-								<td>{{ !empty($leaveTaken->start_date) ? date('Y M d : H : i : s', $leaveTaken->start_date) : '' }}</td>
-								<td>{{ !empty($leaveTaken->leave_days) ? number_format($leaveTaken->leave_days/8, 2) : '' }} days(s)</td>
+							   <td>{{ !empty($allowance->employee_number) ? $allowance->employee_number : '' }}</td>
+								<td>{{ !empty($allowance->first_name) && !empty($allowance->surname) ? $allowance->first_name.' '.$allowance->surname : '' }}</td>
+								<td>{{ !empty($allowance->leave_type_name) ? $allowance->leave_type_name : $allowance->leave_type_name }}</td>
+								<td>{{ !empty($allowance->min) ? $allowance->min : $allowance->min }}</td>
+								<td>{{ !empty($allowance->max) ? $allowance->max : $allowance->max }}</td>
 							</tr>
 						@endforeach
 					@endif
 					</tbody>
-                    <tfoot>
 					<tfoot>
-                    	<tr>
+						<tr>
 							<th>Employee Number </th>
 							<th>Employee Name </th>
-							<th>Leave Type</th>
-							<th>Date taken</th>
-							<th>Day(s)</th>
+							<th>Leave Type </th>
+							<th>Min Day(s)</th>
+							<th>Max Day(s)</th>
 						</tr>
-                    </tfoot>
+					</tfoot>
 				</table>
 			</div>
 		</div>

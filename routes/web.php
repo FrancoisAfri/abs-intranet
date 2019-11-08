@@ -191,6 +191,7 @@ Route::post('leave/reports/leavepaOut', 'LeaveHistoryAuditController@leavepaidOu
 Route::post('leave/reports/leaveAll', 'LeaveHistoryAuditController@leaveAllowance');
 Route::post('leave/reports/cancelled-leaves', 'LeaveHistoryAuditController@cancelledLeaves');
 Route::post('leave/reports/cancelled-leaves/print', 'LeaveHistoryAuditController@cancelledLeavesPrint');
+Route::post('leave/print-allowance', 'LeaveHistoryAuditController@leaveAllowancePrint');
 Route::post('leave/print', 'LeaveHistoryAuditController@printlevhistoReport');
 Route::post('leave/bal', 'LeaveHistoryAuditController@printlevbalReport');
 Route::post('leave_taken/print', 'LeaveHistoryAuditController@takenPrint');

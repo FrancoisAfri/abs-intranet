@@ -48,11 +48,9 @@
                                 <div class="col-sm-9">
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="application_type" value="1" checked> Leave Taken </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="application_type" value="2">  Leave Balance</label>
-                                    <!--<label class="radio-inline"><input type="radio" id="rdo_po" name="application_type" value="3">  Leave Paid Out</label>-->
                                     <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Leave Allowance</label>
                                     <label class="radio-inline"><input type="radio" id="rdo_levH" name="application_type" value="5">  Leave History</label>
                                     <label class="radio-inline"><input type="radio" id="rdo_cancelled_leaves" name="application_type" value="6"> Cancelled Leaves</label>
-
                                 </div>
                             </div>
                           <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
@@ -84,9 +82,8 @@
                                     </div>
                                 </div>
                             </div>                                        
-                        <div class="form-group lev-field{{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                        <div class="form-group lev-field{{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="leave_types_id" class="col-sm-2 control-label">Leave Type</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -108,9 +105,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </div>
-<!--                                    <input type="text" class="form-control pull-right" id="reservation">-->
-                                    <input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
-                                    
+										<input type="text" class="form-control daterangepicker" id="action_date" name="action_date" value="" placeholder="Select Action Date...">
                                 </div>
                             </div>
                         </div>
@@ -309,7 +304,7 @@
                  $('.levAction-field').hide();
                   $('.manual-field').show();
                  $('.lev-field').show();
-                 $('.date-field').show();
+                 $('.date-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leaveAll');
                  $('#gen-report').val("Submit"); 
             } else if(allType == 5){

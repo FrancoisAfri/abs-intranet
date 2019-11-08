@@ -1,4 +1,8 @@
 @extends('layouts.main_layout')
+@section('page_dependencies')
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/buttons.dataTables.min.css">
+@endsection
 @section('content')
     <div class="row">
         <div class="col-sm-12">
@@ -9,7 +13,7 @@
                 <!-- /.box-header -->
 				<form class="form-horizontal" method="POST" action="/leave/print">
                  <input type="hidden" name="actionDate" value="{{!empty($actionDate) ? $actionDate : ''}}">
-                 <input type="hidden" name="userID" value="{{!empty($userID) ? $userID : ''}}">
+                 <input type="hidden" name="hr_person_id" value="{{!empty($userID) ? $userID : ''}}">
                  <input type="hidden" name="report" value="{{!empty($report) ? $report : ''}}">
                  <input type="hidden" name="leave_types_id" value="{{!empty($leave_types_id) ? $leave_types_id : ''}}">
 					{{ csrf_field() }}
@@ -17,18 +21,21 @@
                     <!-- Collapsible section containing the amortization schedule -->
                     <div class="box-group" id="accordion">
                         <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                       <table class="table table-striped">
-							<tr>
-								<th>Employee Number </th>
-								<th>Names</th>
-								<th>Action</th>
-								<th>Action Date</th>
-								<th>Leave Type</th>
-								<th>Previous Balance</th>
-								<th>Transaction</th>
-								<th>Current Balance</th>
-								<th>Performed By</th>
-							</tr>
+						<table id="example2" class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									<th>Employee Number </th>
+									<th>Names</th>
+									<th>Action</th>
+									<th>Action Date</th>
+									<th>Leave Type</th>
+									<th>Previous Balance</th>
+									<th>Transaction</th>
+									<th>Current Balance</th>
+									<th>Performed By</th>
+								</tr>
+							</thead>
+							<tbody>
 							@if(count($historyAudit) > 0)
 								@foreach($historyAudit as $audit)
 									<tr>
@@ -44,6 +51,20 @@
 									</tr>
 								@endforeach
 							@endif
+							</tbody>
+							<tfoot>
+								<tr>
+									<th>Employee Number </th>
+									<th>Names</th>
+									<th>Action</th>
+									<th>Action Date</th>
+									<th>Leave Type</th>
+									<th>Previous Balance</th>
+									<th>Transaction</th>
+									<th>Current Balance</th>
+									<th>Performed By</th>
+								</tr>
+							</tfoot>
 						</table>
 						<div class="row no-print">
 							<div class="col-xs-12">
@@ -62,13 +83,49 @@
     </div>
 @endsection
 @section('page_script')
-<!--  -->
-<!--  -->
- <script type="text/javascript">
- $(function () {
+	<!-- DataTables -->
+	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.buttons.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.flash.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/jszip.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/pdfmake.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/vfs_fonts.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.html5.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.print.min.js"></script>
+	<!-- End Bootstrap File input -->
+	<script>
+		$(function () {
 		$('#cancel').click(function () {
 			location.href = '/leave/reports';
 		});
 	})
- </script>
- @endsection
+		$(function () {
+			$('#example2').DataTable({
+				"paging": true,
+				"lengthChange": true,
+				"lengthMenu": [ 50, 75, 100, 150, 200, 250 ],
+				"pageLength": 50,
+				"searching": true,
+				"ordering": true,
+				"info": true,
+				"autoWidth": true,
+				dom: 'lfrtipB',
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						title: 'Leave Allowance Report'
+					},
+					{
+						extend: 'csvHtml5',
+						title: 'Leave Allowance Report'
+					},
+					{
+						extend: 'copyHtml5',
+						title: 'Leave Allowance Report'
+					}
+				]
+			});
+		});
+	</script>
+@endsection
