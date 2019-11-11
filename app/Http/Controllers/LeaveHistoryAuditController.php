@@ -656,5 +656,5 @@ class LeaveHistoryAuditController extends Controller {
         AuditReportsController::store('Leave Management', 'Viewed leave Paid out Report Results', "view Reports Results", 0);
         return view('leave.reports.leave_paid_out report')->with($data);
     }
-
+	
 }

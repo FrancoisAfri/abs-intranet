@@ -140,6 +140,7 @@ Route::get('policy/category', 'PolicyEnforcementController@viewCategories');
 Route::post('policy/category', 'PolicyEnforcementController@categorySave');
 Route::patch('policy/cat_edit/{category}', 'PolicyEnforcementController@editCategory');
 Route::get('policy/cat_active/{category}', 'PolicyEnforcementController@categoryAct');
+Route::get('policy/read-policy-document/{user}', 'PolicyEnforcementController@readPolicy');
 
 
 Route::get('System/policy/viewuserdetails/{policydetails}', 'PolicyEnforcementController@viewuserdetails');

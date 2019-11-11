@@ -216,7 +216,7 @@
 
 
 			var policyID;
-			$('#edit-policy-modal').on('show.bs.modal', function (e) {
+			$('#edit-policy-modal').on('shown.bs.modal', function (e) {
 				var btnEdit = $(e.relatedTarget);
 				if (parseInt(btnEdit.data('id')) > 0) {
 					policyID = btnEdit.data('id');

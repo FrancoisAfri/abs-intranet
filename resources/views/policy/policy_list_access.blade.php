@@ -14,9 +14,7 @@
     <div class="col-md-12">
         <div class="box box-primary">
             <form class="form-horizontal" method="POST" action="/System/policy/update_status">
-                {{ csrf_field() }}
-
-                
+                {{ csrf_field() }}               
                 <div class="box-header with-border">
                     <h3 class="box-title"> My Policies </h3>
                     <div class="box-tools pull-right">
@@ -48,24 +46,21 @@
                             <th style="vertical-align: middle; text-align: center;">Read and understood</th>
                             <th style="vertical-align: middle; text-align: center;">Read but not understood</th>
                             <th style="vertical-align: middle; text-align: center;">Read but not sure</th>
-
                         </tr>
                         </thead>
                         <tbody>
                         @foreach($policyUsers as $policy)
                             <tr>
                                 <td style="vertical-align: middle;" nowrap>
-                                    <div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-                                        <label for="document" class="control-label"></label>
-                                        @if(!empty($policy->policy_doc))
-                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-                                               href="{{ Storage::disk('local')->url("Policies/policy/$policy->policy_doc") }}"
-                                               target="_blank"><i class="fa fa-file-pdf-o"></i> {{$policy->policy_name}}</a>
+										@if(!empty($policy->policy_doc))
+                                           <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+                                               href="/policy/read-policy-document/{{$policy->id}}"
+                                               target="_blank"><i
+                                                        class="fa fa-exclamation-triangle"></i> Read Policy</a> 
                                         @else
                                             <a class="btn btn-default pull-centre btn-xs"><i
                                                         class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
                                         @endif
-                                    </div>
                                 </td>
 								<td>{{ (!empty( $policy->cat_name)) ?  $policy->cat_name : ''}} </td>
                                 <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->policy_name)) ?  $policy->policy_name : ''}}</td>
@@ -75,27 +70,26 @@
 									@if(!empty($policy->read_understood) ||  !empty($policy->read_not_understood)  || !empty($policy->read_not_sure))
 											<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "1-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>
 									@else 
-										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" value="{{ "1-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>	
+										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "1-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>	
 									@endif
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
 								@if(!empty($policy->read_understood) ||  !empty($policy->read_not_understood)  || !empty($policy->read_not_sure))
 										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "2-$policy->user_id" }}"  {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>
 									@else 
-										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" value="{{ "2-$policy->user_id" }}"  {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>	
+										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "2-$policy->user_id" }}"  {{ $policy->read_not_understood == 1 ? ' checked' : '' }}></label>	
 									@endif
                                 </td>
                                 <td style="vertical-align: middle; text-align: center;">
 									@if(!empty($policy->read_understood) ||  !empty($policy->read_not_understood)  || !empty($policy->read_not_sure))
 										 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "3-$policy->user_id" }}" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>
 									@else 
-										 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" value="{{ "3-$policy->user_id" }}" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>	
+										 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "3-$policy->user_id" }}" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>	
 									@endif
                                    
                                 </td>
                                 @endforeach
                             </tr>
-
                         </tbody>
                         <tfoot>
                         <tr>
@@ -113,7 +107,7 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-                    <button type="submit" id="add-new-module" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
+                   <!-- <button type="submit" id="add-new-module" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>-->
                 </div>
             </form>
         </div>

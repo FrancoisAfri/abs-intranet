@@ -18,7 +18,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-
+use Illuminate\Support\Facades\Storage;
 class PolicyEnforcementController extends Controller
 {
     public function __construct()
@@ -321,7 +321,7 @@ class PolicyEnforcementController extends Controller
             ->orderBy('policy_users.id')
             ->limit(100)
             ->get();
-
+//return $policyUsers;
         $modules = modules::where('active', 1)->orderBy('name', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
@@ -470,7 +470,27 @@ class PolicyEnforcementController extends Controller
         AuditReportsController::store('Policy Enforcement', 'Policy Users Details Page Accessed', "Accessed By User", 0);
         return view('policy.view_policy_details')->with($data);
     }
-	
+	// read Policies
+	public function readPolicy(Policy_users $user)
+    {
+		$users = Auth::user()->person->id;
+		$user = $user->load('policy');
+		//return $user;
+		$document = !empty($user->policy->document) ? $user->policy->document : '';
+        $data['policy_documnet'] = (!empty($document)) ? Storage::disk('local')->url("Policies/policy/$document") : '';
+		$data['user'] = $user;
+        $data['page_title'] = "Policy Enforcement System";
+        $data['page_description'] = "Policy Enforcement System";
+        $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Read Policy ', 'active' => 1, 'is_module' => 0]];
+
+        $data['active_mod'] = 'Policy Enforcement';
+        $data['active_rib'] = 'My Policies';
+
+        AuditReportsController::store('Policy Enforcement', 'Policy Read by user', "Accessed By User", 0);
+        return view('policy.read_policy')->with($data);
+    }
+	//
     public function reports()
     {
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();

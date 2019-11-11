@@ -34,7 +34,6 @@
                                     </div>
                                     <div class="product-info">
                                         <a href="{{ '/users/' . $person->user_id . '/edit' }}" class="product-title">{{ $person->first_name . ' ' . $person->surname }}</a>
-                                        <!--<span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }} pull-right">{{ $status_values[$person->status] }}</span><!-- </a> -->
                                         <label class="radio-inline pull-right" style="padding-left: 0px;"><input class="rdo-iCheck" type="checkbox" id="{{ $person->user_id . '_rdo_status_active' }}" name="{{ "status[" . $person->user_id . "]" }}" value="1" {{ $person->status == 1 ? ' checked' : '' }}> <span class="label {{ ($person->status === 1) ? 'label-success' : 'label-danger' }}">Active</span></label>
                                         <input type="hidden" id="{{ $person->user_id . '_rdo_status_inactive' }}" name="{{ "status[" . $person->user_id . "]" }}" value="0" {{ $person->status == 1 ? ' disabled' : '' }}>
                                         <span class="product-description">
