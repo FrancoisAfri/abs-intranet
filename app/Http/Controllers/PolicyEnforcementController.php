@@ -39,11 +39,11 @@ class PolicyEnforcementController extends Controller
         $ContactCompany = ContactCompany::orderBy('id', 'asc')->get();
         $users = HRPerson::where('status', 1)->get();
 
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
         $data['breadcrumb'] = [
-            ['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['active_mod'] = 'Policy Enforcement';
@@ -143,11 +143,11 @@ class PolicyEnforcementController extends Controller
     public function policyAct(Policy $pol)
     {
         if ($pol->status == 1) {
-            $label = "De-Activated";
+            $label = "De-Activate";
             $stastus = 0;
         } else {
             $stastus = 1;
-            $label = "Activated";
+            $label = "Activate";
         }
         $pol->status = $stastus;
         $pol->update();
@@ -168,11 +168,11 @@ class PolicyEnforcementController extends Controller
         $employees = HRPerson::where('status', 1)->get();
 		$DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
         
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
         $data['breadcrumb'] = [
             ['title' => 'Policy Enforcement', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]
         ];
         $policyID = $users->id;
         $policyname = $users->name;
@@ -221,7 +221,7 @@ class PolicyEnforcementController extends Controller
             }
         }
 
-        AuditReportsController::store('Policy Enforcement', 'Edit policy Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Policy Enforcement', 'Edit Policy Page Accessed', "Accessed By User", 0);
         return response()->json();
     }
 
@@ -297,7 +297,7 @@ class PolicyEnforcementController extends Controller
                 Mail::to($email)->send(new createPolicy($firstname, $surname, $email));
             }
         }
-        AuditReportsController::store('Policy Enforcement', 'New Policy Added', "Added By User", 0);
+        AuditReportsController::store('Policy Enforcement', 'New User Added to Policy', "Added By User", 0);
         return response()->json();
     }
 
@@ -316,7 +316,7 @@ class PolicyEnforcementController extends Controller
             ->leftJoin('hr_people', 'policy_users.user_id', '=', 'hr_people.id')
             ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
             ->leftJoin('policy_category', 'policy.category_id', '=', 'policy_category.id')
-            ->where('policy.date', '>', $today)
+            //->where('policy.date', '>', $today)
             ->where('policy_users.user_id', $users)
             ->orderBy('policy_users.id')
             ->limit(100)
@@ -325,11 +325,11 @@ class PolicyEnforcementController extends Controller
         $modules = modules::where('active', 1)->orderBy('name', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
         $data['breadcrumb'] = [
             ['title' => 'Policy Enforcement', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['policyUsers'] = $policyUsers;
@@ -340,7 +340,7 @@ class PolicyEnforcementController extends Controller
         $data['modules'] = $modules;
         $data['division_levels'] = $divisionLevels;
 
-        AuditReportsController::store('Policy Enforcement', 'View Policy Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Policy Enforcement', 'View Policies Page Accessed', "Accessed By User", 0);
         return view('policy.policy_list_access')->with($data);
     }
 
@@ -380,11 +380,11 @@ class PolicyEnforcementController extends Controller
     public function policySearchindex()
     {
 		$categories = Policy_Category::where('status', 1)->get();
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
         $data['breadcrumb'] = [
-            ['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['active_mod'] = 'Policy Enforcement';
@@ -432,11 +432,11 @@ class PolicyEnforcementController extends Controller
 			
         $data['policyUsers'] = $policyUsers;
 
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
         $data['breadcrumb'] = [
-            ['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['active_mod'] = 'Policy Enforcement';
@@ -459,10 +459,10 @@ class PolicyEnforcementController extends Controller
         $data['employees'] = $employees;
         $data['DivisionLevelFive'] = $DivisionLevelFive;
         $data['policy'] = $policy;
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
-        $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]];
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
+        $data['breadcrumb'] = [['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]];
 
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Search Policies';
@@ -479,15 +479,15 @@ class PolicyEnforcementController extends Controller
 		$document = !empty($user->policy->document) ? $user->policy->document : '';
         $data['policy_documnet'] = (!empty($document)) ? Storage::disk('local')->url("Policies/policy/$document") : '';
 		$data['user'] = $user;
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
-        $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
+        $data['breadcrumb'] = [['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Read Policy ', 'active' => 1, 'is_module' => 0]];
 
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'My Policies';
 
-        AuditReportsController::store('Policy Enforcement', 'Policy Read by user', "Accessed By User", 0);
+        AuditReportsController::store('Policy Enforcement', "Policy $user->policy->name Viewed by user", "Accessed By User", 0);
         return view('policy.read_policy')->with($data);
     }
 	//
@@ -496,11 +496,11 @@ class PolicyEnforcementController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $categories = Policy_Category::where('status', 1)->get();
 		$policy = Policy::where('status', 1)->get();
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
         $data['breadcrumb'] = [
-            ['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]
         ];
 
         $data['division_levels'] = $divisionLevels;
@@ -554,10 +554,10 @@ class PolicyEnforcementController extends Controller
             $policies = $policies->load('policyUsers','policyCategory');
 
         $data['policies'] = $policies;
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
-        $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]];
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
+        $data['breadcrumb'] = [['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]];
 
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Reports';
@@ -589,10 +589,10 @@ class PolicyEnforcementController extends Controller
 
         $data['policies'] = $policies;
         $data['policy'] = $policy;
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
-        $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]];
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
+        $data['breadcrumb'] = [['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]];
 
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Reports';
@@ -625,10 +625,10 @@ class PolicyEnforcementController extends Controller
 
         $data['policies'] = $policies;
         $data['Policy'] = $Policy;
-        $data['page_title'] = "Policy Enforcement System";
-        $data['page_description'] = "Policy Enforcement System";
-        $data['breadcrumb'] = [['title' => 'Policy Enforcement System', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Manage Policy Enforcement System ', 'active' => 1, 'is_module' => 0]];
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Policy Library";
+        $data['breadcrumb'] = [['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]];
 
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Reports';
@@ -661,7 +661,6 @@ class PolicyEnforcementController extends Controller
 
         $data['policies'] = $policies;
         $data['Policy'] = $Policy;
-
 //
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];

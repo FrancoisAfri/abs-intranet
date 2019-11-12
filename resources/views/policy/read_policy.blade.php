@@ -30,7 +30,7 @@
 									<tr>
 										<td colspan="3"> 
 											<iframe frameborder="0" scrolling="yes" style="border:0px" 
-												src="{{ $policy_documnet }}" width="1000" height="800">
+												src="{{ $policy_documnet}}#toolbar=0&navpanes=0&scrollbar=0" width="1000" height="800">
 											</iframe>
 										</td>
 									</tr>

@@ -55,7 +55,7 @@
 										@if(!empty($policy->policy_doc))
                                            <a class="btn btn-default btn-flat btn-block pull-right btn-xs"
                                                href="/policy/read-policy-document/{{$policy->id}}"
-                                               target="_blank"><i
+                                               ><i
                                                         class="fa fa-exclamation-triangle"></i> Read Policy</a> 
                                         @else
                                             <a class="btn btn-default pull-centre btn-xs"><i
