@@ -487,7 +487,7 @@ class PolicyEnforcementController extends Controller
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'My Policies';
 
-        AuditReportsController::store('Policy Enforcement', "Policy $user->policy->name Viewed by user", "Accessed By User", 0);
+        AuditReportsController::store('Policy Enforcement', "$user->policy->name Policy Viewed", "Accessed By User", 0);
         return view('policy.read_policy')->with($data);
     }
 	//
