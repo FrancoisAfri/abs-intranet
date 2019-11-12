@@ -24,44 +24,46 @@
                 <!-- /.box-header -->
 				<form class="form-horizontal" method="POST" action="/System/policy/update_status">
 					<div class="box-body no-padding no-margin">
-						<table class="table table-striped" >
-							<tr><th colspan="3">Policy</th></tr>
-								<tr>
-									<td colspan="3"> 
-										<iframe frameborder="0" scrolling="no" style="border:0px" 
-											src="{{ $policy_documnet }}" width="1000" height="800">
-										</iframe>
-									</td>
-								</tr>
-								<tr>
-									<th style="text-align: center;">Read and understood</th>
-									<th style="text-align: center;">Read but not understood</th>
-									<th style="text-align: center;">Read but not sure</th>
-								</tr>
-								<tr>
-									<td style="vertical-align: middle; text-align: center;">
-										@if(!empty($user->read_understood) ||  !empty($user->read_not_understood)  || !empty($user->read_not_sure))
-												<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readunderstood' }}" name="{{ "docread[" . $user->policy_id . "]" }}" disabled value="{{ "1-$user->user_id" }}" {{ $user->read_understood == 1 ? ' checked' : '' }}></label>
-										@else 
-											<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readunderstood' }}" name="{{ "docread[" . $user->policy_id . "]" }}" value="{{ "1-$user->user_id" }}" {{ $user->read_understood == 1 ? ' checked' : '' }}></label>	
-										@endif
-									</td>
-									<td style="vertical-align: middle; text-align: center;">
-										@if(!empty($user->read_understood) ||  !empty($user->read_not_understood)  || !empty($user->read_not_sure))
-												<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readnotunderstood' }}" name="{{ "docread[" . $user->policy_id . "]" }}" disabled value="{{ "2-$user->user_id" }}"  {{ $user->read_not_understood == 1 ? ' checked' : '' }}></label>
-										@else 
-												<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readnotunderstood' }}" name="{{ "docread[" . $user->policy_id . "]" }}" value="{{ "2-$user->user_id" }}"  {{ $user->read_not_understood == 1 ? ' checked' : '' }}></label>	
-										@endif
-									</td>
-									<td style="vertical-align: middle; text-align: center;">
-										@if(!empty($user->read_understood) ||  !empty($user->read_not_understood)  || !empty($user->read_not_sure))
-											 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readnotsure' }}" name="{{ "docread[" . $user->policy_id . "]" }}" disabled value="{{ "3-$user->user_id" }}" {{ $user->read_not_sure == 1 ? ' checked' : '' }}></label>
-										@else 
-											 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readnotsure' }}" name="{{ "docread[" . $user->policy_id . "]" }}" value="{{ "3-$user->user_id" }}" {{ $user->read_not_sure == 1 ? ' checked' : '' }}></label>	
-										@endif
-									</td>
-								</tr>
-						</table>
+						<div class="overflow-X:auto; overflow-Y:auto;">
+							<table class="table table-striped" >
+								<tr><th colspan="3">Policy</th></tr>
+									<tr>
+										<td colspan="3"> 
+											<iframe frameborder="0" scrolling="yes" style="border:0px" 
+												src="{{ $policy_documnet }}" width="1000" height="800">
+											</iframe>
+										</td>
+									</tr>
+									<tr>
+										<th style="text-align: center;">Read and understood</th>
+										<th style="text-align: center;">Read but not understood</th>
+										<th style="text-align: center;">Read but not sure</th>
+									</tr>
+									<tr>
+										<td style="vertical-align: middle; text-align: center;">
+											@if(!empty($user->read_understood) ||  !empty($user->read_not_understood)  || !empty($user->read_not_sure))
+													<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readunderstood' }}" name="{{ "docread[" . $user->policy_id . "]" }}" disabled value="{{ "1-$user->user_id" }}" {{ $user->read_understood == 1 ? ' checked' : '' }}></label>
+											@else 
+												<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readunderstood' }}" name="{{ "docread[" . $user->policy_id . "]" }}" value="{{ "1-$user->user_id" }}" {{ $user->read_understood == 1 ? ' checked' : '' }}></label>	
+											@endif
+										</td>
+										<td style="vertical-align: middle; text-align: center;">
+											@if(!empty($user->read_understood) ||  !empty($user->read_not_understood)  || !empty($user->read_not_sure))
+													<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readnotunderstood' }}" name="{{ "docread[" . $user->policy_id . "]" }}" disabled value="{{ "2-$user->user_id" }}"  {{ $user->read_not_understood == 1 ? ' checked' : '' }}></label>
+											@else 
+													<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readnotunderstood' }}" name="{{ "docread[" . $user->policy_id . "]" }}" value="{{ "2-$user->user_id" }}"  {{ $user->read_not_understood == 1 ? ' checked' : '' }}></label>	
+											@endif
+										</td>
+										<td style="vertical-align: middle; text-align: center;">
+											@if(!empty($user->read_understood) ||  !empty($user->read_not_understood)  || !empty($user->read_not_sure))
+												 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readnotsure' }}" name="{{ "docread[" . $user->policy_id . "]" }}" disabled value="{{ "3-$user->user_id" }}" {{ $user->read_not_sure == 1 ? ' checked' : '' }}></label>
+											@else 
+												 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $user->id . '_readnotsure' }}" name="{{ "docread[" . $user->policy_id . "]" }}" value="{{ "3-$user->user_id" }}" {{ $user->read_not_sure == 1 ? ' checked' : '' }}></label>	
+											@endif
+										</td>
+									</tr>
+							</table>
+						</div>
 					</div>
 					<div class="box-footer">
 						<button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i>
