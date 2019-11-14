@@ -595,14 +595,14 @@ class LeaveApplicationController extends Controller
         if (!empty($email))
 			Mail::to($email)->send(new Accept_application($firstname, $leaveAttachment));
         // Send email to employee manager
-		if (!empty($hrDetails->manager_id))
+		/*if (!empty($hrDetails->manager_id))
 		{
 			$managerDetails = HRPerson::where('id', $hrDetails->manager_id)->where('status',1)
                 ->select('first_name', 'email')
                 ->first();
 			if (!empty($managerDetails->email))
 				Mail::to($managerDetails->email)->send(new SendLeaveApplicationToManager($managerDetails->first_name, $leaveAttachment));
-		}
+		}*/
 		// send emal to Hr manager
 		if (!empty($hrDetails->division_level_5))
 		{
