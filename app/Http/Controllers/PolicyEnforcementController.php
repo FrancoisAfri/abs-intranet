@@ -28,7 +28,27 @@ class PolicyEnforcementController extends Controller
 
     public function create()
     {
-        $policies = Policy::all();
+        $categories = Policy_Category::where('status', 1)->get();
+		if (!empty($categories)) $categories = $categories->load('policies');
+        $data['page_title'] = "Policy Library";
+        $data['page_description'] = "Categories";
+        $data['breadcrumb'] = [
+            ['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Manage Policy Library ', 'active' => 1, 'is_module' => 0]
+        ];
+
+        $data['active_mod'] = 'Policy Enforcement';
+        $data['active_rib'] = 'Add Policy';
+        $data['categories'] = $categories;
+        AuditReportsController::store('Policy Enforcement', 'Policy Enforcement Page Accessed', "Accessed By User", 0);
+
+        return view('policy.create_policy_categories')->with($data);
+    }
+	
+	///
+	public function policyCat(Policy_Category $policyCat)
+    {
+        $policies = Policy::where('category_id',$policyCat->id)->get();
 		if (!empty($policies)) $policies = $policies->load('policyCategory');
 		
 		$employees = HRPerson::where('status', 1)->get();
@@ -48,6 +68,7 @@ class PolicyEnforcementController extends Controller
 
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'Add Policy';
+        $data['policyCat'] = $policyCat;
         $data['employees'] = $employees;
         $data['policies'] = $policies;
         $data['division_levels'] = $divisionLevels;

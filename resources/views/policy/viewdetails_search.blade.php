@@ -1,12 +1,8 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
-    <!-- bootstrap file input -->
-    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"/>
-    <!-- DataTables -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/buttons.dataTables.min.css">
 @endsection
 
 @section('content')
@@ -44,7 +40,7 @@
                                 </ul>
                             </div>
                         @endif
-                        <table id="emp-list-table" class="table table-bordered table-striped table-hover">
+                        <table id="example2" class="table table-bordered table-striped table-hover">
                             <thead>
                             <tr>
                                 <th style="width: 5px; text-align: center;">Accept <input type="checkbox"
@@ -152,8 +148,15 @@
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 
     <!-- DataTables -->
-    <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.buttons.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.flash.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/jszip.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/pdfmake.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/vfs_fonts.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.html5.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.print.min.js"></script>
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
 
@@ -202,14 +205,31 @@
             $('[data-toggle="tooltip"]').tooltip();
 
             //Initialize the data table
-            $('#emp-list-table').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": false,
-                "autoWidth": true
-            });
+            $('#example2').DataTable({
+				"paging": true,
+				"lengthChange": true,
+				"lengthMenu": [ 50, 75, 100, 150, 200, 250 ],
+				"pageLength": 50,
+				"searching": true,
+				"ordering": true,
+				"info": true,
+				"autoWidth": true,
+				dom: 'lfrtipB',
+				buttons: [
+					{
+						extend: 'excelHtml5',
+						title: 'Fines Report'
+					},
+					{
+						extend: 'csvHtml5',
+						title: 'Fines Report'
+					},
+					{
+						extend: 'copyHtml5',
+						title: 'Fines Report'
+					}
+				]
+			});
 
             //Cancel button
             $('#cancel').click(function () {

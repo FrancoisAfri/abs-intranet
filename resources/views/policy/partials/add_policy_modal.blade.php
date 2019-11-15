@@ -19,7 +19,7 @@
 									id="category_id" name="category_id">
 								<option value="">*** Select a Category ***</option>
 								@foreach($categories as $category)
-									<option value="{{ $category->id }}">{{ $category->name }}</option>
+									<option value="{{ $category->id }}" {{ ($category->id == $policyCat->id) ? ' selected' : '' }}>{{ $category->name }}</option>
 								@endforeach
 							</select>
                         </div>

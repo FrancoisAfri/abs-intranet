@@ -570,13 +570,14 @@ class LeaveApplicationController extends Controller
 			->first();
         $ManHed = $approvals->require_managers_approval;
         $DepHead = $approvals->require_department_head_approval;
-        if ($status == 1 && $ManHed) 
+        /*if ($status == 2 && $ManHed) 
 		{
             DB::table('leave_application')
                 ->where('id', $iD)
                 ->update(['status' => 2]);
         }
-		elseif ($status == 2 && $DepHead == 1) 
+		else*/
+		if ($status == 2 && $DepHead == 1) 
 		{
             DB::table('leave_application')
                 ->where('id', $iD)
@@ -590,7 +591,6 @@ class LeaveApplicationController extends Controller
         }
 		
 		$leaveAttachment = $this->viewApplication($leaveId);
-      //complaints@nexustravel.co.za
 		#send email to the user informing that the leave has been accepted
         if (!empty($email))
 			Mail::to($email)->send(new Accept_application($firstname, $leaveAttachment));
