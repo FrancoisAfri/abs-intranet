@@ -646,4 +646,121 @@ class LeaveApplicationController extends Controller
         LeaveHistoryAuditController::store("leave application Rejected", 0, 0, 0, 0, $levReject->leave_type_id, $manager_id);
         return response()->json();
     }
+	// view leave cancellation page_description
+	// cancel approved applicatiion
+	public function leaveSearch()
+    {
+		
+		$employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+		$leaveTypes = LeaveType::where('status', 1)->orderBy('name', 'asc')->get();
+		
+		$data['leaveTypes'] = $leaveTypes;
+        $data['employees'] = $employees;
+		
+		$data['page_title'] = "leave Management";
+        $data['page_description'] = "Leave Application Cancellation";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave Management', 'path' => '/leave/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Leave Application', 'active' => 1, 'is_module' => 0]
+        ];
+		$data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Search';
+
+        AuditReportsController::store('Leave Management', 'Leave Type Page Accessed', "Accessed By User", 0);
+        return view('leave.cancellation')->with($data);   
+    }
+	// cancel approved applicatiion
+	public function leaveSearchResults(Request $request, leave_application $leaveApplication)
+    {
+		$this->validate($request, [
+        ]);
+        $request = $request->all();
+        unset($request['_token']);
+
+        $actionFrom = $actionTo = 0;
+        $hr_person_id = $request['hr_person_id'];
+        $managerId = $request['manager_id'];
+        $LevTypID = !empty($request['leave_type']) ? $request['leave_type'] : 0;
+        $status = !empty($request['status']) ? $request['status'] : 0;
+		$leaveStatus = array(1 => 'Approved', 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 => 'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejected', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr', 9 => 'rejectd_by_payroll', 10 => 'Cancelled');
+		$actionDate = $request['date_applied'];
+        if (!empty($actionDate)) {
+            $startExplode = explode('-', $actionDate);
+            $actionFrom = strtotime($startExplode[0]);
+            $actionTo = strtotime($startExplode[1]);
+        }
+		$applicatiions = DB::table('leave_application')
+			->select('leave_application.*', 'hr_people.employee_number as employee_number'
+			,'hr_people.first_name', 'hr_people.surname'
+			,'hp.first_name as manager_first_name','hp.surname as manager_surname'
+			, 'leave_types.name as leave_type_name')
+			->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
+			->leftJoin('hr_people as hp', 'leave_application.manager_id', '=', 'hp.id')
+			->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
+			->where('hr_people.status', 1)
+			->whereNotIn('leave_application.status', [1, 6, 7, 8, 9, 10])
+			->where(function ($query) use ($hr_person_id) {
+				if (!empty($hr_person_id)) {
+					$query->where('leave_application.hr_id', $hr_person_id);
+				}
+			})
+			->where(function ($query) use ($managerId) {
+				if (!empty($managerId)) {
+					$query->where('leave_application.manager_id', $managerId);
+				}
+			})
+			->where(function ($query) use ($status) {
+				if (!empty($status)) {
+					$query->where('leave_application.status', $status);
+				}
+			})
+			->where(function ($query) use ($LevTypID) {
+				if (!empty($LevTypID)) {
+					$query->where('leave_application.leave_type_id', $LevTypID);
+				}
+			})
+			->where(function ($query) use ($actionFrom, $actionTo) {
+				if ($actionFrom > 0 && $actionTo > 0) {
+					$query->whereBetween('start_date', [$actionFrom, $actionTo]);
+				}
+			})
+			->orderBy('hr_people.first_name')
+			->orderBy('hr_people.surname')
+			->orderBy('leave_types.name')
+			->orderBy('leave_application.id')
+			->get();
+		
+		$data['leaveStatus'] = $leaveStatus;
+		$data['applicatiions'] = $applicatiions;
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Search';
+		$data['page_title'] = "leave Management";
+        $data['page_description'] = "Leave Cancellation";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave Management', 'path' => 'leave/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'leave Approval', 'active' => 1, 'is_module' => 0]
+        ];
+        AuditReportsController::store('Leave Management', 'Leave Approval Page Accessed', "Accessed By User", 0);
+        return view('leave.leave_cancel')->with($data);
+    }
+	// View Leave Application
+	public function viewLeaveApplication(leave_application $leave)
+    {
+		if (!empty($leave)) $leave = $leave->load('person','manager','leavetpe','canceller');
+		return $leave;
+		AuditReportsController::store('Leave Management', 'Leave Application Printed', "Accessed By User");
+
+		$data['leave'] = $leave;
+		$data['leaveStatus'] = $leaveStatus;
+		$data['applicatiions'] = $applicatiions;
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Search';
+		$data['page_title'] = "leave Management";
+        $data['page_description'] = "View Application";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave Management', 'path' => 'leave/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'leave Approval', 'active' => 1, 'is_module' => 0]
+        ];
+		return view('leave.leave_application')->with($data);
+    }
 }

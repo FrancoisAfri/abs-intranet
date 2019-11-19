@@ -24,14 +24,12 @@
                 <form class="form-horizontal" method="POST" action="/users/{{ $user->id }}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
-
                     <div class="box-body" id="view_users">
                         @if (isset($view_by_admin) && $view_by_admin === 1)
                             @foreach($division_levels as $division_level)
                                 <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                             <label for="{{ 'division_level_' . $division_level->level }}"
                                                    class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
                                             <div class="col-sm-10">
                                                 <div class="input-group">
                                                     <div class="input-group-addon">
@@ -301,7 +299,6 @@
                             </div>
                         </div>
 						  <div class="form-group">
-						  @if (isset($view_by_admin) && $view_by_admin === 1)
                             <label for="date_joined" class="col-sm-2 control-label">Date Joined</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -312,7 +309,6 @@
                                 </div>
                             </div>
                         </div>
-						 @endif
 						  <div class="form-group">
 						  @if (isset($view_by_admin) && $view_by_admin === 1)
                             <label for="date_left" class="col-sm-2 control-label">Date Left Company</label>

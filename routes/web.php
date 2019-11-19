@@ -163,6 +163,10 @@ Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
 Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
 
+// Search
+Route::get('/leave/search', 'LeaveApplicationController@leaveSearch');
+Route::post('leave/admin-cancellation', 'LeaveApplicationController@leaveSearchResults');
+Route::get('/leave/view/applicatiion/{leave}', 'LeaveApplicationController@viewLeaveApplication');
 //leave Allocation
 Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
 Route::post('leave/Allocate_leave', 'LeaveSetupController@Adjust');
