@@ -3,7 +3,6 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="cancel-leave-form">
                 {{ csrf_field() }}
-                {{ method_field('PATCH') }}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -27,7 +26,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="rejection-reason" class="btn btn-primary">Save</button>
+                    <button type="button" id="cancellation-reason" class="btn btn-primary">Save</button>
                     
                 </div>
             </form>

@@ -166,7 +166,8 @@ Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
 // Search
 Route::get('/leave/search', 'LeaveApplicationController@leaveSearch');
 Route::post('leave/admin-cancellation', 'LeaveApplicationController@leaveSearchResults');
-Route::get('/leave/view/applicatiion/{leave}', 'LeaveApplicationController@viewLeaveApplication');
+Route::get('/leave/view/application/{leave}', 'LeaveApplicationController@viewLeaveApplication');
+Route::post('leave/cancellation/{leave}', 'LeaveApplicationController@cancelApplicationAdmin');
 //leave Allocation
 Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
 Route::post('leave/Allocate_leave', 'LeaveSetupController@Adjust');

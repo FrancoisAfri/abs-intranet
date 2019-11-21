@@ -32,20 +32,20 @@
                                 </thead>
                                 <tbody>
 									<!-- loop through the leave applications   -->
-									@if(count($applicatiions) > 0)
-										@foreach($applicatiions as $applicatiion)
+									@if(count($applications) > 0)
+										@foreach($applications as $application)
 											<tr>
 												<td>
-													<a href="{{ '/leave/view/applicatiion/' . $applicatiion->id}}" class="product-title">View</a></td>
-												<td>{{ !empty($applicatiion->employee_number) ? $applicatiion->employee_number : '' }}</td>
-												<td>{{ !empty($applicatiion->first_name) && !empty($applicatiion->surname) ? $applicatiion->first_name.' '.$applicatiion->surname : '' }}</td>
-												<td>{{ !empty($applicatiion->leave_type_name) ? $applicatiion->leave_type_name : '' }}</td>
-												<td>{{ !empty($applicatiion->start_date) ? date('d M Y ', $applicatiion->start_date) : '' }}</td>
-												<td>{{ !empty($applicatiion->end_date) ? date(' d M Y', $applicatiion->end_date) : '' }}</td>
-												<td>{{ !empty($applicatiion->leave_days) ? $applicatiion->leave_days / 8 : '' }}</td>
-												<td>{{ !empty($applicatiion->notes) ? $applicatiion->notes : '' }}</td>
-												<td>{{ !empty($applicatiion->manager_first_name) && !empty($applicatiion->manager_surname) ? $applicatiion->manager_first_name.' '.$applicatiion->manager_surname : '' }}</td>
-												<td>{{ (!empty($applicatiion->status)) ?  $leaveStatus[$applicatiion->status] : ''}}</td>
+													<a href="{{ '/leave/view/application/' . $application->id}}" class="product-title">View</a></td>
+												<td>{{ !empty($application->employee_number) ? $application->employee_number : '' }}</td>
+												<td>{{ !empty($application->first_name) && !empty($application->surname) ? $application->first_name.' '.$application->surname : '' }}</td>
+												<td>{{ !empty($application->leave_type_name) ? $application->leave_type_name : '' }}</td>
+												<td>{{ !empty($application->start_date) ? date('d M Y ', $application->start_date) : '' }}</td>
+												<td>{{ !empty($application->end_date) ? date(' d M Y', $application->end_date) : '' }}</td>
+												<td>{{ !empty($application->leave_days) ? $application->leave_days / 8 : '' }}</td>
+												<td>{{ !empty($application->notes) ? $application->notes : '' }}</td>
+												<td>{{ !empty($application->manager_first_name) && !empty($application->manager_surname) ? $application->manager_first_name.' '.$application->manager_surname : '' }}</td>
+												<td>{{ (!empty($application->status)) ?  $leaveStatus[$application->status] : ''}}</td>
 											</tr>
 										@endforeach
 									@endif
@@ -142,7 +142,7 @@
                 _token: $('#' + modalID).find('input[name=_token]').val()
             };
             var submitBtnID = 'reject_leave';
-            var redirectUrl = '/leave/applicatiion';
+            var redirectUrl = '/leave/application';
             var successMsgTitle = 'reject reason Saved!';
             var successMsg = 'The reject reason has been Saved successfully.';
             //var formMethod = 'PATCH';
