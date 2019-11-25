@@ -23,10 +23,12 @@
 										<th>Leave Type</th>
 										<th>Date From</th>
 										<th>Date To</th>
+										<th>Date Applied</th>
 										<th>Day(s) Requested</th>
 										<th>Notes</th>
 										<th>Supporting Documents</th>
 										<th>Status</th>
+										<th>Reports To</th>
 										<th>Action</th>
 										<th></th>
 									</tr>
@@ -40,6 +42,7 @@
 												<td>{{ !empty($approval->leavetype) ? $approval->leavetype : '' }}</td>
 												<td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
 												<td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
+												<td>{{ !empty($approval->created_at) ? $approval->created_at : '' }}</td>
 												<td>{{ !empty($approval->leave_days) ? $approval->leave_days / 8 : '' }}</td>
 												<td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
 												<td>
@@ -57,6 +60,7 @@
 													</div>
 												</td>
 												<td>{{ (!empty($approval->status)) ?  $leaveStatus[$approval->status] : ''}}</td>
+												<td>{{ !empty($approval->mg_firstname) && !empty($approval->mg_surname) ? $approval->mg_firstname.' '.$approval->mg_surname : '' }}</td>
 												<td>
 													<button type="button" id="Accept"
 															class="btn btn-success btn-xs btn-detail open-modal"
@@ -74,16 +78,111 @@
 									@endif
                                 </tbody>
                                 <tfoot>
-                                <tr>
-                                    <th>Employee name</th>
-                                    <th>Leave Type</th>
-                                    <th>Date From</th>
-                                    <th>Date To</th>
-                                    <th>Day(s) Requested</th>
-                                    <th>Notes</th>
-                                    <th>Supporting Documents</th>
-                                    <th>Status</th>
+									<tr>
+										<th>Employee name</th>
+										<th>Leave Type</th>
+										<th>Date From</th>
+										<th>Date To</th>
+										<th>Date Applied</th>
+										<th>Day(s) Requested</th>
+										<th>Notes</th>
+										<th>Supporting Documents</th>
+										<th>Status</th>
+										<th>Reports To</th>
+										<th>Action</th>
+										<th></th>
+									</tr>
                                 </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+				
+                <!-- Subdinate leave -->
+				<div class="box box-primary">
+                    <div class="box-header with-border">
+                        <i class="fa fa-user pull-right"></i>
+                        <h3 class="box-title">Sub-subordinates Leave Approvals</h3>
+                    </div>
+                    <div class="box-body">
+                        <div style="overflow-X:auto;">
+                            <table id="example2" class="table table-bordered table-hover">
+                                <thead>
+									<tr>
+										<th>Employee name</th>
+										<th>Leave Type</th>
+										<th>Date From</th>
+										<th>Date To</th>
+										<th>Date Applied</th>
+										<th>Day(s) Requested</th>
+										<th>Notes</th>
+										<th>Supporting Documents</th>
+										<th>Status</th>
+										<th>Reports To</th>
+										<th>Action</th>
+										<th></th>
+									</tr>
+                                </thead>
+                                <tbody>
+									<!-- loop through the leave applications   -->
+									@if(count($subLeaveApplications) > 0)
+										@foreach($subLeaveApplications as $approval)
+											<tr>
+												<td>{{ !empty($approval->firstname) && !empty($approval->surname) ? $approval->firstname.' '.$approval->surname : '' }}</td>
+												<td>{{ !empty($approval->leavetype) ? $approval->leavetype : '' }}</td>
+												<td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
+												<td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
+												<td>{{ !empty($approval->created_at) ? $approval->created_at : '' }}</td>
+												<td>{{ !empty($approval->leave_days) ? $approval->leave_days / 8 : '' }}</td>
+												<td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
+												<td>
+													<div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
+														<label for="supporting_doc" class="control-label"></label>
+														@if(!empty($approval->supporting_docs))
+															<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+															   href="{{ Storage::disk('local')->url("Leave/LeaveDocuments/$approval->supporting_docs") }}" target="_blank"><i
+																		class="fa fa-file-pdf-o"></i> View Document</a>
+														@else
+															<a class="btn btn-default pull-centre btn-xs"><i
+																		class="fa fa-exclamation-triangle"></i> Nothing
+																Uploaded</a>
+														@endif
+													</div>
+												</td>
+												<td>{{ (!empty($approval->status)) ?  $leaveStatus[$approval->status] : ''}}</td>
+												<td>{{ !empty($approval->mg_firstname) && !empty($approval->mg_surname) ? $approval->mg_firstname.' '.$approval->mg_surname : '' }}</td>
+												<td>
+													<button type="button" id="Accept"
+															class="btn btn-success btn-xs btn-detail open-modal"
+															value="{{$approval->id}}"
+															onclick="postData({{$approval->id}}, 'approval_id')">Accept
+													</button>
+
+												</td>
+												<td>
+													<button type="button" id="reject-reason" class="btn btn-danger btn-xs"
+														data-toggle="modal" data-target="#reject-leave-modal"
+														data-id="{{ $approval->id }}">Decline</button></td>
+											</tr>
+										@endforeach
+									@endif
+                                </tbody>
+                                <tfoot>
+									<tr>
+										<th>Employee name</th>
+										<th>Leave Type</th>
+										<th>Date From</th>
+										<th>Date To</th>
+										<th>Date Applied</th>
+										<th>Day(s) Requested</th>
+										<th>Notes</th>
+										<th>Supporting Documents</th>
+										<th>Status</th>
+										<th>Reports To</th>
+										<th>Action</th>
+										<th></th>
+									</tr>
+								</tfoot>
                             </table>
                         </div>
                     </div>

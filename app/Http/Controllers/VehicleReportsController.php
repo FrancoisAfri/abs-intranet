@@ -212,7 +212,6 @@ class VehicleReportsController extends Controller
         $destination = $request['destination'];
         $purpose = $request['purpose'];
 
-
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);

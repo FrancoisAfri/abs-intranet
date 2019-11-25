@@ -90,6 +90,20 @@ class LeaveApplicationController extends Controller
         AuditReportsController::store('Leave Management', 'Leave Type Page Accessed', "Accessed By User", 0);
         return view('leave.application')->with($data);
     }
+	
+	public function getAllSubordinates($users,$managerID)
+	{
+		$employees = HRPerson::where('status', 1)->where('manager_id', $managerID)->pluck('id');
+
+		foreach ($employees as $employee) 
+		{
+			if (array_key_exists($employee,$users)) continue;
+			if ($employee == $managerID) continue;
+			$users[] = $employee;
+			$users = LeaveApplicationController::getAllSubOrdinates($users,$employee);
+		}
+		return $users;
+	}
 
     public function show()
     {
@@ -99,33 +113,57 @@ class LeaveApplicationController extends Controller
             ['title' => 'Leave Management', 'path' => 'leave/approval', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'leave Approval', 'active' => 1, 'is_module' => 0]
         ];
-		
+		$loggedInEmplID = Auth::user()->person->id;
+		$subordinates = LeaveApplicationController::getAllSubordinates(array(),$loggedInEmplID);
+
 		$people = DB::table('hr_people')->orderBy('id', 'asc')->get();
         $leaveTypes = LeaveType::where('status', 1)->get()->load(['leave_profle' => function ($query) {
             $query->orderBy('name', 'asc');
         }]);
         // left join between leaveApplication & HRPerson & LeaveType
-        $loggedInEmplID = Auth::user()->person->id;
+
         $leaveStatus = array(1 => 'Approved', 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 => 'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejected', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr', 9 => 'rejectd_by_payroll', 10 => 'Cancelled');
         $leaveApplications = DB::table('leave_application')
             ->select('leave_application.*'
 			, 'hr_people.first_name as firstname'
 			, 'hr_people.surname as surname'
+			, 'hp.first_name as mg_firstname'
+			, 'hp.surname as mg_surname'
 			, 'leave_types.name as leavetype'
 			, 'hr_people.manager_id as manager')
             ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
             ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
-            //->leftJoin('leave_credit', 'leave_application.hr_id', '=', 'leave_credit.hr_id')
+            ->leftJoin('hr_people as hp', 'leave_application.manager_id', '=', 'hp.id')
             ->where('hr_people.manager_id', $loggedInEmplID)
             ->whereNotIn('leave_application.status', [1, 6, 7, 8, 9, 10])
             ->orderBy('leave_application.hr_id')
             ->orderBy('leave_application.id')
             ->get();
-        $data['leaveStatus'] = $leaveStatus;
+			
+		// get all surbodinates applicatiions
+		$subLeaveApplications = DB::table('leave_application')
+            ->select('leave_application.*'
+			, 'hr_people.first_name as firstname'
+			, 'hr_people.surname as surname'
+			, 'leave_types.name as leavetype'
+			, 'hp.first_name as mg_firstname'
+			, 'hp.surname as mg_surname'
+			, 'hr_people.manager_id as manager')
+            ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
+            ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
+			->leftJoin('hr_people as hp', 'leave_application.manager_id', '=', 'hp.id')
+			->whereIn('hr_people.manager_id', $subordinates)
+            ->whereNotIn('leave_application.status', [1, 6, 7, 8, 9, 10])
+            ->orderBy('leave_application.hr_id')
+            ->orderBy('leave_application.id')
+            ->get();
+		
+		$data['leaveStatus'] = $leaveStatus;
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Approval';
         $data['leaveTypes'] = $leaveTypes;
         $data['leaveApplications'] = $leaveApplications;
+        $data['subLeaveApplications'] = $subLeaveApplications;
 
         AuditReportsController::store('Leave Management', 'Leave Approval Page Accessed', "Accessed By User", 0);
         return view('leave.leave_approval')->with($data);
