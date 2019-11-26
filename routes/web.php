@@ -77,6 +77,9 @@ Route::get('users/users-access', 'SecurityController@usersAccess');
 Route::post('users/users-access', 'SecurityController@getEmployees');
 Route::post('users/update-users-access', 'SecurityController@updateRights');
 Route::post('/users/access_save/{user}', 'UsersController@accessSave');
+Route::get('users/reports_to', 'SecurityController@reportTo');
+Route::post('/users/get_reports_to', 'SecurityController@getReportsTo');
+Route::post('/users/update-report-to', 'SecurityController@updateReportsTo');
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');

@@ -1,5 +1,4 @@
 @extends('layouts.main_layout')
-
 @section('page_dependencies')
     <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datepicker/datepicker3.css">
@@ -7,7 +6,6 @@
     <!-- bootstrap file input -->
     <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 @endsection
-
 @section('content')
     <div class="row">
         <!-- User Form -->
