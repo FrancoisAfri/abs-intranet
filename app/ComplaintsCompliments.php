@@ -15,7 +15,7 @@ class ComplaintsCompliments extends Model
 		, 'summary_complaint_compliment','company_id', 'client_id'
 		, 'type', 'type_complaint_compliment', 'employee_id', 'created_by'
 		,'responsible_party','date_complaint_compliment'
-		,'date_created','status'
+		,'date_created','status','supplier'
     ];
 	
 	public function employees()

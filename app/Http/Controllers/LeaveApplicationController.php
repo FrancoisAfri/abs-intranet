@@ -577,18 +577,17 @@ class LeaveApplicationController extends Controller
 			->first();
         $ManHed = $approvals->require_managers_approval;
         $DepHead = $approvals->require_department_head_approval;
-		// update leave applicatiion status
+		//update leave applicatiion status
 		if ($leaveId->status == 2 && $DepHead == 1) 
 		{
 			$leaveId->status = 3;
 			$leaveId->update();
         }
-		else 
+		elseif ($leaveId->status == 2 && $ManHed == 1)
 		{
 			// update leave applicatiion status
 			$leaveId->status = 1;
 			$leaveId->update();
-			$managerId = !empty($hrDetails->manager_id) ? $hrDetails->manager_id: 0;
 			// #Query the the leave_config days for value
 			$credit = leave_credit::where('hr_id', $leaveId->hr_id)
 				->where('leave_type_id', $leaveId->leave_type_id)
@@ -618,7 +617,7 @@ class LeaveApplicationController extends Controller
 				}
 			}
 			// update leave history
-			LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $daysApplied, $newBalance, $leaveId->leave_type_id, $managerId);
+			LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $daysApplied, $newBalance, $leaveId->leave_type_id, $leaveId->hr_id);
         }
 		
 		AuditReportsController::store('Leave Management', 'leave_approval Informations accepted', "Edited by User: $managerId", 0);

@@ -39,9 +39,7 @@ class CmsController extends Controller
         $data['active_rib'] = 'Add Company News';
         $data['Cmsnews'] = $Cmsnews;
         $data['division_levels'] = $divisionLevels;
-        AuditReportsController::store('CRM', 'CRM Setup Page Accessed', "Accessed By User", 0);
-
-
+        
         AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
         return view('cms.viewcrmnews')->with($data);
     }
@@ -574,5 +572,18 @@ class CmsController extends Controller
 
         AuditReportsController::store('Content Management', 'Company News search page Accessed', "Company search page Accessed", 0);
         return view('cms.partials.new_ratings')->with($data);
+    }
+	// general informations
+	public function generalInformations()
+    {
+        $data['page_title'] = "General Info";
+        $data['page_description'] = "General Informations";
+        $data['breadcrumb'] = [
+            ['title' => 'General ', 'path' => '/general_information/view', 'icon' => 'fa fa-handshake-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'General Info', 'active' => 1, 'is_module' => 0]
+        ];
+
+        AuditReportsController::store('Content Management', 'Company News Added', "Company News Content Management Accessed", 0);
+        return view('cms.view_general_info')->with($data);
     }
 }

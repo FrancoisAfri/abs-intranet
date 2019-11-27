@@ -8,6 +8,8 @@ use App\Province;
 use App\ComplaintsCompliments;
 use App\User;
 use App\ContactPerson;
+use App\Mail\SendComplaintsToManager;
+use App\Mail\SendComplaintsToEmployee;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
@@ -114,14 +116,30 @@ class ComplaintsController extends Controller
         $complaint->employee_id = !empty($comData['employee_id']) ? $comData['employee_id'] : 0;
         $complaint->company_id = !empty($comData['company_id']) ? $comData['company_id']:0;
         $complaint->responsible_party = !empty($comData['responsible_party']) ? $comData['responsible_party']:0;
+        $complaint->supplier = !empty($comData['supplier']) ? $comData['supplier']:0;
         $complaint->status = 1;
         $complaint->created_by = $person->person->id;
         $complaint->date_complaint_compliment = $date;
         $complaint->date_created = time();
         $complaint->client_id = !empty($comData['contact_person_id']) ? $comData['contact_person_id']:0;
         $complaint->save();
+		// return 
 		if ($complaint->type == 1) $text = "Complaints";
 		else $text = "Compliments";
+		// send email to employee and the manager
+		$employeeDetails = HRPerson::where('id', $comData['employee_id'])->where('status',1)
+            ->select('manager_id','first_name','surname','email')->first();
+        $managerID = !empty($employeeDetails->manager_id) ? $employeeDetails->manager_id : 0;
+		$managerDetails = HRPerson::where('id', $managerID)->where('status',1)
+                ->select('first_name', 'email')
+                ->first();
+		// send email to manager
+		if (!empty($managerDetails->email))
+			Mail::to($managerDetails->email)->send(new SendComplaintsToManager($managerDetails->first_name, $text, $employeeDetails->first_name." ".$employeeDetails->surname));
+		// send emal to employee
+		if (!empty($employeeDetails->email))
+			Mail::to($employeeDetails->email)->send(new SendComplaintsToEmployee($employeeDetails->first_name, $text));		
+		
 		AuditReportsController::store('Compliments & Complaints', 'New Compliments & Complaints Added', 'Added By User', 0);
         return redirect('/complaints/view/' . $complaint->id)->with('success_add', "The $text has been added successfully");
     }

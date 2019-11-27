@@ -158,11 +158,9 @@
                             <div class="pull-left">
                                 <a href="{{ ($user->type === 2) ? '/contacts/profile' : '/users/profile' }}" class="btn btn-default btn-flat">Profile</a>
                             </div>
-                            @if (isset($status) && $status === 1)
                                     <div class="pull-left">
-                                <a href="{{ ($user->type === 2) ? '/contacts/profile' : '/hr/user_card' }}" class="btn btn-default btn-flat">Business Card</a>
+                                <a href="{{ ($user->type === 2) ? '' : '/general_information/view' }}" class="btn btn-default btn-flat">Informations</a>
                             </div>
-                                 @endif
                             <div class="pull-right">
                                 <a href="{{ url('/logout') }}" class="btn btn-default btn-flat"
                                    onclick="event.preventDefault();

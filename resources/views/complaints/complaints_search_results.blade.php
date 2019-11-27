@@ -28,6 +28,7 @@
 				  <th>Office</th>
                   <th>Company</th>
                   <th>Traveller</th>
+                  <th>Supplier</th>
                   <th>Type</th>
                   <th>Employee</th>
                   <th>Summary</th>
@@ -42,6 +43,7 @@
 					  <td>{{ !empty($complaint->office) ? $complaint->office : '' }}</td>
 					  <td>{{ !empty($complaint->company) ? $complaint->company->name : '' }}</td>
 					  <td>{{!empty($complaint->client->first_name) && !empty($complaint->client->surname) ? $complaint->client->first_name." ". $complaint->client->surname : ''}}</td>
+					  <td>{{!empty($complaint->supplier) ? $complaint->supplier : ''}}</td>
 					  <td>{{ ($complaint->type == 1) ? 'Complaint' : 'Compliment' }}</td>
 					  <td>{{$complaint->employees->first_name." ".$complaint->employees->surname}}</td>
 					  <td>{{ !empty($complaint->summary_complaint_compliment) ? $complaint->summary_complaint_compliment : '' }}</td>
@@ -56,6 +58,7 @@
 				  <th>Office</th>
                   <th>Company</th>
                   <th>Traveller</th>
+				  <th>Supplier</th>
                   <th>Type</th>
                   <th>Employee</th>
                   <th>Summary</th>

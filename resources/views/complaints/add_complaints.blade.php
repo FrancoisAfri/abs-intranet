@@ -71,6 +71,14 @@
                                 </select>
                             </div>
                         </div>
+						<div class="form-group">
+							<label for="supplier" class="col-sm-2 control-label">Supplier</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<input type="text" class="form-control" id="supplier" name="supplier" value="" placeholder="Enter Supplier">
+								</div>
+							</div>
+						</div>
 						<div class="form-group{{ $errors->has('type') ? ' has-error' : '' }}">
                             <label for="type" class="col-sm-2 control-label">Type</label>
                             <div class="col-sm-9">

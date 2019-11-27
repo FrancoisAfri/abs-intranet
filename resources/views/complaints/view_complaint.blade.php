@@ -62,6 +62,14 @@
                                 </div>
                             </div>
                         </div>
+						<div class="form-group">
+                            <label for="supplier" class="col-sm-2 control-label">Supplier</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="supplier" name="supplier" value="{{ !empty($complaint->supplier) ? $complaint->supplier : '' }}" readonly>
+                                </div>
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="type" class="col-sm-2 control-label">Type</label>
                             <div class="col-sm-10">

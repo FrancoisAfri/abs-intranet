@@ -33,6 +33,8 @@ Route::get('viewceo/{viewceo}', 'CmsController@viewceo');
 
 #cms ratings
 Route::get('rate/{id}/{cmsID}', 'CmsController@cmsratings');
+// General Information
+Route::get('general_information/view', 'CmsController@generalInformations');
 
 //Users related requests
 Route::get('users', 'UsersController@index');
