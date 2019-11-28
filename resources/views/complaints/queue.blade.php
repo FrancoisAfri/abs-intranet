@@ -172,8 +172,8 @@
 @section('page_script')
     <!-- DataTables -->
     <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-    <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
         $(function () {
@@ -227,22 +227,15 @@
             var modal = $(this);
         });
         //Post module form to server using ajax (ADD)
-        $('#close_complaint').on('click', function () {
-            //console.log('strUrl');
-            var strUrl = '/complaint/close/' + close_ID;
-            var modalID = 'close-complaints-modal';
-            var objData = {
-                // name: $('#'+modalID).find('#name').val(),
-                closing_comment: $('#' + modalID).find('#closing_comment').val(),
-                summary_corrective_measure: $('#' + modalID).find('#summary_corrective_measure').val(),
-                _token: $('#' + modalID).find('input[name=_token]').val()
-            };
-            var submitBtnID = 'close_complaint';
-            var redirectUrl = '/complaints/queue';
-            var successMsgTitle = 'Complaint/Compliment Closed!';
-            var successMsg = 'The complaint/compliment have been successfully closed.';
-            //var formMethod = 'PATCH';
-            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        });
+		$('#close_complaint').on('click', function () {
+			var strUrl = '/complaint/close/' + close_ID;
+			var formName = 'close-complaints-form';
+			var modalID = 'close-complaints-modal';
+			var submitBtnID = 'close_complaint';
+			var redirectUrl = '/complaints/queue';
+			var successMsgTitle = 'Complaint Closed!';
+			var successMsg = 'The complaint have been successfully closed.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
     </script>
 @endsection

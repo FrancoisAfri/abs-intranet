@@ -539,9 +539,22 @@ class ComplaintsController extends Controller
             }
         }
         //update Data
+        $complaint->status = 2;
         $complaint->summary_corrective_measure = !empty($comData['summary_corrective_measure']) ? $comData['summary_corrective_measure'] : '';
         $complaint->closing_comment = !empty($comData['closing_comment']) ? $comData['closing_comment'] : '';
         $complaint->update();
+		// upload document
+		//Upload task doc
+        if ($request->hasFile('document_upload')) {
+            $fileExt = $request->file('document_upload')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'xlsx', 'doc', 'xltm']) && $request->file('document_upload')->isValid()) {
+                $fileName = time() . "_complaints_" . '.' . $fileExt;
+                $request->file('document_upload')->storeAs('complaints/', $fileName);
+                //Update file name in the appraisal_perks table
+				$complaint->document_upload = $fileName;
+				$complaint->update();	
+            }
+        }
 		// return 
 		if ($complaint->type == 1) $text = "Complaints";
 		else $text = "Compliments";

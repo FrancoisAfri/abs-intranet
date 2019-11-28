@@ -11,150 +11,37 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-files-o pull-right"></i>
-                    <h3 class="box-title">{{$text}}</h3>
-                    <p>Details:</p>
+                    <h3 class="box-title"></h3>
+                    <p></p>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form class="form-horizontal" method="POST" action="/contacts/complaint">
                     {{ csrf_field() }}
                     <div class="box-body">
-                        @if (count($errors) > 0)
-                            <div class="alert alert-danger alert-dismissible fade in">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        <div class="form-group">
-                            <label for="date_complaint_compliment" class="col-sm-2 control-label">Date</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="date_complaint_compliment" name="date_complaint_compliment" value="{{ !empty($complaint->date_complaint_compliment) ? date('d M Y ', $complaint->date_complaint_compliment) : '' }}" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="office" class="col-sm-2 control-label">Office</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="office" name="office" value="{{ !empty($complaint->office) ? $complaint->office : '' }}" readonly>
-                                </div>
-                            </div>
-                        </div>
-						<div class="form-group">
-							<label for="company_id" class="col-sm-2 control-label">Company</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-									<input type="text" class="form-control" id="company_id" name="company_id" value="{{ !empty($complaint->company) ? $complaint->company->name : '' }}" readonly>
-								</div>
-							</div>
-						</div>
-                        <div class="form-group">
-                            <label for="contact_person_id" class="col-sm-2 control-label">Traveller</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="contact_person_id" name="contact_person_id" value="{{!empty($complaint->client->first_name) && !empty($complaint->client->surname) ? $complaint->client->first_name." ". $complaint->client->surname : ''}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-						<div class="form-group">
-                            <label for="supplier" class="col-sm-2 control-label">Supplier</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="supplier" name="supplier" value="{{ !empty($complaint->supplier) ? $complaint->supplier : '' }}" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="type" class="col-sm-2 control-label">Type</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="type" name="type" value="{{ ($complaint->type == 1) ? 'Complaint' : 'Compliment' }}" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="responsible_party" class="col-sm-2 control-label">Responsible Party</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="responsible_party" name="responsible_party" value="{{ !empty($complaint->type_complaint_compliment) ? $reponsible[$complaint->type_complaint_compliment] : '' }}" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="employee_id" class="col-sm-2 control-label">Employee</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="employee_id" name="employee_id" value="{{$complaint->employees->first_name." ".$complaint->employees->surname}}" readonly>
-                                </div>
-                            </div>
-                        </div>
-						<div class="form-group">
-							<label for="summary_complaint_compliment" class="col-sm-2 control-label">Summary</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-									<textarea class="form-control" rows="3" cols="70" id="summary_complaint_compliment" name="summary_complaint_compliment"
-									readonly>{{ !empty($complaint->summary_complaint_compliment) ? $complaint->summary_complaint_compliment : '' }}</textarea>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="pending_reason" class="col-sm-2 control-label">Pending Reason</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-									<textarea class="form-control" rows="3" cols="70" id="pending_reason" name="pending_reason"
-									readonly>{{ !empty($complaint->pending_reason) ? $complaint->pending_reason : '' }}</textarea>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="summary_corrective_measure" class="col-sm-2 control-label">Summary of Corrective Measure</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-									<textarea class="form-control" rows="3" cols="70" id="summary_corrective_measure" name="summary_corrective_measure"
-									readonly>{{ !empty($complaint->summary_corrective_measure) ? $complaint->summary_corrective_measure : '' }}</textarea>
-								</div>
-							</div>
-						</div>
-						<div class="form-group{{ $errors->has('type_complaint_compliment') ? ' has-error' : '' }}">
-                            <label for="type_complaint_compliment" class="col-sm-2 control-label">Type Of Complaint/Compliment</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="type_complaint_compliment" name="type_complaint_compliment" value="{{ !empty($complaint->type_complaint_compliment) ? $typeComplaints[$complaint->type_complaint_compliment] : '' }}" readonly>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group">
-							<label for="error_type" class="col-sm-2 control-label">Error Type</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-									<textarea class="form-control" rows="3" cols="70" id="error_type" name="error_type"
-									readonly>{{ !empty($complaint->error_type) ? $complaint->error_type : '' }}</textarea>
-								</div>
-							</div>
-						</div>
-						<div class="form-group{{ $errors->has('status') ? ' has-error' : '' }}">
-                            <label for="status" class="col-sm-2 control-label">Status</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <input type="text" class="form-control" id="status" name="status" value="{{ !empty($complaint->status) ? $statuses[$complaint->status] : '' }}" readonly>
-                                </div>
-                            </div>
-                        </div>
-						<div class="form-group">
-							<label for="closing_comment" class="col-sm-2 control-label">Closing Comment</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-									<textarea class="form-control" rows="3" cols="70" id="closing_comment" name="closing_comment"
-									readonly>{{ !empty($complaint->closing_comment) ? $complaint->closing_comment : '' }}</textarea>
-								</div>
-							</div>
-						</div>
+						<table class="table table-bordered">
+                        <tr>
+                            <th style="text-align: center;" colspan="2">{{$text}} Details:</th>
+                        </tr>
+						<tr><td><b>Date</b></td><td>{{ !empty($complaint->date_complaint_compliment) ? date('d M Y ', $complaint->date_complaint_compliment) : '' }}</td></tr>
+						<tr><td><b>Office</b></td><td>{{ !empty($complaint->office) ? $complaint->office : '' }}</td></tr>
+						<tr><td><b>Company</b></td><td>{{ !empty($complaint->company) ? $complaint->company->name : '' }}</td></tr>
+						<tr><td><b>Traveller</b></td><td>{{!empty($complaint->client->first_name) && !empty($complaint->client->surname) ? $complaint->client->first_name." ". $complaint->client->surname : ''}}</td></tr>
+						<tr><td><b>Supplier</b></td><td>{{ !empty($complaint->supplier) ? $complaint->supplier : '' }}</td></tr>
+						<tr><td><b>Type</b></td><td>{{ ($complaint->type == 1) ? 'Complaint' : 'Compliment' }}</td></tr>
+						<tr><td><b>Responsible Party</b></td><td>{{ !empty($complaint->type_complaint_compliment) ? $reponsible[$complaint->type_complaint_compliment] : '' }}</td></tr>
+						<tr><td><b>Employee</b></td><td>{{$complaint->employees->first_name." ".$complaint->employees->surname}}</td></tr>
+						<tr><td><b>Summary</b></td><td>{{ !empty($complaint->summary_complaint_compliment) ? $complaint->summary_complaint_compliment : '' }}</td></tr>
+						<tr><td><b>Pending Reason</b></td><td>{{ !empty($complaint->pending_reason) ? $complaint->pending_reason : '' }}</td></tr>
+						<tr><td><b>Summary of Corrective Measure</b></td><td>{{ !empty($complaint->summary_corrective_measure) ? $complaint->summary_corrective_measure : '' }}</td></tr>
+						<tr><td><b>Type Of Complaint/Compliment</b></td><td>{{ !empty($complaint->type_complaint_compliment) ? $typeComplaints[$complaint->type_complaint_compliment] : '' }}</td></tr>
+						<tr><td><b>Error Type</b></td><td>{{ !empty($complaint->error_type) ? $complaint->error_type : '' }}</td></tr>
+						<tr><td><b>Status</b></td><td>{{ !empty($complaint->status) ? $statuses[$complaint->status] : '' }}</td></tr>
+						<tr><td><b>Closing Comment</b></td><td>{{ !empty($complaint->closing_comment) ? $complaint->closing_comment : '' }}</td></tr>
+						<tr><td><b>Document</b></td><td><a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+													   href="{{ Storage::disk('local')->url("complaints/$complaint->document_upload") }}"
+													   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a></td></tr>
+                    </table>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer" style="text-align: center;">
