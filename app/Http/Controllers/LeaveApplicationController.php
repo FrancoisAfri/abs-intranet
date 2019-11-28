@@ -620,7 +620,7 @@ class LeaveApplicationController extends Controller
 			LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $daysApplied, $newBalance, $leaveId->leave_type_id, $leaveId->hr_id);
         }
 		
-		AuditReportsController::store('Leave Management', 'leave_approval Informations accepted', "Edited by User: $managerId", 0);
+		AuditReportsController::store('Leave Management', 'leave_approval Informations accepted', "Edited by User: $leaveId->hr_id", 0);
         return back()->with('success_application', "leave application was successful.");
     }
 

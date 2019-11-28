@@ -39,7 +39,7 @@
 						<tr><td><b>Durban</b></td><td>031 303 4341</td></tr>
 						<tr><td><b>Sassa</b></td><td>012 400 2594</td></tr>
 						<tr><td><b>Extension List</b></td><td><a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-													   href="{{ Storage::disk('local')->url("general/extension_list") }}"
+													   href="{{ Storage::disk('local')->url("general/Extension List - Sep 2019.xlsx") }}"
 													   target="_blank"><i class="fa fa-file-pdf-o"></i> Extension List</a></td></tr>
                     </table>
                     <!--   </div> -->

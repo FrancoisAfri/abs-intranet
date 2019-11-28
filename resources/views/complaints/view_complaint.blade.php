@@ -146,6 +146,15 @@
                                 </div>
                             </div>
                         </div>
+						<div class="form-group">
+							<label for="closing_comment" class="col-sm-2 control-label">Closing Comment</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<textarea class="form-control" rows="3" cols="70" id="closing_comment" name="closing_comment"
+									readonly>{{ !empty($complaint->closing_comment) ? $complaint->closing_comment : '' }}</textarea>
+								</div>
+							</div>
+						</div>
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer" style="text-align: center;">

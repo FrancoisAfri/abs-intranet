@@ -1189,6 +1189,8 @@ Route::get('procurement/print/{procurement}', 'procurementRequestController@prin
 
 Route::get('procurement/viewrequest/{procurement}', 'procurementRequestController@viewRequest');
 // Complaints & Compliments
+Route::post('complaint/close/{complaint}', 'ComplaintsController@closeComplaint');
+Route::get('complaints/queue', 'ComplaintsController@queue');
 Route::get('complaints/create', 'ComplaintsController@create');
 Route::post('complaints/add', 'ComplaintsController@store');
 Route::get('complaints/view/{complaint}', 'ComplaintsController@show');

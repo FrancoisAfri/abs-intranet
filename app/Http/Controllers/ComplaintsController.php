@@ -8,8 +8,11 @@ use App\Province;
 use App\ComplaintsCompliments;
 use App\User;
 use App\ContactPerson;
+use App\DivisionLevelThree;
+use App\DivisionLevelFour;
 use App\Mail\SendComplaintsToManager;
 use App\Mail\SendComplaintsToEmployee;
+use App\Mail\CloseComplaints;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
@@ -103,8 +106,11 @@ class ComplaintsController extends Controller
 		// convert date
 		$date = str_replace('/', '-', $comData['date_complaint_compliment']);
         $date = strtotime($date);
+		// get manager info
+		$employeeDetails = HRPerson::where('id', $comData['employee_id'])->where('status',1)
+            ->select('manager_id','first_name','surname','email')->first();
+        $managerID = !empty($employeeDetails->manager_id) ? $employeeDetails->manager_id : 0;
         //Insert Data
-
         $complaint = new ComplaintsCompliments();
         $complaint->office = !empty($comData['office']) ? $comData['office'] : '';
         $complaint->error_type = !empty($comData['error_type']) ? $comData['error_type'] : '';
@@ -114,10 +120,11 @@ class ComplaintsController extends Controller
         $complaint->type = !empty($comData['type']) ? $comData['type'] : 0;
         $complaint->type_complaint_compliment = !empty($comData['type_complaint_compliment']) ? $comData['type_complaint_compliment'] : 0;
         $complaint->employee_id = !empty($comData['employee_id']) ? $comData['employee_id'] : 0;
+        $complaint->manager_id = $managerID;
         $complaint->company_id = !empty($comData['company_id']) ? $comData['company_id']:0;
         $complaint->responsible_party = !empty($comData['responsible_party']) ? $comData['responsible_party']:0;
         $complaint->supplier = !empty($comData['supplier']) ? $comData['supplier']:0;
-        $complaint->status = 1;
+        $complaint->status = !empty($comData['type']) && $comData['type'] == 1 ? 1 : 2;
         $complaint->created_by = $person->person->id;
         $complaint->date_complaint_compliment = $date;
         $complaint->date_created = time();
@@ -127,9 +134,6 @@ class ComplaintsController extends Controller
 		if ($complaint->type == 1) $text = "Complaints";
 		else $text = "Compliments";
 		// send email to employee and the manager
-		$employeeDetails = HRPerson::where('id', $comData['employee_id'])->where('status',1)
-            ->select('manager_id','first_name','surname','email')->first();
-        $managerID = !empty($employeeDetails->manager_id) ? $employeeDetails->manager_id : 0;
 		$managerDetails = HRPerson::where('id', $managerID)->where('status',1)
                 ->select('first_name', 'email')
                 ->first();
@@ -225,7 +229,7 @@ class ComplaintsController extends Controller
             'employee_id' => 'required',
             'summary_complaint_compliment' => 'required',
         ]);
-         $comData = $request->all();
+        $comData = $request->all();
 		$person = Auth::user()->load('person');
         //Exclude empty fields from query
         foreach ($comData as $key => $value) {
@@ -442,5 +446,121 @@ class ComplaintsController extends Controller
 		$data['active_mod'] = 'Compliments & Complaints';
         $data['active_rib'] = 'Reports';
         return view('complaints.complaints_reports_results')->with($data);
+    }
+	// surbodinates
+	public function getAllSubordinates($users,$managerID)
+	{
+		$employees = HRPerson::where('status', 1)->where('manager_id', $managerID)->pluck('id');
+
+		foreach ($employees as $employee) 
+		{
+			if (array_key_exists($employee,$users)) continue;
+			if ($employee == $managerID) continue;
+			$users[] = $employee;
+			$users = ComplaintsController::getAllSubOrdinates($users,$employee);
+		}
+		return $users;
+	}
+	// queue
+	public function queue()
+    {
+		$loggedInEmplID = Auth::user()->person->id;
+		$subordinates = ComplaintsController::getAllSubordinates(array(),$loggedInEmplID);
+
+		$people = DB::table('hr_people')->orderBy('id', 'asc')->get();
+
+        $status = array(1 => 'Open', 2 => 'Closed');
+        $complaints = DB::table('complaints_compliments')
+            ->select('complaints_compliments.*'
+			, 'hr_people.first_name as firstname'
+			, 'hr_people.surname as surname'
+			, 'hp.first_name as mg_firstname'
+			, 'hp.surname as mg_surname'
+			, 'contact_companies.name as com_name'
+			, 'contacts_contacts.first_name as con_name'
+			, 'contacts_contacts.surname as con_surname'
+			, 'hr_people.manager_id as manager')
+            ->leftJoin('hr_people', 'complaints_compliments.employee_id', '=', 'hr_people.id')
+            ->leftJoin('contact_companies', 'complaints_compliments.company_id', '=', 'contact_companies.id')
+            ->leftJoin('contacts_contacts', 'complaints_compliments.client_id', '=', 'contacts_contacts.id')
+            ->leftJoin('hr_people as hp', 'complaints_compliments.manager_id', '=', 'hp.id')
+            ->where('hr_people.manager_id', $loggedInEmplID)
+            ->where('complaints_compliments.status', 1)
+            ->orderBy('complaints_compliments.employee_id')
+            ->get();
+			
+		// get all surbodinates applicatiions
+		$subComplaints = DB::table('complaints_compliments')
+            ->select('complaints_compliments.*'
+			, 'hr_people.first_name as firstname'
+			, 'hr_people.surname as surname'
+			, 'hp.first_name as mg_firstname'
+			, 'hp.surname as mg_surname'
+			, 'contact_companies.name as com_name'
+			, 'contacts_contacts.first_name as con_name'
+			, 'contacts_contacts.surname as con_surname'
+			, 'hr_people.manager_id as manager')
+            ->leftJoin('hr_people', 'complaints_compliments.employee_id', '=', 'hr_people.id')
+            ->leftJoin('contact_companies', 'complaints_compliments.company_id', '=', 'contact_companies.id')
+            ->leftJoin('contacts_contacts', 'complaints_compliments.client_id', '=', 'contacts_contacts.id')
+            ->leftJoin('hr_people as hp', 'complaints_compliments.manager_id', '=', 'hp.id')
+			->whereIn('hr_people.manager_id', $subordinates)
+            ->where('complaints_compliments.status', 1)
+            ->orderBy('complaints_compliments.employee_id')
+            ->get();
+		
+        $data['active_mod'] = 'Compliments & Complaints';
+        $data['active_rib'] = 'Queue';
+        $data['complaints'] = $complaints;
+        $data['subComplaints'] = $subComplaints;
+		$data['page_title'] = "Compliments & Complaints";
+        $data['page_description'] = "Queue";
+        $data['breadcrumb'] = [
+            ['title' => 'Compliments & Complaints', 'path' => '/complaints/queue', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Queue', 'active' => 1, 'is_module' => 0]
+        ];
+        AuditReportsController::store('Leave Management', 'Leave Approval Page Accessed', "Accessed By User", 0);
+        return view('complaints.queue')->with($data);
+    }
+	
+	//
+	public function closeComplaint(Request $request, ComplaintsCompliments $complaint)
+    {
+        //validate form data
+        $this->validate($request, [
+            'summary_corrective_measure' => 'required',
+            'closing_comment' => 'required',
+			]);
+        $comData = $request->all();
+        //Exclude empty fields from query
+        foreach ($comData as $key => $value) {
+            if (empty($comData[$key])) {
+                unset($comData[$key]);
+            }
+        }
+        //update Data
+        $complaint->summary_corrective_measure = !empty($comData['summary_corrective_measure']) ? $comData['summary_corrective_measure'] : '';
+        $complaint->closing_comment = !empty($comData['closing_comment']) ? $comData['closing_comment'] : '';
+        $complaint->update();
+		// return 
+		if ($complaint->type == 1) $text = "Complaints";
+		else $text = "Compliments";
+		// send email to Senior staff
+		
+		$adminsLevelThree = DivisionLevelThree::where('active',1)->get();
+		$adminsLevelFour = DivisionLevelFour::where('active',1)->get();
+
+		foreach ($adminsLevelFour as $admin) {
+			$user = HRPerson::where('id', $admin->manager_id)->first();
+			Mail::to("$user->email")->send(new CloseComplaints($user->email, $complaint->id));
+		}
+		
+		foreach ($adminsLevelThree as $admin) {
+			$user = HRPerson::where('id', $admin->manager_id)->first();
+			Mail::to("$user->email")->send(new CloseComplaints($user->email, $complaint->id));
+		}
+
+		AuditReportsController::store('Compliments & Complaints', "$text Closed", 'Added By User', 0);
+        return response()->json();
     }
 }

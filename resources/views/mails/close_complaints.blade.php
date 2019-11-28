@@ -215,9 +215,8 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $first_name }},<br><br>
-                                                    We would like to inform you that there is a new {{ $text }} logged for {{$employee_name}} that requires your attention. Please Log on to the system and attend to it.<a href="{{ $dashboard_url }}">Click Here</a>.
-													
-												</td>
+                                                    We would like to inform you that a complaint was closed. Please Log on to the system to see more details about it.<a href="{{ $dashboard_url }}">Click Here</a>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td style="padding-top:20px;background-color:#ffffff;">
