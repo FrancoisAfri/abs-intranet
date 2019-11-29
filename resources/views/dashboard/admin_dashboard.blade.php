@@ -117,7 +117,7 @@
                                 </tbody>
                             </table>
                             <div class="box-footer">
-								@if (!empty($surbodinates))
+								@if (!empty($surbodinateBalances))
 									<button type="button" id="leave-balance" class="btn btn-primary pull-left"
 									data-toggle="modal" data-target="#leave-balance-modal"
 											>Sub-subordinates Balances</button>
