@@ -4,6 +4,7 @@
 <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 <!-- DataTables -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/buttons.dataTables.min.css">
 <!-- iCheck -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @endsection
@@ -119,7 +120,14 @@
 <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 <!-- DataTables -->
 <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.buttons.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.flash.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/jszip.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/pdfmake.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/vfs_fonts.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.html5.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.print.min.js"></script>
 <!-- Ajax dropdown options load -->
 <script src="/custom_components/js/load_dropdown_options.js"></script>
 
@@ -140,15 +148,33 @@
 
         //Initialize the data table
         $('#emp-list-table').DataTable({
-            "paging": true,
-				"lengthChange": true,
-				"lengthMenu": [ 50, 75, 100, 150, 200, 250 ],
-				"pageLength": 50,
-				"searching": true,
-				"ordering": true,
-				"info": true,
-				"autoWidth": true,
-				dom: 'lfrtipB',
+           "paging": true,
+			"lengthChange": true,
+			"lengthMenu": [ 50, 75, 100, 150, 200, 250 ],
+			"pageLength": 50,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			"autoWidth": true,
+			dom: 'lfrtipB',
+			buttons: [
+				{
+					extend: 'excelHtml5',
+					title: 'Report To Report'
+				},
+				{
+					extend: 'csvHtml5',
+					title: 'Report To Report'
+				},
+				{
+					extend: 'copyHtml5',
+					title: 'Report To Report'
+				},
+				{
+					extend: 'pdfHtml5',
+					title: 'Report To Report'
+				}
+			]
         });
 
         //Cancel button
