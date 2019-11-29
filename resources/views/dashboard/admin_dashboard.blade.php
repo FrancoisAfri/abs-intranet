@@ -116,7 +116,7 @@
                                 </tbody>
                             </table>
                             <div class="box-footer">
-								@if (!empty($surbodinates))
+								@if (!empty($surbs))
 									<button type="button" id="leave-balance" class="btn btn-primary pull-left"
 									data-toggle="modal" data-target="#leave-balance-modal"
 											>Subordinates Balances</button>
@@ -126,7 +126,7 @@
                                 </button>
                             </div>
                         </div>
-						@if (!empty($surbodinates))
+						@if (!empty($surbs))
 							@include('dashboard.partials.widgets.leave_balance')
 						@endif
                     </div>

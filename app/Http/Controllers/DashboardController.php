@@ -161,6 +161,8 @@ class DashboardController extends Controller
                 ->get();
 			// get surbodinates leave balances
 			$surbodinateArray = array();
+			
+			$surbs = HRPerson::where('status', 1)->where('manager_id', $user->person->id)->first();
 			$surbodinates = HRPerson::where('status', 1)->where('manager_id', $user->person->id)->pluck('id');
 			if (!empty($surbodinates))
 			{
@@ -248,11 +250,8 @@ class DashboardController extends Controller
                 ->first();
             $names = $name->first_name;
             $surname = $name->surname;
-
             //return $surname;
             #Product_Category-------->
-
-
             $ProductCategory = product_category::orderBy('id', 'asc')->get();
             if (!empty($ProductCategory))
                 $ProductCategory = $ProductCategory->load('productCategory');
@@ -335,6 +334,7 @@ class DashboardController extends Controller
             $ClientTask = $ClientInduction->load('TasksList');
 
             $data['surbodinates'] = $surbodinates;
+            $data['surbs'] = $surbs;
 			if (!empty($surbodinates))
 				$data['surbodinateBalances'] = $surbodinateBalances;
             $data['ceonews'] = $ceonews;
