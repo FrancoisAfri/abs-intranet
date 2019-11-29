@@ -20,7 +20,7 @@
 					@if(count($surbodinateBalances) > 0)
 						@foreach($surbodinateBalances as $surbodinateBalance)
 							<tr>
-								<td>{{ !empty($surbodinateBalance->employee_number) ? $surbodinateBalance->employee_number : '' }}</td>
+								<td>{{ !empty($surbodinateBalance->hr_employee_number) ? $surbodinateBalance->hr_employee_number : '' }}</td>
 								<td>{{ !empty($surbodinateBalance->hr_first_name) && !empty($surbodinateBalance->hr_surname) ? $surbodinateBalance->hr_first_name.' '.$surbodinateBalance->hr_surname : '' }}</td>
 								<td>{{ !empty($surbodinateBalance->leave_types) ? $surbodinateBalance->leave_types : '' }}</td>
 								<td>{{ !empty($surbodinateBalance->leave_balance) ? number_format($surbodinateBalance->leave_balance/8, 2) : '' }} days(s)</td>
