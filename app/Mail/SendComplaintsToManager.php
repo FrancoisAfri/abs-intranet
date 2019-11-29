@@ -45,7 +45,7 @@ class SendComplaintsToManager extends Mailable
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['dashboard_url'] = url('/complaints/lists');
+        $data['dashboard_url'] = url('/complaints/queue');
 
         return $this->view('mails.complaints_manager')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
