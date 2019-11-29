@@ -117,16 +117,17 @@
                                 </tbody>
                             </table>
                             <div class="box-footer">
-                                <!--  <button id="back_to_user_search" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back to search</button> -->
-                                <button id="Apply" class="btn btn-primary pull-right"><i
+								@if (!empty($surbodinates))
+									<button type="button" id="leave-balance" class="btn btn-primary pull-left"
+									data-toggle="modal" data-target="#leave-balance-modal"
+											>Sub-subordinates Balances</button>
+								@endif
+								<button id="Apply" class="btn btn-primary pull-right"><i
                                             class="fa fa-cloud-download"></i> Apply For Leave
                                 </button>
                             </div>
                         </div>
-                        @if(Session('error_starting'))
-                            @include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
-                        @endif
-                        @include('tasks.partials.end_task')
+						@include('dashboard.partials.widgets.leave_balance')
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer clearfix">
@@ -268,6 +269,10 @@
                 <!-- Include tasks to check widget -->
                 @include('dashboard.partials.widgets.tasks_to_check_widget')
             </div>
+			@if(Session('error_starting'))
+				@include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
+			@endif
+			@include('tasks.partials.end_task')
         </div>
     @endif
     @if($activeModules->where('code_name', 'appraisal')->first())

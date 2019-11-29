@@ -159,8 +159,28 @@ class DashboardController extends Controller
                 ->orderBy('leave_application.id', 'desc')
 				->limit(15)
                 ->get();
-            //return $application;
+			// get surbodinates leave balances
+			$surbodinateArray = array();
+			$surbodinates = HRPerson::where('status', 1)->where('manager_id', $user->person->id)->pluck('id');
+			if (!empty($surbodinates))
+			{
+				foreach ($surbodinates as $surbodinate) 
+				{
+					$surbodinateArray[] = $surbodinate;
+				}
 
+				$surbodinateBalances = DB::table('leave_credit')
+					->select('leave_credit.*', 'leave_types.name as leave_types'
+					,'hr_people.first_name as hr_first_name', 'hr_people.surname as hr_surname'
+					, 'hr_people.employee_number as hr_employee_number')
+					->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
+					->leftJoin('hr_people', 'leave_credit.hr_id', '=', 'hr_people.id')
+					->whereIn('leave_credit.hr_id', $surbodinateArray)
+					->orderBy('hr_people.first_name')
+					->orderBy('hr_people.surname')
+					->orderBy('leave_types.name')
+					->get();
+			}
             //Get Employees on leave this month
             $monthStart = new Carbon('first day of this month');
             $monthStart->startOfDay();
@@ -314,6 +334,8 @@ class DashboardController extends Controller
 
             $ClientTask = $ClientInduction->load('TasksList');
 
+            $data['surbodinates'] = $surbodinates;
+            $data['surbodinateBalances'] = $surbodinateBalances;
             $data['ceonews'] = $ceonews;
             $data['ClientInduction'] = $ClientInduction;
             $data['$ticketLabels'] = $ticketLabels;
