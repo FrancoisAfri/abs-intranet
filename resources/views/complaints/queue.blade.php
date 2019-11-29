@@ -84,7 +84,7 @@
 				<div class="box box-primary">
                     <div class="box-header with-border">
                         <i class="fa fa-user pull-right"></i>
-                        <h3 class="box-title">Sub-subordinates Complaints / Compliments</h3>
+                        <h3 class="box-title">Subordinates Complaints / Compliments</h3>
                     </div>
                     <div class="box-body">
                         <div style="overflow-X:auto;">

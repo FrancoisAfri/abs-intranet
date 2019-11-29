@@ -82,7 +82,6 @@
                     <div class="box-header with-border">
                         <i class="fa fa-hourglass"></i>
                         <h3 class="box-title">Leave Balance</h3>
-
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
                                         class="fa fa-minus"></i>
@@ -117,17 +116,19 @@
                                 </tbody>
                             </table>
                             <div class="box-footer">
-								@if (!empty($surbodinateBalances))
+								@if (!empty($surbodinates))
 									<button type="button" id="leave-balance" class="btn btn-primary pull-left"
 									data-toggle="modal" data-target="#leave-balance-modal"
-											>Sub-subordinates Balances</button>
+											>Subordinates Balances</button>
 								@endif
 								<button id="Apply" class="btn btn-primary pull-right"><i
                                             class="fa fa-cloud-download"></i> Apply For Leave
                                 </button>
                             </div>
                         </div>
-						@include('dashboard.partials.widgets.leave_balance')
+						@if (!empty($surbodinates))
+							@include('dashboard.partials.widgets.leave_balance')
+						@endif
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer clearfix">

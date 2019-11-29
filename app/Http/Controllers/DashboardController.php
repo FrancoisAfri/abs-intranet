@@ -335,7 +335,8 @@ class DashboardController extends Controller
             $ClientTask = $ClientInduction->load('TasksList');
 
             $data['surbodinates'] = $surbodinates;
-            $data['surbodinateBalances'] = $surbodinateBalances;
+			if (!empty($surbodinates))
+				$data['surbodinateBalances'] = $surbodinateBalances;
             $data['ceonews'] = $ceonews;
             $data['ClientInduction'] = $ClientInduction;
             $data['$ticketLabels'] = $ticketLabels;
