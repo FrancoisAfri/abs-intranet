@@ -124,6 +124,7 @@
 
 @section('page_script')
 <script src="/custom_components/js/modal_ajax_submit.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 <script>
     function postData(id, data) {
        // if (data == 'actdeac') location.href = "/leave/types/activate" + id;
@@ -134,6 +135,8 @@
     }
     $(function () {
         var moduleId;
+		 //Initialize Select2 Elements
+            $(".select2").select2();
         //Tooltip
         $('[data-toggle="tooltip"]').tooltip();
         //Vertically center modals on page

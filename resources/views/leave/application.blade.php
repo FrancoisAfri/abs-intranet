@@ -216,7 +216,8 @@ $(function() {
 	$(".select2").select2();
 	//Phone mask
 	$("[data-mask]").inputmask();
-
+	//Initialize Select2 Elements
+    $(".select2").select2();
 	$('input[name="date"]').daterangepicker({
 		singleDatePicker: true,
 		showDropdowns: false,

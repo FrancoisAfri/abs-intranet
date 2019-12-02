@@ -19,8 +19,8 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-user"></i>
                                 </div>
-                                <select class="form-control select2" style="width: 100%;" id="hr_id" name="hr_id" required>
-                                    <option selected="selected" value="0">*** Select a Employee ***</option>
+                                <select id="hr_id" name="hr_id" class="form-control select2" style="width: 100%;">
+									<option selected="selected" value="0">*** Select a Employee ***</option>
                                     @foreach($employees as $employee)
                                         <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach

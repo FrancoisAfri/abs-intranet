@@ -52,7 +52,7 @@ class LeaveSetupController extends Controller {
 
         //return $leave_customs;
         $leaveTypes = DB::table('leave_types')->orderBy('name','asc')->get();
-        $employees = HRPerson::where('status', 1)->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name','asc')->orderBy('surname','asc')->get();
         $data['page_title'] = "leave Types";
         $data['page_description'] = "leave types";
         $data['breadcrumb'] = [
