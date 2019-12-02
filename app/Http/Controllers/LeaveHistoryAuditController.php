@@ -25,8 +25,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
-#
-
 class LeaveHistoryAuditController extends Controller {
 
     /**
@@ -66,11 +64,21 @@ class LeaveHistoryAuditController extends Controller {
 
     public static function store($action = '', $descriptionAction = '', $previousBalance = 0, $transcation = 0, $current_balance = 0, $leave_type = 0, $hrID = 0) {
         $user = Auth::user()->load('person');
+		if (!empty($user))
+		{
+			$userID = $user->person->id;
+			$userName = $user->person->first_name." ".$user->person->surname;
+		}
+		else 
+		{
+			$userID = 0;
+			$userName = '';
+		}
         $leave_history = new leave_history();
         //$leave_history
         $leave_history->hr_id = $hrID;
-        $leave_history->added_by = $user->person->id;
-        $leave_history->added_by_name = $user->person->first_name." ".$user->person->surname;
+        $leave_history->added_by = $userID;
+        $leave_history->added_by_name = $userName;
         $leave_history->action = $action;
         $leave_history->description_action = $descriptionAction;
         $leave_history->previous_balance = $previousBalance;
