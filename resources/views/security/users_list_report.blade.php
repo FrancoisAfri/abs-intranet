@@ -44,6 +44,7 @@
 								<th>Position</th>
 								<th>Report To</th>
 								<th>Status</th>
+								<th>Leave Profile</th>
 							</tr>
                         </thead>
                         <tbody>
@@ -56,6 +57,7 @@
 									<td>{{ !empty($employee->job_title) ? $employee->job_title : '' }}</td>
 									<td>{{ !empty($employee->manager_first_name) && !empty($employee->manager_surname)  ? $employee->manager_first_name." ". $employee->manager_surname: '' }}</td>
 									<td>{{ !empty($employee->status) && ($employee->status == 1)  ? 'Active': 'Inactive' }}</td>
+									<td>{{ !empty($employee->profile_name) ? $employee->profile_name: '' }}</td>
 								</tr>
 							@endforeach
                         </tbody>
@@ -68,6 +70,7 @@
 							<th>Position</th>
 							<th>Report To</th>
 							<th>Status</th>
+							<th>Leave Profile</th>
                         </tr>
                         </tfoot>
                     </table>

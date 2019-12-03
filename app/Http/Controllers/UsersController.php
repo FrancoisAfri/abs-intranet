@@ -819,11 +819,14 @@ class UsersController extends Controller
         $divLevel4 = ($request->input('division_level_4')) ? $request->input('division_level_4') : 0;
         $divLevel5 = ($request->input('division_level_5')) ? $request->input('division_level_5') : 0;
         $hrPersonID = ($request->input('hr_person_id')) ? $request->input('hr_person_id') : 0;
-        
+        $leaveProfile = array(1 => 'Approved', 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 => 'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejected', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr', 9 => 'rejectd_by_payroll', 10 => 'Cancelled');
+
         $employees = HRPerson::select('hr_people.*'
 			, 'hr_positions.name as job_title', 'hp.first_name as manager_first_name'
-			, 'hp.surname as manager_surname')
+			, 'hp.surname as manager_surname'
+			, 'leave_profile.name as profile_name')
 			->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
+			->leftJoin('leave_profile', 'hr_people.leave_profile', '=', 'leave_profile.id')
 			->leftJoin('hr_people as hp', 'hr_people.manager_id', '=', 'hp.id')
             ->whereNotNull('hr_people.user_id')
             ->where('hr_people.status', 1)->where(function ($query) use($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5){
@@ -832,7 +835,8 @@ class UsersController extends Controller
             if ($divLevel3 > 0) $query->where('hr_people.division_level_3', $divLevel3);
             if ($divLevel4 > 0) $query->where('hr_people.division_level_4', $divLevel4);
             if ($divLevel5 > 0) $query->where('hr_people.division_level_5', $divLevel5);
-        })->where(function ($query) use($hrPersonID){
+        })
+		->where(function ($query) use($hrPersonID){
             if (!empty($hrPersonID)) {
                 $query->where('hr_people.id',$hrPersonID);
             }
@@ -875,8 +879,10 @@ class UsersController extends Controller
 
         $employees = HRPerson::select('hr_people.*'
 			, 'hr_positions.name as job_title', 'hp.first_name as manager_first_name'
-			, 'hp.surname as manager_surname')
+			, 'hp.surname as manager_surname'
+			, 'leave_profile.name as profile_name')
 			->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
+			->leftJoin('leave_profile', 'hr_people.leave_profile', '=', 'leave_profile.id')
 			->leftJoin('hr_people as hp', 'hp.manager_id', '=', 'hr_people.id')
             ->whereNotNull('hr_people.user_id')
             ->where('hr_people.status', 1)->where(function ($query) use($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5){
