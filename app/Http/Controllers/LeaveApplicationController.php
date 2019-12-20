@@ -237,13 +237,18 @@ class LeaveApplicationController extends Controller
 
     public function availableDays($hrID, $typID)
     {
+		$row = leave_configuration::first();
+		$numberAnnual = !empty($row->allow_annual_negative_days) ? $row->allow_annual_negative_days : 0;
+		$numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
+		$extraDays = 0; 
         $balance = DB::table('leave_credit')
             ->select('leave_balance')
             ->where('hr_id', $hrID)
             ->where('leave_type_id', $typID)
             ->get();
-
-        return !empty($balance->first()->leave_balance) ? $balance->first()->leave_balance / 8 : 0;
+		if ($typID == 1) $extraDays = $numberAnnual;
+		elseif ($typID == 5) $extraDays = $numberSick;
+        return !empty($balance->first()->leave_balance) ? $balance->first()->leave_balance / 8 + $extraDays: 0;
     }
 
     # calculate leave days
@@ -310,6 +315,7 @@ class LeaveApplicationController extends Controller
             $dayRequested = $request->input('day_requested');
             $applicationType = $request->input('application_type');
             $availableBalance = 0;
+			$extraDays = 0;
 			//make sure application doesnot overlaps
 			$day = $request->input('day');
 			$dates = explode(' - ', $day);
@@ -335,7 +341,12 @@ class LeaveApplicationController extends Controller
 				->where('hr_id', $hrPersonId)
 				->where('leave_type_id', $leaveType)
 				->first();
-				$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8 : '';
+				$row = leave_configuration::first();
+				$numberAnnual = !empty($row->allow_annual_negative_days) ? $row->allow_annual_negative_days : 0;
+				$numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
+				if ($leaveType == 1) $extraDays = $numberAnnual;
+				elseif ($leaveType == 5) $extraDays = $numberSick;
+				$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8  + $extraDays: '';
 				if (!empty($availableBalance))
 				{
 					if ($applicationType == 1)
@@ -450,6 +461,7 @@ class LeaveApplicationController extends Controller
             $hours = $request->input('hours');
             $applicationType = $request->input('application_type');
             $availableBalance = 0;
+			$extraDays = 0;
 			if (!empty($hrPersonId) && !empty($leaveType))
 			{
 				$balance = DB::table('leave_credit')
@@ -457,7 +469,12 @@ class LeaveApplicationController extends Controller
 				->where('hr_id', $hrPersonId)
 				->where('leave_type_id', $leaveType)
 				->first();
-				$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance : '';
+				$row = leave_configuration::first();
+				$numberAnnual = !empty($row->allow_annual_negative_days) ? $row->allow_annual_negative_days : 0;
+				$numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
+				if ($leaveType == 1) $extraDays = $numberAnnual;
+				elseif ($leaveType == 5) $extraDays = $numberSick;
+				$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance + ($extraDays * 8) : '';
 				if (!empty($availableBalance))
 				{
 					if ($applicationType == 2)

@@ -239,15 +239,6 @@
 							</div>
 						</td>
 						</tr>
-					</div> 
-					<div class="form-group">
-						<tr>
-							<td>Notify employee about applications submitted on their behalf</td>
-							<td style="text-align: center; vertical-align: middle;">
-								  <input type="hidden" name="notify_employee_about_applications_submitted_on_their_behalf" value="0">
-								 <input  type="checkbox" name="notify_employee_about_applications_submitted_on_their_behalf" value="1" {{ $leave_configuration->notify_employee_about_applications_submitted_on_their_behalf === 1 ? 'checked ="checked"' : 0 }}>
-							</td>
-						</tr>
 					</div>
 				</table>
 			</div>
@@ -277,18 +268,7 @@
                    
                          <div class="box-body">
                          <table class="table table-bordered">
-                             <div class="checkbox">
-                                
-                               <div class="form-group">
-                              <tr>
-                                <td>Limit administration to assigned divisions</td>
-                                  <td style="text-align: center; vertical-align: middle;">
-                                      <input type="hidden" name="limit_administration_to_assigned_divisions" value="0">
-                                      <input  type="checkbox" name="limit_administration_to_assigned_divisions" value="1" {{ $leave_configuration->limit_administration_to_assigned_divisions === 1 ? 'checked ="checked"' : 0 }}>
-                                  </td>
-                              </tr>
-                            </div>
-                                 
+                             
                             <div class="form-group">
                                 <tr>
                                 <td>Number of Days Until Escalation</td>
