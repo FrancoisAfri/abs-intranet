@@ -18,6 +18,7 @@ class leave_applications extends Mailable
     public $first_name;
     public $leave_type;
     public $email;
+    public $username;
     /**
      * Create a new message instance.
      *
@@ -27,12 +28,13 @@ class leave_applications extends Mailable
    
     // public $company_url = '/contacts/company/';
 
-    public function __construct($first_name, $leave_type, $email)
+    public function __construct($first_name, $leave_type, $email, $username)
     {
         // $this->user = $user->load('person');
         $this->first_name = $first_name;
         $this->leave_type = $leave_type;
         $this->email = $email;
+        $this->username = $username;
     }
 
     /**

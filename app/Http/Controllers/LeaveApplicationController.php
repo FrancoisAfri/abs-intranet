@@ -248,7 +248,8 @@ class LeaveApplicationController extends Controller
             ->get();
 		if ($typID == 1) $extraDays = $numberAnnual;
 		elseif ($typID == 5) $extraDays = $numberSick;
-        return !empty($balance->first()->leave_balance) ? $balance->first()->leave_balance / 8 + $extraDays: 0;
+        $leaveDays =  !empty($balance->first()->leave_balance) ? $balance->first()->leave_balance / 8: 0;
+        return  $leaveDays + $extraDays;
     }
 
     # calculate leave days
@@ -346,7 +347,8 @@ class LeaveApplicationController extends Controller
 				$numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
 				if ($leaveType == 1) $extraDays = $numberAnnual;
 				elseif ($leaveType == 5) $extraDays = $numberSick;
-				$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8  + $extraDays: '';
+				$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8: 0;
+				$availableBalance = $availableBalance  + $extraDays;
 				if (!empty($availableBalance))
 				{
 					if ($applicationType == 1)
@@ -437,7 +439,7 @@ class LeaveApplicationController extends Controller
 		$leaveTypes = LeaveType::where('id', $request->input('leave_type'))->where('status', 1)->first();
         // send email to manager
 		if (!empty($ApplicationDetails['email']))
-			Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $leaveTypes->name, $ApplicationDetails['email']));
+			Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $leaveTypes->name, $ApplicationDetails['email'], $username));
 
         AuditReportsController::store('Leave Management', 'Leave day application', "Accessed By User", 0);
         #leave history audit
@@ -474,7 +476,8 @@ class LeaveApplicationController extends Controller
 				$numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
 				if ($leaveType == 1) $extraDays = $numberAnnual;
 				elseif ($leaveType == 5) $extraDays = $numberSick;
-				$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance + ($extraDays * 8) : '';
+				$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance : 0;
+				$availableBalance = $availableBalance + ($extraDays * 8);
 				if (!empty($availableBalance))
 				{
 					if ($applicationType == 2)
@@ -511,6 +514,8 @@ class LeaveApplicationController extends Controller
         $ApplicationDetails = array();
         $date = strtotime($leaveApp['date']);
         $hrID = $request->input('hr_person_id');
+		$HRpeople = HRPerson::find($hrID);
+        $username = $HRpeople->first_name." ".$HRpeople->surname;
         $managerDetails = HRPerson::where('id', $hrID)
             ->select('manager_id')->get()->first();
         $managerID = $managerDetails['manager_id'];
@@ -550,7 +555,7 @@ class LeaveApplicationController extends Controller
 		$leaveTypes = LeaveType::where('id', $request->input('leave_type'))->where('status', 1)->first();
         // send email to manager
 		if (!empty($ApplicationDetails['email']))
-			Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $leaveTypes->name, $ApplicationDetails['email']));
+			Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $leaveTypes->name, $ApplicationDetails['email'], $username));
 
 		#$action='',$descriptionAction ='',$previousBalance='',$transcation='' ,$currentBalance ='',$leave_type ='')
         AuditReportsController::store('Leave Management', 'Leave hours application ', "Accessed By User", 0);
