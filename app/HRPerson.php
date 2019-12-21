@@ -108,7 +108,7 @@ class HRPerson extends Model
     public function getProfilePicUrlAttribute() {
         $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
-        return (!empty($this->profile_pic)) ? Storage::disk('local')->url("avatars/$this->profile_pic") : (($this->gender === 0) ? $f_silhouette : $m_silhouette);
+        return (!empty($this->profile_pic)) ? Storage::disk('local')->url("avatars/$this->profile_pic") : (($this->gender === 2) ? $f_silhouette : $m_silhouette);
     }
 
     //function to get people from a specific div level

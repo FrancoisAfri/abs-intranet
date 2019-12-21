@@ -214,7 +214,58 @@ class DashboardController extends Controller
                 $employee->is_on_leave_today = $isOnLeaveToday;
             }
             //return $onLeaveThisMonth;
+			//Employee birthday
+			$birthdays = array();
+			$birthdayThisMonth = HRPerson::select('hr_people.id'
+						, 'hr_people.first_name', 'hr_people.surname'
+						, 'hr_people.profile_pic'
+						, 'hr_people.gender'
+						,'hr_people.date_of_birth')
+                ->where('hr_people.status',1)
+				->whereNotNull('hr_people.date_of_birth')
+                ->orderBy('hr_people.first_name')
+                ->orderBy('hr_people.surname')
+                ->get();
 
+            //Flag employees that are on leave today
+            foreach ($birthdayThisMonth as $employee) {
+				if (date('n',$employee->date_of_birth) == date('n')) 
+				{
+					$birthdays[$employee->id]['names'] = $employee->first_name." ".$employee->surname;
+					$birthdays[$employee->id]['birthday_month'] = date('j M',$employee->date_of_birth);
+					$m_silhouette = Storage::disk('local')->url("avatars/m-silhouette.jpg");
+					$f_silhouette = Storage::disk('local')->url("avatars/f-silhouette.jpg");
+					$birthdays[$employee->id]["profile_pic_ur"] = (!empty($employee->profile_pic)) ? Storage::disk('local')->url("avatars/$employee->profile_pic") : (($employee->gender === 2) ? $f_silhouette : $m_silhouette);
+					if (date('j',$employee->date_of_birth) === date('j')) $birthdays[$employee->id]['is_birthday_today'] =  1;
+				}
+            }
+			//return $birthdays;
+			//Staff anniversary
+			$staffAnniversaries = array();
+			$staffs = HRPerson::select('hr_people.id'
+						, 'hr_people.first_name', 'hr_people.surname'
+						, 'hr_people.profile_pic'
+						, 'hr_people.gender'
+						,'hr_people.date_joined')
+                ->where('hr_people.status',1)
+				->whereNotNull('hr_people.date_joined')
+                ->orderBy('hr_people.first_name')
+                ->orderBy('hr_people.surname')
+                ->get();
+
+            //Flag employees that are on leave today
+            foreach ($staffs as $employee) {
+				if (date('n',$employee->date_joined) == date('n')) 
+				{
+					$staffAnniversaries[$employee->id]['names'] = $employee->first_name." ".$employee->surname;
+					$staffAnniversaries[$employee->id]['birthday_month'] = date('j M',$employee->date_joined);
+					$m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+					$f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+					$staffAnniversaries[$employee->id]['profile_pic_ur'] = (!empty($employee->profile_pic)) ? Storage::disk('local')->url("avatars/$employee->profile_pic") : (($employee->gender === 2) ? $f_silhouette : $m_silhouette);
+					
+					if (date('j',$employee->date_joined) === date('j')) $staffAnniversaries[$employee->id]['is_birthday_today'] =  1;
+				}
+            }
             // check task
             $checkTasks = DB::table('employee_tasks')
                 ->select('employee_tasks.description', 'employee_tasks.employee_id'
@@ -332,146 +383,9 @@ class DashboardController extends Controller
                 ->get();
 
             $ClientTask = $ClientInduction->load('TasksList');
-			// staff anniversary
-			/*
-			#$iToDisplay: 0 - All, 1 - Only Today, 2 - Only Tomorrow, 3 - Only This Month, 1.2 - Today and Tomorrow, 1.3 - Today and This Month
-		public static function getDashboardBirthdays($sToDisplay = '1.2', $sHeading = '')
-		{
-			$sYear = date("Y");
-			$sMonthDay = date("m-d");
-			$sTomorrowMonthDay = date("m-d", strtotime('+1 day'));
-			$iNow = date("d");
-			$sStartOfThisMonth = str_replace('-', '', date("m-$iNow"));
-			$sEndOfThisMonth = str_replace('-', '', date("m-t"));
-			$sReturnToday = '<table class="defaultTbl" width="100%"><tr><th>BIRTHDAYS TODAY</th>';
-			$sSQL = "select id, firstname || ' ' || surname as title,surname, known_as, date_of_birth
-					,(select substring(date_of_birth,9,5) from hr_person where  id=hp.id and active=1) as birthday_day
-					from hr_person hp
-					where active=1 and substring(date_of_birth,6,5) = '$sMonthDay'
-					order by birthday_day asc";
-			$rBirthdays = database::query($sSQL);
-			if ($rBirthdays->numrows())
-			{
-				while($aBirthday = $rBirthdays->fetchrow())
-				{
-					if ($aBirthday['date_of_birth'])
-					{
-						$sBirthday = date('d M', strtotime($aBirthday['date_of_birth']));
-						$sDay = date('l', strtotime($aBirthday['date_of_birth']));
-						//if (empty($aBirthday['known_as'])) $aBirthday['known_as'] = $aBirthday['title'];
-						if (empty($aBirthday['known_as'])) $aBirthday['known_as'] = $aBirthday['title'];
-						elseif (!empty($aBirthday['known_as'])) $aBirthday['known_as'] = $aBirthday['known_as']." ".$aBirthday['surname'];
-						if ( ((substr($aBirthday['date_of_birth'],5,2)+0)==(date('m')+0)) and ((substr($aBirthday['date_of_birth'],8,2)+0)==(date('d')+0) ))
-							$sReturnToday .= "<tr><td>$aBirthday[known_as] : $sBirthday</td></tr>";
-					}
-				}
-				$sReturnToday .= '</table>';
-			}
-			else $sReturnToday .= "<tr><td><em>No Birthdays.</em></td></tr></table>";
-
-			$sReturnTomorrow = '<table class="defaultTbl" width="100%"><tr><th>BIRTHDAYS TOMORROW</th>';
-			$sSQL = "select id, firstname || ' ' || surname as title, surname, date_of_birth 
-					,(select substring(date_of_birth,9,5) from hr_person where id=hp.id and active=1) as birthday_day
-					from hr_person hp
-					where active=1 and substring(date_of_birth,6,5) = '$sTomorrowMonthDay'
-					order by birthday_day asc";
-			$rBirthdays = database::query($sSQL);
-			if ($rBirthdays->numrows())
-			{
-				while($aBirthday = $rBirthdays->fetchrow())
-				{
-					if ($aBirthday['date_of_birth'])
-					{
-						$sBirthday = date('d M', strtotime($aBirthday['date_of_birth']));
-						if ( ((substr($aBirthday['date_of_birth'],5,2)+0)==(date('m')+0)) and ((substr($aBirthday['date_of_birth'],8,2)+0)==(date('d')+1) ))
-							$sReturnTomorrow .= "<tr><td>$aBirthday[title] : $sBirthday</td></tr>";
-					}
-				}
-				$sReturnTomorrow .= '</table>';
-			}
-			else $sReturnTomorrow .= "<tr><td><em>No Birthdays.</em></td></tr></table>";
 			
-			$sReturnMonth = '<table class="defaultTbl" width="100%"><tr><th>BIRTHDAYS THIS MONTH</th>';
-			$sSQL = "select id, firstname || ' ' || surname as title, surname, date_of_birth, known_as, 
-			(select name from security_departments where id=department_id) as department 
-			,(select substring(date_of_birth,9,5) from hr_person where id=hp.id and active=1) as birthday_day
-					from hr_person hp
-					where active=1 
-					and replace(substring(date_of_birth,6,5), '-' ,'') between '$sStartOfThisMonth' and '$sEndOfThisMonth'
-					order by birthday_day asc";
-			$rBirthdays = database::query($sSQL);
-			if ($rBirthdays->numrows())
-			{
-				while($aBirthday = $rBirthdays->fetchrow())
-				{
-					if ($aBirthday['date_of_birth'])
-					{
-						if (empty($aBirthday['known_as'])) $aBirthday['known_as'] = $aBirthday['title'];
-						elseif (!empty($aBirthday['known_as'])) $aBirthday['known_as'] = $aBirthday['known_as']." ".$aBirthday['surname'];
-						//if ( ((substr($aBirthday['date_of_birth'],5,2)+0)==(date('m')+0)) and ((substr($aBirthday['date_of_birth'],8,2)+0)==(date('d')+1) ))
-						//$sDay = substr($aBirthday['date_of_birth'],8,2);
-						$sBirthday = date('d M', strtotime($aBirthday['date_of_birth']));
-						$sReturnMonth .= "<tr><td>$aBirthday[known_as] : $sBirthday</td></tr>";
-					}
-				}
-				$sReturnMonth .= '</table>';
-			}
-			else $sReturnMonth .= "<tr><td><em>No Birthdays.</em></td></tr></table>";
-
-			switch ($sToDisplay)
-			{
-				case '0' : return "$sReturnToday<p>$sReturnTomorrow<p>$sReturnMonth"; break;
-				case '1' : return "$sReturnToday"; break;
-				case '1.2' : return "$sReturnToday<p>$sReturnTomorrow"; break;
-				case '1.3' : return "$sReturnToday<p>$sReturnMonth"; break;
-				case '2' : return "$sReturnTomorrow"; break;
-				case '3' : return "$sReturnMonth"; break;
-				default : return "$sReturnToday<p>$sReturnTomorrow<p>$sReturnMonth"; break;
-			}
-		}
-		
-		#Get employees anniversary and display on the dasboard
-		public static function getStaffAnniversairy()
-		{
-			$sYear = date("Y");
-			$sMonthDay = date("m-d");
-			$sTomorrowMonthDay = date("m-d", strtotime('+1 day'));
-			$sStartOfThisMonth = str_replace('-', '', date("m-01"));
-			$sEndOfThisMonth = str_replace('-', '', date("m-t"));
-			$sReturnMessage = '<table class="defaultTbl" width="100%"><tr><th>STAFF ANNIVERSARY</th>';
-			$sSQL = "select id, known_as, surname, date_started
-					, (select name from security_departments where id=department_id) as department
-					, (select name from security_sections where id=section_id) as section
-					from hr_person where active=1 and substring(date_started,6,5) = '$sMonthDay'";
-
-			$rStaff = database::query($sSQL);
-			if ($rStaff->numrows())
-			{
-				while($aStaff = $rStaff->fetchrow())
-				{
-					if ($aStaff['date_started'])
-					{
-						if ( ((substr($aStaff['date_started'],5,2)+0)==(date('m')+0)) and ((substr($aStaff['date_started'],8,2)+0)==(date('d')+0)))
-						{
-							$iNumbers = substr($aStaff['date_started'],0,4);
-							$iNumbersyear = date("Y") - $iNumbers;
-							$aAbbreviation = array('th','st','nd','rd','th','th','th','th','th','th');
-							if (($iNumbersyear %100) >= 11 && ($iNumbersyear%100) <= 13)
-								$sAbbreviation = $iNumbersyear. 'th';
-							else
-								$sAbbreviation = $iNumbersyear. $aAbbreviation[$iNumbersyear % 10];
-							$sSurname = $aStaff['surname']."'s";
-							$sReturnMessage .= "<tr><td>$aStaff[known_as] $sSurname $sAbbreviation anniversary from $aStaff[department], $aStaff[section]</td></tr>";
-						}
-					}
-				}
-				$sReturnMessage .= '</table>';
-			}
-			else $sReturnMessage .= "<tr><td><em>No Staff Anniversary Today.</em></td></tr></table>";
-			
-			return "$sReturnMessage"; break;
-			
-		}*/
+            $data['staffAnniversaries'] = $staffAnniversaries;
+            $data['birthdays'] = $birthdays;
             $data['surbodinates'] = $surbodinates;
             $data['surbs'] = $surbs;
 			if (!empty($surbodinates))

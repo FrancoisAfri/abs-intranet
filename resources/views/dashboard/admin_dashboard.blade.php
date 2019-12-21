@@ -276,6 +276,107 @@
 			@include('tasks.partials.end_task')
         </div>
     @endif
+	@if($activeModules->whereIn('code_name', 'security')->first())
+		<div class="row">
+            <div class="col-md-6">
+                <!-- /Tasks List -->
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <i class="fa fa-hourglass"></i>
+                        <h3 class="box-title">Staff Anniversary</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i>
+                            </button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                        class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+                        <div class="table-responsive">
+                            <table class="table no-margin">
+                                <thead>
+									<tr>
+										<th>Employee</th>
+										<th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave
+											Anniversary Date
+										</th>
+										<th></th>
+									</tr>
+                                </thead>
+                                <tbody>
+									@foreach($staffAnniversaries as $staff)
+										<tr>									
+											<td style="vertical-align: middle;"
+												class="{{ !empty($staff['is_birthday_today']) ? 'bg-primary' : '' }}">
+												<img src="{{ !empty($staff['profile_pic_ur']) ? $staff['profile_pic_ur'] : '' }}" class="img-circle"
+												 alt="Employee's Photo"
+												 style="width: 25px; height: 25px; border-radius: 50%; margin-right: 10px; margin-top: -2px;">
+												<span>{{ $staff['names'] }}</span>
+											</td>
+											<td style="vertical-align: middle;"
+												class="text-center {{ !empty($staff['is_birthday_today']) ? 'bg-primary' : '' }}">{{ !empty($staff['birthday_month']) ? $staff['birthday_month'] : ''}}</td>
+										</tr>
+								@endforeach 
+								</tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- /.box-body -->
+                    <div class="box-footer clearfix">
+                    </div>
+                    <!-- /.box-footer -->
+                </div>
+                <!-- /Tasks List End -->
+            </div>
+			<div class="col-md-6">
+                <div class="box box-info">
+                    <div class="box-header with-border">
+                        <i class="ion ion-ios-people-outline"></i>
+                        <h3 class="box-title">Birthdays This Month</h3>
+                        <div class="box-tools pull-right">
+                            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                        class="fa fa-minus"></i></button>
+                            <button type="button" class="btn btn-box-tool" data-widget="remove"><i
+                                        class="fa fa-times"></i></button>
+                        </div>
+                    </div>
+                    <!-- /.box-header -->
+                    <div class="box-body no-padding" style="max-height: 180px; overflow-y: scroll;">
+                        <div class="table-responsive">
+							<table class="table table-striped table-hover">
+								<thead>
+									<tr>
+										<th>Employee</th>
+										<th class="text-center">Date Of Birth</th>
+									</tr>
+								</thead>
+								<tbody>
+								@foreach($birthdays as $birthday)
+									<tr>									
+										<td style="vertical-align: middle;"
+											class="{{ !empty($birthday['is_birthday_today']) ? 'bg-primary' : '' }}">
+											<img src="{{ !empty($birthday['profile_pic_ur']) ? $birthday['profile_pic_ur'] : '' }}" class="img-circle"
+                                             alt="Employee's Photo"
+                                             style="width: 25px; height: 25px; border-radius: 50%; margin-right: 10px; margin-top: -2px;">
+											<span>{{ $birthday['names'] }}</span>
+										</td>
+										<td style="vertical-align: middle;"
+											class="text-center {{ !empty($birthday['is_birthday_today']) ? 'bg-primary' : '' }}">{{ !empty($birthday['birthday_month']) ? $birthday['birthday_month'] : ''}}</td>
+									</tr>
+								@endforeach
+								</tbody>
+							</table>
+						</div>
+                    </div>
+					<div class="box-footer clearfix">
+                    </div>
+                    <!-- /.box-body -->
+                </div>
+            </div> 
+        </div>
+	@endif	
     @if($activeModules->where('code_name', 'appraisal')->first())
         <div class="row">
             <div class="col-md-12">
