@@ -196,13 +196,6 @@ class LeaveApplicationController extends Controller
 
     public function ApplicationDetails($status = 0, $hrID = 0)
     {
-		//UserAccess
-		/*$userAccess = DB::table('security_modules_access')
-                ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
-                ->where('code_name', 'leave')
-                ->where('user_id', Auth::user()->person->user_id)
-                ->first();
-				*/
         // query the leave congif table and bring back the values
         $approvals = DB::table('leave_configuration')
             ->select('require_managers_approval', 'require_department_head_approval', 'require_hr_approval', 'require_payroll_approval')
@@ -249,7 +242,7 @@ class LeaveApplicationController extends Controller
 		if ($typID == 1) $extraDays = $numberAnnual;
 		elseif ($typID == 5) $extraDays = $numberSick;
         $leaveDays =  !empty($balance->first()->leave_balance) ? $balance->first()->leave_balance / 8: 0;
-        return  $leaveDays + $extraDays;
+        return  $leaveDays /*+ $extraDays*/;
     }
 
     # calculate leave days
@@ -258,11 +251,6 @@ class LeaveApplicationController extends Controller
         //convert dates
         $startDate = strtotime($dateFrom);
         $endDate = strtotime($dateTo);
-		//$dates = explode(' - ', $day);
-        /*$startDate = str_replace('/', '-', $dates[0]);
-        $startDate = strtotime($startDate);
-        $endDate = str_replace('/', '-', $dates[1]);
-        $endDate = strtotime($endDate);*/
 		$onceOffHoliday = date("Y", $startDate);
         // calculate public holidays and weekends
         $numweek = 0;
