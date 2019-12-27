@@ -1200,3 +1200,8 @@ Route::patch('complaint/update/{complaint}', 'ComplaintsController@update');
 Route::post('conplaints/search_results', 'ComplaintsController@searchResults');
 Route::get('complaints/reports', 'ComplaintsController@reports');
 Route::post('conplaints/reports_results', 'ComplaintsController@reportSearchResults');
+// Document Management
+Route::get('dms/setup', 'DMSSetupController@index');
+Route::post('dms/setup/{setup}', 'DMSSetupController@store');
+Route::post('dms/setup', 'DMSSetupController@store');
+Route::get('dms/folders', 'DMSFoldersController@index');
