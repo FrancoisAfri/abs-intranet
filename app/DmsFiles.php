@@ -12,7 +12,7 @@ class DmsFiles extends Model
     //Mass assignable fields
     protected $fillable = [
         'folder_id', 'max_size', 'responsable_person'
-		, 'status', 'deleted'
+		, 'status', 'deleted', 'visibility'
 		,'inherit_rights','file_name'
     ];
 	

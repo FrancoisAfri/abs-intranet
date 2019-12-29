@@ -238,12 +238,9 @@
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
-
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
-
     <script>
         $(function () {
             //Initialize iCheck/iRadio Elements

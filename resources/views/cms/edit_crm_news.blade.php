@@ -29,11 +29,8 @@
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
-
                     <div class="box-body" id="view_users">
-
                         <hr class="hr-text" data-content="Edit News for - {{ $Cmsnews->name }} ">
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label"> Name</label>
                             <div class="col-sm-8">
@@ -42,7 +39,6 @@
                                        placeholder="Enter Name" required>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label for="path" class="col-sm-2 control-label"> Description</label>
                             <div class="col-sm-8">
@@ -51,11 +47,8 @@
                                        placeholder="Enter Description" required>
                             </div>
                         </div>
-
-
                         <div class="form-group">
                             <label for="exp_date" class="col-sm-2 control-label">Date </label>
-
                             <div class="col-sm-8">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -67,7 +60,6 @@
                                 </div>
                             </div>
                         </div>
-
                         @foreach($division_levels as $division_level)
                             <div class="form-group{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                 <label for="{{ 'division_level_' . $division_level->level }}"
@@ -88,7 +80,6 @@
                                 </div>
                             </div>
                         @endforeach
-
                         <div class="form-group">
                             <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
@@ -99,9 +90,6 @@
                                 <input type="file" id="image" name="image" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                             </div>
                         </div>
-
-
-
                         <div class="box-body">
                             <textarea id="send_invoice_message" name="summary" rows="10"
                                       cols="60">{{$Cmsnews->summary}}</textarea>
@@ -109,7 +97,6 @@
                             <br>
                             {{--<p style="margin-bottom: 0;"><b>Placeholders:</b> [client name]</p>--}}
                         </div>
-
                         <!-- Confirmation Modal -->
                     @if(Session('success_application'))
                         @include('cms.partials.success_action', ['modal_title' => "Content Edit Successful!", 'modal_content' => session('success_application')])

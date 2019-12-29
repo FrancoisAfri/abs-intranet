@@ -94,7 +94,6 @@ class CmsController extends Controller
         $Cmsnews = Cmsnews::where('id', $news->id)->first();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
-
         $data['page_title'] = "CMS";
         $data['page_description'] = "CMS Settings";
         $data['breadcrumb'] = [

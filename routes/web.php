@@ -1205,3 +1205,6 @@ Route::get('dms/setup', 'DMSSetupController@index');
 Route::post('dms/setup/{setup}', 'DMSSetupController@store');
 Route::post('dms/setup', 'DMSSetupController@store');
 Route::get('dms/folders', 'DMSFoldersController@index');
+Route::post('dms/add_folder', 'DMSFoldersController@store');
+Route::post('dms/add_sub_folder/{folder}', 'DMSFoldersController@storeSubfolders');
+Route::get('dms/folder/view/{folder}', 'DMSFoldersController@subfolders');

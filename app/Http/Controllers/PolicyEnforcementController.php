@@ -51,7 +51,7 @@ class PolicyEnforcementController extends Controller
         $policies = Policy::where('category_id',$policyCat->id)->get();
 		if (!empty($policies)) $policies = $policies->load('policyCategory');
 		
-		$employees = HRPerson::where('status', 1)->get();
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
         $categories = Policy_Category::where('status', 1)->get();
 
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
@@ -186,7 +186,7 @@ class PolicyEnforcementController extends Controller
             ->orderBy('policy_users.id')
             ->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $employees = HRPerson::where('status', 1)->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
 		$DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
         
         $data['page_title'] = "Policy Library";
@@ -472,7 +472,7 @@ class PolicyEnforcementController extends Controller
 		$policy = $policy->load('policyCategory','policyUsers.employees');
 		//return $policy;
 		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $employees = HRPerson::where('status', 1)->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
 		$DivisionLevelFive = DivisionLevelFive::where('active', 1)->orderBy('id', 'desc')->get();
         
         $data['division_levels'] = $divisionLevels;
