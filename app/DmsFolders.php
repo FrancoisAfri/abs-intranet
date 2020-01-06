@@ -32,6 +32,11 @@ class DmsFolders extends Model
     {
         return $this->belongsTo(DivisionLevelFive::class, 'division_5');
     }
+	//relationship between folders and parent
+    public function parentDetails()
+    {
+        return $this->belongsTo(DmsFolders::class, 'parent_id');
+    }
 	//relationship between folders and division_4
     public function department()
     {

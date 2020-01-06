@@ -55,7 +55,7 @@ class DMSFoldersController extends Controller
 		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $folders = DmsFolders::where('parent_id',$folder->id)->get();
 		if (!empty($folders)) 
-			$folders = $folders->load('employee','division');
+			$folders = $folders->load('employee','division','parentDetails');
 		$file_size = 0;
 		foreach ($folders as $directory)
 		{
