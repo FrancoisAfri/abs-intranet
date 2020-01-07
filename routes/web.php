@@ -1208,3 +1208,6 @@ Route::get('dms/folders', 'DMSFoldersController@index');
 Route::post('dms/add_folder', 'DMSFoldersController@store');
 Route::post('dms/add_sub_folder/{folder}', 'DMSFoldersController@storeSubfolders');
 Route::get('dms/folder/view/{folder}', 'DMSFoldersController@subfolders');
+Route::post('dms/add_files/{folder}', 'DMSFoldersController@storeFile');
+Route::get('dms/folder_management/{folder}', 'DMSFoldersController@manageFolder');
+Route::get('dms/file_management/{file}', 'DMSFoldersController@manageFile');

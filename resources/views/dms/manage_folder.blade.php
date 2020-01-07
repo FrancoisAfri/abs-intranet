@@ -75,76 +75,6 @@
             </div>
 			@include('dms.partials.add_folder_modal')
         </div>
-		<div class="col-ms-9">
-            <div class="box box-warning">
-                <div class="box-header with-border">
-                    <h3 class="box-title">{{$folder->folder_name}} File(s) </h3>
-                    <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
-                                    class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="box-body">
-					<div style="max-height: 400px; overflow-y: scroll;">
-						<table class="table table-bordered">
-							<tr>
-								<th style="width: 5px; text-align: center;">#</th>
-								<th>Name</th>
-								<th>Responsible Person</th>
-								<th>Current Version</th>
-								<th>Date Uploaded</th>
-								<th style="width: 5px; text-align: center;">#</th>
-								
-							</tr>
-							@if (count($files) > 0)
-								@foreach ($files as $file)
-									<tr>
-										<td style="text-align: center">
-											<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
-												<label for="document" class="control-label"></label>
-												@if(!empty($file->file_name))
-													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-													   href="{{ Storage::disk('local')->url("$file->path$file->file_name") }}"
-													   target="_blank"><i class="fa fa-file-pdf-o"></i> View</a>
-												@endif
-											</div>
-										</td>
-										<td>{{ (!empty($file->document_name)) ?  $file->document_name : ''}} </td>
-										<td>{{ (!empty($file->employee->first_name)) ?  $file->employee->first_name." ".$file->employee->surname : ''}} </td>
-										<td>{{ (!empty($file->current_version)) ?  $file->current_version : ''}} </td>
-										<td>{{ (!empty($file->created_at)) ?  $file->created_at : ''}} </td>
-										<td style="text-align: center"><button vehice="button" id="view_ribbons" class="btn btn-success" 
-												onclick="postData({{$file->id}}, 'manage_file');"><i class="fa fa-check"></i> Manage</button></td>
-									</tr>
-								@endforeach
-							@else
-								<tr id="categories-list">
-									<td colspan="6">
-										<div class="alert alert-danger alert-dismissable">
-											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
-												&times;
-											</button>
-											There is no file in this directory, please start by adding a file ...
-										</div>
-									</td>
-								</tr>
-							@endif
-						</table>
-					</div>
-                    <!--   </div> -->
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-up"></i> One Directory Up</button>
-                        <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#add-file-modal">Add New File
-                        </button>
-                    </div>
-                </div>
-            </div>
-			@include('dms.partials.add_file_modal')
-        </div>
     </div>
 @endsection
 @section('page_script')
@@ -219,17 +149,7 @@
 				var successMsg = 'New Folder has been Added successfully.';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
-			//Post perk form to server using ajax (add)
-			$('#add_file').on('click', function () {
-				var strUrl = '/dms/add_files/' + {{$folder->id}};
-				var formName = 'add-file-form';
-				var modalID = 'add-file-modal';
-				var submitBtnID = 'add_folder';
-				var redirectUrl = '/dms/folder/view/' + {{$folder->id}};
-				var successMsgTitle = 'New Record Added!';
-				var successMsg = 'New File has been Added successfully.';
-				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-			});
+
 			//Load divisions drop down
 			var parentDDID = '';
 			var loadAllDivs = 1;

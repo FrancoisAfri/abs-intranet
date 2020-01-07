@@ -5,6 +5,7 @@ use App\HRPerson;
 use App\DmsSetup;
 use App\DmsFolders;
 use App\DmsFiles;
+use App\DmsFilesVersions;
 use App\DivisionLevel;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
@@ -74,6 +75,9 @@ class DMSFoldersController extends Controller
         $folder_image = Storage::disk('local')->url('DMS Image/folder_image.png');
 		// get files
 		$files = DmsFiles::where('folder_id',$folder->id)->get();
+		if (!empty($files)) 
+			$files = $files->load('employee');
+		//return $files;
 		$data['page_title'] = "Document Management";
         $data['page_description'] = "Folder Directory";
         $data['breadcrumb'] = [
@@ -151,7 +155,7 @@ class DMSFoldersController extends Controller
 		AuditReportsController::store('Document Management', 'New Folder Created', "Accessed By User", 0);
         return response()->json();
     }
-	
+	// this function will store sub folders
 	public function storeSubfolders(Request $request, DmsFolders $folder)
     {
         $this->validate($request, [
@@ -178,8 +182,126 @@ class DMSFoldersController extends Controller
 		AuditReportsController::store('Document Management', 'New Subfolder Created', "Accessed By User", 0);
         return response()->json();
     }
+	
+	// this function will store files into a folder
+	public function storeFile(Request $request, DmsFolders $folder)
+    {
+        $this->validate($request, [
+            'document_name' => 'required',      
+        ]);
+        $fileData = $request->all();
+        unset($fileData['_token']);
+		
+		$filePath = $folder->path."/";
+		$docName =  $fileData['document_name'];
+		$docName =  str_replace(" ","_",$docName);
+		
+		//Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'xlsx']) && $request->file('documents')->isValid()) {
+                $fileName = time()."_".$docName.".". $fileExt;
+                $request->file('documents')->storeAs($folder->path, $fileName);
+                //Add file name in the table
+                $DmsFile = new DmsFiles();
+				$DmsFile->folder_id = $folder->id;
+				$DmsFile->document_name = $fileData['document_name'];
+				$DmsFile->responsable_person = $folder->responsable_person;
+				$DmsFile->file_name = $fileName;
+				$DmsFile->path = $filePath;
+				$DmsFile->file_extension = $fileExt;
+				$DmsFile->current_version = "Version 1";
+				$DmsFile->status = 1;
+				$DmsFile->description = !empty($fileData['description']) ? $fileData['description'] : '';
+                $DmsFile->save();
+				// Save file version
+				$DmsFileVersion  = new DmsFilesVersions();
+				$DmsFileVersion->file_id = $DmsFile->id;
+				$DmsFileVersion->file_name = $fileName;
+				$DmsFileVersion->path = $filePath;
+				$DmsFileVersion->status = 1;
+				$DmsFileVersion->version_number = 1;
+            }
+        }
+		
+		AuditReportsController::store('Document Management', "New File: $DmsFile->document_name Added to $folder->id", "Accessed By User", 0);
+        return response()->json();
+    }
+	// manage folders
+	public function manageFolder(DmsFolders $folder)
+    {
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $folders = DmsFolders::where('parent_id',$folder->id)->get();
+		if (!empty($folders)) 
+			$folders = $folders->load('employee','division','parentDetails');
 
-    /**
+		// get folder size
+		$file_size = 0;
+		foreach ($folders as $directory)
+		{
+			$folder_path = storage_path('app')."/".$directory->path."/";
+			foreach( File::allFiles("$folder_path") as $file)
+			{
+				$file_size += $file->getSize();
+			}
+			if (!empty($file_size))
+			{
+				$totalSize = number_format($file_size / 1048576,2)." MB";
+				$directory->total_size = $totalSize;
+			}
+		}
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
+        $folder_image = Storage::disk('local')->url('DMS Image/folder_image.png');
+
+		$data['page_title'] = "Document Management";
+        $data['page_description'] = "Folder Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+		//return $folder;
+        $data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Folders';
+        $data['folder'] = $folder;
+        $data['folders'] = $folders;
+        $data['division_levels'] = $divisionLevels;
+        $data['employees'] = $employees;
+
+        AuditReportsController::store('Document Management', 'Folder management Page Accessed', "Actioned By User", 0);
+        return view('dms.manage_folder')->with($data);
+    }
+	// manage files 
+	public function manageFile(DmsFiles $file)
+    {
+		$file_size = 0;
+		/*
+			$folder_path = storage_path('app')."/".$file->path."/";
+			$file_size += $file->getSize();
+			if (!empty($file_size))
+			{
+				$totalSize = number_format($file_size / 1048576,2)." MB";
+				$directory->total_size = $totalSize;
+			}
+		}*/
+		// get folder details 
+		$folder = DmsFolders::where('id',$file->folder_id)->first();
+		// get files
+		if (!empty($file)) 
+			$file = $file->load('employee','folderList','fileVersions');
+		return $file;
+		$data['page_title'] = "Document Management";
+        $data['page_description'] = "File Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Folders';
+        $data['folder'] = $folder;
+        $data['file'] = $file;
+		//return $folders;
+        AuditReportsController::store('Document Management', 'Folders Page Accessed', "Actioned By User", 0);
+        return view('dms.manage_file')->with($data);
+    }
+   /**
      * Display the specified resource.
      *
      * @param  int  $id
