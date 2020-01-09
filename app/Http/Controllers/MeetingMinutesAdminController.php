@@ -289,8 +289,7 @@ class meetingMinutesAdminController extends Controller
         $this->validate($request, [       
             'description' => 'required',      
             'due_date' => 'required',      
-            'employee_id' => 'required',        
-            'check_by_id' => 'bail|required|integer|min:1',   
+            'employee_id' => 'required',   
             'due_time' => 'required',     
             //'meeting_id' => 'bail|required|integer|min:1',        
         ]);
@@ -304,22 +303,16 @@ class meetingMinutesAdminController extends Controller
             $taskData['due_time'] = str_replace('/', '-', $taskData['due_time']);
             $duetime = strtotime($taskData['due_time']);
         }
-
-
         $employees = $taskData['employee_id'];
-
-         foreach ($employees as $empID) {
+        foreach ($employees as $empID) {
         $startDate = strtotime(date('Y-m-d'));
         // $employeeID = $taskData['employee_id'];
         $escalationPerson = HRPerson::where('id', $empID)->first();
         $managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;
         TaskManagementController::store($taskData['description'],$duedate,$startDate,$managerID,$empID,2
-                    ,0,0,0,0,$meeting->id,0,0,$taskData['check_by_id'],0,0,0,0,$duetime);
+                    ,0,0,0,0,$meeting->id,0,0,0,0,0,0,0,$duetime);
         $description = $request->input('description');
          }
-
-
-		
         AuditReportsController::store('Minutes Meeting', 'Meeting Task Added', "Added by User", 0);
         return response()->json(['new_task' => $description], 200);
     }

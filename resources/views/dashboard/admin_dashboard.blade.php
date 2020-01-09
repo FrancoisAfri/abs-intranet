@@ -262,13 +262,9 @@
     @endif
     @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
         <div class="row">
-            <div class="col-md-7">
+            <div class="col-md-12">
                 <!-- Include tasks widget -->
                 @include('dashboard.partials.widgets.tasks_widget')
-            </div>
-            <div class="col-md-5">
-                <!-- Include tasks to check widget -->
-                @include('dashboard.partials.widgets.tasks_to_check_widget')
             </div>
 			@if(Session('error_starting'))
 				@include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])

@@ -57,21 +57,6 @@
                                 </div>
                             </div>
                         </div>
-
-					<div class="form-group">
-                        <label for="checked_by" class="col-sm-3 control-label">Check By</label>
-
-                        <div class="col-sm-9">
-                            <div class="input-group">
-                                <select class="form-control select2" style="width:170px;" id="check_by_id" name="check_by_id">
-								<option selected="selected" value="0">*** Select Attendee ***</option>
-								@foreach($attendees as $attendee)
-									<option value="{{ $attendee->hr_id }}">{{ $attendee->first_name.' '.$attendee->surname}}</option>
-								@endforeach
-								</select>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
