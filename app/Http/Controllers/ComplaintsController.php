@@ -7,6 +7,7 @@ use App\HRPerson;
 use App\Province;
 use App\ComplaintsCompliments;
 use App\User;
+use App\module_access;
 use App\ContactPerson;
 use App\DivisionLevelThree;
 use App\DivisionLevelFour;
@@ -156,6 +157,15 @@ class ComplaintsController extends Controller
      */
     public function show(ComplaintsCompliments $complaint, $back='')
     {
+		//check if user can view the company performance widget (must be superuser or div head or have people reporting to him/her)
+		$user_id = Auth::user()->person->user_id;
+        $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
+            ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
+            ->where('security_modules.code_name', 'comp_comp')
+            ->where('security_modules_access.access_level', '>=', 4)
+            ->where('security_modules_access.user_id', $user_id)
+            ->pluck('user_id')->first();
+
         if (!empty($complaint)) $complaint = $complaint->load('employees','createdBy','company','client');
 		//return $complaint;
 		if ($complaint->type == 1) $text = "Complaint";
@@ -169,6 +179,7 @@ class ComplaintsController extends Controller
         $data['statuses'] = $statuses;
         $data['reponsible'] = $reponsible;
         $data['text'] = $text;
+        $data['userAccess'] = $userAccess;
         $data['complaint'] = $complaint;
 		$data['page_title'] = "View $text Details";
         $data['page_description'] = "$text Information";

@@ -47,7 +47,9 @@
                     <div class="box-footer" style="text-align: center;">
 						<button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Cancel</button>
 						@if ($complaint->status == 1)
-                        <a href="/complaint/edit/{{ $complaint->id }}" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
+							<a href="/complaint/edit/{{ $complaint->id }}" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
+						@elseif ($complaint->status == 2 && !empty($userAccess))
+							<a href="/complaint/edit/{{ $complaint->id }}" class="btn btn-warning pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
 						@endif
 					</div>
                     <!-- /.box-footer -->
