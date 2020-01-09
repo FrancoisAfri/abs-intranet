@@ -41,7 +41,7 @@ class InductionCronEmail extends Mailable
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyDetails['full_company_name'] ;
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-
+		$data['dashboard_url'] = url('/');
         return $this->view('mails.employeeLateTask')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)

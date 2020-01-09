@@ -215,8 +215,8 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $person->first_name }},<br><br>
-                                                    We would to remind you that your task: {{$task}}, due will expired soon.
-                                                    Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system and attend to it.<br>
+                                                    We would to remind you that your task: {{$task}}, due date has expired.
+                                                    Please <a target="_blank" href="{{ $dashboard_url }}">click here.</a> to login to the system and attend to it.<br>
 													PS: A notification has also be sent to your manager.
                                                 </td>
                                             </tr>

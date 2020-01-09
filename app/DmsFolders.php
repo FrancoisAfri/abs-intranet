@@ -32,23 +32,24 @@ class DmsFolders extends Model
     {
         return $this->belongsTo(DivisionLevelFive::class, 'division_5');
     }
-	//relationship between folders and parent
-    public function parentDetails()
-    {
-        return $this->belongsTo(DmsFolders::class, 'parent_id');
-    }
 	//relationship between folders and division_4
     public function department()
     {
-        return $this->belongsTo(DivisionLevelFour::class, 'division_4');
+        return $this->belongsTo(DivisionLevelFive::class, 'division_4');
     }
 	//relationship between folders and division_3
     public function section()
     {
-        return $this->belongsTo(DivisionLevelThree::class, 'division_3');
-    }//relationship between folders and division_2
+        return $this->belongsTo(DivisionLevelFive::class, 'division_3');
+    }
+	//relationship between folders and division_2
     public function team()
     {
-        return $this->belongsTo(DivisionLevelTwo::class, 'division_2');
+        return $this->belongsTo(DivisionLevelFive::class, 'division_2');
+    }
+	//relationship between folders and parent
+    public function parentDetails()
+    {
+        return $this->belongsTo(DmsFolders::class, 'parent_id');
     }
 }

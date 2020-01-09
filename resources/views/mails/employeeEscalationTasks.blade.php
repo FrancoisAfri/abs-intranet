@@ -216,7 +216,7 @@
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $manager->first_name }},<br><br>
                                                     We would like to inform you, the task "{{$task}}" assigned to {{$employee->first_name." ".$employee->surname}} due date is about to expired.<br>
-                                                    Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system to view more details.
+                                                    Please <a target="_blank" href="{{ $dashboard_url }}">click here.</a> to login to the system to view more details.
                                                 </td>
                                             </tr>
                                             <tr>

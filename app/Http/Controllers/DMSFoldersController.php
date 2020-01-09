@@ -29,7 +29,7 @@ class DMSFoldersController extends Controller
     public function index()
     {
 		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $folders = DmsFolders::whereNull('parent_id')->get();
+        $folders = DmsFolders::whereNull('parent_id')->where('status',1)->whereNull('deleted')->get();
 		if (!empty($folders)) 
 		$folders = $folders->load('employee','division');
 		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
@@ -54,7 +54,7 @@ class DMSFoldersController extends Controller
     {
 		//return $folder;
 		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $folders = DmsFolders::where('parent_id',$folder->id)->get();
+        $folders = DmsFolders::where('parent_id',$folder->id)->where('status',1)->whereNull('deleted')->get();
 		if (!empty($folders)) 
 			$folders = $folders->load('employee','division','parentDetails');
 		$file_size = 0;
@@ -74,7 +74,7 @@ class DMSFoldersController extends Controller
 		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
         $folder_image = Storage::disk('local')->url('DMS Image/folder_image.png');
 		// get files
-		$files = DmsFiles::where('folder_id',$folder->id)->get();
+		$files = DmsFiles::where('folder_id',$folder->id)->where('status',1)->whereNull('deleted')->get();
 		if (!empty($files)) 
 			$files = $files->load('employee');
 		//return $files;
@@ -148,6 +148,7 @@ class DMSFoldersController extends Controller
 		$DmsFolders->division_3 = !empty($folderData['division_level_3']) ? $folderData['division_level_3']: 0;
 		$DmsFolders->division_2 = !empty($folderData['division_level_2']) ? $folderData['division_level_2']: 0;
 		$DmsFolders->division_1 = !empty($folderData['division_level_1']) ? $folderData['division_level_1']: 0;
+		$DmsFolder->status = 1;
 		$DmsFolders->path = "DMS Master File/$folderName";
 		$DmsFolders->save();
 		/// create folder
@@ -175,6 +176,7 @@ class DMSFoldersController extends Controller
 		$DmsFolder->division_3 = !empty($folderData['division_level_3']) ? $folderData['division_level_3']: 0;
 		$DmsFolder->division_2 = !empty($folderData['division_level_2']) ? $folderData['division_level_2']: 0;
 		$DmsFolder->division_1 = !empty($folderData['division_level_1']) ? $folderData['division_level_1']: 0;
+		$DmsFolder->status = 1;
 		$DmsFolder->path = $folderName;
 		$DmsFolder->save();
 		/// create folder
@@ -231,27 +233,23 @@ class DMSFoldersController extends Controller
 	public function manageFolder(DmsFolders $folder)
     {
 		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $folders = DmsFolders::where('parent_id',$folder->id)->get();
-		if (!empty($folders)) 
-			$folders = $folders->load('employee','division','parentDetails');
+        if (!empty($folder)) 
+			$folder = $folder->load('employee','division','parentDetails','department','section','team');
 
 		// get folder size
 		$file_size = 0;
-		foreach ($folders as $directory)
+		$folder_path = storage_path('app')."/".$folder->path."/";
+		foreach( File::allFiles("$folder_path") as $file)
 		{
-			$folder_path = storage_path('app')."/".$directory->path."/";
-			foreach( File::allFiles("$folder_path") as $file)
-			{
-				$file_size += $file->getSize();
-			}
-			if (!empty($file_size))
-			{
-				$totalSize = number_format($file_size / 1048576,2)." MB";
-				$directory->total_size = $totalSize;
-			}
+			$file_size += $file->getSize();
 		}
+		if (!empty($file_size))
+		{
+			$totalSize = number_format($file_size / 1048576,2)." MB";
+			$folder->total_size = $totalSize;
+		}
+		
 		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
-        $folder_image = Storage::disk('local')->url('DMS Image/folder_image.png');
 
 		$data['page_title'] = "Document Management";
         $data['page_description'] = "Folder Management";
@@ -262,7 +260,6 @@ class DMSFoldersController extends Controller
         $data['active_mod'] = 'Document Management';
         $data['active_rib'] = 'Folders';
         $data['folder'] = $folder;
-        $data['folders'] = $folders;
         $data['division_levels'] = $divisionLevels;
         $data['employees'] = $employees;
 
@@ -330,9 +327,32 @@ class DMSFoldersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, DmsFolders $folder)
     {
-        //
+        $this->validate($request, [
+            'folder_name' => 'required',       
+            'visibility' => 'required',       
+            'responsable_person' => 'required',       
+            'division_level_5' => 'required',       
+        ]);
+        $folderData = $request->all();
+        unset($folderData['_token']);
+		
+		$folderName = $folderData['folder_name'];
+		$DmsFolders = new DmsFolders($folderData);
+		$folder->division_5 = !empty($folderData['division_level_5']) ? $folderData['division_level_5']: 0;
+		$folder->division_4 = !empty($folderData['division_level_4']) ? $folderData['division_level_4']: 0;
+		$folder->division_3 = !empty($folderData['division_level_3']) ? $folderData['division_level_3']: 0;
+		$folder->division_2 = !empty($folderData['division_level_2']) ? $folderData['division_level_2']: 0;
+		$folder->division_1 = !empty($folderData['division_level_1']) ? $folderData['division_level_1']: 0;
+		$folder->folder_name = !empty($folderData['folder_name']) ? $folderData['folder_name']: '';
+		$folder->visibility = !empty($folderData['visibility']) ? $folderData['visibility']: 0;
+		$folder->responsable_person = !empty($folderData['responsable_person']) ? $folderData['responsable_person']: 0;
+		$folder->size = !empty($folderData['size']) ? $folderData['size']: 0;
+		$folder->update();
+		
+		AuditReportsController::store('Document Management', 'New Folder Created', "Accessed By User", 0);
+        return response()->json();
     }
 
     /**
@@ -341,8 +361,235 @@ class DMSFoldersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(DmsFolders $folder)
     {
-        //
+        $folder->status = 2;
+        $folder->deleted = 1;
+        $folder->update();
+		
+		AuditReportsController::store('Document Management', 'Folder Deleted', "Folder has been deleted", 0);
+        return back();
+    }
+	// company folder access
+	public function companyFolderAccess(DmsFolders $folder)
+    {
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        if (!empty($folder)) 
+			$folder = $folder->load('employee','division','parentDetails','department','section','team');
+
+		// get folder size
+		$file_size = 0;
+		$folder_path = storage_path('app')."/".$folder->path."/";
+		foreach( File::allFiles("$folder_path") as $file)
+		{
+			$file_size += $file->getSize();
+		}
+		if (!empty($file_size))
+		{
+			$totalSize = number_format($file_size / 1048576,2)." MB";
+			$folder->total_size = $totalSize;
+		}
+		
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
+
+		$data['page_title'] = "Document Management";
+        $data['page_description'] = "Folder Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+		//return $folder;
+        $data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Folders';
+        $data['folder'] = $folder;
+        $data['division_levels'] = $divisionLevels;
+        $data['employees'] = $employees;
+
+        AuditReportsController::store('Document Management', 'Folder management Page Accessed', "Actioned By User", 0);
+        return view('dms.manage_folder')->with($data);
+    }
+	// group folder access
+	public function groupFolderAccess(DmsFolders $folder)
+    {
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        if (!empty($folder)) 
+			$folder = $folder->load('employee','division','parentDetails','department','section','team');
+
+		// get folder size
+		$file_size = 0;
+		$folder_path = storage_path('app')."/".$folder->path."/";
+		foreach( File::allFiles("$folder_path") as $file)
+		{
+			$file_size += $file->getSize();
+		}
+		if (!empty($file_size))
+		{
+			$totalSize = number_format($file_size / 1048576,2)." MB";
+			$folder->total_size = $totalSize;
+		}
+		
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
+
+		$data['page_title'] = "Document Management";
+        $data['page_description'] = "Folder Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+		//return $folder;
+        $data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Folders';
+        $data['folder'] = $folder;
+        $data['division_levels'] = $divisionLevels;
+        $data['employees'] = $employees;
+
+        AuditReportsController::store('Document Management', 'Folder management Page Accessed', "Actioned By User", 0);
+        return view('dms.manage_folder')->with($data);
+    }
+	// user folder access
+	public function userFolderAccess(DmsFolders $folder)
+    {
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        if (!empty($folder)) 
+			$folder = $folder->load('employee','division','parentDetails','department','section','team');
+
+		// get folder size
+		$file_size = 0;
+		$folder_path = storage_path('app')."/".$folder->path."/";
+		foreach( File::allFiles("$folder_path") as $file)
+		{
+			$file_size += $file->getSize();
+		}
+		if (!empty($file_size))
+		{
+			$totalSize = number_format($file_size / 1048576,2)." MB";
+			$folder->total_size = $totalSize;
+		}
+		
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
+
+		$data['page_title'] = "Document Management";
+        $data['page_description'] = "Folder Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+		//return $folder;
+        $data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Folders';
+        $data['folder'] = $folder;
+        $data['division_levels'] = $divisionLevels;
+        $data['employees'] = $employees;
+
+        AuditReportsController::store('Document Management', 'Folder management Page Accessed', "Actioned By User", 0);
+        return view('dms.manage_folder')->with($data);
+    }
+	// company file access
+	public function companyFileAccess(DmsFolders $folder)
+    {
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        if (!empty($folder)) 
+			$folder = $folder->load('employee','division','parentDetails','department','section','team');
+
+		// get folder size
+		$file_size = 0;
+		$folder_path = storage_path('app')."/".$folder->path."/";
+		foreach( File::allFiles("$folder_path") as $file)
+		{
+			$file_size += $file->getSize();
+		}
+		if (!empty($file_size))
+		{
+			$totalSize = number_format($file_size / 1048576,2)." MB";
+			$folder->total_size = $totalSize;
+		}
+		
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
+
+		$data['page_title'] = "Document Management";
+        $data['page_description'] = "Folder Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+		//return $folder;
+        $data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Folders';
+        $data['folder'] = $folder;
+        $data['division_levels'] = $divisionLevels;
+        $data['employees'] = $employees;
+
+        AuditReportsController::store('Document Management', 'Folder management Page Accessed', "Actioned By User", 0);
+        return view('dms.manage_folder')->with($data);
+    }
+	// group file access
+	public function groupFileAccess(DmsFolders $folder)
+    {
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        if (!empty($folder)) 
+			$folder = $folder->load('employee','division','parentDetails','department','section','team');
+
+		// get folder size
+		$file_size = 0;
+		$folder_path = storage_path('app')."/".$folder->path."/";
+		foreach( File::allFiles("$folder_path") as $file)
+		{
+			$file_size += $file->getSize();
+		}
+		if (!empty($file_size))
+		{
+			$totalSize = number_format($file_size / 1048576,2)." MB";
+			$folder->total_size = $totalSize;
+		}
+		
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
+
+		$data['page_title'] = "Document Management";
+        $data['page_description'] = "Folder Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+		//return $folder;
+        $data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Folders';
+        $data['folder'] = $folder;
+        $data['division_levels'] = $divisionLevels;
+        $data['employees'] = $employees;
+
+        AuditReportsController::store('Document Management', 'Folder management Page Accessed', "Actioned By User", 0);
+        return view('dms.manage_folder')->with($data);
+    }
+	// user file access
+	public function userFileAccess(DmsFolders $folder)
+    {
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        if (!empty($folder)) 
+			$folder = $folder->load('employee','division','parentDetails','department','section','team');
+
+		// get folder size
+		$file_size = 0;
+		$folder_path = storage_path('app')."/".$folder->path."/";
+		foreach( File::allFiles("$folder_path") as $file)
+		{
+			$file_size += $file->getSize();
+		}
+		if (!empty($file_size))
+		{
+			$totalSize = number_format($file_size / 1048576,2)." MB";
+			$folder->total_size = $totalSize;
+		}
+		
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
+
+		$data['page_title'] = "Document Management";
+        $data['page_description'] = "Folder Management";
+        $data['breadcrumb'] = [
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+		//return $folder;
+        $data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Folders';
+        $data['folder'] = $folder;
+        $data['division_levels'] = $divisionLevels;
+        $data['employees'] = $employees;
+
+        AuditReportsController::store('Document Management', 'Folder management Page Accessed', "Actioned By User", 0);
+        return view('dms.manage_folder')->with($data);
     }
 }
