@@ -199,11 +199,23 @@ class ContactCompaniesController extends Controller
             ->where('contacts_communications.company_id',  $company->id)
             ->orderBy('contacts_communications.communication_date','contacts_communications.company_id')
             ->get();
-
+		$tasks = DB::table('employee_tasks')
+			->select('employee_tasks.id as task_id','employee_tasks.employee_id'
+			,'employee_tasks.start_date'
+			,'employee_tasks.due_date'
+			,'employee_tasks.administrator_id','employee_tasks.upload_required'
+			,'employee_tasks.description','employee_tasks.order_no','employee_tasks.notes'
+			,'employee_tasks.status','employee_tasks.date_completed'
+			,'hr_people.first_name as hr_fist_name','hr_people.surname as hr_surname')
+			->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
+			->where('employee_tasks.client_id', $company->id)
+			->orderBy('employee_tasks.due_date')
+			->get();
         $data['contactsCommunications'] = $contactsCommunications;
         $data['communicationStatus'] = $communicationStatus;
+        $data['tasks'] = $tasks;
 		
-        $data['page_title'] = "Clients";
+        $data['page_title'] = "CRM";
         $data['page_description'] = "View Company Details";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],

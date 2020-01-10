@@ -8,11 +8,13 @@
         <!-- New User Form -->
         <div class="col-md-12">
             <!-- Horizontal Form -->
-            <div class="box box-primary">
+            <div class="box box-primary collapsed-box">
                 <div class="box-header with-border">
-                    <i class="fa fa-files-o pull-right"></i>
-                    <h3 class="box-title">Company</h3>
-                    <p>Company details:</p>
+                    <h3 class="box-title"><i class="fa fa-users"></i> Details</h3>
+					<div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
@@ -271,7 +273,6 @@
                         @if($canEdit)
                             <a href="/contacts/company/{{ $company->id }}/edit" class="btn btn-primary pull-right"><i class="fa fa-pencil-square-o"></i> Edit</a>
                             <a href="/contacts/company/{{ $company->id }}/actdeact" class="btn btn-primary pull-left  {{ (!empty($company->status) && $company->status == 1) ? " btn-danger " : " btn-success" }}"><i class="fa fa-pencil-square-o"></i> {{(!empty($company->status) && $company->status == 1) ? "Deactivate" : "Activate"}}</a>
-                            <a href="{{ '/contacts/add-to-company/' . $company->id }}" class="btn btn-primary"><i class="fa fa-user-plus"></i> Add Contact Person</a>
                             <a href="/contacts/company/{{ $company->id }}/notes" class="btn btn-info "><i class="fa fa-phone-square"></i> Notes </a>
                             <a href="/contacts/{{ $company->id }}/viewcompanydocuments" class="btn btn-primary " ><i class="fa fa-clipboard"> </i> Company Document(s)</a>
                         @endif
@@ -284,7 +285,7 @@
             <!-- Company's contacts box -->
             <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-users"></i> Contacts From The Company</h3>
+                    <h3 class="box-title"><i class="fa fa-users"></i> Contacts</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -298,11 +299,151 @@
                     </div>
                 </div>
                 <!-- /.box-body -->
+				<div class="box-footer" style="text-align: center;">
+					@if($canEdit)
+						<a href="{{ '/contacts/add-to-company/' . $company->id }}" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Add Contact Person</a>
+					@endif
+				</div>
             </div> 
 			<!-- Company's contacts box -->
             <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-users"></i>Company Communications</h3>
+                    <h3 class="box-title"><i class="fa fa-users"></i> Communications</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding no-margin">
+                <div style="overflow-X:auto; margin-right: 10px; max-height: 250px;">
+                   <table class="table table-striped" >
+					<tr>
+						<th>Company Name</th>
+						<th>Contact person</th>
+						<th>Communication Date</th>
+						<th>Communication Time</th>
+						<th>Communication Type</th>
+						<th>Message</th>
+						<th>Sent By</th>
+					</tr>
+					@if (count($contactsCommunications) > 0)
+						@foreach($contactsCommunications as $contactsCommunication)
+						   <tr>
+								<td>{{ (!empty($contactsCommunication->companyname)) ?  $contactsCommunication->companyname : ''}} </td>
+								<td>{{ !empty($contactsCommunication->first_name) && !empty($contactsCommunication->surname) ?  $contactsCommunication->first_name." ".$contactsCommunication->surname : '' }}</td>
+								<td>{{ !empty($contactsCommunication->communication_date) ? date('d M Y ', $contactsCommunication->communication_date) : '' }}</td>
+								<td>{{ !empty($contactsCommunication->time_sent) ? $contactsCommunication->time_sent : '' }}</td>
+								<td>{{ (!empty($contactsCommunication->communication_type)) ?  $communicationStatus[$contactsCommunication->communication_type] : ''}} </td>
+								<td>{{ (!empty($contactsCommunication->message)) ?  $contactsCommunication->message : ''}} </td> 
+								<td>{{ (!empty($contactsCommunication->hr_firstname) && !empty($contactsCommunication->hr_surname)) ?  $contactsCommunication->hr_firstname." ".$contactsCommunication->hr_surname : ''}} </td> 
+							</tr>
+						@endforeach
+					@endif
+				</table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            </div>
+			<!-- Company's contacts box -->
+            <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-users"></i> Tasks</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding no-margin">
+					<div style="overflow-X:auto; margin-right: 10px; max-height: 250px;">
+					   <table class="table table-striped">
+							<tr><th style="width: 10px"></th><th>Description</th><th>Person Responsible</th><th>Status</th><th>Notes</th><th>Document</th></tr>
+								@if (!empty($tasks))
+									@foreach($tasks as $task)
+									<tr>
+										<td>
+											@if(!empty($task->administrator_id) && $task->administrator_id == $user->person->id && $task->status < 4 && $induction->status == 1)           
+												<button type="button" id="end-task-button" class="btn btn-sm btn-default btn-flat pull-right" data-toggle="modal" data-target="#end-task-modal"
+												data-task_id="{{ $task->task_id }}" data-employee_id="{{ $task->employee_id }}" 
+												data-upload_required="{{ $task->upload_required }}" >End</button>
+											@endif
+										</td>
+										<td>{{ (!empty($task->description)) ?  $task->description : ''}} </td>
+										<td>{{ (!empty($task->hr_fist_name)) && (!empty($task->hr_surname)) ?  $task->hr_fist_name." ".$task->hr_surname : ''}} </td>
+										<td>{{ (!empty($task->status)) ?  $taskStatus[$task->status] : ''}} </td>
+										<td>{{ (!empty($task->status)) ?  $task->notes : ''}} </td>
+										@if(!empty($task->emp_doc))
+											<td><a class="btn btn-default btn-flat btn-block" href="{{ Storage::disk('local')->url("tasks/$task->emp_doc") }}" target="_blank"><i class="fa fa-file-pdf-o"></i> Click Here</a></td>
+										@else
+										<td><a class="btn btn-default btn-flat btn-block"><i class="fa fa-exclamation-triangle"></i>No Document Was Uploaded</a></td>
+										@endif
+									</tr>
+									@endforeach
+								@else
+									<tr id="categories-list">
+									<td colspan="6">
+									<div class="alert alert-danger alert-dismissable">
+										<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+										No task to display, please start by adding a new task.
+									</div>
+									</td>
+									</tr>
+								@endif
+						</table>
+					</div>
+					<!-- /.box-body -->
+					<div class="box-footer">
+					<button type="button" id="add-task" class="btn btn-success pull-right" data-toggle="modal"
+							data-target="#add-task-modal" data-meeting_id="{{ $company->id }}">Add Task
+					</button>
+				</div>
+				</div>
+            </div>
+			<!-- Company's contacts box -->
+            <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-users"></i> Meeting Minutes</h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                    </div>
+                </div>
+                <!-- /.box-header -->
+                <div class="box-body no-padding no-margin">
+                <div style="overflow-X:auto; margin-right: 10px; max-height: 250px;">
+                   <table class="table table-striped" >
+					<tr>
+						<th>Company Name</th>
+						<th>Contact person</th>
+						<th>Communication Date</th>
+						<th>Communication Time</th>
+						<th>Communication Type</th>
+						<th>Message</th>
+						<th>Sent By</th>
+					</tr>
+					@if (count($contactsCommunications) > 0)
+						@foreach($contactsCommunications as $contactsCommunication)
+						   <tr>
+								<td>{{ (!empty($contactsCommunication->companyname)) ?  $contactsCommunication->companyname : ''}} </td>
+								<td>{{ !empty($contactsCommunication->first_name) && !empty($contactsCommunication->surname) ?  $contactsCommunication->first_name." ".$contactsCommunication->surname : '' }}</td>
+								<td>{{ !empty($contactsCommunication->communication_date) ? date('d M Y ', $contactsCommunication->communication_date) : '' }}</td>
+								<td>{{ !empty($contactsCommunication->time_sent) ? $contactsCommunication->time_sent : '' }}</td>
+								<td>{{ (!empty($contactsCommunication->communication_type)) ?  $communicationStatus[$contactsCommunication->communication_type] : ''}} </td>
+								<td>{{ (!empty($contactsCommunication->message)) ?  $contactsCommunication->message : ''}} </td> 
+								<td>{{ (!empty($contactsCommunication->hr_firstname) && !empty($contactsCommunication->hr_surname)) ?  $contactsCommunication->hr_firstname." ".$contactsCommunication->hr_surname : ''}} </td> 
+							</tr>
+						@endforeach
+					@endif
+				</table>
+                </div>
+                <!-- /.box-body -->
+            </div>
+            </div>
+			<!-- Company's contacts box -->
+            <div class="box box-default collapsed-box">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-users"></i> Induction</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
