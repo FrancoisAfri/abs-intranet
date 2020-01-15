@@ -20,11 +20,15 @@ class EmployeesTasksMail extends Mailable
      * @return void
      */
 	public $person;
+	public $task;
+	public $sender;
 	public $urls = '/';
 
-    public function __construct(HRPerson $person)
+    public function __construct(HRPerson $person, $task, $sender)
     {
         $this->person = $person;
+        $this->task = $task;
+        $this->sender = $sender;
     }
 
     /**

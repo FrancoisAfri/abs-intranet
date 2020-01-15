@@ -634,7 +634,6 @@
                <!-- /.box-header -->
                <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
                     <table class="table table-striped table-bordered">
-
                         <tr>
                            <!--  <th style="width: 10px">#</th> -->
                             <th>Induction Name</th>

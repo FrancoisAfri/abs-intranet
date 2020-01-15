@@ -21,6 +21,7 @@
                     <th>Duration</th>
                     <th>Due Date</th>
                     <th>Client Name</th>
+                    <th>Document</th>
                     <th></th>
                     <!--<th></th>-->
                 </tr>
@@ -43,6 +44,12 @@
                             <td>{{ (!empty($task->manager_duration)) ?  $task->manager_duration : ''}}</td>
                             <td>{{ (!empty($task->due_date)) ?  date('Y-m-d',$task->due_date) : ''}}</td>
                             <td>{{ (!empty($task->client_name)) ?  $task->client_name : ''}}</td>
+                            <td>@if(!empty($task->document_on_task))
+									<a class="btn btn-default btn-flat btn-block" href="{{ Storage::disk('local')->url("tasks/$task->document_on_task") }}" target="_blank"><i class="fa fa-file-pdf-o"></i> Click Here</a>
+								@else
+									<a class="btn btn-default btn-flat btn-block"><i class="fa fa-exclamation-triangle"></i>No Document Was Uploaded</a>
+								@endif
+							</td>
                             <td>
                                 <div id="controls">
                                     <input type="text" id="{{ $task->task_id . 'stopWatchDisplay' }}" style="font-weight:bold; font-family:cursive; width: 80px; height: 23px;" value="{{ $task->human_duration }}" class="input-sm" disabled>

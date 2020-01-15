@@ -26,41 +26,41 @@
                     {{ method_field('PATCH') }}
                 <!-- /.box-header -->
                 <div class="box-body">
-                <table class="table table-bordered">
-                     <tr>
-					 <th style="width: 10px"></th>
-                     <th>Notes</th>
-                     <th>Date</th>
-                     <th>Communication Method</th>
-                     <th>Next Action </th>
-                     <th>Follow up Date</th>
-                     <th style="width: 40px"></th>
-                     </tr>
-                    @if (count($contactnotes) > 0)
-                        @foreach($contactnotes as $notes)
-                         <tr id="notess-list">
-                          <td ><img src="{{ (!empty($notes->profile_pic)) ? Storage::disk('local')->url("avatars/$notes->profile_pic") : (($notes->gender === 0) ? $f_silhouette : $m_silhouette) }}" width="30" height="30" alt="" ></td>
-                          <td>{{ (!empty($notes->notes)) ?  $notes->notes : ''}} </td>
-                          <td>{{ !empty($notes->date) ? date('d M Y ', $notes->date) : '' }}</td>
-                          <td>{{ !empty($notes->time) ? date('d M Y ', $notes->time) : '' }}</td>
-                           <!-- <td>{{ (!empty($notes->next_action)) ?  $notes->next_action : ''}} </td> -->
-                           <td>{{ (!empty($notes->next_action)) ?  $notesStatus[$notes->next_action] : ''}} </td>
-                          <td>{{ !empty($notes->follow_date) ? date('d M Y ', $notes->follow_date) : '' }}</td>
-                          <td><button type="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $notes->id }}" data-originator_type="{{ $notes->originator_type }}" data-company_id="{{$notes->company_id}}" data-hr_person_id="{{$notes->hr_person_id}}" data-employee_id="{{$notes->employee_id}}"
-                            ><i class="fa fa-pencil-square-o"></i> Edit</button></td>
-                                </tr>
-                                   @endforeach
-                               @else
-                               <tr id="categories-list">
-                        <td colspan="7">
-                        <div class="alert alert-danger alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                             No Notes to display, Begin by Adding Notes.
-                        </div>
-                        </td>
-                        </tr>
-                           @endif
-                            </table>
+					<table class="table table-bordered">
+						 <tr>
+						 <th style="width: 10px"></th>
+						 <th>Notes</th>
+						 <th>Date</th>
+						 <th>Communication Method</th>
+						 <th>Next Action </th>
+						 <th>Follow up Date</th>
+						 <th style="width: 40px"></th>
+						 </tr>
+						@if (count($contactnotes) > 0)
+							@foreach($contactnotes as $notes)
+							 <tr id="notess-list">
+							  <td ><img src="{{ (!empty($notes->profile_pic)) ? Storage::disk('local')->url("avatars/$notes->profile_pic") : (($notes->gender === 0) ? $f_silhouette : $m_silhouette) }}" width="30" height="30" alt="" ></td>
+							  <td>{{ (!empty($notes->notes)) ?  $notes->notes : ''}} </td>
+							  <td>{{ !empty($notes->date) ? date('d M Y ', $notes->date) : '' }}</td>
+							  <td>{{ !empty($notes->time) ? date('d M Y ', $notes->time) : '' }}</td>
+							   <!-- <td>{{ (!empty($notes->next_action)) ?  $notes->next_action : ''}} </td> -->
+							   <td>{{ (!empty($notes->next_action)) ?  $notesStatus[$notes->next_action] : ''}} </td>
+							  <td>{{ !empty($notes->follow_date) ? date('d M Y ', $notes->follow_date) : '' }}</td>
+							  <td><button type="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" data-target="#edit-category-modal" data-id="{{ $notes->id }}" data-originator_type="{{ $notes->originator_type }}" data-company_id="{{$notes->company_id}}" data-hr_person_id="{{$notes->hr_person_id}}" data-employee_id="{{$notes->employee_id}}"
+								><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+									</tr>
+									   @endforeach
+								   @else
+								   <tr id="categories-list">
+							<td colspan="7">
+							<div class="alert alert-danger alert-dismissable">
+								<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+								 No Notes to display, Begin by Adding Notes.
+							</div>
+							</td>
+							</tr>
+							   @endif
+					</table>
                         </div>
                                    <!-- /.box-body -->
                     <div class="box-footer">
@@ -194,7 +194,7 @@
             });
 
               var doc_typeID;
-            $('#edit-category-modal').on('show.bs.modal', function (e) {
+            $('#edit-note-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
                 doc_typeID = btnEdit.data('id');
@@ -209,7 +209,7 @@
             $('#edit_category').on('click', function () {
                 var strUrl = '/Product/category_edit/' + doc_typeID;
                 // Product/category_edit/{Category}
-                var modalID = 'edit-category-modal';
+                var modalID = 'edit-note-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     description: $('#'+modalID).find('#description').val(),

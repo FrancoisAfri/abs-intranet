@@ -13,10 +13,12 @@ use App\contactsCompanydocs;
 use App\CompanyIdentity;
 use App\contactsClientdocuments;
 use App\User;
+use App\ClientInduction;
 Use App\contacts_note;
 use App\ContactPerson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
+use App\Http\Controllers\TaskManagementController;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -199,6 +201,7 @@ class ContactCompaniesController extends Controller
             ->where('contacts_communications.company_id',  $company->id)
             ->orderBy('contacts_communications.communication_date','contacts_communications.company_id')
             ->get();
+		// task
 		$tasks = DB::table('employee_tasks')
 			->select('employee_tasks.id as task_id','employee_tasks.employee_id'
 			,'employee_tasks.start_date'
@@ -211,10 +214,48 @@ class ContactCompaniesController extends Controller
 			->where('employee_tasks.client_id', $company->id)
 			->orderBy('employee_tasks.due_date')
 			->get();
-        $data['contactsCommunications'] = $contactsCommunications;
+		// notes
+		$employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $contactPeople = ContactPerson::where('company_id', $company->id)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+        $contactnotes = DB::table('contacts_notes')
+            ->select('contacts_notes.*', 'hr_people.gender as gender'
+			, 'hr_people.profile_pic as profile_pic'
+			, 'contacts_contacts.first_name as con_first_name'
+			, 'contacts_contacts.surname as con_surname'
+			,'hr_people.first_name as hr_first_name','hr_people.surname as hr_surname'
+			)
+            ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
+			->leftJoin('hr_people', 'contacts_notes.employee_id', '=', 'hr_people.id')	
+            ->where('contacts_notes.company_id', $company->id)
+            ->orderBy('contacts_notes.id')
+            ->get();
+			//return $contactnotes;
+		// Client induction
+		 $ClientInduction = ClientInduction::
+            select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
+			->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
+			->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
+			->where('client_inductions.company_id', $company->id)
+			->get();
+		
+        $notesStatus = array(1 => 'Supplier', 2 => 'Operations', 3 => 'Finance', 4 => 'After Hours', 5 => 'Sales', 6 => 'Client');
+        $communicationmethod = array(1 => 'Telephone', 2 => 'Meeting/Interview', 3 => 'Email', 4 => 'Fax', 4 => 'SMS');
+		$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+        
+		$data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $data['f_silhouette'] = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+		$data['contactsCommunications'] = $contactsCommunications;
         $data['communicationStatus'] = $communicationStatus;
         $data['tasks'] = $tasks;
-		
+        $data['taskStatus'] = $taskStatus;
+		$data['notesStatus'] = $notesStatus;
+        $data['communicationmethod'] = $communicationmethod;
+        $data['ClientInduction'] = $ClientInduction;
+        $data['contactnotes'] = $contactnotes;
+        $data['companies'] = $companies;
+        $data['contactPeople'] = $contactPeople;
+        $data['employees'] = $employees;
         $data['page_title'] = "CRM";
         $data['page_description'] = "View Company Details";
         $data['breadcrumb'] = [
@@ -235,7 +276,6 @@ class ContactCompaniesController extends Controller
 
     public function notes(ContactCompany $company)
     {
-        //die('dd/');
         $companyID = $company->id;
         $employees = HRPerson::where('status', 1)->get()->load(['leave_types' => function ($query) {
             $query->orderBy('name', 'asc');
@@ -279,11 +319,19 @@ class ContactCompaniesController extends Controller
     ####
     public function addnote(Request $request)
     {
-        $this->validate($request, [
-            // 'hr_id' => 'required',
-            // 'number_of_days' => 'required',
+        $this->validate($request,[
+            'date' => 'required',
+            'time' => 'required',
+            'notes' => 'required',
+            'communication_method' => 'required',
+            'employee_id' => 'required',
+            'hr_person_id' => 'required',
         ]);
 
+		/*$this->validate($request, [
+            // 'date' => 'required',
+            'invoice_number' => 'required|unique:vehicle_serviceDetails,invoice_number',
+        ]);*/
         $noteData = $request->all();
         unset($noteData['_token']);
 
@@ -293,28 +341,58 @@ class ContactCompaniesController extends Controller
         $time = str_replace('/', '-', $noteData['time']);
         $time = strtotime($time);
 
-        $follow_date = str_replace('/', '-', $noteData['follow_date']);
-        $follow_date = strtotime($follow_date);
-
         $contactsnote = new contacts_note();
-        $contactsnote->originator_type = $noteData['originator_type'];
-        $contactsnote->company_id = $noteData['company_id'];
-        $contactsnote->hr_person_id = $noteData['hr_person_id'];
-        $contactsnote->employee_id = $noteData['employee_id'];
+        $contactsnote->originator_type = !empty($noteData['originator_type']) ? $noteData['originator_type'] : 0;
+        $contactsnote->company_id = !empty($noteData['company_id']) ? $noteData['company_id'] : 0;
+        $contactsnote->hr_person_id = !empty($noteData['hr_person_id']) ? $noteData['hr_person_id'] : 0;
+        $contactsnote->employee_id = !empty($noteData['employee_id']) ? $noteData['employee_id'] : 0;
         $contactsnote->date = $date;
         $contactsnote->time = $time;
-        $contactsnote->communication_method = $noteData['communication_method'];
-        $contactsnote->rensponse = $noteData['rensponse_type'];
-        $contactsnote->notes = $noteData['notes'];
-        $contactsnote->next_action = $noteData['next_action'];
-        $contactsnote->follow_date = $follow_date;
+        $contactsnote->communication_method = !empty($noteData['communication_method']) ? $noteData['communication_method'] : 0;
+        $contactsnote->rensponse = !empty($noteData['rensponse_type']) ? $noteData['rensponse_type'] : 0;
+        $contactsnote->notes = !empty($noteData['notes']) ? $noteData['notes'] : 0;
+        $contactsnote->next_action = !empty($noteData['next_action']) ? $noteData['next_action'] : 0;
         $contactsnote->save();
 
-
-        //AuditReportsController::store('Leave custom', 'leave custom Added', "leave type Name: $leave_customs->hr_id", 0);
+        AuditReportsController::store('CRM', 'Note Added', "Added by User", 0);
         return response()->json();
     }
+	
+	// update note
+	public function updateNote(Request $request, contacts_note $note)
+    {
+        //Validation
+        $this->validate($request, [
+            'date_update' => 'required',
+            'time_update' => 'required',
+            'notes_update' => 'required',
+            'communication_method_update' => 'required',
+            'employee_id_update' => 'required',
+            'hr_person_id_update' => 'required',
+        ]);
+        $noteData = $request->all();
+        unset($noteData['_token']);
+		
+		$date = str_replace('/', '-', $noteData['date_update']);
+        $date = strtotime($date);
 
+        $time = str_replace('/', '-', $noteData['time_update']);
+        $time = strtotime($time);
+		
+        $note->originator_type = !empty($noteData['originator_type_update']) ? $noteData['originator_type_update'] : 0;
+        $note->hr_person_id = !empty($noteData['hr_person_id_update']) ? $noteData['hr_person_id_update'] : 0;
+        $note->employee_id = !empty($noteData['employee_id_update']) ? $noteData['employee_id_update'] : 0;
+        $note->date = $date;
+        $note->time = $time;
+        $note->communication_method = !empty($noteData['communication_method_update']) ? $noteData['communication_method_update'] : 0;
+        $note->rensponse = !empty($noteData['rensponse_type_update']) ? $noteData['rensponse_type_update'] : 0;
+        $note->notes = !empty($noteData['notes_update']) ? $noteData['notes_update'] : 0;
+        $note->next_action = !empty($noteData['next_action_update']) ? $noteData['next_action_update'] : 0;
+        $note->update();
+
+        AuditReportsController::store('CRM', 'Note Edited', "Added by User", 0);
+        return response()->json();
+    }
     /**
      * Show the form for editing the specified resource.
      *
@@ -1390,5 +1468,34 @@ class ContactCompaniesController extends Controller
        Document description: $contactsCompanydocs[description], Document expiry date: $Expirydatet, Company Name : $companyDetails->name ", 0);
         return response()->json();
     }
-
+	public function saveTask(Request $request, ContactCompany $company)
+    {
+        $this->validate($request, [       
+            'description' => 'required',      
+            'due_date' => 'required',      
+            'responsible_person' => 'required',   
+            'due_time' => 'required',     
+            //'meeting_id' => 'bail|required|integer|min:1',        
+        ]);
+		$taskData = $request->all();
+		unset($taskData['_token']);
+		if (!empty($taskData['due_date'])) {
+            $taskData['due_date'] = str_replace('/', '-', $taskData['due_date']);
+            $duedate = strtotime($taskData['due_date']);
+        }
+        if (!empty($taskData['due_time'])) {
+            $taskData['due_time'] = str_replace('/', '-', $taskData['due_time']);
+            $duetime = strtotime($taskData['due_time']);
+        }
+        
+        $startDate = strtotime(date('Y-m-d'));
+        $employeeID = $taskData['responsible_person'];
+        $escalationPerson = HRPerson::where('id', $employeeID)->first();
+        $managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;
+        TaskManagementController::store($taskData['description'],$duedate,$startDate,$managerID,$employeeID,2
+                    ,0,0,0,0,0,0,0,0,$company->id,0,0,0,$duetime);
+        $description = $request->input('description');
+        AuditReportsController::store('CMR', 'CRM Meeting Task Added', "Added by User", 0);
+        return response()->json(['new_task' => $description], 200);
+    }
 }

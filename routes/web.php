@@ -236,9 +236,10 @@ Route::post('contacts/company/{company}/reject', 'ContactCompaniesController@rej
 Route::post('contacts/company/{company}/approve', 'ContactCompaniesController@approve');
 Route::get('contacts/company/{company}/edit', 'ContactCompaniesController@editCompany');
 Route::get('contacts/company/{company}/actdeact', 'ContactCompaniesController@actCompany');
-Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
+//Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
 Route::patch('contacts/company/{company}', 'ContactCompaniesController@updateCompany');
 Route::post('contacts/company/addnotes', 'ContactCompaniesController@addnote');
+Route::patch('contacts/company/updatenotes/{note}', 'ContactCompaniesController@updateNote');
 //#CompanyNotes
 Route::get('contacts/company/{company}/notes', 'ContactCompaniesController@notes');
 
@@ -261,6 +262,7 @@ Route::post('reports/contact_note/meetingreport', 'ContactCompaniesController@pr
 Route::post('reports/contact_note/client_report', 'ContactCompaniesController@printclientReport');
 Route::post('reports/contact_com_print', 'ContactCompaniesController@printcommunicationsReport');
 Route::post('reports/contact_docs_print', 'ContactCompaniesController@printDocsReport');
+Route::post('/crm/add_task/{company}', 'ContactCompaniesController@saveTask');
 
 Route::get('contacts/company_search', 'CompanySearchController@index');
 Route::post('contacts/company_search_results', 'CompanySearchController@companySearch');

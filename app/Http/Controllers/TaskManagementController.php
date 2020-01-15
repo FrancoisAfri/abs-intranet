@@ -270,11 +270,24 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->due_time = $duetime;
 		//Save task
         $EmployeeTasks->save();
+		
+		//Upload task doc
+        if ($request->hasFile('document')) {
+            $fileExt = $request->file('document')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'xlsx', 'doc', 'xltm']) && $request->file('document')->isValid()) {
+                $fileName = time() . "_task_added_doc_" . '.' . $fileExt;
+                $request->file('document')->storeAs('tasks', $fileName);
+                //Update file name in the employee task table
+				$EmployeeTasks->document_on_task = $fileName;
+				$EmployeeTasks->update();
+            }
+        }
 		if (empty($inductionID))
 		{
 			# Send Email to employee
+			$sentBy = $user = Auth::user()->load('person');
 			$employee = HRPerson::where('id', $employeeID)->first();
-			Mail::to($employee->email)->send(new EmployeesTasksMail($employee));
+			Mail::to($employee->email)->send(new EmployeesTasksMail($employee, $EmployeeTasks->description,$sentBy->first_name." ".$sentBy->surname));
 		}
 		AuditReportsController::store('Task Management', 'Task Successfully Added', "Added by user", 0);
 		#send email to manager if its an helpdesk task

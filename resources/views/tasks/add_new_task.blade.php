@@ -86,7 +86,6 @@
 								</div>
 							</div>
 						</div>
-						
 						<div class="form-group {{ $errors->has('employee_id') ? ' has-error' : '' }}">
 							<label for="employee_id" class="col-sm-3 control-label">Employee Person</label>
 							<div class="col-sm-9">
