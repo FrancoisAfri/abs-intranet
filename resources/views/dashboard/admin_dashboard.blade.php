@@ -73,6 +73,123 @@
 				</div>
 			</div>
 		@endif
+		@if($activeModules->where('code_name', 'appraisal')->first())
+            <div class="col-md-12">
+				<div class="box box-primary">
+					<div class="box-header">
+						<h3 class="box-title"><i class="fa fa-hourglass"></i> Employee Monthly Appraisal</h3>
+						<div class="box-tools pull-right">
+							<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+							<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+						</div>
+					</div>
+					<!-- Employee Monthly performance Widget-->
+					<!-- /.box-header -->
+					<div class="box-body">
+						<div class="row">
+							<div class="col-md-8">
+								<p class="text-center">
+									<strong>My Performance For {{ date('Y') }}</strong>
+								</p>
+								<div class="chart">
+									<!-- Sales Chart Canvas-->
+									<canvas id="empMonthlyPerformanceChart" style="height: 220px;"></canvas>
+								</div>
+								<!-- /.chart-responsive -->
+							</div>
+							<!-- Appraised months list col -->
+							<div class="col-md-4">
+								<p class="text-center">
+									<strong>Appraised Months List</strong>
+								</p>
+								<div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
+									<ul class="nav nav-pills nav-stacked" id="emp-appraised-month-list"></ul>
+								</div>
+							</div>
+						</div>
+						<!-- /.row -->
+					</div>
+				<!-- Loading wheel overlay -->
+				<div class="overlay" id="loading_overlay_emp_monthly_appraisal">
+					<i class="fa fa-refresh fa-spin"></i>
+				</div>
+				</div>
+                <!-- /.box Employee Monthly performance Widget -->
+            </div>
+		@endif
+		@if($activeModules->where('code_name', 'appraisal')->first())
+            @if($canViewCPWidget)
+            <div class="col-md-12 box box-default">
+				<div class="box-header">
+					<h3 class="box-title"><i class="fa fa-hourglass"></i> Company Appraisal</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+					</div>
+				</div>
+                <!-- company performance Widget -->
+				<!-- /.box-header -->
+				<div class="box-body">
+					<div class="row" id="myStaffPerformanceRankingRow" hidden>
+						<div class="col-md-12">
+							<p class="text-center"><strong>My Staff Performance Ranking
+									For {{ date('Y') }}</strong></p>
+							<div class="no-padding" style="max-height: 420px; overflow-y: scroll;">
+								<ul class="nav nav-pills nav-stacked products-list product-list-in-box"
+									id="my-staff-ranking-list">
+								</ul>
+							</div>
+						</div>
+					</div>
+					<div class="row" id="topLvlDivGraphAndRankingRow">
+						<!-- Chart col -->
+						<div class="col-md-8">
+							<p class="text-center">
+								<strong>
+									@if($isSuperuser)
+										{{ $topGroupLvl->plural_name }}
+									@elseif($isDivHead)
+										{{ $managedDivsLevel->plural_name }}
+									@endif
+									Performance For {{ date('Y') }}
+								</strong>
+							</p>
+							<div class="chart">
+								<!-- Sales Chart Canvas-->
+								<canvas id="divisionsPerformanceChart" style="height: 220px;"></canvas>
+							</div>
+							<!-- /.chart-responsive -->
+						</div>
+						<!-- Ranking col -->
+						<div class="col-md-4">
+							<p class="text-center">
+								<strong>Ranking</strong>
+							</p>
+							<div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
+								<ul class="nav nav-pills nav-stacked" id="ranking-list">
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- Loading wheel overlay -->
+				<div class="overlay" id="lo_company_appraisal">
+					<i class="fa fa-refresh fa-spin"></i>
+				</div>
+				<!-- Include division performance modal -->
+				@include('dashboard.partials.division_4_performance_modal')
+				@include('dashboard.partials.division_3_performance_modal')
+				@include('dashboard.partials.division_2_performance_modal')
+				@include('dashboard.partials.division_1_performance_modal')
+				<!-- Include emp list performance modal -->
+				@include('dashboard.partials.emp_list_performance_modal')
+				<!-- Include emp year performance modal -->
+				@include('dashboard.partials.emp_year_performance_modal')
+            </div>
+			<!-- /.box company performance Widget -->
+            @endif
+		@endif
 		@if($activeModules->where('code_name', 'leave')->first())
             <div class="col-md-12 box box-default collapsed-box">
 				<div class="box-header">
@@ -332,121 +449,6 @@
 				</div>
 				<!-- /.box-body -->
             </div>
-		@endif	
-		@if($activeModules->where('code_name', 'appraisal')->first())
-            <div class="col-md-12 box box-default collapsed-box">
-				<div class="box-header">
-					<h3 class="box-title"><i class="fa fa-hourglass"></i> Employee Monthly Appraisal</h3>
-					<div class="box-tools pull-right">
-						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-					</div>
-				</div>
-                <!-- Employee Monthly performance Widget-->
-				<!-- /.box-header -->
-				<div class="box-body">
-					<div class="row">
-						<div class="col-md-8">
-							<p class="text-center">
-								<strong>My Performance For {{ date('Y') }}</strong>
-							</p>
-							<div class="chart">
-								<!-- Sales Chart Canvas-->
-								<canvas id="empMonthlyPerformanceChart" style="height: 220px;"></canvas>
-							</div>
-							<!-- /.chart-responsive -->
-						</div>
-						<!-- Appraised months list col -->
-						<div class="col-md-4">
-							<p class="text-center">
-								<strong>Appraised Months List</strong>
-							</p>
-							<div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
-								<ul class="nav nav-pills nav-stacked" id="emp-appraised-month-list"></ul>
-							</div>
-						</div>
-					</div>
-					<!-- /.row -->
-				</div>
-				<!-- Loading wheel overlay -->
-				<div class="overlay" id="loading_overlay_emp_monthly_appraisal">
-					<i class="fa fa-refresh fa-spin"></i>
-				</div>
-                <!-- /.box Employee Monthly performance Widget -->
-            </div>
-		@endif
-		@if($activeModules->where('code_name', 'appraisal')->first())
-            @if($canViewCPWidget)
-            <div class="col-md-12 box box-default collapsed-box">
-				<div class="box-header">
-					<h3 class="box-title"><i class="fa fa-hourglass"></i> Company Appraisal</h3>
-					<div class="box-tools pull-right">
-						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-					</div>
-				</div>
-                <!-- company performance Widget -->
-				<!-- /.box-header -->
-				<div class="box-body">
-					<div class="row" id="myStaffPerformanceRankingRow" hidden>
-						<div class="col-md-12">
-							<p class="text-center"><strong>My Staff Performance Ranking
-									For {{ date('Y') }}</strong></p>
-							<div class="no-padding" style="max-height: 420px; overflow-y: scroll;">
-								<ul class="nav nav-pills nav-stacked products-list product-list-in-box"
-									id="my-staff-ranking-list">
-								</ul>
-							</div>
-						</div>
-					</div>
-					<div class="row" id="topLvlDivGraphAndRankingRow">
-						<!-- Chart col -->
-						<div class="col-md-8">
-							<p class="text-center">
-								<strong>
-									@if($isSuperuser)
-										{{ $topGroupLvl->plural_name }}
-									@elseif($isDivHead)
-										{{ $managedDivsLevel->plural_name }}
-									@endif
-									Performance For {{ date('Y') }}
-								</strong>
-							</p>
-							<div class="chart">
-								<!-- Sales Chart Canvas-->
-								<canvas id="divisionsPerformanceChart" style="height: 220px;"></canvas>
-							</div>
-							<!-- /.chart-responsive -->
-						</div>
-						<!-- Ranking col -->
-						<div class="col-md-4">
-							<p class="text-center">
-								<strong>Ranking</strong>
-							</p>
-							<div class="no-padding" style="max-height: 220px; overflow-y: scroll;">
-								<ul class="nav nav-pills nav-stacked" id="ranking-list">
-								</ul>
-							</div>
-						</div>
-					</div>
-					<!-- /.row -->
-				</div>
-				<!-- Loading wheel overlay -->
-				<div class="overlay" id="lo_company_appraisal">
-					<i class="fa fa-refresh fa-spin"></i>
-				</div>
-				<!-- Include division performance modal -->
-				@include('dashboard.partials.division_4_performance_modal')
-				@include('dashboard.partials.division_3_performance_modal')
-				@include('dashboard.partials.division_2_performance_modal')
-				@include('dashboard.partials.division_1_performance_modal')
-				<!-- Include emp list performance modal -->
-				@include('dashboard.partials.emp_list_performance_modal')
-				<!-- Include emp year performance modal -->
-				@include('dashboard.partials.emp_year_performance_modal')
-            </div>
-			<!-- /.box company performance Widget -->
-            @endif
 		@endif
 		@if($activeModules->where('code_name', 'appraisal')->first())
 			@if($canViewEmpRankWidget)
