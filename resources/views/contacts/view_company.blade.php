@@ -495,36 +495,36 @@
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body no-padding no-margin">
-                <div style="overflow-X:auto; margin-right: 10px; max-height: 250px;">
-                   <table class="table table-striped" >
-					<tr>
-						<th>#</th>
-						<th>Induction Name</th>
-						<th>KAM </th>
-						<th>Date Created</th>
-						<th style="text-align: center;"><i class="fa fa-info-circle"></i> Status</th>
-					</tr>
-					@if (!empty($ClientInduction))
-					   @foreach($ClientInduction as $induction)
+					<div style="overflow-X:auto; margin-right: 10px; max-height: 250px;">
+						<table class="table table-striped" >
 							<tr>
-								<td><a href="{{ '/induction/' . $induction->id . '/view' }}" class="product-title" target="_blank">View</a></td>
-									
-								<td>{{ (!empty($induction->induction_title)) ?  $induction->induction_title : ''}}</td>
-								<td>{{ !empty($induction->firstname) && !empty($induction->surname) ? $induction->firstname.' '.$induction->surname : '' }}</td>
-								<td>{{ !empty($induction->created_at) ? $induction->created_at : '' }}</td>
-								<td>
-									<div class="progress xs">
-										<div class="progress-bar progress-bar-warning  progress-bar-striped" role="progressbar"
-										aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{ $induction->completed_task == 0 ? 0 : ($induction->completed_task/$induction->total_task * 100)  }}%"></div></div>
-										{{(round($induction->completed_task == 0 ? 0 : ($induction->completed_task/$induction->total_task * 100)))}}% 
-								</td>
+								<th>#</th>
+								<th>Induction Name</th>
+								<th>KAM </th>
+								<th>Date Created</th>
+								<th style="text-align: center;"><i class="fa fa-info-circle"></i> Status</th>
 							</tr>
-					   @endforeach
-				   @endif
-				</table>
-                </div>
+							@if (!empty($ClientInduction))
+							   @foreach($ClientInduction as $induction)
+									<tr>
+										<td><a href="{{ '/induction/' . $induction->id . '/view' }}" class="product-title" target="_blank">View</a></td>
+											
+										<td>{{ (!empty($induction->induction_title)) ?  $induction->induction_title : ''}}</td>
+										<td>{{ !empty($induction->firstname) && !empty($induction->surname) ? $induction->firstname.' '.$induction->surname : '' }}</td>
+										<td>{{ !empty($induction->created_at) ? $induction->created_at : '' }}</td>
+										<td>
+											<div class="progress xs">
+												<div class="progress-bar progress-bar-warning  progress-bar-striped" role="progressbar"
+												aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width:{{ $induction->completed_task == 0 ? 0 : ($induction->completed_task/$induction->total_task * 100)  }}%"></div></div>
+												{{(round($induction->completed_task == 0 ? 0 : ($induction->completed_task/$induction->total_task * 100)))}}% 
+										</td>
+									</tr>
+							   @endforeach
+						   @endif
+						</table>
+					</div>
                 <!-- /.box-body -->
-            </div>
+				</div>
             </div>
             <!-- /.box -->
         </div>

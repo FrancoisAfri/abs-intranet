@@ -1,15 +1,11 @@
 <!-- /Tasks List -->
-<div class="box box-info">
-    <div class="box-header with-border">
-        <i class="ion ion-clipboard"></i>
-        <h3 class="box-title">Tasks List<!-- <p id="stopWatchDisplay" style="font-size:18px; font-weight:bold; font-family:cursive;"></p>--></h3>
-
-        <div class="box-tools pull-right">
-            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-            </button>
-            <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-        </div>
-    </div>
+	<div class="box-header">
+		<h3 class="box-title"><i class="fa fa-hourglass"></i> Tasks List</h3>
+		<div class="box-tools pull-right">
+			<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+			<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+		</div>
+	</div>
     <!-- /.box-header -->
     <div class="box-body" style="max-height: 274px; overflow-y: scroll;">
         <div class="table-responsive">
@@ -86,5 +82,4 @@
     <div class="box-footer clearfix">
     </div>
     <!-- /.box-footer -->
-</div>
 <!-- /Tasks List End -->
