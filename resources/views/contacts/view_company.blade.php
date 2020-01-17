@@ -46,7 +46,6 @@
                         @endif
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="name" class="col-sm-2 control-label">Company Name</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -58,7 +57,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('cp_home_number') ? ' has-error' : '' }}">
                             <label for="cp_home_number" class="col-sm-2 control-label">Office Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -70,7 +68,6 @@
                         </div>
 						<div class="form-group{{ $errors->has('fax_number') ? ' has-error' : '' }}">
 							<label for="fax_number" class="col-sm-2 control-label">Fax Number</label>
-
 							<div class="col-sm-10">
 								<div class="input-group">
 									<div class="input-group-addon">
@@ -82,7 +79,6 @@
 						</div>
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-sm-2 control-label">Email</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -95,7 +91,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('phys_address') ? ' has-error' : '' }}">
                             <label for="phys_address" class="col-sm-2 control-label">Street Address</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -107,7 +102,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('phys_city') ? ' has-error' : '' }}">
                             <label for="phys_city" class="col-sm-2 control-label">City</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -119,7 +113,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('phys_province') ? ' has-error' : '' }}">
                             <label for="phys_province" class="col-sm-2 control-label">Province</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -131,7 +124,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('phys_postal_code') ? ' has-error' : '' }}">
                             <label for="phys_postal_code" class="col-sm-2 control-label">Postal Code</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -143,7 +135,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('registration_number') ? ' has-error' : '' }}">
                             <label for="registration_number" class="col-sm-2 control-label">Registration Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -155,7 +146,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('vat_number') ? ' has-error' : '' }}">
                             <label for="vat_number" class="col-sm-2 control-label">VAT Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -167,7 +157,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('tax_number') ? ' has-error' : '' }}">
                             <label for="tax_number" class="col-sm-2 control-label">Tax Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -179,7 +168,6 @@
                         </div>
 						<div class="form-group{{ $errors->has('account_number') ? ' has-error' : '' }}">
                             <label for="account_number" class="col-sm-2 control-label">Account Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -191,7 +179,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('bee_score') ? ' has-error' : '' }}">
                             <label for="bee_score" class="col-sm-2 control-label">BEE Score</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -200,11 +187,9 @@
                                     <input type="text" class="form-control" id="bee_score" name="bee_score" value="{{ !empty($company->bee_score) ? $company->bee_score : '' }}" placeholder="BEE Score" readonly>
                                 </div>
                             </div>
-                        </div>  
-
+                        </div>
                         <div class="form-group {{ $errors->has('status') ? ' has-error' : '' }}">
                             <label for="status" class="col-sm-2 control-label">Status</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -219,10 +204,8 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group{{ $errors->has('estimated_spent') ? ' has-error' : '' }}">
                             <label for="estimated_spent" class="col-sm-2 control-label">Estimated Expenditure</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -234,7 +217,6 @@
                         </div>
                          <div class="form-group{{ $errors->has('domain_name') ? ' has-error' : '' }}">
                             <label for="domain_name" class="col-sm-2 control-label">Domain Name</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -246,7 +228,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('bee_certificate_doc') ? ' has-error' : '' }}">
                             <label for="bee_certificate_doc" class="col-sm-2 control-label">BEE Certificate</label>
-
                             <div class="col-sm-10">
                                 @if(!empty($bee_certificate_doc))
                                     <a class="btn btn-default btn-flat btn-block" href="{{ $bee_certificate_doc }}" target="_blank"><i class="fa fa-file-pdf-o"></i> Click Here To View The Document</a>
@@ -257,7 +238,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('comp_reg_doc') ? ' has-error' : '' }}">
                             <label for="comp_reg_doc" class="col-sm-2 control-label">Registration Document</label>
-
                             <div class="col-sm-10">
                                 @if(!empty($comp_reg_doc))
                                     <a class="btn btn-default btn-flat btn-block" href="{{ $comp_reg_doc }}" target="_blank"><i class="fa fa-file-pdf-o"></i> Click Here To View The Document</a>
@@ -268,13 +248,23 @@
                         </div>
 						<div class="form-group{{ $errors->has('dept_id') ? ' has-error' : '' }}">
                             <label for="dept_id" class="col-sm-2 control-label">{{$dept->name}}</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-home"></i>
                                     </div>
                                     <input type="text" class="form-control" id="dept_id" name="dept_id" value="{{ !empty($deparments->name) ? $deparments->name : '' }}" placeholder="Department" readonly>
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group{{ $errors->has('account_owners') ? ' has-error' : '' }}">
+                            <label for="account_owners" class="col-sm-2 control-label">Account Owner</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-home"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="account_owners" name="account_owners" value="{{ !empty($company->accountManager->first_name) && !empty($company->accountManager->surname) ? $company->accountManager->first_name." ".$company->accountManager->surname : '' }}" placeholder="Account Owner" readonly>
                                 </div>
                             </div>
                         </div>
@@ -291,7 +281,6 @@
                 </form>
             </div>
             <!-- /.box -->
-
             <!-- Company's contacts box -->
             <div class="box box-default collapsed-box">
                 <div class="box-header with-border">

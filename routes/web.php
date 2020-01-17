@@ -1099,6 +1099,7 @@ Route::get('crm/invoice/mail/{quotation}', 'CRMInvoiceController@emailInvoice');
 Route::get('crm/invoice/mail/{quotation}/{invoice}', 'CRMInvoiceController@emailMonthlyInvoice');
 Route::post('crm/capture-payment/{quotation}/{invoice}', 'CRMAccountController@capturePayment');
 Route::post('crm/accounts/search', 'CRMSetupController@searchResults');
+Route::get('crm/search_account', 'CRMAccountController@searchAccount');
 
 // CRM Reports
 Route::get('crm/reports', 'CRMAccountController@crmreportIndex');

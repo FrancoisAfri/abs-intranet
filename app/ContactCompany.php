@@ -16,7 +16,7 @@ class ContactCompany extends Model
 		'bee_score', 'bee_certificate_doc', 'comp_reg_doc', 'sector', 'phone_number',
 		'fax_number', 'email', 'phys_address', 'phys_city', 'phys_postal_code',
         'phys_province', 'postal_address', 'account_number','estimated_spent','domain_name'
-		,'dept_id'
+		,'dept_id','account_owners','live_regret'
     ];
 
     /**
@@ -27,7 +27,11 @@ class ContactCompany extends Model
     public function employees() {
         return $this->hasMany(ContactPerson::class, 'company_id');
     }
-
+	
+	//
+	public function accountManager() {
+        return $this->belongsTo(HRPerson::class, 'account_owners');
+    }
     /**
      * Relationship between Contact Company and Quotations
      *

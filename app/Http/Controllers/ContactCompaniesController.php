@@ -52,7 +52,8 @@ class ContactCompaniesController extends Controller
         $deparments = DB::table('division_level_fives')->where('active', 1)->orderBy('name', 'asc')->get();
         $dept = DB::table('division_setup')->where('level', 4)->first();
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
-        $data['page_title'] = "Contacts";
+        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+		$data['page_title'] = "Contacts";
         $data['page_description'] = "Add a New Company";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
@@ -61,6 +62,7 @@ class ContactCompaniesController extends Controller
         $data['provinces'] = $provinces;
         $data['deparments'] = $deparments;
         $data['dept'] = $dept;
+        $data['employees'] = $employees;
         $data['active_mod'] = 'Contacts';
         $data['active_rib'] = 'Add Company';
         return view('contacts.add_company')->with($data);
@@ -130,6 +132,7 @@ class ContactCompaniesController extends Controller
             'bee_score' => 'numeric',
             'email' => 'email',
             'phys_postal_code' => 'integer',
+            'account_owners' => 'integer',
         ]);
 
         $formData = $request->all();
@@ -181,7 +184,8 @@ class ContactCompaniesController extends Controller
      */
     public function showCompany(ContactCompany $company)
     {
-        $company->load('employees.company');
+        $company->load('employees.company','accountManager');
+
         $user = Auth::user()->load('person');
         $beeCertDoc = $company->bee_certificate_doc;
         $compRegDoc = $company->comp_reg_doc;
@@ -230,9 +234,9 @@ class ContactCompaniesController extends Controller
             ->where('contacts_notes.company_id', $company->id)
             ->orderBy('contacts_notes.id')
             ->get();
-			//return $contactnotes;
+		//return $contactnotes;
 		// Client induction
-		 $ClientInduction = ClientInduction::
+		$ClientInduction = ClientInduction::
             select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
 			->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
 			->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
@@ -404,12 +408,15 @@ class ContactCompaniesController extends Controller
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $dept = DB::table('division_setup')->where('level', 4)->first();
         $deparments = DB::table('division_level_fives')->where('active', 1)->orderBy('name', 'asc')->get();
-        $data['page_title'] = "Clients";
+        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+		$data['page_title'] = "Clients";
         $data['page_description'] = "Edit Company Details";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Edit company', 'active' => 1, 'is_module' => 0]
         ];
+		
+        $data['employees'] = $employees;
         $data['company'] = $company;
         $data['provinces'] = $provinces;
         $data['deparments'] = $deparments;
@@ -445,6 +452,7 @@ class ContactCompaniesController extends Controller
             'bee_score' => 'numeric',
             'email' => 'email',
             'phys_postal_code' => 'integer',
+            'account_owners' => 'integer',
         ]);
         $formData = $request->all();
         // return  $formData ;

@@ -18,7 +18,6 @@
                 <!-- form start -->
                 <form class="form-horizontal" method="POST" action="/contacts/company" enctype="multipart/form-data">
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
@@ -33,7 +32,6 @@
                         @endif
                         <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
                             <label for="name" class="col-sm-2 control-label">Company Name</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -45,7 +43,6 @@
                         </div>
 						<div class="form-group{{ $errors->has('trading_as') ? ' has-error' : '' }}">
 							<label for="name" class="col-sm-2 control-label">Trading As</label>
-
 							<div class="col-sm-10">
 								<div class="input-group">
 									<div class="input-group-addon">
@@ -57,7 +54,6 @@
 						</div>
                         <div class="form-group{{ $errors->has('cp_home_number') ? ' has-error' : '' }}">
                             <label for="cp_home_number" class="col-sm-2 control-label">Office Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -69,7 +65,6 @@
                         </div>
 						<div class="form-group{{ $errors->has('fax_number') ? ' has-error' : '' }}">
 							<label for="fax_number" class="col-sm-2 control-label">Fax Number</label>
-
 							<div class="col-sm-10">
 								<div class="input-group">
 									<div class="input-group-addon">
@@ -105,7 +100,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('phys_city') ? ' has-error' : '' }}">
                             <label for="phys_city" class="col-sm-2 control-label">City</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -117,7 +111,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('phys_province') ? ' has-error' : '' }}">
                             <label for="phys_province" class="col-sm-2 control-label">Province</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -134,7 +127,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('phys_postal_code') ? ' has-error' : '' }}">
                             <label for="phys_postal_code" class="col-sm-2 control-label">Postal Code</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -146,7 +138,6 @@
                         </div>
 						<div class="form-group{{ $errors->has('postal_address') ? ' has-error' : '' }}">
 							<label for="phys_address" class="col-sm-2 control-label">Postal Address</label>
-
 							<div class="col-sm-10">
 								<div class="input-group">
 									<div class="input-group-addon">
@@ -158,7 +149,6 @@
 						</div>
                         <div class="form-group{{ $errors->has('registration_number') ? ' has-error' : '' }}">
                             <label for="registration_number" class="col-sm-2 control-label">Registration Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -170,7 +160,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('vat_number') ? ' has-error' : '' }}">
                             <label for="vat_number" class="col-sm-2 control-label">VAT Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -182,7 +171,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('tax_number') ? ' has-error' : '' }}">
                             <label for="tax_number" class="col-sm-2 control-label">Tax Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -194,7 +182,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('bee_score') ? ' has-error' : '' }}">
                             <label for="bee_score" class="col-sm-2 control-label">BEE Score</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -206,7 +193,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('bee_certificate_doc') ? ' has-error' : '' }}">
                             <label for="bee_certificate_doc" class="col-sm-2 control-label">BEE Certificate</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -218,7 +204,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('comp_reg_doc') ? ' has-error' : '' }}">
                             <label for="comp_reg_doc" class="col-sm-2 control-label">Registration Document</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -231,7 +216,6 @@
                         <hr>
                         <div class="form-group{{ $errors->has('do') ? ' has-error' : '' }}">
                             <label for="domain_name" class="col-sm-2 control-label">Domain Name</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -254,10 +238,25 @@
 								</div>
 							</div>
 						</div>
+						<div class="form-group{{ $errors->has('account_owners') ? ' has-error' : '' }}">
+                            <label for="account_owners" class="col-sm-2 control-label">Account Owner</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-users"></i>
+                                    </div>
+                                    <select id="account_owners" name="account_owners" class="form-control select2">
+                                        <option value="">*** Select an Employee ***</option>
+                                        @foreach($employees as $employee)
+                                            <option value="{{ $employee->id }}" {{ (old('account_owners') == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name." ".$employee->surname }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
                          <!--
                         <div class="form-group{{ $errors->has('cp_cell_number') ? ' has-error' : '' }}">
                             <label for="phone_number" class="col-sm-2 control-label">Cell Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -269,7 +268,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('cp_home_number') ? ' has-error' : '' }}">
                             <label for="phone_number" class="col-sm-2 control-label">Home Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -281,7 +279,6 @@
                         </div>
 						<div class="form-group{{ $errors->has('account_number') ? ' has-error' : '' }}">
                             <label for="phone_number" class="col-sm-2 control-label">Account Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
