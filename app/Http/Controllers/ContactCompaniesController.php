@@ -15,6 +15,7 @@ use App\contactsClientdocuments;
 use App\User;
 use App\ClientInduction;
 Use App\contacts_note;
+Use App\CrmDocumentType;
 use App\ContactPerson;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
@@ -63,7 +64,7 @@ class ContactCompaniesController extends Controller
         $data['deparments'] = $deparments;
         $data['dept'] = $dept;
         $data['employees'] = $employees;
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Add Company';
         return view('contacts.add_company')->with($data);
     }
@@ -266,7 +267,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'View company', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Search Company';
         $data['company'] = $company;
         $data['bee_certificate_doc'] = (!empty($beeCertDoc)) ? Storage::disk('local')->url("company_docs/$beeCertDoc") : '';
@@ -314,7 +315,7 @@ class ContactCompaniesController extends Controller
         ];
         // $data['positions'] = $aPositions;
         $data['company'] = $company;
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Search Company';
         AuditReportsController::store('Notes', 'Notes Updated', " Updated By User", 0);
         return view('contacts.notes')->with($data);
@@ -421,8 +422,8 @@ class ContactCompaniesController extends Controller
         $data['provinces'] = $provinces;
         $data['deparments'] = $deparments;
         $data['dept'] = $dept;
-        $data['active_mod'] = 'clients';
-        $data['active_rib'] = 'add company';
+        $data['active_mod'] = 'CRM';
+        $data['active_rib'] = 'Search Company';
         return view('contacts.edit_company')->with($data);
     }
 
@@ -899,7 +900,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Contacts Notes Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Reports';
         AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
         return view('contacts.reports.contacts_note_report_result')->with($data);
@@ -957,7 +958,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
             ['title' => 'Contacts Meeting Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Reports';
         AuditReportsController::store('Contacts', 'View Contacts Search Results', "view Contacts Results", 0);
         return view('contacts.reports.meeting_minutes_report_result')->with($data);
@@ -996,10 +997,10 @@ class ContactCompaniesController extends Controller
         $data['page_title'] = "Minutes Neetingd Report";
         $data['page_description'] = "Minutes Neetings Report";
         $data['breadcrumb'] = [
-            ['title' => 'Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'CRM', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Minutes Neetings', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Reports';
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
@@ -1071,7 +1072,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Contacts Notes Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Reports';
         AuditReportsController::store('Contacts', 'View Contacts Communications Search Results', "view Contacts Results", 0);
         return view('contacts.reports.communications_report_result')->with($data);
@@ -1088,6 +1089,7 @@ class ContactCompaniesController extends Controller
         $communicationsdata = $request->all();
         unset($communicationsdata['_token']);
 
+        $docType = $communicationsdata['doc_type'];
         $companyID = $communicationsdata['company_id'];
         $personID = $communicationsdata['contact_id'];
         $datefrom = $communicationsdata['date_from'];
@@ -1099,8 +1101,10 @@ class ContactCompaniesController extends Controller
 		
         $companyDocs = DB::table('company_documents')
             ->select('company_documents.*',
-			'contact_companies.name as companyname')
+			'contact_companies.name as companyname'
+			,'crm_document_types.name as doc_name')
             ->leftJoin('contact_companies', 'contact_companies.id', '=', 'company_documents.company_id')
+            ->leftJoin('crm_document_types', 'company_documents.doc_type', '=', 'crm_document_types.id')
             ->where(function ($query) use ($Datefrom, $Dateto) {
                 if ($Datefrom > 0 && $Dateto > 0) {
                     $query->whereBetween('company_documents.expirydate', [$Datefrom, $Dateto]);
@@ -1111,7 +1115,12 @@ class ContactCompaniesController extends Controller
                     $query->where('company_documents.company_id', $companyID);
                 }
             })
-            ->orderBy('company_documents.company_id', 'company_documents.expirydate')
+			->where(function ($query) use ($docType) {
+                if (!empty($docType)) {
+                    $query->where('company_documents.doc_type', $docType);
+                }
+            })
+            ->orderBy('companyname', 'company_documents.expirydate')
             ->get();
 
 		$contactsDocs = DB::table('client_documents')
@@ -1132,6 +1141,7 @@ class ContactCompaniesController extends Controller
             ->orderBy('client_documents.expirydate')
             ->get();
         //return $contactsDocs;
+        $data['doc_type'] = $docType;
         $data['company_id'] = $companyID;
         $data['contact_id'] = $personID;
         $data['Datefrom'] = $Datefrom;
@@ -1144,7 +1154,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Contacts Document Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Reports';
         AuditReportsController::store('Contacts', 'View Contacts Expiring Document Search Results', "view Contacts Results", 0);
         return view('contacts.reports.doc_report')->with($data);
@@ -1155,7 +1165,8 @@ class ContactCompaniesController extends Controller
     {
         $communicationsdata = $request->all();
         unset($communicationsdata['_token']);
-
+		
+		$docType = $communicationsdata['doc_type'];
         $companyID = $communicationsdata['company_id'];
         $personID = $communicationsdata['contact_id'];
         $Datefrom = str_replace('/', '-', $communicationsdata['date_from']);
@@ -1166,7 +1177,8 @@ class ContactCompaniesController extends Controller
             ->select('company_documents.*',
 			'contact_companies.name as companyname')
             ->leftJoin('contact_companies', 'contact_companies.id', '=', 'company_documents.company_id')
-            ->where(function ($query) use ($Datefrom, $Dateto) {
+            ->leftJoin('crm_document_types', 'company_documents.doc_type', '=', 'crm_document_types.id')
+			->where(function ($query) use ($Datefrom, $Dateto) {
                 if ($Datefrom > 0 && $Dateto > 0) {
                     $query->whereBetween('company_documents.expirydate', [$Datefrom, $Dateto]);
                 }
@@ -1176,7 +1188,12 @@ class ContactCompaniesController extends Controller
                     $query->where('company_documents.company_id', $companyID);
                 }
             })
-            ->orderBy('company_documents.company_id', 'company_documents.expirydate')
+			->where(function ($query) use ($docType) {
+                if (!empty($docType)) {
+                    $query->where('company_documents.doc_type', $docType);
+                }
+            })
+            ->orderBy('companyname', 'company_documents.expirydate')
             ->get();
 
 		$contactsDocs = DB::table('client_documents')
@@ -1203,7 +1220,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Contacts Document Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Reports';
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
@@ -1236,7 +1253,8 @@ class ContactCompaniesController extends Controller
         $contactsCommunications = DB::table('contacts_communications')
             ->select('contacts_communications.*', 'contacts_contacts.first_name', 'contacts_contacts.surname', 
 			'hr_people.first_name as hr_firstname', 'hr_people.surname as hr_surname',
-			'contact_companies.name as companyname')
+			'contact_companies.name as companyname'
+			,'crm_document_types.name as doc_name')
             ->leftJoin('contact_companies', 'contact_companies.id', '=', 'contacts_communications.company_id')
             ->leftJoin('contacts_contacts', 'contacts_contacts.id', '=', 'contacts_communications.contact_id')
             ->leftJoin('hr_people', 'hr_people.id', '=', 'contacts_communications.sent_by')
@@ -1258,7 +1276,6 @@ class ContactCompaniesController extends Controller
             ->orderBy('contacts_communications.communication_date','contacts_communications.company_id')
             ->get();
 
-
         $data['contactsCommunications'] = $contactsCommunications;
         $data['communicationStatus'] = $communicationStatus;
         $data['page_title'] = "Contacts Report";
@@ -1267,7 +1284,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Communications Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Reports';
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
@@ -1320,7 +1337,7 @@ class ContactCompaniesController extends Controller
             ['title' => 'Leave Management', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Contacts', 'path' => '/contacts', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Notes Report', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Reports';
 
 		$companyDetails = CompanyIdentity::systemSettings();
@@ -1341,15 +1358,18 @@ class ContactCompaniesController extends Controller
     {
         $companyID = $company->id;
         $document = contactsCompanydocs::orderby('id', 'asc')->where('company_id', $companyID)->get();
-        $data['page_title'] = "Clients";
+		if (!empty($document)) $document = $document->load('documentType');
+        $types = CrmDocumentType::where('status', 1)->orderBy('name', 'asc')->get();
+		$data['page_title'] = "Clients";
         $data['page_description'] = "View Company Details";
         $data['breadcrumb'] = [
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'View company', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'Contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'Search Company';
+        $data['types'] = $types;
         $data['company'] = $company;
         $data['document'] = $document;
 		AuditReportsController::store('Contacts',"Accessed Documents For Company: $company->name", "Accessed By User", 0);
@@ -1359,9 +1379,10 @@ class ContactCompaniesController extends Controller
     public function addCompanyDoc(Request $request)
     {
         $this->validate($request, [
-            //'name' => 'required|unique:contactsCompanydocs,name',
-            //'exp_date' => 'required',
+            'name' => 'required',
             'supporting_docs' => 'required',
+            'doc_type' => 'required',
+            'company_id' => 'required',
         ]);
 
         $contactsCompanydocs = $request->all();
@@ -1384,6 +1405,7 @@ class ContactCompaniesController extends Controller
         $contactsCompany->date_from = $Datefrom;
         $contactsCompany->expirydate = $Expirydate;
         $contactsCompany->company_id = $contactsCompanydocs['companyID'];
+        $contactsCompany->doc_type = $contactsCompanydocs['doc_type'];
         $contactsCompany->status = 1;
         $contactsCompany->save();
 		$company = ContactCompany::where('id', $contactsCompanydocs['companyID'])->first(); 
@@ -1398,7 +1420,6 @@ class ContactCompaniesController extends Controller
                 $contactsCompany->update();
             }
         }
-
         AuditReportsController::store('Contacts', 'Company Document Added', "Company Document added , Document Name: $contactsCompanydocs[name], 
 		Document description: $contactsCompanydocs[description], Document expiry date: $Expirydate ,  Company Name : $company->name", 0);
 		return response()->json();
@@ -1435,35 +1456,35 @@ class ContactCompaniesController extends Controller
     public function editCompanydoc(Request $request, contactsCompanydocs $company)
     {
         $this->validate($request, [
-//            'name' => 'required',
+			 'name_update' => 'required',
 //            'name' => 'required|unique:contactsCompanydocs,name',
 //            'exp_date' => 'required',
-//            'supporting_docs' => 'required',
+            'doc_type_update' => 'required',
         ]);
 
         $contactsCompanydocs = $request->all();
         unset($contactsCompanydocs['_token']);
 
-        $Datefrom = $contactsCompanydocs['date_from'] = str_replace('/', '-', $contactsCompanydocs['date_from']);
-        $Datefrom = $contactsCompanydocs['date_from'] = strtotime($contactsCompanydocs['date_from']);
+        $Datefrom = $contactsCompanydocs['date_from_update'] = str_replace('/', '-', $contactsCompanydocs['date_from_update']);
+        $Datefrom = $contactsCompanydocs['date_from_update'] = strtotime($contactsCompanydocs['date_from_update']);
 
         $Expirydatet = $contactsCompanydocs['expirydate'] = str_replace('/', '-', $contactsCompanydocs['expirydate']);
         $Expirydate = $contactsCompanydocs['expirydate'] = str_replace('/', '-', $contactsCompanydocs['expirydate']);
         $Expirydate = $contactsCompanydocs['expirydate'] = strtotime($contactsCompanydocs['expirydate']);
 
-        $company->name = $contactsCompanydocs['name'];
-        $company->description = $contactsCompanydocs['description'];
+        $company->name = $contactsCompanydocs['name_update'];
+        $company->description = $contactsCompanydocs['description_update'];
         $company->date_from = $Datefrom;
         $company->expirydate = $Expirydate;
-        $company->company_id = $contactsCompanydocs['companyID'];
+        $company->doc_type = $contactsCompanydocs['doc_type_update'];
         $company->update();
 
         //Upload supporting document
-        if ($request->hasFile('supporting_docs')) {
-            $fileExt = $request->file('supporting_docs')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
+        if ($request->hasFile('supporting_docs_update')) {
+            $fileExt = $request->file('supporting_docs_update')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs_update')->isValid()) {
                 $fileName = time() . "_client_documents." . $fileExt;
-                $request->file('supporting_docs')->storeAs('ContactCompany/company_documents', $fileName);
+                $request->file('supporting_docs_update')->storeAs('ContactCompany/company_documents', $fileName);
                 //Update file name in the table
                 $company->supporting_docs = $fileName;
                 $company->update();
@@ -1472,8 +1493,8 @@ class ContactCompaniesController extends Controller
 		$companyDetails = ContactCompany::where('id', $company->company_id)->first();
         // request fields
 
-        AuditReportsController::store('Contacts', 'Document Updated', "Company Document Updated, Document Name: $contactsCompanydocs[name], 
-       Document description: $contactsCompanydocs[description], Document expiry date: $Expirydatet, Company Name : $companyDetails->name ", 0);
+        AuditReportsController::store('Contacts', 'Document Updated', "Company Document Updated, Document Name: $contactsCompanydocs[name_update], 
+		Document description: $contactsCompanydocs[description_update], Document expiry date: $Expirydatet, Company Name : $companyDetails->name ", 0);
         return response()->json();
     }
 	public function saveTask(Request $request, ContactCompany $company)

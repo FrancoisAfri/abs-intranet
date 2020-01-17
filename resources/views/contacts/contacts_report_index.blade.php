@@ -130,6 +130,19 @@
                                 </div>
                             </div>
                         </div>
+						<div class="form-group doc-field">
+							<label for="doc_type" class="col-sm-2 control-label">Document Type</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<select class="form-control select2" style="width:170px;" id="doc_type" name="doc_type">	
+									<option value="">*** Select a Document Type ***</option>
+									@foreach($types as $type)
+										<option value="{{ $type->id }}">{{ $type->name}}</option>
+									@endforeach
+									</select>
+								</div>
+							</div>
+						</div>
                     </div> 
                      <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>

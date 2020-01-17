@@ -6,6 +6,7 @@ use App\CompanyIdentity;
 use App\ContactCompany;
 use App\ContactPerson;
 use App\ContactsCommunication;
+use App\CrmDocumentType;
 use App\Country;
 use App\public_reg;
 use App\contactsClientdocuments;
@@ -74,8 +75,8 @@ class ContactsController extends Controller
         $data['contact_types'] = $contactTypes;
         $data['org_types'] = $orgTypes;
         $data['companyID'] = $companyID;
-        $data['active_mod'] = 'Contacts';
-        $data['active_rib'] = 'Add Client';
+        $data['active_mod'] = 'CrM';
+        $data['active_rib'] = 'Search Company';
         //die('what');
         AuditReportsController::store('Contacts', 'Contacts Contact Page Accessed', "Actioned By User", 0);
         return view('contacts.add_contact')->with($data);
@@ -603,7 +604,7 @@ class ContactsController extends Controller
             ['title' => 'Clients', 'path' => '/contacts', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1],
             ['title' => 'Send Message', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'contacts';
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'send message';
         $data['contactPersons'] = $contactPersons;
         AuditReportsController::store('Contacts', 'Send Message Page Accessed', "Actioned By User", 0);
@@ -661,21 +662,69 @@ class ContactsController extends Controller
 
     public function setup()
     {
-        $data['page_title'] = "Contacts Setup";
-        $data['page_description'] = "Contacts set up ";
+        $data['page_title'] = "CRM Setup";
+        $data['page_description'] = "CRM set up ";
         $data['breadcrumb'] = [
-            ['title' => 'Contacts', 'path' => '/contacts/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+            ['title' => 'CRM', 'path' => '/contacts/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
         $SmSConfiguration = SmS_Configuration::first();
-        $data['active_mod'] = 'contacts';
+        $crmDocumentTypes = CrmDocumentType::get();
+        $data['active_mod'] = 'CRM';
         $data['active_rib'] = 'setup';
         $data['SmSConfiguration'] = $SmSConfiguration;
+        $data['crmDocumentTypes'] = $crmDocumentTypes;
         //return $SmSConfiguration;
         AuditReportsController::store('Contacts', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('contacts.setup')->with($data);
     }
+	// save Document type
+	public function saveDocumentType(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
 
-    public function saveSetup(Request $request)
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $documentType = new CrmDocumentType;
+        $documentType->name = $docData['name'];
+        $documentType->description = !empty($docData['description']) ? $docData['description']: '';
+        $documentType->status = 1;
+        $documentType->save();
+        AuditReportsController::store('CRM', 'Document Type Saved', "Actioned By User", 0);
+        return response()->json();
+    }
+	// update Document type
+	public function updateDocumentType(Request $request, CrmDocumentType $type)
+    {
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+
+        $docData = $request->all();
+        unset($docData['_token']);
+
+        $type->name = $docData['name'];
+        $type->description = !empty($docData['description']) ? $docData['description']: '';
+        $type->update();
+        AuditReportsController::store('CRM', 'Document Type Updateded', "Actioned By User", 0);
+        return response()->json();
+    }
+	//
+	 public function docActivate(CrmDocumentType $type)
+    {
+        if ($type->status == 1)
+            $stastus = 0;
+        else
+            $stastus = 1;
+
+        $type->status = $stastus;
+        $type->update();
+        return back();
+    }
+	///
+	public function saveSetup(Request $request)
     {
         $this->validate($request, [
             'sms_provider' => 'required',
@@ -694,7 +743,6 @@ class ContactsController extends Controller
         AuditReportsController::store('Contacts', 'SMS Setup Saved', "Actioned By User", 0);
         return redirect('/contacts/setup');
     }
-
     public function updateSMS(Request $request, SmS_Configuration $smsConfiguration)
     {
         $this->validate($request, [
@@ -872,7 +920,7 @@ class ContactsController extends Controller
 
         $companies = ContactCompany::where('status', 1)->orderBy('name')->get();
         $contacts = ContactPerson::where('status', 1)->orderBy('first_name')->get();
-
+		$types = CrmDocumentType::where('status', 1)->orderBy('name', 'asc')->get();
         $data['page_title'] = "contacts";
         $data['page_description'] = "Reports";
         $data['breadcrumb'] = [
@@ -881,10 +929,11 @@ class ContactsController extends Controller
             ['title' => 'Clients Clients-reports', 'active' => 1, 'is_module' => 0]
         ];
 
-        $data['active_mod'] = 'contacts';
-        $data['active_rib'] = 'report';
+        $data['active_mod'] = 'CRM';
+        $data['active_rib'] = 'reports';
         $data['companies'] = $companies;
         $data['contacts'] = $contacts;
+        $data['types'] = $types;
 
         $data['employees'] = $employees;
         AuditReportsController::store('Audit', 'View Audit Search', "view Audit", 0);

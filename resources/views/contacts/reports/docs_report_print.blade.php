@@ -47,6 +47,7 @@
 				<table class="table table-striped">
 						<thead>
 						<tr>
+							<th>Document Type</th>
 							<th>Company Name</th>
 							<th>Document Name</th>
 							<th>Document Description</th>
@@ -58,6 +59,7 @@
 						@if (count($companyDocs) > 0)
 							@foreach($companyDocs as $companyDoc)
 							   <tr>
+									<td>{{ (!empty($companyDoc->doc_name)) ?  $companyDoc->doc_name : ''}} </td>
 									<td>{{ (!empty($companyDoc->companyname)) ?  $companyDoc->companyname : ''}} </td>
 									<td>{{ !empty($companyDoc->name) ?  $companyDoc->name : '' }}</td>
 									<td>{{ !empty($companyDoc->description) ? $companyDoc->description : '' }}</td>
@@ -69,6 +71,7 @@
 						</tbody>
 						<tfoot>
 						<tr>
+							<th>Document Type</th>
 							<th>Company Name</th>
 							<th>Document Name</th>
 							<th>Document Description</th>

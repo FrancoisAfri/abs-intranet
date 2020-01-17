@@ -116,4 +116,25 @@ class CRMSetupController extends Controller
         AuditReportsController::store('CRM', 'CRM Search Results', 'Accessed By User', 0);
         return view('crm.search_accounts_results')->with($data);
     }
+	////
+	public function searchAccount(){
+            
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
+        $contactPeople = ContactPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+
+        $data['page_title'] = 'CRM';
+        $data['page_description'] = 'Account Search';
+        $data['breadcrumb'] = [
+            ['title' => 'CRM', 'path' => '/crm/search_account', 'icon' => 'fa fa-file-text-o', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Search', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'CRM';
+        $data['active_rib'] = 'Account Search';
+        $data['companies'] = $companies;
+        $data['contactPeople'] = $contactPeople;
+        AuditReportsController::store('CRM', 'Account Search Page Accessed', 'Accessed By User', 0);
+        
+        return view('crm.accounts_search')->with($data); 
+    }
+	//
 }

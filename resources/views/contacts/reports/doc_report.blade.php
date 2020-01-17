@@ -17,13 +17,15 @@
 			<div class="box-body">
 				<div style="overflow-X:auto;">
 				<form class="form-horizontal" method="POST" action="/reports/contact_docs_print">
-					 <input type="hidden" name="contact_id" value="{{ !empty($personID) ? $personID : ''  }}">
-                        <input type="hidden" name="company_id" value="{{ !empty($companyID) ? $companyID : ''  }}">
+					 <input type="hidden" name="doc_type" value="{{ !empty($doc_type) ? $doc_type : ''  }}">
+					 <input type="hidden" name="contact_id" value="{{ !empty($contact_id) ? $contact_id : ''  }}">
+                        <input type="hidden" name="company_id" value="{{ !empty($company_id) ? $company_id : ''  }}">
                         <input type="hidden" name="date_from" value="{{ !empty($Datefrom) ? $Datefrom : ''  }}">
                         <input type="hidden" name="date_to" value="{{ !empty($Dateto) ? $Dateto : ''  }}">				
 					<table id="example2" class="table table-bordered table-hover">
 						<thead>
 						<tr>
+							<th>Document Type</th>
 							<th>Company Name</th>
 							<th>Document Name</th>
 							<th>Document Description</th>
@@ -35,6 +37,7 @@
 						@if (count($companyDocs) > 0)
 							@foreach($companyDocs as $companyDoc)
 							   <tr>
+									<td>{{ (!empty($companyDoc->doc_name)) ?  $companyDoc->doc_name : ''}} </td>
 									<td>{{ (!empty($companyDoc->companyname)) ?  $companyDoc->companyname : ''}} </td>
 									<td>{{ !empty($companyDoc->name) ?  $companyDoc->name : '' }}</td>
 									<td>{{ !empty($companyDoc->description) ? $companyDoc->description : '' }}</td>
@@ -46,6 +49,7 @@
 						</tbody>
 						<tfoot>
 						<tr>
+							<th>Document Type</th>
 							<th>Company Name</th>
 							<th>Document Name</th>
 							<th>Document Description</th>

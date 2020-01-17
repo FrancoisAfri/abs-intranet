@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddLifeOrRegretContactCompaniesToTable extends Migration
+class AddDocumentTypeToCompanyDocumentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddLifeOrRegretContactCompaniesToTable extends Migration
      */
     public function up()
     {
-		Schema::table('contact_companies', function($table) {
-            $table->string('live_regret')->nullable();
+       Schema::table('company_documents', function($table) {
+            $table->integer('doc_type')->nullable();
         });
     }
 
@@ -25,9 +25,8 @@ class AddLifeOrRegretContactCompaniesToTable extends Migration
      */
     public function down()
     {
-        
-		Schema::table('contact_companies', function($table) {
-            $table->dropColumn('live_regret');
+        Schema::table('company_documents', function($table) {
+            $table->dropColumn('doc_type');
         });
     }
 }

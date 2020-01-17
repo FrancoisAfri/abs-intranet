@@ -14,14 +14,14 @@
                     <div id="success-alert"></div>
 
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Doc Name</label>
+                        <label for="name" class="col-sm-2 control-label">Doc Name</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="name" name="name" value=""
                                    placeholder="Enter Name" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Doc Description</label>
+                        <label for="description" class="col-sm-2 control-label">Doc Description</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="description" name="description" value=""
                                    placeholder="Enter Description" required>
@@ -60,9 +60,21 @@
                             </div>
                         </div>
                     </div>
+					<div class="form-group {{ $errors->has('doc_type') ? ' has-error' : '' }}">
+						<label for="doc_type" class="col-sm-2 control-label">Document Type</label>
+						<div class="col-sm-8">
+							<div class="input-group">
+								<select class="form-control select2" style="width:170px;" id="doc_type" name="doc_type">	
+								<option value="">*** Select a Document Type ***</option>
+								@foreach($types as $type)
+									<option value="{{ $type->id }}">{{ $type->name}}</option>
+								@endforeach
+								</select>
+							</div>
+						</div>
+					</div>
                     <input type="hidden" id="companyID" name="companyID"
                            value="{{ !empty($company->id) ? $company->id : ''}}">
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

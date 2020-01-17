@@ -14,7 +14,7 @@
                 <div class="box-header with-border">
                     <i class="fa fa-user pull-right"></i>
                     <h3 class="box-title">New Client</h3>
-                    <p>Enter client details:</p>
+                    <p>Enter Client details:</p>
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
@@ -58,7 +58,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="First Name" required>
+                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ old('first_name') }}" placeholder="First Name">
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ old('surname') }}" placeholder="Surname" required>
+                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ old('surname') }}" placeholder="Surname">
                                 </div>
                             </div>
                         </div>
@@ -170,7 +170,7 @@
 
             //Cancel button click event
             document.getElementById("cancel").onclick = function () {
-                location.href = "/";
+                location.href = "/contacts/company/"+ {{$companyID}} + "/view";
             };
 
             //call hide/show fields functions on doc ready

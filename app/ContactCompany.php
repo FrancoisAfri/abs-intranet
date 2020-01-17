@@ -32,6 +32,7 @@ class ContactCompany extends Model
 	public function accountManager() {
         return $this->belongsTo(HRPerson::class, 'account_owners');
     }
+
     /**
      * Relationship between Contact Company and Quotations
      *
