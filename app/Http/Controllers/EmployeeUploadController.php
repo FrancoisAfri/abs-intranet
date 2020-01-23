@@ -85,10 +85,18 @@ class EmployeeUploadController extends Controller
 							$employees = HRPerson::where('email', $value['email'])->first();
 							//$email = !empty($employees->email) ? $employees->email : '';
 							// get employee jobtille
-							$jobTitle = JobTitle::where('name', $value['job_title'])->first();
-							$position = !empty($jobTitle->id) ? $jobTitle->id : 0;
+							if (!empty($value['job_title']))
+							{
+								$jobTitle = JobTitle::where('name', $value['job_title'])->first();
+								$position = !empty($jobTitle->id) ? $jobTitle->id : 0;
+							}
+							else $position  = 0;
 							if (empty($employees))
 							{
+								$birthday = !empty($value['date_of_birth']) ? str_replace('/', '-', $value['date_of_birth']) : '';
+								$birthday = !empty($birthday) ? strtotime($birthday) : 0;
+								$joined = !empty($value['date_started']) ? str_replace('/', '-', $value['date_started']) : '';
+								$joined = !empty($joined) ? strtotime($joined) : 0;
 								//if ($email == $value['email']) continue;
 								$password = EmployeeUploadController::randomPass();
 								$user = new User;
@@ -104,12 +112,15 @@ class EmployeeUploadController extends Controller
 								$person->first_name = $value['firstname'];
 								$person->surname = $value['surname'];
 								$person->employee_number = $value['employee_number'];
+								$person->date_of_birth = $birthday;
+								$person->date_joined = $joined;
+								$person->leave_profile = 2;
 								$person->position = $position;
 								$person->status = 1;
 								$user->addPerson($person);
 
 								//Send email
-								//Mail::to("$user->email")->send(new ConfirmRegistration($user, $password));
+								Mail::to("$user->email")->send(new ConfirmRegistration($user, $password));
 								AuditReportsController::store('Security', 'New User Created', "Login Details Sent To User $user->email", 0);
 							}
 						}

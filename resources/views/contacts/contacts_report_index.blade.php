@@ -12,8 +12,6 @@
 @section('page_dependencies')
 <!--  -->
 <!--Time Charger-->
-
-
 @endsection
 @section('content')
     <div class="row">
@@ -23,7 +21,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-files-o pull-right"></i>
-                    <h3 class="box-title">Contacts Reports Search criteria</h3>
+                    <h3 class="box-title">CRM Reports Search criteria</h3>
                     <p>Enter search details:</p>
                 </div>
                     <form name="contact-report-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
@@ -47,8 +45,7 @@
                                     <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_levTkn" name="report_type" value="1" checked> Client Note </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="2"> Meetings</label>
                                     <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="3"> Communications</label>
-                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="4"> Documents Expiring</label>
-                                      
+                                    <label class="radio-inline"><input type="radio" id="rdo_bal" name="report_type" value="4"> Documents Expiring</label>   
                                 </div>
                         </div>
                         <div class="form-group employee-field {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
@@ -134,11 +131,11 @@
 							<label for="doc_type" class="col-sm-2 control-label">Document Type</label>
 							<div class="col-sm-10">
 								<div class="input-group">
-									<select class="form-control select2" style="width:170px;" id="doc_type" name="doc_type">	
-									<option value="">*** Select a Document Type ***</option>
-									@foreach($types as $type)
-										<option value="{{ $type->id }}">{{ $type->name}}</option>
-									@endforeach
+									<select class="form-control select2" style="width: 100%;" id="doc_type" name="doc_type">	
+										<option value="">*** Select a Document Type ***</option>
+										@foreach($types as $type)
+											<option value="{{ $type->id }}">{{ $type->name}}</option>
+										@endforeach
 									</select>
 								</div>
 							</div>
@@ -267,6 +264,7 @@
                 $('form[name="contact-report-form"]').attr('action', '/contacts/reports/documents_expired');
                 $('#gen-report').val("Submit"); 
             }
+
             return allType;      
         }
           //Load divisions drop down 

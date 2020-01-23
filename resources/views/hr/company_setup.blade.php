@@ -113,13 +113,13 @@
             $('#save_firstlevel').on('click', function() {
                 //console.log('strUrl');
                 var strUrl = '/hr/firstleveldiv/add/'+ '{{ $highestLvl->id }}';
-                var modalID = 'level-module-modal';
+                var modalID = 'add-division-modal';
                 var objData = {
                     name: $('#'+modalID).find('#name').val(),
                     manager_id: $('#'+modalID).find('#manager_id').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
-                var submitBtnID = 'level_module';
+                var submitBtnID = 'save_firstlevel';
                 var redirectUrl = '/hr/company_setup';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'The group level has been updated successfully.';

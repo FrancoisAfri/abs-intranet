@@ -26,7 +26,7 @@ class AddActualPrinceToQuotationsTable extends Migration
     public function down()
     {
         Schema::table('quotations', function (Blueprint $table) {
-            $table->dropColumn('quote_number');
+            $table->dropColumn('actual_price');
         });
     }
 }

@@ -1,21 +1,23 @@
 @extends('layouts.main_layout')
+
 @section('page_dependencies')
 <!-- bootstrap file input -->
 <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet" type="text/css" />
 <!-- DataTables -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/buttons.dataTables.min.css">
 <!-- iCheck -->
 <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
 @endsection
+
 @section('content')
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
-            <form class="form-horizontal" method="POST" action="/users/update-report-to">
+            <form class="form-horizontal" method="POST" action="/security/update_job_title">
                 {{ csrf_field() }}
+                <input type="hidden" name="module_id" value="141">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Reports To List</h3>
+                    <h3 class="box-title">User Search Results</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -34,7 +36,7 @@
                         </ul>
                     </div>
                     @endif
-                    <table id="emp-list-table" class="table table-bordered table-striped table-hover">
+					<table id="emp-list-table" class="table table-bordered table-striped table-hover">
                         <thead>
 							<tr>
 								<th>#</th>
@@ -48,7 +50,14 @@
                         <tbody>
 							@foreach($employeesList as $employee)
 								<tr>
-									<td><input type="checkbox" id="external_service" value="1" name="{{ "report_to[" . $employee->uid . "]" }}"></td>
+									<td>
+										<select name="{{ "assign_job_titles[" . $employee->uid . "]" }}" class="form-control">
+                                            <option value="">*** Select a Position ***</option>
+                                            @foreach($positions as $position)
+                                                <option value="{{ $position->id }}" {{ ($employee->position == $position->id) ? ' selected' : '' }}>{{ $position->name }}</option>
+                                            @endforeach
+                                        </select>
+									</td>
 									<td>{{!empty($employee->div_name) ? $employee->div_name : '' }}</td>
 									<td>{{!empty($employee->dep_name) ? $employee->dep_name : '' }}</td>
 									<td>{{!empty($employee->full_name) ? $employee->full_name : '' }}</td>
@@ -69,22 +78,10 @@
                         </tfoot>
                     </table>
                 </div>
-				<div class="form-group{{ $errors->has('manager_id') ? ' has-error' : '' }}">
-					<div class="col-sm-12">
-						<div class="input-group">
-							<select id="manager_id" name="manager_id" class="form-control select2">
-								<option value="">*** Please Select a Manager ***</option>
-								@foreach($employees as $employee)
-									<option value="{{ $employee->id }}" {{ ($employee->id == $managerId) ? ' selected' : '' }}>{{ $employee->first_name." ".$employee->surname }}</option>
-								@endforeach
-							</select>
-						</div>
-					</div>
-				</div>
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Cancel</button>
-                    <button type="submit" id="update-report-to" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
+                    <button type="submit" id="save" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Assign Job Title</button>
                 </div>
             </form>
         </div>
@@ -120,14 +117,7 @@
 <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 <!-- DataTables -->
 <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.buttons.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.flash.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/jszip.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/pdfmake.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/vfs_fonts.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.html5.min.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/datatables/buttons.print.min.js"></script>
+<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
 <!-- Ajax dropdown options load -->
 <script src="/custom_components/js/load_dropdown_options.js"></script>
 
@@ -160,7 +150,7 @@
 
         //Cancel button
         $('#cancel').click(function () {
-            location.href = '/users/reports_to';
+            location.href = '/security/assign-jobtitles';
         });
 
         //Vertically center modals on page

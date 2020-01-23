@@ -39,7 +39,7 @@ class EmployeeCompanySetupController extends Controller
         $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
         $Qualif_type = DB::table('Qualification_type')->orderBy('id')->get();
         #Qualification_type::where('status', 1)->get();
-        $employees = HRPerson::where('status', 1)->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $highestLvl = DivisionLevel::where('active', 1)->orderBy('level', 'desc')->limit(1)->get()->first()->load('divisionLevelGroup.manager','divisionLevelGroup.hrManager','divisionLevelGroup.payrollOfficer');
         $lowestactiveLvl = DivisionLevel::where('active', 1)->orderBy('level', 'asc')->limit(1)->get()->first()->level;
         if ($highestLvl->level > $lowestactiveLvl) {
@@ -169,7 +169,7 @@ class EmployeeCompanySetupController extends Controller
             $childDiv = null;
             $intCurrentLvl = 0;
         }
-		$employees = HRPerson::where('status', 1)->get();
+		$employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $lowestactiveLvl = DivisionLevel::where('active', 1)->orderBy('level', 'asc')->limit(1)->get()->first()->level;
         if ($parentLevel > $lowestactiveLvl) {
             $childLevel = DivisionLevel::where('level', $parentLevel - 1)->get()->first();

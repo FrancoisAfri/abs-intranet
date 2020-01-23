@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
         //insert default user
         $user = new User;
         $user->email = 'francois@afrixcel.co.za';
-        $user->password = Hash::make('absusr30@!');
+        $user->password = Hash::make('CharlesNgameni2035!@');
         $user->type = 3;
         $user->status = 1;
         $user->save();
@@ -35,22 +35,6 @@ class DatabaseSeeder extends Seeder
         $person->first_name = 'Francois';
         $person->surname = 'keou';
         $person->email = 'francois@afrixcel.co.za';
-        $person->status = 1;
-        $user->addPerson($person);
-
-        //insert default user
-        $user = new User;
-        $user->email = 'nkosana@afrixcel.co.za';
-        $user->password = Hash::make('theone');
-        $user->type = 3;
-        $user->status = 1;
-        $user->save();
-
-        //insert default user's hr record
-        $person = new HRPerson();
-        $person->first_name = 'Nkosana';
-        $person->surname = 'Biyela';
-        $person->email = 'nkosana@afrixcel.co.za';
         $person->status = 1;
         $user->addPerson($person);
 
@@ -250,33 +234,6 @@ class DatabaseSeeder extends Seeder
         $groupLevel->plural_name = 'Divisions';
         $groupLevel->active = 1;
         $groupLevel->save(); 
-		
-		//insert the stock group levels
-        $groupLevel = new stockLevel();
-        $groupLevel->level = 1;
-        $groupLevel->active = 0;
-        $groupLevel->save();
-
-        $groupLevel = new stockLevel();
-        $groupLevel->level = 2;
-        $groupLevel->active = 0;
-        $groupLevel->save();
-
-        $groupLevel = new stockLevel();
-        $groupLevel->level = 3;
-        $groupLevel->active = 0;
-        $groupLevel->save();
-
-        $groupLevel = new stockLevel();
-        $groupLevel->level = 4;
-        $groupLevel->active = 1;
-        $groupLevel->save();
-
-        $groupLevel = new stockLevel();
-        $groupLevel->level = 5;
-        $groupLevel->active = 1;
-        $groupLevel->save();
-
         $module = new modules(); //polivy
         $module->active = 1;
         $module->name = 'Policy Enforcement';

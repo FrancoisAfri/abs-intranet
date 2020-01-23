@@ -469,7 +469,7 @@ class LeaveSetupController extends Controller {
 					{
 						if (!empty($value['employee_number']))	
 						{
-							$employees = HRPerson::where('employee_number', $value['employee_number'])->first();
+							$employees = HRPerson::where('employee_number', $value['employee_number'])->where('status',1)->first();
 							if (!empty($employees))
 							{
 								$days = !empty($value['special'])? $value['special'] : 0 ;

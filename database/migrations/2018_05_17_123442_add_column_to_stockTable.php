@@ -27,8 +27,8 @@ class AddColumnToStockTable extends Migration
     public function down()
     {
         Schema::table('stock', function (Blueprint $table) {
-            $table->dropColumn('user_id');
-            $table->dropColumn('vehicle_id');
+            $table->dropColumn('product_code');
+            $table->dropColumn('stock_type');
         });
     }
 }

@@ -12,10 +12,10 @@
 <div class="row">
     <div class="col-md-12">
         <div class="box box-primary">
-            <form class="form-horizontal" method="POST" action="/users/update-report-to">
+            <form class="form-horizontal" method="POST" action="/users/update-reset-password">
                 {{ csrf_field() }}
                 <div class="box-header with-border">
-                    <h3 class="box-title">Reports To List</h3>
+                    <h3 class="box-title">Reset Password List</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -48,7 +48,7 @@
                         <tbody>
 							@foreach($employeesList as $employee)
 								<tr>
-									<td><input type="checkbox" id="external_service" value="1" name="{{ "report_to[" . $employee->uid . "]" }}"></td>
+									<td><input type="checkbox" id="external_service" value="1" name="{{ "reset_password[" . $employee->uid . "]" }}"></td>
 									<td>{{!empty($employee->div_name) ? $employee->div_name : '' }}</td>
 									<td>{{!empty($employee->dep_name) ? $employee->dep_name : '' }}</td>
 									<td>{{!empty($employee->full_name) ? $employee->full_name : '' }}</td>
@@ -69,34 +69,32 @@
                         </tfoot>
                     </table>
                 </div>
-				<div class="form-group{{ $errors->has('manager_id') ? ' has-error' : '' }}">
-					<div class="col-sm-12">
+				<div class="form-group{{ $errors->has('new_password') ? ' has-error' : '' }}">
+					<label for="{{ 'new_password' }}" class="col-sm-2 control-label">New Password</label>
+
+					<div class="col-sm-10">
 						<div class="input-group">
-							<select id="manager_id" name="manager_id" class="form-control select2">
-								<option value="">*** Please Select a Manager ***</option>
-								@foreach($employees as $employee)
-									<option value="{{ $employee->id }}" {{ ($employee->id == $managerId) ? ' selected' : '' }}>{{ $employee->first_name." ".$employee->surname }}</option>
-								@endforeach
-							</select>
+							<div class="input-group-addon">
+								<i class="fa fa-lock"></i>
+							</div>
+							<input type="text" class="form-control" name="new_password" id="new_password" value="{{ old('new_password') }}" required>
 						</div>
 					</div>
 				</div>
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button type="button" id="cancel" class="btn btn-default pull-left"><i class="fa fa-arrow-left"></i> Cancel</button>
-                    <button type="submit" id="update-report-to" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save Changes</button>
+                    <button type="submit" id="update-reset-password" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Reset Password</button>
                 </div>
             </form>
         </div>
     </div>
-
     <!-- Include modal -->
     @if(Session('changes_saved'))
     @include('contacts.partials.success_action', ['modal_title' => "Company Identity Updated!", 'modal_content' => session('changes_saved')])
     @endif
 </div>
 @endsection
-
 @section('page_script')
 <!-- Start Bootstrap File input -->
 <!-- canvas-to-blob.min.js is only needed if you wish to resize images before upload. This must be loaded before fileinput.min.js -->
@@ -160,7 +158,7 @@
 
         //Cancel button
         $('#cancel').click(function () {
-            location.href = '/users/reports_to';
+            location.href = '/security/password-reset';
         });
 
         //Vertically center modals on page

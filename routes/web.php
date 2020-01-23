@@ -82,6 +82,12 @@ Route::post('/users/access_save/{user}', 'UsersController@accessSave');
 Route::get('users/reports_to', 'SecurityController@reportTo');
 Route::post('/users/get_reports_to', 'SecurityController@getReportsTo');
 Route::post('/users/update-report-to', 'SecurityController@updateReportsTo');
+Route::get('/security/password-reset', 'SecurityController@resetPassword');
+Route::post('/users/get_reset_password', 'SecurityController@getResetPassword');
+Route::post('/users/update-reset-password', 'SecurityController@updatePassword');
+Route::get('/security/assign-jobtitles', 'SecurityController@assignJobTitle');
+Route::post('/security/get_job_titles', 'SecurityController@getJobTitle');
+Route::post('/security/update_job_title', 'SecurityController@updateJobTitle');
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');

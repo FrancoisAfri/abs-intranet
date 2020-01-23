@@ -54,8 +54,8 @@ class CmsController extends Controller
         $NewsData = $request->all();
         unset($NewsData['_token']);
 
-        $Expdate = $NewsData['exp_date'] = str_replace('/', '-', $NewsData['exp_date']);
-        $Expdate = $NewsData['exp_date'] = strtotime($NewsData['exp_date']);
+        $Expdate = str_replace('/', '-', $NewsData['exp_date']);
+        $Expdate =  strtotime($Expdate);
 
         $crmNews = new Cmsnews();
         $crmNews->name = $NewsData['name'];
