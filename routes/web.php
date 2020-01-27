@@ -1231,3 +1231,10 @@ Route::get('dms/file/user_access/{folder}', 'DMSFoldersController@userFolderAcce
 Route::get('dms/file/company_access/{folder}', 'DMSFoldersController@companyFileAccess');
 Route::get('dms/file/group_access/{folder}', 'DMSFoldersController@groupFileAccess');
 Route::get('dms/folder/user_access/{folder}', 'DMSFoldersController@userFileAccess');
+Route::get('dms/group_admin', 'DMSGroupAdminController@index');
+Route::post('dms/add_group', 'DMSGroupAdminController@store');
+Route::get('dms/group/{group}/actdect', 'DMSGroupAdminController@groupAct');
+Route::patch('dms/group/update/{group}', 'DMSGroupAdminController@update');
+Route::get('dms/group/users/{group}/view', 'DMSGroupAdminController@groupUsers');
+Route::post('dms/add_group_users', 'DMSGroupAdminController@saveGroupUsers');
+Route::get('dms/group/users/actdeac/{groupUser}', 'DMSGroupAdminController@groupUsersAct');

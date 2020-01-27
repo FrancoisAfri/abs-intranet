@@ -147,11 +147,13 @@
         //Initialize the data table
         $('#emp-list-table').DataTable({
             "paging": true,
-            "lengthChange": true,
-            "searching": true,
-            "ordering": true,
-            "info": false,
-            "autoWidth": true
+			"lengthChange": true,
+			"lengthMenu": [ 50, 75, 100, 150, 200, 250 ],
+			"pageLength": 50,
+			"searching": true,
+			"ordering": true,
+			"info": true,
+			"autoWidth": true,
         });
 
         //Cancel button
