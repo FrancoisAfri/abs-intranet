@@ -220,6 +220,7 @@ Route::get('/leave/custom/leave_type_edit/{lev}', 'LeaveController@customleaveAc
 Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLeaveType');
 Route::get('leave/upload', 'LeaveSetupController@upload');
 Route::post('leave/leave_upload', 'LeaveSetupController@leaveUpload');
+Route::post('/leave/upload/app', 'LeaveSetupController@leaveUploadApplications');
 //Contacts related requests
 //Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
@@ -1238,3 +1239,10 @@ Route::patch('dms/group/update/{group}', 'DMSGroupAdminController@update');
 Route::get('dms/group/users/{group}/view', 'DMSGroupAdminController@groupUsers');
 Route::post('dms/add_group_users', 'DMSGroupAdminController@saveGroupUsers');
 Route::get('dms/group/users/actdeac/{groupUser}', 'DMSGroupAdminController@groupUsersAct');
+Route::get('dms/grant_access', 'DMSGrantAccessController@index');
+Route::post('dms/company/access_save', 'DMSGrantAccessController@storeCompanyAccess');
+Route::post('dms/group/access_save', 'DMSGrantAccessController@storeGroupAccess');
+Route::post('dms/user/access_save', 'DMSGrantAccessController@storeUserAccess');
+Route::get('dms/comp_access/{company}/actdect', 'DMSGrantAccessController@companyAct');
+Route::get('dms/group_access/{group}/actdect', 'DMSGrantAccessController@groupActive');
+Route::get('dms/user_access/{user}/actdect', 'DMSGrantAccessController@userAct');

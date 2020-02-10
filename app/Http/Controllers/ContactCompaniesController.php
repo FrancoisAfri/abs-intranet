@@ -11,6 +11,7 @@ use App\Mail\RejectedCompany;
 use App\Province;
 use App\contactsCompanydocs;
 use App\CompanyIdentity;
+use App\EmployeeTasks;
 use App\contactsClientdocuments;
 use App\User;
 use App\ClientInduction;
@@ -1521,8 +1522,20 @@ class ContactCompaniesController extends Controller
         $employeeID = $taskData['responsible_person'];
         $escalationPerson = HRPerson::where('id', $employeeID)->first();
         $managerID = !empty($escalationPerson->manager_id) ? $escalationPerson->manager_id: 0;
-        TaskManagementController::store($taskData['description'],$duedate,$startDate,$managerID,$employeeID,2
+        $taskID = TaskManagementController::store($taskData['description'],$duedate,$startDate,$managerID,$employeeID,2
                     ,0,0,0,0,0,0,0,0,$company->id,0,0,0,$duetime);
+		//Upload task doc
+		$tasks = EmployeeTasks::where('id',$taskID)->first();
+        if ($request->hasFile('document')) {
+            $fileExt = $request->file('document')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'xlsx', 'doc', 'xltm']) && $request->file('document')->isValid()) {
+                $fileName = time() . "_task_added_doc_" . '.' . $fileExt;
+                $request->file('document')->storeAs('tasks', $fileName);
+                //Update file name in the employee task table
+				$tasks->document_on_task = $fileName;
+				$tasks->update();
+            }
+        }
         $description = $request->input('description');
         AuditReportsController::store('CMR', 'CRM Meeting Task Added', "Added by User", 0);
         return response()->json(['new_task' => $description], 200);

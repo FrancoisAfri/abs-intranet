@@ -31,7 +31,6 @@ class DMSGroupAdminController extends Controller
      */
     public function index()
     {
-		
         $groupAdmins = DMSGoupAdmin::orderBy('group_name', 'asc')->get();
 		if (!empty($groupAdmins)) $groupAdmins->load('groupUsers');
 

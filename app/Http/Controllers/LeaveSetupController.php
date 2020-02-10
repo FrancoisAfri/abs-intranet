@@ -16,6 +16,7 @@ use App\HRPerson;
 use App\hr_person;
 use App\modules;
 use App\leave_credit;
+use App\leave_application;
 use App\leave_history;
 use App\type_profile;
 use App\leave_profile;
@@ -502,5 +503,258 @@ class LeaveSetupController extends Controller {
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Appraisals';
         AuditReportsController::store('Leave Management', "Leave Balance uploaded", "Accessed by User", 0);
+    }
+	// leave application upload 
+	public function leaveUploadApplications(Request $request)
+    {
+		if($request->hasFile('input_file'))
+		{
+			$path = $request->file('input_file')->getRealPath();
+			$data = Excel::load($path, function($reader) {})->get();
+			if(!empty($data) && $data->count())
+			{
+				foreach ($data->toArray() as $key => $value) 
+				{
+					if(!empty($value))
+					{
+						if (!empty($value['employee_number']))	
+						{
+							$employees = HRPerson::where('employee_number', $value['employee_number'])->where('status',1)->first();
+							if (!empty($employees))
+							{
+								$fromDate = !empty($value['from_date'])? $value['from_date'] : 0 ;
+								$toDate = !empty($value['to_date'])? $value['to_date'] : 0 ;
+								$fromDate = str_replace('/', '-', $fromDate);
+								//$startDate = strtotime($startDate);
+								$toDate = str_replace('/', '-', $toDate);
+								$dayRequested = LeaveSetupController::calculatedays($fromDate,$toDate);
+								$dayRequested = $dayRequested * 8;
+								$startDate = strtotime($fromDate);
+								$endDate = strtotime($toDate);
+
+								if (!empty($value['leave_type']) && $value['leave_type'] == 'Special')
+								{
+									// get leave application
+									$levApp = new leave_application();
+									$levApp->leave_type_id = 4;
+									$levApp->start_date = $startDate;
+									$levApp->end_date = $endDate;
+									$levApp->leave_days = $dayRequested;
+									$levApp->hr_id = $employees->id;
+									$levApp->notes = '';
+									$levApp->status = 1;
+									$levApp->manager_id = !empty($employees->manager_id) ? $employees->manager_id : 0;
+									$levApp->save();
+									// #Query the the leave_config days for value
+									$credit = leave_credit::where('hr_id', $employees->id)
+										->where('leave_type_id', 4)
+										->first();
+									$leaveBalance = $credit->leave_balance;
+									
+									#subract current balance from the one applied for
+									$newBalance = $leaveBalance - $dayRequested;
+									$credit->leave_balance = $newBalance;
+									$credit->update();
+									// update leave history
+									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 4, $employees->id);
+								}
+								elseif (!empty($value['leave_type']) && $value['leave_type'] == 'Annual')
+								{
+									// get leave application
+									$levApp = new leave_application();
+									$levApp->leave_type_id = 1;
+									$levApp->start_date = $startDate;
+									$levApp->end_date = $endDate;
+									$levApp->leave_days = $dayRequested;
+									$levApp->hr_id = $employees->id;
+									$levApp->notes = '';
+									$levApp->status = 1;
+									$levApp->manager_id = !empty($employees->manager_id) ? $employees->manager_id : 0;
+									$levApp->save();
+									// #Query the the leave_config days for value
+									$credit = leave_credit::where('hr_id', $employees->id)
+										->where('leave_type_id', 1)
+										->first();
+									$leaveBalance = $credit->leave_balance;
+									//return $credit;
+									#subract current balance from the one applied for
+									$newBalance = $leaveBalance - $dayRequested;
+									$credit->leave_balance = $newBalance;
+									$credit->update();
+									// update leave history
+									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 1, $employees->id);
+								}
+								elseif (!empty($value['leave_type']) && $value['leave_type'] == 'Sick')
+								{
+									// get leave application
+									$levApp = new leave_application();
+									$levApp->leave_type_id = 5;
+									$levApp->start_date = $startDate;
+									$levApp->end_date = $endDate;
+									$levApp->leave_days = $dayRequested;
+									$levApp->hr_id = $employees->id;
+									$levApp->notes = '';
+									$levApp->status = 1;
+									$levApp->manager_id = !empty($employees->manager_id) ? $employees->manager_id : 0;
+									$levApp->save();
+									// #Query the the leave_config days for value
+									$credit = leave_credit::where('hr_id', $employees->id)
+										->where('leave_type_id', 5)
+										->first();
+									$leaveBalance = $credit->leave_balance;
+									
+									#subract current balance from the one applied for
+									$newBalance = $leaveBalance - $dayRequested;
+									$credit->leave_balance = $newBalance;
+									$credit->update();
+									// update leave history
+									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 5, $employees->id);
+								}
+								elseif (!empty($value['leave_type']) && $value['leave_type'] == 'Family')
+								{
+									// get leave application
+									$levApp = new leave_application();
+									$levApp->leave_type_id = 2;
+									$levApp->start_date = $startDate;
+									$levApp->end_date = $endDate;
+									$levApp->leave_days = $dayRequested;
+									$levApp->hr_id = $employees->id;
+									$levApp->notes = '';
+									$levApp->status = 1;
+									$levApp->manager_id = !empty($employees->manager_id) ? $employees->manager_id : 0;
+									$levApp->save();
+									// #Query the the leave_config days for value
+									$credit = leave_credit::where('hr_id', $employees->id)
+										->where('leave_type_id', 2)
+										->first();
+									$leaveBalance = $credit->leave_balance;
+									
+									#subract current balance from the one applied for
+									$newBalance = $leaveBalance - $dayRequested;
+									$credit->leave_balance = $newBalance;
+									$credit->update();
+									// update leave history
+									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 2, $employees->id);
+								}
+								elseif (!empty($value['leave_type']) && $value['leave_type'] == 'Maternity')
+								{
+									// get leave application
+									$levApp = new leave_application();
+									$levApp->leave_type_id = 3;
+									$levApp->start_date = $startDate;
+									$levApp->end_date = $endDate;
+									$levApp->leave_days = $dayRequested;
+									$levApp->hr_id = $employees->id;
+									$levApp->notes = '';
+									$levApp->status = 1;
+									$levApp->manager_id = !empty($employees->manager_id) ? $employees->manager_id : 0;
+									$levApp->save();
+									// #Query the the leave_config days for value
+									$credit = leave_credit::where('hr_id', $employees->id)
+										->where('leave_type_id', 3)
+										->first();
+									$leaveBalance = $credit->leave_balance;
+									
+									#subract current balance from the one applied for
+									$newBalance = $leaveBalance - $dayRequested;
+									$credit->leave_balance = $newBalance;
+									$credit->update();
+									// update leave history
+									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 3, $employees->id);
+								}
+								elseif (!empty($value['leave_type']) && $value['leave_type'] == 'Maternity')
+								{
+									// get leave application
+									$levApp = new leave_application();
+									$levApp->leave_type_id = 7;
+									$levApp->start_date = $startDate;
+									$levApp->end_date = $endDate;
+									$levApp->leave_days = $dayRequested;
+									$levApp->hr_id = $employees->id;
+									$levApp->notes = '';
+									$levApp->status = 1;
+									$levApp->manager_id = !empty($employees->manager_id) ? $employees->manager_id : 0;
+									$levApp->save();
+									// #Query the the leave_config days for value
+									//$leaveBalance = $credit->leave_balance;
+									$levcre = new leave_credit();
+									$levcre->leave_type_id = 7;
+									$levcre->leave_balance = $dayRequested;
+									$levcre->hr_id = $employees->id;
+									$levcre->save();
+									
+									#subract current balance from the one applied for
+									/*$newBalance = $leaveBalance - $dayRequested;
+									$credit->leave_balance = $newBalance;
+									$credit->update();*/
+									// update leave history
+									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 3, $employees->id);
+								}
+								AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");
+							}
+						}
+					}
+				}
+				return back()->with('success_add',"Records were successfully inserted.");
+			}
+			else return back()->with('error_add','Please Check your file, Something is wrong there.');
+		}
+		else return back()->with('error_add','Please Upload A File.');
+		
+        $data['page_title'] = "Leave Management";
+        $data['page_description'] = "Upload Leave Balance";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave Management', 'path' => '/leave/upload', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Leave Balance', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Appraisals';
+        AuditReportsController::store('Leave Management', "Leave Balance uploaded", "Accessed by User", 0);
+    }
+	
+	# calculate leave days
+	public function calculatedays($dateFrom, $dateTo)
+    {
+		
+        //convert dates
+        $startDate = strtotime($dateFrom);
+        $endDate = strtotime($dateTo);
+		
+		$onceOffHoliday = date("Y", $startDate);
+        // calculate public holidays and weekends
+        $numweek = 0;
+        $publicHolidays = array();
+        $publicHolidays = DB::table('public_holidays')
+							->where(function ($query)  use ($onceOffHoliday) {
+								$query->whereNull('year')
+									  ->orWhere('year', '=', 0)
+									  ->orWhere('year', '=', $onceOffHoliday);
+							})
+							->pluck('day');
+							//return $publicHolidays;
+        # Add Easter Weekend to list of public holidays
+		$easterSunday =  easter_date(date("Y",$endDate));
+		$publicHolidays[] = $easterSunday - (2*3600*24);
+		$publicHolidays[] = $easterSunday + (3600*24);
+		
+		for ($i = $startDate; $i <= $endDate; $i = $i+86400)
+		{
+			$publicArray = array();
+			foreach ($publicHolidays as $key => $value)
+			{
+				$day = date("Y",$i)."-".date("m",$value)."-".date("d",$value);
+				$day = strtotime($day);
+				$publicArray[$day] = 0;
+			}
+			if (((date("w",$i) == 6) || (date("w",$i) == 0))) $numweek++;
+			if (array_key_exists($i,$publicArray) && ((date("w",$i) != 6) && (date("w",$i) != 0))) $numweek++;
+			
+			if (array_key_exists($i-86400,$publicArray) && (date("w",$i) == 1))
+				if (array_key_exists($i,$publicArray)) {}
+				else $numweek++;
+		}
+        $diff = $endDate - $startDate;
+		$days = ($diff / 86400) - $numweek + 1;
+		return $days;
     }
 }

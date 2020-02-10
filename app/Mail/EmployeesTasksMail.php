@@ -7,6 +7,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\HRPerson;
+use App\ContactCompany;
 use App\CompanyIdentity;
 use Illuminate\Support\Facades\Storage;
 
@@ -22,13 +23,15 @@ class EmployeesTasksMail extends Mailable
 	public $person;
 	public $task;
 	public $sender;
+	public $company;
 	public $urls = '/';
 
-    public function __construct(HRPerson $person, $task, $sender)
+    public function __construct(HRPerson $person, $task, HRPerson $sender, ContactCompany $company)
     {
         $this->person = $person;
         $this->task = $task;
         $this->sender = $sender;
+        $this->company = $company;
     }
 
     /**

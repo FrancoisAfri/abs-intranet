@@ -215,7 +215,7 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Hi {{ $person->first_name }},<br><br>
-                                                    We would like to inform you that a new task: {{$task}}, has been assigned to you by: {{$sender}} .<br>
+                                                    We would like to inform you that a new task: <b>{{$task}}</b>, has been assigned to you by: <b>{{$sender->first_name." ".$sender->surname}}</b>, for client: <b>{{$company->name}}</b> .<br>
                                                     Please <a target="_blank" href="{{ url($urls) }}">click here.</a> to login to the system and see more details.
                                                 </td>
                                             </tr>

@@ -51,7 +51,7 @@
                         <label for="date" class="col-sm-2 control-label">Completion date</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date" name="date"
-                                   value="{{ old('date') }}" placeholder="Select  Inception date  ...">
+                                   value="{{ old('date') }}" placeholder="Select  Completion date  ...">
                         </div>
                     </div>
                     <hr class="hr-text" data-content="Add Policy Users">

@@ -12,7 +12,7 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Leave Balance Upload</h3>
+                    <h3 class="box-title">Leave Upload</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -20,8 +20,15 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- Form Start -->
-                <form name="upload employee" class="form-horizontal" method="POST" action="/leave/leave_upload" enctype="multipart/form-data" required>
+                <form name="upload employee" class="form-horizontal" method="POST" action="" enctype="multipart/form-data" required>
                     {{ csrf_field() }}
+					<div class="form-group{{ $errors->has('upload_type') ? ' has-error' : '' }}">
+						<label for="upload_type" class="col-sm-2 control-label"> Report Type</label>
+						<div class="col-sm-9">
+							<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_bal" name="application_type" value="1" > Upload Leave Balance </label>
+							<label class="radio-inline"><input type="radio" id="rdo_app" name="upload_type" value="2"> Upload Leave Applications</label>
+						</div>
+					</div>
                     <div class="box-body">
                         <div class="form-group file-upload-field {{ $errors->has('file_input') ? ' has-error' : '' }}">
                             <label for="file_input" class="col-sm-2 control-label">File input</label>
@@ -44,7 +51,7 @@
             </div>
         </div>
         @if (session('success_add'))
-        @include('contacts.partials.success_action', ['modal_title' => "Leave Balance Inserted!", 'modal_content' => session('success')])
+        @include('contacts.partials.success_action', ['modal_title' => "Leave Transactions Completed!", 'modal_content' => session('success')])
         @endif
         @if (session('error_add'))
         @include('appraisals.partials.success_action', ['modal_title' => 'An Error Occurred!', 'modal_content' => session('error')])
@@ -64,4 +71,64 @@
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <!-- Ajax dropdown options load -->
     <script src="/custom_components/js/load_dropdown_options.js"></script>
+	<script type="text/javascript">
+	$(function () {
+		//Initialize Select2 Elements
+		$(".select2").select2();
+		//Cancel button click event
+
+		$('#cancel').click(function () {
+			location.href = '/leave/reports';
+		});
+		//Initialize iCheck/iRadio Elements
+		$('input').iCheck({
+			checkboxClass: 'icheckbox_square-blue',
+			radioClass: 'iradio_square-blue',
+			increaseArea: '20%' // optional
+		});
+			hideFields();
+
+		//show/hide fields on radio button toggles (depending on registration type)
+
+		$('#rdo_app, #rdo_bal').on('ifChecked', function(){
+			var allType = hideFields();
+			if (allType == 1) $('#box-subtitle').html('Leave Balance');
+			else if (allType == 2) $('#box-subtitle').html('Leave Applications');
+		});
+
+		//Vertically center modals on page
+		function reposition() {
+			var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+			modal.css('display', 'block');
+
+			// Dividing by two centers the modal exactly, but dividing by three
+			// or four works better for larger screens.
+			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+		}
+		// Reposition when a modal is shown
+		$('.modal').on('show.bs.modal', reposition);
+		// Reposition when the window is resized
+		$(window).on('resize', function () {
+			$('.modal:visible').each(reposition);
+		});
+
+		//Show success action modal
+		$('#success-action-modal').modal('show');
+	});      
+    
+	//function to hide/show fields depending on the allocation  type
+	function hideFields() {
+		var allType = $("input[name='upload_type']:checked").val();
+		if (allType == 1) { //adjsut leave
+			 $('form[name="upload employee"]').attr('action', '/leave/leave_upload');
+			 $('#gen-report').val("Submit");        
+		}
+		else if (allType == 2) { //resert leave
+			 $('form[name="upload employee"]').attr('action', '/leave/upload/app');
+			 $('#gen-report').val("Submit"); 
+		}
+		return allType;      
+		}
+    </script>
 @endsection

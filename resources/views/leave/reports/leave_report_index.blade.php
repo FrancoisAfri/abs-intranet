@@ -342,8 +342,6 @@
             loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
             parentDDID = ddID;
             loadAllDivs = -1;
-        @endforeach
-      
-        
+        @endforeach 
     </script>
 @endsection
