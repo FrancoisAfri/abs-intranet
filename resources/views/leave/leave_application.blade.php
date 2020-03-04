@@ -61,7 +61,7 @@
 					</tr>
 					<tr>
 						<td class="caption"><b>Day(s) Requested</b></td>
-						<td>{{ (!empty($leave->leave_days)) ?  $leave->leave_days / 8: ''}}</td>
+						<td>{{ (!empty($leave->leave_taken)) ?  $leave->leave_taken / 8: ''}}</td>
 						<td class="caption"><b>Note</b></td>
 						<td>{{ !empty($leave->notes) ? $leave->notes : '' }}</td>
 					</tr>

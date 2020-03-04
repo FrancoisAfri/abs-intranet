@@ -123,7 +123,7 @@
                                         <div class="input-group-addon">
                                             <i class="fa fa-clock-o"></i>
                                         </div>
-                                        <input type="number" class="form-control" id="hours" name="hours" max="7" value="{{ old('hours') }}" placeholder="Enter Hours...">
+                                        <input type="number" class="form-control" id="hours" name="hours" max="7" min="0" step=".01" value="{{ old('hours') }}" placeholder="Enter Hours...">
                                     </div>
                                 </div>
                             </div>

@@ -33,7 +33,7 @@
 						<td class="caption">Leave Type</td>
 						<td>{{ !empty($leave->leavetpe->name) ? $leave->leavetpe->name : ''}}</td>
 						<td class="caption">Day(s) Requested</td>
-						<td>{{ !empty($leave->leave_days) ? $leave->leave_days / 8 : ''}}</td>
+						<td>{{ !empty($leave->leave_taken) ? $leave->leave_taken / 8 : ''}}</td>
 					</tr>
 					<tr>
 						<td class="caption">Supporting Document</td>

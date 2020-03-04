@@ -30,7 +30,7 @@
                     @foreach($leaveTypes as $leaveType)
                     <tr id="modules-list">
                         <td nowrap>
-						<button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave_days-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-day5min="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }}"  data-day5max="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '' }}" data-day6min="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->min : '' }}" data-day6max="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->max : '' }}" data-shiftmin="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->min : '' }}" data-shiftmax="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->max : '' }}"> <i class="fa fa-pencil-square-o"></i> Edit</button>
+						<button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-leave_taken-modal" data-id="{{ $leaveType->id }}" data-name="{{ $leaveType->name }}" data-day5min="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }}"  data-day5max="{{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->max : '' }}" data-day6min="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->min : '' }}" data-day6max="{{ ($profile = $leaveType->leave_profle->where('id', 3)->first()) ? $profile->pivot->max : '' }}" data-shiftmin="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->min : '' }}" data-shiftmax="{{ ($profile = $leaveType->leave_profle->where('id', 4)->first()) ? $profile->pivot->max : '' }}"> <i class="fa fa-pencil-square-o"></i> Edit</button>
                         </td>
                         <td align="center">{{ $leaveType->name}}</td>
                         <td align="center"> {{ ($profile = $leaveType->leave_profle->where('id', 2)->first()) ? $profile->pivot->min : '' }} </td>
@@ -348,7 +348,7 @@
         });
      
         var leavesetupId;
-        $('#edit-leave_days-modal').on('show.bs.modal', function (e) {
+        $('#edit-leave_taken-modal').on('show.bs.modal', function (e) {
             //console.log('kjhsjs');
             var btnEdit = $(e.relatedTarget);
             leavesetupId = btnEdit.data('id');
@@ -376,20 +376,20 @@
         });
         // pass module data to the custom leave  -edit module modal
         //****leave type post
-        $('#update-leave_days').on('click', function () {
+        $('#update-leave_taken').on('click', function () {
             var strUrl = '/leave/setup/leave_type_edit/' + leavesetupId;
             var objData = {
-                  day5min: $('#edit-leave_days-modal').find('#day5min').val()
-                , day5max: $('#edit-leave_days-modal').find('#day5max').val()
-                , day6min: $('#edit-leave_days-modal').find('#day6min').val()
-                , day6max: $('#edit-leave_days-modal').find('#day6max').val()
-                , shiftmin: $('#edit-leave_days-modal').find('#shiftmin').val()
-                , shiftmax: $('#edit-leave_days-modal').find('#shiftmax').val()
-                , _token: $('#edit-leave_days-modal').find('input[name=_token]').val()
+                  day5min: $('#edit-leave_taken-modal').find('#day5min').val()
+                , day5max: $('#edit-leave_taken-modal').find('#day5max').val()
+                , day6min: $('#edit-leave_taken-modal').find('#day6min').val()
+                , day6max: $('#edit-leave_taken-modal').find('#day6max').val()
+                , shiftmin: $('#edit-leave_taken-modal').find('#shiftmin').val()
+                , shiftmax: $('#edit-leave_taken-modal').find('#shiftmax').val()
+                , _token: $('#edit-leave_taken-modal').find('input[name=_token]').val()
             };
             //console.log('gets here ' + JSON.stringify(objData));
-            var modalID = 'edit-leave_days-modal';
-            var submitBtnID = 'update-leave_days';
+            var modalID = 'edit-leave_taken-modal';
+            var submitBtnID = 'update-leave_taken';
             var redirectUrl = '/leave/setup';
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Leave days has been successfully added.';

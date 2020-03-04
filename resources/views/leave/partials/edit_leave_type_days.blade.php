@@ -1,4 +1,4 @@
-<div id="edit-leave_days-modal" class="modal modal-default fade">
+<div id="edit-leave_taken-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="" method="POST" name="edit_leavetypedays-form">
@@ -64,7 +64,7 @@
                     </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="update-leave_days" class="btn btn-primary">Update</button>
+                    <button type="button" id="update-leave_taken" class="btn btn-primary">Update</button>
                 </div>
             </form>
         </div>

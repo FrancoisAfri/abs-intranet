@@ -33,7 +33,7 @@
 							</div>
 						</div>
                     @endforeach
-					<div class="form-group folder-field{{ $errors->has('folder_id') ? ' has-error' : '' }}">
+					<div class="form-group folder-com-field{{ $errors->has('folder_id') ? ' has-error' : '' }}">
                         <label for="folder_id" class="col-sm-2 control-label">Folders</label>
                         <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
@@ -45,7 +45,7 @@
                                 </select>
                         </div>
                     </div>
-					<div class="form-group file-field{{ $errors->has('file_id') ? ' has-error' : '' }}">
+					<div class="form-group file-com-field{{ $errors->has('file_id') ? ' has-error' : '' }}">
                         <label for="file_id" class="col-sm-2 control-label">Files</label>
                         <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
@@ -88,4 +88,3 @@
     </div>
 </div>
 </div>
-           

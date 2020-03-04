@@ -395,7 +395,7 @@ class UsersController extends Controller
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
         $businessCard = DB::table('business_card')->get();
-        $positions = DB::table('hr_positions')->where('status', 1)->get();
+        $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         // return $businessCard;
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
         $data['page_title'] = "Users";

@@ -539,7 +539,7 @@ class LeaveSetupController extends Controller {
 									$levApp->leave_type_id = 4;
 									$levApp->start_date = $startDate;
 									$levApp->end_date = $endDate;
-									$levApp->leave_days = $dayRequested;
+									$levApp->leave_taken = $dayRequested;
 									$levApp->hr_id = $employees->id;
 									$levApp->notes = '';
 									$levApp->status = 1;
@@ -549,12 +549,25 @@ class LeaveSetupController extends Controller {
 									$credit = leave_credit::where('hr_id', $employees->id)
 										->where('leave_type_id', 4)
 										->first();
-									$leaveBalance = $credit->leave_balance;
-									
-									#subract current balance from the one applied for
-									$newBalance = $leaveBalance - $dayRequested;
-									$credit->leave_balance = $newBalance;
-									$credit->update();
+									if (!empty($credit))
+									{
+										$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance: 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$credit->leave_balance = $newBalance;
+										$credit->update();	
+									}
+									else
+									{
+										$leaveBalance = 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$levcre = new leave_credit();
+										$levcre->leave_type_id = 4;
+										$levcre->leave_balance = $newBalance;
+										$levcre->hr_id = $employees->id;
+										$levcre->save();
+									}
 									// update leave history
 									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 4, $employees->id);
 								}
@@ -565,7 +578,7 @@ class LeaveSetupController extends Controller {
 									$levApp->leave_type_id = 1;
 									$levApp->start_date = $startDate;
 									$levApp->end_date = $endDate;
-									$levApp->leave_days = $dayRequested;
+									$levApp->leave_taken = $dayRequested;
 									$levApp->hr_id = $employees->id;
 									$levApp->notes = '';
 									$levApp->status = 1;
@@ -575,12 +588,26 @@ class LeaveSetupController extends Controller {
 									$credit = leave_credit::where('hr_id', $employees->id)
 										->where('leave_type_id', 1)
 										->first();
-									$leaveBalance = $credit->leave_balance;
-									//return $credit;
-									#subract current balance from the one applied for
-									$newBalance = $leaveBalance - $dayRequested;
-									$credit->leave_balance = $newBalance;
-									$credit->update();
+									// new improved code 
+									if (!empty($credit))
+									{
+										$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance: 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$credit->leave_balance = $newBalance;
+										$credit->update();	
+									}
+									else
+									{
+										$leaveBalance = 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$levcre = new leave_credit();
+										$levcre->leave_type_id = 1;
+										$levcre->leave_balance = $newBalance;
+										$levcre->hr_id = $employees->id;
+										$levcre->save();
+									}
 									// update leave history
 									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 1, $employees->id);
 								}
@@ -591,7 +618,7 @@ class LeaveSetupController extends Controller {
 									$levApp->leave_type_id = 5;
 									$levApp->start_date = $startDate;
 									$levApp->end_date = $endDate;
-									$levApp->leave_days = $dayRequested;
+									$levApp->leave_taken = $dayRequested;
 									$levApp->hr_id = $employees->id;
 									$levApp->notes = '';
 									$levApp->status = 1;
@@ -601,12 +628,26 @@ class LeaveSetupController extends Controller {
 									$credit = leave_credit::where('hr_id', $employees->id)
 										->where('leave_type_id', 5)
 										->first();
-									$leaveBalance = $credit->leave_balance;
-									
-									#subract current balance from the one applied for
-									$newBalance = $leaveBalance - $dayRequested;
-									$credit->leave_balance = $newBalance;
-									$credit->update();
+									// new improved code 
+									if (!empty($credit))
+									{
+										$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance: 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$credit->leave_balance = $newBalance;
+										$credit->update();	
+									}
+									else
+									{
+										$leaveBalance = 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$levcre = new leave_credit();
+										$levcre->leave_type_id = 5;
+										$levcre->leave_balance = $newBalance;
+										$levcre->hr_id = $employees->id;
+										$levcre->save();
+									}
 									// update leave history
 									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 5, $employees->id);
 								}
@@ -617,7 +658,7 @@ class LeaveSetupController extends Controller {
 									$levApp->leave_type_id = 2;
 									$levApp->start_date = $startDate;
 									$levApp->end_date = $endDate;
-									$levApp->leave_days = $dayRequested;
+									$levApp->leave_taken = $dayRequested;
 									$levApp->hr_id = $employees->id;
 									$levApp->notes = '';
 									$levApp->status = 1;
@@ -627,12 +668,26 @@ class LeaveSetupController extends Controller {
 									$credit = leave_credit::where('hr_id', $employees->id)
 										->where('leave_type_id', 2)
 										->first();
-									$leaveBalance = $credit->leave_balance;
-									
-									#subract current balance from the one applied for
-									$newBalance = $leaveBalance - $dayRequested;
-									$credit->leave_balance = $newBalance;
-									$credit->update();
+									// new improved code 
+									if (!empty($credit))
+									{
+										$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance: 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$credit->leave_balance = $newBalance;
+										$credit->update();	
+									}
+									else
+									{
+										$leaveBalance = 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$levcre = new leave_credit();
+										$levcre->leave_type_id = 2;
+										$levcre->leave_balance = $newBalance;
+										$levcre->hr_id = $employees->id;
+										$levcre->save();
+									}
 									// update leave history
 									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 2, $employees->id);
 								}
@@ -643,7 +698,7 @@ class LeaveSetupController extends Controller {
 									$levApp->leave_type_id = 3;
 									$levApp->start_date = $startDate;
 									$levApp->end_date = $endDate;
-									$levApp->leave_days = $dayRequested;
+									$levApp->leave_taken = $dayRequested;
 									$levApp->hr_id = $employees->id;
 									$levApp->notes = '';
 									$levApp->status = 1;
@@ -653,42 +708,116 @@ class LeaveSetupController extends Controller {
 									$credit = leave_credit::where('hr_id', $employees->id)
 										->where('leave_type_id', 3)
 										->first();
-									$leaveBalance = $credit->leave_balance;
-									
-									#subract current balance from the one applied for
-									$newBalance = $leaveBalance - $dayRequested;
-									$credit->leave_balance = $newBalance;
-									$credit->update();
+									// new improved code 
+									if (!empty($credit))
+									{
+										$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance: 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$credit->leave_balance = $newBalance;
+										$credit->update();	
+									}
+									else
+									{
+										$leaveBalance = 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$levcre = new leave_credit();
+										$levcre->leave_type_id = 3;
+										$levcre->leave_balance = $newBalance;
+										$levcre->hr_id = $employees->id;
+										$levcre->save();
+									}
 									// update leave history
 									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 3, $employees->id);
 								}
-								elseif (!empty($value['leave_type']) && $value['leave_type'] == 'Maternity')
+								elseif (!empty($value['leave_type']) && $value['leave_type'] == 'Unpaid')
 								{
 									// get leave application
 									$levApp = new leave_application();
 									$levApp->leave_type_id = 7;
 									$levApp->start_date = $startDate;
 									$levApp->end_date = $endDate;
-									$levApp->leave_days = $dayRequested;
+									$levApp->leave_taken = $dayRequested;
 									$levApp->hr_id = $employees->id;
 									$levApp->notes = '';
 									$levApp->status = 1;
 									$levApp->manager_id = !empty($employees->manager_id) ? $employees->manager_id : 0;
 									$levApp->save();
 									// #Query the the leave_config days for value
-									//$leaveBalance = $credit->leave_balance;
+									$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance: 0;
+									$newBalance = $leaveBalance - $dayRequested;
 									$levcre = new leave_credit();
 									$levcre->leave_type_id = 7;
-									$levcre->leave_balance = $dayRequested;
+									$levcre->leave_balance = $newBalance;
 									$levcre->hr_id = $employees->id;
 									$levcre->save();
-									
-									#subract current balance from the one applied for
-									/*$newBalance = $leaveBalance - $dayRequested;
-									$credit->leave_balance = $newBalance;
-									$credit->update();*/
+									// Query leave credit to get available leave days
+									$credit = leave_credit::where('hr_id', $employees->id)
+										->where('leave_type_id', 7)
+										->first();
+									// new improved code 
+									if (!empty($credit))
+									{
+										$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance: 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$credit->leave_balance = $newBalance;
+										$credit->update();	
+									}
+									else
+									{
+										$leaveBalance = 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$levcre = new leave_credit();
+										$levcre->leave_type_id = 7;
+										$levcre->leave_balance = $newBalance;
+										$levcre->hr_id = $employees->id;
+										$levcre->save();
+									}
 									// update leave history
-									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 3, $employees->id);
+									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 7, $employees->id);
+								}
+								elseif (!empty($value['leave_type']) && $value['leave_type'] == 'Study')
+								{
+									// get leave application
+									$levApp = new leave_application();
+									$levApp->leave_type_id = 6;
+									$levApp->start_date = $startDate;
+									$levApp->end_date = $endDate;
+									$levApp->leave_taken = $dayRequested;
+									$levApp->hr_id = $employees->id;
+									$levApp->notes = '';
+									$levApp->status = 1;
+									$levApp->manager_id = !empty($employees->manager_id) ? $employees->manager_id : 0;
+									$levApp->save();
+									// #Query the the leave_config days for value
+									$credit = leave_credit::where('hr_id', $employees->id)
+										->where('leave_type_id', 6)
+										->first();
+									// new improved code 
+									if (!empty($credit))
+									{
+										$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance: 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$credit->leave_balance = $newBalance;
+										$credit->update();	
+									}
+									else
+									{
+										$leaveBalance = 0;
+										#subract current balance from the one applied for
+										$newBalance = $leaveBalance - $dayRequested;
+										$levcre = new leave_credit();
+										$levcre->leave_type_id = 6;
+										$levcre->leave_balance = $newBalance;
+										$levcre->hr_id = $employees->id;
+										$levcre->save();
+									}
+									// update leave history
+									LeaveHistoryAuditController::store("leave application Approved", '', $leaveBalance, $dayRequested, $newBalance, 6, $employees->id);
 								}
 								AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");
 							}

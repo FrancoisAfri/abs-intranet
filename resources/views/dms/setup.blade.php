@@ -107,7 +107,7 @@
         });
      
         var leavesetupId;
-        $('#edit-leave_days-modal').on('show.bs.modal', function (e) {
+        $('#edit-leave_taken-modal').on('show.bs.modal', function (e) {
             //console.log('kjhsjs');
             var btnEdit = $(e.relatedTarget);
             leavesetupId = btnEdit.data('id');
@@ -135,20 +135,20 @@
         });
         // pass module data to the custom leave  -edit module modal
         //****leave type post
-        $('#update-leave_days').on('click', function () {
+        $('#update-leave_taken').on('click', function () {
             var strUrl = '/leave/setup/leave_type_edit/' + leavesetupId;
             var objData = {
-                  day5min: $('#edit-leave_days-modal').find('#day5min').val()
-                , day5max: $('#edit-leave_days-modal').find('#day5max').val()
-                , day6min: $('#edit-leave_days-modal').find('#day6min').val()
-                , day6max: $('#edit-leave_days-modal').find('#day6max').val()
-                , shiftmin: $('#edit-leave_days-modal').find('#shiftmin').val()
-                , shiftmax: $('#edit-leave_days-modal').find('#shiftmax').val()
-                , _token: $('#edit-leave_days-modal').find('input[name=_token]').val()
+                  day5min: $('#edit-leave_taken-modal').find('#day5min').val()
+                , day5max: $('#edit-leave_taken-modal').find('#day5max').val()
+                , day6min: $('#edit-leave_taken-modal').find('#day6min').val()
+                , day6max: $('#edit-leave_taken-modal').find('#day6max').val()
+                , shiftmin: $('#edit-leave_taken-modal').find('#shiftmin').val()
+                , shiftmax: $('#edit-leave_taken-modal').find('#shiftmax').val()
+                , _token: $('#edit-leave_taken-modal').find('input[name=_token]').val()
             };
             //console.log('gets here ' + JSON.stringify(objData));
-            var modalID = 'edit-leave_days-modal';
-            var submitBtnID = 'update-leave_days';
+            var modalID = 'edit-leave_taken-modal';
+            var submitBtnID = 'update-leave_taken';
             var redirectUrl = '/leave/setup';
             var successMsgTitle = 'Changes Saved!';
             var successMsg = 'Leave days has been successfully added.';

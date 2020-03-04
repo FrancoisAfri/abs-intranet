@@ -96,7 +96,6 @@
 								<th>Current Version</th>
 								<th>Date Uploaded</th>
 								<th style="width: 5px; text-align: center;">#</th>
-								
 							</tr>
 							@if (count($files) > 0)
 								@foreach ($files as $file)

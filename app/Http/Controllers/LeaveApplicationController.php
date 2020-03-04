@@ -37,7 +37,7 @@ class LeaveApplicationController extends Controller
     }
 
     public function index()
-    {
+    {		
         $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
         if (!empty($leave_customs))
             $leave_customs = $leave_customs->load('userCustom');
@@ -406,7 +406,7 @@ class LeaveApplicationController extends Controller
         $levApp->leave_type_id = $request->input('leave_type');
         $levApp->start_date = $startDate;
         $levApp->end_date = $endDate;
-        $levApp->leave_days = $dayRequested;
+        $levApp->leave_taken = $dayRequested;
         $levApp->hr_id = $request->input('hr_person_id');
         $levApp->notes = $request->input('description');
         $levApp->status = $applicatiionStaus;
@@ -525,7 +525,7 @@ class LeaveApplicationController extends Controller
         $levApp->status = $applicatiionStaus;
         $levApp->start_date = $date;
         $levApp->end_date = $date;
-        $levApp->leave_days = $hours;
+        $levApp->leave_taken = $hours;
         $levApp->manager_id = $managerID;
         $levApp->save();
 		//Upload supporting Documents
@@ -580,7 +580,7 @@ class LeaveApplicationController extends Controller
     {
         #query the hr person table
 		$hrDetails = HRPerson::where('id', $leaveId->hr_id)->where('status', 1)->first();
-		$daysApplied = $leaveId->leave_days;
+		$daysApplied = $leaveId->leave_taken;
 		//check leave approvals setup
         $approvals = leave_configuration::where('id', 1)
             ->select('require_managers_approval', 'require_department_head_approval')
@@ -797,9 +797,9 @@ class LeaveApplicationController extends Controller
 			{
 				// get leave creadit
 				$credit = leave_credit::where('hr_id',$leave->hr_id)->where('leave_type_id',$leave->leave_type_id)->first(); 
-				$leaveBalance = $credit->leave_balance;
+				$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance: 0;
 				// update leave balance
-				$credit->leave_balance = $leaveBalance + $leave->leave_days;
+				$credit->leave_balance = $leaveBalance + $leave->leave_taken;
 				$credit->update();
 				// insert into leave history
 				$levHist = new leave_history();
@@ -808,7 +808,7 @@ class LeaveApplicationController extends Controller
 				$levHist->description_action = "Leave application canceled and credit been updated";
 				$levHist->previous_balance = $leaveBalance;
 				$levHist->leave_type_id = $leave->leave_type_id;
-				$levHist->transcation = $leave->leave_days;
+				$levHist->transcation = $leave->leave_taken;
 				$levHist->current_balance = $credit->leave_balance;
 				$levHist->added_by = $user->person->id;
 				$levHist->save();

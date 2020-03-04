@@ -23,7 +23,7 @@
             <!-- Company's contacts box -->
             <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-users"></i> Company Access</h3>
+                    <h3 class="box-title"> <b>Company Folder(s)</b></h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -34,58 +34,55 @@
                     <div style="overflow-X:auto; margin-right: 10px; max-height: 250px;">
 						<table class="table table-striped" >
 							<tr>
-								<th colspan="7" style="text-align: center;">Folders Access</th>
+								<th colspan="5" style="text-align: center;">Folders</th>
 							</tr>
 							<tr>
-								<th>Division</th>
-								<th>Department</th>
-								<th>Section</th>
+								<th></th>
 								<th>Folder</th>
+								<th>Division</th>
 								<th>Administrator</th>
 								<th>Expiry Date</th>
-								<th>#</th>
 							</tr>
 							@if (count($companyAccessFolders) > 0)
 								@foreach($companyAccessFolders as $companyAccessFolder)
 								   <tr>
-										<td>{{ (!empty($companyAccessFolder->division->name)) ?  $companyAccessFolder->division->name : ''}} </td>
-										<td>{{ (!empty($companyAccessFolder->department->name)) ?  $companyAccessFolder->department->name : ''}} </td>
-										<td>{{ (!empty($companyAccessFolder->section->name)) ?  $companyAccessFolder->section->name : ''}} </td>
+										<td style="text-align: center"><a href="{{ '/dms/folder/view/' . $companyAccessFolder->id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
+												 alt="Doc Image"
+												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a></td>
 										<td>{{ (!empty($companyAccessFolder->companyFolder->folder_name)) ?  $companyAccessFolder->companyFolder->folder_name : ''}} </td>
+										<td>{{ (!empty($companyAccessFolder->division->name)) ?  $companyAccessFolder->division->name : ''}} </td>
 										<td>{{ !empty($companyAccessFolder->companyAdmin->first_name) && !empty($companyAccessFolder->companyAdmin->surname) ?  $companyAccessFolder->companyAdmin->first_name." ".$companyAccessFolder->companyAdmin->surname : '' }}</td>
 										<td>{{ !empty($companyAccessFolder->expiry_date) ? date('d M Y ', $companyAccessFolder->expiry_date) : '' }}</td>
-										<td nowrap>
-											<button type="button" id="view_users" class="btn {{ (!empty($companyAccessFolder->status) && $companyAccessFolder->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$companyAccessFolder->id}}, 'actdeac');"><i class="fa {{ (!empty($companyAccessFolder->status) && $companyAccessFolder->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($companyAccessFolder->status) && $companyAccessFolder->status == 1) ? "Revoke Access" : ""}}</button>
-										</td>
 									</tr>
 								@endforeach
 							@endif
 						</table>
 						<table class="table table-striped" >
 							<tr>
-								<th colspan="7" style="text-align: center;">Files Access</th>
+								<th colspan="5" style="text-align: center;">Files</th>
 							</tr>
 							<tr>
-								<th>Division</th>
-								<th>Department</th>
-								<th>Section</th>
+								<th></th>
 								<th>File</th>
+								<th>Division</th>
 								<th>Administrator</th>
 								<th>Expiry Date</th>
-								<th>#</th>
 							</tr>
 							@if (count($companyAccessFiles) > 0)
 								@foreach($companyAccessFiles as $companyAccessFile)
-								   <tr>
-										<td>{{ (!empty($companyAccessFile->division->name)) ?  $companyAccessFile->division->name : ''}} </td>
-										<td>{{ (!empty($companyAccessFile->department->name)) ?  $companyAccessFile->department->name : ''}} </td>
-										<td>{{ (!empty($companyAccessFile->section->name)) ?  $companyAccessFile->section->name : ''}} </td>
+									<tr>
+										<td>@if(!empty($companyAccessFile->companyFile->document_name))
+													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+													   href="/dms/read-view-document/{{$companyAccessFile->companyFile->id}}"
+													   ><img src="{{ Storage::disk('local')->url("DMS Image/{$companyAccessFile->companyFile->file_extension}.gif") }}" class="img-circle"
+												 alt="Doc Image"
+												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a>
+											@endif
+										</td>
 										<td>{{ (!empty($companyAccessFile->companyFile->document_name)) ?  $companyAccessFile->companyFile->document_name : ''}} </td>
+										<td>{{ (!empty($companyAccessFile->division->name)) ?  $companyAccessFile->division->name : ''}} </td>
 										<td>{{ !empty($companyAccessFile->companyAdmin->first_name) && !empty($companyAccessFile->companyAdmin->surname) ?  $companyAccessFile->companyAdmin->first_name." ".$companyAccessFile->companyAdmin->surname : '' }}</td>
 										<td>{{ !empty($companyAccessFile->expiry_date) ? date('d M Y ', $companyAccessFile->expiry_date) : '' }}</td>
-										<td nowrap>
-											<button type="button" id="view_users" class="btn {{ (!empty($companyAccessFile->status) && $companyAccessFile->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$companyAccessFile->id}}, 'actdeac');"><i class="fa {{ (!empty($companyAccessFile->status) && $companyAccessFile->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($companyAccessFile->status) && $companyAccessFile->status == 1) ? "Revoke Access" : ""}}</button>
-										</td>
 									</tr>
 								@endforeach
 							@endif
@@ -93,9 +90,7 @@
 					</div>
 					<!-- /.box-body -->
 					<div class="box-footer">
-						<button type="button" id="add-task" class="btn btn-success pull-right" data-toggle="modal"
-								data-target="#add-company-access-modal" data-meeting_id="">Add Company Access
-						</button>
+					
 					</div>
 				</div>
             </div>
@@ -104,7 +99,7 @@
 			<!-- Company's contacts box -->
             <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-users"></i> Group Access</h3>
+                    <h3 class="box-title"> <b>Group Folder(s)</b></h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -115,44 +110,49 @@
 					<div style="overflow-X:auto; margin-right: 10px; max-height: 250px;">
 						<table class="table table-striped" >
 							<tr>
-								<th colspan="5" style="text-align: center;">Folders Access</th>
+								<th colspan="4" style="text-align: center;">Folders</th>
 							</tr>
 							<tr>
-								<th>Group</th>
+								<th></th>
 								<th>Folder</th>
 								<th>Administrator</th>
 								<th>Expiry Date</th>
-								<th>#</th>
 							</tr>
 							@if (count($groupAccessFolders) > 0)
 								@foreach($groupAccessFolders as $groupAccessFolder)
 								   <tr>
-										<td>{{ (!empty($groupAccessFolder->groupName->group_name)) ?  $groupAccessFolder->groupName->group_name : ''}} </td>
+										<td style="text-align: center"><a href="{{ '/dms/folder/view/' . $groupAccessFolder->id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
+												 alt="Doc Image"
+												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a></td>
 										<td>{{ (!empty($groupAccessFolder->groupFolder->folder_name)) ?  $groupAccessFolder->groupFolder->folder_name : ''}} </td>
 										<td>{{ !empty($groupAccessFolder->groupAdmin->first_name) && !empty($groupAccessFolder->groupAdmin->surname) ? $groupAccessFolder->groupAdmin->first_name." ".$groupAccessFolder->groupAdmin->surname : '' }}</td>
 										<td>{{ !empty($groupAccessFolder->expiry_date) ? date('d M Y ', $groupAccessFolder->expiry_date) : '' }}</td>
-										<td nowrap>
-											<button type="button" id="view_users" class="btn {{ (!empty($groupAccessFolder->status) && $groupAccessFolder->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$groupAccessFolder->id}}, 'actdeac');"><i class="fa {{ (!empty($groupAccessFolder->status) && $groupAccessFolder->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($groupAccessFolder->status) && $groupAccessFolder->status == 1) ? "Revoke Access" : ""}}</button>
-										</td>
+										
 									</tr>
 								@endforeach
 							@endif
 						</table>
 						<table class="table table-striped" >
 							<tr>
-								<th colspan="5" style="text-align: center;">Files Access</th>
+								<th colspan="4" style="text-align: center;">Files</th>
 							</tr>
 							<tr>
-								<th>Group</th>
+								<th></th>
 								<th>File</th>
 								<th>Administrator</th>
 								<th>Expiry Date</th>
-								<th>#</th>
 							</tr>
 							@if (count($groupAccessFiles) > 0)
 								@foreach($groupAccessFiles as $groupAccessFile)
 									<tr>
-										<td>{{ (!empty($groupAccessFile->groupName->group_name)) ?  $groupAccessFile->groupName->group_name : ''}} </td>
+										<td>@if(!empty($groupAccessFile->groupFile->document_name))
+													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+													   href="/dms/read-view-document/{{$groupAccessFile->groupFile->id}}"
+													   ><img src="{{ Storage::disk('local')->url("DMS Image/{$groupAccessFile->groupFile->file_extension}.gif") }}" class="img-circle"
+												 alt="Doc Image"
+												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a>
+											@endif
+										</td>
 										<td>{{ (!empty($groupAccessFile->groupFile->document_name)) ?  $groupAccessFile->groupFile->document_name : ''}} </td>
 										<td>{{ !empty($groupAccessFile->groupAdmin->first_name) && !empty($groupAccessFile->groupAdmin->surname) ? $groupAccessFolder->groupAdmin->first_name." ".$groupAccessFolder->groupAdmin->surname : '' }}</td>
 										<td>{{ !empty($groupAccessFile->expiry_date) ? date('d M Y ', $groupAccessFile->expiry_date) : '' }}</td>
@@ -166,9 +166,7 @@
 					</div>
 					<!-- /.box-body -->
 					<div class="box-footer">
-						<button type="button" id="add-task" class="btn btn-success pull-right" data-toggle="modal"
-								data-target="#add-group-access-modal" data-meeting_id="">Add Group Access
-						</button>
+						
 					</div>
 				</div>
             </div>
@@ -177,7 +175,7 @@
 			<!-- Company's contacts box -->
             <div class="box box-default collapsed-box">
                 <div class="box-header with-border">
-                    <h3 class="box-title"><i class="fa fa-users"></i> Users Access</h3>
+                    <h3 class="box-title"> <b>Users Folder(s)</b></h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -186,52 +184,53 @@
                 <!-- /.box-header -->
                 <div class="box-body no-padding no-margin">
 					<div style="overflow-X:auto; margin-right: 10px; max-height: 250px;">
-					   <table class="table table-striped">
+						<table class="table table-striped">
 							<tr>
-								<th colspan="5" style="text-align: center;">Folders Access</th>
+								<th colspan="4" style="text-align: center;">Folders</th>
 							</tr>
 							<tr>
-								<th>Employee</th>
+								<th></th>
 								<th>Folder</th>
 								<th>Administrator</th>
 								<th>Expiry Date</th>
-								<th>#</th>
 							</tr>
 							@if (!empty($userAccessFolders))
 								@foreach($userAccessFolders as $userAccessFolder)
 									<tr>
-										<td>{{ !empty($userAccessFolder->employee->first_name) && !empty($userAccessFolder->employee->surname) ?  $userAccessFolder->employee->first_name." ".$userAccessFolder->employee->surname : '' }}</td>
+										<td style="text-align: center"><a href="{{ '/dms/folder/view/' . $userAccessFolder->id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
+												 alt="Doc Image"
+												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a></td>
 										<td>{{ !empty($userAccessFolder->userFolder->folder_name) ? $userAccessFolder->userFolder->folder_name : '' }}</td>
 										<td>{{ !empty($userAccessFolder->expiry_date) ? date('d M Y ', $userAccessFolder->expiry_date) : '' }}</td>
 										<td>{{ (!empty($userAccessFolder->userAdmin->first_name) && !empty($userAccessFolder->userAdmin->surname)) ?  $userAccessFolder->userAdmin->first_name." ".$userAccessFolder->userAdmin->surname : ''}} </td>
-										<td nowrap>
-											<button type="button" id="view_users" class="btn {{ (!empty($userAccessFolder->status) && $userAccessFolder->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$userAccessFolder->id}}, 'actdeac');"><i class="fa {{ (!empty($userAccessFolder->status) && $userAccessFolder->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($userAccessFolder->status) && $userAccessFolder->status == 1) ? "Revoke Access" : ""}}</button>
-										</td>
 									</tr>
 								@endforeach
 							@endif
 						</table>
 						<table class="table table-striped" >
 							<tr>
-								<th colspan="5" style="text-align: center;">Files Access</th>
+								<th colspan="4" style="text-align: center;">Files</th>
 							</tr>
 							<tr>
-								<th>Employee</th>
+								<th></th>
 								<th>File</th>
 								<th>Administrator</th>
 								<th>Expiry Date</th>
-								<th>#</th>
 							</tr>
 							@if (count($userAccessFiles) > 0)
 								@foreach($userAccessFiles as $userAccessFile)
 								   <tr>
-										<td>{{ !empty($userAccessFile->employee->first_name) && !empty($userAccessFile->employee->surname) ?  $userAccessFile->employee->first_name." ".$userAccessFile->employee->surname : '' }}</td>
-										<td>{{ !empty($userAccessFile->userFile->document_name) ? $userAccessFile->userFile->document_name : '' }}</td>
-										<td>{{ !empty($userAccessFile->expiry_date) ? date('d M Y ', $userAccessFile->expiry_date) : '' }}</td>
-										<td>{{ (!empty($userAccessFile->userAdmin->first_name) && !empty($userAccessFile->userAdmin->surname)) ?  $userAccessFile->userAdmin->first_name." ".$userAccessFile->userAdmin->surname : ''}} </td>
-										<td nowrap>
-											<button type="button" id="view_users" class="btn {{ (!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$userAccessFile->id}}, 'actdeac');"><i class="fa {{ (!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "Revoke Access" : ""}}</button>
+										<td>@if(!empty($userAccessFile->userFile->document_name))
+													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+													   href="/dms/read-view-document/{{$userAccessFile->userFile->id}}"
+													   ><img src="{{ Storage::disk('local')->url("DMS Image/{$userAccessFile->userFile->file_extension}.gif") }}" class="img-circle"
+												 alt="Doc Image"
+												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a>
+											@endif
 										</td>
+										<td>{{ !empty($userAccessFile->userFile->document_name) ? $userAccessFile->userFile->document_name : '' }}</td>
+										<td>{{ (!empty($userAccessFile->userAdmin->first_name) && !empty($userAccessFile->userAdmin->surname)) ?  $userAccessFile->userAdmin->first_name." ".$userAccessFile->userAdmin->surname : ''}} </td>
+										<td>{{ !empty($userAccessFile->expiry_date) ? date('d M Y ', $userAccessFile->expiry_date) : '' }}</td>
 									</tr>
 								@endforeach
 							@endif
@@ -240,15 +239,13 @@
 					<!-- /.box-body -->
 					<div class="box-footer">
 						<button type="button" id="add-task" class="btn btn-success pull-right" data-toggle="modal"
-								data-target="#add-user-access-modal" data-meeting_id="">Add User Access
+								data-target="#add-user-access-modal" data-meeting_id="">Request Access
 						</button>
 					</div>
 				</div>
 			</div>
 		</div>
-		@include('dms.partials.add_company_access_modal')
-		@include('dms.partials.add_group_access_modal')
-		@include('dms.partials.add_user_access_modal')
+		@include('dms.partials.request_user_access_modal')
     </div>
 @endsection
 @section('page_script')
@@ -426,7 +423,6 @@
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
 			
-			
 			//Load divisions drop down
 			var parentDDID = '';
 			var loadAllDivs = 1;
@@ -447,32 +443,32 @@
 		function hideFields() {
 			var accessComType = $("input[name='access_com_type']:checked").val();
 			if (accessComType == 1) { //folder
-				$('.folder-com-field').show();
-				$('.file-com-field ').hide();
+				$('.folder-field').show();
+				$('.file-field ').hide();
 			}
 			else if (accessComType == 2) { //file
-				$('.file-com-field').show();
-				$('.folder-com-field').hide();
+				$('.file-field').show();
+				$('.folder-field').hide();
 			}
 			//dd
 			var accessGrType = $("input[name='access_gr_type']:checked").val();
 			if (accessGrType == 1) { //folder
-				$('.folder-grp-field').show();
-				$('.file-grp-field ').hide();
+				$('.folder-field').show();
+				$('.file-field ').hide();
 			}
 			else if (accessGrType == 2) { //file
-				$('.file-grp-field').show();
-				$('.folder-grp-field').hide();
+				$('.file-field').show();
+				$('.folder-field').hide();
 			}
 			//dd
 			var accessUsrType = $("input[name='access_usr_type']:checked").val();
 			if (accessUsrType == 1) { //folder
-				$('.folder-usr-field').show();
-				$('.file-usr-field ').hide();
+				$('.folder-field').show();
+				$('.file-field ').hide();
 			}
 			else if (accessUsrType == 2) { //file
-				$('.file-usr-field').show();
-				$('.folder-usr-field').hide();
+				$('.file-field').show();
+				$('.folder-field').hide();
 			}
 		}
     </script>

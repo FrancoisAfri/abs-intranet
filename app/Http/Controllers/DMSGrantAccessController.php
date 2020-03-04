@@ -22,6 +22,10 @@ use Illuminate\Support\Facades\File;
 
 class DMSGrantAccessController extends Controller
 {
+	public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -40,23 +44,23 @@ class DMSGrantAccessController extends Controller
 		//return $companyAccessFolders;
 		// company file
 		$companyAccessFiles = DMSCompanyAccess::where('expiry_date', '>=', $today)->where('folder_id', '<', 1)->orderBy('expiry_date', 'asc')->get();
-        if ($companyAccessFiles) 
+        if (!empty($companyAccessFiles))
 			$companyAccessFiles = $companyAccessFiles->load('division','department','section','team','levelOne','companyAdmin','companyFile');
 		// group folder
 		$groupAccessFolders = DMSGroupAccess::where('expiry_date', '>=', $today)->where('file_id', '<', 1)->orderBy('expiry_date', 'asc')->get();
-        if ($groupAccessFolders) 
+        if (!empty($groupAccessFolders)) 
 			$groupAccessFolders = $groupAccessFolders->load('groupName','groupAdmin','groupFolder');	
 		// group file
 		$groupAccessFiles = DMSGroupAccess::where('expiry_date', '>=', $today)->where('folder_id', '<', 1)->orderBy('expiry_date', 'asc')->get();
-        if ($groupAccessFiles) 
+        if (!empty($groupAccessFiles))
 			$groupAccessFiles = $groupAccessFiles->load('groupName','groupAdmin','groupFile');
 		// user folder
 		$userAccessFolders = DMSUserAccess::where('expiry_date', '>=', $today)->where('file_id', '<', 1)->orderBy('expiry_date', 'asc')->get();
-        if ($userAccessFolders) 
+        if (!empty($userAccessFolders)) 
 			$userAccessFolders = $userAccessFolders->load('employee','userAdmin','userFolder');
 		// user file
 		$userAccessFiles = DMSUserAccess::where('expiry_date', '>=', $today)->where('folder_id', '<', 1)->orderBy('expiry_date', 'asc')->get();
-		if ($userAccessFiles) 
+		if (!empty($userAccessFiles)) 
 			$userAccessFiles = $userAccessFiles->load('employee','userAdmin','userFile');
 		
 		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();

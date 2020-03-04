@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddContactIdContactsCommunicationsTable extends Migration
+class AddLeaveTakenToLeaveApplicationTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddContactIdContactsCommunicationsTable extends Migration
      */
     public function up()
     {
-        Schema::table('contacts_communications', function ($table) {
-            $table->integer('contact_id')->unsigned()->index()->nullable();
+        Schema::table('leave_application', function($table) {
+            $table->double('leave_taken')->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddContactIdContactsCommunicationsTable extends Migration
      */
     public function down()
     {
-        Schema::table('contacts_communications', function ($table) {
-            $table->dropColumn('contact_id');
+        Schema::table('leave_application', function($table) {
+            $table->dropColumn('leave_taken');
         });
     }
 }

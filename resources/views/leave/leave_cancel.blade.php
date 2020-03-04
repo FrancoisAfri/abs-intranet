@@ -42,7 +42,7 @@
 												<td>{{ !empty($application->leave_type_name) ? $application->leave_type_name : '' }}</td>
 												<td>{{ !empty($application->start_date) ? date('d M Y ', $application->start_date) : '' }}</td>
 												<td>{{ !empty($application->end_date) ? date(' d M Y', $application->end_date) : '' }}</td>
-												<td>{{ !empty($application->leave_days) ? $application->leave_days / 8 : '' }}</td>
+												<td>{{ !empty($application->leave_taken) ? $application->leave_taken / 8 : '' }}</td>
 												<td>{{ !empty($application->notes) ? $application->notes : '' }}</td>
 												<td>{{ !empty($application->manager_first_name) && !empty($application->manager_surname) ? $application->manager_first_name.' '.$application->manager_surname : '' }}</td>
 												<td>{{ (!empty($application->status)) ?  $leaveStatus[$application->status] : ''}}</td>

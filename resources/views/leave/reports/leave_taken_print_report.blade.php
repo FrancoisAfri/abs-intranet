@@ -62,7 +62,7 @@
 								<td>{{ !empty($leaveTaken->first_name) && !empty($leaveTaken->surname) ? $leaveTaken->first_name.' '.$leaveTaken->surname : '' }}</td>
 								<td>{{ !empty($leaveTaken->leave_type_name) ? $leaveTaken->leave_type_name : '' }}</td>
 								<td>{{ !empty($leaveTaken->start_date) ? date('Y M d : H : i : s', $leaveTaken->start_date) : '' }}</td>
-								<td>{{ !empty($leaveTaken->leave_days) ? number_format($leaveTaken->leave_days/8, 2) : '' }} days(s)</td>
+								<td>{{ !empty($leaveTaken->leave_taken) ? number_format($leaveTaken->leave_taken/8, 2) : '' }} days(s)</td>
 							</tr>
 						@endforeach
 					@endif

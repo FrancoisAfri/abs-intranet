@@ -43,7 +43,7 @@
 												<td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
 												<td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
 												<td>{{ !empty($approval->created_at) ? $approval->created_at : '' }}</td>
-												<td>{{ !empty($approval->leave_days) ? $approval->leave_days / 8 : '' }}</td>
+												<td>{{ !empty($approval->leave_taken) ? $approval->leave_taken / 8 : '' }}</td>
 												<td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
 												<td>
 													<div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
@@ -133,7 +133,7 @@
 												<td>{{ !empty($approval->start_date) ? date('d M Y ', $approval->start_date) : '' }}</td>
 												<td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
 												<td>{{ !empty($approval->created_at) ? $approval->created_at : '' }}</td>
-												<td>{{ !empty($approval->leave_days) ? $approval->leave_days / 8 : '' }}</td>
+												<td>{{ !empty($approval->leave_taken) ? $approval->leave_taken / 8 : '' }}</td>
 												<td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
 												<td>
 													<div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">

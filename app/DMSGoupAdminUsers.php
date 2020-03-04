@@ -12,7 +12,7 @@ class DMSGoupAdminUsers extends Model
     //Mass assignable fields
     protected $fillable = [
         'hr_id', 'division_level_5', 'division_level_4'
-		, 'status'
+		, 'status', 'group_id'
     ];
 	
 	//relationship between folders and files

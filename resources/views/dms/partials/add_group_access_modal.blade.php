@@ -32,7 +32,7 @@
                                 </select>
                         </div>
                     </div>
-					<div class="form-group folder-field{{ $errors->has('folder_id_gr') ? ' has-error' : '' }}">
+					<div class="form-group folder-grp-field{{ $errors->has('folder_id_gr') ? ' has-error' : '' }}">
                         <label for="folder_id_gr" class="col-sm-2 control-label">Folders</label>
                         <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
@@ -44,7 +44,7 @@
                                 </select>
                         </div>
                     </div>
-					<div class="form-group file-field{{ $errors->has('file_id_gr') ? ' has-error' : '' }}">
+					<div class="form-group file-grp-field{{ $errors->has('file_id_gr') ? ' has-error' : '' }}">
                         <label for="file_id_gr" class="col-sm-2 control-label">Files</label>
                         <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
