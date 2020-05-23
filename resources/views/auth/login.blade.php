@@ -96,6 +96,8 @@
 <script src="/bower_components/AdminLTE/bootstrap/js/bootstrap.min.js"></script>
 <!-- iCheck -->
 <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+<!-- Ajax form submit -->
+<script src="/custom_components/js/modal_ajax_submit.js"></script>
 <script>
     $(function () {
         $('input').iCheck({
@@ -104,94 +106,35 @@
             increaseArea: '20%' // optional
         });
         //autoclose alert after 7 seconds
-        $("#failed-login-alert").alert();
-        window.setTimeout(function() { $("#failed-login-alert").fadeOut('slow'); }, 7000);
-
-        //Tooltip
-        $('[data-toggle="tooltip"]').tooltip();
-
         //Vertically center modals on page
-        function reposition() {
-            var modal = $(this),
-                    dialog = modal.find('.modal-dialog');
-            modal.css('display', 'block');
+            function reposition() {
+                var modal = $(this),
+                        dialog = modal.find('.modal-dialog');
+                modal.css('display', 'block');
 
-            // Dividing by two centers the modal exactly, but dividing by three
-            // or four works better for larger screens.
-            dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-        }
-        // Reposition when a modal is shown
-        $('.modal').on('show.bs.modal', reposition);
-        // Reposition when the window is resized
-        $(window).on('resize', function() {
-            $('.modal:visible').each(reposition);
-        });
-
-        //Show success action modal
-        $('#success-action-modal').modal('show');
-
-        //Post password form to server using ajax
-        $('#reset-password').on('click', function() {
-            $.ajax({
-                method: 'POST',
-                url: '{{ 'users/recoverpw' }}',
-                data: {
-                    reset_email: $('#reset_email').val(),
-                    _token: $('input[name=_token]').val()
-                },
-                success: function(success) {
-                    //console.log(success);
-                    $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
-                    $('form[name=recover_password]').trigger('reset'); //Reset the form
-
-                    var successHTML = '<button type="button" id="close-invalid-input-alert" class="close" data-dismiss="alert" aria-hidden="true">&times;</button><h4><i class="icon fa fa-check"></i> Reset successful!</h4>';
-                    successHTML += 'The password has been successfully reset. A reset password has been sent to your email address, use it to login and go to your profile to change your password.';
-                    $('#success-alert').addClass('alert alert-success alert-dismissible')
-                            .fadeIn()
-                            .html(successHTML);
-
-                    //auto hide modal after 7 seconds
-                    $("#forgot-password-modal").alert();
-                    window.setTimeout(function() { $("#forgot-password-modal").modal('hide'); }, 5000);
-
-                    //autoclose alert after 7 seconds
-                    $("#success-alert").alert();
-                    window.setTimeout(function() { $("#success-alert").fadeOut('slow'); }, 5000);
-                },
-                error: function(xhr) {
-                    //console.log(xhr);
-                    //if(xhr.status === 401) //redirect if not authenticated
-                    //$( location ).prop( 'pathname', 'auth/login' );
-                    if(xhr.status === 422) {
-                        var errors = xhr.responseJSON; //get the errors response data
-                        //console.log(errors);
-
-                        $('.form-group').removeClass('has-error'); //Remove the has error class to all form-groups
-
-                        var errorsHTML = '<button type="button" id="close-invalid-input-alert" class="close" aria-hidden="true">&times;</button><h4><i class="icon fa fa-ban"></i> Invalid Input!</h4><ul>';
-                        $.each(errors, function (key, value) {
-                            errorsHTML += '<li>' + value[0] + '</li>'; //shows only the first error.
-                            $('#'+key).closest('.form-group')
-                                    .addClass('has-error'); //Add the has error class to form-groups with errors
-                        });
-                        errorsHTML += '</ul>';
-
-                        $('#invalid-input-alert').addClass('alert alert-danger alert-dismissible')
-                                .fadeIn()
-                                .html(errorsHTML);
-
-                        //autoclose alert after 7 seconds
-                        $("#invalid-input-alert").alert();
-                        window.setTimeout(function() { $("#invalid-input-alert").fadeOut('slow'); }, 7000);
-
-                        //Close btn click
-                        $('#close-invalid-input-alert').on('click', function () {
-                            $("#invalid-input-alert").fadeOut('slow');
-                        });
-                    }
-                }
+                // Dividing by two centers the modal exactly, but dividing by three
+                // or four works better for larger screens.
+                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+            }
+            // Reposition when a modal is shown
+            $('.modal').on('show.bs.modal', reposition);
+            // Reposition when the window is resized
+            $(window).on('resize', function() {
+                $('.modal:visible').each(reposition);
             });
-        });
+		/// new reset password code
+		//Post perk form to server using ajax (add)
+		$('#reset-password').on('click', function() {
+			var strUrl = '/users/recoverpw';
+			var formName = 'reset-password-form';
+			var modalID = 'forgot-password-modal';
+			var submitBtnID = 'reset-password';
+			var redirectUrl = '/login';
+			var successMsgTitle = 'Password Changed!';
+			var successMsg = 'The password has been successfully reset. A reset password has been sent to your email address, use it to login and go to your profile to change your password.!';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
+		
     });
 </script>
 </body>

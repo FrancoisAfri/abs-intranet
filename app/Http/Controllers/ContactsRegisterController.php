@@ -80,14 +80,13 @@ class ContactsRegisterController extends Controller
 
         //find the user
         $user = User::where('email', $request['reset_email'])->first();
-
         //Update user password
         $randomPass = str_random(10);
-        $user->password = Hash::make($randomPass);
-        $user->update();
-
-        //email new password to user
         Mail::to("$user->email")->send(new ResetPassword($user, $randomPass));
+        $user->password = Hash::make($randomPass);
+        $user->password_changed_at = time();
+        $user->update();
+        //email new password to user
 		AuditReportsController::store('Security', 'User Password Recoverd', "User Password Recoverd", 0);
         return response()->json(['success' => 'Password successfully reset.'], 200);
     }

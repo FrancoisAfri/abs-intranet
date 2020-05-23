@@ -46,14 +46,18 @@ class LeaveApplicationController extends Controller
 		$currentUser = Auth::user()->person->id;
 		$userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
             ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
-            ->where('security_modules.code_name', 'leave')->where('security_modules_access.access_level', '>', 1)
+            ->where('security_modules.code_name', 'leave')->where('security_modules_access.access_level', '>', 3)
             ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();  
-
 		if (!empty($userAccess))
 			$employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-		else 
-			$employees = HRPerson::where('status', 1)->where('id', $currentUser)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-		
+		else
+		{
+			$reportsTo = HRPerson::where('status', 1)->where('manager_id', $currentUser)->orwhere('id', $currentUser)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+			if ($reportsTo->count() > 0) 
+				$employees = $reportsTo;
+			else
+				$employees = HRPerson::where('status', 1)->where('id', $currentUser)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+		}
         $leaveTypes = LeaveType::where('status', 1)->orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
            
         }]);

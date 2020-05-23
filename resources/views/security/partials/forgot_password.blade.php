@@ -1,7 +1,7 @@
-<div id="forgot-password-modal" class="modal fade" role="dialog">
+<div id="forgot-password-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" action="{{ url('/users/recoverpw') }}">
+            <form class="form-horizontal" method="POST" name="reset-password-form">
                 {{ csrf_field() }}
 
                 <div class="modal-header">
@@ -27,7 +27,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" name="command" id="reset-password" class="btn btn-primary">Reset Password</button>
+                    <button type="button" id="reset-password" class="btn btn-primary"> Submit</button>
                 </div>
             </form>
         </div>
