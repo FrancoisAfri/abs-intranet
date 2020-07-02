@@ -6,25 +6,25 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">View Tickets</h3>
-
                 </div>
                  {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                 <!-- /.box-header -->
                 <div class="box-body">
-
                <table class="table no-margin">
                     <thead>
-                     <tr><th style="width: 10px"></th>
-                     <th>Help Desk Name</th>
-                     <th>Ticket(s)</th>
-                     <th>Completed</th>
-                     <th>Out Standing</th>
-                     <th>Status</th>
-                     <th style="width: 40px"></th>
-                    </thead>
-                    <tbody>
-                      @if (count($helpdeskTickets) > 0)
+						 <tr>
+							 <th style="width: 10px"></th>
+							 <th>Help Desk Name</th>
+							 <th>Ticket(s)</th>
+							 <th>Completed</th>
+							 <th>Out Standing</th>
+							 <th>Status</th>
+							 <th style="width: 40px"></th>
+						 </tr>
+					</thead>
+					<tbody>
+						@if (count($helpdeskTickets) > 0)
                         @foreach($helpdeskTickets as $ticket)
                          <tr id="jobtitles-list">
                             <td nowrap></td>
@@ -54,10 +54,9 @@
                 </div> -->
             </div>
         </div>
-
         <!-- Include add new prime rate modal -->
-        @include('help_desk.partials.add_position')
-        @include('help_desk.partials.edit_position')
+        @include('help_desk.partials.add_admin')
+        @include('help_desk.partials.edit_admin')
         <!--  -->
          
 @endsection
@@ -99,12 +98,8 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
-
             //Show success action modal
             $('#success-action-modal').modal('show');
-
-           
-
              //Post module form to server using ajax (ADD)
             $('#add_service').on('click', function() {
                 //console.log('strUrl');
@@ -122,7 +117,6 @@
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-
 
               var serviceID;
             $('#edit-service-modal').on('show.bs.modal', function (e) {
@@ -150,11 +144,8 @@
                 var successMsgTitle = 'Changes Saved!';
                  var successMsg = 'The service has been updated successfully.';
                 var Method = 'PATCH';
-         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-
-
-           
         });
     </script>
 @endsection

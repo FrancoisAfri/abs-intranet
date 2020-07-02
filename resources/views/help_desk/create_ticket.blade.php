@@ -6,7 +6,6 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">View Ticket(s)</h3>
-
                 </div>
                  {{ csrf_field() }}
                     {{ method_field('PATCH') }}
@@ -57,7 +56,6 @@
 
         <!-- Include add new prime rate modal -->
         @include('help_desk.partials.add_ticket')
-        @include('help_desk.partials.edit_position')
         <!--  -->
          
 @endsection
@@ -76,10 +74,7 @@
             });
         $(function () {
             var jobId;
-            
-            // document.getElementById("back_button").onclick = function () {
-            // location.href = "/hr/job_title"; 
-   //      }
+
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -99,12 +94,8 @@
             $(window).on('resize', function() {
                 $('.modal:visible').each(reposition);
             });
-
             //Show success action modal
             $('#success-action-modal').modal('show');
-
-           
-
              //Post module form to server using ajax (ADD)
             $('#add_tiket').on('click', function() {
                 //console.log('strUrl');
@@ -125,8 +116,6 @@
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-
-
               var serviceID;
             $('#edit-service-modal').on('show.bs.modal', function (e) {
                     //console.log('kjhsjs');
@@ -153,11 +142,8 @@
                 var successMsgTitle = 'Changes Saved!';
                  var successMsg = 'The service has been updated successfully.';
                 var Method = 'PATCH';
-         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+				modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-
-
-           
         });
     </script>
 @endsection

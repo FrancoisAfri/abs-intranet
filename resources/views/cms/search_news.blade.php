@@ -24,11 +24,9 @@
                     <i class="fa fa-search"></i>
                     <h3 class="box-title">Seach News</h3>
                 </div>
-
                 <form name="leave-application-form" class="form-horizontal" method="POST" action=" "
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
@@ -42,7 +40,6 @@
                                 </ul>
                             </div>
                         @endif
-
                         <div class="form-group{{ $errors->has('application_type') ? ' has-error' : '' }}">
                             <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
 
@@ -54,29 +51,25 @@
                                 </label>
                                 <label class="radio-inline"><input type="radio" id="rdo_hours" name="application_type"
                                                                    value="2"> Company News</label>
-
                             </div>
                         </div>
-
                         <div class="form-group {{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Name</label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control pull-left" id="name" name="name" value=""/>
                             </div>
                         </div>
-
-                            <div class="form-group">
-                                <label for="due_date" class="col-sm-2 control-label"> Date</label>
-                                <div class="col-sm-8">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-user"></i>
-                                        </div>
-                                        <input type="text" class="form-control daterangepicker" id="day" name="day" value="" placeholder="Select Due Date...">
-                                    </div>
-                                </div>
-                            </div>
-
+						<div class="form-group">
+							<label for="due_date" class="col-sm-2 control-label"> Date</label>
+							<div class="col-sm-8">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input type="text" class="form-control daterangepicker" id="day" name="day" value="" placeholder="Select Due Date...">
+								</div>
+							</div>
+						</div>
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i>

@@ -71,18 +71,15 @@
 							@if (count($companyAccessFiles) > 0)
 								@foreach($companyAccessFiles as $companyAccessFile)
 									<tr>
-										<td>@if(!empty($companyAccessFile->companyFile->document_name))
-													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-													   href="/dms/read-view-document/{{$companyAccessFile->companyFile->id}}"
-													   ><img src="{{ Storage::disk('local')->url("DMS Image/{$companyAccessFile->companyFile->file_extension}.gif") }}" class="img-circle"
-												 alt="Doc Image"
-												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a>
-											@endif
-										</td>
-										<td>{{ (!empty($companyAccessFile->companyFile->document_name)) ?  $companyAccessFile->companyFile->document_name : ''}} </td>
 										<td>{{ (!empty($companyAccessFile->division->name)) ?  $companyAccessFile->division->name : ''}} </td>
+										<td>{{ (!empty($companyAccessFile->department->name)) ?  $companyAccessFile->department->name : ''}} </td>
+										<td>{{ (!empty($companyAccessFile->section->name)) ?  $companyAccessFile->section->name : ''}} </td>
+										<td>{{ (!empty($companyAccessFile->companyFile->document_name)) ?  $companyAccessFile->companyFile->document_name : ''}} </td>
 										<td>{{ !empty($companyAccessFile->companyAdmin->first_name) && !empty($companyAccessFile->companyAdmin->surname) ?  $companyAccessFile->companyAdmin->first_name." ".$companyAccessFile->companyAdmin->surname : '' }}</td>
 										<td>{{ !empty($companyAccessFile->expiry_date) ? date('d M Y ', $companyAccessFile->expiry_date) : '' }}</td>
+										<td nowrap>
+											<button type="button" id="view_users" class="btn {{ (!empty($companyAccessFile->status) && $companyAccessFile->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$companyAccessFile->id}}, 'actdeac');"><i class="fa {{ (!empty($companyAccessFile->status) && $companyAccessFile->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($companyAccessFile->status) && $companyAccessFile->status == 1) ? "Revoke Access" : ""}}</button>
+										</td>
 									</tr>
 								@endforeach
 							@endif
@@ -145,14 +142,7 @@
 							@if (count($groupAccessFiles) > 0)
 								@foreach($groupAccessFiles as $groupAccessFile)
 									<tr>
-										<td>@if(!empty($groupAccessFile->groupFile->document_name))
-													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-													   href="/dms/read-view-document/{{$groupAccessFile->groupFile->id}}"
-													   ><img src="{{ Storage::disk('local')->url("DMS Image/{$groupAccessFile->groupFile->file_extension}.gif") }}" class="img-circle"
-												 alt="Doc Image"
-												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a>
-											@endif
-										</td>
+										<td>{{ (!empty($groupAccessFile->groupName->group_name)) ?  $groupAccessFile->groupName->group_name : ''}} </td>
 										<td>{{ (!empty($groupAccessFile->groupFile->document_name)) ?  $groupAccessFile->groupFile->document_name : ''}} </td>
 										<td>{{ !empty($groupAccessFile->groupAdmin->first_name) && !empty($groupAccessFile->groupAdmin->surname) ? $groupAccessFolder->groupAdmin->first_name." ".$groupAccessFolder->groupAdmin->surname : '' }}</td>
 										<td>{{ !empty($groupAccessFile->expiry_date) ? date('d M Y ', $groupAccessFile->expiry_date) : '' }}</td>
@@ -220,17 +210,13 @@
 							@if (count($userAccessFiles) > 0)
 								@foreach($userAccessFiles as $userAccessFile)
 								   <tr>
-										<td>@if(!empty($userAccessFile->userFile->document_name))
-													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-													   href="/dms/read-view-document/{{$userAccessFile->userFile->id}}"
-													   ><img src="{{ Storage::disk('local')->url("DMS Image/{$userAccessFile->userFile->file_extension}.gif") }}" class="img-circle"
-												 alt="Doc Image"
-												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a>
-											@endif
-										</td>
+										<td>{{ !empty($userAccessFile->employee->first_name) && !empty($userAccessFile->employee->surname) ?  $userAccessFile->employee->first_name." ".$userAccessFile->employee->surname : '' }}</td>
 										<td>{{ !empty($userAccessFile->userFile->document_name) ? $userAccessFile->userFile->document_name : '' }}</td>
-										<td>{{ (!empty($userAccessFile->userAdmin->first_name) && !empty($userAccessFile->userAdmin->surname)) ?  $userAccessFile->userAdmin->first_name." ".$userAccessFile->userAdmin->surname : ''}} </td>
 										<td>{{ !empty($userAccessFile->expiry_date) ? date('d M Y ', $userAccessFile->expiry_date) : '' }}</td>
+										<td>{{ (!empty($userAccessFile->userAdmin->first_name) && !empty($userAccessFile->userAdmin->surname)) ?  $userAccessFile->userAdmin->first_name." ".$userAccessFile->userAdmin->surname : ''}} </td>
+										<td nowrap>
+											<button type="button" id="view_users" class="btn {{ (!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$userAccessFile->id}}, 'actdeac');"><i class="fa {{ (!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "Revoke Access" : ""}}</button>
+										</td>
 									</tr>
 								@endforeach
 							@endif

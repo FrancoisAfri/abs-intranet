@@ -58,7 +58,7 @@ class HelpdeskController extends Controller {
         $Sys->description = $SysData['description'];
         $Sys->status = 1;
         $Sys->save();
-        AuditReportsController::store('Help Desk', 'Help Desk System Added', "price: $priceData[price]", 0);
+        AuditReportsController::store('Help Desk', 'Help Desk System Added', "name: $SysData[name]", 0);
         return response()->json();
     }
 
@@ -293,7 +293,6 @@ class HelpdeskController extends Controller {
                 ['title' => 'Help Desk', 'path' => '/Help Desk', 'icon' => 'fa fa-info', 'active' => 0, 'is_module' => 1],
                 ['title' => 'Help Desk viewTicket Page', 'active' => 1, 'is_module' => 0]
         ];
-
 
         $helpdeskTickets = HelpDesk::orderBy('id', 'asc')->distinct()->get();
         if (!empty($helpdeskTickets))

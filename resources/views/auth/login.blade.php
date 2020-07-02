@@ -130,6 +130,7 @@
 			var modalID = 'forgot-password-modal';
 			var submitBtnID = 'reset-password';
 			var redirectUrl = '/login';
+			$('#reset-password').prop('disabled', true);
 			var successMsgTitle = 'Password Changed!';
 			var successMsg = 'The password has been successfully reset. A reset password has been sent to your email address, use it to login and go to your profile to change your password.!';
 			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

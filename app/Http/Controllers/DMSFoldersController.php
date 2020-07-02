@@ -148,7 +148,7 @@ class DMSFoldersController extends Controller
 		$DmsFolders->division_3 = !empty($folderData['division_level_3']) ? $folderData['division_level_3']: 0;
 		$DmsFolders->division_2 = !empty($folderData['division_level_2']) ? $folderData['division_level_2']: 0;
 		$DmsFolders->division_1 = !empty($folderData['division_level_1']) ? $folderData['division_level_1']: 0;
-		$DmsFolder->status = 1;
+		$DmsFolders->status = 1;
 		$DmsFolders->path = "DMS Master File/$folderName";
 		$DmsFolders->save();
 		/// create folder

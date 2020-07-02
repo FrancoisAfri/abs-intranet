@@ -447,32 +447,32 @@
 		function hideFields() {
 			var accessComType = $("input[name='access_com_type']:checked").val();
 			if (accessComType == 1) { //folder
-				$('.folder-com-field').show();
-				$('.file-com-field ').hide();
+				$('.folder-field').show();
+				$('.file-field ').hide();
 			}
 			else if (accessComType == 2) { //file
-				$('.file-com-field').show();
-				$('.folder-com-field').hide();
+				$('.file-field').show();
+				$('.folder-field').hide();
 			}
 			//dd
 			var accessGrType = $("input[name='access_gr_type']:checked").val();
 			if (accessGrType == 1) { //folder
-				$('.folder-grp-field').show();
-				$('.file-grp-field ').hide();
+				$('.folder-field').show();
+				$('.file-field ').hide();
 			}
 			else if (accessGrType == 2) { //file
-				$('.file-grp-field').show();
-				$('.folder-grp-field').hide();
+				$('.file-field').show();
+				$('.folder-field').hide();
 			}
 			//dd
 			var accessUsrType = $("input[name='access_usr_type']:checked").val();
 			if (accessUsrType == 1) { //folder
-				$('.folder-usr-field').show();
-				$('.file-usr-field ').hide();
+				$('.folder-field').show();
+				$('.file-field ').hide();
 			}
 			else if (accessUsrType == 2) { //file
-				$('.file-usr-field').show();
-				$('.folder-usr-field').hide();
+				$('.file-field').show();
+				$('.folder-field').hide();
 			}
 		}
     </script>

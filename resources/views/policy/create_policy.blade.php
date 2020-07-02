@@ -140,6 +140,7 @@
 	<script>
 		function postData(id, data) {
 			if (data == 'actdeac') location.href = "/System/policy_act/" + id;
+
 		}
 
 		$('#back_button').click(function () {
@@ -180,7 +181,9 @@
 
 			//Show success action modal
 			$('#success-action-modal').modal('show');
+
 			//
+
 			$(".js-example-basic-multiple").select2();
 
 			//Initialize iCheck/iRadio Elements
@@ -189,6 +192,8 @@
 				radioClass: 'iradio_square-blue',
 				increaseArea: '10%' // optional
 			});
+
+
 			$(document).ready(function () {
 
 				$('input[name="date"]').datepicker({
@@ -241,6 +246,7 @@
 				var successMsg = 'The  policy details been updated successfully!';
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
+
 
 			//Load divisions drop down
 			var parentDDID = '';

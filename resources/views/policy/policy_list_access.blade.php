@@ -68,7 +68,7 @@
                                 <td style="vertical-align: middle;" nowrap>{{ (!empty( $policy->expiry)) ?  date('d M Y', $policy->expiry) : ''}}</td>
                                 <td style="vertical-align: middle; text-align: center;">
 									@if(!empty($policy->read_understood) ||  !empty($policy->read_not_understood)  || !empty($policy->read_not_sure))
-										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "1-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>
+											<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "1-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>
 									@else 
 										<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readunderstood' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "1-$policy->user_id" }}" {{ $policy->read_understood == 1 ? ' checked' : '' }}></label>	
 									@endif
@@ -86,6 +86,7 @@
 									@else 
 										 <label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="{{ $policy->id . '_readnotsure' }}" name="{{ "docread[" . $policy->policy_id . "]" }}" disabled value="{{ "3-$policy->user_id" }}" {{ $policy->read_not_sure == 1 ? ' checked' : '' }}></label>	
 									@endif
+                                   
                                 </td>
                                 @endforeach
                             </tr>

@@ -5,14 +5,12 @@
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Add new Help Desk</h3>
-
+                    <h3 class="box-title">Add New Help Desk</h3>
                 </div>
                  {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                 <!-- /.box-header -->
                 <div class="box-body">
-
                 <table class="table table-bordered">
                      <tr><th style="width: 10px"></th>
                      <th>Name</th>
@@ -24,9 +22,7 @@
                          <tr id="helpdesks-list">
                            <td nowrap>
                           <button type="button" id="edit_job_title" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-service-modal" data-id="{{ $helpdesk->id }}" data-name="{{ $helpdesk->name }}" data-description="{{ $helpdesk->description }}"><i class="fa fa-pencil-square-o"></i> Edit</button>
-
                                <a href="{{ '/help_desk/service/' . $helpdesk->id }}" id="edit_compan" class="btn btn-primary  btn-xs"   data-id="{{ $helpdesk->id }}" data-name="{{ $helpdesk->name }}" data-description="{{$helpdesk->description}}"  ><i class="fa fa-tasks"></i> view help desk</a></td>
-
                           <td>{{ (!empty($helpdesk->name)) ?  $helpdesk->name : ''}} </td>
                           <td>{{ (!empty( $helpdesk->description)) ?  $helpdesk->description : ''}} </td>
                           <td nowrap>
@@ -52,10 +48,9 @@
                 </div>
             </div>
         </div>
-
         <!-- Include add new prime rate modal -->
-        @include('help_desk.partials.add_position')
-        @include('help_desk.partials.edit_position')
+        @include('help_desk.partials.add_helpdesk')
+        @include('help_desk.partials.edit_helpdesk')
     </div>
 @endsection
 
