@@ -15,6 +15,8 @@ use App\EmployeeTasks;
 use App\System;
 use App\EmployeeTasksDocuments;
 use App\Mail\EmployeesTasksMail;
+use App\Mail\EmployeeMeetingTasks;
+use App\Mail\EmployeesInductionTaskMail;
 use App\Mail\NextTaskNotifications;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
@@ -271,14 +273,31 @@ class TaskManagementController extends Controller
 		$EmployeeTasks->due_time = $duetime;
 		//Save task
         $EmployeeTasks->save();
-		if (empty($inductionID))
+		$sentBy =  Auth::user()->load('person');
+
+		if (empty($inductionID) && empty($meetingID))
 		{
 			# Send Email to employee
-			$sentBy =  Auth::user()->load('person');
 			$company =  ContactCompany::where('id',$clientID)->first();
 			$employee = HRPerson::where('id', $employeeID)->first();
-			$sender = HRPerson::where('id', $sentBy->id)->first();
+			$sender = HRPerson::where('id', $sentBy->person->id)->first();
 			Mail::to($employee->email)->send(new EmployeesTasksMail($employee, $EmployeeTasks->description,$sender,$company));
+		}
+		// send meeting email
+		if (!empty($meetingID))
+		{
+			# Send Email to employee
+			$employee = HRPerson::where('id', $employeeID)->first();
+			$sender = HRPerson::where('id', $sentBy->person->id)->first();
+			Mail::to($employee->email)->send(new EmployeeMeetingTasks($employee, $EmployeeTasks->description,$sender));
+		}
+		// send induction email
+		if (!empty($inductionID))
+		{
+			# Send Email to employee
+			$employee = HRPerson::where('id', $employeeID)->first();
+			$sender = HRPerson::where('id', $sentBy->person->id)->first();
+			Mail::to($employee->email)->send(new EmployeesInductionTaskMail($employee, $EmployeeTasks->description,$sender));
 		}
 		AuditReportsController::store('Task Management', 'Task Successfully Added', "Added by user", 0);
 		#send email to manager if its an helpdesk task

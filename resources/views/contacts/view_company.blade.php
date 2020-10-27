@@ -652,6 +652,7 @@
 			});
 			// save  task
 			$('#save-task').on('click', function() {
+				$('#save-task').prop('disabled', true);
 				var strUrl = '/crm/add_task/' + {{$company->id}};
 				var formName = 'add-task-form';
 				var modalID = 'add-task-modal';

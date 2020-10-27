@@ -32,6 +32,8 @@ class InductionAdminController extends Controller
      */
     public function index()
     {
+		$sentBy =  Auth::user()->load('person');
+		
 		$libraries = DB::table('task_libraries')
 		->orderBy('dept_id', 'asc')
 		->orderBy('order_no', 'asc')

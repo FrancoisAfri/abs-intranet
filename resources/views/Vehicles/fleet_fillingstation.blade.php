@@ -57,7 +57,7 @@
                                    <!-- /.box-body -->
                     <div class="box-footer">
                      <button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
-                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-station-modal" data-id="{{ $filling->id }}">Add new  Filling Station </button>
+                     <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal" data-target="#add-station-modal" ">Add new  Filling Station </button>
                     </div>
              </div>
         </div>

@@ -141,7 +141,7 @@
 											<td style="width: 100px; vertical-align: middle;" nowrap class="text-center">
 												{{ $service->quantity }}
 											</td>
-											<!--<td style="width: 10px; vertical-align: middle;" nowrap class="text-center"></td>-->
+											<td style="width: 10px; vertical-align: middle;" nowrap class="text-center">{{ $service->quantity * $servicesSettings->service_rate}}</td>
 										</tr>
 									@endforeach
 								</tbody>
@@ -149,6 +149,7 @@
 									<tr>
 										<th colspan="3" class="text-right">Total</th>
 										<th class="text-center" nowrap><span id="total_service_units"></span> <i>{{  $totalServiceQty . ' ' . $servicesSettings->service_unit_plural_name }}</i></th>
+										<th class="text-center" nowrap><span id="total_service_units"></span> <i>{{  $totalServiceQty * $servicesSettings->service_rate }}</i></th>
 									</tr>
 								</tfoot>
 							</table>

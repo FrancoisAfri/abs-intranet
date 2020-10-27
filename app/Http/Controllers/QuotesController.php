@@ -324,10 +324,12 @@ class QuotesController extends Controller
        // return $stastus;
         $quote->status = $stastus;
         $changedStatus = 'Status Changed To: ' . $quote->quote_status;
+		$quote->load('client', 'person');
+		$email = !empty($quote->person->email) ? $quote->person->email : '';
         //$quote->update();
         if ($stastus == 5) {
             //Email Client to confirm success
-            $quote->load('client');
+            //$quote->load('client');
             $messageContents = EmailTemplate::where('template_key', 'approved_quote')->first();
             if (!empty($messageContents)) {
 				
@@ -336,7 +338,7 @@ class QuotesController extends Controller
 				$messageContent = str_replace('[employee details]', $quote->person->first_name." ".$quote->person->surname." ".$quote->person->email." ".$quote->person->cell_number, $messageContent);
 				$quoteAttachment = $this->viewQuote($quote, false,true, false, true);
 				if (!empty($quote->client->email))
-					Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment));
+					Mail::to($quote->client->email)->send(new SendQuoteToClient($messageContent, $quoteAttachment,$email));
             }
             $quote->status = 5;
 
@@ -424,8 +426,6 @@ class QuotesController extends Controller
             $changedStatus .= ', Email sent to client, to welcome them';
         } elseif ($stastus == 2) {
             //if authorization not required: email quote to client and update status to awaiting client approval
-            $quote->load('client', 'person');
-			$email = !empty($quote->person->email) ? $quote->person->email : '';
             $messageContents = EmailTemplate::where('template_key', 'send_quote')->first();
             if (!empty($messageContents) && !empty($configuration->allow_client_email_quote)) {
                 $messageContent = $messageContents->template_content;
@@ -837,7 +837,7 @@ class QuotesController extends Controller
         $highestLvl = DivisionLevel::where('active', 1)
             ->orderBy('level', 'desc')->limit(1)->get()->first();
         $quoteApplications = Quotation::where(function ($query) use ($companyID) {
-            if ($companyID && $companyID != "01") {
+			if ($companyID /*&& $companyID != "01"*/) {
                 $query->where('company_id', $companyID);
             }
         })
@@ -989,10 +989,11 @@ class QuotesController extends Controller
             if ($printQuote || $companyID === 'pdf') {
 				if ($isInvoice) return $pdf->stream('invoice' . $quotation->id . '.pdf');
 				else return $pdf->stream('quotation_' . $quotation->id . '.pdf');
-            } elseif ($emailQuote) {
+            }
+			elseif ($emailQuote) {
                 return $pdf->output();
             }
-				// Add to quote history
+			// Add to quote history
 			$QuoteApprovalHistory = new QuoteApprovalHistory();
 			$QuoteApprovalHistory->quotation_id = $quote->id;
 			$QuoteApprovalHistory->user_id = Auth::user()->person->id;

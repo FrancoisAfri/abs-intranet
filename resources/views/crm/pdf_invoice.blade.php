@@ -39,29 +39,16 @@
 			</table>
 		</div>
     </div>
-
     <div class="row">
         <div class="col-md-12">
             <div class="box box-default no-padding">
                 <form class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
-                    <div class="box-header with-border">
+                    <div class="with-border">
                         <p class="text-muted text-center">INVOICE DESCRIPTION</p>
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body no-padding">
-                        @if (count($errors) > 0)
-                            <div class="alert alert-danger alert-dismissible fade in">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-
+                    <div class="box-body">
                         @if($quotation->quote_type == 1)
                             <table class="table table-striped table-bordered">
                                 <tr>
@@ -124,13 +111,12 @@
                                     <thead>
                                         <tr>
                                             <th style="width: 10px" nowrap>#</th>
-                                            <th>Description</th>
+                                            <th nowrap>Description</th>
                                             <th style="width: 10px" nowrap class="text-center">Unit</th>
                                             <th class="text-center" nowrap>Quantity</th>
                                             <!--<th style="width: 10px" nowrap class="text-center"></th>-->
                                         </tr>
                                     </thead>
-
                                     <tbody class="input-fields-wrap">
                                         @foreach($quotation->services as $service)
                                             <tr>
@@ -144,7 +130,6 @@
                                             </tr>
                                         @endforeach
                                     </tbody>
-
                                     <tfoot>
                                         <tr>
                                             <th colspan="3" class="text-right">Total</th>
@@ -160,11 +145,9 @@
                                 </div>
                             @endif
                         @endif
-
                         <div class="row">
                             <div class="col-xs-12"><p>&nbsp;</p></div>
                         </div>
-
                         <div class="row no-margin">
                             <!-- banking details section -->
                             <div class="col-xs-5 no-padding">

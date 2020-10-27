@@ -275,6 +275,7 @@ class VehicleBookingController extends Controller
 
     public function BookingDetails($status = 0, $hrID = 0, $driverID = 0)
     {
+		
 		$approvals = DB::table('vehicle_configuration')->select('approval_manager_capturer', 'approval_manager_driver', 'approval_hod', 'approval_admin')->first();
         if (empty($approvals)) {
             $vehicleconfig = new vehicle_config();
@@ -286,7 +287,7 @@ class VehicleBookingController extends Controller
         }
 
         $hrDetails = HRPerson::where('id', $hrID)->where('status', 1)->first();
-
+//return $hrDetails;
         if ($approvals->approval_manager_capturer == 1) {
 			
             # code...

@@ -423,6 +423,7 @@ $(function () {
 	});
 	// Add minute Submit
 	$('#save-task').on('click', function() {
+		$('#save-task').prop('disabled', true);
 		var strUrl = '/meeting/add_task/'+ {{$meeting->id}};
 		var formName = 'add-task-form';
 		var modalID = 'add-task-modal';

@@ -379,7 +379,7 @@ class DashboardController extends Controller
             $ceonews = ceoNews::where('status', 1)->latest()->first();
             $ClientInduction = ClientInduction::
             select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
-                ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.id')
+                ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.user_id')
                 ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
                 //->where('client_inductions.id', 13)
                 ->get();
