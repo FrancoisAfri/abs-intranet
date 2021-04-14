@@ -86,21 +86,17 @@
                                         <td class="text-right" nowrap>{{ is_numeric($quotation->balance) ? 'R ' . number_format(round($quotation->balance, 2), 2) : '' }}</td>
                                         <td class="text-right" nowrap>
                                             @if($quotation->payment_option == 1)
-                                                @if($quotation->can_capture_payment)
+												@if($quotation->can_capture_payment == 1)
                                                     <button type="button" class="btn btn-success btn-flat btn-xs" data-toggle="modal"
                                                             data-target="#capture-payment-modal" data-quote_id="{{ $quotation->id }}"
                                                             data-invoice_id="{{ ($quotation->invoices->first()) ? $quotation->invoices->first()->id : 0 }}"
                                                             data-balance="{{ $quotation->balance }}">
                                                         <i class="fa fa-credit-card"></i> Capture Payment
                                                     </button>
-                                                @endif
-
-                                                @if($quotation->can_send_invoice)
+												@endif
                                                     <a href="/crm/invoice/mail/{{ $quotation->id }}" class="btn btn-primary btn-flat btn-xs">
                                                         <i class="fa fa-send"></i> Send Invoice
                                                     </a>
-                                                @endif
-
                                                 <a href="/crm/invoice/view/{{ $quotation->id }}/pdf" target="_blank" class="btn btn-primary btn-flat btn-xs">
                                                     <i class="fa fa-print"></i> Print Invoice
                                                 </a>
@@ -287,7 +283,7 @@
                     invoiceRow.append(invoiceNumCell, dueDateCell, statusCell, amountCell, balanceCell);
 
                     if (showActionButtons && (invoiceStatus !== 4 || (invoiceStatus === 4 && index === (invoices.length - 1)))) {
-                        if (invoiceStatus === 2 || invoiceStatus === 3) {
+                        if (invoiceStatus === 1 || invoiceStatus === 2 || invoiceStatus === 3) {
                             actionButtonsCell.append(captutePaymentBtn, ' ');
                         }
                         if (invoiceStatus !== 4) {

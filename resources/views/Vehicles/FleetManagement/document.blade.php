@@ -309,9 +309,7 @@
 			return allType;
 		}
 		$(function () {
-			$('#back_button').click(function () {
-				location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-			});
+			
 			var moduleId;
 			//Initialize Select2 Elements
 			$(".select2").select2();

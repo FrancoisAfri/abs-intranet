@@ -29,7 +29,6 @@
                 </div>
                 <form class="form-horizontal" method="POST" action="/vehicle_management/vehiclesearch">
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
@@ -159,9 +158,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
     <script type="text/javascript">
 		$('#back_button').click(function () {
-                    location.href = '/vehicle_management/create_request';
-                });
-
+			location.href = '/vehicle_management/create_request';
+		});
         $(function () {
             $(".select2").select2();
             $('.hours-field').hide();
@@ -169,9 +167,7 @@
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
-
             //Vertically center modals on page
-
             //Phone mask
             $("[data-mask]").inputmask();
 
@@ -211,13 +207,10 @@
         });
 
         $(document).ready(function () {
-
             $(function () {
                 $('#required_from').datetimepicker();
             });
-
             $('#required_to').datetimepicker({});
-
         });
 
         //Load divisions drop down

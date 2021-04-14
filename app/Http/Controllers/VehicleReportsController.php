@@ -112,8 +112,8 @@ class VehicleReportsController extends Controller
 		
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
 
         $vehiclebookings = vehicle_booking::select('vehicle_booking.*', 'vehicle_make.name as vehicle_make',
@@ -214,8 +214,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
 
         $vehiclebookings = vehicle_booking::select('vehicle_booking.*', 'vehicle_make.name as vehicle_make',
@@ -750,8 +750,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
         $vehiclefines = DB::table('vehicle_fines')
             ->select('vehicle_fines.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel', 'vehicle_details.vehicle_type as vehicletype',
@@ -832,8 +832,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
         $serviceDetails = DB::table('vehicle_serviceDetails')
             ->select('vehicle_serviceDetails.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel',
@@ -905,8 +905,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
         $serviceDetails = DB::table('vehicle_serviceDetails')
             ->select('vehicle_serviceDetails.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel',
@@ -983,8 +983,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
         $vehicleincidents = DB::table('vehicle_incidents')
             ->select('vehicle_incidents.*', 'vehicle_details.vehicle_make as vehiclemake', 'vehicle_details.vehicle_model as vehiclemodel',
@@ -1004,12 +1004,12 @@ class VehicleReportsController extends Controller
             })
             ->where(function ($query) use ($driverID) {
                 if (!empty($driverID)) {
-                    $query->where('driver', $driverID);
+                    $query->where('reported_by', $driverID);
                 }
             })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('date', [$actionFrom, $actionTo]);
+                    $query->whereBetween('date_of_incident', [$actionFrom, $actionTo]);
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
@@ -1060,8 +1060,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
 
         $vehicleincidents = DB::table('vehicle_incidents')
@@ -1082,12 +1082,12 @@ class VehicleReportsController extends Controller
             })
             ->where(function ($query) use ($driverID) {
                 if (!empty($driverID)) {
-                    $query->where('driver', $driverID);
+                    $query->where('reported_by', $driverID);
                 }
             })
             ->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
-                    $query->whereBetween('date', [$actionFrom, $actionTo]);
+                    $query->whereBetween('date_of_incident', [$actionFrom, $actionTo]);
                 }
             })
             ->Where(function ($query) use ($vehicleArray) {
@@ -1335,8 +1335,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
         $currentTime = time();
         $vehicleDocumets = DB::table('vehicle_documets')
@@ -1434,8 +1434,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
         $currentTime = time();
         $vehicleDocumets = DB::table('vehicle_documets')
@@ -1507,8 +1507,8 @@ class VehicleReportsController extends Controller
         $actionDate = $request['action_date'];
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
         $currentTime = time();
         $VehicleLicences = DB::table('permits_licence')
@@ -1916,8 +1916,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
 
         $fuelTankTopUp = DB::table('fuel_tank_topUp')
@@ -1986,8 +1986,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
         $status = array(1 => ' Active', 2 => ' InActive');
 
@@ -2075,8 +2075,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
         $status = array(1 => ' Active', 2 => ' InActive');
 
@@ -2160,8 +2160,8 @@ class VehicleReportsController extends Controller
 		$statusArray= array(1 => 'Active', 2 => ' Allocate', 3 => 'In Use', 4 => 'Empty', 5=> 'Evacate', 6=> 'In Storage', 7=> 'Discarded', 8=> 'Rental' , 9=> 'Sold');
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
 
         $fireExtinguishers = vehicle_fire_extinguishers::select('vehicle_fire_extinguisher.*'
@@ -2220,8 +2220,8 @@ class VehicleReportsController extends Controller
 
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
-            $actionFrom = strtotime($startExplode[0]);
-            $actionTo = strtotime($startExplode[1]);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
         }
 
         $fireExtinguishers = vehicle_fire_extinguishers::select('vehicle_fire_extinguisher.*'

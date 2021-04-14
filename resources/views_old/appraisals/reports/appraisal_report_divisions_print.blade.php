@@ -1,4 +1,0 @@
-@extends('layouts.printables.report_print_layout')
-@section('content')
-    @include('appraisals.partials.appraisal_report_divisions_result')
-@endsection

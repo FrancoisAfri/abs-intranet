@@ -602,7 +602,8 @@ class fleetcardController extends Controller
 		$data['active_rib'] = 'Manage Fleet';
 		AuditReportsController::store('Fleet Management', 'Vehicle History Page Accessed', 'Accessed by User', 0);
 		return view('Vehicles.vehicle_history')->with($data);
-    }	
+    }
+	
 	public function vehicleHistoriesPrint(vehicle_detail $fleet)
     {
 		$fleet = $fleet->load('vehicleHistory.userName');

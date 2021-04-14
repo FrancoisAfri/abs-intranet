@@ -344,11 +344,11 @@
 				var totalPrices = new Array();
 				var quantitys = new Array();
                 $( ".item-quantity" ).each(function( index ) {
-                    var qty = parseInt($( this ).val()) || 0;
+                    var qty = parseFloat($( this ).val()) || 0;
 					quantitys[index]= qty;
                 });
 				$( ".item-price" ).each(function( index ) {
-                    var price = parseInt($( this ).val()) || 0;
+                    var price = parseFloat($( this ).val()) || 0;
 					
                     totalPrices[index] = price * quantitys[index] ;
                 });
@@ -360,10 +360,10 @@
 				$( "#subtotal" ).html('R ' + subtotal.formatMoney(2));
 				
             } else if (quoteType == 2) { //services
-                var serviceRate = parseInt($('#service_rate').val());
+                var serviceRate = parseFloat($('#service_rate').val());
                 var totalServiceUnits = 0;
                 $( ".item-quantity" ).each(function( index ) {
-                    var qty = parseInt($( this ).val()) || 0;
+                    var qty = parseFloat($( this ).val()) || 0;
                     totalServiceUnits += qty;
                     subtotal += (qty * serviceRate);
                     $( "#subtotal" ).html('R ' + subtotal.formatMoney(2));

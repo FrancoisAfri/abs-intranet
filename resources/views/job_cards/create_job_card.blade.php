@@ -85,14 +85,14 @@
 										</div>
 									</div>
 								</div>
-								<div class="form-group {{ $errors->has('external_service') ? ' has-error' : '' }}">
-									<label for="external_service" class="col-sm-2 control-label">Service by Agent</label>
+								<div class="form-group {{ $errors->has('booking_type') ? ' has-error' : '' }}">
+									<label for="booking_type" class="col-sm-2 control-label">Service by Agent</label>
 									<div class="col-sm-10">
 										<div class="input-group">
 											<div class="input-group-addon">
 												<i class="fa fa-check-square-o"></i>
 											</div>
-											<input type="checkbox" id="external_service" value="1" name="external_service"
+											<input type="checkbox" id="booking_type" value="1" name="booking_type"
 												onclick="showHide();">
 										</div>
 									</div>
@@ -285,7 +285,6 @@
 	<!-- InputMask -->
 	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
     <script type="text/javascript">
 		$('#back_button').click(function () {
