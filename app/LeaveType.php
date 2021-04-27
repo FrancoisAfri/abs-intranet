@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class LeaveType extends Model
+class   extends Model
 {
     //
     protected $table = 'leave_types';

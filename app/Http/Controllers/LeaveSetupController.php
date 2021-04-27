@@ -233,7 +233,7 @@ class LeaveSetupController extends Controller {
     }
 
     //leavecredit
-    public function resert(Request $request, LeaveType $lev) {
+    public function resetLeave(Request $request, LeaveType $lev) {
 		
 		$this->validate($request, [
                  'division_level_5' => 'required',
@@ -353,8 +353,6 @@ class LeaveSetupController extends Controller {
 					{
 						$previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
 						$currentBalance =  $previousBalance + $days;
-						$currentBalance =  $currentBalance;
-						$previousBalance =  $previousBalance;
 						if ($maximum > $currentBalance)
 						{
 							$credits->leave_balance = $currentBalance;
@@ -885,5 +883,140 @@ class LeaveSetupController extends Controller {
         $diff = $endDate - $startDate;
 		$days = ($diff / 86400) - $numweek + 1;
 		return $days;
+    }
+	// upload
+	public function leaveUploadPaid(Request $request)
+    {
+		if($request->hasFile('input_file'))
+		{
+			$path = $request->file('input_file')->getRealPath();
+			$data = Excel::load($path, function($reader) {})->get();
+			if(!empty($data) && $data->count())
+			{
+				foreach ($data->toArray() as $key => $value) 
+				{
+					if(!empty($value))
+					{
+						if (!empty($value['employee_number']) && !empty($value['leave_type']) )	
+						{
+							$employees = HRPerson::where('employee_number', $value['employee_number'])->where('status',1)->first();
+							$leaveType = LeaveType::where('name', $value['leave_type'])->where('status',1)->first();
+							if (!empty($employees) && !empty($leaveType))
+							{
+								$credit = leave_credit::where('hr_id', $employees->id)->where('leave_type_id', $leaveType->id)->first();
+								$days = !empty($value['days'])? $value['days'] : 0 ;
+								$currentDays = !empty($credit['leave_balance'])? $credit['leave_balance'] : 0 ;
+								if (!empty($days))
+								{
+									$credit->leave_balance = $currentDays - ($days * 8);
+									$credit->update();
+									LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', 0 ,($days * 8),($days * 8),1, $employees->id);
+								}
+								AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");
+							}
+						}
+					}
+				}
+				return back()->with('success_add',"Records were successfully inserted.");
+			}
+			else return back()->with('error_add','Please Check your file, Something is wrong there.');
+		}
+		else return back()->with('error_add','Please Upload A File.');
+		
+        $data['page_title'] = "Leave Management";
+        $data['page_description'] = "Upload Leave Paid Out";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave Management', 'path' => '/leave/upload', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Paid Out', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Upload';
+        AuditReportsController::store('Leave Management', "Leave Balance uploaded", "Accessed by User", 0);
+    }
+	
+	// upload
+	public function leaveUploadReactivation(Request $request)
+    {
+		if($request->hasFile('input_file'))
+		{
+			$path = $request->file('input_file')->getRealPath();
+			$data = Excel::load($path, function($reader) {})->get();
+			if(!empty($data) && $data->count())
+			{
+				foreach ($data->toArray() as $key => $value) 
+				{
+					if(!empty($value))
+					{
+						if (!empty($value['employee_number']) && !empty($value['date']))	
+						{
+							$date1 = '2020-04-01';
+							$date2 = $value['date'];
+							$ts1 = strtotime($date1);
+							$ts2 = strtotime($date2);
+							$year1 = date('Y', $ts1);
+							$year2 = date('Y', $ts2);
+							$month1 = date('m', $ts1);
+							$month2 = date('m', $ts2);
+							$diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+							
+							$employees = HRPerson::where('employee_number', $value['employee_number'])->where('status',1)->first();
+							if (!empty($employees))
+							{
+								$customDays = $days = $maximum = 0;
+								$custLeave = leave_custom::where('hr_id', $employees->id)->first();
+								if (!empty($custLeave->id) && $custLeave->number_of_days > 0) {
+									$customDays = (($custLeave->number_of_days / 12) * $diff) * 8;
+								}
+								// return leave profile id based on an user id;
+								// get min value from pivot
+								#get leaveprofile ID
+								$LevProfID = HRPerson::where('id', $employees->id)->first();
+								if (!empty($LevProfID))
+								{
+									$proId = $LevProfID->leave_profile;
+									$minimum = type_profile::where('leave_type_id', 1)
+											->where('leave_profile_id', $proId)
+											->first();
+						
+									if (count($minimum) > 0) {
+										if (!empty($minimum->min))
+											$days = (($minimum->min / 12) * $diff)* 8;
+									}
+								}
+								if (!empty($customDays)) $days = $customDays;
+								if (!empty($days))
+								{
+									$credits = leave_credit::where('hr_id', $employees->id)
+										->where('leave_type_id', 1)
+										->first();
+									if (count($credits) > 0)
+									{
+										$previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
+										$currentBalance =  $previousBalance + $days;
+										$credits->leave_balance = $currentBalance;
+										$credits->update();
+										LeaveHistoryAuditController::store('leave days reactivation','leave days reactivation', $previousBalance ,$days,$currentBalance,$LevID,$empID);
+									}
+								}
+								AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");
+							}
+						}
+					}
+				}
+				return back()->with('success_add',"Records were successfully inserted.");
+			}
+			else return back()->with('error_add','Please Check your file, Something is wrong there.');
+		}
+		else return back()->with('error_add','Please Upload A File.');
+		
+        $data['page_title'] = "Leave Management";
+        $data['page_description'] = "Upload Leave Reactivation";
+        $data['breadcrumb'] = [
+            ['title' => 'Leave Management', 'path' => '/leave/upload', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Leave Reactivation', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Leave Management';
+        $data['active_rib'] = 'Upload';
+        AuditReportsController::store('Leave Management', "Leave Reactivation uploaded", "Accessed by User", 0);
     }
 }

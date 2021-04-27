@@ -27,6 +27,8 @@
 						<div class="col-sm-9">
 							<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_bal" name="application_type" value="1" > Upload Leave Balance </label>
 							<label class="radio-inline"><input type="radio" id="rdo_app" name="upload_type" value="2"> Upload Leave Applications</label>
+							<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_bal" name="application_type" value="3" > Upload Leave Paid Out </label>
+							<label class="radio-inline"><input type="radio" id="rdo_app" name="upload_type" value="4"> Upload Leave Days Reactivation</label>
 						</div>
 					</div>
                     <div class="box-body">
@@ -124,8 +126,16 @@
 			 $('form[name="upload employee"]').attr('action', '/leave/leave_upload');
 			 $('#gen-report').val("Submit");        
 		}
-		else if (allType == 2) { //resert leave
+		else if (allType == 2) { //reset leave
 			 $('form[name="upload employee"]').attr('action', '/leave/upload/app');
+			 $('#gen-report').val("Submit"); 
+		}
+		else if (allType == 3) { //reset leave
+			 $('form[name="upload employee"]').attr('action', '/leave/upload/paid');
+			 $('#gen-report').val("Submit"); 
+		}
+		else if (allType == 4) { //resert leave
+			 $('form[name="upload employee"]').attr('action', '/leave/upload/reactivation');
 			 $('#gen-report').val("Submit"); 
 		}
 		return allType;      

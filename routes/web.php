@@ -182,7 +182,7 @@ Route::post('leave/cancellation/{leave}', 'LeaveApplicationController@cancelAppl
 //leave Allocation
 Route::get('leave/Allocate_leave_types', 'LeaveSetupController@show');
 Route::post('leave/Allocate_leave', 'LeaveSetupController@Adjust');
-Route::post('leave/Allocate_leave/resert', 'LeaveSetupController@resert');
+Route::post('leave/Allocate_leave/resert', 'LeaveSetupController@resetLeave');
 Route::post('leave/Allocate_leave/add', 'LeaveSetupController@allocate');
 
 //leave Approval
@@ -221,6 +221,9 @@ Route::post('/leave/custom/leave_type_edit/{lev}', 'LeaveController@editcustomLe
 Route::get('leave/upload', 'LeaveSetupController@upload');
 Route::post('leave/leave_upload', 'LeaveSetupController@leaveUpload');
 Route::post('/leave/upload/app', 'LeaveSetupController@leaveUploadApplications');
+// leave pay out scripts and employee restart
+Route::post('leave/upload/reactivation', 'LeaveSetupController@leaveUploadPaid');
+Route::post('/leave/upload/paid', 'LeaveSetupController@leaveUploadReactivation');
 //Contacts related requests
 //Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
