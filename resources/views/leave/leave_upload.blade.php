@@ -25,10 +25,10 @@
 					<div class="form-group{{ $errors->has('upload_type') ? ' has-error' : '' }}">
 						<label for="upload_type" class="col-sm-2 control-label"> Report Type</label>
 						<div class="col-sm-9">
-							<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_bal" name="application_type" value="1" > Upload Leave Balance </label>
+							<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_bal" name="upload_type" value="1" > Upload Leave Balance </label>
 							<label class="radio-inline"><input type="radio" id="rdo_app" name="upload_type" value="2"> Upload Leave Applications</label>
-							<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_bal" name="application_type" value="3" > Upload Leave Paid Out </label>
-							<label class="radio-inline"><input type="radio" id="rdo_app" name="upload_type" value="4"> Upload Leave Days Reactivation</label>
+							<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_paid" name="upload_type" value="3" > Upload Leave Paid Out </label>
+							<label class="radio-inline"><input type="radio" id="rdo_react" name="upload_type" value="4"> Upload Leave Days Reactivation</label>
 						</div>
 					</div>
                     <div class="box-body">
@@ -92,7 +92,7 @@
 
 		//show/hide fields on radio button toggles (depending on registration type)
 
-		$('#rdo_app, #rdo_bal').on('ifChecked', function(){
+		$('#rdo_app, #rdo_bal, #rdo_react, #rdo_paid').on('ifChecked', function(){
 			var allType = hideFields();
 			if (allType == 1) $('#box-subtitle').html('Leave Balance');
 			else if (allType == 2) $('#box-subtitle').html('Leave Applications');
@@ -130,13 +130,13 @@
 			 $('form[name="upload employee"]').attr('action', '/leave/upload/app');
 			 $('#gen-report').val("Submit"); 
 		}
-		else if (allType == 3) { //reset leave
+		else if (allType == 3) {
 			 $('form[name="upload employee"]').attr('action', '/leave/upload/paid');
 			 $('#gen-report').val("Submit"); 
 		}
 		else if (allType == 4) { //resert leave
 			 $('form[name="upload employee"]').attr('action', '/leave/upload/reactivation');
-			 $('#gen-report').val("Submit"); 
+			 $('#gen-report').val("Submit");
 		}
 		return allType;      
 		}

@@ -181,7 +181,7 @@ class LeaveSetupController extends Controller {
                  'leave_types_id' => 'required',
                  'adjust_days' => 'required',
         ]);
-
+		
         $allData = $request->all();
         unset($allData['_token']);
         $leveTyp = $allData['leave_types_id'];
@@ -207,7 +207,6 @@ class LeaveSetupController extends Controller {
 			$employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
 
         foreach ($employees as $empID) {
-			
 			$credits = leave_credit::where('hr_id', $empID)
 					->where('leave_type_id', $leveTyp)
 					->first();
@@ -949,8 +948,8 @@ class LeaveSetupController extends Controller {
 					{
 						if (!empty($value['employee_number']) && !empty($value['date']))	
 						{
-							$date1 = '2020-04-01';
-							$date2 = $value['date'];
+							$date1 = $value['date'];
+							$date2 = '2021-05-01';
 							$ts1 = strtotime($date1);
 							$ts2 = strtotime($date2);
 							$year1 = date('Y', $ts1);
@@ -995,7 +994,7 @@ class LeaveSetupController extends Controller {
 										$currentBalance =  $previousBalance + $days;
 										$credits->leave_balance = $currentBalance;
 										$credits->update();
-										LeaveHistoryAuditController::store('leave days reactivation','leave days reactivation', $previousBalance ,$days,$currentBalance,$LevID,$empID);
+										LeaveHistoryAuditController::store('leave days reactivation','leave days reactivation', $previousBalance ,$days,$currentBalance,1,$employees->id);
 									}
 								}
 								AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");

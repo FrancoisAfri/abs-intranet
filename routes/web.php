@@ -222,8 +222,8 @@ Route::get('leave/upload', 'LeaveSetupController@upload');
 Route::post('leave/leave_upload', 'LeaveSetupController@leaveUpload');
 Route::post('/leave/upload/app', 'LeaveSetupController@leaveUploadApplications');
 // leave pay out scripts and employee restart
-Route::post('leave/upload/reactivation', 'LeaveSetupController@leaveUploadPaid');
-Route::post('/leave/upload/paid', 'LeaveSetupController@leaveUploadReactivation');
+Route::post('leave/upload/reactivation', 'LeaveSetupController@leaveUploadReactivation');
+Route::post('/leave/upload/paid', 'LeaveSetupController@leaveUploadPaid');
 //Contacts related requests
 //Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
@@ -1231,7 +1231,7 @@ Route::get('dms/folder/{folder}/delete', 'DMSFoldersController@destroy');
 Route::patch('dms/edit_folder_details/{folder}', 'DMSFoldersController@update');
 Route::get('dms/folder/company_access/{folder}', 'DMSFoldersController@companyFolderAccess');
 Route::get('dms/folder/group_access/{folder}', 'DMSFoldersController@groupFolderAccess');
-Route::get('dms/file/user_access/{folde}', 'DMSFoldersController@userFolderAccess');
+Route::get('dms/file/user_access/{folder}', 'DMSFoldersController@userFolderAccess');
 Route::get('dms/file/company_access/{folder}', 'DMSFoldersController@companyFileAccess');
 Route::get('dms/file/group_access/{folder}', 'DMSFoldersController@groupFileAccess');
 Route::get('dms/folder/user_access/{folder}', 'DMSFoldersController@userFileAccess');
