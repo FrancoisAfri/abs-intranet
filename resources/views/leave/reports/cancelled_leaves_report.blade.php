@@ -107,15 +107,15 @@
 				buttons: [
 					{
 						extend: 'excelHtml5',
-						title: 'Leave Allowance Report'
+						title: 'Leave Cancelled Report'
 					},
 					{
 						extend: 'csvHtml5',
-						title: 'Leave Allowance Report'
+						title: 'Leave Cancelled Report'
 					},
 					{
 						extend: 'copyHtml5',
-						title: 'Leave Allowance Report'
+						title: 'Leave Cancelled Report'
 					}
 				]
 			});

@@ -164,7 +164,9 @@ class LeaveHistoryAuditController extends Controller {
 					$query->where('leave_history.leave_type_id', $LevTypID);
 				}
 			})
-			->orderBy('leave_history.id')
+			->orderBy('hr_people.first_name')
+			->orderBy('hr_people.surname')
+			->orderBy('leave_types.name')
 			->get();
 
         $data['actionFrom'] = $actionFrom;
@@ -216,7 +218,9 @@ class LeaveHistoryAuditController extends Controller {
 					$query->where('leave_history.leave_type_id', $LevTypID);
 				}
 			})
-			->orderBy('leave_history.id')
+			->orderBy('hr_people.first_name')
+                ->orderBy('hr_people.surname')
+                ->orderBy('leave_types.name')
 			->get();
 
         $data['historyAudit'] = $historyAudit;

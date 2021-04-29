@@ -909,7 +909,7 @@ class LeaveSetupController extends Controller {
 								{
 									$credit->leave_balance = $currentDays - ($days * 8);
 									$credit->update();
-									LeaveHistoryAuditController::store('Added annul leave Days','Annul leave Days', 0 ,($days * 8),($days * 8),1, $employees->id);
+									LeaveHistoryAuditController::store('Added annual leave Days Paid','Annual leave Days Paid', 0 ,($days * 8),($days * 8),1, $employees->id);
 								}
 								AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");
 							}

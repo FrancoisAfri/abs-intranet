@@ -114,15 +114,15 @@
 				buttons: [
 					{
 						extend: 'excelHtml5',
-						title: 'Leave Allowance Report'
+						title: 'Leave History Report'
 					},
 					{
 						extend: 'csvHtml5',
-						title: 'Leave Allowance Report'
+						title: 'Leave History Report'
 					},
 					{
 						extend: 'copyHtml5',
-						title: 'Leave Allowance Report'
+						title: 'Leave History Report'
 					}
 				]
 			});
