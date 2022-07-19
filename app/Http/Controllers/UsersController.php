@@ -944,7 +944,7 @@ class UsersController extends Controller
 		$status = !empty($request->input('status')) ? $request->input('status') : 0;
         $employees = HRPerson::select('hr_people.*'
 			, 'hr_positions.name as job_title', 'hp.first_name as manager_first_name'
-			, 'hp.surname as manager_surname', 'hp.date_joined as date_joined', 'hp.date_left as date_left'
+			, 'hp.surname as manager_surname'
 			, 'leave_profile.name as profile_name')
 			->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
 			->leftJoin('leave_profile', 'hr_people.leave_profile', '=', 'leave_profile.id')
@@ -1003,7 +1003,7 @@ class UsersController extends Controller
 		
         $employees = HRPerson::select('hr_people.*'
 			, 'hr_positions.name as job_title', 'hp.first_name as manager_first_name'
-			, 'hp.surname as manager_surname', 'hp.date_joined as date_joined', 'hp.date_left as date_left'
+			, 'hp.surname as manager_surname'
 			, 'leave_profile.name as profile_name')
 			->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
 			->leftJoin('leave_profile', 'hr_people.leave_profile', '=', 'leave_profile.id')
