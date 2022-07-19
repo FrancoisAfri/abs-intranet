@@ -192,7 +192,7 @@
 							><i class="fa fa-times"></i> Reject Request
 							</button>
 						@endif
-						<a href="/procurement/print/{{ $procurement->id }}/pdf" target="_blank" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Request</a>
+						<a href="/procurement/print/{{ $procurement->id }}" target="_blank" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Request</a>
                     </div>
                 </div>
             </div>

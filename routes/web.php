@@ -67,6 +67,8 @@ Route::get('users/approval', 'UsersController@usersApproval');
 Route::post('users/users-approval', 'UsersController@approvalUsers');
 Route::get('/users/reports', 'UsersController@reports');
 Route::post('/users/get_users_access_report', 'UsersController@getEmployeesReport');
+Route::post('/users/get_users_date_report', 'UsersController@getEmployeesStartDateReport');
+Route::post('/users/get_users_date_report_print', 'UsersController@getEmployeesStartDateReportPrint');
 Route::post('/users/get_users_report_print', 'UsersController@getEmployeesReportPrint');
 Route::post('/users/get_users_report', 'UsersController@getUsersReport');
 Route::post('/users/get_users_print', 'UsersController@getUsersReportPrint');

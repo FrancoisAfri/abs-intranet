@@ -18,7 +18,7 @@
                 <form name="users-report-form" class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
-                        <h3 class="box-title">Users Access</h3>
+                        <h3 class="box-title">Users Reports</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                             <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
@@ -40,8 +40,9 @@
 						<div class="form-group{{ $errors->has('report_type') ? ' has-error' : '' }}">
                             <label for="report_type" class="col-sm-2 control-label"> Report Type</label>
 							<div class="col-sm-10">
-								<label class="radio-inline"><input type="radio" id="rdo_users_access" name="report_type" value="2" checked> Users Access</label>
-								<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_users" name="report_type" value="1"> Users List </label>
+								<label class="radio-inline"><input type="radio" id="rdo_users_access" name="report_type" value="2" checked> Users Access</label>    
+								<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_users" name="report_type" value="1"> Users List </label>    
+								<label class="radio-inline" style="padding-left: 0px;"><input type="radio" id="rdo_date" name="report_type" value="3"> Date Stated </label>
 							</div>
 						</div>
                         @foreach($division_levels as $division_level)
@@ -87,6 +88,21 @@
                                         @foreach($modules as $module)
                                             <option value="{{ $module->id }}">{{ $module->name }}</option>
                                         @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group {{ $errors->has('status') ? ' has-error' : '' }}">
+                            <label for="{{ 'status' }}" class="col-sm-2 control-label">Status</label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-unlock-alt"></i>
+                                    </div>
+                                    <select id="status" name="status" class="form-control select2">
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
                                     </select>
                                 </div>
                             </div>
@@ -160,7 +176,7 @@
 			//Date Range picker
             //show/hide fields on radio button toggles (depending on registration type)
 
-            $('#rdo_users, #rdo_users_access').on('ifChecked', function(){      
+            $('#rdo_users, #rdo_users_access, #rdo_date').on('ifChecked', function(){      
 				var allType = hideFields();
                
             });
@@ -190,7 +206,6 @@
         function hideFields() {
             var allType = $("input[name='report_type']:checked").val();
             if (allType == 1) { //users report
-			//alert('ddddd');
                  $('.users-field').show();
                  $('.users-access-field').hide();
                  $('form[name="users-report-form"]').attr('action', '/users/get_users_report');
@@ -201,6 +216,12 @@
                  $('.users-access-field').show();
                  $('form[name="users-report-form"]').attr('action', '/users/get_users_access_report');
                  $('#gen-report').val("Submit"); 
+            } 
+			else if (allType == 3) { //date stated report			 
+				 $('.users-field').show();
+                 $('.users-access-field').hide();
+                 $('form[name="users-report-form"]').attr('action', '/users/get_users_date_report');
+                 $('#gen-report').val("Submit");  
             }
             return allType;      
         }

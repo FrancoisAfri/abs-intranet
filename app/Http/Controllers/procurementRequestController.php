@@ -245,7 +245,7 @@ class procurementRequestController extends Controller
 			{
 				$users = DB::table('hr_users_roles')
 				->leftJoin('hr_people', 'hr_users_roles.hr_id', '=', 'hr_people.id')
-				->where('status', 1)
+				->where('hr_people.status', 1)
 				->where('hr_people.division_level_5', $flow->division_id)
 				->where('hr_users_roles.role_id', $flow->role_id)
 				->pluck('hr_users_roles.hr_id');
@@ -1102,6 +1102,7 @@ class procurementRequestController extends Controller
 		$roles = DB::table('hr_roles')
 				->where('status', 1)
 				->get();
+				//return $procurementSetup;
         $data['procurementSetup'] = $procurementSetup;
         $data['roles'] = $roles;
         $data['page_title'] = "Procurement";
