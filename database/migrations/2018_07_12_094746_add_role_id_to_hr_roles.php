@@ -14,7 +14,7 @@ class AddRoleIdToHrRoles extends Migration
     public function up()
     {
         Schema::table('hr_people', function ($table) {
-            $table->integer('role_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('role_id')->index()->nullable();
         });
     }
 

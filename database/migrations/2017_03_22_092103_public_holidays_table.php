@@ -15,10 +15,13 @@ class PublicHolidaysTable extends Migration
     {
         Schema::create('public_holidays', function (Blueprint $table) {
             $table->increments('id');
-			 $table->integer('day')->index()->unsigned()->nullable();
-			 $table->integer('country_id')->index()->unsigned()->nullable();
-			 $table->integer('year')->index()->unsigned()->nullable();
-			 $table->string('name')->index()->unsigned()->nullable();
+            $table->integer('day')->index()->nullable();
+            $table->unsignedInteger('country_id')->index()->nullable();
+            // $table->foreign('country_id')
+            //     ->references('id')
+            //     ->on('countries');
+            $table->integer('year')->index()->nullable();
+            $table->string('name')->index()->nullable();
             $table->timestamps();
         });
     }

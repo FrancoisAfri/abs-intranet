@@ -14,8 +14,8 @@ class VehicleIDToVehicleCollectImageTable extends Migration
     public function up()
     {
         Schema::table('vehicle_collect_image', function (Blueprint $table) {
-           $table->integer('vehicleID')->nullable()->unsigned()->index();
-			$table->integer('bookingID')->nullable()->unsigned()->index();
+           $table->unsignedInteger('vehicleID')->nullable()->index();
+			$table->unsignedInteger('bookingID')->nullable()->index();
         });
     }
 

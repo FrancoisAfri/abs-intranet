@@ -14,7 +14,7 @@ class AddAuthorIdToVehicleDetailsTable extends Migration
     public function up()
     {
         Schema::table('vehicle_details', function ($table) {
-            $table->integer('author_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('author_id')->index()->nullable();
         });
     }
 

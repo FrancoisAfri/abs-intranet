@@ -14,10 +14,10 @@ class AddFieldsFromStockTable extends Migration
     public function up()
     {
 		Schema::table('stock', function (Blueprint $table) {
-            $table->integer('product_id')->unsigned()->index()->nullable();
-            $table->integer('category_id')->unsigned()->index()->nullable();
-            $table->integer('avalaible_stock')->unsigned()->index()->nullable();
-            $table->bigInteger('date_added')->unsigned()->index()->nullable();
+            $table->unsignedInteger('product_id')->index()->nullable();
+            $table->unsignedInteger('category_id')->index()->nullable();
+            $table->unsignedInteger('avalaible_stock')->index()->nullable();
+            $table->unsignedBigInteger('date_added')->index()->nullable();
         });
     }
 

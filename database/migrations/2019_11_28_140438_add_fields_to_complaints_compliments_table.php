@@ -14,8 +14,8 @@ class AddFieldsToComplaintsComplimentsTable extends Migration
     public function up()
     {
         Schema::table('complaints_compliments', function (Blueprint $table) {
-            $table->integer('manager_id')->index()->unsigned()->nullable();
-            $table->string('closing_comment')->index()->unsigned()->nullable();
+            $table->unsignedInteger('manager_id')->index()->nullable();
+            $table->string('closing_comment')->index()->nullable();
         });
     }
 

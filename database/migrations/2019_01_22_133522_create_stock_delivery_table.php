@@ -15,9 +15,9 @@ class CreateStockDeliveryTable extends Migration
     {
          Schema::create('stock_deliveries', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('employee_id')->unsigned()->index()->nullable();
-			$table->string('delivery_slip')->unsigned()->index()->nullable();
-			$table->integer('request_stocks_id')->unsigned()->index()->nullable();
+			$table->unsignedInteger('employee_id')->index()->nullable();
+			$table->string('delivery_slip')->index()->nullable();
+			$table->unsignedInteger('request_stocks_id')->index()->nullable();
 			$table->smallInteger('status')->nullable();
 			$table->bigInteger('date_delivered')->nullable();
             $table->timestamps();

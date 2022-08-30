@@ -15,7 +15,7 @@ class CreateFueltankTopUp extends Migration
     {
         Schema::create('fuel_tank_topUp', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('supplier_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('supplier_id')->index()->nullable();
             $table->string('document_no')->nullable();
             $table->bigInteger('document_date')->nullable();
             $table->bigInteger('topup_date')->nullable();
@@ -29,7 +29,7 @@ class CreateFueltankTopUp extends Migration
             $table->integer('received_by')->nullable();
             $table->integer('captured_by')->nullable();
             $table->smallInteger('status');
-            $table->integer('tank_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('tank_id')->index()->nullable();
             $table->timestamps();
         });
     }

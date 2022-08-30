@@ -14,7 +14,7 @@ class AddCompanyIdToClientCommunications extends Migration
     public function up()
     {
         Schema::table('contacts_communications', function ($table) {
-            $table->integer('company_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('company_id')->index()->nullable();
         });
     }
 

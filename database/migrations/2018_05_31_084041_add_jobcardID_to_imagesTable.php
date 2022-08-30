@@ -14,7 +14,7 @@ class AddJobcardIDToImagesTable extends Migration
     public function up()
     {
        Schema::table('vehicle_image', function (Blueprint $table) {
-            $table->integer('jobcard_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('jobcard_id')->index()->nullable();
         });
     }
 

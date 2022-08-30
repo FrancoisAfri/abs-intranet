@@ -14,9 +14,9 @@ class AddColumnsToStockRequestTable extends Migration
     public function up()
     {
         Schema::table('request_stocks', function ($table) {
-            $table->string('request_number')->unsigned()->index()->nullable();
-            $table->string('invoice_number')->unsigned()->index()->nullable();
-            $table->string('delivery_number')->unsigned()->index()->nullable();
+            $table->string('request_number')->index()->nullable();
+            $table->string('invoice_number')->index()->nullable();
+            $table->string('delivery_number')->index()->nullable();
         });
     }
 

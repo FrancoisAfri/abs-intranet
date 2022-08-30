@@ -14,8 +14,8 @@ class AddColumnsToStockTble extends Migration
     public function up()
     {
        Schema::table('stock', function (Blueprint $table) {
-            $table->string('serial_number')->unsigned()->index()->nullable();
-            $table->string('bar_code')->nullable()->index();;
+            $table->string('serial_number')->nullable()->index();
+            $table->string('bar_code')->nullable()->index();
            
         });
     }

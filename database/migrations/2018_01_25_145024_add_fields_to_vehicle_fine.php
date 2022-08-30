@@ -14,7 +14,7 @@ class AddFieldsToVehicleFine extends Migration
     public function up()
     {
      Schema::table('vehicle_warranties', function (Blueprint $table) {
-            $table->string('registrion')->index()->unsigned()->nullable();
+            $table->string('registrion')->index()->nullable();
         });
     }
 

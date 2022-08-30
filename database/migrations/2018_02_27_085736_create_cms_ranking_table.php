@@ -21,7 +21,7 @@ class CreateCmsRankingTable extends Migration
             $table->bigInteger('rating_3');
             $table->bigInteger('rating_4');
             $table->bigInteger('rating_5');
-            $table->integer('user_id')->index()->unsigned()->nullable();
+            $table->unsignedInteger('user_id')->index()->nullable();
             $table->timestamps();
 
         });

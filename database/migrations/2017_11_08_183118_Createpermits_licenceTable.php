@@ -15,15 +15,15 @@ class CreatepermitsLicenceTable extends Migration
     {
         Schema::create('permits_licence', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('Supplier')->nullable()->unsigned()->index();
-            $table->integer('permit_licence')->nullable();
+            $table->unsignedInteger('Supplier')->nullable()->index();
+            $table->unsignedInteger('permit_licence')->nullable();
             $table->bigInteger('date_issued')->nullable();
             $table->bigInteger('exp_date')->nullable();
             $table->integer('status')->nullable();
-            $table->string('captured_by')->nullable()->unsigned()->index();
+            $table->string('captured_by')->nullable()->index();
             $table->bigInteger('date_captured')->nullable();
-            $table->string('document')->nullable()->unsigned()->index();
-            $table->integer('vehicleID')->nullable()->unsigned()->index();
+            $table->string('document')->nullable()->index();
+            $table->unsignedInteger('vehicleID')->nullable()->index();
             $table->integer('default_documrnt')->nullable();
             $table->timestamps();
         });

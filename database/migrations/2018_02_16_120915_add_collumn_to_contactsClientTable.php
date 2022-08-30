@@ -14,7 +14,7 @@ class AddCollumnToContactsClientTable extends Migration
     public function up()
     {
       Schema::table('policy_users', function (Blueprint $table) {
-            $table->string('client_documents')->index()->unsigned()->nullable();
+            $table->string('client_documents')->index()->nullable();
         });
     }
 

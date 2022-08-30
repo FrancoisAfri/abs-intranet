@@ -14,7 +14,7 @@ class AddDivisionIdToProcurementApprovalStepsTable extends Migration
     public function up()
     {
         Schema::table('procurement_approval_steps', function (Blueprint $table) {
-            $table->integer('division_id')->nullable()->unsigned()->index();
+            $table->unsignedInteger('division_id')->nullable()->index();
         });
     }
 

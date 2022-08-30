@@ -14,7 +14,7 @@ class AddVehiclergistrationToVehicleinsuarance extends Migration
     public function up()
     {
         Schema::table('vehicle_insurance', function (Blueprint $table) {
-            $table->integer('vehicle_reg_no')->index()->unsigned()->nullable();
+            $table->unsignedInteger('vehicle_reg_no')->index()->nullable();
         });
     }
 

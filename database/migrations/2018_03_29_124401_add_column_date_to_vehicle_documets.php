@@ -14,7 +14,7 @@ class AddColumnDateToVehicleDocumets extends Migration
     public function up()
     {
        Schema::table('vehicle_documets', function (Blueprint $table) {
-            $table->bigInteger('currentdate')->nullable()->unsigned()->index();
+            $table->unsignedBigInteger('currentdate')->nullable()->index();
         });
     }
 

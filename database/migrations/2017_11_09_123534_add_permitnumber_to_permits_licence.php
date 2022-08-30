@@ -14,8 +14,8 @@ class AddPermitnumberToPermitsLicence extends Migration
     public function up()
     {
         Schema::table('permits_licence', function ($table) {
-            $table->string('permits_licence_no')->nullable()->unsigned()->index();
-            $table->string('permits_licence_numbers')->nullable()->unsigned()->index();
+            $table->string('permits_licence_no')->nullable()->index();
+            $table->string('permits_licence_numbers')->nullable()->index();
             
         });
     }

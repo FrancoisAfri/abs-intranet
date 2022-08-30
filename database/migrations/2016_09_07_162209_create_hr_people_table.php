@@ -15,7 +15,8 @@ class CreateHrPeopleTable extends Migration
     {
         Schema::create('hr_people', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('user_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('user_id')->index()->nullable();
+            $table->foreign('user_id')->references('id')->on('users');
             $table->string('title')->nullable();
             $table->string('first_name')->nullable();
             $table->string('surname')->nullable();
@@ -24,7 +25,7 @@ class CreateHrPeopleTable extends Migration
             $table->string('maiden_name')->nullable();
             $table->string('aka')->nullable();
             $table->string('initial')->nullable();
-            $table->integer('position')->unsigned()->index()->nullable();
+            $table->unsignedInteger('position')->index()->nullable();
             $table->string('email')->unique()->nullable();
             $table->string('cell_number')->nullable();
             $table->string('phone_number')->nullable();

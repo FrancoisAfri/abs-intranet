@@ -15,10 +15,10 @@ class KeyTypeToKeytracking extends Migration
     {
         Schema::table('keytracking', function (Blueprint $table) {
             $table->string('key_number')->nullable();
-            $table->integer('key_type')->nullable()->unsigned()->index();
-            $table->integer('key_status')->nullable()->unsigned()->index();
-            $table->integer('vehicle_type')->nullable()->unsigned()->index();
-            $table->integer('vehicle_id')->nullable()->unsigned()->index();
+            $table->unsignedInteger('key_type')->nullable()->index();
+            $table->unsignedInteger('key_status')->nullable()->index();
+            $table->unsignedInteger('vehicle_type')->nullable()->index();
+            $table->unsignedInteger('vehicle_id')->nullable()->index();
         });
     }
 

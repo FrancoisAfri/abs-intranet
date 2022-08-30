@@ -15,8 +15,8 @@ class CreateVehicleBookingTable extends Migration
     {
         Schema::create('vehicle_booking', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('capturer_id')->nullable()->unsigned()->index();
-            $table->integer('driver_id')->nullable()->unsigned()->index();
+            $table->string('capturer_id')->nullable()->index();
+            $table->unsignedInteger('driver_id')->nullable()->index();
             $table->string('purpose')->nullable();
             $table->integer('status')->nullable();
             $table->integer('vehicle_id')->nullable();
@@ -46,11 +46,11 @@ class CreateVehicleBookingTable extends Migration
             $table->bigInteger('approver4_timestamp')->nullable();
             $table->string('return_time')->nullable();
             $table->integer('usage_type')->nullable();
-            $table->integer('vehicle_make')->nullable()->unsigned()->index();
-            $table->integer('vehicle_type')->nullable()->unsigned()->index();
-            $table->integer('vehicle_model')->nullable()->unsigned()->index();
-            $table->string('vehicle_reg')->nullable()->unsigned()->index();
-            $table->integer('UserID')->nullable()->unsigned()->index();
+            $table->unsignedInteger('vehicle_make')->nullable()->index();
+            $table->unsignedInteger('vehicle_type')->nullable()->index();
+            $table->unsignedInteger('vehicle_model')->nullable()->index();
+            $table->string('vehicle_reg')->nullable()->index();
+            $table->unsignedInteger('UserID')->nullable()->index();
 
             $table->timestamps();
         });

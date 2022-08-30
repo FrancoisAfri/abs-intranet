@@ -14,7 +14,7 @@ class AddColumnToFineTble extends Migration
     public function up()
     {
     Schema::table('vehicle_fines', function (Blueprint $table) {
-            $table->bigInteger('vehiclebookingID')->nullable()->unsigned()->index();
+            $table->unsignedBigInteger('vehiclebookingID')->nullable()->index();
         });
     }
 

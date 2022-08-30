@@ -14,7 +14,7 @@ class AddCancelStatusToVehicleBookingTable extends Migration
     public function up()
     {
         Schema::table('vehicle_booking', function (Blueprint $table) {
-            $table->integer('cancel_status')->nullable()->unsigned()->index();
+            $table->unsignedInteger('cancel_status')->nullable()->index();
         });
     }
 
@@ -26,7 +26,7 @@ class AddCancelStatusToVehicleBookingTable extends Migration
     public function down()
     {
         Schema::table('vehicle_booking', function (Blueprint $table) {
-            $table->integer('cancel_status')->nullable()->unsigned()->index();
+            $table->unsignedInteger('cancel_status')->nullable()->index();
         });
     }
 }

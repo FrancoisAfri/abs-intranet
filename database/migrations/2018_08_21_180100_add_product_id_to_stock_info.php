@@ -14,7 +14,7 @@ class AddProductIdToStockInfo extends Migration
     public function up()
     {
         Schema::table('stock_infos', function ($table) {
-            $table->integer('product_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('product_id')->index()->nullable();
         });
     }
 

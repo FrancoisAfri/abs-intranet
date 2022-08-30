@@ -14,7 +14,7 @@ class AddFieldsToStockLevelFivesTable extends Migration
     public function up()
     {
         Schema::table('stock_level_fives', function ($table) {
-            $table->string('store_address')->unsigned()->index()->nullable();
+            $table->string('store_address')->index()->nullable();
         });
     }
 

@@ -14,7 +14,7 @@ class AddDateCreatedToQuotationTable extends Migration
     public function up()
     {
         Schema::table('quotations', function ($table) {
-            $table->bigInteger('quote_date')->unsigned()->index()->nullable();
+            $table->unsignedBigInteger('quote_date')->index()->nullable();
         });
     }
 

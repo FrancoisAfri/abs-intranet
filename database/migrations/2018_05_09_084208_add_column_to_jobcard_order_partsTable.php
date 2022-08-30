@@ -14,7 +14,7 @@ class AddColumnToJobcardOrderPartsTable extends Migration
      public function up()
     {
        Schema::table('jobcard__order_parts', function (Blueprint $table) {
-            $table->integer('avalaible_transaction')->unsigned()->index()->nullable();
+            $table->unsignedInteger('avalaible_transaction')->index()->nullable();
         });
     }
 

@@ -16,11 +16,11 @@ class CreateJobcardOrderPartsTable extends Migration
      Schema::create('jobcard__order_parts', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('no_of_parts_used')->nullable();
-            $table->integer('jobcard_parts_id')->unsigned()->index()->nullable();
-            $table->integer('jobcard_card_id')->unsigned()->index()->nullable();
-            $table->integer('category_id')->unsigned()->index()->nullable();
-            $table->integer('created_by')->unsigned()->index()->nullable();
-            $table->bigInteger('date_created')->unsigned()->index()->nullable();
+            $table->unsignedInteger('jobcard_parts_id')->index()->nullable();
+            $table->unsignedInteger('jobcard_card_id')->index()->nullable();
+            $table->unsignedInteger('category_id')->index()->nullable();
+            $table->unsignedInteger('created_by')->index()->nullable();
+            $table->unsignedBigInteger('date_created')->index()->nullable();
             $table->smallInteger('status')->nullable();
             $table->timestamps();
 

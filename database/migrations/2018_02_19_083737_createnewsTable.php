@@ -21,12 +21,12 @@ class CreatenewsTable extends Migration
             $table->string('supporting_docs')->nullable();
             $table->string('summary', 5000)->nullable();
             $table->string('image')->nullable();
-            $table->integer('user_id')->index()->unsigned()->nullable();
-            $table->integer('division_level_1')->unsigned()->index()->nullable();
-            $table->integer('division_level_2')->unsigned()->index()->nullable();
-            $table->integer('division_level_3')->unsigned()->index()->nullable();
-            $table->integer('division_level_4')->unsigned()->index()->nullable();
-            $table->integer('division_level_5')->unsigned()->index()->nullable();
+            $table->unsignedInteger('user_id')->index()->nullable();
+            $table->unsignedInteger('division_level_1')->index()->nullable();
+            $table->unsignedInteger('division_level_2')->index()->nullable();
+            $table->unsignedInteger('division_level_3')->index()->nullable();
+            $table->unsignedInteger('division_level_4')->index()->nullable();
+            $table->unsignedInteger('division_level_5')->index()->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
         });

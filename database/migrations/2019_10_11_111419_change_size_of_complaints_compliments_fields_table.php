@@ -14,11 +14,11 @@ class ChangeSizeOfComplaintsComplimentsFieldsTable extends Migration
     public function up()
     {
         Schema::table('complaints_compliments', function (Blueprint $table) {
-            $table->string('office', 5000)->change();
-            $table->string('error_type', 5000)->change();
-            $table->string('pending_reason', 5000)->change();
-            $table->string('summary_corrective_measure', 5000)->change();
-            $table->string('summary_complaint_compliment', 5000)->change();
+            $table->longText('office', 5000)->change();
+            $table->longText('error_type', 5000)->change();
+            $table->longText('pending_reason', 5000)->change();
+            $table->longText('summary_corrective_measure', 5000)->change();
+            $table->longText('summary_complaint_compliment', 5000)->change();
         });
     }
 

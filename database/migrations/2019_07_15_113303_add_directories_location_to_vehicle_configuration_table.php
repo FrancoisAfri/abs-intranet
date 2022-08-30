@@ -14,26 +14,26 @@ class AddDirectoriesLocationToVehicleConfigurationTable extends Migration
     public function up()
     {
         Schema::table('vehicle_configuration', function (Blueprint $table) {
-            $table->string('brake_test_from')->nullable()->unsigned()->index();
-            $table->string('brake_test_to')->nullable()->unsigned()->index();
-            $table->string('fire_extinguisher_from')->nullable()->unsigned()->index();
-            $table->string('fire_extinguisher_to')->nullable()->unsigned()->index();
-            $table->string('fuel_transaction_from')->nullable()->unsigned()->index();
-            $table->string('fuel_transaction_to')->nullable()->unsigned()->index();
-            $table->string('get_fitment_from')->nullable()->unsigned()->index();
-            $table->string('get_fitment_to')->nullable()->unsigned()->index();
-            $table->string('ldv_car_inspection_from')->nullable()->unsigned()->index();
-            $table->string('ldv_car_inspection_to')->nullable()->unsigned()->index();
-            $table->string('ldv_pre_use_inspections_from')->nullable()->unsigned()->index();
-            $table->string('ldv_pre_use_inspections_to')->nullable()->unsigned()->index();
-            $table->string('mechanic_plant_inspections_from')->nullable()->unsigned()->index();
-            $table->string('mechanic_plant_inspections_to')->nullable()->unsigned()->index();
-            $table->string('truck_tractor_rigid_chassis_from')->nullable()->unsigned()->index();
-            $table->string('truck_tractor_rigid_chassis_to')->nullable()->unsigned()->index();
-            $table->string('tyre_survey_reports_from')->nullable()->unsigned()->index();
-            $table->string('tyre_survey_reports_to')->nullable()->unsigned()->index();
-            $table->string('job_card_inspection_from')->nullable()->unsigned()->index();
-            $table->string('job_card_inspection_to')->nullable()->unsigned()->index();
+            $table->string('brake_test_from')->nullable()->index();
+            $table->string('brake_test_to')->nullable()->index();
+            $table->string('fire_extinguisher_from')->nullable()->index();
+            $table->string('fire_extinguisher_to')->nullable()->index();
+            $table->string('fuel_transaction_from')->nullable()->index();
+            $table->string('fuel_transaction_to')->nullable()->index();
+            $table->string('get_fitment_from')->nullable()->index();
+            $table->string('get_fitment_to')->nullable()->index();
+            $table->string('ldv_car_inspection_from')->nullable()->index();
+            $table->string('ldv_car_inspection_to')->nullable()->index();
+            $table->string('ldv_pre_use_inspections_from')->nullable()->index();
+            $table->string('ldv_pre_use_inspections_to')->nullable()->index();
+            $table->string('mechanic_plant_inspections_from')->nullable()->index();
+            $table->string('mechanic_plant_inspections_to')->nullable()->index();
+            $table->string('truck_tractor_rigid_chassis_from')->nullable()->index();
+            $table->string('truck_tractor_rigid_chassis_to')->nullable()->index();
+            $table->string('tyre_survey_reports_from')->nullable()->index();
+            $table->string('tyre_survey_reports_to')->nullable()->index();
+            $table->string('job_card_inspection_from')->nullable()->index();
+            $table->string('job_card_inspection_to')->nullable()->index();
         });
     }
 

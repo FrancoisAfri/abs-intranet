@@ -14,7 +14,7 @@ class AddRegistrationToVehicleInsuranceTable extends Migration
     public function up()
     {
         Schema::table('vehicle_insurance', function (Blueprint $table) {
-            $table->string('registration')->nullable()->unsigned()->index();
+            $table->string('registration')->nullable()->index();
         });
     }
 
@@ -26,7 +26,7 @@ class AddRegistrationToVehicleInsuranceTable extends Migration
     public function down()
     {
         Schema::table('vehicle_insurance', function (Blueprint $table) {
-            $table->string('registration')->nullable()->unsigned()->index();
+            $table->string('registration')->nullable()->index();
         });
     }
 }

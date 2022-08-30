@@ -15,9 +15,9 @@ class CreateJobCardHistoriesTable extends Migration
     {
         Schema::create('job_card_histories', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('job_card_id')->unsigned()->index()->nullable();
-            $table->integer('status')->unsigned()->index()->nullable();
-            $table->string('comment')->unsigned()->index()->nullable();
+			$table->unsignedInteger('job_card_id')->index()->nullable();
+            $table->unsignedInteger('status')->index()->nullable();
+            $table->string('comment')->index()->nullable();
             $table->bigInteger('action_date')->nullable();
 			$table->integer('user_id')->nullable();
             $table->timestamps();

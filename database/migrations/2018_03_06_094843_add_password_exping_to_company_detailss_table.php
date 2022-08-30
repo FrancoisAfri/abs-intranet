@@ -14,7 +14,7 @@ class AddPasswordExpingToCompanyDetailssTable extends Migration
     public function up()
     {
         Schema::table('company_identities', function($table) {
-            $table->bigInteger('password_expiring_month')->nullable()->unsigned()->index();
+            $table->unsignedBigInteger('password_expiring_month')->nullable()->index();
         });
     }
 

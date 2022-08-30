@@ -15,23 +15,23 @@ class CreateVehicleFireExtinguisherTable extends Migration
     {
         Schema::create('vehicle_fire_extinguisher', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('attachement')->unsigned()->index()->nullable();
-			$table->string('Serial_number')->unsigned()->index()->nullable();
-			$table->bigInteger('date_purchased')->unsigned()->index()->nullable();
-			$table->integer('vehicle_id')->unsigned()->index()->nullable();
-			$table->integer('supplier_id')->unsigned()->index()->nullable();
-			$table->string('bar_code')->unsigned()->index()->nullable();
-			$table->string('item_no')->unsigned()->index()->nullable();
-			$table->string('Description')->unsigned()->index()->nullable();
-			$table->integer('Weight')->unsigned()->index()->nullable();
-			$table->string('invoice_number')->unsigned()->index()->nullable();
-			$table->string('purchase_order')->unsigned()->index()->nullable();
+			$table->string('attachement')->index()->nullable();
+			$table->string('Serial_number')->index()->nullable();
+			$table->unsignedInteger('date_purchased')->index()->nullable();
+			$table->unsignedInteger('vehicle_id')->index()->nullable();
+			$table->unsignedInteger('supplier_id')->index()->nullable();
+			$table->string('bar_code')->index()->nullable();
+			$table->string('item_no')->index()->nullable();
+			$table->string('Description')->index()->nullable();
+			$table->unsignedInteger('Weight')->index()->nullable();
+			$table->string('invoice_number')->index()->nullable();
+			$table->string('purchase_order')->index()->nullable();
 			$table->double('Cost')->unsigned()->index()->nullable();
 			$table->double('rental_amount')->unsigned()->index()->nullable();
-			$table->string('image')->unsigned()->index()->nullable();
-			$table->integer('Status')->unsigned()->index()->nullable();
-			$table->string('notes')->unsigned()->index()->nullable();
-			$table->integer('capturer_id')->unsigned()->index()->nullable();
+			$table->string('image')->index()->nullable();
+			$table->unsignedInteger('Status')->index()->nullable();
+			$table->string('notes')->index()->nullable();
+			$table->unsignedInteger('capturer_id')->index()->nullable();
             $table->timestamps();
         });
     }

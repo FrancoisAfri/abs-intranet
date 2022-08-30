@@ -14,7 +14,7 @@ class AddHelpdeskIdAutoescalationTable extends Migration
     public function up()
     {
         Schema::table('auto_escalation_settings', function (Blueprint $table) {
-            $table->integer('helpdesk_id')->index()->unsigned()->nullable();
+            $table->unsignedInteger('helpdesk_id')->index()->nullable();
         });
     }
 

@@ -14,10 +14,10 @@ class AddFieldsToStockSettingsTable extends Migration
     public function up()
     {
         Schema::table('stock_settings', function ($table) {
-            $table->integer('require_managers_approval')->unsigned()->index()->nullable();
-            $table->integer('require_store_manager_approval')->unsigned()->index()->nullable();
-            $table->integer('require_department_head_approval')->unsigned()->index()->nullable();
-            $table->integer('require_ceo_approval')->unsigned()->index()->nullable();
+            $table->unsignedInteger('require_managers_approval')->index()->nullable();
+            $table->unsignedInteger('require_store_manager_approval')->index()->nullable();
+            $table->unsignedInteger('require_department_head_approval')->index()->nullable();
+            $table->unsignedInteger('require_ceo_approval')->index()->nullable();
         });
     }
 

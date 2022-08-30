@@ -14,7 +14,7 @@ class AddFieldsProcurementRequestTable extends Migration
     public function up()
     {
         Schema::table('procurement_requests', function ($table) {
-            $table->integer('add_vat')->unsigned()->index()->nullable();
+            $table->unsignedInteger('add_vat')->index()->nullable();
         });
     }
 

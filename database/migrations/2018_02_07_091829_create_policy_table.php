@@ -19,7 +19,7 @@ class CreatePolicyTable extends Migration
             $table->string('description')->nullable();
             $table->string('document')->nullable();
             $table->integer('status')->nullable();
-            $table->bigInteger('date')->index()->unsigned()->nullable();
+            $table->unsignedBigInteger('date')->index()->nullable();
             $table->timestamps();
         });
     }

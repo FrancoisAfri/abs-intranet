@@ -14,7 +14,7 @@ class AddStoreIdToStockTable extends Migration
     public function up()
     {
         Schema::table('stock', function ($table) {
-            $table->integer('store_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('store_id')->index()->nullable();
         });
     }
 

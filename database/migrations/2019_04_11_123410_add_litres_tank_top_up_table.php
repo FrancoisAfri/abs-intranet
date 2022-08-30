@@ -14,7 +14,7 @@ class AddLitresTankTopUpTable extends Migration
     public function up()
     {
         Schema::table('fuel_tank_topUp', function (Blueprint $table) {
-            $table->bigInteger('litres_new')->nullable()->unsigned()->index();
+            $table->unsignedBigInteger('litres_new')->nullable()->index();
         });
     }
 

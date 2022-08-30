@@ -14,7 +14,7 @@ class VehicleIDToVehicleReturnImagesTable extends Migration
     public function up()
     {
         Schema::table('vehicle_return_images', function ($table) {
-             $table->integer('vehicleID')->nullable()->unsigned()->index();
+             $table->unsignedInteger('vehicleID')->nullable()->index();
         });
     }
 

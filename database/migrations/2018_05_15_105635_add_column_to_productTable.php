@@ -14,7 +14,7 @@ class AddColumnToProductTable extends Migration
     public function up()
     {
       Schema::table('Product_products', function (Blueprint $table) {
-            $table->string('product_code')->unsigned()->index()->nullable();
+            $table->string('product_code')->index()->nullable();
         });
     }
 

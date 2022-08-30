@@ -14,7 +14,7 @@ class AddStoreIdToRequestStockTable extends Migration
     public function up()
     {
         Schema::table('request_stocks', function ($table) {
-            $table->integer('store_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('store_id')->index()->nullable();
         });
     }
 

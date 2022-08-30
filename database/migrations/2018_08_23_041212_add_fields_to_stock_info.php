@@ -18,9 +18,9 @@ class AddFieldsToStockInfo extends Migration
             $table->double('mass_net')->unsigned()->index()->nullable();
 			$table->double('minimum_level')->unsigned()->index()->nullable();
             $table->double('maximum_level')->unsigned()->index()->nullable();
-            $table->string('bar_code')->unsigned()->index()->nullable();
-            $table->string('unit')->unsigned()->index()->nullable();
-            $table->string('commodity_code')->unsigned()->index()->nullable();
+            $table->string('bar_code')->index()->nullable();
+            $table->string('unit')->index()->nullable();
+            $table->string('commodity_code')->index()->nullable();
         });
     }
 

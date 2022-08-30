@@ -14,7 +14,7 @@ class AddCollumnToContactsClient extends Migration
     public function up()
     {
        Schema::table('client_documents', function (Blueprint $table) {
-            $table->string('document_name')->index()->unsigned()->nullable();
+            $table->string('document_name')->index()->nullable();
         });
     }
 

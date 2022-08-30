@@ -14,9 +14,9 @@ class AddFieldsToProcurementSetupTable extends Migration
     public function up()
     {
         Schema::table('procurement_setups', function (Blueprint $table) {
-            $table->integer('is_role_general')->nullable()->unsigned()->index();
-            $table->integer('email_po_to_supplier')->nullable()->unsigned()->index();
-            $table->integer('email_role')->nullable()->unsigned()->index();
+            $table->unsignedInteger('is_role_general')->nullable()->index();
+            $table->unsignedInteger('email_po_to_supplier')->nullable()->index();
+            $table->unsignedInteger('email_role')->nullable()->index();
             $table->double('amount_required_double')->nullable()->unsigned()->index();
         });
     }

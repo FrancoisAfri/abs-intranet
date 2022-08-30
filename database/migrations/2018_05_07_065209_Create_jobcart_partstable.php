@@ -19,7 +19,7 @@ class CreateJobcartPartstable extends Migration
             $table->String('description')->nullable();   
             $table->integer('no_of_parts_available')->nullable();
             $table->smallInteger('status')->nullable();
-            $table->integer('category_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('category_id')->index()->nullable();
             $table->timestamps();
 
         });

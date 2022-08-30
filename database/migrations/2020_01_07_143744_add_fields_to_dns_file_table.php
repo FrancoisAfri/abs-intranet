@@ -14,9 +14,9 @@ class AddFieldsToDnsFileTable extends Migration
     public function up()
     {
         Schema::table('dms_files', function (Blueprint $table) {
-            $table->string('current_version')->index()->unsigned()->nullable();
-            $table->string('description')->index()->unsigned()->nullable();
-            $table->string('document_name')->index()->unsigned()->nullable();
+            $table->string('current_version')->index()->nullable();
+            $table->string('description')->index()->nullable();
+            $table->string('document_name')->index()->nullable();
         });
     }
 

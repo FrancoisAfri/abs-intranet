@@ -14,7 +14,7 @@ class AddColumnToHistoryTable extends Migration
     public function up()
     {
        Schema::table('stock_history', function (Blueprint $table) {
-            $table->integer('user_allocated_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('user_allocated_id')->index()->nullable();
             $table->integer('balance_before')->nullable()->index();;
             $table->integer('balance_after')->nullable()->index();;
         });

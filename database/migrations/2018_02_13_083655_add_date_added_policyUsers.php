@@ -14,7 +14,7 @@ class AddDateAddedPolicyUsers extends Migration
     public function up()
     {
         Schema::table('policy_users', function (Blueprint $table) {
-            $table->bigInteger('date_added')->index()->unsigned()->nullable();
+            $table->unsignedBigInteger('date_added')->index()->nullable();
         });
     }
 

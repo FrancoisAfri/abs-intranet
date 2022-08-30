@@ -17,10 +17,10 @@ class CreateVehicleMilegeTable extends Migration
             $table->increments('id');
             $table->bigInteger('date_created')->nullable();
             $table->bigInteger('date_taken')->nullable();
-			$table->integer('vehicle_id')->index()->unsigned()->nullable();
+			$table->unsignedInteger('vehicle_id')->index()->nullable();
             $table->integer('odometer_reading')->nullable();
             $table->smallInteger('type')->nullable();
-            $table->integer('booking_id')->index()->unsigned()->nullable();
+            $table->unsignedInteger('booking_id')->index()->nullable();
             $table->string('hours_reading')->nullable();
             $table->timestamps();
         });

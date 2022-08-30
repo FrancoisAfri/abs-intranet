@@ -14,8 +14,8 @@ class AddContactIdToVehicleCommunicationsTable extends Migration
     public function up()
     {
        Schema::table('fleet_communications', function ($table) {
-            $table->integer('contact_id')->unsigned()->index()->nullable();
-            $table->integer('company_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('contact_id')->index()->nullable();
+            $table->unsignedInteger('company_id')->index()->nullable();
         });
     }
 

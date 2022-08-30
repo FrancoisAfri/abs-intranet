@@ -14,7 +14,7 @@ class AddCategoryIDTermsConditionsTable extends Migration
     public function up()
     {
         Schema::table('quotes_terns_conditions', function (Blueprint $table) {
-            $table->integer('category_id')->index()->unsigned()->nullable();
+            $table->unsignedInteger('category_id')->index()->nullable();
         });
     }
 

@@ -15,20 +15,21 @@ class CreateFuelTanks extends Migration
     {
         Schema::create('fuel_tanks', function (Blueprint $table) {
             $table->increments('id');
-            $table->bigInteger('division_level_1')->index()->unsigned()->nullable();
-            $table->bigInteger('division_level_2')->index()->unsigned()->nullable();
-            $table->bigInteger('division_level_3')->index()->unsigned()->nullable();
-            $table->bigInteger('division_level_4')->index()->unsigned()->nullable();
-            $table->bigInteger('division_level_5')->index()->unsigned()->nullable();
+            $table->unsignedBigInteger('division_level_1')->index()->nullable();
+            $table->unsignedBigInteger('division_level_2')->index()->nullable();
+            $table->unsignedBigInteger('division_level_3')->index()->nullable();
+            $table->unsignedBigInteger('division_level_4')->index()->nullable();
+            $table->unsignedBigInteger('division_level_5')->index()->nullable();
             $table->string('tank_name')->nullable();
             $table->string('tank_location')->nullable();
             $table->string('tank_description')->nullable();
-            $table->integer('tank_capacity')->unsigned()->index()->nullable();
-            $table->integer('tank_manager')->index()->unsigned()->nullable();
+            $table->unsignedInteger('tank_capacity')->index()->nullable();
+            $table->unsignedInteger('tank_manager')->index()->nullable();
             $table->smallInteger('status')->nullable(); 
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.
@@ -39,5 +40,6 @@ class CreateFuelTanks extends Migration
     {
         Schema::dropIfExists('fuel_tanks');
     }
+
 }
 

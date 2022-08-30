@@ -14,7 +14,7 @@ class AddFiedlsToUnresolvedTicketsTable extends Migration
     public function up()
     {
         Schema::table('unresolved_tickets_settings', function (Blueprint $table) {
-            $table->integer('critical_oficehrs')->nullable()->unsigned()->index();
+            $table->unsignedInteger('critical_oficehrs')->nullable()->index();
         });
     }
 

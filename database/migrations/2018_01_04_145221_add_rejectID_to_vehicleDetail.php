@@ -14,7 +14,7 @@ class AddRejectIDToVehicleDetail extends Migration
     public function up()
     {
         Schema::table('vehicle_details', function (Blueprint $table) {
-            $table->bigInteger('rejector_id')->unsigned()->nullable();
+            $table->unsignedBigInteger('rejector_id')->nullable();
         });
     }
 

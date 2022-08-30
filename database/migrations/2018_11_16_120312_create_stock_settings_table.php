@@ -15,7 +15,7 @@ class CreateStockSettingsTable extends Migration
     {
         Schema::create('stock_settings', function (Blueprint $table) {
             $table->increments('id');
-			$table->string('unit_of_measurement')->unsigned()->index()->nullable();
+			$table->string('unit_of_measurement')->index()->nullable();
             $table->timestamps();
         });
     }

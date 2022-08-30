@@ -14,7 +14,7 @@ class AddDateColumnToVehiclebookingTable extends Migration
     public function up()
     {
         Schema::table('vehicle_booking', function (Blueprint $table) {
-            $table->bigInteger('booking_date')->nullable()->unsigned()->index();
+            $table->unsignedBigInteger('booking_date')->nullable()->index();
         });
     }
 

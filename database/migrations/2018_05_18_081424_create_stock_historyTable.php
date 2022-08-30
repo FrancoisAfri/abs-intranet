@@ -16,12 +16,12 @@ class CreateStockHistoryTable extends Migration
      Schema::create('stock_history', function (Blueprint $table) {
             $table->increments('id');
             $table->String('action')->nullable();       
-            $table->integer('product_id')->unsigned()->index()->nullable();
-            $table->integer('category_id')->unsigned()->index()->nullable();
-            $table->integer('user_id')->unsigned()->index()->nullable();
-            $table->integer('vehicle_id')->unsigned()->index()->nullable();
-            $table->integer('avalaible_stock')->unsigned()->index()->nullable();
-            $table->bigInteger('action_date')->unsigned()->index()->nullable();
+            $table->unsignedInteger('product_id')->index()->nullable();
+            $table->unsignedInteger('category_id')->index()->nullable();
+            $table->unsignedInteger('user_id')->index()->nullable();
+            $table->unsignedInteger('vehicle_id')->index()->nullable();
+            $table->unsignedInteger('avalaible_stock')->index()->nullable();
+            $table->unsignedBigInteger('action_date')->index()->nullable();
             $table->smallInteger('status')->nullable();
             $table->timestamps();
 

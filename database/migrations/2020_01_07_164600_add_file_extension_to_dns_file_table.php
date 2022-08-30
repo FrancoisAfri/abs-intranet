@@ -14,7 +14,7 @@ class AddFileExtensionToDnsFileTable extends Migration
     public function up()
     {
         Schema::table('dms_files', function (Blueprint $table) {
-            $table->string('file_extension')->index()->unsigned()->nullable();
+            $table->string('file_extension')->index()->nullable();
         });
     }
 

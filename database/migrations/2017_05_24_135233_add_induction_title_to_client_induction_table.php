@@ -14,7 +14,7 @@ class AddInductionTitleToClientInductionTable extends Migration
     public function up()
     {
          Schema::table('client_inductions', function($table) {
-            $table->string('induction_title')->nullable()->unsigned()->index();
+            $table->string('induction_title')->nullable()->index();
         });
     }
 

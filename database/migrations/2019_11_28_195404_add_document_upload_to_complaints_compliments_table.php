@@ -14,7 +14,7 @@ class AddDocumentUploadToComplaintsComplimentsTable extends Migration
     public function up()
     {
         Schema::table('complaints_compliments', function (Blueprint $table) {
-            $table->string('document_upload')->index()->unsigned()->nullable();
+            $table->string('document_upload')->index()->nullable();
         });
     }
 

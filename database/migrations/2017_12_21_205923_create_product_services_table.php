@@ -15,7 +15,7 @@ class CreateProductServicesTable extends Migration
     {
         Schema::create('product_services', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('quotation_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('quotation_id')->index()->nullable();
             $table->string('description', 1000)->nullable();
             $table->double('quantity')->nullable();
             $table->double('rate')->nullable();

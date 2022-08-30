@@ -15,21 +15,21 @@ class CreatejobcardMaintananceTable extends Migration
     {
        Schema::create('jobcard_maintanance', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('vehicle_id')->unsigned()->index()->nullable();
+			$table->unsignedInteger('vehicle_id')->index()->nullable();
             $table->bigInteger('card_date')->nullable();
 			$table->bigInteger('schedule_date')->nullable();
 			$table->bigInteger('booking_date')->nullable();
-			$table->integer('supplier_id')->unsigned()->index()->nullable();
-			$table->integer('service_type')->unsigned()->index()->nullable();
+			$table->unsignedInteger('supplier_id')->index()->nullable();
+			$table->unsignedInteger('service_type')->index()->nullable();
 			$table->Integer('estimated_hours')->nullable();
 			$table->string('service_file_upload')->nullable();
 			$table->bigInteger('service_time')->nullable();
 			$table->Integer('machine_hour_metre')->nullable();
 			$table->Integer('machine_odometer')->nullable();
-			$table->Integer('last_driver_id')->unsigned()->index()->nullable();
+			$table->unsignedInteger('last_driver_id')->index()->nullable();
 			$table->string('inspection_info')->nullable();
 			$table->string('inspection_file_upload')->nullable();
-			$table->Integer('mechanic_id')->unsigned()->index()->nullable();
+			$table->unsignedInteger('mechanic_id')->index()->nullable();
 			$table->string('instruction')->nullable();
             $table->smallInteger('status')->nullable();
             $table->timestamps();

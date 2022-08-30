@@ -14,8 +14,8 @@ class AddFieldsToJobcardMaintananceTable extends Migration
     public function up()
     {
         Schema::table('jobcard_maintanance', function ($table) {
-            $table->string('mechanic_comment')->unsigned()->index()->nullable();
-            $table->string('completion_comment')->unsigned()->index()->nullable();
+            $table->string('mechanic_comment')->index()->nullable();
+            $table->string('completion_comment')->index()->nullable();
         });
     }
 

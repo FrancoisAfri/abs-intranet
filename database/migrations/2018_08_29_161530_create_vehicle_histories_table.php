@@ -15,11 +15,11 @@ class CreateVehicleHistoriesTable extends Migration
     {
         Schema::create('vehicle_histories', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('vehicle_id')->unsigned()->index()->nullable();
-            $table->integer('status')->unsigned()->index()->nullable();
-            $table->string('comment')->unsigned()->index()->nullable();
+			$table->unsignedInteger('vehicle_id')->index()->nullable();
+            $table->unsignedInteger('status')->index()->nullable();
+            $table->string('comment')->index()->nullable();
             $table->bigInteger('action_date')->nullable();
-			$table->integer('user_id')->nullable();
+			$table->unsignedInteger('user_id')->nullable();
             $table->timestamps();
         });
     }

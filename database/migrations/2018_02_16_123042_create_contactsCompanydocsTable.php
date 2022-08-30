@@ -20,7 +20,7 @@ class CreateContactsCompanydocsTable extends Migration
              $table->bigInteger('date_from')->nullable();
              $table->bigInteger('expirydate')->nullable();
              $table->string('supporting_docs')->nullable();
-             $table->integer('company_id')->index()->unsigned()->nullable();
+             $table->unsignedInteger('company_id')->index()->nullable();
              $table->integer('status')->nullable();
              $table->timestamps();
          });

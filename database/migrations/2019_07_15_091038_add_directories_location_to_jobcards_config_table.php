@@ -14,10 +14,10 @@ class AddDirectoriesLocationToJobcardsConfigTable extends Migration
     public function up()
     {
         Schema::table('jobcard_config', function (Blueprint $table) {
-            $table->string('service_file_from')->nullable()->unsigned()->index();
-            $table->string('service_file_to')->nullable()->unsigned()->index();
-            $table->string('break_test_from')->nullable()->unsigned()->index();
-            $table->string('break_test_to')->nullable()->unsigned()->index();
+            $table->string('service_file_from')->nullable()->index();
+            $table->string('service_file_to')->nullable()->index();
+            $table->string('break_test_from')->nullable()->index();
+            $table->string('break_test_to')->nullable()->index();
         });
     }
 

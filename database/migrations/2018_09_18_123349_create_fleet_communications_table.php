@@ -15,13 +15,13 @@ class CreateFleetCommunicationsTable extends Migration
     {
         Schema::create('fleet_communications', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('communication_type')->unsigned()->index()->nullable();
+			$table->unsignedInteger('communication_type')->index()->nullable();
             $table->string('message')->nullable();
             $table->integer('vehicle_id')->nullable();
             $table->integer('status')->nullable();
             $table->integer('sent_by')->nullable();
             $table->bigInteger('communication_date')->nullable();
-			$table->string('time_sent')->unsigned()->index()->nullable();
+			$table->string('time_sent')->index()->nullable();
             $table->timestamps();
         });
     }

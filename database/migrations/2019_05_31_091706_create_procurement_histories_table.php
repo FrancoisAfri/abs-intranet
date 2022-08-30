@@ -16,9 +16,9 @@ class CreateProcurementHistoriesTable extends Migration
         Schema::create('procurement_history', function (Blueprint $table) {
             $table->increments('id');
             $table->String('action')->nullable();       
-            $table->integer('procurement_id')->unsigned()->index()->nullable();
-            $table->integer('user_id')->unsigned()->index()->nullable();
-            $table->bigInteger('action_date')->unsigned()->index()->nullable();
+            $table->unsignedInteger('procurement_id')->index()->nullable();
+            $table->unsignedInteger('user_id')->index()->nullable();
+            $table->unsignedBigInteger('action_date')->index()->nullable();
             $table->smallInteger('status')->nullable();
             $table->timestamps();
 		});

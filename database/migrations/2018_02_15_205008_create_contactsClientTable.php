@@ -20,7 +20,7 @@ class CreateContactsClientTable extends Migration
             $table->bigInteger('date_from')->nullable();
             $table->bigInteger('expirydate')->nullable();
             $table->string('supporting_docs')->nullable();
-			$table->integer('client_id')->index()->unsigned()->nullable();
+			$table->unsignedInteger('client_id')->index()->nullable();
 			$table->integer('status')->nullable();
 			$table->timestamps();
        });

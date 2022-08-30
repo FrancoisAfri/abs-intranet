@@ -14,11 +14,11 @@ class AddFieldsToStockInfoTable extends Migration
     public function up()
     {
         Schema::table('stock_infos', function ($table) {
-            $table->integer('stock_level_5')->unsigned()->index()->nullable();
-            $table->integer('stock_level_4')->unsigned()->index()->nullable();
-            $table->integer('stock_level_3')->unsigned()->index()->nullable();
-            $table->integer('stock_level_2')->unsigned()->index()->nullable();
-            $table->integer('stock_level_1')->unsigned()->index()->nullable();
+            $table->unsignedInteger('stock_level_1')->index()->nullable();
+            $table->unsignedInteger('stock_level_5')->index()->nullable();
+            $table->unsignedInteger('stock_level_4')->index()->nullable();
+            $table->unsignedInteger('stock_level_3')->index()->nullable();
+            $table->unsignedInteger('stock_level_2')->index()->nullable();
         });
     }
 

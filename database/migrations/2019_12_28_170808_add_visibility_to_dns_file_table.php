@@ -14,7 +14,7 @@ class AddVisibilityToDnsFileTable extends Migration
     public function up()
     {
         Schema::table('dms_files', function (Blueprint $table) {
-            $table->integer('visibility')->index()->unsigned()->nullable();
+            $table->unsignedInteger('visibility')->index()->nullable();
         });
     }
 

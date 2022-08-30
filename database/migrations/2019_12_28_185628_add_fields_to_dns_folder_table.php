@@ -14,11 +14,11 @@ class AddFieldsToDnsFolderTable extends Migration
     public function up()
     {
         Schema::table('dms_folders', function (Blueprint $table) {
-            $table->integer('division_5')->index()->unsigned()->nullable();
-            $table->integer('division_4')->index()->unsigned()->nullable();
-            $table->integer('division_3')->index()->unsigned()->nullable();
-            $table->integer('division_2')->index()->unsigned()->nullable();
-            $table->integer('division_1')->index()->unsigned()->nullable();
+            $table->unsignedInteger('division_5')->index()->nullable();
+            $table->unsignedInteger('division_4')->index()->nullable();
+            $table->unsignedInteger('division_3')->index()->nullable();
+            $table->unsignedInteger('division_2')->index()->nullable();
+            $table->unsignedInteger('division_1')->index()->nullable();
         });
     }
 

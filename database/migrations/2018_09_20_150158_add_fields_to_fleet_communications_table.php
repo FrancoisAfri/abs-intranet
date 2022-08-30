@@ -14,8 +14,8 @@ class AddFieldsToFleetCommunicationsTable extends Migration
     public function up()
     {
         Schema::table('fleet_communications', function ($table) {
-            $table->integer('employee_id')->unsigned()->index()->nullable();
-            $table->integer('send_type')->unsigned()->index()->nullable();
+            $table->unsignedInteger('employee_id')->index()->nullable();
+            $table->unsignedInteger('send_type')->index()->nullable();
         });
     }
 

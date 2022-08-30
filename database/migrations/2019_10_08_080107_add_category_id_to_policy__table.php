@@ -14,7 +14,7 @@ class AddCategoryIdToPolicyTable extends Migration
     public function up()
     {
         Schema::table('policy', function (Blueprint $table) {
-            $table->integer('category_id')->index()->unsigned()->nullable();
+            $table->unsignedInteger('category_id')->index()->nullable();
         });
     }
 

@@ -15,11 +15,11 @@ class CreateJobCardInstructions extends Migration
     {
         Schema::create('job_card_instructions', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('job_card_id')->unsigned()->index()->nullable();
+			$table->unsignedInteger('job_card_id')->index()->nullable();
             $table->string('instruction_details')->nullable();
             $table->integer('status')->nullable();
             $table->bigInteger('completion_date')->nullable();
-			$table->string('completion_time')->unsigned()->index()->nullable();
+			$table->string('completion_time')->index()->nullable();
             $table->timestamps();
         });
     }

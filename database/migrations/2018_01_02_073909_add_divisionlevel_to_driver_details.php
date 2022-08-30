@@ -14,8 +14,8 @@ class AddDivisionlevelToDriverDetails extends Migration
     public function up()
     {
         Schema::table('drver_details', function (Blueprint $table) {
-            $table->integer('division_level_5')->unsigned()->index()->nullable();
-            $table->integer('division_level_4')->unsigned()->index()->nullable();
+            $table->unsignedInteger('division_level_5')->index()->nullable();
+            $table->unsignedInteger('division_level_4')->index()->nullable();
         });
     }
 

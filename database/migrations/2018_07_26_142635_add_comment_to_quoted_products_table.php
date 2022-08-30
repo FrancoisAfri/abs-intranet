@@ -14,7 +14,7 @@ class AddCommentToQuotedProductsTable extends Migration
     public function up()
     {
         Schema::table('quoted_products', function ($table) {
-            $table->string('comment')->unsigned()->index()->nullable();
+            $table->string('comment')->index()->nullable();
         });
     }
 

@@ -14,7 +14,7 @@ class AddProductIdToPreferedSuppliersInfo extends Migration
     public function up()
     {
         Schema::table('products_preferred_suppliers', function ($table) {
-            $table->integer('product_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('product_id')->index()->nullable();
         });
     }
 

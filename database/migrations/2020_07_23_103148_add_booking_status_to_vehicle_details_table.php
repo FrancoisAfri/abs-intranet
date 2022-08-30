@@ -14,7 +14,7 @@ class AddBookingStatusToVehicleDetailsTable extends Migration
     public function up()
     {
         Schema::table('vehicle_details', function (Blueprint $table) {
-            $table->integer('booking_status')->nullable()->unsigned()->index();
+            $table->unsignedInteger('booking_status')->nullable()->index();
         });
     }
 
@@ -26,7 +26,7 @@ class AddBookingStatusToVehicleDetailsTable extends Migration
     public function down()
     {
         Schema::table('vehicle_details', function (Blueprint $table) {
-            $table->integer('booking_status')->nullable()->unsigned()->index();
+            $table->integer('booking_status')->nullable()->index();
         });
     }
 }

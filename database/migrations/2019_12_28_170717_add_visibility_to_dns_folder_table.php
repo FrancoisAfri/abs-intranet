@@ -14,7 +14,7 @@ class AddVisibilityToDnsFolderTable extends Migration
     public function up()
     {
         Schema::table('dms_folders', function (Blueprint $table) {
-            $table->integer('visibility')->index()->unsigned()->nullable();
+            $table->unsignedInteger('visibility')->index()->nullable();
         });
     }
 

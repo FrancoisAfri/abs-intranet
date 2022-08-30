@@ -20,7 +20,7 @@ class CreateVehicleReturnDocuments extends Migration
             $table->string('document')->nullable();
             $table->bigInteger('upload_date')->nullable();
             $table->integer('user_name')->nullable();
-            $table->integer('vehicleID')->nullable()->unsigned()->index();
+            $table->unsignedInteger('vehicleID')->nullable()->index();
             //$table->integer('bookingID')->nullable()->unsigned()->index();
             $table->timestamps();
         });

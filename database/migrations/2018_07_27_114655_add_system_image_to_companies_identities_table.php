@@ -14,7 +14,7 @@ class AddSystemImageToCompaniesIdentitiesTable extends Migration
     public function up()
     {
         Schema::table('company_identities', function ($table) {
-            $table->string('system_background_image')->unsigned()->index()->nullable();
+            $table->string('system_background_image')->index()->nullable();
         });
     }
 

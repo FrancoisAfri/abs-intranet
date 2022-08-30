@@ -14,7 +14,7 @@ class AddCollectedToStockRequestTable extends Migration
     public function up()
     {
         Schema::table('request_stocks', function ($table) {
-            $table->integer('request_collected')->unsigned()->index()->nullable();
+            $table->unsignedInteger('request_collected')->index()->nullable();
         });
     }
 

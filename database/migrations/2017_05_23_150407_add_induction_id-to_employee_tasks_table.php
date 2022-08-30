@@ -14,9 +14,9 @@ class AddInductionIdToEmployeeTasksTable extends Migration
     public function up()
     {
         Schema::table('employee_tasks', function($table) {
-            $table->integer('induction_id')->nullable()->unsigned()->index();
-            $table->integer('meeting_id')->nullable()->unsigned()->index();
-            $table->integer('is_dependent')->nullable()->unsigned()->index();
+            $table->unsignedInteger('induction_id')->nullable()->index();
+            $table->unsignedInteger('meeting_id')->nullable()->index();
+            $table->unsignedInteger('is_dependent')->nullable()->index();
         });
     }
 

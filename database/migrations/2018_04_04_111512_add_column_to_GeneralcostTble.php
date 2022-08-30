@@ -14,7 +14,7 @@ class AddColumnToGeneralcostTble extends Migration
     public function up()
     {
         Schema::table('vehicle_generalcosts', function (Blueprint $table) {
-            $table->bigInteger('vehiclebookingID')->nullable()->unsigned()->index();
+            $table->unsignedBigInteger('vehiclebookingID')->nullable()->index();
         });
     }
 

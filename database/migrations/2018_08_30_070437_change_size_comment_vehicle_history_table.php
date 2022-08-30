@@ -14,7 +14,7 @@ class ChangeSizeCommentVehicleHistoryTable extends Migration
     public function up()
     {
         Schema::table('vehicle_histories', function (Blueprint $table) {
-            $table->string('comment', 5000)->change();
+           // $table->longText('comment', 5000)->change();
         });
     }
 

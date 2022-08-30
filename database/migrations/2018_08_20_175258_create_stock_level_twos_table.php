@@ -17,9 +17,9 @@ class CreateStockLevelTwosTable extends Migration
             $table->increments('id');
 			$table->string('name')->nullable();
             $table->smallInteger('active')->nullable();
-            $table->integer('manager_id')->unsigned()->index()->nullable();
-            $table->integer('parent_id')->unsigned()->index()->nullable();
-            $table->integer('division_level_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('manager_id')->index()->nullable();
+            $table->unsignedInteger('parent_id')->index()->nullable();
+            $table->unsignedInteger('division_level_id')->index()->nullable();
             $table->timestamps();
         });
     }

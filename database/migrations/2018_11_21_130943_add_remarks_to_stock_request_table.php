@@ -14,7 +14,7 @@ class AddRemarksToStockRequestTable extends Migration
     public function up()
     {
         Schema::table('request_stocks', function ($table) {
-            $table->string('request_remarks')->unsigned()->index()->nullable();
+            $table->string('request_remarks')->index()->nullable();
         });
     }
 

@@ -14,8 +14,8 @@ class AddFieldToFuelToUpTable extends Migration
     public function up()
     {
         Schema::table('fuel_tank_topUp', function (Blueprint $table) {
-            $table->string('make_or_model')->nullable()->unsigned()->index();
-            $table->string('registration_number')->nullable()->unsigned()->index();
+            $table->string('make_or_model')->nullable()->index();
+            $table->string('registration_number')->nullable()->index();
         });
     }
 

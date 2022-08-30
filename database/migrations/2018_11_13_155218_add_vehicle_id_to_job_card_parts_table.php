@@ -14,7 +14,7 @@ class AddVehicleIdToJobCardPartsTable extends Migration
     public function up()
     {
         Schema::table('jobcard__order_parts', function ($table) {
-            $table->integer('vehicle_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('vehicle_id')->index()->nullable();
         });
     }
 

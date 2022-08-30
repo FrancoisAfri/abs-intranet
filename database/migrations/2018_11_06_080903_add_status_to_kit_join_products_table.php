@@ -14,7 +14,7 @@ class AddStatusToKitJoinProductsTable extends Migration
     public function up()
     {
         Schema::table('kin_join_products', function ($table) {
-            $table->smallInteger('status')->unsigned()->index()->nullable();
+            $table->unsignedInteger('status')->index()->nullable();
         });
     }
 

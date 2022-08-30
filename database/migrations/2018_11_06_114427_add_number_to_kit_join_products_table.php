@@ -14,7 +14,7 @@ class AddNumberToKitJoinProductsTable extends Migration
     public function up()
     {
         Schema::table('kin_join_products', function ($table) {
-            $table->integer('amount_required')->unsigned()->index()->nullable();
+            $table->unsignedInteger('amount_required')->index()->nullable();
         });
     }
 

@@ -14,7 +14,7 @@ class AddSupplierToComplaintsComplimentsTable extends Migration
     public function up()
     {
         Schema::table('complaints_compliments', function (Blueprint $table) {
-            $table->string('supplier')->index()->unsigned()->nullable();
+            $table->string('supplier')->index()->nullable();
         });
     }
 

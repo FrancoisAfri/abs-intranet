@@ -14,7 +14,7 @@ class AddIsVatableToProductsProductsTable extends Migration
     public function up()
     {
         Schema::table('Product_products', function ($table) {
-            $table->integer('is_vatable')->unsigned()->index()->nullable();
+            $table->unsignedInteger('is_vatable')->index()->nullable();
         });
     }
 

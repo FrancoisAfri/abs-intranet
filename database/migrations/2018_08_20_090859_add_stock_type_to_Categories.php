@@ -14,7 +14,7 @@ class AddStockTypeToCategories extends Migration
     public function up()
     {
         Schema::table('Categories', function ($table) {
-            $table->integer('stock_type')->unsigned()->index()->nullable();
+            $table->unsignedInteger('stock_type')->index()->nullable();
         });
     }
 

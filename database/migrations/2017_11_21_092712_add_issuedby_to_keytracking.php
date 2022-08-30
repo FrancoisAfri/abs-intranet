@@ -14,7 +14,7 @@ class AddIssuedbyToKeytracking extends Migration
     public function up()
     {
        Schema::table('keytracking', function ($table) {
-             $table->string('issuedBy')->nullable()->unsigned()->index();
+             $table->string('issuedBy')->nullable()->index();
              $table->string('safeController')->nullable();
 
         });

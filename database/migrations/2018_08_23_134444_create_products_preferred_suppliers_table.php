@@ -15,14 +15,14 @@ class CreateProductsPreferredSuppliersTable extends Migration
     {
         Schema::create('products_preferred_suppliers', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('order_no')->unsigned()->index()->nullable();
-			$table->integer('supplier_id')->unsigned()->index()->nullable();
-			$table->integer('status')->unsigned()->index()->nullable();
+			$table->unsignedInteger('order_no')->index()->nullable();
+			$table->unsignedInteger('supplier_id')->index()->nullable();
+			$table->unsignedInteger('status')->index()->nullable();
             $table->double('mass_net')->unsigned()->index()->nullable();
-            $table->string('description')->unsigned()->index()->nullable();
-            $table->string('inventory_code')->unsigned()->index()->nullable();
-            $table->string('commodity_code')->unsigned()->index()->nullable();
-            $table->bigInteger('date_last_processed')->unsigned()->index()->nullable();
+            $table->string('description')->index()->nullable();
+            $table->string('inventory_code')->index()->nullable();
+            $table->string('commodity_code')->index()->nullable();
+            $table->unsignedBigInteger('date_last_processed')->index()->nullable();
             $table->timestamps();
         });
     }

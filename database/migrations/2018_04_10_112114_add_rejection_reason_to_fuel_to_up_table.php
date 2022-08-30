@@ -14,7 +14,7 @@ class AddRejectionReasonToFuelToUpTable extends Migration
     public function up()
     {
         Schema::table('fuel_tank_topUp', function (Blueprint $table) {
-            $table->string('reject_reason')->nullable()->unsigned()->index();
+            $table->string('reject_reason')->nullable()->index();
             $table->bigInteger('reject_timestamp')->nullable()->unsigned()->index();
             $table->integer('rejector_id')->nullable()->unsigned()->index();
         });

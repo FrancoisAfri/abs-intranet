@@ -14,7 +14,7 @@ class AddMoreFieldToCarVoucherTable extends Migration
     public function up()
     {
         Schema::table('car_vouchers', function (Blueprint $table) {
-            $table->string('c_bill_postal_address3')->nullable();
+            // $table->longText('c_bill_postal_address3')->nullable();
 			});
     }
 
@@ -26,7 +26,7 @@ class AddMoreFieldToCarVoucherTable extends Migration
     public function down()
     {
         Schema::table('car_vouchers', function (Blueprint $table) {
-            $table->dropColumn('c_bill_postal_address3');
+            // $table->dropColumn('c_bill_postal_address3');
         });
     }
 }

@@ -14,7 +14,7 @@ class AddTimeSentToContactsCommunicationsTable extends Migration
     public function up()
     {
         Schema::table('contacts_communications', function ($table) {
-            $table->string('time_sent')->unsigned()->index()->nullable();
+            $table->string('time_sent')->index()->nullable();
         });
     }
 

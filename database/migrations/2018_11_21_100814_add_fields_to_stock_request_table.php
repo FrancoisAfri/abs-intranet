@@ -14,7 +14,7 @@ class AddFieldsToStockRequestTable extends Migration
     public function up()
     {
         Schema::table('request_stocks', function ($table) {
-            $table->string('title_name')->unsigned()->index()->nullable();
+            $table->string('title_name')->index()->nullable();
         });
     }
 

@@ -14,7 +14,7 @@ class AddRejectTimestampToVehicleDetail extends Migration
     public function up()
     {
         Schema::table('vehicle_details', function (Blueprint $table) {
-            $table->bigInteger('reject_timestamp')->unsigned()->nullable();
+            $table->unsignedInteger('reject_timestamp')->nullable();
         });
     }
 

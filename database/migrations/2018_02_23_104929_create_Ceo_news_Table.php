@@ -21,7 +21,7 @@ class CreateCeoNewsTable extends Migration
             $table->string('supporting_docs')->nullable();
             $table->string('summary', 5000)->nullable();
             $table->string('image')->nullable();
-            $table->integer('user_id')->index()->unsigned()->nullable();
+            $table->unsignedInteger('user_id')->index()->nullable();
             $table->integer('status')->nullable();
             $table->timestamps();
         });

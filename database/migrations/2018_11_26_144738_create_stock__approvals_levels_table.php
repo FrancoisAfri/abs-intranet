@@ -15,16 +15,16 @@ class CreateStockApprovalsLevelsTable extends Migration
     {
         Schema::create('stock_approvals_levels', function (Blueprint $table) {
             $table->increments('id');
-			$table->integer('division_level_5')->unsigned()->index()->nullable();
-            $table->integer('division_level_4')->unsigned()->index()->nullable();
-            $table->integer('division_level_3')->unsigned()->index()->nullable();
-            $table->integer('division_level_2')->unsigned()->index()->nullable();
-            $table->integer('division_level_1')->unsigned()->index()->nullable();
-            $table->integer('employee_id')->unsigned()->index()->nullable();
-			$table->string('step_name')->unsigned()->index()->nullable();
-			$table->integer('step_number')->unsigned()->index()->nullable();
-			$table->double('max_amount')->unsigned()->index()->nullable();
-			$table->integer('job_title')->unsigned()->index()->nullable();
+			$table->unsignedInteger('division_level_5')->index()->nullable();
+            $table->unsignedInteger('division_level_4')->index()->nullable();
+            $table->unsignedInteger('division_level_3')->index()->nullable();
+            $table->unsignedInteger('division_level_2')->index()->nullable();
+            $table->unsignedInteger('division_level_1')->index()->nullable();
+            $table->unsignedInteger('employee_id')->index()->nullable();
+			$table->string('step_name')->index()->nullable();
+			$table->unsignedInteger('step_number')->index()->nullable();
+			$table->double('max_amount')->index()->nullable();
+			$table->unsignedInteger('job_title')->index()->nullable();
 			$table->smallInteger('status')->nullable();
 			$table->bigInteger('date_added')->nullable();
             $table->timestamps();

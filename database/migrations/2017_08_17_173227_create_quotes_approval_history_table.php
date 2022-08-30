@@ -15,9 +15,9 @@ class CreateQuotesApprovalHistoryTable extends Migration
     {
         Schema::create('quote_approval_history', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('quotation_id')->unsigned()->index()->nullable();
-            $table->integer('status')->unsigned()->index()->nullable();
-            $table->string('comment')->unsigned()->index()->nullable();
+            $table->unsignedInteger('quotation_id')->index()->nullable();
+            $table->unsignedInteger('status')->index()->nullable();
+            $table->string('comment')->index()->nullable();
             $table->bigInteger('approval_date')->nullable();
             $table->timestamps();
         });

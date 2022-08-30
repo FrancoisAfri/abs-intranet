@@ -14,7 +14,7 @@ class AddDivToCarVoucherTable extends Migration
     public function up()
     {
         Schema::table('car_vouchers', function (Blueprint $table) {
-            $table->string('c_div_fax')->nullable();
+            // $table->longText('c_div_fax')->nullable();
 			});
     }
 
@@ -26,7 +26,7 @@ class AddDivToCarVoucherTable extends Migration
     public function down()
     {
         Schema::table('car_vouchers', function (Blueprint $table) {
-            $table->dropColumn('c_div_fax');
+            // $table->dropColumn('c_div_fax');
         });
     }
 }

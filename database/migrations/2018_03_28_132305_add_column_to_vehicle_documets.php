@@ -14,7 +14,7 @@ class AddColumnToVehicleDocumets extends Migration
     public function up()
     {
        Schema::table('vehicle_documets', function (Blueprint $table) {
-            $table->integer('expiry_type')->nullable()->unsigned()->index();
+            $table->unsignedInteger('expiry_type')->nullable()->index();
         });
     }
 

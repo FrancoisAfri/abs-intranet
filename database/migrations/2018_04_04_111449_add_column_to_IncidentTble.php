@@ -14,7 +14,7 @@ class AddColumnToIncidentTble extends Migration
     public function up()
     {
       Schema::table('vehicle_incidents', function (Blueprint $table) {
-            $table->bigInteger('vehiclebookingID')->nullable()->unsigned()->index();
+            $table->unsignedBigInteger('vehiclebookingID')->nullable()->index();
         });
     }
 

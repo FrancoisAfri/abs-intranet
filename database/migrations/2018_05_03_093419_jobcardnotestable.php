@@ -15,10 +15,10 @@ class Jobcardnotestable extends Migration
     {
      Schema::create('jobcard_notes', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('vehicle_id')->unsigned()->index()->nullable();
-            $table->integer('jobcard_id')->unsigned()->index()->nullable();
-            $table->String('note_details')->unsigned()->index()->nullable();
-            $table->integer('user_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('vehicle_id')->index()->nullable();
+            $table->unsignedInteger('jobcard_id')->index()->nullable();
+            $table->String('note_details')->index()->nullable();
+            $table->unsignedInteger('user_id')->index()->nullable();
             $table->timestamps();
 
         });

@@ -14,7 +14,7 @@ class AddReasonToVehicleDetails extends Migration
     public function up()
     {
         Schema::table('vehicle_details', function (Blueprint $table) {
-            $table->string('reject_reason')->unsigned()->nullable();
+            $table->string('reject_reason')->nullable();
         });
     }
 

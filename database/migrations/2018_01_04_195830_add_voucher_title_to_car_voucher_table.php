@@ -14,7 +14,7 @@ class AddVoucherTitleToCarVoucherTable extends Migration
     public function up()
     {
         Schema::table('car_vouchers', function (Blueprint $table) {
-            $table->string('c_voucher_title')->nullable();
+            // $table->string('c_voucher_title')->nullable();
 			});
     }
 
@@ -26,7 +26,7 @@ class AddVoucherTitleToCarVoucherTable extends Migration
     public function down()
     {
         Schema::table('car_vouchers', function (Blueprint $table) {
-            $table->dropColumn('c_voucher_title');
+            // $table->dropColumn('c_voucher_title');
         });
     }
 }

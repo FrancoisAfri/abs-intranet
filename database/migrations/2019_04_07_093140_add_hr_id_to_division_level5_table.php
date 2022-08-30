@@ -14,8 +14,8 @@ class AddHrIdToDivisionLevel5Table extends Migration
     public function up()
     {
         Schema::table('division_level_fives', function($table) {
-            $table->integer('hr_manager_id')->unsigned()->index()->nullable();
-            $table->integer('payroll_officer')->unsigned()->index()->nullable();
+            $table->unsignedInteger('hr_manager_id')->index()->nullable();
+            $table->unsignedInteger('payroll_officer')->index()->nullable();
         });
     }
 

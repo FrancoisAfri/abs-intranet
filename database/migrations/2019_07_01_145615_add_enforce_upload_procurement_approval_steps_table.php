@@ -14,7 +14,7 @@ class AddEnforceUploadProcurementApprovalStepsTable extends Migration
     public function up()
     {
        Schema::table('procurement_approval_steps', function (Blueprint $table) {
-            $table->integer('enforce_upload')->nullable()->unsigned()->index();
+            $table->unsignedInteger('enforce_upload')->nullable()->index();
         });
     }
 

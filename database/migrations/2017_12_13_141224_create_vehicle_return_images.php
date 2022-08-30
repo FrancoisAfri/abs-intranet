@@ -21,7 +21,7 @@ class CreateVehicleReturnImages extends Migration
              $table->bigInteger('upload_date')->nullable();
              $table->integer('user_name')->nullable();
              $table->integer('status')->nullable();
-             $table->integer('vehicle_maintanace')->nullable()->unsigned()->index();
+             $table->unsignedInteger('vehicle_maintanace')->nullable()->index();
              $table->timestamps();
         });
     }

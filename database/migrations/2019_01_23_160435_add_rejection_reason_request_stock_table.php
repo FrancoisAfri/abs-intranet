@@ -14,9 +14,9 @@ class AddRejectionReasonRequestStockTable extends Migration
     public function up()
     {
         Schema::table('request_stocks', function ($table) {
-            $table->string('rejection_reason')->unsigned()->index()->nullable();
-            $table->integer('rejected_by')->unsigned()->index()->nullable();
-            $table->bigInteger('rejection_date')->unsigned()->index()->nullable();
+            $table->string('rejection_reason')->index()->nullable();
+            $table->unsignedInteger('rejected_by')->index()->nullable();
+            $table->unsignedBigInteger('rejection_date')->index()->nullable();
         });
     }
 

@@ -14,7 +14,7 @@ class AddFieldsToRequestStockItemsTable extends Migration
     public function up()
     {
         Schema::table('request_stock_items', function ($table) {
-            $table->integer('request_stocks_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('request_stocks_id')->index()->nullable();
         });
     }
 

@@ -24,9 +24,9 @@ class CreateFueltankPrivateUsage extends Migration
             $table->string('description')->nullable();
             $table->integer('received_by')->nullable();
             $table->integer('captured_by')->nullable();
-            $table->integer('person_responsible')->unsigned()->index()->nullable();
+            $table->unsignedInteger('person_responsible')->index()->nullable();
             $table->smallInteger('status');
-            $table->integer('tank_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('tank_id')->index()->nullable();
             $table->timestamps();
         });
     }

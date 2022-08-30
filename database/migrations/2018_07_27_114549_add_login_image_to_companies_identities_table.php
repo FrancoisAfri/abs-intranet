@@ -14,7 +14,7 @@ class AddLoginImageToCompaniesIdentitiesTable extends Migration
     public function up()
     {
         Schema::table('company_identities', function ($table) {
-            $table->string('login_background_image')->unsigned()->index()->nullable();
+            $table->string('login_background_image')->index()->nullable();
         });
     }
 

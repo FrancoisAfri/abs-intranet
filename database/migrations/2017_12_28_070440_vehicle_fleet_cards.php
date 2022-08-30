@@ -15,9 +15,9 @@ class VehicleFleetCards extends Migration
     {
        Schema::create('vehicle_fleet_cards', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('card_type_id')->unsigned()->index()->nullable();
-            $table->integer('company_id')->unsigned()->index()->nullable();
-            $table->integer('holder_id')->unsigned()->index()->nullable();
+            $table->unsignedInteger('card_type_id')->index()->nullable();
+            $table->unsignedInteger('company_id')->index()->nullable();
+            $table->unsignedInteger('holder_id')->index()->nullable();
             $table->string('card_number')->nullable();
             $table->bigInteger('expiry_date')->nullable();
             $table->integer('cvs_number')->nullable();
