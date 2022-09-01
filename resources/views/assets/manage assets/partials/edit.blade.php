@@ -1,4 +1,4 @@
-<div id="add-asset-modal" class="modal modal-default fade">
+<div id="edit-asset-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="edit-module-form">
@@ -8,7 +8,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Asset Types</h4>
+                    <h4 class="modal-title">Edt Asset Type </h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -27,32 +27,15 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
+
                 </div>
-
-                <div class="form-group">
-                    <label for="employee_id" class="col-sm-3 control-label">Licence Types</label>
-                    <div class="col-sm-pull-3">
-                        <div class="input-group">
-                            <select class="form-control " style="width:350px;" id="licence_type" name="licence_type">
-                                <option value=" ">*** Select a Licence Type ***</option>
-                                @foreach($licenceType as $licenceTypes)
-                                    <option value="{{ $licenceTypes->id }}">{{ $licenceTypes->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add-asset" class="btn btn-warning"><i
-                                class="fa fa-cloud-upload"></i> Save
+                    <button type="button" id="edit-asset" class="btn btn-warning"><i class="fa fa-cloud-upload"></i> Save
                     </button>
                 </div>
             </form>
         </div>
     </div>
 </div>
-
 

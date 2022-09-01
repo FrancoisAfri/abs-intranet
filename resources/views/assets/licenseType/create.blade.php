@@ -40,6 +40,7 @@
                                                             class="fa fa-pencil-square-o"></i> Edit
                                                 </button>
                                             </td>
+
                                             <td>{{ (!empty( $licenceTypes->name)) ?  $licenceTypes->name : ''}} </td>
                                             <td>{{ (!empty( $licenceTypes->description)) ?  $licenceTypes->description : ''}} </td>
                                             <td>
@@ -50,8 +51,7 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <form action="{{ route('licence.destroy', $licenceTypes->id) }}"
-                                                      method="POST"
+                                                <form action="{{ route('licence.destroy', $licenceTypes->id ) }}" method="POST"
                                                       style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">
                                                     <input type="hidden" name="_token" value="{{ csrf_token() }}">
@@ -60,7 +60,6 @@
                                                             class="btn btn-xs btn-danger btn-flat delete_confirm"
                                                             data-toggle="tooltip" title='Delete'>
                                                         <i class="fa fa-trash"> Delete </i>
-
                                                     </button>
                                                 </form>
                                             </td>

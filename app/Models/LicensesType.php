@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class LicensesType extends Model
 {
@@ -13,4 +14,9 @@ class LicensesType extends Model
         'description',
         'status',
     ];
+
+    public function licence(): HasMany
+    {
+        return $this->hasMany(AssetType::class, 'assetType_id', 'id');
+    }
 }

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Assets;
 
 use App\Http\Controllers\AuditReportsController;
+use App\Http\Requests\AssetTypeRequest;
 use App\Models\AssetType;
+use App\Models\LicensesType;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
@@ -24,11 +26,19 @@ class AssetTypeController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return Application|Factory|View
+     * @return RedirectResponse
      */
     public function index()
     {
-        $assetType = AssetType::all();
+        //check if they are licence types
+        $licences = LicensesType::first();
+
+        if (is_null($licences)) {
+            Alert::error('Licence Type Empty', 'Please add License Type first');
+            return redirect()->route('licence.index');
+        } else
+            $assetType = AssetType::all();
+            $licences = LicensesType::all();
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -41,6 +51,7 @@ class AssetTypeController extends Controller
         );
 
         $data['assetType'] = $assetType;
+        $data['licenceType'] = $licences;
 
         AuditReportsController::store(
             'Asset Management',
@@ -51,6 +62,7 @@ class AssetTypeController extends Controller
 
         return view('assets.assetType.create-asset-type')->with($data);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -68,7 +80,7 @@ class AssetTypeController extends Controller
      * @param AssetsRequest $request
      * @return JsonResponse
      */
-    public function store(AssetsRequest $request): JsonResponse
+    public function store(AssetTypeRequest $request): JsonResponse
     {
         $assetType = AssetType::create($request->all());
         Alert::toast('Record Added Successfully ', 'success');

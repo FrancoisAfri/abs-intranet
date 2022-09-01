@@ -3,7 +3,6 @@
 
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/select2/select2.min.css">
 
 @stop
 @section('content')
@@ -95,10 +94,6 @@
                         <div class="box-footer">
                             <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#add-asset-modal">Add Asset  Type</button>
                         </div>
-
-                        <div class="box-footer">
-                            <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#add-asset-modal">Add Asset  Type</button>
-                        </div>
                     </div>
                 </div>
                 @include('assets.assetType.partials.create')
@@ -154,23 +149,18 @@
                 <script>
 
                     $(function () {
-                        //Initialize Select2 Elements
-                        // $(".select2").select2();
-
                         $('.modal').on('show.bs.modal', reposition);
 
                         $('#add-asset').on('click', function() {
-
+                            //console.log('strUrl');
                             let strUrl = '/assets/type';
                             let modalID = 'add-asset-modal';
                             let id = 1;
                             let objData = {
                                 name: $('#'+modalID).find('#name').val(),
                                 description: $('#'+modalID).find('#description').val(),
-                                licence_type: $('#'+modalID).find('#licence_type').val(),
                                 _token: $('#'+modalID).find('input[name=_token]').val()
                             };
-
                             let submitBtnID = 'add-asset';
                             let redirectUrl = '{{ route('type.index') }}';
                             let successMsgTitle = 'Asset Type Added!';

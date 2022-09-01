@@ -29,21 +29,6 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <label for="employee_id" class="col-sm-3 control-label">Licence Types</label>
-                    <div class="col-sm-pull-3">
-                        <div class="input-group">
-                            <select class="form-control " style="width:350px;" id="licence_type" name="licence_type">
-                                <option value=" ">*** Select a Licence Type ***</option>
-                                @foreach($licenceType as $licenceTypes)
-                                    <option value="{{ $licenceTypes->id }}">{{ $licenceTypes->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                </div>
-
-
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
                     <button type="button" id="add-asset" class="btn btn-warning"><i

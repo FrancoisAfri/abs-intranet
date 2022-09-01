@@ -45,7 +45,6 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
     Route::get('licence/act/{type}', 'LicenceTypeController@activate')->name('licence.activate');
     Route::resource('licence', LicenceTypeController::class);
 
-
     Route::get('store-room/act/{type}', 'StoreRoomTypeController@activate')->name('store.activate');
     Route::resource('store-room', StoreRoomTypeController::class);
 

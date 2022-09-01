@@ -17,6 +17,9 @@ class CreateAssetsTypeTable extends Migration
             $table->increments('id');
             $table->string('name')->nullable();
             $table->string('description')->nullable();
+            $table->unsignedBigInteger('licenceType_id')->nullable();
+            $table->foreign('licenceType_id')->references('id')->on('licence_type')
+                    ->onDelete('cascade');
             $table->bigInteger('status')->nullable()->default(1);
             $table->timestamps();
         });
