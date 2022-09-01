@@ -1,6 +1,9 @@
 <?php
 
+
 use Illuminate\Support\Facades\Route;
+
+//use App\Http\Controllers\Assets\AssetManagementController;
 
 /*
   |--------------------------------------------------------------------------
@@ -28,6 +31,52 @@ Route::get('/home', function () {
 
 Auth::routes();
 
+
+//Users related requests
+
+//Route::get('users/modules', 'UsersController@viewModules');
+Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['auth']], function () {
+    Route::resource('/', AssetManagementController::class);
+    Route::get('settings', 'AssetManagementController@setUp')->name('assets.settings');
+
+    Route::get('type/act/{type}', 'AssetTypeController@activate')->name('type.activate');
+    Route::resource('type', AssetTypeController::class);
+
+    Route::get('licence/act/{type}', 'LicenceTypeController@activate')->name('licence.activate');
+    Route::resource('licence', LicenceTypeController::class);
+
+
+    Route::get('store-room/act/{type}', 'StoreRoomTypeController@activate')->name('store.activate');
+    Route::resource('store-room', StoreRoomTypeController::class);
+
+});
+
+Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {
+
+    Route::get('/', 'UsersController@index');
+    Route::get('create', 'UsersController@create');
+    Route::get('{user}/edit', 'UsersController@edit');
+    Route::get('profile', 'UsersController@profile');
+    Route::post('users', 'UsersController@store');
+    Route::post('search', 'UsersController@getSearch');
+    Route::post('search/activate', 'UsersController@activateUsers');
+    Route::post('{user}/pw', 'UsersController@updatePassword');
+    Route::post('{user}/upw', 'UsersController@updateUserPassword');
+    Route::patch('{user}', 'UsersController@update');
+    Route::get('modules', 'UsersController@modules');
+    Route::get('public-holiday', 'UsersController@publicHoliday');
+    Route::get('setup', 'UsersController@companySetup');
+    Route::post('public-holiday/delete/{holidayId}', 'UsersController@deleteHoliday');
+    Route::post('public-holiday', 'UsersController@saveHoliday');
+    Route::patch('holiday_edit/{holiday}', 'UsersController@updateHoliday');
+    Route::post('setup/modules', 'UsersController@addmodules');
+    Route::post('setup/add_ribbon/{mod}', 'UsersController@addribbon');
+    Route::get('/ribbons/{mod}', 'UsersController@ribbonView');
+    Route::patch('module_edit/{mod}', 'UsersController@editModule');
+    Route::get('approval', 'UsersController@usersApproval');
+    Route::get('reports', 'UsersController@reports');
+});
+
 Route::get('view/{id}', 'CmsController@view');
 Route::get('viewceo/{viewceo}', 'CmsController@viewceo');
 
@@ -35,37 +84,17 @@ Route::get('viewceo/{viewceo}', 'CmsController@viewceo');
 Route::get('rate/{id}/{cmsID}', 'CmsController@cmsratings');
 // General Information
 Route::get('general_information/view', 'CmsController@generalInformations');
-
-//Users related requests
-Route::get('users', 'UsersController@index');
-//Route::get('users/modules', 'UsersController@viewModules');
-Route::get('users/create', 'UsersController@create');
-Route::get('users/{user}/edit', 'UsersController@edit');
-Route::get('users/profile', 'UsersController@profile');
-Route::post('users', 'UsersController@store');
-Route::post('users/search', 'UsersController@getSearch');
-Route::post('users/search/activate', 'UsersController@activateUsers');
-Route::post('users/{user}/pw', 'UsersController@updatePassword');
-Route::post('users/{user}/upw', 'UsersController@updateUserPassword');
-Route::patch('users/{user}', 'UsersController@update');
-Route::get('users/modules', 'UsersController@modules');
-Route::get('users/public-holiday', 'UsersController@publicHoliday');
-Route::get('users/setup', 'UsersController@companySetup');
-Route::post('users/public-holiday/delete/{holidayId}', 'UsersController@deleteHoliday');
-Route::post('users/public-holiday', 'UsersController@saveHoliday');
-Route::patch('/users/holiday_edit/{holiday}', 'UsersController@updateHoliday');
-Route::post('users/setup/modules', 'UsersController@addmodules');
-Route::post('users/setup/add_ribbon/{mod}', 'UsersController@addribbon');
-Route::get('/users/ribbons/{mod}', 'UsersController@ribbonView');
-Route::patch('/users/module_edit/{mod}', 'UsersController@editModule');
-
 // Reset password
 Route::get('password/expired', 'ExpiredPasswordController@expired');
 Route::post('password/post_expired/{user}', 'ExpiredPasswordController@postExpired');
 
-Route::get('users/approval', 'UsersController@usersApproval');
+//Route::group();
+
+//TODO
+//GROUP ROUTES BY PREFIX
+
+
 Route::post('users/users-approval', 'UsersController@approvalUsers');
-Route::get('/users/reports', 'UsersController@reports');
 Route::post('/users/get_users_access_report', 'UsersController@getEmployeesReport');
 Route::post('/users/get_users_date_report', 'UsersController@getEmployeesStartDateReport');
 Route::post('/users/get_users_date_report_print', 'UsersController@getEmployeesStartDateReportPrint');
@@ -90,6 +119,8 @@ Route::post('/users/update-reset-password', 'SecurityController@updatePassword')
 Route::get('/security/assign-jobtitles', 'SecurityController@assignJobTitle');
 Route::post('/security/get_job_titles', 'SecurityController@getJobTitle');
 Route::post('/security/update_job_title', 'SecurityController@updateJobTitle');
+
+
 //#Contacts Management
 Route::get('contacts', 'ContactsController@index');
 Route::get('contacts/create', 'ContactsController@create');
@@ -229,7 +260,11 @@ Route::post('/leave/upload/paid', 'LeaveSetupController@leaveUploadPaid');
 //Contacts related requests
 //Route::get('contacts', 'ContactsController@index');
 //Route::get('contacts/contact', 'ContactsController@addContact');
-Route::get('contacts/public', 'PublicRegistrationController@create');
+/**
+ * l dnt know what this route does, but has no controller
+ * Route::get('contacts/public', 'PublicRegistrationController@create');
+ */
+//Route::get('contacts/public', 'PublicRegistrationController@create');
 
 Route::get('contacts/general_search', 'ClientSearchController@index');
 //Route::post('educator/search', 'ClientSearchController@educatorSearch');
@@ -391,21 +426,21 @@ Route::post('help_desk/email_setup/{service}', 'HelpdeskController@email_setup')
 Route::get('vehicle_management/fleet_cards', 'fleetcardController@index');
 Route::post('vehicle_management/fleet_card_search', 'fleetcardController@fleetcardSearch');
 Route::post('vehicle_management/add_vehiclefleetcard', 'fleetcardController@Addfleetcard');
-Route::patch('vehicle_management/edit_vehiclefleetcard/{vehiclefleetcards}' ,'fleetcardController@editfleetcard');
+Route::patch('vehicle_management/edit_vehiclefleetcard/{vehiclefleetcards}', 'fleetcardController@editfleetcard');
 //Route::patch('vehicle_management/edit_booking/{Vehiclebookings}', 'VehicleBookingController@edit_bookings');
 #//************Manage Fuel Tanks *******************
 Route::get('vehicle_management/fuel_tank', 'FuelManagementController@fueltankIndex');
 Route::post('vehicle_management/addfueltank', 'FuelManagementController@Addfueltank');
 Route::get('/vehicle_management/fueltank_act/{fuel}', 'FuelManagementController@FuelTankAct');
 //tanktop up
-Route::patch('vehicle_management/edit_fueltank/{Fueltanks}' ,'FuelManagementController@editfueltank');
+Route::patch('vehicle_management/edit_fueltank/{Fueltanks}', 'FuelManagementController@editfueltank');
 Route::get('/vehicle_management/vehice_tank/{fuel}', 'FuelManagementController@ViewTank');
 Route::post('vehicle_management/incoming/{tank}', 'FuelManagementController@incoming');
 Route::post('vehicle_management/outgoing/{tank}', 'FuelManagementController@outgoing');
 Route::post('vehicle_management/both/{tank}', 'FuelManagementController@both');
 Route::post('vehicle_management/tank_topup', 'FuelManagementController@TanktopUp');
 //tank private
-Route::post('vehicle_management/tank_privateuse', 'FuelManagementController@TankprivateUse'); 
+Route::post('vehicle_management/tank_privateuse', 'FuelManagementController@TankprivateUse');
 
 #******************** Tanks Approval *************************
 Route::get('vehicle_management/tank_approval', 'FuelManagementController@tank_approval');
@@ -427,9 +462,9 @@ Route::get('vehicle_management/vehicle_history/{fleet}', 'fleetcardController@ve
 Route::get('vehicle_management/vehicle_history_print/{fleet}', 'fleetcardController@vehicleHistoriesPrint');
 Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_approval');
 Route::post('vehicle_management/vehicleApproval', 'fleetcardController@vehicleApprovals');
-Route::patch('vehicle_management/reject_vehicle/{reason}','fleetcardController@rejectReason' );
-Route::patch('vehicle_management/reject-single/{fleet}','fleetcardController@vehicleRejectsSingle');
-Route::get('vehicle_management/approve-single/{fleet}','fleetcardController@vehicleApprovalsSingle' );
+Route::patch('vehicle_management/reject_vehicle/{reason}', 'fleetcardController@rejectReason');
+Route::patch('vehicle_management/reject-single/{fleet}', 'fleetcardController@vehicleRejectsSingle');
+Route::get('vehicle_management/approve-single/{fleet}', 'fleetcardController@vehicleApprovalsSingle');
 //Route::get('vehicle_management/vehicle_approval', 'fleetcardController@vehicle_approval');
 
 //##----bookings
@@ -443,41 +478,40 @@ Route::get('vehicle_management/bookingdetails/{vehicle}/{required}', 'VehicleBoo
 Route::post('vehicle_management/vehiclebooking/{vehicle}', 'VehicleBookingController@vehiclebooking');
 Route::get('vehicle_management/vehiclebooking_results', 'VehicleBookingController@booking_results');
 //cancel booking
- Route::get('vehicle_management/cancel_booking/{booking}', 'VehicleBookingController@cancel_booking');
+Route::get('vehicle_management/cancel_booking/{booking}', 'VehicleBookingController@cancel_booking');
 // edit booking
- Route::patch('vehicle_management/edit_booking/{booking}', 'VehicleBookingController@edit_bookings');
+Route::patch('vehicle_management/edit_booking/{booking}', 'VehicleBookingController@edit_bookings');
 // collect vehicle
- Route::get('/vehicle_management/collect/{collect}', 'VehicleBookingController@collect_vehicle');
+Route::get('/vehicle_management/collect/{collect}', 'VehicleBookingController@collect_vehicle');
 
- // Return vehicle
- Route::get('/vehicle_management/return_vehicle/{returnVeh}', 'VehicleBookingController@returnVehicle');
- // View Vehicle Appprovals
- Route::get('vehicle_management/approval', 'VehicleBookingController@vewApprovals');
- //Decline vehicle booking
- Route::patch('vehicle_management/decline_booking/{booking}', 'VehicleBookingController@Decline_booking');
-  //Approve Vehicle Approval
- Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking'); 
- // confirm collection
- Route::post('vehicle_management/add_collectiondoc', 'VehicleBookingController@AddcollectionDoc');
- Route::post('vehicle_management/addcollectionImage', 'VehicleBookingController@AddcollectionImage');
- Route::patch('vehicle_management/{confirm}/confirmbooking', 'VehicleBookingController@confrmCollection');
+// Return vehicle
+Route::get('/vehicle_management/return_vehicle/{returnVeh}', 'VehicleBookingController@returnVehicle');
+// View Vehicle Appprovals
+Route::get('vehicle_management/approval', 'VehicleBookingController@vewApprovals');
+//Decline vehicle booking
+Route::patch('vehicle_management/decline_booking/{booking}', 'VehicleBookingController@Decline_booking');
+//Approve Vehicle Approval
+Route::get('vehicle_management/approval/{approve}', 'VehicleBookingController@Approve_booking');
+// confirm collection
+Route::post('vehicle_management/add_collectiondoc', 'VehicleBookingController@AddcollectionDoc');
+Route::post('vehicle_management/addcollectionImage', 'VehicleBookingController@AddcollectionImage');
+Route::patch('vehicle_management/{confirm}/confirmbooking', 'VehicleBookingController@confrmCollection');
 // confirm return
 Route::post('vehicle_management/return_document', 'VehicleBookingController@AddreturnDoc');
 Route::post('vehicle_management/return_Image', 'VehicleBookingController@AddreturnImage');
 Route::patch('vehicle_management/{confirm}/confirmreturn', 'VehicleBookingController@confirmReturn');
 // vehicle_ispection
-Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingController@viewVehicleIspectionDocs'); 
-Route::get('vehicle_management/view_booking/{booking}', 'VehicleBookingController@viewBookingDetails'); 
+Route::get('vehicle_management/vehicle_ispection/{ispection}', 'VehicleBookingController@viewVehicleIspectionDocs');
+Route::get('vehicle_management/view_booking/{booking}', 'VehicleBookingController@viewBookingDetails');
 
 ### fire_extinguishers
-Route::get('vehicle_management/fire_extinguishers/{maintenance}', 'FleetManagementController@viewfireExtinguishers'); 
+Route::get('vehicle_management/fire_extinguishers/{maintenance}', 'FleetManagementController@viewfireExtinguishers');
 Route::post('vehicle_management/addfireextinguishers', 'FleetManagementController@addvehicleextinguisher');
 Route::patch('vehicle_management/changestatus/{extinguishers}', 'FleetManagementController@changeFirestatus');
 Route::patch('vehicle_management/editfireexting/{extinguishers}', 'FleetManagementController@editeditfireexting');
 
 ##########################  Alerts  #########################
 Route::get('vehicle_management/vehicle_alerts', 'vehiclealertController@index');
-
 
 
 Route::get('vehicle_management/Manage_fleet_types', 'VehicleManagemntController@index');
@@ -678,7 +712,7 @@ Route::post('fleet/reports/fireExtinguisher/print', 'VehicleReportsController@fi
 //Route::post('vehicle_management/vehicle_reports/general', 'VehicleReportsController@general');
 Route::post('vehicle_management/vehicle_reports/jobcard', 'VehicleReportsController@jobcard');
 Route::get('vehicle/overview', 'VehicleDashboard@index');
-  // ***************
+// ***************
 Route::post('vehicle_management/vehicle_reports/details', 'VehicleReportsController@generaldetails');
 Route::get('vehicle_management/vehicle_reports/viewfinedetails/{vehicleID}', 'VehicleReportsController@vehicleFineDetails');
 Route::get('vehicle_management/vehicle_reports/viewbookingdetails/{vehicleID}', 'VehicleReportsController@vehicleBookingDetails');
@@ -739,18 +773,18 @@ Route::get('jobcards/jobcardnotes/{card}', 'JobcardController@viewjobcardnotes')
 Route::get('jobcard/jobcard_history/{card}', 'JobcardController@jobcardhistory');
 Route::get('jobcard/jobcard_print/{card}', 'JobcardController@jobcardHistoriesPrint');
 Route::patch('jobcards/instructions-update/{instruction}', 'JobcardController@editInstruction');
-Route::get('jobcards/edit_instructions/{instruction}','JobcardController@editjobcardinstructions');
-Route::get('jobcard/cancellation/{card}','JobcardController@canceljobcardnotes');
-Route::get('jobcards/jobcardimages/{images}','JobcardController@jobcardimages');
-Route::post('jobcard/addimages','JobcardController@addcardimages');
-Route::patch('jobcard/edit_images/{image}','JobcardController@editImage');
-Route::post('jobcards/audits/print','JobcardController@printAudit');
-Route::post('jobcards/addcatergory','JobcardController@addpartscatergory');
-Route::get('jobcards/addparts/{parts}','JobcardController@viewjobcardparts');
+Route::get('jobcards/edit_instructions/{instruction}', 'JobcardController@editjobcardinstructions');
+Route::get('jobcard/cancellation/{card}', 'JobcardController@canceljobcardnotes');
+Route::get('jobcards/jobcardimages/{images}', 'JobcardController@jobcardimages');
+Route::post('jobcard/addimages', 'JobcardController@addcardimages');
+Route::patch('jobcard/edit_images/{image}', 'JobcardController@editImage');
+Route::post('jobcards/audits/print', 'JobcardController@printAudit');
+Route::post('jobcards/addcatergory', 'JobcardController@addpartscatergory');
+Route::get('jobcards/addparts/{parts}', 'JobcardController@viewjobcardparts');
 Route::patch('jobcards/edit_partscatagory/{parts}', 'JobcardController@editpartscatagory');
 Route::get('jobcards/card_act/{parts}', 'JobcardController@jobcat_act');
 Route::post('jobcards/delete_partscatergory/{parts}', 'JobcardController@deletepartscatergory');
-Route::post('jobcards/addjobcardparts','JobcardController@addjobcardparts');
+Route::post('jobcards/addjobcardparts', 'JobcardController@addjobcardparts');
 Route::get('jobcards/parts_act/{parts}', 'JobcardController@parts_act');
 Route::patch('jobcards/edit_cardparts/{parts}', 'JobcardController@editcardparts');
 Route::post('jobcards/delete_jobcards/{parts}', 'JobcardController@deletejobcards');
@@ -790,8 +824,8 @@ Route::get('stock/storckmanagement', 'StockController@mystock');
 Route::post('stock/stock_search', 'StockController@stock');
 Route::get('stock/stock_allocation', 'StockController@takeout');
 Route::post('stock/stock_outsearch', 'StockController@stockout');
-Route::post('stock/add_stock' ,'StockController@add_stock');
-Route::post('stock/takestock' ,'StockController@takestockout');
+Route::post('stock/add_stock', 'StockController@add_stock');
+Route::post('stock/takestock', 'StockController@takestockout');
 Route::get('stock/kit_management', 'StockController@kitIndex');
 Route::get('stock/reports', 'StockController@viewreports');
 Route::post('stock/stock_history/print', 'StockController@printreport');
@@ -809,7 +843,7 @@ Route::post('stock/remove/items/{item}', 'StockRequest@removeItems');
 Route::patch('stock/updateitems/{stock}', 'StockRequest@updateRequest');
 Route::get('stock/seach_request', 'StockRequest@requestSearch');
 Route::post('stock/search_results', 'StockRequest@requestResults');
-Route::post('stock/search_report' ,'StockController@searchreport');
+Route::post('stock/search_report', 'StockController@searchreport');
 // Request & Approvals 
 Route::get('stock/request_items', 'StockRequest@create');
 Route::get('stock/request_collection', 'StockRequest@collectRequest');
@@ -898,7 +932,7 @@ Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');
 Route::post('appraisal/reports/result/print', 'AppraisalReportsController@printReport');
 
 // #Document setup module
- //Route::get('/hr/document', 'DocumentTypeController@viewDoc');
+//Route::get('/hr/document', 'DocumentTypeController@viewDoc');
 // Route::post('/hr/document/add/doc_type', 'DocumentTypeController@addList');
 // Route::get('/hr/document/{listLevel}/activate', 'DocumentTypeController@activateList');
 // Route::patch('/hr/document/{doc_type}', 'DocumentTypeController@updateList');

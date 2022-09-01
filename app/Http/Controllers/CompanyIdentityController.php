@@ -5,11 +5,15 @@ namespace App\Http\Controllers;
 use App\CompanyIdentity;
 use Illuminate\Http\Request;
 
+use App\Traits\StoreImageTrait;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Schema;
 
 class CompanyIdentityController extends Controller
 {
+
+    use StoreImageTrait;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -21,13 +25,15 @@ class CompanyIdentityController extends Controller
      * @return  \Illuminate\Http\Response
      */
     public function saveOrUpdate(Request $request)
-	
     {
+
         $this->validate($request, [
             'mailing_address' => 'email',
             'support_email' => 'email',
+            'company_logo' => 'image|mimes:jpeg,png,jpg|max:3000',
+            'login_background_image' => 'image|mimes:jpeg,png,jpg|max:3000',
         ]);
-			
+
         $compDetails = CompanyIdentity::first();
 		
         //$compDetails = (Schema::hasTable('company_identities')) ? CompanyIdentity::first() : null;
@@ -58,39 +64,15 @@ class CompanyIdentityController extends Controller
      * @param   \App\CompanyIdentity
      */
     private function uploadLogo(Request $request, CompanyIdentity $compDetails) {
-        if ($request->hasFile('company_logo')) {
-            $fileExt = $request->file('company_logo')->extension();
-            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('company_logo')->isValid()) {
-                $fileName = "logo_" . time() . '.' . $fileExt;
-                $request->file('company_logo')->storeAs('logos', $fileName);
-                //Update file name in the database
-                $compDetails->company_logo = $fileName;
-                $compDetails->update();
-            }
-        }
+        $formInput = $request->all();
+        $formInput['company_logo'] = $this->verifyAndStoreImage('logos', 'company_logo', $compDetails, $request);
     } 
 	private function uploadLoginImage(Request $request, CompanyIdentity $compDetails) {
-        if ($request->hasFile('login_background_image')) {
-            $fileExt = $request->file('login_background_image')->extension();
-            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('login_background_image')->isValid()) {
-                $fileName = "login_background_image_" . time() . '.' . $fileExt;
-                $request->file('login_background_image')->storeAs('logos', $fileName);
-                //Update file name in the database
-                $compDetails->login_background_image = $fileName;
-                $compDetails->update();
-            }
-        }
+        $formInput = $request->all();
+        $formInput['login_background_image'] = $this->verifyAndStoreImage('logos', 'login_background_image', $compDetails, $request);
     }
 	private function uploadSystemImage(Request $request, CompanyIdentity $compDetails) {
-        if ($request->hasFile('system_background_image')) {
-            $fileExt = $request->file('system_background_image')->extension();
-            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('system_background_image')->isValid()) {
-                $fileName = "system_background_image_" . time() . '.' . $fileExt;
-                $request->file('system_background_image')->storeAs('logos', $fileName);
-                //Update file name in the database
-                $compDetails->system_background_image = $fileName;
-                $compDetails->update();
-            }
-        }
+            $formInput = $request->all();
+            $formInput['system_background_image_'] = $this->verifyAndStoreImage('logos', 'system_background_image', $compDetails, $request);
     }
 }

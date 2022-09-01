@@ -67,8 +67,8 @@ class JobcardController extends Controller
         $data['active_mod'] = 'Job Card Management';
         $data['active_rib'] = 'Setup';
 
-        AuditReportsController::store('Job Card Management', 'Job Card Settings Page Accessed', "view Jobcard Settings", 0);
-        return view('job_cards.setup')->with($data);
+//        AuditReportsController::store('Job Card Management', 'Job Card Settings Page Accessed', "view Jobcard Settings", 0);
+        return view('assets.setup')->with($data);
     }
 
     public function servicetype()

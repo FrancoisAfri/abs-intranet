@@ -553,27 +553,8 @@ class VehicleManagemntController extends Controller
 
     public function VehicleConfiguration(Request $request)
     {
-        $row = vehicle_config::count();
-        //return $row;
-        if ($row == 0) {
-            $vehicleconfig = new vehicle_config();
-            $vehicleconfig->permit_days = 0;
-            $vehicleconfig->currency = 0;
-            $vehicleconfig->service_days = 0;
-            $vehicleconfig->service_km = 0;
-            $vehicleconfig->service_overdue_days = 0;
-            $vehicleconfig->service_overdue_km = 0;
-            $vehicleconfig->no_bookings_days = 0;
-            $vehicleconfig->no_bookings_km = 0;
-            $vehicleconfig->fuel_auto_approval = 0;
-            $vehicleconfig->inforce_vehicle_image = 0;
-            $vehicleconfig->inforce_vehicle_documents = 0;
-            $vehicleconfig->include_inspection_document = 0;
-            $vehicleconfig->save();
-        } elseif($row > 1)
-            $configuration = DB::table('vehicle_configuration')->get()->first();
-
         $configuration = DB::table('vehicle_configuration')->get()->first();
+
         $data['page_title'] = " Vehicle Configuration ";
         $data['page_description'] = "Setup Management";
         $data['breadcrumb'] = [

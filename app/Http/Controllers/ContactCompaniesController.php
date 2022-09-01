@@ -29,6 +29,9 @@ use Illuminate\Support\Facades\Storage;
 
 class ContactCompaniesController extends Controller
 {
+
+    public $company_types = [1 => 'Service Provider', 2 => 'School', 3 => 'Sponsor'];
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -70,7 +73,7 @@ class ContactCompaniesController extends Controller
         return view('contacts.add_company')->with($data);
     }
 
-    public $company_types = [1 => 'Service Provider', 2 => 'School', 3 => 'Sponsor'];
+
 
     public function createServiceProvider()
     {
@@ -1357,7 +1360,9 @@ class ContactCompaniesController extends Controller
 
     public function viewdocumets(ContactCompany $company)
     {
+
         $companyID = $company->id;
+
         $document = contactsCompanydocs::orderby('id', 'asc')->where('company_id', $companyID)->get();
 		if (!empty($document)) $document = $document->load('documentType');
         $types = CrmDocumentType::where('status', 1)->orderBy('name', 'asc')->get();

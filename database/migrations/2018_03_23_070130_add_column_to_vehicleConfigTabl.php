@@ -14,8 +14,8 @@ class AddColumnToVehicleConfigTabl extends Migration
     public function up()
     {
         Schema::table('vehicle_configuration', function (Blueprint $table) {
-            $table->unsignedSmallInteger('inforce_vehicle_image')->nullable()->index();
-            $table->unsignedSmallInteger('inforce_vehicle_documents')->nullable()->index();
+            $table->unsignedSmallInteger('inforce_vehicle_image')->nullable()->index()->default(0);
+            $table->unsignedSmallInteger('inforce_vehicle_documents')->nullable()->index()->default(0);
         });
     }
 

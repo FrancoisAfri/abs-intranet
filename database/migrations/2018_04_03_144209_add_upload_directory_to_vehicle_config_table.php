@@ -14,7 +14,7 @@ class AddUploadDirectoryToVehicleConfigTable extends Migration
     public function up()
     {
         Schema::table('vehicle_configuration', function (Blueprint $table) {
-            $table->string('incidents_upload_directory')->index();
+            $table->string('incidents_upload_directory')->index()->nullable();
         });
     }
 

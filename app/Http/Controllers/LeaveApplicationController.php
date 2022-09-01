@@ -294,6 +294,7 @@ class LeaveApplicationController extends Controller
 	
 	public function day(Request $request)
     {
+
 		//Validation
         $validator = Validator::make($request->all(), [
             'hr_person_id' => 'required',

@@ -20,6 +20,7 @@ use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
 use App\Province;
+use App\Traits\StoreImageTrait;
 // use App\business_card;
 use App\Http\Controllers\AuditReportsController;
 use Illuminate\Support\Facades\Mail;
@@ -31,6 +32,8 @@ use Illuminate\Support\Facades\Validator;
 
 class UsersController extends Controller
 {
+    use StoreImageTrait;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -513,20 +516,28 @@ class UsersController extends Controller
         $user->person()->update($person);
 
         //Upload profile picture
+
+
         if ($request->hasFile('profile_pic')) {
             $fileExt = $request->file('profile_pic')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('profile_pic')->isValid()) {
                 $fileName = time() . "_avatar_" . time() . '.' . $fileExt;
-                $request->file('profile_pic')->storeAs('avatars', $fileName);
+                $request->file('profile_pic')->storeAs('public/avatars', $fileName);
                 //Update file name in hr table
                 $user->person->profile_pic = $fileName;
                 $user->person->update();
             }
         }
+
 		AuditReportsController::store('Security', 'User Details Updated', "By User", 0);
         //return to the edit page
         //return redirect("/users/$user->id/edit")->with('success_edit', "The user's details have been successfully updated.");
         return back()->with('success_edit', "The user's details have been successfully updated.");
+    }
+
+    private function uploadAvatar(Request $request, User $user) {
+        $formInput = $request->all();
+        $formInput['profile_pic'] = $this->verifyAndStoreImage($request, 'profile_pic', 'avatars', $user->person->profile_pic);
     }
 
     public function getSearch(Request $request) {

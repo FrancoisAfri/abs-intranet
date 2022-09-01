@@ -235,6 +235,7 @@ class DatabaseSeeder extends Seeder
         $groupLevel->active = 1;
         $groupLevel->save(); 
         $module = new modules(); //polivy
+
         $module->active = 1;
         $module->name = 'Policy Enforcement';
         $module->code_name = 'Policy Enforcement';
@@ -277,6 +278,58 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'System/policy/reports';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+
+        /**
+         * Assets Management Module
+         * Nkosana Ncube
+         */
+        $module = new modules(); //Contacts
+        $module->active = 1;
+        $module->name = 'Asset Management';
+        $module->code_name = 'assets';
+        $module->path = 'assets';
+        $module->font_awesome = 'fa-barcode';
+        $module->save();
+
+        /**
+         * Assets Management Ribbons
+         */
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Add Assets';
+        $ribbon->description = 'Add Assets';
+        $ribbon->ribbon_path = 'assets/create';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Manage Assets';
+        $ribbon->description = 'View Assets';
+        $ribbon->ribbon_path = 'assets';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Assets Reports';
+        $ribbon->ribbon_path = 'assets/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Asset Setup';
+        $ribbon->description = 'Assets Set Up';
+        $ribbon->ribbon_path = 'assets/settings';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
 
         //Insert navigation menus (Modules)
         $module = new modules(); //Contacts
@@ -1364,6 +1417,8 @@ class DatabaseSeeder extends Seeder
          $ribbon->access_level = 4;
          $module->addRibbon($ribbon);
 
+
+
         $leave_config = new leave_configuration();
         $leave_config->save();
 
@@ -1442,6 +1497,8 @@ class DatabaseSeeder extends Seeder
         $profile->name = 'Shift Worker';
         $profile->description = 'Shift Worker Employee leave' ;
         $profile->save();
+
+
     }
 }
 /*INSERT INTO public.stock_levels(

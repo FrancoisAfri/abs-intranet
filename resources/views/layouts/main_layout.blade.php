@@ -73,7 +73,7 @@ desired effect
 -->
 <body class="hold-transition skin-{{ $skinColor }} fixed sidebar-mini">
 <div class="wrapper">
-
+    @include('sweetalert::alert')
     <!-- Header -->
     @include('layouts.header')
 

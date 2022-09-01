@@ -166,7 +166,7 @@ return [
 		Maatwebsite\Excel\ExcelServiceProvider::class,
 		ZanySoft\Zip\ZipServiceProvider::class,
 		Intervention\Image\ImageServiceProvider::class,
-
+        RealRashid\SweetAlert\SweetAlertServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -235,6 +235,7 @@ return [
         'Image' => Intervention\Image\Facades\Image::class,
         //'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         //'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
+        'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
 
     ],
 
