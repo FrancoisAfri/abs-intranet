@@ -1,0 +1,49 @@
+<?php
+
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Migrations\Migration;
+
+class CreateAssetsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('assets', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name')->nullable();
+            $table->unsignedInteger('user_id')->nullable();
+            $table->string('description')->nullable();
+            $table->string('serial_number')->nullable();
+            $table->string('asset_tag')->nullable();
+            $table->unsignedInteger('model_id')->nullable();
+            $table->unsignedInteger('make_id')->nullable();
+            $table->unsignedInteger('type')->nullable();
+            $table->integer('assigned_to')->nullable();
+            $table->string('picture')->nullable();
+            $table->decimal('price', 9, 3)->default(0);
+            /**
+             * asset location table
+             *  $table->unsignedInteger('division_level_1')->index()->nullable();
+                $table->unsignedInteger('division_level_2')->index()->nullable();
+             */
+
+            $table->bigInteger('status_id')->index()->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::drop('assets');
+    }
+}
