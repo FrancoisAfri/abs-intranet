@@ -15,7 +15,9 @@
         "barryvdh/laravel-dompdf": "^0.8.0",
         "zanysoft/laravel-zip": "^1.0",
         "intervention/image": "^2.4",
-        "realrashid/sweet-alert": "^v3.1.6"
+        "realrashid/sweet-alert": "^v3.1.6",
+        "yajra/laravel-datatables-oracle": "^7.0",
+        "spatie/enum": "^2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

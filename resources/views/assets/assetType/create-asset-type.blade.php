@@ -67,17 +67,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    @else
-                                        <tr id="categories-list">
-                                            <td colspan="5">
-                                                <div class="alert alert-danger alert-dismissable">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-hidden="true">&times;
-                                                    </button>
-                                                    No Safe to display, please start by adding a new Safe....
-                                                </div>
-                                            </td>
-                                        </tr>
+
                             @endif
                             </tbody>
                             <tfoot>
@@ -91,14 +81,12 @@
                             </tr>
                             </tfoot>
                         </table>
-                        <!-- /.box-body -->
-                        <div class="box-footer">
-                            <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#add-asset-modal">Add Asset  Type</button>
-                        </div>
 
                         <div class="box-footer">
-                            <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#add-asset-modal">Add Asset  Type</button>
+                            <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#add-asset-modal">Add Asset Type</button>
+                            <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
                         </div>
+
                     </div>
                 </div>
                 @include('assets.assetType.partials.create')
@@ -120,6 +108,10 @@
                     function postData(id , data ){
                         if(data === 'actdeac') location.href = "{{route('type.activate', '')}}"+"/"+id;
                     }
+
+                    $('#back_button').click(function () {
+                        location.href = '{{route('assets.settings')}}';
+                    });
 
                     $('.delete_confirm').click(function (event) {
 
@@ -155,7 +147,6 @@
 
                     $(function () {
                         //Initialize Select2 Elements
-                        // $(".select2").select2();
 
                         $('.modal').on('show.bs.modal', reposition);
 
@@ -163,13 +154,14 @@
 
                             let strUrl = '/assets/type';
                             let modalID = 'add-asset-modal';
-                            let id = 1;
                             let objData = {
                                 name: $('#'+modalID).find('#name').val(),
                                 description: $('#'+modalID).find('#description').val(),
-                                licence_type: $('#'+modalID).find('#licence_type').val(),
+                                licenceType_id: $('#'+modalID).find('#licenceType_id').val(),
                                 _token: $('#'+modalID).find('input[name=_token]').val()
                             };
+
+                            console.log(objData)
 
                             let submitBtnID = 'add-asset';
                             let redirectUrl = '{{ route('type.index') }}';
@@ -207,8 +199,6 @@
                             let Method = 'PATCH';
                             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                         });
-
-
 
                     });
                 </script>

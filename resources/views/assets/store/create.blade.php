@@ -11,7 +11,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-barcode pull-right"></i>
-                    <h3 class="box-title"> Store Types</h3>
+                    <h3 class="box-title"> Store</h3>
                 </div>
                 <div class="box-body">
                     <div style="overflow-X:auto;">
@@ -66,17 +66,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    @else
-                                        <tr id="categories-list">
-                                            <td colspan="5">
-                                                <div class="alert alert-danger alert-dismissable">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-hidden="true">&times;
-                                                    </button>
-                                                    No Safe to display, please start by adding a new Safe....
-                                                </div>
-                                            </td>
-                                        </tr>
+
                             @endif
                             </tbody>
                             <tfoot>
@@ -92,7 +82,8 @@
                         </table>
                         <!-- /.box-body -->
                         <div class="box-footer">
-                            <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#add-storeroom-modal">Add Licence Type</button>
+                            <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#add-storeroom-modal">Add Store</button>
+                            <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
                         </div>
                     </div>
                 </div>
@@ -116,6 +107,10 @@
                     function postData(id , data ){
                         if(data === 'actdeac') location.href = "{{route('store.activate', '')}}"+"/"+id;
                     }
+
+                    $('#back_button').click(function () {
+                        location.href = '{{route('assets.settings')}}';
+                    });
 
                     $('.delete_confirm').click(function (event) {
 
@@ -164,8 +159,8 @@
                             };
                             let submitBtnID = 'add-storeroom';
                             let redirectUrl = '{{ route('store-room.index') }}';
-                            let successMsgTitle = 'store-room Type Added!';
-                            let successMsg = 'The store-room Type has been updated successfully.';
+                            let successMsgTitle = 'Storeroom Added!';
+                            let successMsg = 'The Store room Type has been updated successfully.';
                             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                         });
 
@@ -182,7 +177,7 @@
                         });
 
                         // update modal
-                        $('#edit-licence').on('click', function () {
+                        $('#edit-storeroom').on('click', function () {
                             // console.log(licenceId)
                             let strUrl = '/assets/store-room/' + storeId;
                             let modalID = 'edit-storeroom-modal';

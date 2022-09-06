@@ -232,7 +232,6 @@
         }
 
         function reject(id, data) {
-            alert(id)
             if (data == 'reject_id') location.href = "/leave/reject/" + id;
         }
 

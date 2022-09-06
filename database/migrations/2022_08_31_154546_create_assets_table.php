@@ -20,19 +20,14 @@ class CreateAssetsTable extends Migration
             $table->string('description')->nullable();
             $table->string('serial_number')->nullable();
             $table->string('asset_tag')->nullable();
-            $table->unsignedInteger('model_id')->nullable();
-            $table->unsignedInteger('make_id')->nullable();
-            $table->unsignedInteger('type')->nullable();
-            $table->integer('assigned_to')->nullable();
+            $table->string('model_number')->nullable();
+            $table->string('make_number')->nullable();
+            $table->unsignedInteger('asset_type_id')->nullable();
+            $table->unsignedInteger('license_type_id')->nullable();
             $table->string('picture')->nullable();
-            $table->decimal('price', 9, 3)->default(0);
-            /**
-             * asset location table
-             *  $table->unsignedInteger('division_level_1')->index()->nullable();
-                $table->unsignedInteger('division_level_2')->index()->nullable();
-             */
-
-            $table->bigInteger('status_id')->index()->nullable();
+            $table->decimal('price', 9, 2)->default(0);
+            $table->bigInteger('status')->index()->nullable()->default(1);
+            $table->string('asset_status')->index()->nullable();
             $table->timestamps();
         });
     }

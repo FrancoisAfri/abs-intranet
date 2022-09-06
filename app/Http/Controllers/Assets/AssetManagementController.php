@@ -3,24 +3,60 @@
 namespace App\Http\Controllers\Assets;
 
 use App\Http\Controllers\AuditReportsController;
+use App\Models\Assets;
+use App\Models\AssetType;
+use App\Models\LicensesType;
+use App\Models\StoreRoom;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Traits\BreadCrumpTrait;
+use App\Traits\StoreImageTrait;
 use RealRashid\SweetAlert\Facades\Alert;
+use Yajra\Datatables\Facades\Datatables;
 
 class AssetManagementController extends Controller
 {
 
-    use BreadCrumpTrait;
+    use BreadCrumpTrait, StoreImageTrait;
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
-        die('lets');
-    }
+        $asset = AssetType::all();
+        $asserts = Assets::where(
+            'asset_status', 'In Use'
+        )->get();
+        $store = StoreRoom::all();
+        $licenseType = LicensesType::all();
 
+
+        $data = $this->breadCrump(
+            "Asset Management",
+            "Setup", "fa fa-lock",
+            "Asset Management Set Up",
+            "Asset Management",
+            "assets/settings",
+            "Asset Management",
+            "Asset Management Set Up"
+        );
+
+        $data['asset'] = $asset;
+        $data['asserts'] = $asserts;
+        $data['store'] = $store;
+        $data['licenseType'] = $licenseType;
+
+        AuditReportsController::store(
+            'Asset Management',
+            'Asset Management Page Accessed',
+            "Actioned By User",
+            0
+        );
+
+        return view('assets.manageAssets.create-asset')->with($data);
+
+    }
 
 
     /**
@@ -41,8 +77,15 @@ class AssetManagementController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $asset = Assets::create($request->all());
+
+        //add image
+        $formInput['picture'] = $this->verifyAndStoreImage('assets/images', 'picture', $asset, $request);
+
+        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+        return response()->json();
     }
+
 
     /**
      * Display the specified resource.

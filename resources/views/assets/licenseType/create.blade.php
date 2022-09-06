@@ -65,17 +65,7 @@
                                             </td>
                                         </tr>
                                     @endforeach
-                                    @else
-                                        <tr id="categories-list">
-                                            <td colspan="5">
-                                                <div class="alert alert-danger alert-dismissable">
-                                                    <button type="button" class="close" data-dismiss="alert"
-                                                            aria-hidden="true">&times;
-                                                    </button>
-                                                    No Safe to display, please start by adding a new Safe....
-                                                </div>
-                                            </td>
-                                        </tr>
+
                             @endif
                             </tbody>
                             <tfoot>
@@ -92,6 +82,7 @@
                         <!-- /.box-body -->
                         <div class="box-footer">
                             <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#add-licence-modal">Add Licence Type</button>
+                            <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
                         </div>
                     </div>
                 </div>
@@ -114,6 +105,10 @@
                     function postData(id , data ){
                         if(data === 'actdeac') location.href = "{{route('licence.activate', '')}}"+"/"+id;
                     }
+
+                    $('#back_button').click(function () {
+                        location.href = '{{route('assets.settings')}}';
+                    });
 
                     $('.delete_confirm').click(function (event) {
 

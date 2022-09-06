@@ -27,20 +27,26 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="employee_id" class="col-sm-3 control-label">Licence Types</label>
-                    <div class="col-sm-pull-3">
-                        <div class="input-group">
-                            <select class="form-control " style="width:350px;" id="licence_type" name="licence_type">
-                                <option value=" ">*** Select a Licence Type ***</option>
-                                @foreach($licenceType as $licenceTypes)
-                                    <option value="{{ $licenceTypes->id }}">{{ $licenceTypes->name }}</option>
-                                @endforeach
-                            </select>
+                    <div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Licence Type</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-building-o"></i>
+                                </div>
+                                <select class="form-control select2" style="width: 100%;"
+                                        id="license_type_id" name="license_type_id">
+                                    <option value="0">*** Select a Asset Type ***</option>
+                                    @foreach($licenceType as $licenceTypes)
+                                        <option value="{{ $licenceTypes->id }}">{{ $licenceTypes->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
 
 

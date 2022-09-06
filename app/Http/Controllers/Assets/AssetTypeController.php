@@ -80,11 +80,11 @@ class AssetTypeController extends Controller
      * @param AssetsRequest $request
      * @return JsonResponse
      */
-    public function store(AssetTypeRequest $request): JsonResponse
+    public function store(Request $request): JsonResponse
     {
         $assetType = AssetType::create($request->all());
         Alert::toast('Record Added Successfully ', 'success');
-        AuditReportsController::store('Asset Management', 'Fleet Management Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);
         return response()->json();
     }
 

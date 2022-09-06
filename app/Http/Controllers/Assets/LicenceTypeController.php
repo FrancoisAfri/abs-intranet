@@ -129,11 +129,11 @@ class LicenceTypeController extends Controller
      * @param LicensesType $type
      * @return RedirectResponse
      */
-    public function activate(LicensesType $licence){
+    public function activate(LicensesType $type){
 
-        $licence->status == 1 ? $stastus = 0 : $stastus = 1;
-        $licence->status = $stastus;
-        $licence->update();
+        $type->status == 1 ? $stastus = 0 : $stastus = 1;
+        $type->status = $stastus;
+        $type->update();
 
         Alert::success('Status changed', 'Status changed Successfully');
 

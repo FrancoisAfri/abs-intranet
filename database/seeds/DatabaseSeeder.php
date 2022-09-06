@@ -314,21 +314,27 @@ class DatabaseSeeder extends Seeder
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Reports';
-        $ribbon->description = 'Assets Reports';
-        $ribbon->ribbon_path = 'assets/reports';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Asset Setup';
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Assets Set Up';
         $ribbon->ribbon_path = 'assets/settings';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+
+
+
+//        $ribbon = new module_ribbons();
+//        $ribbon->active = 1;
+//        $ribbon->sort_order = 2;
+//        $ribbon->ribbon_name = 'Reports';
+//        $ribbon->description = 'Assets Reports';
+//        $ribbon->ribbon_path = 'assets/reports';
+//        $ribbon->access_level = 4;
+//        $module->addRibbon($ribbon);
+
+        //TODO - individual ribbons with dedicated ribbons
+
+
 
 
         //Insert navigation menus (Modules)

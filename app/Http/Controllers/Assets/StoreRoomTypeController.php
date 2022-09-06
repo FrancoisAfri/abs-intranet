@@ -131,11 +131,11 @@ class StoreRoomTypeController extends Controller
      * @param StoreRoom $type
      * @return RedirectResponse
      */
-    public function activate(StoreRoom $store_room): RedirectResponse
+    public function activate(StoreRoom $type): RedirectResponse
     {
-        $store_room->status == 1 ? $stastus = 0 : $stastus = 1;
-        $store_room->status = $stastus;
-        $store_room->update();
+        $type->status == 1 ? $stastus = 0 : $stastus = 1;
+        $type->status = $stastus;
+        $type->update();
 
         Alert::success('Status changed', 'Status changed Successfully');
 

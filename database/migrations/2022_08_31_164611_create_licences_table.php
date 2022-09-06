@@ -25,7 +25,7 @@ class CreateLicencesTable extends Migration
             $table->integer('user_id')->nullable();
             $table->unsignedBigInteger('location_id')->nullable();
             $table->integer('depreciation_id');
-            $table->unsignedBigInteger('licence_type')->nullable();
+            $table->unsignedBigInteger('licence_type_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
