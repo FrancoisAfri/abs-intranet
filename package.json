@@ -16,6 +16,7 @@
     "cross-env": "^7.0.3",
     "datatables": "^1.10.18",
     "datatables.net-bs4": "^1.10.22",
+    "datatables.net-buttons": "^2.2.3",
     "gulp": "^3.9.1",
     "jquery": "^3.6.1",
     "laravel-mix": "^6.0.49",

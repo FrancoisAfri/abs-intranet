@@ -2,8 +2,8 @@
 @section('page_dependencies')
 
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
-    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"/>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 @stop
 @section('content')
     <div class="row">
@@ -156,10 +156,20 @@
                 <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
                 <script src="/custom_components/js/modal_ajax_submit.js"></script>
                 <script src="/custom_components/js/deleteAlert.js"></script>
-                <script src="/custom_components/js/dataTable.js"></script>
+{{--                <script src="/custom_components/js/dataTable.js"></script>--}}
                 <!-- the main fileinput plugin file -->
                 <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+                <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+                <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+                <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+                <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+                <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+                <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+
                 <!-- End Bootstrap File input -->
                 <script type="text/javascript">
 
@@ -167,6 +177,21 @@
                     function postData(id, data) {
                         if (data === 'actdeac') location.href = "{{route('assets.activate', '')}}" + "/" + id;
                     }
+
+                    $(function () {
+                        $('#example2').DataTable({
+                            "paging": true,
+                            "lengthChange": true,
+                            "searching": true,
+                            "ordering": true,
+                            "info": true,
+                            "autoWidth": true,
+                            dom: 'Bfrtip',
+                            buttons: [
+                                'copy', 'csv', 'excel', 'pdf', 'print'
+                            ]
+                        });
+                    });
 
                     $('.delete_confirm').click(function (event) {
 

@@ -3026,6 +3026,14 @@
     "datatables.net" ">=1.11.3"
     "jquery" ">=1.7"
 
+"datatables.net-buttons@^2.2.3":
+  "integrity" "sha512-9Xz52grBQxAgs6Meo+j/8koxrhnINt0fTc9tLYYb4UHxgtM2BzTGV4NA8KxXGxVjslem41e0quC5eXpXt9d4tw=="
+  "resolved" "https://registry.npmjs.org/datatables.net-buttons/-/datatables.net-buttons-2.2.3.tgz"
+  "version" "2.2.3"
+  dependencies:
+    "datatables.net" ">=1.11.3"
+    "jquery" ">=1.7"
+
 "datatables.net@>=1.11.3":
   "integrity" "sha512-e6XAMUoV41JdQPS/r9YRfRcmTPcCVvyZbWI+xog1Zg+kjVliMQbEkvWK5XFItmi64Cvwg+IqsZbTUJ1KSY3umA=="
   "resolved" "https://registry.npmjs.org/datatables.net/-/datatables.net-1.12.1.tgz"
