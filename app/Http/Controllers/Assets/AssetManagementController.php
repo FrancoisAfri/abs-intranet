@@ -7,10 +7,12 @@ use App\Models\Assets;
 use App\Models\AssetType;
 use App\Models\LicensesType;
 use App\Models\StoreRoom;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Traits\BreadCrumpTrait;
 use App\Traits\StoreImageTrait;
+use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\Datatables\Facades\Datatables;
 
@@ -25,9 +27,9 @@ class AssetManagementController extends Controller
     public function index(Request $request)
     {
         $asset = AssetType::all();
-        $asserts = Assets::where(
-            'asset_status', 'In Use'
-        )->get();
+
+        $asserts = Assets::with('AssetType', 'LicenseType')->get();
+
         $store = StoreRoom::all();
         $licenseType = LicensesType::all();
 
@@ -127,9 +129,13 @@ class AssetManagementController extends Controller
      * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+
+    public function destroy(Assets $assets): RedirectResponse
     {
-        //
+        //dd($assets);
+        $assets->delete();
+
+        return redirect()->route('index')->with('status', 'Asset Deleted!');
     }
 
     /**
@@ -155,6 +161,22 @@ class AssetManagementController extends Controller
         AuditReportsController::store('Asset Management', 'Asset ManagementSettings Page Accessed', "view Asset Management Settings", 0);
         return view('assets.setup')->with($data);
 
+    }
+
+    /**
+     * @param Assets $type
+     * @return RedirectResponse
+     */
+    public function activate(Assets $type): RedirectResponse
+    {
+        $type->status == 1 ? $stastus = 0 : $stastus = 1;
+        $type->status = $stastus;
+        $type->update();
+
+        Alert::success('Status changed', 'Status changed Successfully');
+
+        AuditReportsController::store('Asset Management', 'Asset t  Type Status Changed', "Asset News Type  Changed", 0);
+        return back();
     }
 
 }

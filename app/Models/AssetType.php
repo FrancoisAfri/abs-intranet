@@ -22,4 +22,6 @@ class AssetType extends Model
         return $this->belongsTo(LicensesType::class, 'licence_type')->orderBy('id');
     }
 
+
+
 }

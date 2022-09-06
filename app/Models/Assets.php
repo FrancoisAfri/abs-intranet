@@ -4,6 +4,7 @@ namespace App\Models;
 
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Assets extends Model
 {
@@ -28,9 +29,29 @@ class Assets extends Model
         'Sold' => 'Sold',
     ];
 
+    /**
+     * @param DateTimeInterface $date
+     * @return string
+     */
     protected function serializeDate(DateTimeInterface $date): string
     {
         return $date->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function AssetType(): BelongsTo
+    {
+        return $this->belongsTo(AssetType::class, 'asset_type_id')->orderBy('id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function LicenseType(): BelongsTo
+    {
+        return $this->belongsTo(LicensesType::class, 'license_type_id')->orderBy('id');
     }
 
 }

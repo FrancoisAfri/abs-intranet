@@ -37,7 +37,13 @@ Auth::routes();
 //Route::get('users/modules', 'UsersController@viewModules');
 Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['auth']], function () {
     Route::resource('/', AssetManagementController::class);
+    /**
+     * custom AssetManagementController routes
+     */
     Route::get('settings', 'AssetManagementController@setUp')->name('assets.settings');
+    Route::delete('assets/{assets}', 'AssetManagementController@destroy')->name('assets.destroy');
+    Route::get('act/{type}', 'AssetManagementController@activate')->name('assets.activate');
+    //end of AssetManagementController routes
 
     Route::get('type/act/{type}', 'AssetTypeController@activate')->name('type.activate');
     Route::resource('type', AssetTypeController::class);

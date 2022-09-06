@@ -40,13 +40,14 @@
                                 <th style="width: 5px; text-align: center;">Asset Tag</th>
                                 <th style="width: 5px; text-align: center;">Serial</th>
                                 <th style="width: 5px; text-align: center;">Model</th>
+                                <th style="width: 5px; text-align: center;">Make</th>
                                 <th style="width: 5px; text-align: center;">Asset Type</th>
-                                <th style="width: 5px; text-align: center;">price</th>
                                 <th style="width: 5px; text-align: center;">Licence Type</th>
+                                <th style="width: 5px; text-align: center;">price</th>
                                 <th style="width: 5px; text-align: center;">Availability</th>
-                                <th>Asset Status</th>
+                                <th>Status</th>
                                 <th style="width: 5px; text-align: center;">.</th>
-                                <th style="width: 5px; text-align: center;">.</th>
+
                             </tr>
                             </thead>
                             <tbody>
@@ -72,12 +73,11 @@
                                             <td>{{ (!empty( $assets->asset_tag)) ?  $assets->asset_tag : ''}} </td>
                                             <td>{{ (!empty( $assets->serial_number)) ?  $assets->serial_number : ''}} </td>
                                             <td>{{ (!empty( $assets->model_number)) ?  $assets->model_number : ''}} </td>
-                                            <td>{{ (!empty( $assets->asset_type_id)) ?  $assets->asset_type_id : ''}} </td>
-                                            <td>{{ (!empty( $assets->price)) ?  $assets->price : ''}} </td>
-                                            <td>{{ (!empty( $assets->license_type_id)) ?  $assets->license_type_id : ''}} </td>
                                             <td>{{ (!empty( $assets->make_number)) ?  $assets->make_number : ''}} </td>
+                                            <td>{{ (!empty( $assets->AssetType->name)) ?  $assets->AssetType->name : ''}} </td>
+                                            <td>{{ (!empty( $assets->LicenseType->name)) ?  $assets->LicenseType->name : ''}} </td>
+                                            <td>{{ (!empty( $assets->price)) ?  $assets->price : ''}} </td>
                                             <td>
-
                                                 @if($assets->asset_status == 'Sold')
                                                     <span class="label label-danger">{{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
                                                 @elseif($assets->asset_status == 'Missing')
@@ -99,7 +99,7 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <form action="{{ route('licence.destroy', $assets->id ) }}"
+                                                <form action="{{ route('assets.destroy', $assets->id) }}"
                                                       method="POST"
                                                       style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">
@@ -126,12 +126,12 @@
                                 <th style="width: 5px; text-align: center;">Asset Tag</th>
                                 <th style="width: 5px; text-align: center;">Serial</th>
                                 <th style="width: 5px; text-align: center;">Model</th>
+                                <th style="width: 5px; text-align: center;">Make</th>
                                 <th style="width: 5px; text-align: center;">Asset Type</th>
-                                <th style="width: 5px; text-align: center;">price</th>
                                 <th style="width: 5px; text-align: center;">Licence Type</th>
+                                <th style="width: 5px; text-align: center;">price</th>
                                 <th style="width: 5px; text-align: center;">Availability</th>
                                 <th>Asset Status</th>
-                                <th style="width: 5px; text-align: center;">.</th>
                                 <th style="width: 5px; text-align: center;">.</th>
                                 {{--                                <th style="width: 5px; text-align: center;"></th>--}}
                             </tr>
@@ -164,9 +164,8 @@
                 <script type="text/javascript">
 
 
-
                     function postData(id, data) {
-                        if (data === 'actdeac') location.href = "{{route('type.activate', '')}}" + "/" + id;
+                        if (data === 'actdeac') location.href = "{{route('assets.activate', '')}}" + "/" + id;
                     }
 
                     $('.delete_confirm').click(function (event) {
@@ -196,10 +195,6 @@
                             });
 
                     });
-
-                </script>
-
-                <script>
 
                     $(function () {
                         $('.modal').on('show.bs.modal', reposition);
@@ -250,4 +245,4 @@
 
                     });
                 </script>
-@endsection
+@stop
