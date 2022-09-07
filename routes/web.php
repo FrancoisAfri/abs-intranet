@@ -40,20 +40,35 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
     /**
      * custom AssetManagementController routes
      */
-    Route::get('settings', 'AssetManagementController@setUp')->name('assets.settings');
-    Route::delete('assets/{assets}', 'AssetManagementController@destroy')->name('assets.destroy');
-    Route::get('act/{type}', 'AssetManagementController@activate')->name('assets.activate');
+    Route::get(
+        'settings', 'AssetManagementController@setUp')
+        ->name('assets.settings');
+    Route::delete(
+        'assets/{assets}', 'AssetManagementController@destroy')
+        ->name('assets.destroy');
+
+    Route::get('show/{assets}', 'AssetManagementController@show')
+        ->name('assets.show');
+
+    Route::get(
+        'act/{type}', 'AssetManagementController@activate')
+        ->name('assets.activate');
     //end of AssetManagementController routes
 
-    Route::get('type/act/{type}', 'AssetTypeController@activate')->name('type.activate');
+    Route::get(
+        'type/act/{type}', 'AssetTypeController@activate')
+        ->name('type.activate');
     Route::resource('type', AssetTypeController::class);
 
-    Route::get('licence/act/{type}', 'LicenceTypeController@activate')->name('licence.activate');
+    Route::get(
+        'licence/act/{type}', 'LicenceTypeController@activate')
+        ->name('licence.activate');
     Route::resource('licence', LicenceTypeController::class);
 
-    Route::get('store-room/act/{type}', 'StoreRoomTypeController@activate')->name('store.activate');
+    Route::get(
+        'store-room/act/{type}', 'StoreRoomTypeController@activate')
+        ->name('store.activate');
     Route::resource('store-room', StoreRoomTypeController::class);
-
 });
 
 Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {

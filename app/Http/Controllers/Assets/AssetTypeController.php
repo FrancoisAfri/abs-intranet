@@ -18,6 +18,7 @@ use Illuminate\Http\Response;
 use Illuminate\View\View;
 use App\Http\Requests\AssetsRequest;
 use RealRashid\SweetAlert\Facades\Alert;
+use Ramsey\Uuid\Uuid;
 
 class AssetTypeController extends Controller
 {

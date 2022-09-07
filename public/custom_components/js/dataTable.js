@@ -1,4 +1,6 @@
+
 $(function () {
+
     $('#example2').DataTable({
         paging: true,
         lengthChange: true,
@@ -6,15 +8,12 @@ $(function () {
         ordering: true,
         info: true,
         autoWidth: true,
+        dom: 'Bfrtip',
         buttons: [
-            {
-                extend: 'copy',
-                text: 'Copy to clipboard'
-            },
-            'excel',
-            'pdf'
+            'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
+
 
     $('.modal').on('show.bs.modal', reposition);
 });

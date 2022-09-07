@@ -2,19 +2,27 @@
 
 namespace App\Models;
 
+use App\Traits\Uuids;
 use DateTimeInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Query\Builder;
 
 class Assets extends Model
 {
+    use Uuids;
 
     public $table = 'assets';
 
+    protected $hidden = [
+        'id'
+    ];
+
     protected $fillable = [
-        'name', 'description', 'model_number', 'make_number','asset_type_id',
-        'user_id', 'serial_number', 'asset_tag', 'type','license_type_id',
-        'picture', 'price', 'status','asset_status','serial_number'
+        'name', 'description', 'model_number', 'make_number', 'asset_type_id',
+        'user_id', 'serial_number', 'asset_tag', 'type', 'license_type_id',
+        'picture', 'price', 'status', 'asset_status', 'serial_number'
     ];
 
 
@@ -22,6 +30,7 @@ class Assets extends Model
      * status constants
      */
     const STATUS_SELECT = [
+        'Un Allocated' => 'Un Allocated',
         'In Use' => 'In Use',
         'Discarded' => 'Discarded',
         'Missing' => 'Missing',
@@ -54,4 +63,23 @@ class Assets extends Model
         return $this->belongsTo(LicensesType::class, 'license_type_id')->orderBy('id');
     }
 
+
+    /**
+     * Get the route key for the model.
+     *
+     * @return string
+     */
+    public function getRouteKeyName()
+    {
+        return 'uuid';
+    }
+
+    /**
+     * @param string $uuid
+     * @return Assets|Builder|Model
+     */
+    public static function findByUuid(string $uuid)
+    {
+        return (new Assets)->where('uuid', $uuid)->first();
+    }
 }

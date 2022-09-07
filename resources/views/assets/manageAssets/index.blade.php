@@ -1,0 +1,108 @@
+@extends('layouts.main_layout')
+@section('page_dependencies')
+
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css') }}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
+    <!-- bootstrap file input -->
+@stop
+@section('content')
+    <section class="content">
+
+        <div class="row">
+            <!-- /.col -->
+            <div class=" tab-content">
+                <div class="activetab-pane" id="info">
+                    <section class="content">
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <h1>
+                                    View Asset - {{ $asset->name}}</h1>
+                                <div class="nav-tabs-custom">
+                                    <ul class="nav nav-tabs">
+                                        <li class="active"><a href="#information" data-toggle="tab">Info</a></li>
+                                        <li><a href="#transfares" data-toggle="tab">Transferases</a></li>
+                                        <li><a href="#Components" data-toggle="tab">Components</a></li>
+                                        <li><a href="#files" data-toggle="tab">Files</a></li>
+                                        <li class=" pull-right">
+                                            <button type="button" class="btn btn-default pull-right" id="back_button"><i
+                                                        class="fa fa-arrow-left"></i> Back
+                                            </button>
+                                        </li>
+
+                                    </ul>
+                                    <div class="tab-content">
+                                        {{--  taranferes  tab  --}}
+                                        <div class="active tab-pane" id="information">
+                                            @include('assets.manageAssets.Tabs.asset-information-tab')
+                                        </div>
+                                        <!-- /.tab-pane -->
+
+                                        {{--  taranferes  tab  --}}
+                                        <div class="tab-pane" id="transfares">
+                                            @include('assets.manageAssets.Tabs.asset-transfares-tab')
+                                            Transfare
+                                        </div>
+                                        <!-- /.tab-pane -->
+
+                                        {{--  Components  tab  --}}
+                                        <div class="tab-pane" id="Components">
+                                            @include('assets.manageAssets.Tabs.asset-components-tab')
+                                        </div>
+                                        <!-- /.tab-pane -->
+
+                                        {{--  Files  tab  --}}
+                                        <div class="tab-pane" id="files">
+                                            @include('assets.manageAssets.Tabs.asset-files-tab')
+                                        </div>
+                                        <!-- /.tab-pane -->
+
+                                    </div>
+                                    <!-- /.tab-content -->
+                                </div>
+                                <!-- /.nav-tabs-custom -->
+                            </div>
+                            <!-- /.col -->
+                        </div>
+                        <!-- /.row -->
+
+                    </section>
+                </div>
+            </div>
+            <!-- /.tab-content -->
+        </div>
+        <!-- /.col -->
+        <!-- /.row -->
+
+    </section>
+@stop
+@section('page_script')
+
+    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('custom_components/js/modal_ajax_submit.js') }}"></script>
+    <script src="{{ asset('custom_components/js/deleteAlert.js') }}"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+
+    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>
+
+    <script>
+        $('[data-toggle="tooltip"]').tooltip();
+
+        $('#back_button').click(function () {
+            location.href = '{{route('index')}}';
+        });
+    </script>
+@stop

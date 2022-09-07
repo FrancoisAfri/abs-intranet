@@ -22,3 +22,6 @@ mix.scripts([
 mix.styles([
     'node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css'
 ], 'public/css/global.css');
+
+mix.copyDirectory('public/bower_components/AdminLTE/plugins', 'public/Plugins');
+mix.copyDirectory('public/custom_components', 'public/customComponents');

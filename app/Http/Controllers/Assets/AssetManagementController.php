@@ -26,13 +26,13 @@ class AssetManagementController extends Controller
      */
     public function index(Request $request)
     {
-        $asset = AssetType::all();
 
-        $asserts = Assets::with('AssetType', 'LicenseType')->get();
+        $assetType = AssetType::all();
 
-        $store = StoreRoom::all();
-        $licenseType = LicensesType::all();
-
+        $asserts = Assets::with('AssetType')
+            ->where(['asset_status' => 'In Use',
+                'status' => 1])
+            ->get();
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -44,10 +44,8 @@ class AssetManagementController extends Controller
             "Asset Management Set Up"
         );
 
-        $data['asset'] = $asset;
+        $data['assetType'] = $assetType;
         $data['asserts'] = $asserts;
-        $data['store'] = $store;
-        $data['licenseType'] = $licenseType;
 
         AuditReportsController::store(
             'Asset Management',
@@ -97,7 +95,37 @@ class AssetManagementController extends Controller
      */
     public function show($id)
     {
-        //
+       $asset = Assets::findByUuid($id);
+       $licenceType = LicensesType::all();
+        $assetTransfare = Assets::with('AssetType')
+            ->where('status' , 1)
+            ->get();
+
+
+        $data = $this->breadCrump(
+            "Asset Management",
+            "Asset View", "fa fa-lock",
+            "Asset Management View" ,
+            "Asset Management",
+            "assets/settings",
+            "Asset Management",
+            "Asset Management View "
+        );
+
+        $data['assetTransfare'] = $assetTransfare;
+        $data['asset'] = $asset;
+        $data['licenceType'] = $licenceType;
+
+        AuditReportsController::store(
+            'Asset Management',
+            'Asset Management Page Accessed',
+            "Actioned By User",
+            0
+        );
+
+
+
+        return view('assets.manageAssets.index')->with($data);
     }
 
     /**

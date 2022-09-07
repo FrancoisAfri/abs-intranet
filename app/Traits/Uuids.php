@@ -2,45 +2,26 @@
 namespace App\Traits;
 
 use Illuminate\Support\Str;
+use Ramsey\Uuid\Uuid as PackageUuid;
 
 trait Uuids
 {
-    /**
-     * Override the boot function from Laravel so that
-     * we give the model a new UUID when we create it.
-     */
+    public function scopeUuid($query, $uuid)
+    {
+        return $query->where($this->getUuidName(), $uuid);
+    }
+
+    public function getUuidName()
+    {
+        return property_exists($this, 'uuidName') ? $this->uuidName : 'uuid';
+    }
+
     protected static function boot()
     {
         parent::boot();
 
-        $creationCallback = function ($model) {
-            if (empty($model->{$model->getKeyName()}))
-            {
-                $model->{$model->getKeyName()} = Str::uuid()->toString();
-            }
-        };
-
-        static::creating($creationCallback);
-
-    }
-
-    /**
-     * Get the value indicating whether the IDs are incrementing.
-     *
-     * @return bool
-     */
-    public function getIncrementing() :bool
-    {
-        return false;
-    }
-
-    /**
-     * Get the auto-incrementing key type.
-     *
-     * @return string
-     */
-    public function getKeyType() :string
-    {
-        return 'string';
+        static::creating(function ($model) {
+            $model->{$model->getUuidName()} = PackageUuid::uuid4()->toString();
+        });
     }
 }

@@ -102,7 +102,9 @@
                 <script src="/custom_components/js/deleteAlert.js"></script>
                 <script src="/custom_components/js/dataTable.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-                <!-- End Bootstrap File input -->
+                {{--      data tables add ons         --}}
+
+
                 <script type="text/javascript">
 
                     function postData(id , data ){

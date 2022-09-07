@@ -6,7 +6,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Asset Types</h4>
+                    <h4 class="modal-title">Add Asset</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -59,29 +59,13 @@
 
                     <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" id="user_id">
 
+                    <input type="hidden" value="Un Allocated" name="asset_status" id="asset_status">
+
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label"> Price</label>
                         <div class="col-sm-8">
                             <input type="number" class="form-control" id="price" name="price" value=""
                                    placeholder="Enter Price" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Asset Status</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-bell-slash-o"></i>
-                                </div>
-                                <select class="form-control select2" style="width: 100%;"
-                                        id="asset_status" name="asset_status">
-                                    <option value="0">*** Select a Asset Status ***</option>
-                                    @foreach (\App\Models\Assets::STATUS_SELECT as $key => $status)
-                                        <option value="{{$key}}"> {{ (!empty( $status)) ?  $status : ''}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
                         </div>
                     </div>
 
@@ -95,7 +79,7 @@
                                 <select class="form-control select2" style="width: 100%;"
                                         id="asset_type_id" name="asset_type_id">
                                     <option value="0">*** Select a Asset Type ***</option>
-                                    @foreach($asset as $assets)
+                                    @foreach($assetType as $assets)
                                         <option value="{{ $assets->id }}">{{ $assets->name }}</option>
                                     @endforeach
                                 </select>
@@ -103,29 +87,12 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Licence Type</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-building-o"></i>
-                                </div>
-                                <select class="form-control select2" style="width: 100%;"
-                                        id="license_type_id" name="license_type_id">
-                                    <option value="0">*** Select a Asset Type ***</option>
-                                    @foreach($licenseType as $licenceTypes)
-                                        <option value="{{ $licenceTypes->id }}">{{ $licenceTypes->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
 
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">Image</label>
                         <div class="col-sm-8">
 
-                            <input type="file" id="picture" name="picture" class="file file-loading"
+                            <input type="file" id="picture" name="picture"
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
                     </div>

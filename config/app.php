@@ -239,6 +239,7 @@ return [
         //'PDF' => Barryvdh\Snappy\Facades\SnappyPdf::class,
         //'SnappyImage' => Barryvdh\Snappy\Facades\SnappyImage::class,
         'Alert' => RealRashid\SweetAlert\Facades\Alert::class,
+        'Uuid' => Webpatser\Uuid\Uuid::class,
 
     ],
 
