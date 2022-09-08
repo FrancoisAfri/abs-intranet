@@ -30,7 +30,7 @@
                     </div>
                     <div style="overflow-X:auto;">
                         {{--                        <table id="example2" class="table table-bordered table-hover">--}}
-                        <table id="example2" class="table table-bordered data-table my-2">
+                        <table id=" " class="display table table-bordered data-table my-2">
                             <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>

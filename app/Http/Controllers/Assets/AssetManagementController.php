@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Assets;
 
 use App\Http\Controllers\AuditReportsController;
+use App\Models\AssetFiles;
 use App\Models\Assets;
 use App\Models\AssetType;
 use App\Models\LicensesType;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Traits\BreadCrumpTrait;
 use App\Traits\StoreImageTrait;
+use App\Traits\uploadFilesTrait;
 use Illuminate\Support\Facades\DB;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\Datatables\Facades\Datatables;
@@ -19,7 +21,7 @@ use Yajra\Datatables\Facades\Datatables;
 class AssetManagementController extends Controller
 {
 
-    use BreadCrumpTrait, StoreImageTrait;
+    use BreadCrumpTrait, StoreImageTrait , uploadFilesTrait;
 
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
@@ -86,6 +88,18 @@ class AssetManagementController extends Controller
         return response()->json();
     }
 
+    /**
+     * @param Request $request
+     * @return void
+     */
+    public function storeFile(Request $request){
+        $asset = AssetFiles::create($request->all());
+
+        $formInput['document'] = $this->uploadFile($request,'document', 'assets/files' , $asset );
+
+        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+        return response()->json();
+    }
 
     /**
      * Display the specified resource.
@@ -97,10 +111,12 @@ class AssetManagementController extends Controller
     {
        $asset = Assets::findByUuid($id);
        $licenceType = LicensesType::all();
-        $assetTransfare = Assets::with('AssetType')
+       // will have to clean this
+       $assetTransfare = Assets::with('AssetType')
             ->where('status' , 1)
             ->get();
 
+        $assetFiles = AssetFiles::getAllFiles($asset->id);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -114,6 +130,7 @@ class AssetManagementController extends Controller
 
         $data['assetTransfare'] = $assetTransfare;
         $data['asset'] = $asset;
+        $data['assetFiles'] = $assetFiles;
         $data['licenceType'] = $licenceType;
 
         AuditReportsController::store(
@@ -122,8 +139,6 @@ class AssetManagementController extends Controller
             "Actioned By User",
             0
         );
-
-
 
         return view('assets.manageAssets.index')->with($data);
     }
@@ -172,10 +187,6 @@ class AssetManagementController extends Controller
     public function setUp()
     {
 
-//        Alert::question('Question Title', 'Question Message');
-        /**
-         * make use of the breadcrump trait
-         */
         $data = $this->breadCrump(
             "Asset Management",
             "Setup", "fa fa-lock",

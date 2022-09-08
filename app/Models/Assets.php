@@ -22,7 +22,7 @@ class Assets extends Model
     protected $fillable = [
         'name', 'description', 'model_number', 'make_number', 'asset_type_id',
         'user_id', 'serial_number', 'asset_tag', 'type', 'license_type_id',
-        'picture', 'price', 'status', 'asset_status', 'serial_number'
+        'picture', 'price', 'status', 'asset_status', 'serial_number',''
     ];
 
 
@@ -63,6 +63,17 @@ class Assets extends Model
         return $this->belongsTo(LicensesType::class, 'license_type_id')->orderBy('id');
     }
 
+    /**
+     * Establishes the asset -> location relationship
+     *
+     * @author [A. Gianotto] [<snipe@snipe.net>]
+     * @since [v2.0]
+     * @return \Illuminate\Database\Eloquent\Relations\Relation
+     */
+    public function store()
+    {
+        return $this->belongsTo(StoreRoom::class, 'store_id');
+    }
 
     /**
      * Get the route key for the model.

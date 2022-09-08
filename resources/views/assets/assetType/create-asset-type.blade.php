@@ -16,7 +16,7 @@
                 </div>
                 <div class="box-body">
                     <div style="overflow-X:auto;">
-                        <table id="example2" class="table table-bordered table-hover">
+                            <table id=" " class="display table table-bordered table-hover">
                             <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;">#</th>

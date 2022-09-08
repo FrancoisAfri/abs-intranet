@@ -3,109 +3,95 @@
         <div class="box box-primary">
             <div class="box-header with-border">
                 <i class="fa fa-barcode pull-right"></i>
-                <h3 class="box-title"> Files</h3>
+                <h3 class="box-title"> Asset Files</h3>
             </div>
             <div class="box-body">
+                <div class="card my-2">
+                </div>
                 <div style="overflow-X:auto;">
-                    <table id="example2"
-                           class="table table-bordered table-hover">
+                    <table id=" " class="display table table-bordered data-table my-2">
                         <thead>
                         <tr>
-                            <th style="width: 10px; text-align: center;">#
-                            </th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th style="width: 5px; text-align: center;">.
-                            </th>
-                            <th style="width: 5px; text-align: center;">.
-                            </th>
-                            {{--                                <th style="width: 5px; text-align: center;">.</th>--}}
+                            <th>File Type</th>
+                            <th>Images</th>
+                            <th style="width: 5px; text-align: center;">File</th>
+                            <th style="width: 5px; text-align: center;">  File Size</th>
+                            <th style="width: 5px; text-align: center;">Notes</th>
+                            <th style="width: 5px; text-align: center;">Download</th>
+                            <th style="width: 5px; text-align: center;"> Created At</th>
+                            <th>Status</th>
+                            <th style="width: 5px; text-align: center;"></th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if (count($licenceType) > 0)
+                        @if (count($assetFiles) > 0)
                             <ul class="products-list product-list-in-box">
-                                @foreach ($licenceType as $key => $licenceTypes)
-                                    <tr id="categories-list">
-                                        <td nowrap>
-                                            <button vehice="button"
-                                                    id="edit_licence"
-                                                    class="btn btn-warning  btn-xs"
-                                                    data-toggle="modal"
-                                                    data-target="#edit-licence-modal"
-                                                    data-id="{{ $licenceTypes->id }}"
-                                                    data-name="{{ $licenceTypes->name }}"
-                                                    data-description="{{$licenceTypes->description}}">
-                                                <i
-                                                        class="fa fa-pencil-square-o"></i>
-                                                Edit
-                                            </button>
+                                @foreach ($assetFiles as $key => $assets)
+                                    <td></td>
+                                        <td>{{ (!empty( $assets->name)) ?  $assets->name : ''}}</td>
+                                        <td>{{ (!empty( $assets->name)) ?  $assets->name : ''}}</td>
+                                        <td>{{ (!empty( $assets->name)) ?  $assets->name : ''}}</td>
+                                        <td>{{ (!empty( $assets->name)) ?  $assets->name : ''}}</td>
+                                        <td>
+                                                {{ (!empty( $assets->description)) ?  $assets->description : ''}}
+                                        </td>
+                                        <td>
+                                            <img src="{{ asset('storage/assets/files/'.$assets->document) }} "
+                                                 height="35px" width="40px" alt="device image">
                                         </td>
 
-                                        <td>{{ (!empty( $licenceTypes->name)) ?  $licenceTypes->name : ''}} </td>
-                                        <td>{{ (!empty( $licenceTypes->description)) ?  $licenceTypes->description : ''}} </td>
                                         <td>
-                                            <!--   leave here  -->
-                                            <button vehice="button"
-                                                    id="view_ribbons" class="btn {{ (!empty($licenceTypes->status) && $licenceTypes->status == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$licenceTypes->id}}, 'actdeac');"><i class="fa {{ (!empty($licenceTypes->status) && $licenceTypes->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($licenceTypes->status) && $licenceTypes->status == 1) ? "De-Activate" : "Activate"}}
+                                            <button vehice="button" id="view_ribbons" class="btn {{ (!empty($assets->status) && $assets->status == 1) ? " btn-danger " : "btn-success " }}
+                                      btn-xs" onclick="postData({{$assets->id}}, 'actdeac');"><i class="fa {{ (!empty($assets->status) && $assets->status == 1) ?
+                                      " fa-times " : "fa-check " }}"></i> {{(!empty($assets->status) && $assets->status == 1) ? "De-Activate" : "Activate"}}
                                             </button>
                                         </td>
                                         <td>
-                                            <form action="{{ route('licence.destroy', $licenceTypes->id ) }}"
+                                            <form action="{{ route('assets.destroy', $assets->id) }}"
                                                   method="POST"
                                                   style="display: inline-block;">
-                                                <input type="hidden"
-                                                       name="_method"
-                                                       value="DELETE">
-                                                <input type="hidden"
-                                                       name="_token"
-                                                       value="{{ csrf_token() }}">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
 
                                                 <button type="submit"
                                                         class="btn btn-xs btn-danger btn-flat delete_confirm"
-                                                        data-toggle="tooltip"
-                                                        title='Delete'>
-                                                    <i class="fa fa-trash">
-                                                        Delete </i>
+                                                        data-toggle="tooltip" title='Delete'>
+                                                    <i class="fa fa-trash"> Delete </i>
                                                 </button>
                                             </form>
                                         </td>
                                     </tr>
                             @endforeach
-
                         @endif
                         </tbody>
                         <tfoot>
                         <tr>
-                            <th style="width: 10px; text-align: center;"></th>
-                            <th>Name</th>
-                            <th>Description</th>
+                            <th>File Type</th>
+                            <th>Images</th>
+                            <th style="width: 5px; text-align: center;">File</th>
+                            <th style="width: 5px; text-align: center;">  File Size</th>
+                            <th style="width: 5px; text-align: center;">Notes</th>
+                            <th style="width: 5px; text-align: center;">Download</th>
+                            <th style="width: 5px; text-align: center;"> Created At</th>
+                            <th>Status</th>
                             <th style="width: 5px; text-align: center;"></th>
-                            <th style="width: 5px; text-align: center;"></th>
-                            {{--                                <th style="width: 5px; text-align: center;"></th>--}}
                         </tr>
                         </tfoot>
                     </table>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="button" id="cat_module"
-                                class="btn btn-default pull-right"
-                                data-toggle="modal"
-                                data-target="#add-licence-modal">Add Licence
-                            Type
+                        <button type="button" id="" class="btn btn-default pull-right" data-toggle="modal"
+                                data-target="#upload-file-modal">
+                            <i class="fa fa-paperclip" aria-hidden="true"></i> Upload
                         </button>
-                        <button type="button"
-                                class="btn btn-default pull-left"
-                                id="back_button"><i
-                                    class="fa fa-arrow-left"></i> Back
-                        </button>
+
                     </div>
                 </div>
             </div>
-            @include('assets.licenseType.partials.create')
-            @include('assets.licenseType.partials.edit')
+            @include('assets.manageAssets.partials.upload')
         </div>
     </div>
 </div>
+
+
+

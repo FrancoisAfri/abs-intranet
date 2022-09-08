@@ -3,6 +3,7 @@
 
     <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css') }}">
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
     <!-- bootstrap file input -->
@@ -85,6 +86,9 @@
     <script src="{{ asset('custom_components/js/modal_ajax_submit.js') }}"></script>
     <script src="{{ asset('custom_components/js/deleteAlert.js') }}"></script>
 
+    <!-- the main fileinput plugin file -->
+    <script src="{{ asset('bower_components/bootstrap_fileinput/js/fileinput.min.js') }}"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -104,5 +108,25 @@
         $('#back_button').click(function () {
             location.href = '{{route('index')}}';
         });
+
+        <!-- add asset file -->
+        $(function () {
+            $('.modal').on('show.bs.modal', reposition);
+
+            $('#upload-asset').on('click', function () {
+                let strUrl = '{{route('assets.file')}}';
+                let modalID = 'upload-file-modal';
+                let formName = 'upload-asset-form';
+
+                console.log(formName)
+                let submitBtnID = 'upload-asset';
+                let redirectUrl = '{{ route('index') }}';
+                let successMsgTitle = 'Uploaded Successfully!';
+                let successMsg = 'The Asset  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+        });
+
     </script>
 @stop

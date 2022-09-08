@@ -1,7 +1,8 @@
 
 $(function () {
 
-    $('#example2').DataTable({
+    $('table.display').DataTable({
+
         paging: true,
         lengthChange: true,
         searching: true,
@@ -13,7 +14,6 @@ $(function () {
             'copy', 'csv', 'excel', 'pdf', 'print'
         ]
     });
-
 
     $('.modal').on('show.bs.modal', reposition);
 });
