@@ -30,5 +30,6 @@ class CreateHrRoles extends Migration
     public function down()
     {
         //
+		Schema::drop('hr_roles');
     }
 }

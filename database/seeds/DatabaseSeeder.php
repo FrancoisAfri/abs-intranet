@@ -577,6 +577,51 @@ class DatabaseSeeder extends Seeder
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'users/setup';
         $ribbon->access_level = 5;
+        $module->addRibbon($ribbon); 
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 7;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'users/reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon); 
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 8;
+        $ribbon->ribbon_name = 'User Approval';
+        $ribbon->description = 'User Approval';
+        $ribbon->ribbon_path = 'users/approval';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon); 
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 9;
+        $ribbon->ribbon_name = 'Reports To';
+        $ribbon->description = 'Reports To';
+        $ribbon->ribbon_path = 'users/reports_to';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon); 
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 10;
+        $ribbon->ribbon_name = 'Reset Password';
+        $ribbon->description = 'Reset Password';
+        $ribbon->ribbon_path = 'security/password-reset';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon); 
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 11;
+        $ribbon->ribbon_name = 'Assign Job Titles';
+        $ribbon->description = 'Assign Job Titles';
+        $ribbon->ribbon_path = 'security/assign-jobtitles';
+        $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
         $module = new modules(); //Employee Records
