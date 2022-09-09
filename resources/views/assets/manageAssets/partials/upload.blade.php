@@ -29,9 +29,10 @@
                             <input type="file" id="document" name="document"  class="file file-loading"
                                    data-allowed-file-extensions='["jpg", "jpeg", "png", "gif", "doc","pdf",
                                    "xls", "xlsx", "txt", "lic", "xml", "zip", "rtf","rar"
-                                 ]' data-show-upload="false"  placeholder="Allowed filetypes are png, gif,
-                                  jpg, jpeg, doc, docx, pdf, xls, xlsx, txt, lic, xml, zip, rtf and
-                                   rar. Max upload size allowed is 2M.">
+                                 ]' data-show-upload="false" >
+                            <strong> Allowed filetypes are png, gif,
+                                jpg, jpeg, doc, docx, pdf, xls, xlsx, txt, lic, xml, zip, rtf and
+                                rar. Max upload size allowed is 2M."</strong>
                         </div>
                     </div>
 

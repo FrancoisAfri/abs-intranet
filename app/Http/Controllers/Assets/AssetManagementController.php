@@ -2,12 +2,18 @@
 
 namespace App\Http\Controllers\Assets;
 
+use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
+use App\Models\AssetComponents;
 use App\Models\AssetFiles;
 use App\Models\Assets;
+use App\Models\AssetTransfers;
 use App\Models\AssetType;
 use App\Models\LicensesType;
 use App\Models\StoreRoom;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -15,26 +21,24 @@ use App\Traits\BreadCrumpTrait;
 use App\Traits\StoreImageTrait;
 use App\Traits\uploadFilesTrait;
 use Illuminate\Support\Facades\DB;
+use Illuminate\View\View;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\Datatables\Facades\Datatables;
 
 class AssetManagementController extends Controller
 {
 
-    use BreadCrumpTrait, StoreImageTrait , uploadFilesTrait;
+    use BreadCrumpTrait, StoreImageTrait, uploadFilesTrait;
 
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @return Factory|Application|View
      */
     public function index(Request $request)
     {
 
         $assetType = AssetType::all();
 
-        $asserts = Assets::with('AssetType')
-            ->where(['asset_status' => 'In Use',
-                'status' => 1])
-            ->get();
+        $asserts = Assets::getAssetsByStatus();
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -46,8 +50,10 @@ class AssetManagementController extends Controller
             "Asset Management Set Up"
         );
 
-        $data['assetType'] = $assetType;
-        $data['asserts'] = $asserts;
+        $data = [
+            'assetType' => $assetType,
+            'asserts' => $asserts
+        ];
 
         AuditReportsController::store(
             'Asset Management',
@@ -79,10 +85,9 @@ class AssetManagementController extends Controller
      */
     public function store(Request $request)
     {
-        $asset = Assets::create($request->all());
-
+        $asset = $this->addAsset($request);
         //add image
-        $formInput['picture'] = $this->verifyAndStoreImage('assets/images', 'picture', $asset, $request);
+        $Data['picture'] = $this->verifyAndStoreImage('assets/images', 'picture', $asset, $request);
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
@@ -92,10 +97,23 @@ class AssetManagementController extends Controller
      * @param Request $request
      * @return void
      */
-    public function storeFile(Request $request){
+    public function storeFile(Request $request)
+    {
         $asset = AssetFiles::create($request->all());
 
-        $formInput['document'] = $this->uploadFile($request,'document', 'assets/files' , $asset );
+        $formInput['document'] = $this->uploadFile($request, 'document', 'assets/files', $asset);
+
+        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+        return response()->json();
+    }
+
+    /**
+     * @param Request $request
+     * @return void
+     */
+    public function storeComponent(Request $request)
+    {
+        $component = AssetComponents::create($request->all());
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
@@ -104,24 +122,31 @@ class AssetManagementController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param int $id
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
     {
-       $asset = Assets::findByUuid($id);
-       $licenceType = LicensesType::all();
-       // will have to clean this
-       $assetTransfare = Assets::with('AssetType')
-            ->where('status' , 1)
-            ->get();
+        $users = HRPerson::where('status', 1)->get();
+
+        $stores = StoreRoom::all();
+
+        $asset = Assets::findByUuid($id);
+
+        $licenceType = LicensesType::all();
+        // will have to clean this
+        $assetTransfare = Assets::getAssetsTypes();
 
         $assetFiles = AssetFiles::getAllFiles($asset->id);
+
+        $assetComponents = AssetComponents::getAssetComponents($asset->id);
+
+        $Transfers = AssetTransfers::getAssetsTransfares($asset->id);
 
         $data = $this->breadCrump(
             "Asset Management",
             "Asset View", "fa fa-lock",
-            "Asset Management View" ,
+            "Asset Management View",
             "Asset Management",
             "assets/settings",
             "Asset Management",
@@ -130,8 +155,12 @@ class AssetManagementController extends Controller
 
         $data['assetTransfare'] = $assetTransfare;
         $data['asset'] = $asset;
+        $data['assetComponents'] = $assetComponents;
         $data['assetFiles'] = $assetFiles;
         $data['licenceType'] = $licenceType;
+        $data['stores'] = $stores;
+        $data['users'] = $users;
+        $data['Transfers'] = $Transfers;
 
         AuditReportsController::store(
             'Asset Management',
@@ -182,7 +211,31 @@ class AssetManagementController extends Controller
     }
 
     /**
-     * @return void
+     * @param AssetFiles $files
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function fileDestroy(AssetFiles $assets): RedirectResponse
+    {
+        $assets->delete();
+        return redirect()->back();
+
+    }
+
+    /**
+     * @param AssetFiles $files
+     * @return RedirectResponse
+     * @throws Exception
+     */
+    public function componentDestroy(AssetComponents $assets): RedirectResponse
+    {
+        $assets->delete();
+        return redirect()->back();
+
+    }
+
+    /**
+     * @return Factory|Application|View
      */
     public function setUp()
     {
@@ -216,6 +269,38 @@ class AssetManagementController extends Controller
 
         AuditReportsController::store('Asset Management', 'Asset t  Type Status Changed', "Asset News Type  Changed", 0);
         return back();
+    }
+
+    /***
+     * Private function to store Asset data
+     * @param Request $request
+     * @return Assets
+     */
+    private function addAsset(Request $request): Assets
+    {
+        $asset = new Assets();
+        $asset->name = $request['name'];
+        $asset->description = $request['description'];
+        $asset->serial_number = $request['serial_number'];
+        $asset->asset_tag = $request['asset_tag'];
+        $asset->model_number = $request['model_number'];
+        $asset->make_number = $request['make_number'];
+        $asset->asset_type_id = $request['asset_type_id'];
+        $asset->price = $request['price'];
+        $asset->asset_status = $request['asset_status'];
+        $asset->save();
+
+        $transfare = new AssetTransfers();
+        $transfare->name = $request['name'];
+        $transfare->description = $request['description'];
+        $transfare->user_id = $request['user_id'];
+        $transfare->asset_id = $asset->id;
+        $transfare->asset_status = $request['asset_status'];
+        $transfare->save();
+
+        return $asset;
+
+
     }
 
 }

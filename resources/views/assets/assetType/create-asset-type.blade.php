@@ -41,8 +41,8 @@
                                                             class="fa fa-pencil-square-o"></i> Edit
                                                 </button>
                                             </td>
-                                            <td>{{ (!empty( $assetTypes->name)) ?  $assetTypes->name : ''}} </td>
-                                            <td>{{ (!empty( $assetTypes->description)) ?  $assetTypes->description : ''}} </td>
+                                            <td>{{ $assetTypes->name ?? ''}} </td>
+                                            <td>{{ $assetTypes->description ?? ''}} </td>
                                             <td>
                                                 <!--   leave here  -->
                                                 <button vehice="button" id="view_ribbons" class="btn {{ (!empty($assetTypes->status) && $assetTypes->status == 1) ? " btn-danger " : "btn-success " }}
@@ -159,7 +159,6 @@
                             let objData = {
                                 name: $('#'+modalID).find('#name').val(),
                                 description: $('#'+modalID).find('#description').val(),
-                                licenceType_id: $('#'+modalID).find('#licenceType_id').val(),
                                 _token: $('#'+modalID).find('input[name=_token]').val()
                             };
 

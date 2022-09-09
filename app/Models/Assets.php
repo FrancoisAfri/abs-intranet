@@ -7,6 +7,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Builder;
 
 class Assets extends Model
@@ -14,6 +15,10 @@ class Assets extends Model
     use Uuids;
 
     public $table = 'assets';
+    /**
+     * @var mixed
+     */
+    public $description;
 
     protected $hidden = [
         'id'
@@ -64,16 +69,24 @@ class Assets extends Model
     }
 
     /**
-     * Establishes the asset -> location relationship
      *
-     * @author [A. Gianotto] [<snipe@snipe.net>]
-     * @since [v2.0]
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
+     * @return Relation
      */
     public function store()
     {
         return $this->belongsTo(StoreRoom::class, 'store_id');
     }
+
+
+    /**
+     *
+     * @return Relation
+     */
+    public function AssetTransfare(): Relation
+    {
+        return $this->hasMany(AssetTransfers::class , 'asset_id');
+    }
+
 
     /**
      * Get the route key for the model.
@@ -85,6 +98,19 @@ class Assets extends Model
         return 'uuid';
     }
 
+    public static function getAssetsTypes(){
+       return Assets::with('AssetType')
+            ->where('status' , 1)
+            ->get();
+    }
+
+    public static function getAssetsByStatus($status='In Use'){
+       return Assets::with('AssetType')
+            ->where(['asset_status' => $status,
+                'status' => 1])
+            ->get();
+    }
+
     /**
      * @param string $uuid
      * @return Assets|Builder|Model
@@ -93,4 +119,6 @@ class Assets extends Model
     {
         return (new Assets)->where('uuid', $uuid)->first();
     }
+
+
 }

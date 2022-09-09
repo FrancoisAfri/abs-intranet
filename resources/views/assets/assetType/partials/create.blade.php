@@ -28,25 +28,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">Licence Type</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-building-o"></i>
-                                </div>
-                                <select class="form-control select2" style="width: 100%;"
-                                        id="license_type_id" name="license_type_id">
-                                    <option value="0">*** Select a Asset Type ***</option>
-                                    @foreach($licenceType as $licenceTypes)
-                                        <option value="{{ $licenceTypes->id }}">{{ $licenceTypes->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
-
                 </div>
 
 

@@ -53,6 +53,17 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
     Route::post('assets/file', 'AssetManagementController@storeFile')
         ->name('assets.file');
 
+    Route::delete(
+        'file/{assets}', 'AssetManagementController@fileDestroy')
+        ->name('file.destroy');
+
+    Route::post('assets/component', 'AssetManagementController@storeComponent')
+        ->name('assets.component');
+
+    Route::delete(
+        'component/{assets}', 'AssetManagementController@componentDestroy')
+        ->name('component.destroy');
+
     Route::get(
         'act/{type}', 'AssetManagementController@activate')
         ->name('assets.activate');

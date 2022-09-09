@@ -3,6 +3,9 @@
 
     <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/iCheck/square/green.css') }}">
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
@@ -24,7 +27,7 @@
                                 <div class="nav-tabs-custom">
                                     <ul class="nav nav-tabs">
                                         <li class="active"><a href="#information" data-toggle="tab">Info</a></li>
-                                        <li><a href="#transfares" data-toggle="tab">Transferases</a></li>
+                                        <li><a href="#transfares" data-toggle="tab">Transfers</a></li>
                                         <li><a href="#Components" data-toggle="tab">Components</a></li>
                                         <li><a href="#files" data-toggle="tab">Files</a></li>
                                         <li class=" pull-right">
@@ -89,6 +92,8 @@
     <!-- the main fileinput plugin file -->
     <script src="{{ asset('bower_components/bootstrap_fileinput/js/fileinput.min.js') }}"></script>
 
+    <script src="{{ asset('bower_components/AdminLTE/plugins/iCheck/icheck.min.js')}}"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -103,10 +108,49 @@
     <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>
 
     <script>
+
         $('[data-toggle="tooltip"]').tooltip();
 
         $('#back_button').click(function () {
             location.href = '{{route('index')}}';
+        });
+
+
+        //Initialize iCheck/iRadio Elements
+        $('input').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+            increaseArea: '10%' // optional
+        });
+
+
+
+        //TODO WILL CREATE A SIGLE GLOBAL FILE
+        $('.delete_confirm').click(function (event) {
+
+            var form = $(this).closest("form");
+
+            var name = $(this).data("name");
+
+            event.preventDefault();
+
+            swal({
+                title: `Are you sure you want to delete this record?`,
+                text: "If you delete this, it will be gone forever.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        form.submit();
+                        swal("Poof! Your Record has been deleted!", {
+                            icon: "success",
+                        });
+                    }
+
+                });
+
         });
 
         <!-- add asset file -->
@@ -120,9 +164,24 @@
 
                 console.log(formName)
                 let submitBtnID = 'upload-asset';
-                let redirectUrl = '{{ route('index') }}';
+                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
                 let successMsgTitle = 'Uploaded Successfully!';
                 let successMsg = 'The Asset  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+
+            <!-- add component file -->
+
+            $('#add-component').on('click', function () {
+                let strUrl = '{{route('assets.component')}}';
+                let modalID = 'add-component-modal';
+                let formName = 'add-component-form';
+
+                let submitBtnID = 'add-component';
+                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
+                let successMsgTitle = 'Added Successfully!';
+                let successMsg = 'The component  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
