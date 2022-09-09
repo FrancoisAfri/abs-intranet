@@ -38,9 +38,9 @@ class AssetManagementController extends Controller
     {
         $assetType = AssetType::all();
 
-       // dd($request['status_id']);
-
-        $asserts = Assets::getAssetsByStatus($request['status_id']);
+        //die($request['status_id']);
+		$status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
+        $asserts = Assets::getAssetsByStatus($status);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -54,6 +54,7 @@ class AssetManagementController extends Controller
 
         $data['assetType'] = $assetType;
         $data['asserts'] = $asserts;
+        $data['status'] = $status;
 
 
         AuditReportsController::store(

@@ -29,7 +29,8 @@
                                                 id="status_id" name="status_id">
                                             <option value="In use">--Select Status--</option>
                                             @foreach(\App\Models\Assets::STATUS_SELECT as $assets)
-                                                <option value="{{ $assets }}">{{ $assets }}</option>
+                                                <option value="{{ $assets }}"  {{ ($status == $assets) ?
+                                                ' selected' : '' }}>{{ $assets }}</option>
                                             @endforeach
 
                                         </select>
