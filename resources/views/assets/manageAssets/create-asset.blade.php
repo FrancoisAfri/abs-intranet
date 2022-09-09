@@ -20,14 +20,14 @@
 
                 <div class="box-body">
                     <div class="col-md-6">
-                        <form class="form-horizontal" method="POST" action="">
+                        <form class="form-horizontal" method="get" action="{{ route('index') }}">
                             {{ csrf_field() }}
                             <div class="row">
                                 <div class="col-lg-3">
                                     <div class="input-group">
                                         <select class="form-control select2" style="width: 100%;"
                                                 id="status_id" name="status_id">
-                                            <option value="0">--Select Status--</option>
+                                            <option value="In use">--Select Status--</option>
                                             @foreach(\App\Models\Assets::STATUS_SELECT as $assets)
                                                 <option value="{{ $assets }}">{{ $assets }}</option>
                                             @endforeach
@@ -50,7 +50,8 @@
                             </div>
                         </form>
                     </div>
-                </div>
+                    </div>
+
                 <div class="card my-2">
 
                     <div class="box-header">
@@ -245,8 +246,8 @@
                 console.log(formName)
                 let submitBtnID = 'add-asset';
                 let redirectUrl = '{{ route('index') }}';
-                let successMsgTitle = 'Asset Type Added!';
-                let successMsg = 'The Asset Type has been updated successfully.';
+                let successMsgTitle = 'Asset Added!';
+                let successMsg = 'Record has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
@@ -275,7 +276,7 @@
                 let submitBtnID = 'edit-asset';
                 let redirectUrl = '{{route('type.index')}}';
                 let successMsgTitle = 'Changes Saved!';
-                let successMsg = 'The Fleet Type has been updated successfully.';
+                let successMsg = 'Record has been updated successfully.';
                 let Method = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });

@@ -77,6 +77,7 @@ class meetingMinutesAdminController extends Controller
      */
     public function store(Request $request)
     {
+
         $this->validate($request, [
             'meeting_name' => 'required_if:meeting_type,1',       
             'meeting_date' => 'required_if:meeting_type,1',       

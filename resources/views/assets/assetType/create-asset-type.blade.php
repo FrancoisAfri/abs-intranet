@@ -196,7 +196,7 @@
                             let submitBtnID = 'edit-asset';
                             let redirectUrl = '{{route('type.index')}}';
                             let successMsgTitle = 'Changes Saved!';
-                            let successMsg = 'The Fleet Type has been updated successfully.';
+                            let successMsg = 'Record has been updated successfully.';
                             let Method = 'PATCH';
                             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                         });

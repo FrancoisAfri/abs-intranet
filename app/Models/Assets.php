@@ -104,7 +104,7 @@ class Assets extends Model
             ->get();
     }
 
-    public static function getAssetsByStatus($status='In Use'){
+    public static function getAssetsByStatus($status= "In Use"){
        return Assets::with('AssetType')
             ->where(['asset_status' => $status,
                 'status' => 1])

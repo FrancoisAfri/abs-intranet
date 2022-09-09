@@ -14,6 +14,7 @@ use App\Models\StoreRoom;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -35,10 +36,11 @@ class AssetManagementController extends Controller
      */
     public function index(Request $request)
     {
-
         $assetType = AssetType::all();
 
-        $asserts = Assets::getAssetsByStatus();
+       // dd($request['status_id']);
+
+        $asserts = Assets::getAssetsByStatus($request['status_id']);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -50,10 +52,9 @@ class AssetManagementController extends Controller
             "Asset Management Set Up"
         );
 
-        $data = [
-            'assetType' => $assetType,
-            'asserts' => $asserts
-        ];
+        $data['assetType'] = $assetType;
+        $data['asserts'] = $asserts;
+
 
         AuditReportsController::store(
             'Asset Management',
@@ -115,6 +116,17 @@ class AssetManagementController extends Controller
     {
         $component = AssetComponents::create($request->all());
 
+        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+        return response()->json();
+    }
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function storeTransfer(Request $request): JsonResponse
+    {
+        $component = AssetTransfers::create($request->all());
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
     }
@@ -293,7 +305,6 @@ class AssetManagementController extends Controller
         $transfare = new AssetTransfers();
         $transfare->name = $request['name'];
         $transfare->description = $request['description'];
-        $transfare->user_id = $request['user_id'];
         $transfare->asset_id = $asset->id;
         $transfare->asset_status = $request['asset_status'];
         $transfare->save();

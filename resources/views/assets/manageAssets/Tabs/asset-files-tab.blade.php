@@ -15,7 +15,6 @@
                             <th>File Type</th>
                             <th>Images</th>
                             <th style="width: 5px; text-align: center;">File</th>
-                            {{--                            <th style="width: 5px; text-align: center;"> File Size</th>--}}
                             <th style="width: 5px; text-align: center;">Notes</th>
                             <th style="width: 5px; text-align: center;">Download</th>
                             <th style="width: 5px; text-align: center;"> Created At</th>
@@ -24,7 +23,7 @@
                         </thead>
                         <tbody>
                         @if (count($assetFiles) > 0)
-                            <ul class="products-list product-list-in-box">
+                            <tr class="products-list product-list-in-box">
                                 @foreach ($assetFiles as $key => $assets)
                                     <td>
                                         @if( pathinfo($assets->document, PATHINFO_EXTENSION) == 'pdf')

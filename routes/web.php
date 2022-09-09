@@ -64,6 +64,9 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
         'component/{assets}', 'AssetManagementController@componentDestroy')
         ->name('component.destroy');
 
+    Route::post('assets/transfer', 'AssetManagementController@storeTransfer')
+        ->name('assets.transfer');
+
     Route::get(
         'act/{type}', 'AssetManagementController@activate')
         ->name('assets.activate');

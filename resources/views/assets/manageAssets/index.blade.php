@@ -3,6 +3,7 @@
 
     <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/iCheck/square/green.css') }}">
@@ -94,6 +95,11 @@
 
     <script src="{{ asset('bower_components/AdminLTE/plugins/iCheck/icheck.min.js')}}"></script>
 
+    <!-- Select2 -->
+    <script src="{{ asset('plugins/select2/select2.full.min.js') }}"></script>
+    <!-- bootstrap datepicker -->
+    <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -108,21 +114,59 @@
     <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>
 
     <script>
+        $(function () {
 
-        $('[data-toggle="tooltip"]').tooltip();
+            $(".select2").select2();
 
-        $('#back_button').click(function () {
-            location.href = '{{route('index')}}';
-        });
+            $('[data-toggle="tooltip"]').tooltip();
 
+            //back
+            $('#back_button').click(function () {
+                location.href = '{{route('index')}}';
+            });
 
-        //Initialize iCheck/iRadio Elements
-        $('input').iCheck({
-            checkboxClass: 'icheckbox_square-green',
-            radioClass: 'iradio_square-green',
-            increaseArea: '10%' // optional
-        });
+            // reposition modal
+            $('.modal').on('show.bs.modal', reposition);
 
+            //Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+                increaseArea: '10%' // optional
+            });
+
+            // Initialize date picker Elements
+            $('.datepicker').datepicker({
+                format: 'yyyy/mm/dd',
+                autoclose: true,
+                todayHighlight: true
+            }).datepicker("setDate", 'now');
+
+            // auto hide field elements
+            hideFields();
+            $('#rdo_store, #rdo_user').on('ifChecked', function () {
+                hideFields();
+            });
+
+            //function to hide/show fields depending on the registration type
+            function hideFields() {
+
+                let store = $('.store-field');
+                let user = $('.user-field');
+
+                let choicetype = $("input[name='transfer_to']:checked").val();
+
+                if (choicetype == 1) { //show user
+                    store.hide();
+                    store.val('').prop("removed", true).focus(); //clear textboxes
+                    user.show();
+                } else if (choicetype == 2) { // show store
+                    user.hide();
+                    user.val('').prop("removed", true).focus(); //clear textboxes
+                    store.show();
+                }
+
+            }
 
 
         //TODO WILL CREATE A SIGLE GLOBAL FILE
@@ -154,8 +198,6 @@
         });
 
         <!-- add asset file -->
-        $(function () {
-            $('.modal').on('show.bs.modal', reposition);
 
             $('#upload-asset').on('click', function () {
                 let strUrl = '{{route('assets.file')}}';
@@ -185,7 +227,20 @@
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-        });
+            <!-- New Transfare-->
 
+            $('#new-transfer').on('click', function () {
+                let strUrl = '{{route('assets.transfer')}}';
+                let modalID = 'new-transfer-modal';
+                let formName = 'new-transfer-form';
+
+                let submitBtnID = 'new-transfer';
+                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
+                let successMsgTitle = 'Transferred Successfully!';
+                let successMsg = 'The Asset  has been updated successfully transferred.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+        });
     </script>
 @stop
