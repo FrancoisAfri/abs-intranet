@@ -13,13 +13,11 @@
                         <thead>
                         <tr>
                             <th>Name</th>
-                            <th style="width: 5px; text-align: center;">Last User</th>
-                            <th style="width: 5px; text-align: center;">Make</th>
-                            <th style="width: 5px; text-align: center;">Asset Type</th>
                             <th style="width: 5px; text-align: center;">Asset Image</th>
                             <th style="width: 5px; text-align: center;">Date Created</th>
                             <th style="width: 5px; text-align: center;">Transaction Date</th>
                             <th style="width: 5px; text-align: center;">Transfer Date</th>
+                            <th style="width: 5px; text-align: center;">Last User</th>
                             <th style="width: 5px; text-align: center;">Store</th>
                             <th>Status</th>
 
@@ -31,13 +29,12 @@
                                 @foreach ($Transfers as $key => $assets)
 
                                         <td>{{  $assets->name ?? ''}}</td>
-                                        <td>Last User</td>
-                                        <td>make</td>
-                                        <td>type</td>
+
                                         <td>images</td>
                                         <td>{{ $assets->created_at ?? '' }}</td>
                                         <td>{{ $assets->transaction_date ?? '' }}</td>
                                         <td>{{ $assets->transfer_date ?? '' }}</td>
+                                        <td>Last User</td>
                                         <td>{{ $assets->store_id ?? '' }}</td>
                                         <td>
                                             @if($assets->asset_status == 'Sold')
@@ -62,13 +59,12 @@
                         <tfoot>
                         <tr>
                             <th>Name</th>
-                            <th style="width: 5px; text-align: center;">Last User</th>
-                            <th style="width: 5px; text-align: center;">Make</th>
-                            <th style="width: 5px; text-align: center;">Asset Type</th>
+
                             <th style="width: 5px; text-align: center;">Asset Image</th>
                             <th style="width: 5px; text-align: center;">Date Created</th>
                             <th style="width: 5px; text-align: center;">Transaction Date</th>
                             <th style="width: 5px; text-align: center;">Transfer Date</th>
+                            <th style="width: 5px; text-align: center;">Last User</th>
                             <th style="width: 5px; text-align: center;">Store</th>
                             <th>Status</th>
                         </tr>

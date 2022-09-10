@@ -1,7 +1,7 @@
 <div id="new-transfer-modal" class="modal modal-default fade">
     <div class="modal-dialog modal-lg">
          <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="new-transfer-form" enctype="multipart/form-data">
+            <form class=" dropzone form-horizontal" method="POST" name="new-transfer-form" enctype="multipart/form-data" >
                 {{ csrf_field() }}
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -86,9 +86,14 @@
                         <label for="image" class="col-sm-2 control-label">Image</label>
                         <div class="col-sm-8">
 
-                            <input type="file" id="picture" name="picture" class="file file-loading"
+                            <input type="file" id="picture" name="picture[]"  multiple class="file file-loading"
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="image" class="col-sm-2 control-label">Image</label>
+
                     </div>
 
                 </div>

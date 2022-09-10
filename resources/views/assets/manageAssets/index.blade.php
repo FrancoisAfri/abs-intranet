@@ -7,9 +7,15 @@
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/iCheck/square/green.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/fine-uploader/fine-uploader-gallery.css') }}">
+{{--    <link rel="stylesheet" href="{{asset('custom_components/css/dropzone.css')}}"/>--}}
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
+
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
+
+
     <!-- bootstrap file input -->
 @stop
 @section('content')
@@ -27,10 +33,10 @@
                                     View Asset - {{ $asset->name}}</h1>
                                 <div class="nav-tabs-custom">
                                     <ul class="nav nav-tabs">
-                                        <li class="active"><a href="#information" data-toggle="tab">Info</a></li>
-                                        <li><a href="#transfares" data-toggle="tab">Transfers</a></li>
-                                        <li><a href="#Components" data-toggle="tab">Components</a></li>
-                                        <li><a href="#files" data-toggle="tab">Files</a></li>
+                                        <li class="active" data-toggle="tooltip" title="information"><a href="#information" data-toggle="tab">Info</a></li>
+                                        <li data-toggle="tooltip" title="Transfers"><a href="#transfares" data-toggle="tab">Transfers</a></li>
+                                        <li data-toggle="tooltip" title="Components"><a href="#Components" data-toggle="tab">Components</a></li>
+                                        <li data-toggle="tooltip" title="Files"><a href="#files" data-toggle="tab">Files</a></li>
                                         <li class=" pull-right">
                                             <button type="button" class="btn btn-default pull-right" id="back_button"><i
                                                         class="fa fa-arrow-left"></i> Back
@@ -100,6 +106,8 @@
     <!-- bootstrap datepicker -->
     <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.js') }}"></script>
 
+    <script src="{{ asset('plugins/fine-uploader/fine-uploader.js') }}">
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
@@ -112,6 +120,8 @@
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 
     <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>
+{{--    <script src="{{ asset('custom_components/js/dropzone.js') }}"></script>--}}
+
 
     <script>
         $(function () {
@@ -123,6 +133,15 @@
             //back
             $('#back_button').click(function () {
                 location.href = '{{route('index')}}';
+            });
+
+            $('#example2').DataTable({
+                "paging": true,
+                "lengthChange": true,
+                "searching": true,
+                "ordering": true,
+                "info": true,
+                "autoWidth": true
             });
 
             // reposition modal
@@ -147,6 +166,8 @@
             $('#rdo_store, #rdo_user').on('ifChecked', function () {
                 hideFields();
             });
+
+
 
             //function to hide/show fields depending on the registration type
             function hideFields() {

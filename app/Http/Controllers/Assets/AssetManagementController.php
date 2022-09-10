@@ -6,6 +6,7 @@ use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
 use App\Models\AssetComponents;
 use App\Models\AssetFiles;
+use App\Models\AssetImagesTransfers;
 use App\Models\Assets;
 use App\Models\AssetTransfers;
 use App\Models\AssetType;
@@ -36,11 +37,14 @@ class AssetManagementController extends Controller
      */
     public function index(Request $request)
     {
+
+      //  $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
+        $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
+        $asset_type = $request['asset_type_id'];
+
         $assetType = AssetType::all();
 
-        //die($request['status_id']);
-		$status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
-        $asserts = Assets::getAssetsByStatus($status);
+        $asserts = Assets::getAssetsByStatus($status , $asset_type);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -54,7 +58,6 @@ class AssetManagementController extends Controller
 
         $data['assetType'] = $assetType;
         $data['asserts'] = $asserts;
-        $data['status'] = $status;
 
 
         AuditReportsController::store(
@@ -128,6 +131,22 @@ class AssetManagementController extends Controller
     public function storeTransfer(Request $request): JsonResponse
     {
         $component = AssetTransfers::create($request->all());
+
+        $fileImages = new  AssetImagesTransfers();
+        $fileImages->asset_id = $request['asset_id'];
+        $fileImages->save();
+
+        if($request->has('picture')){
+            foreach ($request->file('picture') as $image)
+                {
+                    $name = $image->getClientOriginalName();
+                    $image->move(public_path().'/files/' , $name);
+                    $data = $name;
+                    $fileImages->picture = $data;
+                    $fileImages->update();
+                }
+        }
+
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
     }

@@ -17,6 +17,8 @@
     "datatables": "^1.10.18",
     "datatables.net-bs4": "^1.10.22",
     "datatables.net-buttons": "^2.2.3",
+    "dropzone": "^6.0.0-beta.2",
+    "fine-uploader": "^5.16.2",
     "gulp": "^3.9.1",
     "jquery": "^3.6.1",
     "laravel-mix": "^6.0.49",

@@ -9,14 +9,14 @@
                 <div class="card my-2">
                 </div>
                 <div style="overflow-X:auto;">
-                    <table id=" " class="display table table-bordered data-table my-2">
+
+                    <table id="example2" class="table table-bordered table-hover">
                         <thead>
                         <tr>
                             <th>File Type</th>
                             <th>Images</th>
                             <th style="width: 5px; text-align: center;">File</th>
                             <th style="width: 5px; text-align: center;">Notes</th>
-                            <th style="width: 5px; text-align: center;">Download</th>
                             <th style="width: 5px; text-align: center;"> Created At</th>
                             <th style="width: 5px; text-align: center;"></th>
                         </tr>
@@ -44,18 +44,12 @@
                                     </td>
                                     <td>
 
-                                            <img  src="{{ asset('storage/assets/files/'.($assets->document ?? '') ) }} "
-                                                   height="35px" width="40px" alt=" ">
+                                        <img src="{{ asset('storage/assets/files/'.($assets->document ?? '') ) }} "
+                                             height="35px" width="40px" alt=" ">
                                     </td>
                                     <td>{{ $assets->document ??  ''}}</td>
                                     <td>{{ $assets->description ??  ''}}</td>
 
-                                    <td>
-                                        <a href="{{ asset('storage/assets/files/'.$assets->document) }}"
-                                           class="btn btn-default align -align-center">
-                                            <i class="fa fa-download" aria-hidden="true"></i>
-                                        </a>
-                                    </td>
                                     <td>{{ $assets->date_added ??  ''}}</td>
 
                                     <td>
@@ -72,7 +66,7 @@
                                             </button>
                                         </form>
                                     </td>
-                                    </tr>
+                            </tr>
                             @endforeach
                         @endif
                         </tbody>
@@ -82,7 +76,6 @@
                             <th>Images</th>
                             <th style="width: 5px; text-align: center;">File</th>
                             <th style="width: 5px; text-align: center;">Notes</th>
-                            <th style="width: 5px; text-align: center;">Download</th>
                             <th style="width: 5px; text-align: center;"> Created At</th>
                             <th style="width: 5px; text-align: center;"></th>
 

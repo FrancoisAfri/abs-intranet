@@ -91,7 +91,6 @@
 							<div class="col-sm-9">
 								<div class="input-group">
 									<select class="form-control select2" multiple="multiple" style="width:170px;" id="employee_id" name="employee_id[]">
-										
 									<option value="0">*** Select a Employee ***</option>
 									@foreach($users as $user)
 										<option value="{{ $user->id }}" {{ ($user->id === old('employee_id')) ? ' selected="selected" ' : '' }}>{{ $user->first_name.' '.$user->surname}}</option>

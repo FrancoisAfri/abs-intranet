@@ -26,9 +26,10 @@ class AssetTransfers extends Model
      * @return AssetTransfers[]|Collection|Builder[]|\Illuminate\Support\Collection
      */
     public static function getAssetsTransfares($id){
-        return AssetTransfers::where('asset_id', $id)->get();
+        return AssetTransfers::where('asset_id', $id)
+            ->OrderBy('id', 'desc')
+            ->get();
     }
-
 
     /**
      *

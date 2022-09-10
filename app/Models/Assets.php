@@ -14,20 +14,30 @@ class Assets extends Model
 {
     use Uuids;
 
+    /**
+     * @var string
+     */
     public $table = 'assets';
+
     /**
      * @var mixed
      */
     public $description;
 
+    /**
+     * @var string[]
+     */
     protected $hidden = [
         'id'
     ];
 
+    /**
+     * @var string[]
+     */
     protected $fillable = [
         'name', 'description', 'model_number', 'make_number', 'asset_type_id',
         'user_id', 'serial_number', 'asset_tag', 'type', 'license_type_id',
-        'picture', 'price', 'status', 'asset_status', 'serial_number',''
+        'picture', 'price', 'status', 'asset_status', 'serial_number', ''
     ];
 
 
@@ -35,8 +45,8 @@ class Assets extends Model
      * status constants
      */
     const STATUS_SELECT = [
-        'Un Allocated' => 'Un Allocated',
         'In Use' => 'In Use',
+        'Un Allocated' => 'Un Allocated',
         'Discarded' => 'Discarded',
         'Missing' => 'Missing',
         'In Store' => 'In Store',
@@ -84,7 +94,7 @@ class Assets extends Model
      */
     public function AssetTransfare(): Relation
     {
-        return $this->hasMany(AssetTransfers::class , 'asset_id');
+        return $this->hasMany(AssetTransfers::class, 'asset_id');
     }
 
 
@@ -98,17 +108,38 @@ class Assets extends Model
         return 'uuid';
     }
 
-    public static function getAssetsTypes(){
-       return Assets::with('AssetType')
-            ->where('status' , 1)
+    /**
+     * @return Assets[]|\Illuminate\Database\Eloquent\Builder[]|Collection|Builder[]|\Illuminate\Support\Collection
+     */
+    public static function getAssetsTypes()
+    {
+        return Assets::with('AssetType')
+            ->where('status', 1)
             ->get();
     }
 
-    public static function getAssetsByStatus($status= "In Use"){
-       return Assets::with('AssetType')
-            ->where(['asset_status' => $status,
-                'status' => 1])
-            ->get();
+    /**
+     * @param $status
+     * @return Assets[]|\Illuminate\Database\Eloquent\Builder[]|Collection|Builder[]|\Illuminate\Support\Collection
+     */
+    public static function getAssetsByStatus($status = 'In Use', $asset_type)
+    {
+
+        $query = Assets::with('AssetType')
+            ->where([
+                'asset_status' => $status,
+                'status' => 1
+            ]);
+       // return only from asset type table if  selection from asset type
+        if ($asset_type > 0) {
+            $query->where('asset_type_id', $asset_type);
+        }
+        //return everything from asset table if no selection from asset type
+        if ($asset_type < 0) {
+            $query->where('asset_status', $status);
+        }
+
+        return $query->get();
     }
 
     /**
