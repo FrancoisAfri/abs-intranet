@@ -134,11 +134,7 @@ class Assets extends Model
         if ($asset_type > 0) {
             $query->where('asset_type_id', $asset_type);
         }
-        //return everything from asset table if no selection from asset type
-        if ($asset_type < 0) {
-            $query->where('asset_status', $status);
-        }
-
+        
         return $query->get();
     }
 
