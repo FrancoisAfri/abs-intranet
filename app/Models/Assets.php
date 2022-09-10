@@ -19,10 +19,6 @@ class Assets extends Model
      */
     public $table = 'assets';
 
-    /**
-     * @var mixed
-     */
-    public $description;
 
     /**
      * @var string[]
@@ -124,17 +120,15 @@ class Assets extends Model
      */
     public static function getAssetsByStatus($status = 'In Use', $asset_type)
     {
-
         $query = Assets::with('AssetType')
             ->where([
-                'asset_status' => $status,
-                'status' => 1
+                'asset_status' => $status
             ]);
-       // return only from asset type table if  selection from asset type
+        // return only from asset type table if  selection from asset type
         if ($asset_type > 0) {
             $query->where('asset_type_id', $asset_type);
         }
-        
+
         return $query->get();
     }
 
@@ -144,8 +138,13 @@ class Assets extends Model
      */
     public static function findByUuid(string $uuid)
     {
-        return (new Assets)->where('uuid', $uuid)->first();
+        return Assets::with('AssetType')
+            ->where(
+                [
+                    'uuid' => $uuid,
+                ]
+            )
+            ->first();
     }
-
 
 }

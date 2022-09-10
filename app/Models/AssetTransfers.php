@@ -2,9 +2,12 @@
 
 namespace App\Models;
 
+use App\HRPerson;
 use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Query\Builder;
 
 class AssetTransfers extends Model
@@ -17,26 +20,60 @@ class AssetTransfers extends Model
     protected $fillable = [
         'name', 'description', 'user_id',
         'asset_id', 'transfer_to', 'store_id',
-        'picture_before', 'picture_after', 'document',
-        'transaction_date','transfer_date', 'asset_status'
+        'picture_before', 'picture_after', 'document','asset_image_transfer_id',
+        'transaction_date', 'transfer_date', 'asset_status'
     ];
+
+
+    /**
+     *
+     * @return Relation
+     */
+    public function AssetTransfers(): Relation
+    {
+        return $this->belongsTo(Assets::class, 'asset_id');
+    }
+
+    /**
+     *
+     * @return Relation
+     */
+    public function AssetImages(): Relation
+    {
+        return $this->belongsTo(AssetImagesTransfers::class, 'asset_image_transfer_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function HrPeople(): BelongsTo
+    {
+        return $this->belongsTo(HRPerson::class, 'user_id');
+    }
+
+    public function store(){
+        return $this->belongsTo(StoreRoom::class, 'store_id');
+    }
 
     /**
      * @param $id
      * @return AssetTransfers[]|Collection|Builder[]|\Illuminate\Support\Collection
      */
-    public static function getAssetsTransfares($id){
-        return AssetTransfers::where('asset_id', $id)
+    public static function getAssetsTransfares($id)
+    {
+
+
+        return AssetTransfers::with(
+            [
+                'AssetTransfers',
+                'AssetImages',
+                'HrPeople',
+                'store'
+            ]
+        )
+            ->where('asset_id', $id)
             ->OrderBy('id', 'desc')
             ->get();
     }
 
-    /**
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\Relation
-     */
-    public function Asset()
-    {
-        return $this->belongsTo(Assets::class, 'asset_id');
-    }
 }

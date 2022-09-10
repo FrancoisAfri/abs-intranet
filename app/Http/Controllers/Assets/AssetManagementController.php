@@ -2,14 +2,13 @@
 
 namespace App\Http\Controllers\Assets;
 
-use App\HRPerson;
-use App\Http\Controllers\AuditReportsController;
-use App\Models\AssetComponents;
+use App\Models\Assets;
 use App\Models\AssetFiles;
 use App\Models\AssetImagesTransfers;
-use App\Models\Assets;
 use App\Models\AssetTransfers;
 use App\Models\AssetType;
+use App\Models\AssetComponents;
+use App\HRPerson;
 use App\Models\LicensesType;
 use App\Models\StoreRoom;
 use Exception;
@@ -22,8 +21,10 @@ use App\Http\Controllers\Controller;
 use App\Traits\BreadCrumpTrait;
 use App\Traits\StoreImageTrait;
 use App\Traits\uploadFilesTrait;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use App\Http\Controllers\AuditReportsController;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\Datatables\Facades\Datatables;
 
@@ -38,13 +39,13 @@ class AssetManagementController extends Controller
     public function index(Request $request)
     {
 
-      //  $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
+        //  $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
         $asset_type = $request['asset_type_id'];
 
         $assetType = AssetType::all();
 
-        $asserts = Assets::getAssetsByStatus($status , $asset_type);
+        $asserts = Assets::getAssetsByStatus($status, $asset_type);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -90,8 +91,17 @@ class AssetManagementController extends Controller
      */
     public function store(Request $request)
     {
-        $asset = $this->addAsset($request);
-        //add image
+        
+        $asset = Assets::create($request->all());
+
+        $transfare = AssetTransfers::create(
+            [
+                $request->all(),
+                'asset_id' => $asset->id
+            ]
+        );
+
+
         $Data['picture'] = $this->verifyAndStoreImage('assets/images', 'picture', $asset, $request);
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
@@ -130,21 +140,31 @@ class AssetManagementController extends Controller
      */
     public function storeTransfer(Request $request): JsonResponse
     {
-        $component = AssetTransfers::create($request->all());
 
-        $fileImages = new  AssetImagesTransfers();
-        $fileImages->asset_id = $request['asset_id'];
-        $fileImages->save();
+        if ($request->hasFile('picture')) {
 
-        if($request->has('picture')){
-            foreach ($request->file('picture') as $image)
-                {
-                    $name = $image->getClientOriginalName();
-                    $image->move(public_path().'/files/' , $name);
-                    $data = $name;
-                    $fileImages->picture = $data;
-                    $fileImages->update();
+            foreach ($request->file('picture') as $image) {
+                $extension = $image->getClientOriginalExtension();
+                if (in_array($extension, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
+                    $fileName = md5(microtime()) . "hardware." . $extension;
+                    $image->storeAs('public' . '/' . 'files/images', $fileName);
+                    $AssetImagesTransfers = AssetImagesTransfers::create(
+                        [
+                            'asset_id' => $request['asset_id'],
+                            'status' => 1,
+                            'picture' => $fileName,
+                        ]
+                    );
+
+                    //AssetTransfers
+                    AssetTransfers::create(
+                        [
+                            $request->all(),
+                            'asset_image_transfer_id' => $AssetImagesTransfers->id
+                        ]
+                    );
                 }
+            }
         }
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
@@ -174,6 +194,7 @@ class AssetManagementController extends Controller
         $assetComponents = AssetComponents::getAssetComponents($asset->id);
 
         $Transfers = AssetTransfers::getAssetsTransfares($asset->id);
+        //dd($Transfers);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -212,19 +233,24 @@ class AssetManagementController extends Controller
      */
     public function edit($id)
     {
-        //
+
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param AssetType $type
+     * @return Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Assets $type): Response
     {
-        //
+        $type->update($request->all());
+
+        Alert::toast('Record Updated Successfully ', 'success');
+
+        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+        return response()->json();
     }
 
     /**
@@ -303,35 +329,5 @@ class AssetManagementController extends Controller
         return back();
     }
 
-    /***
-     * Private function to store Asset data
-     * @param Request $request
-     * @return Assets
-     */
-    private function addAsset(Request $request): Assets
-    {
-        $asset = new Assets();
-        $asset->name = $request['name'];
-        $asset->description = $request['description'];
-        $asset->serial_number = $request['serial_number'];
-        $asset->asset_tag = $request['asset_tag'];
-        $asset->model_number = $request['model_number'];
-        $asset->make_number = $request['make_number'];
-        $asset->asset_type_id = $request['asset_type_id'];
-        $asset->price = $request['price'];
-        $asset->asset_status = $request['asset_status'];
-        $asset->save();
-
-        $transfare = new AssetTransfers();
-        $transfare->name = $request['name'];
-        $transfare->description = $request['description'];
-        $transfare->asset_id = $asset->id;
-        $transfare->asset_status = $request['asset_status'];
-        $transfare->save();
-
-        return $asset;
-
-
-    }
 
 }

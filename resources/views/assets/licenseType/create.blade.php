@@ -148,6 +148,8 @@
                     $(function () {
                         $('.modal').on('show.bs.modal', reposition);
 
+
+
                         $('#add-licence').on('click', function() {
                             //console.log('strUrl');
                             let strUrl = '/assets/licence';
