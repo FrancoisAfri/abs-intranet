@@ -91,7 +91,6 @@
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">Image</label>
                         <div class="col-sm-8">
-
                             <input type="file" id="picture" name="picture" class="file file-loading"
                                    data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                         </div>

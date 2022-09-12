@@ -12,6 +12,45 @@
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
+                            <strong>Asset Name</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{$asset->name}}
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Asset Description</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{$asset->description}}
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Asset Type</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{$asset->AssetType->name}}
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
                             <strong>
                                 Status
                             </strong>
@@ -41,7 +80,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{$asset->asset_status}}
+                            {{$asset->model_number}}
                         </div>
                     </td>
                 </tr>
@@ -71,6 +110,7 @@
 
                     </td>
                 </tr>
+
                 </tbody>
             </table>
         </div>
@@ -91,17 +131,6 @@
                  class="card-img-top" alt="Wild Landscape"
                  style='height: 500%; width: 100%; object-fit: contain'/>
 
-            <div class="card-body">
-                <h2 class="card-title">Checked Out To</h2>
-                <h4 class="card-title">Nkosana</h4>
-                <p class="card-text">
-                    Additional Info
-                </p>
-                <p class="card-text">
-                    <small class="text-muted">Last updated 3 mins
-                        ago</small>
-                </p>
-            </div>
         </div>
         <!-- /.box-body -->
     </div>
