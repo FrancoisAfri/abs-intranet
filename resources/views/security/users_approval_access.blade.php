@@ -78,7 +78,7 @@
 
     <!-- Include modal -->
     @if(Session('changes_saved'))
-    @include('contacts.success_action', ['modal_title' => "Client's Approval!", 'modal_content' => session('changes_saved')])
+    @include('contacts.partials.success_action', ['modal_title' => "Client's Approval!", 'modal_content' => session('changes_saved')])
     @endif
 </div>
 @endsection
