@@ -12,12 +12,12 @@
                     <table id=" " class="display table table-bordered data-table my-2">
                         <thead>
                         <tr>
+                            <th></th>
                             <th>Name</th>
                             <th style="width: 5px; text-align: center;">Asset Image</th>
                             <th style="width: 5px; text-align: center;">Date Created</th>
                             <th style="width: 5px; text-align: center;">Transaction Date</th>
                             <th style="width: 5px; text-align: center;">Transfer Date</th>
-                            <th style="width: 5px; text-align: center;">Last User</th>
                             <th style="width: 5px; text-align: center;">Store</th>
                             <th>Status</th>
 
@@ -27,15 +27,23 @@
                         @if (count($Transfers) > 0)
                             <tr class="products-list product-list-in-box">
                                 @foreach ($Transfers as $key => $assets)
+                                        <td></td>
+                                        <td>
+                                            {{ (!empty( $assets->name)) ?  $assets->name : $assets->AssetTransfers->name }}
+                                        </td>
+                                        <td>
+                                            <img src="{{ asset('storage/files/images/'.($assets->document ?? '') ) }} "
+                                                 height="35px" width="40px" alt=" ">
+                                        </td>
+                                        <td>
+                                            {{ (!empty( $assets->created_at->toDateString())) ?  $assets->created_at->toDateString() : $assets->AssetTransfers->created_at->toDateString() }}
+                                        </td>
+                                        <td>
+                                            {{ (!empty( $assets->transaction_date)) ?  $assets->transaction_date : $assets->AssetTransfers->created_at->toDateString() }}
 
-                                        <td>{{  $assets->name ?? ''}}</td>
-
-                                        <td>images</td>
-                                        <td>{{ $assets->created_at ?? '' }}</td>
-                                        <td>{{ $assets->transaction_date ?? '' }}</td>
+                                        </td>
                                         <td>{{ $assets->transfer_date ?? '' }}</td>
-                                        <td>Last User</td>
-                                        <td>{{ $assets->store_id ?? '' }}</td>
+                                        <td>{{ $assets->store->name ?? '' }}</td>
                                         <td>
                                             @if($assets->asset_status == 'Sold')
                                                 <span class="label label-danger">{{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
@@ -58,13 +66,12 @@
                         </tbody>
                         <tfoot>
                         <tr>
+                            <th style="width: 5px; text-align: center;"></th>
                             <th>Name</th>
-
                             <th style="width: 5px; text-align: center;">Asset Image</th>
                             <th style="width: 5px; text-align: center;">Date Created</th>
                             <th style="width: 5px; text-align: center;">Transaction Date</th>
                             <th style="width: 5px; text-align: center;">Transfer Date</th>
-                            <th style="width: 5px; text-align: center;">Last User</th>
                             <th style="width: 5px; text-align: center;">Store</th>
                             <th>Status</th>
                         </tr>

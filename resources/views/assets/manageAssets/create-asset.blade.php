@@ -19,7 +19,7 @@
                 <div class="box-body">
                     <div class="box-header">
 
-                        <div class="col-sm-8">
+                        <div class="container-fluid col-sm-8">
                             <form class="form-horizontal" method="get" action="{{ route('index') }}">
                                 {{ csrf_field() }}
                                 <div class="row">
@@ -27,7 +27,6 @@
                                         <div class="input-group">
                                             <select class="form-control select2" style="width: 100%;"
                                                     id="status_id" name="status_id">
-
                                                 @foreach(\App\Models\Assets::STATUS_SELECT as $assets)
                                                     <option value="{{ $assets }}" >{{ $assets }}</option>
                                                 @endforeach
@@ -58,7 +57,7 @@
                         </button>
                     </div>
                     <div style="overflow-X:auto;">
-                        <table id=" " class="display table table-bordered data-table my-2">
+                        <table id=" " class="asset table table-bordered data-table my-2">
                             <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
@@ -73,7 +72,6 @@
                                 <th style="width: 5px; text-align: center;">price</th>
                                 <th>Status</th>
                                 <th style="width: 5px; text-align: center;"></th>
-
                             </tr>
                             </thead>
                             <tbody>
@@ -98,7 +96,6 @@
                                                             class="fa fa-pencil-square-o"></i> Edit
                                                 </button>
                                             </td>
-
                                             <td>
                                                 <a data-toggle="tooltip" title="Click to View Asset"
                                                    href="{{ route('assets.show',  $assets->uuid) }}">
@@ -121,8 +118,6 @@
                                             <td>{{ (!empty( $assets->make_number)) ?  $assets->make_number : ''}} </td>
                                             <td>{{ (!empty( $assets->AssetType->name)) ?  $assets->AssetType->name : ''}} </td>
                                             <td>{{ (!empty( $assets->price)) ?  $assets->price : ''}} </td>
-
-
                                             <td>
                                                 <span class="label label-info">{{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
                                             </td>
@@ -156,10 +151,8 @@
                                 <th style="width: 5px; text-align: center;">Make</th>
                                 <th style="width: 5px; text-align: center;">Asset Type</th>
                                 <th style="width: 5px; text-align: center;">price</th>
-                                {{--                                <th style="width: 5px; text-align: center;">Availability</th>--}}
                                 <th>Asset Status</th>
-                                <th style="width: 5px; text-align: center;">.</th>
-                                {{--                                <th style="width: 5px; text-align: center;"></th>--}}
+                                <th style="width: 5px; text-align: center;"></th>
                             </tr>
                             </tfoot>
                         </table>
@@ -196,7 +189,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>
+{{--    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>--}}
 
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
@@ -236,6 +229,20 @@
         });
 
         $(function () {
+
+            $('table.asset').DataTable({
+
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
 
             $('.modal').on('show.bs.modal', reposition);
 
@@ -292,6 +299,7 @@
                     asset_type_id: $('#'+modalID).find('#asset_type_id').val(),
                     price: $('#'+modalID).find('#price').val(),
                     asset_status: $('#'+modalID).find('#asset_status').val(),
+                    picture: $('#'+modalID).find('#picture').val(),
                     _token: $('#'+modalID).find('input[name=_token]').val()
                 };
 

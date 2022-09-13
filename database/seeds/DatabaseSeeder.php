@@ -294,27 +294,47 @@ class DatabaseSeeder extends Seeder
         /**
          * Assets Management Ribbons
          */
+
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'Add Assets';
-        $ribbon->description = 'Add Assets';
-        $ribbon->ribbon_path = 'assets/create';
+        $ribbon->ribbon_name = 'Manage Assets';
+        $ribbon->description = 'View Assets';
+        $ribbon->ribbon_path = 'assets';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'List Assets';
+        $ribbon->description = 'List all Assets';
+        $ribbon->ribbon_path = 'assets/list/assets';
         $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Manage Assets';
-        $ribbon->description = 'View Assets';
-        $ribbon->ribbon_path = 'assets';
-        $ribbon->access_level = 4;
+        $ribbon->ribbon_name = 'Assets Transfer Report';
+        $ribbon->description = 'Assets Transfer Report';
+        $ribbon->ribbon_path = 'assets/list/transfer';
+        $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 4;
+        $ribbon->sort_order =4;
+        $ribbon->ribbon_name = 'List all Component';
+        $ribbon->description = 'List all Component';
+        $ribbon->ribbon_path = 'assets/list/component';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Assets Set Up';
         $ribbon->ribbon_path = 'assets/settings';
@@ -322,20 +342,7 @@ class DatabaseSeeder extends Seeder
         $module->addRibbon($ribbon);
 
 
-
-//        $ribbon = new module_ribbons();
-//        $ribbon->active = 1;
-//        $ribbon->sort_order = 2;
-//        $ribbon->ribbon_name = 'Reports';
-//        $ribbon->description = 'Assets Reports';
-//        $ribbon->ribbon_path = 'assets/reports';
-//        $ribbon->access_level = 4;
-//        $module->addRibbon($ribbon);
-
         //TODO - individual ribbons with dedicated ribbons
-
-
-
 
         //Insert navigation menus (Modules)
         $module = new modules(); //Contacts

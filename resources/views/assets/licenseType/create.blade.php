@@ -136,9 +136,7 @@
                                         icon: "success",
                                     });
                                 }
-
                             });
-
                     });
 
                 </script>
@@ -147,8 +145,6 @@
 
                     $(function () {
                         $('.modal').on('show.bs.modal', reposition);
-
-
 
                         $('#add-licence').on('click', function() {
                             //console.log('strUrl');
@@ -197,8 +193,6 @@
                             let Method = 'PATCH';
                             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
                         });
-
-
 
                     });
                 </script>

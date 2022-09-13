@@ -61,8 +61,6 @@ class AssetTransfers extends Model
      */
     public static function getAssetsTransfares($id)
     {
-
-
         return AssetTransfers::with(
             [
                 'AssetTransfers',

@@ -67,13 +67,18 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
     Route::post('assets/transfer', 'AssetManagementController@storeTransfer')
         ->name('assets.transfer');
 
-    Route::patch('update/{type}', 'AssetManagementController@update')
-        ->name('assets.update');
-
     Route::get(
         'act/{type}', 'AssetManagementController@activate')
         ->name('assets.activate');
-    //end of AssetManagementController routes
+
+    Route::patch('update/{asset}', 'AssetManagementController@update')
+        ->name('assets.update');
+
+    Route::patch('update/component/{asset}', 'AssetManagementController@componentUpdate')
+        ->name('component.update');
+      //end of AssetManagementController routes
+
+
 
     Route::get(
         'type/act/{type}', 'AssetTypeController@activate')

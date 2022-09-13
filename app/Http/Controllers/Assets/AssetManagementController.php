@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Assets;
 
+use App\Http\Controllers\TaskLibraryController;
+use App\Http\Requests\AssetComponentRequest;
+use App\Http\Requests\AssetFilesRequest;
 use App\Models\Assets;
 use App\Models\AssetFiles;
 use App\Models\AssetImagesTransfers;
@@ -80,7 +83,7 @@ class AssetManagementController extends Controller
      */
     public function create()
     {
-        die('create');
+
     }
 
     /**
@@ -91,32 +94,39 @@ class AssetManagementController extends Controller
      */
     public function store(Request $request)
     {
-        
+
         $asset = Assets::create($request->all());
 
-        $transfare = AssetTransfers::create(
+        AssetTransfers::create(
             [
                 $request->all(),
                 'asset_id' => $asset->id
             ]
         );
 
+        $imageTransfare = new AssetImagesTransfers();
+        $imageTransfare->asset_id =  $asset->id;
+        $imageTransfare->status = 1;
+        $imageTransfare->save();
 
-        $Data['picture'] = $this->verifyAndStoreImage('assets/images', 'picture', $asset, $request);
+        $this->verifyAndStoreImage('assets/images', 'picture', $asset, $request);
+
+        $this->verifyAndStoreImage('files/images', 'picture', $imageTransfare, $request);
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
     }
 
     /**
-     * @param Request $request
-     * @return void
+     * @param AssetFilesRequest $request
+     * @return JsonResponse
      */
-    public function storeFile(Request $request)
+    public function storeFile(AssetFilesRequest $request): JsonResponse
     {
+
         $asset = AssetFiles::create($request->all());
 
-        $formInput['document'] = $this->uploadFile($request, 'document', 'assets/files', $asset);
+        $this->uploadFile($request, 'document', 'assets/files', $asset);
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
@@ -126,7 +136,7 @@ class AssetManagementController extends Controller
      * @param Request $request
      * @return void
      */
-    public function storeComponent(Request $request)
+    public function storeComponent(AssetComponentRequest $request)
     {
         $component = AssetComponents::create($request->all());
 
@@ -155,16 +165,25 @@ class AssetManagementController extends Controller
                             'picture' => $fileName,
                         ]
                     );
-
-                    //AssetTransfers
-                    AssetTransfers::create(
-                        [
-                            $request->all(),
-                            'asset_image_transfer_id' => $AssetImagesTransfers->id
-                        ]
-                    );
                 }
             }
+            //AssetTransfers
+
+            //check
+            ($request['transfer_to'] == 1) ? ( $status = 'In Use') : ($status = 'In Store');
+
+            AssetTransfers::create([
+                $request->all(),
+                'name' => $request['name'],
+                'asset_id' => $request['asset_id'],
+                'asset_status' => $status,
+                'user_id' => $request['user_id'],
+                'store_id' => $request['store_id'],
+                'transaction_date' => date('Y-m-d H:i:s'),
+                'transfer_date' => $request['transfer_date'],
+                'asset_image_transfer_id' => $AssetImagesTransfers->id
+            ]);
+
         }
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
@@ -194,7 +213,7 @@ class AssetManagementController extends Controller
         $assetComponents = AssetComponents::getAssetComponents($asset->id);
 
         $Transfers = AssetTransfers::getAssetsTransfares($asset->id);
-        //dd($Transfers);
+       // dd($Transfers);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -236,16 +255,30 @@ class AssetManagementController extends Controller
 
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param Request $request
-     * @param AssetType $type
-     * @return Response
-     */
-    public function update(Request $request, Assets $type): Response
+
+    public function update(Request $request, $asset)
     {
-        $type->update($request->all());
+        $Assets = Assets::find($asset);
+        $Assets->update($request->all());
+
+        //TODO FIX THE UPLOAD
+
+        $this->verifyAndStoreImage('assets/images', 'picture', $Assets, $request);
+
+        Alert::toast('Record Updated Successfully ', 'success');
+
+        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+        return response()->json();
+    }
+
+    /**
+     * @param Request $request
+     * @param AssetComponents $asset
+     * @return JsonResponse
+     */
+    public function componentUpdate(Request $request, AssetComponents $asset): JsonResponse
+    {
+        $asset->update($request->all());
 
         Alert::toast('Record Updated Successfully ', 'success');
 

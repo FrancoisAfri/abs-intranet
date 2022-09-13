@@ -8,14 +8,13 @@
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/iCheck/square/green.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/fine-uploader/fine-uploader-gallery.css') }}">
-{{--    <link rel="stylesheet" href="{{asset('custom_components/css/dropzone.css')}}"/>--}}
+    <script src="/custom_components/js/deleteAlert.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
-
-
     <!-- bootstrap file input -->
 @stop
 @section('content')
@@ -33,10 +32,16 @@
                                     View Asset - {{ $asset->name}}</h1>
                                 <div class="nav-tabs-custom">
                                     <ul class="nav nav-tabs">
-                                        <li class="active" data-toggle="tooltip" title="information"><a href="#information" data-toggle="tab">Info</a></li>
-                                        <li data-toggle="tooltip" title="Transfers"><a href="#transfares" data-toggle="tab">Transfers</a></li>
-                                        <li data-toggle="tooltip" title="Components"><a href="#Components" data-toggle="tab">Components</a></li>
-                                        <li data-toggle="tooltip" title="Files"><a href="#files" data-toggle="tab">Files</a></li>
+                                        <li class="active" data-toggle="tooltip" title="information"><a
+                                                    href="#information" data-toggle="tab">Info</a></li>
+                                        <li data-toggle="tooltip" title="Transfers"><a href="#transfares"
+                                                                                       data-toggle="tab">Transfers</a>
+                                        </li>
+                                        <li data-toggle="tooltip" title="Components"><a href="#Components"
+                                                                                        data-toggle="tab">Components</a>
+                                        </li>
+                                        <li data-toggle="tooltip" title="Files"><a href="#files"
+                                                                                   data-toggle="tab">Files</a></li>
                                         <li class=" pull-right">
                                             <button type="button" class="btn btn-default pull-right" id="back_button"><i
                                                         class="fa fa-arrow-left"></i> Back
@@ -86,7 +91,6 @@
         </div>
         <!-- /.col -->
         <!-- /.row -->
-
     </section>
 @stop
 @section('page_script')
@@ -106,9 +110,10 @@
     <!-- bootstrap datepicker -->
     <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.js') }}"></script>
 
-    <script src="{{ asset('plugins/fine-uploader/fine-uploader.js') }}">
+    <script src="{{ asset('plugins/fine-uploader/fine-uploader.js') }}"></script>
+    <script src="/custom_components/js/deleteAlert.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+
 
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
@@ -118,10 +123,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
     <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>
-{{--    <script src="{{ asset('custom_components/js/dropzone.js') }}"></script>--}}
-
 
     <script>
         $(function () {
@@ -135,14 +139,16 @@
                 location.href = '{{route('index')}}';
             });
 
-            $('#example2').DataTable({
-                "paging": true,
-                "lengthChange": true,
-                "searching": true,
-                "ordering": true,
-                "info": true,
-                "autoWidth": true
+            $('table.files').DataTable({
+
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
             });
+
 
             // reposition modal
             $('.modal').on('show.bs.modal', reposition);
@@ -167,7 +173,40 @@
                 hideFields();
             });
 
+            $('.delete_confirm').click(function (event) {
 
+                let form = $(this).closest("form");
+                let name = $(this).data("name");
+
+                event.preventDefault();
+
+                swal({
+                    title: `Are you sure you want to delete this record?`,
+                    text: "If you delete this, it will be gone forever.",
+                    icon: "warning",
+                    buttons: true,
+                    dangerMode: true,
+                })
+                    .then((willDelete) => {
+                        if (willDelete) {
+                            form.submit();
+                            swal("Poof! Your Record has been deleted!", {
+                                icon: "success",
+                            });
+                        }
+
+                    });
+
+            });
+
+            $(document).ready(function () {
+                $('input[type="radio"]').click(function () {
+                    var inputValue = $(this).attr("value");
+                    var targetBox = $("." + inputValue);
+                    $(".box").not(targetBox).hide();
+                    $(targetBox).show();
+                });
+            });
 
             //function to hide/show fields depending on the registration type
             function hideFields() {
@@ -175,57 +214,32 @@
                 let store = $('.store-field');
                 let user = $('.user-field');
 
+
                 let choicetype = $("input[name='transfer_to']:checked").val();
+
 
                 if (choicetype == 1) { //show user
                     store.hide();
-                    store.val('').prop("removed", true).focus(); //clear textboxes
+
                     user.show();
-                } else if (choicetype == 2) { // show store
+                } else if (choicetype == 2) { //
                     user.hide();
-                    user.val('').prop("removed", true).focus(); //clear textboxes
                     store.show();
                 }
 
             }
 
 
-        //TODO WILL CREATE A SIGLE GLOBAL FILE
-        $('.delete_confirm').click(function (event) {
+            //TODO WILL CREATE A SIGLE GLOBAL FILE
 
-            var form = $(this).closest("form");
 
-            var name = $(this).data("name");
-
-            event.preventDefault();
-
-            swal({
-                title: `Are you sure you want to delete this record?`,
-                text: "If you delete this, it will be gone forever.",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        form.submit();
-                        swal("Poof! Your Record has been deleted!", {
-                            icon: "success",
-                        });
-                    }
-
-                });
-
-        });
-
-        <!-- add asset file -->
+            <!-- add asset file -->
 
             $('#upload-asset').on('click', function () {
                 let strUrl = '{{route('assets.file')}}';
                 let modalID = 'upload-file-modal';
                 let formName = 'upload-asset-form';
 
-                console.log(formName)
                 let submitBtnID = 'upload-asset';
                 let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
                 let successMsgTitle = 'Uploaded Successfully!';
@@ -246,6 +260,41 @@
                 let successMsgTitle = 'Added Successfully!';
                 let successMsg = 'The component  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+
+            <!-- edit component file -->
+            let componentId;
+            $('#edit-component-modal').on('show.bs.modal', function (e) {
+                let btnEdit = $(e.relatedTarget);
+                componentId = btnEdit.data('id');
+                let name = btnEdit.data('name');
+                let description = btnEdit.data('description');
+                let size = btnEdit.data('size');
+                let modal = $(this);
+                modal.find('#name').val(name);
+                modal.find('#description').val(description);
+                modal.find('#size').val(size);
+            });
+
+            // update modal
+            $('#edit-component').on('click', function () {
+
+                let strUrl = '/assets/update/component/' + componentId;
+                let modalID = 'edit-component-modal';
+                let objData = {
+                    name: $('#' + modalID).find('#name').val(),
+                    description: $('#' + modalID).find('#description').val(),
+                    size: $('#' + modalID).find('#size').val(),
+                    _token: $('#' + modalID).find('input[name=_token]').val()
+                };
+
+                let submitBtnID = 'edit-component';
+                let redirectUrl = '{{route('licence.index')}}';
+                let successMsgTitle = 'Changes Saved!';
+                let successMsg = 'The Record has been updated successfully.';
+                let Method = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
             <!-- New Transfare-->

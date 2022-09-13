@@ -10,7 +10,7 @@
                 </div>
                 <div style="overflow-X:auto;">
 
-                    <table id="example2" class="table table-bordered table-hover">
+                    <table id=" " class="files table table-bordered table-hover">
                         <thead>
                         <tr>
                             <th>File Type</th>
@@ -49,9 +49,7 @@
                                     </td>
                                     <td>{{ $assets->document ??  ''}}</td>
                                     <td>{{ $assets->description ??  ''}}</td>
-
                                     <td>{{ $assets->date_added ??  ''}}</td>
-
                                     <td>
                                         <form action="{{ route('file.destroy', $assets->id) }}"
                                               method="POST"
@@ -78,7 +76,7 @@
                             <th style="width: 5px; text-align: center;">Notes</th>
                             <th style="width: 5px; text-align: center;"> Created At</th>
                             <th style="width: 5px; text-align: center;"></th>
-
+                        </tr>
                         </tfoot>
                     </table>
                     <!-- /.box-body -->

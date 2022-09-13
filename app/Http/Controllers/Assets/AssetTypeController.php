@@ -118,13 +118,13 @@ class AssetTypeController extends Controller
      * @param AssetType $type
      * @return Response
      */
-    public function update(Request $request, AssetType $type)
+    public function update(AssetsRequest $request, AssetType $type)
     {
         $type->update($request->all());
 
         Alert::toast('Record Updated Successfully ', 'success');
 
-        AuditReportsController::store('Fleet Management', 'Fleet Management Page Accessed', "Accessed By User", 0);;
+        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
     }
 

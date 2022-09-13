@@ -18,15 +18,7 @@
 
                     <input type="hidden" value="{{ $asset->name }}" name="name" id="name">
 
-                    <input type="hidden" value="Un Allocated" name="asset_status" id="asset_status">
-
-                    <div class="form-group new-field {{ $errors->has('transaction_date') ? ' has-error' : '' }}">
-                        <label for="Transaction Date" class="col-sm-2 control-label"> Transaction Date</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control datepicker" name="transaction_date"
-                                   placeholder="  dd/mm/yyyy" value="{{ old('transaction_date') }}">
-                        </div>
-                    </div>
+{{--                    <input type="hidden" value="Un Allocated" name="asset_status" id="asset_status">--}}
 
                     <div class="form-group new-field {{ $errors->has('transfer_date') ? ' has-error' : '' }}">
                         <label for="TransferDate" class="col-sm-2 control-label">Date to Transfer</label>
@@ -47,24 +39,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group store-field">
-                        <label for="financial_institution" class="col-sm-2 control-label">Store</label>
-                        <div class="col-sm-8">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-building-o"></i>
-                                </div>
-                                <select class="form-control select2" style="width: 100%;" id="store_id"
-                                        name="store_id">
-                                    <option value="0">*** Select Store ***</option>
-                                    @foreach($stores as $store)
-                                        <option value="{{ $store->id }}">{{ $store->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-
                     <div class="form-group user-field">
                         <label for="company" class="col-sm-2 control-label">User</label>
                         <div class="col-sm-8">
@@ -75,12 +49,36 @@
                                 <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id">
                                     <option value="0">*** Select User ***</option>
                                     @foreach($users as $user)
-                                        <option value="{{ $user->id }}">{{ $user->first_name . ' '. $user->surname }}</option>
+                                        <option value="{{ $user->id }}" {{ ($user->first_name . ' '. $user->surname) ? 'selected' : '' }}>
+                                            {{ $user->first_name . ' '. $user->surname }}
+                                        </option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group store-field">
+                        <label for="financial_institution" class="col-sm-2 control-label">Store</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-building-o"></i>
+                                </div>
+                                <select class="form-control select2 no-display"  style="width: 100%;" id="store_id"
+                                        name="store_id">
+                                    <option value="0">*** Select Store ***</option>
+                                    @foreach($stores as $store)
+                                        <option value="{{ $store->id }}" {{ ($store->name) ? 'selected' : '' }}>
+                                            {{ $store->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+
 
                     <div class="form-group">
                         <label for="image" class="col-sm-2 control-label">Image</label>
