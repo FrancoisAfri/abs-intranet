@@ -41,6 +41,7 @@
                                             <select class="form-control select2 " style="width: 100%;"
                                                     id="asset_type_id" name="asset_type_id" data-select2-id="1"
                                                     tabindex="-1" aria-hidden="true">
+												<option value="all">** Select Asset Type **</option>
                                                 @foreach( $assetTypes as $types)
                                                     <option value="{{ $types->id }}">{{ $types->name }}</option>
                                                 @endforeach

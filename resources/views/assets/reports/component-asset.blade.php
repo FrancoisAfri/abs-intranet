@@ -20,22 +20,16 @@
                     <div style="overflow-X:auto;">
                         <div class="form-group">
                             <label for="inputlg">Large input</label>
-
                             <div id="search2"></div>
                         </div>
-
                         <div class="box-body">
                             <div class="row">
                                 <div class="col-xs-3" id="search1">
-
                                 </div>
                                 <div class="col-xs-3" id="search2">
-
                                 </div>
-
                             </div>
                         </div>
-
                         <table class="table table-bordered user_datatable">
                             <thead>
                             <tr>
@@ -77,14 +71,12 @@
                             </tbody>
                             <tfoot>
                             <tr>
-
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th style="width: 5px; text-align: center;">Device Image</th>
                                 <th style="width: 5px; text-align: center;">size</th>
                                 <th style="width: 5px; text-align: center;">Asset Name</th>
                                 <th>Status</th>
-
                             </tr>
                             </tfoot>
                         </table>

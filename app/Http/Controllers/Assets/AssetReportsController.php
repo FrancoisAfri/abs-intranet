@@ -20,17 +20,9 @@ class AssetReportsController extends Controller
      */
     public function assetsList(Request $request)
     {
-
-        // dd($request);
         $status = $request['status_id'];
-
         $assets = Assets::getAllAssetsByStatus($status);
-
-
-
         $assetTypes = AssetType::all();
-
-
         $data = $this->breadCrump(
             "Asset Management",
             "Setup", "fa fa-lock",
@@ -41,10 +33,8 @@ class AssetReportsController extends Controller
             "Asset Management Reports"
         );
 
-
         $data['assetTypes'] = $assetTypes;
         $data['assets'] = $assets;
-
 
         return view('assets.reports.list-asset')->with($data);
     }
@@ -55,14 +45,11 @@ class AssetReportsController extends Controller
      */
     public function componentList(Request $request)
     {
-
         Assets::with('AssetType')->get();
-
         $componentList = AssetComponents::with(
             'AssetsList')
             ->orderBy('id', 'asc')
             ->get();
-        //dd($componentList);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -74,13 +61,10 @@ class AssetReportsController extends Controller
             "Asset Management Reports"
         );
 
-
         $data['componentList'] = $componentList;
-
 
         return view('assets.reports.component-asset')->with($data);
     }
-
 
     /**
      * @param Request $request
@@ -95,8 +79,6 @@ class AssetReportsController extends Controller
             'store')
             ->get();
 
-        // dd($assetTransfer);
-
         $data = $this->breadCrump(
             "Asset Management",
             "Setup", "fa fa-lock",
@@ -107,13 +89,10 @@ class AssetReportsController extends Controller
             "Asset Management Reports"
         );
 
-
         $data['assetTransfer'] = $assetTransfer;
-
 
         return view('assets.reports.transfer-asset')->with($data);
     }
-
 
     public function Assetlocation(Request $request)
     {
@@ -124,8 +103,6 @@ class AssetReportsController extends Controller
             'store')
             ->get();
 
-        // dd($assetTransfer);
-
         $data = $this->breadCrump(
             "Asset Management",
             "Setup", "fa fa-lock",
@@ -136,12 +113,8 @@ class AssetReportsController extends Controller
             "Asset Management Reports"
         );
 
-
         $data['assetTransfer'] = $assetTransfer;
-
 
         return view('assets.reports.location-asset')->with($data);
     }
-
-
 }

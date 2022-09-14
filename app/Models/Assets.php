@@ -143,9 +143,9 @@ class Assets extends Model
         $query = Assets::with('AssetType')
             ->orderBy('id', 'asc');
 
-        if ($status != 'all') {
+        /*if ($status != 'all') {
             $query->where('asset_status', $status);
-        }
+        }*/
         return $query->get();
     }
 

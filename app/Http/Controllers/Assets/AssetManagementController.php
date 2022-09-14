@@ -41,15 +41,9 @@ class AssetManagementController extends Controller
      */
     public function index(Request $request)
     {
-
-       // dd($request);
-
-        //  $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
         $asset_type = $request['asset_type_id'];
-
         $assetType = AssetType::all();
-
         $asserts = Assets::getAssetsByStatus($status, $asset_type);
 
         $data = $this->breadCrump(
@@ -65,7 +59,6 @@ class AssetManagementController extends Controller
         $data['assetType'] = $assetType;
         $data['asserts'] = $asserts;
 
-
         AuditReportsController::store(
             'Asset Management',
             'Asset Management Page Accessed',
@@ -74,10 +67,7 @@ class AssetManagementController extends Controller
         );
 
         return view('assets.manageAssets.create-asset')->with($data);
-
     }
-
-
     /**
      * Show the form for creating a new resource.
      *
@@ -96,7 +86,6 @@ class AssetManagementController extends Controller
      */
     public function store(Request $request)
     {
-
         $asset = Assets::create($request->all());
 
         AssetTransfers::create(
@@ -351,7 +340,6 @@ class AssetManagementController extends Controller
      */
     public function setUp()
     {
-
         $data = $this->breadCrump(
             "Asset Management",
             "Setup", "fa fa-lock",
@@ -364,7 +352,6 @@ class AssetManagementController extends Controller
 
         AuditReportsController::store('Asset Management', 'Asset ManagementSettings Page Accessed', "view Asset Management Settings", 0);
         return view('assets.setup')->with($data);
-
     }
 
     /**
@@ -382,6 +369,4 @@ class AssetManagementController extends Controller
         AuditReportsController::store('Asset Management', 'Asset t  Type Status Changed', "Asset News Type  Changed", 0);
         return back();
     }
-
-
 }
