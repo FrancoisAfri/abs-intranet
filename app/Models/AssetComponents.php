@@ -18,7 +18,8 @@ class AssetComponents extends Model
     ];
 
 
-    public function AssetsList(){
+    public function AssetsList()
+    {
         return $this->belongsTo(Assets::class, 'asset_id')->orderBy('id');
     }
 
@@ -28,5 +29,17 @@ class AssetComponents extends Model
         return AssetComponents::where(
             'asset_id', $id
         )->get();
+    }
+
+    public static function getAssetComponentByStatus($type)
+    {
+        $query = AssetComponents::with(
+            'AssetsList')
+            ->orderBy('id', 'asc');
+
+        if ($type !== 'all') {
+            $query->where('asset_id', $type);
+        }
+        return $query->get();
     }
 }

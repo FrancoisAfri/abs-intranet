@@ -14,7 +14,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-barcode pull-right"></i>
-                    <h3 class="box-title"> Assets </h3>
+                    <h3 class="box-title">LIst Assets </h3>
                 </div>
                 <div class="box-body">
                     <div style="overflow-X:auto;">
@@ -23,32 +23,33 @@
                                 {{ csrf_field() }}
                                 <div class="col-md-5">
                                     <div class="form-group">
-                                        <div class="col-sm-4">
-                                            <label>Minimal</label>
+                                        <div class="col-sm-5">
+                                            <label>Asset Status</label>
                                             <select class="form-control select2 " style="width: 100%;"
                                                     id="status_id" name="status_id" data-select2-id="1" tabindex="-1"
                                                     aria-hidden="true">
                                                 <option value="all">** Select a Status **</option>
-                                                @foreach (\App\Models\Assets::STATUS_SELECT as $values)
-                                                    {
-                                                    <option value="{{ $values }}">{{ $values }}</option>
+                                                @foreach (\App\Models\Assets::STATUS_SELECT as $statusType)
+                                                    <option value="{{ $statusType }}">{{ $statusType }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
 
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-6">
                                             <label>Assset Types</label>
                                             <select class="form-control select2 " style="width: 100%;"
                                                     id="asset_type_id" name="asset_type_id" data-select2-id="1"
                                                     tabindex="-1" aria-hidden="true">
-												<option value="all">** Select Asset Type **</option>
+                                                <option value="0">** Select Asset Type **</option>
                                                 @foreach( $assetTypes as $types)
                                                     <option value="{{ $types->id }}">{{ $types->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
+
                                     </div>
                                     <div class="box-footer">
+                                        <br>
                                         <button type="submit" class="btn btn-primary pull-left">Submit</button>
                                         <br>
                                     </div>
@@ -76,7 +77,7 @@
                             <tbody>
                             @if (count(array($assets)) > 0)
                                 <ul class="products-list product-list-in-box">
-                                    @foreach ($assets as $key => $asset)
+                                    @foreach ($assets as  $asset)
                                         <tr id="categories-list">
 
                                             <td>
@@ -113,7 +114,7 @@
                                                     <span class="label label-info"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
                                                 @endif
                                             </td>
-                                            
+
                                         </tr>
                                 @endforeach
                             @endif

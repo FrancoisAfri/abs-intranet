@@ -14,33 +14,69 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-barcode pull-right"></i>
-                    <h3 class="box-title"> Assets </h3>
+                    <h3 class="box-title"> Assets Transfer </h3>
                 </div>
                 <div class="box-body">
                     <div style="overflow-X:auto;">
                         <div class="form-group">
-                            <label for="inputlg">Large input</label>
+                            <form class="form-horizontal" method="get" action="{{ route('transfer.reports') }}">
+                                {{ csrf_field() }}
+                                <div class="col-md-10">
+                                    <div class="form-group">
 
-                            <div id="search2"></div>
-                        </div>
+                                        <div class="col-sm-4">
+                                            <label>Assset Type</label>
+                                            <select class="form-control select2 " style="width: 100%;"
+                                                    id="asset_id" name="asset_id" data-select2-id="1"
+                                                    tabindex="-1" aria-hidden="true">
+                                                <option value="0">** Select Asset Type **</option>
+                                                @foreach( $assets as $types)
+                                                    <option value="{{ $types->id }}">{{ $types->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
 
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-xs-3" id="search1">
+                                        <div class="col-sm-4">
+                                            <label> User</label>
+                                            <select class="form-control select2 " style="width: 100%;"
+                                                    id="user_id" name="user_id" data-select2-id="1" tabindex="-1"
+                                                    aria-hidden="true">
+                                                <option value="0">** Select User **</option>
+                                                @foreach( $users as $user)
+                                                    <option value="{{ $user->id }}">{{ $user->first_name . ' ' .   $user->surname}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
 
+                                        <div class="col-sm-4">
+                                            <label>Assset Location</label>
+                                            <select class="form-control select2 " style="width: 100%;"
+                                                    id="store_id" name="store_id" data-select2-id="1"
+                                                    tabindex="-1" aria-hidden="true">
+                                                <option value="0">** Select Location **</option>
+                                                @foreach( $stores as $store)
+                                                    <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="box-footer">
+                                        <br>
+                                        <button type="submit" class="btn btn-primary pull-left">Submit</button>
+                                        <br>
+                                    </div>
                                 </div>
-                                <div class="col-xs-3" id="search2">
 
-                                </div>
-
-                            </div>
+                            </form>
                         </div>
+                        <br>
 
                         <table class="table table-bordered user_datatable">
                             <thead>
                             <tr>
-                                <th style="width: 5px; text-align: center;">Name</th>
-                                <th style="width: 5px; text-align: center;">Description</th>
+                                <th style="width: 5px; text-align: center;">Asset Name</th>
+
                                 <th style="width: 5px; text-align: center;">Asset Image</th>
                                 <th style="width: 5px; text-align: center;">Transaction Date</th>
                                 <th style="width: 5px; text-align: center;">Transfer Date</th>
@@ -57,7 +93,7 @@
                                         <tr id="categories-list">
 
                                             <td>{{ (!empty( $assets->name)) ?  $assets->name : ''}}</td>
-                                            <td>{{ (!empty( $assets->description)) ?  $assets->description : ''}}</td>
+
                                             <td>
                                                 <div class="popup-thumbnail img-responsive">
                                                     <img src="{{ asset('storage/assets/images/'.$assets->picture) }} "
@@ -68,7 +104,21 @@
                                             <td>{{ (!empty( $assets->transfer_date)) ?  $assets->transfer_date : $assets->created_at->toDateString() }}</td>
                                             <td> {{ (!empty( $assets->HrPeople->first_name )) ?  $assets->HrPeople->first_name. ' ' . $assets->HrPeople->surname : ' ' }}</td>
                                             <td> {{ (!empty( $assets->store->name )) ?  $assets->store->name : ' ' }}</td>
-                                            <td> {{ (!empty( $assets->asset_status )) ?  $assets->asset_status : ' ' }}</td>
+                                            <td>
+                                                @if($assets->asset_status == 'Sold')
+                                                    <span class="label label-warning">{{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
+                                                @elseif($assets->asset_status == 'Missing')
+                                                    <span class="label label-danger"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
+                                                @elseif($assets->asset_status == 'In Use')
+                                                    <span class="label label-success"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
+                                                @elseif($assets->asset_status == 'Discarded')
+                                                    <span class="label label-primary"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
+                                                @elseif($assets->asset_status == 'In Store')
+                                                    <span class="label label-default"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
+                                                @elseif($assets->asset_status == 'Un Allocated')
+                                                    <span class="label label-info"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
+                                                @endif
+                                            </td>
                                         </tr>
                                 @endforeach
                             @endif
@@ -77,7 +127,7 @@
                             <tr>
 
                                 <th style="width: 5px; text-align: center;">Name</th>
-                                <th style="width: 5px; text-align: center;">Description</th>
+
                                 <th style="width: 5px; text-align: center;">Asset Image</th>
                                 <th style="width: 5px; text-align: center;">Transaction Date</th>
                                 <th style="width: 5px; text-align: center;">Transfer Date</th>
@@ -131,7 +181,16 @@
             }
 
             $('.user_datatable').DataTable({
-
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
             });
 
         });

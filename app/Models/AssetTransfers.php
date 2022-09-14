@@ -75,4 +75,51 @@ class AssetTransfers extends Model
             ->get();
     }
 
+
+
+    public static function getAssetLocation($person , $assetType , $location){
+        $query =  $assetTransfer = AssetTransfers::with(
+            'AssetTransfers',
+            'AssetImages',
+            'HrPeople',
+            'store')
+           ->orderBy('id', 'asc');
+        if ($person !== 'all'){
+            $query->where('user_id', $person);
+        }
+
+        if ($assetType !== 'All'){
+            $query->where('asset_id', $assetType);
+        }
+
+        if ($location !== 's_all'){
+            $query->where('store_id', $location);
+        }
+
+        return $query->get();
+    }
+
+
+    public static function getAssetTransfer($person , $assetType , $location){
+        $query =  $assetTransfer = AssetTransfers::with(
+            'AssetTransfers',
+            'AssetImages',
+            'HrPeople',
+            'store')
+            ->orderBy('id', 'asc');
+        if ($person !== 'all'){
+            $query->where('user_id', $person);
+        }
+
+        if ($assetType !== 'All'){
+            $query->where('asset_id', $assetType);
+        }
+
+        if ($location !== 's_all'){
+            $query->where('store_id', $location);
+        }
+
+        return $query->get();
+    }
+
 }
