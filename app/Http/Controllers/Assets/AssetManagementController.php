@@ -105,7 +105,7 @@ class AssetManagementController extends Controller
         );
 
         $imageTransfare = new AssetImagesTransfers();
-        $imageTransfare->asset_id =  $asset->id;
+        $imageTransfare->asset_id = $asset->id;
         $imageTransfare->status = 1;
         $imageTransfare->save();
 
@@ -170,7 +170,7 @@ class AssetManagementController extends Controller
             //AssetTransfers
 
             //check
-            ($request['transfer_to'] == 1) ? ( $status = 'In Use') : ($status = 'In Store');
+            ($request['transfer_to'] == 1) ? ($status = 'In Use') : ($status = 'In Store');
 
             AssetTransfers::create([
                 $request->all(),
@@ -204,6 +204,8 @@ class AssetManagementController extends Controller
 
         $asset = Assets::findByUuid($id);
 
+        $data['view_by_admin'] = 1;
+
         $licenceType = LicensesType::all();
         // will have to clean this
         $assetTransfare = Assets::getAssetsTypes();
@@ -213,7 +215,7 @@ class AssetManagementController extends Controller
         $assetComponents = AssetComponents::getAssetComponents($asset->id);
 
         $Transfers = AssetTransfers::getAssetsTransfares($asset->id);
-       // dd($Transfers);
+        // dd($Transfers);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -233,6 +235,7 @@ class AssetManagementController extends Controller
         $data['stores'] = $stores;
         $data['users'] = $users;
         $data['Transfers'] = $Transfers;
+        $data['view_by_admin'] = 1;
 
         AuditReportsController::store(
             'Asset Management',
@@ -284,6 +287,22 @@ class AssetManagementController extends Controller
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
+    }
+
+    /**
+     * @param Request $request
+     * @param $asset
+     * @return JsonResponse
+     */
+    public function AssetStatusUpdate(Request $request, $asset)
+    {
+        $Assets = Assets::find($asset);
+        $Assets->update($request->all());
+
+        Alert::toast('Record Updated Successfully ', 'success');
+        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+        return response()->json();
+
     }
 
     /**

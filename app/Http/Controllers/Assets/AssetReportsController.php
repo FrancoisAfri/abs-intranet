@@ -2,84 +2,137 @@
 
 namespace App\Http\Controllers\Assets;
 
+use App\Http\Controllers\AuditReportsController;
+use App\Models\AssetComponents;
+use App\Models\Assets;
+use App\Models\AssetTransfers;
+use App\Models\AssetType;
+use App\Traits\BreadCrumpTrait;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AssetReportsController extends Controller
 {
+    use BreadCrumpTrait;
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function assetsList(Request $request)
     {
-        //
+        $assets = Assets::with('AssetType')->get();
+        // dd($assets);
+
+        $data = $this->breadCrump(
+            "Asset Management",
+            "Setup", "fa fa-lock",
+            "Asset Management Reports",
+            "Asset Management",
+            "assets/settings",
+            "Asset Management",
+            "Asset Management Reports"
+        );
+
+
+        $data['assets'] = $assets;
+
+
+        return view('assets.reports.list-asset')->with($data);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
-    public function create()
+    public function componentList(Request $request)
     {
-        //
+
+        Assets::with('AssetType')->get();
+
+        $componentList = AssetComponents::with(
+            'AssetsList')
+            ->orderBy('id', 'asc')
+            ->get();
+        //dd($componentList);
+
+        $data = $this->breadCrump(
+            "Asset Management",
+            "Setup", "fa fa-lock",
+            "Asset Management Reports",
+            "Asset Management",
+            "assets/settings",
+            "Asset Management",
+            "Asset Management Reports"
+        );
+
+
+        $data['componentList'] = $componentList;
+
+
+        return view('assets.reports.component-asset')->with($data);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return void
      */
-    public function show($id)
+    public function transferList(Request $request)
     {
-        //
+        $assetTransfer = AssetTransfers::with(
+            'AssetTransfers',
+            'AssetImages',
+            'HrPeople',
+            'store')
+            ->get();
+
+       // dd($assetTransfer);
+
+        $data = $this->breadCrump(
+            "Asset Management",
+            "Setup", "fa fa-lock",
+            "Asset Management Reports",
+            "Asset Management",
+            "assets/settings",
+            "Asset Management",
+            "Asset Management Reports"
+        );
+
+
+        $data['assetTransfer'] = $assetTransfer;
+
+
+        return view('assets.reports.transfer-asset')->with($data);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
+
+    public function Assetlocation(Request $request)
     {
-        //
+        $assetTransfer = AssetTransfers::with(
+            'AssetTransfers',
+            'AssetImages',
+            'HrPeople',
+            'store')
+            ->get();
+
+       // dd($assetTransfer);
+
+        $data = $this->breadCrump(
+            "Asset Management",
+            "Setup", "fa fa-lock",
+            "Asset Management Reports",
+            "Asset Management",
+            "assets/settings",
+            "Asset Management",
+            "Asset Management Reports"
+        );
+
+
+        $data['assetTransfer'] = $assetTransfer;
+
+
+        return view('assets.reports.location-asset')->with($data);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

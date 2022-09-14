@@ -18,6 +18,11 @@ class AssetComponents extends Model
     ];
 
 
+    public function AssetsList(){
+        return $this->belongsTo(Assets::class, 'asset_id')->orderBy('id');
+    }
+
+
     public static function getAssetComponents($id)
     {
         return AssetComponents::where(

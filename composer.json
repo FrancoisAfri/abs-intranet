@@ -16,7 +16,6 @@
         "zanysoft/laravel-zip": "^1.0",
         "intervention/image": "^2.4",
         "realrashid/sweet-alert": "^v3.1.6",
-        "yajra/laravel-datatables-oracle": "^7.0",
         "spatie/enum": "^2.3",
         "ramsey/uuid-doctrine": "^1.8",
       "ext-json": "*"

@@ -262,6 +262,36 @@
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
+            <!-- change status -->
+            let statusId;
+            $('#change-asset_status-modal').on('show.bs.modal', function (e) {
+                let btnEdit = $(e.relatedTarget);
+                statusId = btnEdit.data('id');
+                let asset_status = btnEdit.data('asset_status');
+                let modal = $(this);
+                modal.find('#asset_status').val(asset_status);
+            });
+
+            $('#change-status').on('click', function () {
+
+                let strUrl = '/assets/update/changeStatus/' + statusId;
+                let modalID = 'change-asset_status-modal';
+                let objData = {
+                    asset_status: $('#' + modalID).find('#asset_status').val(),
+                    _token: $('#' + modalID).find('input[name=_token]').val()
+                };
+
+                let submitBtnID = 'change-status';
+                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
+                let successMsgTitle = 'Changes Saved!';
+                let successMsg = 'The Record has been updated successfully.';
+                let Method = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+            });
+
+
+
+
 
             <!-- edit component file -->
             let componentId;
@@ -290,7 +320,7 @@
                 };
 
                 let submitBtnID = 'edit-component';
-                let redirectUrl = '{{route('licence.index')}}';
+                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
                 let successMsgTitle = 'Changes Saved!';
                 let successMsg = 'The Record has been updated successfully.';
                 let Method = 'PATCH';

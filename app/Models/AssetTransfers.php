@@ -25,6 +25,7 @@ class AssetTransfers extends Model
     ];
 
 
+
     /**
      *
      * @return Relation
@@ -70,7 +71,7 @@ class AssetTransfers extends Model
             ]
         )
             ->where('asset_id', $id)
-            ->OrderBy('id', 'desc')
+            ->OrderBy('id', 'asc')
             ->get();
     }
 

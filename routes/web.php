@@ -76,9 +76,10 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
 
     Route::patch('update/component/{asset}', 'AssetManagementController@componentUpdate')
         ->name('component.update');
+
+    Route::patch('update/changeStatus/{asset}', 'AssetManagementController@AssetStatusUpdate')
+        ->name('component.update');
       //end of AssetManagementController routes
-
-
 
     Route::get(
         'type/act/{type}', 'AssetTypeController@activate')
@@ -93,7 +94,34 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
     Route::get(
         'store-room/act/{type}', 'StoreRoomTypeController@activate')
         ->name('store.activate');
+
+
     Route::resource('store-room', StoreRoomTypeController::class);
+
+
+    Route::get(
+        'list/assets', 'AssetReportsController@assetsList')
+        ->name('asset.reports');
+
+    Route::get(
+        'list/component', 'AssetReportsController@componentList')
+        ->name('component.reports');
+
+    Route::get(
+        'list/transfer', 'AssetReportsController@transferList')
+        ->name('transfer.reports');
+
+    Route::get(
+        'list/location', 'AssetReportsController@Assetlocation')
+        ->name('transfer.reports');
+
+
+    Route::resource('reports', AssetReportsController::class);
+
+
+
+
+
 });
 
 Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {

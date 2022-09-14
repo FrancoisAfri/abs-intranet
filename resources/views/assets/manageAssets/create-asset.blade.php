@@ -109,8 +109,10 @@
                                                 </a>
                                             </td>
                                             <td>
-                                                <img src="{{ asset('storage/assets/images/'.$assets->picture) }} "
-                                                     height="35px" width="40px" alt="device image">
+                                                <div class="popup-thumbnail img-responsive">
+                                                    <img src="{{ asset('storage/assets/images/'.$assets->picture) }} "
+                                                         height="35px" width="40px" alt="device image">
+                                                </div>
                                             </td>
                                             <td>{{ (!empty( $assets->asset_tag)) ?  $assets->asset_tag : ''}} </td>
                                             <td>{{ (!empty( $assets->serial_number)) ?  $assets->serial_number : ''}} </td>
@@ -141,7 +143,7 @@
                             </tbody>
                             <tfoot>
                             <tr>
-                                <th style="width: 10px; text-align: center;">#</th>
+                                <th style="width: 10px; text-align: center;"></th>
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th style="width: 5px; text-align: center;">Device Image</th>
@@ -151,7 +153,7 @@
                                 <th style="width: 5px; text-align: center;">Make</th>
                                 <th style="width: 5px; text-align: center;">Asset Type</th>
                                 <th style="width: 5px; text-align: center;">price</th>
-                                <th>Asset Status</th>
+                                <th>Status</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
                             </tfoot>
@@ -173,6 +175,7 @@
 @section('page_script')
     <!-- DataTables -->
     {{--    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js"') }}"></script>--}}
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('custom_components/js/modal_ajax_submit.js') }}"></script>
     <script src="{{ asset('custom_components/js/deleteAlert.js') }}"></script>
@@ -181,7 +184,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
-    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -194,9 +197,18 @@
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
 
+
         function postData(id, data) {
             if (data === 'actdeac') location.href = "{{route('assets.activate', '')}}" + "/" + id;
         }
+
+        $('.popup-thumbnail').click(function(){
+            $('.modal-body').empty();
+            $($(this).parents('div').html()).appendTo('.modal-body');
+            $('#modal').modal({show:true});
+        });
+
+
 
 
         //TODO WILL CREATE A SIGLE GLOBAL FILE

@@ -331,10 +331,19 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 2;
         $module->addRibbon($ribbon);
 
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order =5;
+        $ribbon->ribbon_name = 'List all Asset Location';
+        $ribbon->description = 'List all Asset Location';
+        $ribbon->ribbon_path = 'assets/list/location';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 5;
+        $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Assets Set Up';
         $ribbon->ribbon_path = 'assets/settings';

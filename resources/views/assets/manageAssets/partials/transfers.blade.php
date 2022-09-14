@@ -65,7 +65,8 @@
                                 <div class="input-group-addon">
                                     <i class="fa fa-building-o"></i>
                                 </div>
-                                <select class="form-control select2 no-display"  style="width: 100%;" id="store_id"
+                                <select class="form-control select2 no-display
+                                "  style="width: 100%;" id="store_id"
                                         name="store_id">
                                     <option value="0">*** Select Store ***</option>
                                     @foreach($stores as $store)

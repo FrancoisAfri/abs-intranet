@@ -49,6 +49,12 @@ class Assets extends Model
         'Sold' => 'Sold',
     ];
 
+    const ADMIN_STATUS_SELECT = [
+        'Discarded' => 'Discarded',
+        'Missing' => 'Missing',
+        'Sold' => 'Sold',
+    ];
+
     /**
      * @param DateTimeInterface $date
      * @return string
