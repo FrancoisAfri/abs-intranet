@@ -38,7 +38,7 @@
                                         <div class="input-group">
                                             <select class="form-control select2" style="width: 100%;"
                                                     id="asset_type_id" name="asset_type_id">
-                                                <option value="0">--Select Status Type--</option>
+                                                <option value="0">--Select Asset Type--</option>
                                                 @foreach($assetType as $assets)
                                                     <option value="{{ $assets->id }}">{{ $assets->name }}</option>
                                                 @endforeach

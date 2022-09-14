@@ -61,9 +61,6 @@
                     </div>
 
                     <input type="hidden" value="{{ Auth::user()->id }}" name="user_id" id="user_id">
-
-                    <input type="hidden" value="Un Allocated" name="asset_status" id="asset_status">
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label"> Price</label>
                         <div class="col-sm-8">
