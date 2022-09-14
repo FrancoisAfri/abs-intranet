@@ -138,6 +138,17 @@ class Assets extends Model
         return $query->get();
     }
 
+    public static function getAllAssetsByStatus($status)
+    {
+        $query = Assets::with('AssetType')
+            ->orderBy('id', 'asc');
+
+        if ($status != 'all') {
+            $query->where('asset_status', $status);
+        }
+        return $query->get();
+    }
+
     /**
      * @param string $uuid
      * @return Assets|Builder|Model

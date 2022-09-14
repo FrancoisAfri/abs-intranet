@@ -20,8 +20,16 @@ class AssetReportsController extends Controller
      */
     public function assetsList(Request $request)
     {
-        $assets = Assets::with('AssetType')->get();
-        // dd($assets);
+
+        // dd($request);
+        $status = $request['status_id'];
+
+        $assets = Assets::getAllAssetsByStatus($status);
+
+
+
+        $assetTypes = AssetType::all();
+
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -34,6 +42,7 @@ class AssetReportsController extends Controller
         );
 
 
+        $data['assetTypes'] = $assetTypes;
         $data['assets'] = $assets;
 
 
@@ -86,7 +95,7 @@ class AssetReportsController extends Controller
             'store')
             ->get();
 
-       // dd($assetTransfer);
+        // dd($assetTransfer);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -115,7 +124,7 @@ class AssetReportsController extends Controller
             'store')
             ->get();
 
-       // dd($assetTransfer);
+        // dd($assetTransfer);
 
         $data = $this->breadCrump(
             "Asset Management",

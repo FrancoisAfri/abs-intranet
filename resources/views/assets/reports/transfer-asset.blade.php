@@ -131,28 +131,7 @@
             }
 
             $('.user_datatable').DataTable({
-                initComplete: function () {
-                    let counter = 0;
-                    this.api().columns([7, 9]).every(function () {
-                        let column = this;
-                        counter++;
-                        let select = $('<select><option value="Name"></option></select>')
-                            .appendTo($('#search' + counter))
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
 
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
-                            });
-
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                        });
-                    });
-                }
             });
 
         });

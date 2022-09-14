@@ -42,6 +42,8 @@ class AssetManagementController extends Controller
     public function index(Request $request)
     {
 
+       // dd($request);
+
         //  $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
         $asset_type = $request['asset_type_id'];

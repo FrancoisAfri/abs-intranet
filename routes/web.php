@@ -95,9 +95,7 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
         'store-room/act/{type}', 'StoreRoomTypeController@activate')
         ->name('store.activate');
 
-
     Route::resource('store-room', StoreRoomTypeController::class);
-
 
     Route::get(
         'list/assets', 'AssetReportsController@assetsList')
@@ -113,7 +111,7 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
 
     Route::get(
         'list/location', 'AssetReportsController@Assetlocation')
-        ->name('transfer.reports');
+        ->name('location.reports');
 
 
     Route::resource('reports', AssetReportsController::class);

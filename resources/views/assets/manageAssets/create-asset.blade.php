@@ -19,38 +19,44 @@
                 <div class="box-body">
                     <div class="box-header">
 
-                        <div class="container-fluid col-sm-8">
+                        <div class="form-group container-sm">
                             <form class="form-horizontal" method="get" action="{{ route('index') }}">
                                 {{ csrf_field() }}
-                                <div class="row">
-                                    <div class="col-lg-4">
-                                        <div class="input-group">
-                                            <select class="form-control select2" style="width: 100%;"
-                                                    id="status_id" name="status_id">
-                                                @foreach(\App\Models\Assets::STATUS_SELECT as $assets)
-                                                    <option value="{{ $assets }}" >{{ $assets }}</option>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <div class="col-sm-4">
+                                            <label>Asset Status</label>
+                                            <select class="form-control select2 " style="width: 100%;"
+                                                   id="status_id" name="status_id" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                @foreach (\App\Models\Assets::STATUS_SELECT as $values)
+                                                    {
+                                                    <option value="{{ $values }}">{{ $values }}</option>
                                                 @endforeach
+                                            </select>
+                                        </div>
 
-                                            </select>
-                                        </div><!-- /input-group -->
-                                    </div><!-- /.col-lg-6 -->
-                                    <div class="col-lg-4">
-                                        <div class="input-group">
-                                            <select class="form-control select2" style="width: 100%;"
-                                                    id="asset_type_id" name="asset_type_id">
-                                                <option value="0">--Select Asset Type--</option>
-                                                @foreach($assetType as $assets)
-                                                    <option value="{{ $assets->id }}">{{ $assets->name }}</option>
+                                        <div class="col-sm-4">
+                                            <label>Assset Types</label>
+                                            <select class="form-control select2 " style="width: 100%;"
+                                                 id="asset_type_id" name="asset_type_id"   data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                @foreach($assetType as $types)
+                                                    <option value="{{ $types->id }}">{{ $types->name }}</option>
                                                 @endforeach
                                             </select>
-                                        </div><!-- /input-group -->
+                                        </div>
                                     </div>
-
-                                    <button type="submit" class="btn btn-primary "><i class="fa fa-search"></i> Go
-                                    </button>
+                                    <div class="box-footer">
+                                        <button type="submit" class="btn btn-primary pull-left">Submit</button><br>
+                                    </div>
                                 </div>
+
                             </form>
                         </div>
+                        <br>
+
+{{--                        @foreach($assetType as $assets)--}}
+{{--                            <option value="{{ $assets->id }}">{{ $assets->name }}</option>--}}
+{{--                        @endforeach--}}
 
                         <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
                                 data-target="#add-asset-modal">Add Asset

@@ -19,23 +19,43 @@
                 <div class="box-body">
                     <div style="overflow-X:auto;">
                         <div class="form-group">
-                            <label for="inputlg">Large input</label>
+                            <form class="form-horizontal" method="get" action="{{ route('asset.reports') }}">
+                                {{ csrf_field() }}
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <div class="col-sm-4">
+                                            <label>Minimal</label>
+                                            <select class="form-control select2 " style="width: 100%;"
+                                                    id="status_id" name="status_id" data-select2-id="1" tabindex="-1"
+                                                    aria-hidden="true">
+                                                <option value="all">** Select a Status **</option>
+                                                @foreach (\App\Models\Assets::STATUS_SELECT as $values)
+                                                    {
+                                                    <option value="{{ $values }}">{{ $values }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
 
-                            <div id="search2"></div>
-                        </div>
-
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-xs-3" id="search1">
-
+                                        <div class="col-sm-4">
+                                            <label>Assset Types</label>
+                                            <select class="form-control select2 " style="width: 100%;"
+                                                    id="asset_type_id" name="asset_type_id" data-select2-id="1"
+                                                    tabindex="-1" aria-hidden="true">
+                                                @foreach( $assetTypes as $types)
+                                                    <option value="{{ $types->id }}">{{ $types->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="box-footer">
+                                        <button type="submit" class="btn btn-primary pull-left">Submit</button>
+                                        <br>
+                                    </div>
                                 </div>
-                                <div class="col-xs-3" id="search2">
 
-                                </div>
-
-                            </div>
+                            </form>
                         </div>
-
+                        <br>
                         <table class="table table-bordered user_datatable">
                             <thead>
                             <tr>
@@ -53,7 +73,7 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @if (count($assets) > 0)
+                            @if (count(array($assets)) > 0)
                                 <ul class="products-list product-list-in-box">
                                     @foreach ($assets as $key => $asset)
                                         <tr id="categories-list">
@@ -78,9 +98,21 @@
                                             <td>{{ (!empty( $asset->AssetType->name)) ?  $asset->AssetType->name : ''}} </td>
                                             <td>{{ (!empty( $asset->price)) ?  $asset->price : ''}} </td>
                                             <td>
-                                                {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}
+                                                @if($asset->asset_status == 'Sold')
+                                                    <span class="label label-warning">{{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'Missing')
+                                                    <span class="label label-danger"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'In Use')
+                                                    <span class="label label-success"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'Discarded')
+                                                    <span class="label label-primary"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'In Store')
+                                                    <span class="label label-default"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'Un Allocated')
+                                                    <span class="label label-info"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @endif
                                             </td>
-
+                                            
                                         </tr>
                                 @endforeach
                             @endif
@@ -136,8 +168,6 @@
     <script type="text/javascript">
 
 
-
-
         $(function () {
 
             function postData(id, data) {
@@ -145,33 +175,19 @@
             }
 
             $('.user_datatable').DataTable({
-                initComplete: function () {
-                    let counter = 0;
-                    this.api().columns([7, 9]).every(function () {
-                        let column = this;
-                        counter++;
-                        let select = $('<select><option value="Name"></option></select>')
-                            .appendTo($('#search' + counter))
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
-                            });
-
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                        });
-                    });
-                }
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
             });
 
         });
-
-
 
 
     </script>
