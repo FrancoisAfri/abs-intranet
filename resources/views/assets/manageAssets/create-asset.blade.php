@@ -14,7 +14,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-barcode pull-right"></i>
-                    <h3 class="box-title"> Assets </h3>
+                    <h3 class="box-title"> Create and Manage Assets </h3>
                 </div>
                 <div class="box-body">
                     <div class="box-header">
@@ -29,7 +29,6 @@
                                             <select class="form-control select2 " style="width: 100%;"
                                                    id="status_id" name="status_id" data-select2-id="1" tabindex="-1" aria-hidden="true">
                                                 @foreach (\App\Models\Assets::STATUS_SELECT as $values)
-                                                    {
                                                     <option value="{{ $values }}">{{ $values }}</option>
                                                 @endforeach
                                             </select>

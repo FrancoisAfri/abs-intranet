@@ -14,22 +14,39 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-barcode pull-right"></i>
-                    <h3 class="box-title"> Assets </h3>
+                    <h3 class="box-title"> Assets Components </h3>
                 </div>
                 <div class="box-body">
                     <div style="overflow-X:auto;">
                         <div class="form-group">
-                            <label for="inputlg">Large input</label>
-                            <div id="search2"></div>
-                        </div>
-                        <div class="box-body">
-                            <div class="row">
-                                <div class="col-xs-3" id="search1">
+                            <form class="form-horizontal" method="get" action="{{ route('component.reports') }}">
+                                {{ csrf_field() }}
+                                <div class="col-md-5">
+                                    <div class="form-group">
+                                        <div class="col-sm-6">
+                                            <label>Assset </label>
+                                            <select class="form-control select2 " style="width: 100%;"
+                                                    id="asset_type_id" name="asset_type_id" data-select2-id="1"
+                                                    tabindex="-1" aria-hidden="true">
+                                                <option value="0">** Select Asset Type **</option>
+                                                @foreach( $assets as $types)
+                                                    <option value="{{ $types->id }}">{{ $types->name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="box-footer">
+                                        <br>
+                                        <button type="submit" class="btn btn-primary pull-left">Submit</button>
+                                        <br>
+                                    </div>
                                 </div>
-                                <div class="col-xs-3" id="search2">
-                                </div>
-                            </div>
+
+                            </form>
                         </div>
+                        <br>
+
                         <table class="table table-bordered user_datatable">
                             <thead>
                             <tr>
@@ -63,7 +80,13 @@
                                             </td>
                                             <td>{{ (!empty( $asset->size)) ?  $asset->size : ''}} </td>
                                             <td>{{ (!empty( $asset->AssetsList->name)) ?  $asset->AssetsList->name : ''}} </td>
-                                            <td>{{ (!empty( $asset->status)) ?  $asset->status : ''}} </td>
+                                            <td>
+                                                @if($asset->status == 1)
+                                                    <span class="label label-success">Active</span>
+                                                @elseif($asset->asset_status == 'Un Allocated')
+                                                    <span class="label label-danger">No Active</span>
+                                                @endif
+                                            </td>
 
                                         </tr>
                                 @endforeach
@@ -71,12 +94,14 @@
                             </tbody>
                             <tfoot>
                             <tr>
+
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th style="width: 5px; text-align: center;">Device Image</th>
                                 <th style="width: 5px; text-align: center;">size</th>
                                 <th style="width: 5px; text-align: center;">Asset Name</th>
                                 <th>Status</th>
+
                             </tr>
                             </tfoot>
                         </table>
@@ -114,8 +139,6 @@
     <script type="text/javascript">
 
 
-
-
         $(function () {
 
             function postData(id, data) {
@@ -123,33 +146,20 @@
             }
 
             $('.user_datatable').DataTable({
-                initComplete: function () {
-                    let counter = 0;
-                    this.api().columns([7, 9]).every(function () {
-                        let column = this;
-                        counter++;
-                        let select = $('<select><option value="Name"></option></select>')
-                            .appendTo($('#search' + counter))
-                            .on('change', function () {
-                                var val = $.fn.dataTable.util.escapeRegex(
-                                    $(this).val()
-                                );
-
-                                column
-                                    .search(val ? '^' + val + '$' : '', true, false)
-                                    .draw();
-                            });
-
-                        column.data().unique().sort().each(function (d, j) {
-                            select.append('<option value="' + d + '">' + d + '</option>');
-                        });
-                    });
-                }
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
             });
 
+
         });
-
-
 
 
     </script>
