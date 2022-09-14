@@ -113,13 +113,7 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
         'list/location', 'AssetReportsController@Assetlocation')
         ->name('location.reports');
 
-
     Route::resource('reports', AssetReportsController::class);
-
-
-
-
-
 });
 
 Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {
