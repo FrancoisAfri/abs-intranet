@@ -45,10 +45,10 @@ class AssetManagementController extends Controller
         $asset_type = $request['asset_type_id'];
         $assetType = AssetType::all();
         $asserts = Assets::getAssetsByStatus($status, $asset_type);
-
+		
         $data = $this->breadCrump(
             "Asset Management",
-            "Setup", "fa fa-lock",
+            "Manage Assets", "fa fa-lock",
             "Asset Management Set Up",
             "Asset Management",
             "assets/settings",
@@ -56,8 +56,10 @@ class AssetManagementController extends Controller
             "Asset Management Set Up"
         );
 
+
         $data['assetType'] = $assetType;
         $data['asserts'] = $asserts;
+        $data['info'] = 'info';
 
         AuditReportsController::store(
             'Asset Management',
@@ -187,9 +189,18 @@ class AssetManagementController extends Controller
      * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $tab)
     {
         $users = HRPerson::where('status', 1)->get();
+		$activeTransfer = $activeInfo =$activeCom = $activeFile = ''; //
+		if (!empty($tab) && $tab == 'file')
+			$activeFile = 'active';
+		elseif (!empty($tab) && $tab == 'component')
+			$activeCom = 'active';
+		elseif (!empty($tab) && $tab == 'info')
+			$activeInfo = 'active';
+		elseif (!empty($tab) && $tab == 'transfer')
+			$activeTransfer = 'active';
 
         $stores = StoreRoom::all();
 
@@ -206,11 +217,10 @@ class AssetManagementController extends Controller
         $assetComponents = AssetComponents::getAssetComponents($asset->id);
 
         $Transfers = AssetTransfers::getAssetsTransfares($asset->id);
-        // dd($Transfers);
 
         $data = $this->breadCrump(
             "Asset Management",
-            "Asset View", "fa fa-lock",
+            "Manage Assets", "fa fa-lock",
             "Asset Management View",
             "Asset Management",
             "assets/settings",
@@ -218,6 +228,10 @@ class AssetManagementController extends Controller
             "Asset Management View "
         );
 
+        $data['activeFile'] = $activeFile;
+        $data['activeCom'] = $activeCom;
+        $data['activeInfo'] = $activeInfo;
+        $data['activeTransfer'] = $activeTransfer;
         $data['assetTransfare'] = $assetTransfare;
         $data['asset'] = $asset;
         $data['assetComponents'] = $assetComponents;

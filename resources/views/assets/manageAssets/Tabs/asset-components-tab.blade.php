@@ -12,8 +12,8 @@
                             <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;">#</th>
-                                <th>Name</th>
-                                <th>Description</th>
+                                <th style="text-align: center;">Name</th>
+                                <th style="text-align: center;">Description</th>
                                 <th style="width: 5px; text-align: center;">.</th>
                                 <th style="width: 5px; text-align: center;">.</th>
                                 {{--                                <th style="width: 5px; text-align: center;">.</th>--}}
@@ -35,10 +35,10 @@
                                                 </button>
                                             </td>
 
-                                            <td>{{ (!empty( $component->name)) ?  $component->name : ''}} </td>
-                                            <td>{{ (!empty( $component->description)) ?  $component->description : ''}} </td>
-                                            <td>{{ (!empty( $component->size)) ?  $component->size : ''}} </td>
-                                            <td>
+                                            <td style="text-align: center;">{{ (!empty( $component->name)) ?  $component->name : ''}} </td>
+                                            <td style="text-align: center;">{{ (!empty( $component->description)) ?  $component->description : ''}} </td>
+                                            <td style="text-align: center;">{{ (!empty( $component->size)) ?  $component->size : ''}} </td>
+                                            <td style="text-align: center;">
                                                 <form action="{{ route('component.destroy', $component->id ) }}" method="POST"
                                                       style="display: inline-block;">
                                                     <input type="hidden" name="_method" value="DELETE">

@@ -38,7 +38,7 @@ class AssetReportsController extends Controller
 
         $data = $this->breadCrump(
             "Asset Management",
-            "Setup", "fa fa-lock",
+            "List Assets", "fa fa-lock",
             "Asset Management Reports",
             "Asset Management",
             "assets/settings",
@@ -69,7 +69,7 @@ class AssetReportsController extends Controller
 
         $data = $this->breadCrump(
             "Asset Management",
-            "Setup", "fa fa-lock",
+            "List all Component", "fa fa-lock",
             "Asset Management Reports",
             "Asset Management",
             "assets/settings",
@@ -106,7 +106,7 @@ class AssetReportsController extends Controller
 
         $data = $this->breadCrump(
             "Asset Management",
-            "Setup", "fa fa-lock",
+            "Assets Transfer Report", "fa fa-lock",
             "Asset Management Reports",
             "Asset Management",
             "assets/settings",
@@ -144,7 +144,7 @@ class AssetReportsController extends Controller
 
         $data = $this->breadCrump(
             "Asset Management",
-            "Setup", "fa fa-lock",
+            "List all Asset Location", "fa fa-lock",
             "Asset Management Reports",
             "Asset Management",
             "assets/settings",
