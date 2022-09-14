@@ -131,7 +131,7 @@ class Assets extends Model
                 'asset_status' => $status
             ]);
         // return only from asset type table if  selection from asset type
-        if ($asset_type > 0) {
+            if ($asset_type !== 'all'){
             $query->where('asset_type_id', $asset_type);
         }
 

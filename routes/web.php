@@ -116,6 +116,8 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
     Route::resource('reports', AssetReportsController::class);
 });
 
+
+
 Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {
 
     Route::get('/', 'UsersController@index');

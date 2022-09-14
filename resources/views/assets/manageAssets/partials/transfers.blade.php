@@ -49,7 +49,7 @@
                                 <select class="form-control select2" style="width: 100%;" id="user_id" name="user_id">
                                     <option value="0">*** Select User ***</option>
                                     @foreach($users as $user)
-                                        <option value="{{ $user->id }}" {{ ($user->first_name . ' '. $user->surname) ? 'selected' : '' }}>
+                                        <option value="{{ $user->id }}" {{ ($user->first_name . ' '. $user->surname) }}>
                                             {{ $user->first_name . ' '. $user->surname }}
                                         </option>
                                     @endforeach
@@ -70,7 +70,7 @@
                                         name="store_id">
                                     <option value="0">*** Select Store ***</option>
                                     @foreach($stores as $store)
-                                        <option value="{{ $store->id }}" {{ ($store->name) ? 'selected' : '' }}>
+                                        <option value="{{ $store->id }}" {{ ($store->name) }}>
                                             {{ $store->name }}
                                         </option>
                                     @endforeach

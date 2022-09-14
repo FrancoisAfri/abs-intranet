@@ -28,6 +28,7 @@
                                             <label>Asset Status</label>
                                             <select class="form-control select2 " style="width: 100%;"
                                                    id="status_id" name="status_id" data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                <option value="0">*** Select Asset ***</option>
                                                 @foreach (\App\Models\Assets::STATUS_SELECT as $values)
                                                     <option value="{{ $values }}">{{ $values }}</option>
                                                 @endforeach
@@ -38,6 +39,7 @@
                                             <label>Assset Types</label>
                                             <select class="form-control select2 " style="width: 100%;"
                                                  id="asset_type_id" name="asset_type_id"   data-select2-id="1" tabindex="-1" aria-hidden="true">
+                                                <option value="0">*** Select Asset Type ***</option>
                                                 @foreach($assetType as $types)
                                                     <option value="{{ $types->id }}">{{ $types->name }}</option>
                                                 @endforeach

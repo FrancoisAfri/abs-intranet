@@ -41,20 +41,26 @@ class AssetManagementController extends Controller
      */
     public function index(Request $request)
     {
+
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
-        $asset_type = $request['asset_type_id'];
+        $asset_type = !empty($request['asset_type_id']) ? $request['asset_type_id'] : 'All';
+
+//        $asset_type = $request['asset_type_id'];
+
         $assetType = AssetType::all();
         $asserts = Assets::getAssetsByStatus($status, $asset_type);
 
-        $data = $this->breadCrump(
+
+        $data1 = $this->breadCrump(
+            "Asset Management ",
+            "Manage Assets", "fa fa-lock",
             "Asset Management",
-            "Setup", "fa fa-lock",
-            "Asset Management Set Up",
             "Asset Management",
-            "assets/settings",
+            "/assets",
             "Asset Management",
             "Asset Management Set Up"
         );
+
 
         $data['assetType'] = $assetType;
         $data['asserts'] = $asserts;
@@ -173,6 +179,11 @@ class AssetManagementController extends Controller
                 'transaction_date' => date('Y-m-d H:i:s'),
                 'transfer_date' => $request['transfer_date'],
                 'asset_image_transfer_id' => $AssetImagesTransfers->id
+            ]);
+
+            $Assets = Assets::find($request['asset_id']);
+            $Assets->update([
+                'asset_status' =>  $status
             ]);
 
         }

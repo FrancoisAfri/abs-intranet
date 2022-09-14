@@ -80,14 +80,22 @@
                                             </td>
                                             <td>{{ (!empty( $asset->size)) ?  $asset->size : ''}} </td>
                                             <td>{{ (!empty( $asset->AssetsList->name)) ?  $asset->AssetsList->name : ''}} </td>
+{{--                                            <td>{{ (!empty( $asset->AssetsList->name)) ?  $asset->AssetsList->name : ''}} </td>--}}
                                             <td>
-                                                @if($asset->status == 1)
-                                                    <span class="label label-success">Active</span>
-                                                @elseif($asset->asset_status == 'Un Allocated')
-                                                    <span class="label label-danger">No Active</span>
+                                                @if($asset->asset_status == 'Sold')
+                                                    <span class="label label-warning">{{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'Missing')
+                                                    <span class="label label-danger"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'In Use')
+                                                    <span class="label label-success"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'Discarded')
+                                                    <span class="label label-primary"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'In Store')
+                                                    <span class="label label-default"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
+                                                @elseif($asset->AssetsList->asset_status == 'Un Allocated')
+                                                    <span class="label label-info"> {{ (!empty( $asset->AssetsList->asset_status)) ?  $asset->AssetsList->asset_status : ''}}</span>
                                                 @endif
                                             </td>
-
                                         </tr>
                                 @endforeach
                             @endif
