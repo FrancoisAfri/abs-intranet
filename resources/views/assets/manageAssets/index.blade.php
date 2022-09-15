@@ -32,15 +32,15 @@
                                     View Asset - {{ $asset->name}}</h1>
                                 <div class="nav-tabs-custom">
                                     <ul class="nav nav-tabs">
-                                        <li class="{{$activeInfo}}" data-toggle="tooltip" title="information"><a
+                                        <li class="" data-toggle="tooltip" title="information"><a
                                                     href="#information" data-toggle="tab">Info</a></li>
-                                        <li class="{{$activeTransfer}}" data-toggle="tooltip" title="Transfers"><a href="#transfares"
+                                        <li class="" data-toggle="tooltip" title="Transfers"><a href="#transfares"
                                                                                        data-toggle="tab">Transfers</a>
                                         </li>
-                                        <li class="{{$activeCom}}" data-toggle="tooltip" title="Components"><a href="#Components"
+                                        <li class="" data-toggle="tooltip" title="Components"><a href="#Components"
                                                                                         data-toggle="tab">Components</a>
                                         </li>
-                                        <li class="{{$activeFile}}" data-toggle="tooltip" title="Files"><a href="#files"
+                                        <li class="" data-toggle="tooltip" title="Files"><a href="#files"
                                                                                    data-toggle="tab">Files</a></li>
                                         <li class=" pull-right">
                                             <button type="button" class="btn btn-default pull-right" id="back_button"><i
@@ -230,9 +230,6 @@
             }
 
 
-            //TODO WILL CREATE A SIGLE GLOBAL FILE
-
-
             <!-- add asset file -->
 
             $('#upload-asset').on('click', function () {
@@ -241,7 +238,7 @@
                 let formName = 'upload-asset-form';
 				let files = 'file';
                 let submitBtnID = 'upload-asset';
-                let redirectUrl = ' /assets/show/' + {$asset->uuid} + '/' + files;
+                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
                 let successMsgTitle = 'Uploaded Successfully!';
                 let successMsg = 'The Asset  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -256,7 +253,7 @@
                 let formName = 'add-component-form';
 				let com = 'component';
                 let submitBtnID = 'add-component';
-                let redirectUrl = ' /assets/show/' + {$asset->uuid} + '/' + com;
+                let redirectUrl = '{{route('assets.show', $asset->uuid)}}';
                 let successMsgTitle = 'Added Successfully!';
                 let successMsg = 'The component  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -320,7 +317,7 @@
                 };
 
                 let submitBtnID = 'edit-component';
-                let redirectUrl = '/assets/show/' + {$asset->uuid} + '/' + com;
+                let redirectUrl = '{{route('assets.show', $asset->uuid)}}';
                 let successMsgTitle = 'Changes Saved!';
                 let successMsg = 'The Record has been updated successfully.';
                 let Method = 'PATCH';
@@ -335,7 +332,7 @@
                 let formName = 'new-transfer-form';
 				let trans = 'transfer';
                 let submitBtnID = 'new-transfer';
-                let redirectUrl =  '/assets/show/' + {$asset->uuid} + '/' + trans;
+                let redirectUrl = '{{route('assets.show', $asset->uuid)}}';
                 let successMsgTitle = 'Transferred Successfully!';
                 let successMsg = 'The Asset  has been updated successfully transferred.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

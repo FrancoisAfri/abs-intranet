@@ -165,13 +165,17 @@ class AssetManagementController extends Controller
             //check
             ($request['transfer_to'] == 1) ? ($status = 'In Use') : ($status = 'In Store');
 
+            ($request['transfer_to'] == 1) ? ($user = $request['user_id']) : ($user = 0);
+            ($request['transfer_to'] == 2) ? ($store = $request['store_id']) : ($store = 0);
+
+
             AssetTransfers::create([
                 $request->all(),
                 'name' => $request['name'],
                 'asset_id' => $request['asset_id'],
                 'asset_status' => $status,
-                'user_id' => $request['user_id'],
-                'store_id' => $request['store_id'],
+                'user_id' => $user,
+                'store_id' =>$store,
                 'transaction_date' => date('Y-m-d H:i:s'),
                 'transfer_date' => $request['transfer_date'],
                 'asset_image_transfer_id' => $AssetImagesTransfers->id
@@ -189,18 +193,18 @@ class AssetManagementController extends Controller
      * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id, $tab)
+    public function show($id)
     {
         $users = HRPerson::where('status', 1)->get();
-		$activeTransfer = $activeInfo =$activeCom = $activeFile = ''; //
-		if (!empty($tab) && $tab == 'file')
-			$activeFile = 'active';
-		elseif (!empty($tab) && $tab == 'component')
-			$activeCom = 'active';
-		elseif (!empty($tab) && $tab == 'info')
-			$activeInfo = 'active';
-		elseif (!empty($tab) && $tab == 'transfer')
-			$activeTransfer = 'active';
+		//$activeTransfer = $activeInfo =$activeCom = $activeFile = ''; //
+//		if (!empty($tab) && $tab == 'file')
+//			$activeFile = 'active';
+//		elseif (!empty($tab) && $tab == 'component')
+//			$activeCom = 'active';
+//		elseif (!empty($tab) && $tab == 'info')
+//			$activeInfo = 'active';
+//		elseif (!empty($tab) && $tab == 'transfer')
+//			$activeTransfer = 'active';
 
         $stores = StoreRoom::all();
 
@@ -228,10 +232,10 @@ class AssetManagementController extends Controller
             "Asset Management View "
         );
 
-        $data['activeFile'] = $activeFile;
-        $data['activeCom'] = $activeCom;
-        $data['activeInfo'] = $activeInfo;
-        $data['activeTransfer'] = $activeTransfer;
+//        $data['activeFile'] = $activeFile;
+//        $data['activeCom'] = $activeCom;
+//        $data['activeInfo'] = $activeInfo;
+//        $data['activeTransfer'] = $activeTransfer;
         $data['assetTransfare'] = $assetTransfare;
         $data['asset'] = $asset;
         $data['assetComponents'] = $assetComponents;
