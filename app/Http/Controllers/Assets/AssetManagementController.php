@@ -43,9 +43,9 @@ class AssetManagementController extends Controller
     {
 
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
-        $asset_type = !empty($request['asset_type_id']) ? $request['asset_type_id'] : 'All';
+       // $asset_type = !empty($request['asset_type_id']) ? $request['asset_type_id'] : 0;
 
-//        $asset_type = $request['asset_type_id'];
+        $asset_type = $request['asset_type_id'];
 
         $assetType = AssetType::all();
         $asserts = Assets::getAssetsByStatus($status, $asset_type);
