@@ -29,24 +29,24 @@
                             <tr class="products-list product-list-in-box">
                                 @foreach ($Transfers as $key => $assets)
                                     <td></td>
-                                    <td>
+                                    <td style="text-align: center;">
                                         {{ (!empty( $assets->name)) ?  $assets->name : $assets->AssetTransfers->name }}
                                     </td>
-                                    <td>
+                                    <td style="text-align: center;">
                                         <img src="{{ asset('storage/files/images/'.($assets->document ?? '') ) }} "
                                              height="35px" width="40px" alt=" ">
                                     </td>
-                                    <td>
+                                    <td style="text-align: center;">
                                         {{ (!empty( $assets->created_at->toDateString())) ?  $assets->created_at->toDateString() : $assets->AssetTransfers->created_at->toDateString() }}
                                     </td>
-                                    <td>
+                                    <td style="text-align: center;">
                                         {{ (!empty( $assets->transaction_date)) ?  $assets->transaction_date : $assets->AssetTransfers->created_at->toDateString() }}
 
                                     </td>
-                                    <td>{{ $assets->transfer_date ?? '' }}</td>
-                                    <td> {{ (!empty( $assets->HrPeople->first_name )) ?  $assets->HrPeople->first_name. ' ' . $assets->HrPeople->surname : ' ' }}</td>
-                                    <td>{{ $assets->store->name ?? '' }}</td>
-                                    <td>
+                                    <td style="text-align: center;">{{ $assets->transfer_date ?? '' }}</td>
+                                    <td style="text-align: center;"> {{ (!empty( $assets->HrPeople->first_name )) ?  $assets->HrPeople->first_name. ' ' . $assets->HrPeople->surname : ' ' }}</td>
+                                    <td style="text-align: center;">{{ $assets->store->name ?? '' }}</td>
+                                    <td style="text-align: center;">
                                         @if($assets->asset_status == 'Sold')
                                             <span class="label label-danger">{{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
                                         @elseif($assets->asset_status == 'Missing')

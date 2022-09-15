@@ -32,15 +32,15 @@
                                     View Asset - {{ $asset->name}}</h1>
                                 <div class="nav-tabs-custom">
                                     <ul class="nav nav-tabs">
-                                        <li class="active" data-toggle="tooltip" title="information"><a
+                                        <li class="{{$activeInfo}}" data-toggle="tooltip" title="information"><a
                                                     href="#information" data-toggle="tab">Info</a></li>
-                                        <li data-toggle="tooltip" title="Transfers"><a href="#transfares"
+                                        <li class="{{$activeTransfer}}" data-toggle="tooltip" title="Transfers"><a href="#transfares"
                                                                                        data-toggle="tab">Transfers</a>
                                         </li>
-                                        <li data-toggle="tooltip" title="Components"><a href="#Components"
+                                        <li class="{{$activeCom}}" data-toggle="tooltip" title="Components"><a href="#Components"
                                                                                         data-toggle="tab">Components</a>
                                         </li>
-                                        <li data-toggle="tooltip" title="Files"><a href="#files"
+                                        <li class="{{$activeFile}}" data-toggle="tooltip" title="Files"><a href="#files"
                                                                                    data-toggle="tab">Files</a></li>
                                         <li class=" pull-right">
                                             <button type="button" class="btn btn-default pull-right" id="back_button"><i
@@ -239,9 +239,9 @@
                 let strUrl = '{{route('assets.file')}}';
                 let modalID = 'upload-file-modal';
                 let formName = 'upload-asset-form';
-
+				let files = 'file';
                 let submitBtnID = 'upload-asset';
-                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
+                let redirectUrl = ' /assets/show/' + {$asset->uuid} + '/' + files;
                 let successMsgTitle = 'Uploaded Successfully!';
                 let successMsg = 'The Asset  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -254,9 +254,9 @@
                 let strUrl = '{{route('assets.component')}}';
                 let modalID = 'add-component-modal';
                 let formName = 'add-component-form';
-
+				let com = 'component';
                 let submitBtnID = 'add-component';
-                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
+                let redirectUrl = ' /assets/show/' + {$asset->uuid} + '/' + com;
                 let successMsgTitle = 'Added Successfully!';
                 let successMsg = 'The component  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -309,7 +309,7 @@
 
             // update modal
             $('#edit-component').on('click', function () {
-
+				let com = 'component';
                 let strUrl = '/assets/update/component/' + componentId;
                 let modalID = 'edit-component-modal';
                 let objData = {
@@ -320,7 +320,7 @@
                 };
 
                 let submitBtnID = 'edit-component';
-                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
+                let redirectUrl = '/assets/show/' + {$asset->uuid} + '/' + com;
                 let successMsgTitle = 'Changes Saved!';
                 let successMsg = 'The Record has been updated successfully.';
                 let Method = 'PATCH';
@@ -333,9 +333,9 @@
                 let strUrl = '{{route('assets.transfer')}}';
                 let modalID = 'new-transfer-modal';
                 let formName = 'new-transfer-form';
-
+				let trans = 'transfer';
                 let submitBtnID = 'new-transfer';
-                let redirectUrl = '{{ route('assets.show', $asset->uuid) }}';
+                let redirectUrl =  '/assets/show/' + {$asset->uuid} + '/' + trans;
                 let successMsgTitle = 'Transferred Successfully!';
                 let successMsg = 'The Asset  has been updated successfully transferred.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

@@ -105,13 +105,13 @@
                                             </td>
                                             <td>
                                                 <a data-toggle="tooltip" title="Click to View Asset"
-                                                   href="{{ route('assets.show',  $assets->uuid) }}">
+                                                   href="{{ route('assets.show',['assets' => $assets->uuid, 'tab' => $info])}}">
                                                     {{ (!empty( $assets->name)) ?  $assets->name : ''}}
                                                 </a>
                                             </td>
                                             <td>
                                                 <a data-toggle="tooltip" title="Click to View Asset"
-                                                   href="{{ route('assets.show',  $assets->uuid) }}">
+                                                   href="{{ route('assets.show',['assets' => $assets->uuid, 'tab' => $info]) }}">
                                                     {{ (!empty( $assets->description)) ?  $assets->description : ''}}
                                                 </a>
                                             </td>

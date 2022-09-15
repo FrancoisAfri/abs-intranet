@@ -41,22 +41,17 @@ class AssetManagementController extends Controller
      */
     public function index(Request $request)
     {
-
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
-       // $asset_type = !empty($request['asset_type_id']) ? $request['asset_type_id'] : 0;
-
         $asset_type = $request['asset_type_id'];
-
         $assetType = AssetType::all();
         $asserts = Assets::getAssetsByStatus($status, $asset_type);
-
-
-        $data1 = $this->breadCrump(
-            "Asset Management ",
+		
+        $data = $this->breadCrump(
+            "Asset Management",
             "Manage Assets", "fa fa-lock",
+            "Asset Management Set Up",
             "Asset Management",
-            "Asset Management",
-            "/assets",
+            "assets/settings",
             "Asset Management",
             "Asset Management Set Up"
         );
@@ -64,6 +59,7 @@ class AssetManagementController extends Controller
 
         $data['assetType'] = $assetType;
         $data['asserts'] = $asserts;
+        $data['info'] = 'info';
 
         AuditReportsController::store(
             'Asset Management',
@@ -181,11 +177,6 @@ class AssetManagementController extends Controller
                 'asset_image_transfer_id' => $AssetImagesTransfers->id
             ]);
 
-            $Assets = Assets::find($request['asset_id']);
-            $Assets->update([
-                'asset_status' =>  $status
-            ]);
-
         }
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
@@ -198,9 +189,18 @@ class AssetManagementController extends Controller
      * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, $tab)
     {
         $users = HRPerson::where('status', 1)->get();
+		$activeTransfer = $activeInfo =$activeCom = $activeFile = ''; //
+		if (!empty($tab) && $tab == 'file')
+			$activeFile = 'active';
+		elseif (!empty($tab) && $tab == 'component')
+			$activeCom = 'active';
+		elseif (!empty($tab) && $tab == 'info')
+			$activeInfo = 'active';
+		elseif (!empty($tab) && $tab == 'transfer')
+			$activeTransfer = 'active';
 
         $stores = StoreRoom::all();
 
@@ -217,11 +217,10 @@ class AssetManagementController extends Controller
         $assetComponents = AssetComponents::getAssetComponents($asset->id);
 
         $Transfers = AssetTransfers::getAssetsTransfares($asset->id);
-        // dd($Transfers);
 
         $data = $this->breadCrump(
             "Asset Management",
-            "Asset View", "fa fa-lock",
+            "Manage Assets", "fa fa-lock",
             "Asset Management View",
             "Asset Management",
             "assets/settings",
@@ -229,6 +228,10 @@ class AssetManagementController extends Controller
             "Asset Management View "
         );
 
+        $data['activeFile'] = $activeFile;
+        $data['activeCom'] = $activeCom;
+        $data['activeInfo'] = $activeInfo;
+        $data['activeTransfer'] = $activeTransfer;
         $data['assetTransfare'] = $assetTransfare;
         $data['asset'] = $asset;
         $data['assetComponents'] = $assetComponents;

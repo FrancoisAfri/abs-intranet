@@ -47,7 +47,7 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
         'assets/{assets}', 'AssetManagementController@destroy')
         ->name('assets.destroy');
 
-    Route::get('show/{assets}', 'AssetManagementController@show')
+Route::get('show/{assets}/{tab}', 'AssetManagementController@show')
         ->name('assets.show');
 
     Route::post('assets/file', 'AssetManagementController@storeFile')
