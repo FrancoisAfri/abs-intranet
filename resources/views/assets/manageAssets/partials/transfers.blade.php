@@ -32,13 +32,15 @@
                         <label for="meeting_type" class="col-sm-2 control-label">Transfer to</label>
 
                         <div class="col-sm-10">
-                            <label class="radio-inline"><input type="radio" id="rdo_user" name="transfer_to" value="1"
-                                                               checked> User </label>
+                            @if($assets->asset_status !== 'In Use')
+                                <label class="radio-inline"><input type="radio" id="rdo_user" name="transfer_to" value="1" checked> User </label>
+                            @else
+                            @endif
                             <label class="radio-inline"><input type="radio" id="rdo_store" name="transfer_to"
                                                                value="2"> Store </label>
                         </div>
                     </div>
-
+                    @if($assets->asset_status !== 'In Use')
                     <div class="form-group user-field">
                         <label for="company" class="col-sm-2 control-label">User</label>
                         <div class="col-sm-8">
@@ -57,6 +59,8 @@
                             </div>
                         </div>
                     </div>
+                    @else
+                    @endif
 
                     <div class="form-group store-field">
                         <label for="financial_institution" class="col-sm-2 control-label">Store</label>

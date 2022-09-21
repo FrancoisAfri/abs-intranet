@@ -33,8 +33,10 @@
                                         {{ (!empty( $assets->name)) ?  $assets->name : $assets->AssetTransfers->name }}
                                     </td>
                                     <td style="text-align: center;">
-                                        <img src="{{ asset('storage/files/images/'.($assets->document ?? '') ) }} "
-                                             height="35px" width="40px" alt=" ">
+                                        <a href="{{ route('assets.transferImages',['assets' => $assets->uuid ]) }}">
+                                            <span class="label label-primary" data-toggle="tooltip"
+                                                  title="Click to view Images">Click to view Images</span>
+                                        </a>
                                     </td>
                                     <td style="text-align: center;">
                                         {{ (!empty( $assets->created_at->toDateString())) ?  $assets->created_at->toDateString() : $assets->AssetTransfers->created_at->toDateString() }}
@@ -61,7 +63,6 @@
                                             <span class="label label-info"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
                                         @endif
                                     </td>
-
                             </tr>
                             @endforeach
                         @endif
@@ -82,9 +83,10 @@
                     </table>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
-                                data-target="#new-transfer-modal"> New Transfer
-                        </button>
+
+                            <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
+                                    data-target="#new-transfer-modal"> New Transfer
+                            </button>
 
                     </div>
                 </div>

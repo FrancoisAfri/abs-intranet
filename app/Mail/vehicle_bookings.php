@@ -22,11 +22,12 @@ class vehicle_bookings extends Mailable
      *
      * @return void
      */
-     public function __construct($first_name, $surname, $email)
+     public function __construct($first_name, $surname, $email , $balance)
     {
         $this->first_name = $first_name;
         $this->surname = $surname;
         $this->email = $email;
+        $this->balance = $balance;
     }
 
     /**

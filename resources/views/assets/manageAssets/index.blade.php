@@ -14,7 +14,6 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
     <!-- bootstrap file input -->
 @stop
 @section('content')
@@ -28,6 +27,7 @@
 
                         <div class="row">
                             <div class="col-md-12">
+
                                 <h1>
                                     View Asset - {{ $asset->name}}</h1>
                                 <div class="nav-tabs-custom">

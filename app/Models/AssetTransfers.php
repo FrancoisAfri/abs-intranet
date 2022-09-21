@@ -20,10 +20,9 @@ class AssetTransfers extends Model
     protected $fillable = [
         'name', 'description', 'user_id',
         'asset_id', 'transfer_to', 'store_id',
-        'picture_before', 'picture_after', 'document','asset_image_transfer_id',
+        'picture_before', 'picture_after', 'document', 'asset_image_transfer_id',
         'transaction_date', 'transfer_date', 'asset_status'
     ];
-
 
 
     /**
@@ -52,7 +51,8 @@ class AssetTransfers extends Model
         return $this->belongsTo(HRPerson::class, 'user_id');
     }
 
-    public function store(){
+    public function store()
+    {
         return $this->belongsTo(StoreRoom::class, 'store_id');
     }
 
@@ -76,23 +76,23 @@ class AssetTransfers extends Model
     }
 
 
-
-    public static function getAssetLocation($person , $assetType , $location){
-        $query =  $assetTransfer = AssetTransfers::with(
+    public static function getAssetLocation($person, $assetType, $location)
+    {
+        $query = $assetTransfer = AssetTransfers::with(
             'AssetTransfers',
             'AssetImages',
             'HrPeople',
             'store')
-           ->orderBy('id', 'asc');
-        if ($person !== 'all'){
+            ->orderBy('id', 'asc');
+        if ($person !== 'all') {
             $query->where('user_id', $person);
         }
 
-        if ($assetType !== 'All'){
+        if ($assetType !== 'All') {
             $query->where('asset_id', $assetType);
         }
 
-        if ($location !== 's_all'){
+        if ($location !== 's_all') {
             $query->where('store_id', $location);
         }
 
@@ -100,26 +100,45 @@ class AssetTransfers extends Model
     }
 
 
-    public static function getAssetTransfer($person , $assetType , $location){
-        $query =  $assetTransfer = AssetTransfers::with(
+    public static function getAssetTransfer($person, $assetType, $location)
+    {
+        $query = $assetTransfer = AssetTransfers::with(
             'AssetTransfers',
             'AssetImages',
             'HrPeople',
             'store')
             ->orderBy('id', 'asc');
-        if ($person !== 'all'){
+        if ($person !== 'all') {
             $query->where('user_id', $person);
         }
 
-        if ($assetType !== 'All'){
+        if ($assetType !== 'All') {
             $query->where('asset_id', $assetType);
         }
 
-        if ($location !== 's_all'){
+        if ($location !== 's_all') {
             $query->where('store_id', $location);
         }
 
         return $query->get();
+    }
+
+    /**
+     * @param string $uuid
+     * @return Assets|Builder|Model
+     */
+    public static function findByUuid(string $uuid)
+    {
+        return AssetTransfers::with([
+            'AssetTransfers',
+            'AssetImages'
+        ])
+            ->where(
+                [
+                    'uuid' => $uuid,
+                ]
+            )
+            ->first();
     }
 
 }

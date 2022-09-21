@@ -16,7 +16,19 @@ class AssetImagesTransfers extends Model
     public $timestamps = true;
 
     protected $fillable = [
-         'picture', 'asset_id', 'status'
+        'picture', 'asset_id', 'status'
     ];
+
+    public static function getImagesById($asset_id, $date)
+    {
+        return AssetImagesTransfers::where(
+            [
+                'asset_id' => $asset_id,
+                'created_at' => $date,
+            ])->get();
+
+
+    }
+
 
 }
