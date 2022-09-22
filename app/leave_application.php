@@ -49,10 +49,11 @@ class leave_application extends Model
     // public function getLeaveStatusAttribute () {
     //   return $status[$this->status];
     // }
-    public static function getUnapprovedApplications($date)
+    public static function getUnapprovedApplications($date ,$managerId)
     {
-       return leave_application::where('status', 2)
+       return leave_application::where('status', '>=' , 2)
             ->where('created_at', '>=', $date)
+            ->where('manager_id', $managerId)
             ->count();
     }
 

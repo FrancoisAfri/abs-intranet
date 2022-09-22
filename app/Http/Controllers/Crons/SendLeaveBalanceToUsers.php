@@ -46,23 +46,29 @@ class SendLeaveBalanceToUsers extends Controller
         }
     }
 
+    /**
+     * @return void
+     */
     public function managerReminder()
     {
 
+        #check who is the manager
+        #send a reminder
+        #runs everyday
         $date_now = Carbon::now()->toDayDateTimeString();
 
         $days = leave_configuration::pluck('number_of_days_to_remind_manager')->first();
 
         $date = Carbon::today()->subDays($days);
 
-        $users = leave_application::where('status', 2)
+        $user = leave_application::where('status', '>=', 2)
             ->where('created_at', '>=', $date)
             ->pluck('hr_id');
 
-        $unapproved = leave_application::getUnapprovedApplications($date);
+        $users = $user->unique();
 
+        $outputArray = array();
         foreach ($users as $empID) {
-
             $leaveApplications = leave_application::where('hr_id', $empID)->first();
             if (isset($leaveApplications->manager_id))
                 $managerId = $leaveApplications->manager_id;
@@ -74,16 +80,29 @@ class SendLeaveBalanceToUsers extends Controller
                 ]
             )->first();
 
-            $fullnane = $hrDetails->first_name . ' ' . $hrDetails->surname;
+            $outputArray[] = $hrDetails;
+        }
+        // remeove duplicates so that we only send 1 email to diffrent managers
+        $hrDetails = collect($outputArray)->unique();
 
-            if (!empty($hrDetails->email))
-                Mail::to($hrDetails->email)->send(new managerReminder($fullnane, $hrDetails->email, $date_now, $unapproved));
+        //needs improvement
+        foreach ($hrDetails as $hrDetail) {
+            $unapproved = leave_application::getUnapprovedApplications($date , $hrDetail->id);
+
+            $fullnane = $hrDetail->first_name . ' ' . $hrDetail->surname;
+            if (!empty($hrDetail->email))
+                Mail::to($hrDetail->email)->send(new managerReminder($fullnane, $hrDetail->email, $date_now, $unapproved));
 
         }
 
+    }
 
-        #check who is the manager
-        #send a reminder
-        #runs everyday
+    /**
+     * @return void
+     * function to escalate unresolved applications
+     */
+    public function leaveEscallation()
+    {
+       
     }
 }

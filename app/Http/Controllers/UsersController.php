@@ -175,6 +175,7 @@ class UsersController extends Controller
         AuditReportsController::store('Security', 'Setup Page Accessed', "Accessed By User", 0);
         return view('security.company_identity')->with($data);
     }
+
 	public function moduleAccess(User $user) 
 	{
 		$userID = $user->id;
@@ -216,6 +217,7 @@ class UsersController extends Controller
 		}
 		return back();
 	}
+
 	public function ribbonView(modules $mod) 
 	{
 		$aRarrayRights = array(0 => 'None', 1 => 'Read', 2 => 'Write', 3 => 'Modify', 4 => 'Admin', 5=> 'SuperUser');
@@ -237,6 +239,7 @@ class UsersController extends Controller
 		}
 		else return back();
     }
+
 	public function editModule(Request $request, modules $mod)
 	{
         $this->validate($request, [
@@ -254,6 +257,7 @@ class UsersController extends Controller
         AuditReportsController::store('Security', 'Module Informations Edited', "Edited by User", 0);
         return response()->json(['new_name' => $mod->name, 'new_path' => $mod->path], 200);
     }
+
     public function editRibbon(Request $request, module_ribbons $ribbon)
     {
         $this->validate($request, [
@@ -273,6 +277,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Ribbons Informations Edited', "Edited by User", 0);
         return response()->json(['new_name' => $ribbon->ribbon_name, 'new_path' => $ribbon->ribbon_path], 200);
     }
+
 	public function moduleAct(modules $mod) 
 	{
 		if ($mod->active == 1) $stastus = 0;
@@ -282,6 +287,7 @@ class UsersController extends Controller
 		$mod->update();
 		return back();
     }
+
 	public function ribbonAct(module_ribbons $rib) 
 	{
 		if ($rib->active == 1) $stastus = 0;
@@ -291,6 +297,7 @@ class UsersController extends Controller
 		$rib->update();
 		return back();
     }
+
 	public function addmodules(Request $request) {
 	
 		$this->validate($request, [
@@ -313,6 +320,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Module Added', "Module Name: $moduleData[module_name]", 0);
 		return response()->json(['new_name' => $newName, 'new_path' => $newPath], 200);
 	}
+
 	public function addribbon(Request $request, modules $mod) {
 	
 		//Fix the code to use the function created under modules class
@@ -330,6 +338,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Ribbon Added', "Ribbon Name: $ribbonData[ribbon_name]", 0);
 		return response()->json();
 	}
+
     public function store(Request $request ) {
         $this->validate($request, [
             'email' => 'unique:users,email',
@@ -456,6 +465,7 @@ class UsersController extends Controller
 
     public function update(Request $request, User $user) {
         //exclude token, method and command fields from query.
+
         $person = $request->all();
         unset($person['_token'], $person['_method'], $person['command']);
 
@@ -510,6 +520,8 @@ class UsersController extends Controller
             $person['date_left'] = strtotime($person['date_left']);
         }
 		if (empty($person['position'])) $person['position'] = 0;
+
+        $person['second_manager_id'] = $request['second_manager_id'];
 		
         //Update users and hr table
         $user->update($person);
