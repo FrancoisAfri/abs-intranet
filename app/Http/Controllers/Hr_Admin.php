@@ -136,8 +136,7 @@ class Hr_Admin extends Controller {
                 ->orderBy('surname')
                 ->get();
 
-
-        //return  $persons;
+       // dd($persons);
 
         $data['page_title'] = "Employees ";
         $data['page_description'] = "List of users found";

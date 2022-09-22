@@ -42,7 +42,7 @@ class managerReminder extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "Leave Balance for $this->name ";
+        $subject = "Leave Approval Manager Reminder $this->name ";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['fullname'] = $this->name;

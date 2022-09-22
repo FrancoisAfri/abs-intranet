@@ -234,6 +234,7 @@ class LeaveApplicationController extends Controller
 
         } elseif ($approvals->require_department_head_approval == 1) {
             # code...  division_level_twos
+
             // query the hrperon  model and bring back the values of the manager
             $Dept = DivisionLevelTwo::where('id', $hrDetails->division_level_2)->get()->first();
             $deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)

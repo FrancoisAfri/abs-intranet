@@ -27,6 +27,7 @@ class Kernel extends ConsoleKernel
 		  \App\Console\Commands\VehicleDocsUpload::class,
 		  \App\Console\Commands\SendLeaveBalanceToUsers::class,
 		  \App\Console\Commands\RemindManager::class,
+		  \App\Console\Commands\leaveEscalation::class,
     ];
 
     /**
@@ -52,6 +53,7 @@ class Kernel extends ConsoleKernel
 		$schedule->command('vehicle:variouDocumentsUpload')->everyThirtyMinutes();
 		$schedule->command('schedule:SendLeaveBalanceToUsers')->twiceMonthly(2, 16, '22:00');
 		$schedule->command('schedule:RemindManager')->weeklyOn(4, '23:00');
+		$schedule->command('schedule:leaveEscalation')->weeklyOn(4, '23:00');
     }
 
     /**
