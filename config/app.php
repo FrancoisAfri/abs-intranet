@@ -168,6 +168,7 @@ return [
 		Intervention\Image\ImageServiceProvider::class,
         RealRashid\SweetAlert\SweetAlertServiceProvider::class,
 
+
         //bs-intranet/vendor/laravel/framework/src/Illuminate/Foundation/ProviderRepository.php
 
 

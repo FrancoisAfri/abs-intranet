@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use BladeView;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Controllers\LeaveHistoryAuditController;
@@ -25,21 +29,24 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 
 class  LeaveSetupController extends Controller
 {
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->middleware('auth');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \BladeView|false|\Illuminate\Contracts\View\Factory|\Illuminate\Foundation\Application|\Illuminate\View\View
+     * @return BladeView|false|Factory|Application|View
      */
     public function setuptypes()
     {
@@ -68,7 +75,9 @@ class  LeaveSetupController extends Controller
         return view('leave.leave_types')->with($data);
     }
 
-    //#leave allocation
+    /**
+     * @return BladeView|false|Factory|Application|View
+     */
     public function show()
     {
 
@@ -104,8 +113,15 @@ class  LeaveSetupController extends Controller
         return view('leave.leave_allocation')->with($data);
     }
 
+    /**
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function showSetup(Request $request)
     {
+
+        $users =  HRPerson::getAllUsers();
+
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
             $query->orderBy('id', 'asc');
         }]);
@@ -121,6 +137,7 @@ class  LeaveSetupController extends Controller
         ];
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'setup';
+        $data['users'] = $users;
         $data['leave_configuration'] = $leave_configuration;
         $data['leaveTypes'] = $leaveTypes;
         $data['type_profile'] = $type_profile;
@@ -132,6 +149,11 @@ class  LeaveSetupController extends Controller
         return view('leave.setup')->with($data);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function addAnnual(Request $request, $id)
     {
         $this->validate($request, [
@@ -155,6 +177,11 @@ class  LeaveSetupController extends Controller
         return response()->json();
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function addSick(Request $request, $id)
     {
 
@@ -175,6 +202,12 @@ class  LeaveSetupController extends Controller
         return response()->json();
     }
 
+    /**
+     * @param Request $request
+     * @param HRPerson $person
+     * @param LeaveType $lev
+     * @return RedirectResponse
+     */
     public function Adjust(Request $request, HRPerson $person, LeaveType $lev)
     {
         $this->validate($request, [
@@ -230,7 +263,11 @@ class  LeaveSetupController extends Controller
         return back()->with('success_application', "leave action was successful adjusted.");
     }
 
-    //leavecredit
+    /**
+     * @param Request $request
+     * @param LeaveType $lev
+     * @return RedirectResponse
+     */
     public function resetLeave(Request $request, LeaveType $lev)
     {
 
@@ -277,6 +314,11 @@ class  LeaveSetupController extends Controller
         return back()->with('success_application', "leave allocation was successful resert.");
     }
 
+    /**
+     * @param Request $request
+     * @param LeaveType $lev
+     * @return RedirectResponse
+     */
     public function allocate(Request $request, LeaveType $lev)
     {
 
@@ -392,6 +434,11 @@ class  LeaveSetupController extends Controller
         return back()->with('success_application', "leave allocation was successful.");
     }
 
+    /**
+     * @param Request $request
+     * @param LeaveType $lev
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function editsetupType(Request $request, LeaveType $lev)
     {
         $this->validate($request, [
@@ -423,16 +470,21 @@ class  LeaveSetupController extends Controller
         return response()->json();
     }
 
-    //#validate checkboxes
-    public function store(Request $request, $levg)
+    /**
+     * @param Request $request
+     * @param leave_configuration $levg
+     * @return RedirectResponse
+     */
+    public function store(Request $request, leave_configuration $levg)
     {
-        $leaveConfig = leave_configuration::find($levg);
-
-        $leaveConfig->update($request->all());
+        $levg->update($request->all());
+        Alert::toast('Settings  Successfully Changed', 'success');
         return back();
     }
 
-    // upload leave balance
+    /**
+     * @return BladeView|false|Factory|Application|View
+     */
     public function upload()
     {
         $data['page_title'] = "Leave Management";
@@ -448,7 +500,10 @@ class  LeaveSetupController extends Controller
         return view('leave.leave_upload')->with($data);
     }
 
-    // upload
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function leaveUpload(Request $request)
     {
         if ($request->hasFile('input_file')) {
@@ -490,7 +545,10 @@ class  LeaveSetupController extends Controller
         AuditReportsController::store('Leave Management', "Leave Balance uploaded", "Accessed by User", 0);
     }
 
-    // leave application upload
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function leaveUploadApplications(Request $request)
     {
         if ($request->hasFile('input_file')) {
@@ -786,7 +844,11 @@ class  LeaveSetupController extends Controller
         AuditReportsController::store('Leave Management', "Leave Balance uploaded", "Accessed by User", 0);
     }
 
-    # calculate leave days
+    /**
+     * @param $dateFrom
+     * @param $dateTo
+     * @return float|int
+     */
     public function calculatedays($dateFrom, $dateTo)
     {
 
@@ -830,7 +892,10 @@ class  LeaveSetupController extends Controller
         return $days;
     }
 
-    // upload
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function leaveUploadPaid(Request $request)
     {
         if ($request->hasFile('input_file')) {
@@ -872,7 +937,10 @@ class  LeaveSetupController extends Controller
         AuditReportsController::store('Leave Management', "Leave Balance uploaded", "Accessed by User", 0);
     }
 
-    // upload
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function leaveUploadReactivation(Request $request)
     {
         if ($request->hasFile('input_file')) {

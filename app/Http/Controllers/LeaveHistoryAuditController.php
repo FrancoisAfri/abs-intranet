@@ -17,13 +17,17 @@ use App\leave_application;
 use App\hr_person;
 use App\AuditTrail;
 use App\leave_history;
+use BladeView;
 use Carbon\Carbon;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\View\View;
 
 class LeaveHistoryAuditController extends Controller {
 
@@ -36,6 +40,9 @@ class LeaveHistoryAuditController extends Controller {
         $this->middleware('auth');
     }
 
+    /**
+     * @return BladeView|false|Factory|Application|View
+     */
     public function show() {
         $data['page_title'] = "Leave Audit Report";
         $data['page_description'] = "Leave History Audit";
@@ -62,6 +69,16 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.leave_search')->with($data);
     }
 
+    /**
+     * @param $action
+     * @param $descriptionAction
+     * @param $previousBalance
+     * @param $transcation
+     * @param $current_balance
+     * @param $leave_type
+     * @param $hrID
+     * @return void
+     */
     public static function store($action = '', $descriptionAction = '', $previousBalance = 0, $transcation = 0, $current_balance = 0, $leave_type = 0, $hrID = 0) {
         $user = Auth::user()->load('person');
 		if (!empty($user))
@@ -91,7 +108,10 @@ class LeaveHistoryAuditController extends Controller {
     }
 
     #draw history report according to search critea
-    #
+
+    /**
+     * @return BladeView|false|Factory|Application|View
+     */
 	public function reports() {
         
 		$hrID = Auth::user()->id;
@@ -128,11 +148,11 @@ class LeaveHistoryAuditController extends Controller {
     }
     #draw history report according to search critea
 
+    /**
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function getlevhistoryReport(Request $request) {
-        $this->validate($request, [
-        ]);
-        $request = $request->all();
-        unset($request['_token']);
 
         $actionFrom = $actionTo = 0;
         $hr_person_id = $request['hr_person_id'];
@@ -143,31 +163,8 @@ class LeaveHistoryAuditController extends Controller {
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $historyAudit = DB::table('leave_history')
-			->select('leave_history.*', 'hr_people.employee_number as employee_number '
-			, 'hr_people.first_name as firstname'
-			, 'hr_people.surname as surname', 'leave_types.name as leave_type')
-			->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
-			->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
-			->where(function ($query) use ($actionFrom, $actionTo) {
-				if ($actionFrom > 0 && $actionTo > 0) {
-					$query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
-				}
-			})
-			->where(function ($query) use ($hr_person_id) {
-				if (!empty($hr_person_id)) {
-					$query->where('leave_history.hr_id', $hr_person_id);
-				}
-			})
-			->where(function ($query) use ($LevTypID) {
-				if (!empty($LevTypID)) {
-					$query->where('leave_history.leave_type_id', $LevTypID);
-				}
-			})
-			->orderBy('hr_people.first_name')
-			->orderBy('hr_people.surname')
-			->orderBy('leave_types.name')
-			->get();
+
+        $historyAudit =  leave_history::getLeaveHistory($actionFrom, $actionTo , $hr_person_id , $LevTypID);
 
         $data['actionFrom'] = $actionFrom;
         $data['hr_person_id'] = $hr_person_id;
@@ -185,7 +182,11 @@ class LeaveHistoryAuditController extends Controller {
         AuditReportsController::store('Leave Management', 'Viewed Leave History report Results', "view Audit Results", 0);
         return view('leave.reports.leave_history_report')->with($data);
     }
-	#
+
+    /**
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function printlevhistoReport(Request $request) {
 
         $actionFrom = $actionTo = 0;
@@ -197,31 +198,7 @@ class LeaveHistoryAuditController extends Controller {
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $historyAudit = DB::table('leave_history')
-			->select('leave_history.*', 'hr_people.employee_number as employee_number '
-			, 'hr_people.first_name as firstname'
-			, 'hr_people.surname as surname', 'leave_types.name as leave_type')
-			->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
-			->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
-			->where(function ($query) use ($actionFrom, $actionTo) {
-				if ($actionFrom > 0 && $actionTo > 0) {
-					$query->whereBetween('leave_history.action_date', [$actionFrom, $actionTo]);
-				}
-			})
-			->where(function ($query) use ($hr_person_id) {
-				if (!empty($hr_person_id)) {
-					$query->where('leave_history.hr_id', $hr_person_id);
-				}
-			})
-			->where(function ($query) use ($LevTypID) {
-				if (!empty($LevTypID)) {
-					$query->where('leave_history.leave_type_id', $LevTypID);
-				}
-			})
-			->orderBy('hr_people.first_name')
-                ->orderBy('hr_people.surname')
-                ->orderBy('leave_types.name')
-			->get();
+        $historyAudit = leave_history::getLeaveHistory($actionFrom, $actionTo , $hr_person_id , $LevTypID);
 
         $data['historyAudit'] = $historyAudit;
         $data['page_title'] = "Leave history Audit Report";
@@ -245,18 +222,34 @@ class LeaveHistoryAuditController extends Controller {
         AuditReportsController::store('Leave Management', 'Printed Leave History Report Results', "view Audit Results", 0);
         return view('leave.reports.leave_history_print')->with($data);
     }
+
+    /**
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function cancelledLeaves(Request $request) {
 
         $reportData = $request->all();
         return $this->getCancelledLeavesReport($reportData['hr_person_id'], $reportData['leave_types_id'], $reportData['action_date'], false);
     }
 
+    /**
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function cancelledLeavesPrint(Request $request) {
         
         $reportData = $request->all();
         return $this->getCancelledLeavesReport($reportData['hr_person_id'], $reportData['leave_types_id'], $reportData['action_date'], true);
     }
 
+    /**
+     * @param $employeeID
+     * @param $leaveTypeID
+     * @param $action_date
+     * @param $print
+     * @return BladeView|false|Factory|Application|View
+     */
     private function getCancelledLeavesReport($employeeID, $leaveTypeID, $action_date, $print = false) {
         $data['employeeID'] = $employeeID;
         $data['leaveTypeID'] = $leaveTypeID;
@@ -289,6 +282,7 @@ class LeaveHistoryAuditController extends Controller {
             ->limit(100)
             ->with('person', 'leavetpe', 'canceller')
             ->get();
+
         $data['page_title'] = "Leave Report";
         $data['page_description'] = "Cancelled Leaves Report";
         $data['breadcrumb'] = [
@@ -314,6 +308,10 @@ class LeaveHistoryAuditController extends Controller {
         }
     }
 
+    /**
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function leavebalance(Request $request) {
         $this->validate($request, [
                 #code here ....
@@ -325,25 +323,8 @@ class LeaveHistoryAuditController extends Controller {
         $LevTypID = !empty($request['leave_types_id']) ? $request['leave_types_id'] : 0;
 		
         #Query the leave credit
-        $credit = DB::table('hr_people')
-                ->select('hr_people.*', 'leave_credit.hr_id as userID', 'leave_credit.leave_balance as Balance', 'leave_credit.leave_type_id as LeaveID', 'leave_types.name as leaveType')
-                ->leftJoin('leave_credit', 'leave_credit.hr_id', '=', 'hr_people.id')
-                ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('leave_credit.leave_type_id', $LevTypID);
-                    }
-                })
-                ->orderBy('hr_people.first_name')
-                ->orderBy('hr_people.surname')
-                ->orderBy('leave_types.name')
-                ->get();
+        $credit = leave_history::getLeaveBalance($userID, $LevTypID);
+
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
         $data['credit'] = $credit;
@@ -359,31 +340,16 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.reports.leave_report_balance')->with($data);
     }
 
-    //
+    /**
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function printlevbalReport(Request $request) {
 
         $userID = $request['userID'];
         $LevTypID = $request['LevTypID'];
 
-        $credit = DB::table('hr_people')
-                ->select('hr_people.*', 'leave_credit.hr_id as userID', 'leave_credit.leave_balance as Balance', 'leave_credit.leave_type_id as LeaveID', 'leave_types.name as leaveType')
-                ->leftJoin('leave_credit', 'leave_credit.hr_id', '=', 'hr_people.id')
-                ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('leave_credit.leave_types_id', $LevTypID);
-                    }
-                })
-                ->orderBy('hr_people.first_name')
-                ->orderBy('hr_people.surname')
-                ->orderBy('leave_types.name')
-                ->get();
+        $credit = leave_history::getLeaveBalance($userID, $LevTypID);
 
         $data['user_id'] = $userID;
         $data['LevTypID'] = $LevTypID;
@@ -409,6 +375,11 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.reports.leave_balance_print')->with($data);
     }
 
+    /**
+     * leaveAllowance
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function leaveAllowance(Request $request) {
         $this->validate($request, [
                 #validation code here ....
@@ -419,25 +390,7 @@ class LeaveHistoryAuditController extends Controller {
         $userID = $request['hr_person_id'];
         $LevTypID = $request['leave_types_id'];
 		
-        $allowances = DB::table('hr_people')
-                ->select('hr_people.*', 'type_profile.max as max'
-				, 'type_profile.min as min'
-				, 'leave_types.name as leave_type_name')
-                ->leftJoin('type_profile', 'type_profile.leave_profile_id', '=', 'type_profile.leave_profile_id')
-                ->leftJoin('leave_types', 'type_profile.leave_type_id', '=', 'leave_types.id')
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('type_profile.leave_type_id', $LevTypID);
-                    }
-                })
-                ->orderBy('type_profile.leave_type_id')
-                ->get();
+        $allowances = leave_history::getLeaveAllowance($userID, $LevTypID);
 				
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
@@ -453,36 +406,19 @@ class LeaveHistoryAuditController extends Controller {
         AuditReportsController::store('Leave Management', 'Viewed Leave Allocation Report Results', "view Reports Results", 0);
         return view('leave.reports.leave_allowance report')->with($data);
     }
-	//// allowance Printed
+
+    /**
+     * allowance Printed
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
 	public function leaveAllowancePrint(Request $request) {
-        $this->validate($request, [
-                #validation code here ....
-        ]);
-        $request = $request->all();
-        unset($request['_token']);
+
 
 		$userID = $request['hr_person_id'];
         $LevTypID = $request['leave_types_id'];
 		
-        $allowances = DB::table('hr_people')
-			->select('hr_people.*', 'type_profile.max as max'
-			, 'type_profile.min as min'
-			, 'leave_types.name as leave_type_name')
-			->leftJoin('type_profile', 'type_profile.leave_profile_id', '=', 'type_profile.leave_profile_id')
-			->leftJoin('leave_types', 'type_profile.leave_type_id', '=', 'leave_types.id')
-			->where('hr_people.status', 1)
-			->where(function ($query) use ($userID) {
-				if (!empty($userID)) {
-					$query->where('hr_people.id', $userID);
-				}
-			})
-			->where(function ($query) use ($LevTypID) {
-				if (!empty($LevTypID)) {
-					$query->where('type_profile.leave_type_id', $LevTypID);
-				}
-			})
-			->orderBy('type_profile.leave_type_id')
-			->get();
+        $allowances =  leave_history::getLeaveAllowance($userID, $LevTypID);
 			
         $data['allowances'] = $allowances;
         $data['page_title'] = "Leave Allowance";
@@ -507,6 +443,11 @@ class LeaveHistoryAuditController extends Controller {
         return view('leave.reports.leave_allowance_print_report')->with($data);
     }
 
+    /**
+     * Leave Taken
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function taken(Request $request) {
         $this->validate($request, [
                 #validation code here ....
@@ -522,34 +463,7 @@ class LeaveHistoryAuditController extends Controller {
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $leaveTakens = DB::table('leave_application')
-                ->select('leave_application.*', 'hr_people.employee_number as employee_number'
-				, 'hr_people.first_name'
-				, 'hr_people.surname'
-				, 'leave_types.name as leave_type_name')
-                ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
-                ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('leave_application.leave_type_id', $LevTypID);
-                    }
-                })
-				->where(function ($query) use ($actionFrom, $actionTo) {
-					if ($actionFrom > 0 && $actionTo > 0) {
-						$query->whereBetween('start_date', [$actionFrom, $actionTo]);
-					}
-				})
-				->orderBy('hr_people.first_name')
-                ->orderBy('hr_people.surname')
-                ->orderBy('leave_types.name')
-				->orderBy('leave_application.id')
-                ->get();
+        $leaveTakens = leave_history::getLeaveTaken($userID, $LevTypID, $actionFrom , $actionTo);
 
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
@@ -568,13 +482,14 @@ class LeaveHistoryAuditController extends Controller {
         AuditReportsController::store('Leave Management', 'Viewed Leave Taken Report Results', "view Reports Results", 0);
         return view('leave.reports.leave_taken report')->with($data);
     }
-	// print taken
+
+    /**
+     * print taken
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
 	public function takenPrint(Request $request) {
-        $this->validate($request, [
-                #validation code here ....
-        ]);
-        $request = $request->all();
-        unset($request['_token']);
+
 
 		$actionFrom = $actionTo = 0;
         $userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
@@ -585,34 +500,7 @@ class LeaveHistoryAuditController extends Controller {
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $leaveTakens = DB::table('leave_application')
-			->select('leave_application.*', 'hr_people.employee_number as employee_number'
-			, 'hr_people.first_name'
-			, 'hr_people.surname'
-			, 'leave_types.name as leave_type_name')
-			->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
-			->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
-			->where('hr_people.status', 1)
-			->where(function ($query) use ($userID) {
-				if (!empty($userID)) {
-					$query->where('hr_people.id', $userID);
-				}
-			})
-			->where(function ($query) use ($LevTypID) {
-				if (!empty($LevTypID)) {
-					$query->where('leave_application.leave_type_id', $LevTypID);
-				}
-			})
-			->where(function ($query) use ($actionFrom, $actionTo) {
-				if ($actionFrom > 0 && $actionTo > 0) {
-					$query->whereBetween('start_date', [$actionFrom, $actionTo]);
-				}
-			})
-			->orderBy('hr_people.first_name')
-			->orderBy('hr_people.surname')
-			->orderBy('leave_types.name')
-			->orderBy('leave_application.id')
-			->get();
+        $leaveTakens = leave_history::getLeaveTaken($userID, $LevTypID, $actionFrom , $actionTo);
 
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
@@ -638,6 +526,12 @@ class LeaveHistoryAuditController extends Controller {
         AuditReportsController::store('Leave Management', 'Viewed Leave Taken Report Results', "view Reports Results", 0);
         return view('leave.reports.leave_taken_print_report')->with($data);
     }
+
+    /**
+     * leavepaidOut
+     * @param Request $request
+     * @return BladeView|false|Factory|Application|View
+     */
     public function leavepaidOut(Request $request) {
         $this->validate($request, [
                 #code here ....
@@ -648,25 +542,7 @@ class LeaveHistoryAuditController extends Controller {
         $userID = $request['hr_person_id'];
         $LevTypID = $request['leave_types_id'];
 
-        $custom = DB::table('hr_people')
-                ->select('hr_people.*', 'type_profile.max as max', 'type_profile.leave_type_id as levID', 'type_profile.leave_profile_id as ProfID', 'leave_customs.hr_id as empID', 'leave_customs.number_of_days as Days', 'leave_types.name as leaveType')
-                ->leftJoin('type_profile', 'type_profile.leave_profile_id', '=', 'type_profile.leave_profile_id')
-                ->leftJoin('leave_customs', 'hr_people.id', '=', 'leave_customs.hr_id')
-                ->leftJoin('leave_types', 'type_profile.leave_type_id', '=', 'leave_types.id')
-                ->where('leave_customs.status', 1)
-                ->where('hr_people.status', 1)
-                ->where(function ($query) use ($userID) {
-                    if (!empty($userID)) {
-                        $query->where('hr_people.id', $userID);
-                    }
-                })
-                ->where(function ($query) use ($LevTypID) {
-                    if (!empty($LevTypID)) {
-                        $query->where('type_profile.leave_type_id', $LevTypID);
-                    }
-                })
-                ->orderBy('type_profile.leave_type_id')
-                ->get();
+        $custom = leave_history::getLeavePaidOut($userID, $LevTypID);
 
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;

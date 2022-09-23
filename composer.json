@@ -12,7 +12,7 @@
         "guzzlehttp/guzzle": "^6.2",
         "infinety/alerts": "*@dev",
         "doctrine/dbal": "^2.5",
-        "barryvdh/laravel-dompdf": "^0.8.0",
+        "barryvdh/laravel-dompdf": "^v0.8.2",
         "zanysoft/laravel-zip": "^1.0",
         "intervention/image": "^2.4",
         "realrashid/sweet-alert": "^v3.1.6",

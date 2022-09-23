@@ -50,6 +50,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Search User Page Accessed', "Accessed By User", 0);
         return view('security.search_user')->with($data);
     }
+
     public function create() {
         $data['page_title'] = "Users";
         $data['page_description'] = "Create a New User";
@@ -63,6 +64,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Create User Page Accessed', "Accessed By User", 0);
         return view('security.add_user')->with($data);
     }
+
 	public function deleteUser(User $user)
 	{
 		# Delete record form database
@@ -73,6 +75,7 @@ class UsersController extends Controller
 		DB::table('hr_people')->where('user_id', '=', $user->id)->delete();
 		return redirect('/users')->with('success_delete', "User Successfully Deleted.");
 	}
+
 	public function deleteHoliday(Request $request, PublicHoliday $holidayId)
     {
         $holidayId->delete();
@@ -80,6 +83,7 @@ class UsersController extends Controller
         AuditReportsController::store('Security', 'Public Holiday Deleted', "Deleted by user", 0);
         return redirect('/users/public-holiday');
     }
+
 	public function modules() 
 	{
         $modules = DB::table('security_modules')->orderBy('name', 'asc')->get();
@@ -95,6 +99,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'Modules Setup Page Accessed', "Accessed By User", 0);
         return view('security.setup')->with($data);
     }
+
 	public function publicHoliday() 
 	{
         $holidays = DB::table('public_holidays')->select('public_holidays.*','countries.name as country')
@@ -772,6 +777,7 @@ class UsersController extends Controller
 
         return view('security.users_list_access_report')->with($data);
     }
+
 	public function getEmployeesReportPrint(Request $request)
     {
         $reportData = $request->all();
@@ -836,7 +842,6 @@ class UsersController extends Controller
         AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('security.users_list_access_report_print')->with($data);
     }
-	
 	/// get users reports
 	public function getUsersReport(Request $request)
     {

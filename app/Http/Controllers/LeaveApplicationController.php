@@ -27,6 +27,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 
 class LeaveApplicationController extends Controller
@@ -49,30 +50,43 @@ class LeaveApplicationController extends Controller
             ->where('security_modules.code_name', 'leave')->where('security_modules_access.access_level', '>', 3)
             ->where('security_modules_access.user_id', $hrID)->pluck('user_id')->first();
         if (!empty($userAccess))
-            $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+            $employees = HRPerson::where('status', 1)
+                ->orderBy('first_name', 'asc')
+                ->orderBy('surname', 'asc')
+                ->get();
         else {
-            $reportsTo = HRPerson::where('status', 1)->where('manager_id', $currentUser)->orwhere('id', $currentUser)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+            $reportsTo = HRPerson::where('status', 1)
+                ->where(['manager_id' => $currentUser, 'id' => $currentUser])
+                ->orderBy('first_name', 'asc')
+                ->orderBy('surname', 'asc')
+                ->get();
+
+
             if ($reportsTo->count() > 0)
                 $employees = $reportsTo;
             else
-                $employees = HRPerson::where('status', 1)->where('id', $currentUser)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-        }
-        $leaveTypes = LeaveType::where('status', 1)->orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
+                $employees = HRPerson::where(['status' => 1, 'id' => $currentUser])
+                    ->orderBy('first_name', 'asc')
+                    ->orderBy('surname', 'asc')
+                    ->get();
 
-        }]);
+        }
+        $leaveTypes = LeaveType::where('status', 1)
+            ->orderBy('name', 'asc')
+            ->get()
+            ->load(['leave_profle' => function ($query) {
+
+            }]);
         #Query to get negative annual leave days for user based on userID and LeaveID
-        $negativeannualDays = DB::table('leave_configuration')
-            ->select('allow_annual_negative_days')
-            ->where('id', 1)
-            ->where('allow_annualLeave_credit', 1)
+        $negativeannualDays = leave_configuration::select('allow_annual_negative_days')
+            ->where(['id' => 1, 'allow_annualLeave_credit' => 1])
             ->get();
         $negannualDays = !empty($negativeannualDays->first()->allow_annual_negative_days) ? $negativeannualDays->first()->allow_annual_negative_days : 0;
         #Query to get negative sick leave days for user based on userID and LeaveID
-        $negativesickDays = DB::table('leave_configuration')
-            ->select('allow_sick_negative_days')
-            ->where('id', 1)
-            ->where('allow_sickLeave_credit', 1)
+        $negativesickDays = leave_configuration::select('allow_sick_negative_days')
+            ->where(['id' => 1, 'allow_sickLeave_credit' => 1])
             ->get();
+
         $negsickDays = !empty($negativesickDays->first()->allow_sick_negative_days) ? $negativesickDays->first()->allow_sick_negative_days : 0;;
 
         $data['negannualDays'] = $negannualDays;
@@ -208,18 +222,18 @@ class LeaveApplicationController extends Controller
         if ($approvals->require_managers_approval == 1) {
 
             #check if the manager is on leave or not
-           $isOnleave =  leave_application::where('hr_id', $hrDetails->manager_id)->where('status', '<' , 2)->first();
+            $isOnleave = leave_application::where('hr_id', $hrDetails->manager_id)->where('status', '<', 2)->first();
 
             /**
              * if the manager is on leave the second in charge will have toa approve the application
              */
-           if (isset($isOnleave) == true){
-               #get the second in charge
-               $managerDetails =  HRPerson::getManagerDetails($hrDetails->second_manager_id);
-           }else
-            # code...
-            // query the hrperon  model and bring back the values of the manager
-               $managerDetails =  HRPerson::getManagerDetails($hrDetails->manager_id);
+            if (isset($isOnleave) == true) {
+                #get the second in charge
+                $managerDetails = HRPerson::getManagerDetails($hrDetails->second_manager_id);
+            } else
+                # code...
+                // query the hrperon  model and bring back the values of the manager
+                $managerDetails = HRPerson::getManagerDetails($hrDetails->manager_id);
 
 
             // array to store manager details
@@ -441,6 +455,8 @@ class LeaveApplicationController extends Controller
                 $levApp->update();
             }
         }
+
+        Alert::toast('Application was Successfully ', 'success');
         // get leave type value
         $leaveTypes = LeaveType::where('id', $request->input('leave_type'))->where('status', 1)->first();
         // send email to manager

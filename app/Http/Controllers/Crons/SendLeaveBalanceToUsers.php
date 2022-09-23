@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\Crons;
 
+use App\CompanyIdentity;
 use App\DivisionLevelFour;
 use App\DivisionLevelTwo;
 use App\HRPerson;
 use App\leave_application;
 use App\leave_configuration;
 use App\leave_credit;
+use App\leave_history;
 use App\Mail\escalateleaveApplication;
 use App\Mail\LeaveBalanceReminder;
 use App\Mail\managerReminder;
+use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Array_;
+
 
 class SendLeaveBalanceToUsers extends Controller
 {
@@ -29,14 +33,7 @@ class SendLeaveBalanceToUsers extends Controller
         foreach ($users as $empID) {
 
             $leaveBalance = leave_credit::where('hr_id', $users)->pluck('leave_balance')->first();
-            $hrDetails = HRPerson::where(
-                [
-                    'user_id' => $empID,
-                    'status' => 1
-                ]
-            )
-                ->first();
-
+            $hrDetails =  HRPerson::getManagerDetails($empID);
             $fullnane = $hrDetails->first_name . ' ' . $hrDetails->surname;
             $datanow = Carbon::now()->toDayDateTimeString();
 
@@ -77,12 +74,7 @@ class SendLeaveBalanceToUsers extends Controller
             if (isset($leaveApplications->manager_id))
                 $managerId = $leaveApplications->manager_id;
 
-            $hrDetails = HRPerson::where(
-                [
-                    'user_id' => $managerId,
-                    'status' => 1
-                ]
-            )->first();
+            $hrDetails = HRPerson::getManagerDetails($managerId);
 
             $outputArray[] = $hrDetails;
         }
@@ -129,19 +121,12 @@ class SendLeaveBalanceToUsers extends Controller
             if (isset($leaveApplications->manager_id))
                 $managerId = $leaveApplications->manager_id;
 
-            $hrDetails = HRPerson::where(
-                [
-                    'user_id' => $managerId,
-                    'status' => 1
-                ]
-            )->first();
+            $hrDetails = HRPerson::getManagerDetails($managerId);
 
             $outputArray[] = $hrDetails;
         }
-        // remeove duplicates so that we only send 1 email to diffrent managers
+        // remove duplicates so that we only send 1 email to different managers
         $hrDetails = collect($outputArray)->unique();
-
-
 
         //needs improvement
         $headDep = array();
@@ -165,5 +150,40 @@ class SendLeaveBalanceToUsers extends Controller
         }
         if (!empty($deptDetails->email))
             Mail::to($deptDetails->email)->send(new escalateleaveApplication($headName, $hrDetail->email, $date_now, $unapproved , $fullnane));
+    }
+
+    /**
+     * @return \Illuminate\Http\Response
+     * function to send reports to the head
+     */
+    public function sendReport(){
+
+        //get the user selected on the settings
+        $companyDetails = CompanyIdentity::first();
+
+        $date_now = Carbon::now()->toDayDateTimeString();
+        $userId = leave_configuration::pluck('hr_person_id')->first();
+
+        $userDetails = HRPerson::getManagerDetails($userId);
+
+        $fullname = $userDetails->firstname . ' ' . $userDetails->surname;
+
+        //get report leave balnace
+        $credit =  leave_history::getLeaveBalance();
+
+       //create a pdf
+        $data['companyDetails'] = $companyDetails;
+        $data['date'] = $date_now;
+        $data['fullname'] = $fullname;
+        $data['credit'] = $credit;
+
+
+        $pdf = PDF::loadView('leave.reports.leave_balance', $data)->setPaper('a4', 'portrait');
+
+        $pdf->save(public_path('public' . '/' .'files/leaveBalance.pdf'))->stream('download.pdf');
+
+        if (!empty($userDetails->email))
+            Mail::to($userDetails->email)->send(new escalateleaveApplication($headName, $hrDetail->email, $date_now, $unapproved , $fullnane));
+
     }
 }

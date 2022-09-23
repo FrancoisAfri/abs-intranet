@@ -142,9 +142,13 @@ class HRPerson extends Model
         return $hrPeople;
     }
 
+    public static function getAllUsers(){
+        return HRPerson::where('status', 1)->get();
+    }
+
     public static function getManagerDetails($hrDetails)
     {
-        return HRPerson::where('id', $hrDetails)->where('status', 1)
+        return HRPerson::where(['id' => $hrDetails , 'status' => 1])
             ->select('first_name', 'surname', 'email')
             ->first();
     }

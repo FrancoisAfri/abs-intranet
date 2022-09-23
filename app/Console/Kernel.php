@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
 		  \App\Console\Commands\SendLeaveBalanceToUsers::class,
 		  \App\Console\Commands\RemindManager::class,
 		  \App\Console\Commands\leaveEscalation::class,
+		  \App\Console\Commands\leaveBalanceReport::class,
     ];
 
     /**
@@ -54,6 +55,8 @@ class Kernel extends ConsoleKernel
 		$schedule->command('schedule:SendLeaveBalanceToUsers')->twiceMonthly(2, 16, '22:00');
 		$schedule->command('schedule:RemindManager')->weeklyOn(4, '23:00');
 		$schedule->command('schedule:leaveEscalation')->weeklyOn(4, '23:00');
+        $schedule->command('schedule:LeaveBalanceReport')->monthlyOn(1, '01:00');
+
     }
 
     /**
