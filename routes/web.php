@@ -47,7 +47,7 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
         'assets/{assets}', 'AssetManagementController@destroy')
         ->name('assets.destroy');
 
-Route::get('show/{assets}', 'AssetManagementController@show')
+    Route::get('show/{assets}', 'AssetManagementController@show')
         ->name('assets.show');
 
     Route::post('assets/file', 'AssetManagementController@storeFile')
@@ -67,6 +67,9 @@ Route::get('show/{assets}', 'AssetManagementController@show')
     Route::post('assets/transfer', 'AssetManagementController@storeTransfer')
         ->name('assets.transfer');
 
+    Route::get('show/images/{assets}', 'AssetManagementController@viewImages')
+        ->name('assets.transferImages');
+
     Route::get(
         'act/{type}', 'AssetManagementController@activate')
         ->name('assets.activate');
@@ -79,7 +82,7 @@ Route::get('show/{assets}', 'AssetManagementController@show')
 
     Route::patch('update/changeStatus/{asset}', 'AssetManagementController@AssetStatusUpdate')
         ->name('component.update');
-      //end of AssetManagementController routes
+    //end of AssetManagementController routes
 
     Route::get(
         'type/act/{type}', 'AssetTypeController@activate')
@@ -116,7 +119,7 @@ Route::get('show/{assets}', 'AssetManagementController@show')
     Route::resource('reports', AssetReportsController::class);
 });
 
-
+Route::post('users', 'UsersController@store');
 
 Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {
 
@@ -124,7 +127,7 @@ Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {
     Route::get('create', 'UsersController@create');
     Route::get('{user}/edit', 'UsersController@edit');
     Route::get('profile', 'UsersController@profile');
-    Route::post('users', 'UsersController@store');
+
     Route::post('search', 'UsersController@getSearch');
     Route::post('search/activate', 'UsersController@activateUsers');
     Route::post('{user}/pw', 'UsersController@updatePassword');

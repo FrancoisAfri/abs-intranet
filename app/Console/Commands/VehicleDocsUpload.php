@@ -37,7 +37,7 @@ class VehicleDocsUpload extends Command
      */
     public function handle()
     {
-        app('App\Http\Controllers\VehicleVariousUploadDocumentsCron')->execute();
+        app('App\Http\Controllers\ ')->execute();
         \Log::info('Cron - VehicleDocsUpload, artisan command vehicle:variouDocumentsUpload ran successfully @ ' . \Carbon\Carbon::now());
     }
 }

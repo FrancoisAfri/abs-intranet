@@ -26,3 +26,4 @@ mix.styles([
 mix.copyDirectory('public/bower_components/AdminLTE/plugins', 'public/Plugins');
 mix.copyDirectory('public/custom_components', 'public/customComponents');
 mix.copyDirectory('node_modules/dropzone', 'public/dropzone');
+mix.copyDirectory('node_modules/datetimepicker', 'public/datetimepicker');

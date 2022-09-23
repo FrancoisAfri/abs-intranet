@@ -2,18 +2,24 @@
 
 namespace App\Http\Controllers\Assets;
 
+use App\HRPerson;
 use App\Http\Controllers\TaskLibraryController;
 use App\Http\Requests\AssetComponentRequest;
 use App\Http\Requests\AssetFilesRequest;
+use App\Http\Requests\AssetTransferRequest;
+use App\leave_application;
+use App\leave_configuration;
+use App\Mail\LeaveBalanceReminder;
+use App\Mail\managerReminder;
 use App\Models\Assets;
 use App\Models\AssetFiles;
 use App\Models\AssetImagesTransfers;
 use App\Models\AssetTransfers;
 use App\Models\AssetType;
 use App\Models\AssetComponents;
-use App\HRPerson;
 use App\Models\LicensesType;
 use App\Models\StoreRoom;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
@@ -26,6 +32,7 @@ use App\Traits\StoreImageTrait;
 use App\Traits\uploadFilesTrait;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\View\View;
 use App\Http\Controllers\AuditReportsController;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -41,11 +48,14 @@ class AssetManagementController extends Controller
      */
     public function index(Request $request)
     {
+
+
+
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
         $asset_type = $request['asset_type_id'];
         $assetType = AssetType::all();
         $asserts = Assets::getAssetsByStatus($status, $asset_type);
-		
+
         $data = $this->breadCrump(
             "Asset Management",
             "Manage Assets", "fa fa-lock",
@@ -70,6 +80,7 @@ class AssetManagementController extends Controller
 
         return view('assets.manageAssets.create-asset')->with($data);
     }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -141,7 +152,7 @@ class AssetManagementController extends Controller
      * @param Request $request
      * @return JsonResponse
      */
-    public function storeTransfer(Request $request): JsonResponse
+    public function storeTransfer(AssetTransferRequest $request): JsonResponse
     {
 
         if ($request->hasFile('picture')) {
@@ -175,16 +186,57 @@ class AssetManagementController extends Controller
                 'asset_id' => $request['asset_id'],
                 'asset_status' => $status,
                 'user_id' => $user,
-                'store_id' =>$store,
+                'store_id' => $store,
                 'transaction_date' => date('Y-m-d H:i:s'),
                 'transfer_date' => $request['transfer_date'],
                 'asset_image_transfer_id' => $AssetImagesTransfers->id
             ]);
 
+            $assets = Assets::find($request['asset_id']);
+            $assets->asset_status = $status;
+            $assets->user_id = $user;
+            $assets->update();
+
         }
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
+    }
+
+    public function viewImages($assets)
+    {
+        $transfer = AssetTransfers::findByUuid($assets);
+        $date = $transfer->created_at;
+        $asset_id = $transfer->asset_id;
+
+        $assetUiid = Assets::where('id', $transfer->asset_id)->first();
+
+        $image = AssetImagesTransfers::getImagesById($asset_id, $date);
+
+        $data = $this->breadCrump(
+            "Asset Management",
+            "Manage Assets", "fa fa-lock",
+            "Asset Management Set Up",
+            "Asset Management",
+            "assets",
+            "Asset Management",
+            "Asset Management Tranfer Images"
+        );
+
+
+        $data['image'] = $image;
+        $data['transfer'] = $assetUiid->uuid;
+        $data['name'] = $assetUiid->name;
+
+        AuditReportsController::store(
+            'Asset Management',
+            'Asset Management Page Accessed',
+            "Actioned By User",
+            0
+        );
+
+        return view('assets.manageAssets.transfer-images')->with($data);
+
     }
 
     /**
@@ -196,7 +248,7 @@ class AssetManagementController extends Controller
     public function show($id)
     {
         $users = HRPerson::where('status', 1)->get();
-		//$activeTransfer = $activeInfo =$activeCom = $activeFile = ''; //
+        $activeTransfer = $activeInfo = $activeCom = $activeFile = ''; //
 //		if (!empty($tab) && $tab == 'file')
 //			$activeFile = 'active';
 //		elseif (!empty($tab) && $tab == 'component')
@@ -268,6 +320,11 @@ class AssetManagementController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @param $asset
+     * @return JsonResponse
+     */
     public function update(Request $request, $asset)
     {
         $Assets = Assets::find($asset);

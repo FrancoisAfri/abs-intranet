@@ -105,13 +105,13 @@
                                             </td>
                                             <td>
                                                 <a data-toggle="tooltip" title="Click to View Asset"
-                                                   href="{{ route('assets.show',['assets' => $assets->uuid, 'tab' => $info])}}">
+                                                   href="{{ route('assets.show',['assets' => $assets->uuid]) }}">
                                                     {{ (!empty( $assets->name)) ?  $assets->name : ''}}
                                                 </a>
                                             </td>
                                             <td>
                                                 <a data-toggle="tooltip" title="Click to View Asset"
-                                                   href="{{ route('assets.show',['assets' => $assets->uuid, 'tab' => $info]) }}">
+                                                   href="{{ route('assets.show',['assets' => $assets->uuid]) }}">
                                                     {{ (!empty( $assets->description)) ?  $assets->description : ''}}
                                                 </a>
                                             </td>
@@ -148,22 +148,6 @@
                                 @endforeach
                             @endif
                             </tbody>
-                            <tfoot>
-                            <tr>
-                                <th style="width: 10px; text-align: center;"></th>
-                                <th>Name</th>
-                                <th>Description</th>
-                                <th style="width: 5px; text-align: center;">Device Image</th>
-                                <th style="width: 5px; text-align: center;">Asset Tag</th>
-                                <th style="width: 5px; text-align: center;">Serial</th>
-                                <th style="width: 5px; text-align: center;">Model</th>
-                                <th style="width: 5px; text-align: center;">Make</th>
-                                <th style="width: 5px; text-align: center;">Asset Type</th>
-                                <th style="width: 5px; text-align: center;">price</th>
-                                <th>Status</th>
-                                <th style="width: 5px; text-align: center;"></th>
-                            </tr>
-                            </tfoot>
                         </table>
                         <!-- /.box-body -->
                         <div class="box-footer">
