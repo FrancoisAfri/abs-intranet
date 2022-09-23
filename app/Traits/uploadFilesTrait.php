@@ -36,7 +36,7 @@ trait uploadFilesTrait
                 $file_name->isValid()) {
                 $filename = pathinfo($file_name->getClientOriginalName(), PATHINFO_FILENAME);
                 $fileNameToStore = 'hardware-' . $filename . '-' . str_random(8) . '.' . $image_ext;
-                $path = $file_name->storeAs('public' . '/' . $directory, $fileNameToStore);
+                $path = $file_name->storeAs($directory, $fileNameToStore);
                 $moduleName->$file = $fileNameToStore;
                 return $moduleName->update();
             }
