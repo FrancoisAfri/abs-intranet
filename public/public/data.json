@@ -1,0 +1,1525 @@
+{
+    "Raw_Clocks"
+:
+    [{
+        "Clock_Id": 1475708075,
+        "Employee_Pin": "66",
+        "Employee_Fullname": "Virginia Jali",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:02:59",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476041266,
+        "Employee_Pin": "66",
+        "Employee_Fullname": "Virginia Jali",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 16:55:51",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475757930,
+        "Employee_Pin": "513",
+        "Employee_Fullname": "Nonkululeko Seolonyane",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 09:48:26",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476038786,
+        "Employee_Pin": "513",
+        "Employee_Fullname": "Nonkululeko Seolonyane",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 16:51:56",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475646238,
+        "Employee_Pin": "257",
+        "Employee_Fullname": "Ethel Mtshali",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:07:11",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476039961,
+        "Employee_Pin": "257",
+        "Employee_Fullname": "Ethel Mtshali",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 16:53:54",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475671604,
+        "Employee_Pin": "103",
+        "Employee_Fullname": "Farzana Dawood",
+        "Device": "Durban",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:28:01",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475672791,
+        "Employee_Pin": "103",
+        "Employee_Fullname": "Farzana Dawood",
+        "Device": "Durban",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:28:59",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475827322,
+        "Employee_Pin": "103",
+        "Employee_Fullname": "Farzana Dawood",
+        "Device": "Durban",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 11:55:33",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475734155,
+        "Employee_Pin": "45",
+        "Employee_Fullname": "Pearl Makonto",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:51:59",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476124688,
+        "Employee_Pin": "45",
+        "Employee_Fullname": "Pearl Makonto",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 19:58:48",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475683859,
+        "Employee_Pin": "422",
+        "Employee_Fullname": "Ziningi Njumbuxa",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:38:03",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476047202,
+        "Employee_Pin": "422",
+        "Employee_Fullname": "Ziningi Njumbuxa",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:01:04",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475640605,
+        "Employee_Pin": "85",
+        "Employee_Fullname": "Sellinah Simelani",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:03:21",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476052737,
+        "Employee_Pin": "85",
+        "Employee_Fullname": "Sellinah Simelani",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:03:57",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475722783,
+        "Employee_Pin": "532",
+        "Employee_Fullname": "Vina Daya ",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:26:37",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476102311,
+        "Employee_Pin": "532",
+        "Employee_Fullname": "Vina Daya ",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:24:52",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475729536,
+        "Employee_Pin": "487",
+        "Employee_Fullname": "Adriaan P Van Der Merwe",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:42:14",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476073442,
+        "Employee_Pin": "487",
+        "Employee_Fullname": "Adriaan P Van Der Merwe",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:38:16",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475713573,
+        "Employee_Pin": "530",
+        "Employee_Fullname": "Robert Ngobeni",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:10:17",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476108233,
+        "Employee_Pin": "530",
+        "Employee_Fullname": "Robert Ngobeni",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:42:38",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475708875,
+        "Employee_Pin": "428",
+        "Employee_Fullname": "Ronelle Sewduth",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:03:54",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476075501,
+        "Employee_Pin": "428",
+        "Employee_Fullname": "Ronelle Sewduth",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:42:10",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475732112,
+        "Employee_Pin": "230",
+        "Employee_Fullname": "Enock Tshehla",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:46:47",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475732114,
+        "Employee_Pin": "230",
+        "Employee_Fullname": "Enock Tshehla",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:46:48",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475882594,
+        "Employee_Pin": "230",
+        "Employee_Fullname": "Enock Tshehla",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 13:10:55",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476109184,
+        "Employee_Pin": "230",
+        "Employee_Fullname": "Enock Tshehla",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:46:24",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475708301,
+        "Employee_Pin": "482",
+        "Employee_Fullname": "Anna Mokgatle",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:03:01",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476110130,
+        "Employee_Pin": "482",
+        "Employee_Fullname": "Anna Mokgatle",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:49:48",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475739058,
+        "Employee_Pin": "534",
+        "Employee_Fullname": "Nombulelo Monakali",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 09:01:52",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476124525,
+        "Employee_Pin": "534",
+        "Employee_Fullname": "Nombulelo Monakali",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 19:57:02",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475713078,
+        "Employee_Pin": "526",
+        "Employee_Fullname": "Maria Sambo",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:09:25",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475794643,
+        "Employee_Pin": "29",
+        "Employee_Fullname": "Simon Mahlabegwane",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 10:42:35",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475678781,
+        "Employee_Pin": "471",
+        "Employee_Fullname": "Sthembile Shabalala",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:33:03",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475718377,
+        "Employee_Pin": "156",
+        "Employee_Fullname": "Rose Molakeng",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:19:00",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475708012,
+        "Employee_Pin": "382",
+        "Employee_Fullname": "Halene Bollay",
+        "Device": "Durban",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:03:08",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476059823,
+        "Employee_Pin": "382",
+        "Employee_Fullname": "Halene Bollay",
+        "Device": "Durban",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:11:58",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475686334,
+        "Employee_Pin": "241",
+        "Employee_Fullname": "Edward Maas",
+        "Device": "Durban",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:40:58",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476043057,
+        "Employee_Pin": "241",
+        "Employee_Fullname": "Edward Maas",
+        "Device": "Durban",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 16:58:06",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475718480,
+        "Employee_Pin": "211",
+        "Employee_Fullname": "Mpumi Mazeka",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:19:06",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475712450,
+        "Employee_Pin": "504",
+        "Employee_Fullname": "Thato Molefe",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:08:24",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476050595,
+        "Employee_Pin": "504",
+        "Employee_Fullname": "Thato Molefe",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:02:37",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476067355,
+        "Employee_Pin": "542",
+        "Employee_Fullname": "Rebecca Dirane",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:25:48",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475707401,
+        "Employee_Pin": "547",
+        "Employee_Fullname": "Baleseng Matshwe",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:02:02",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476059282,
+        "Employee_Pin": "547",
+        "Employee_Fullname": "Baleseng Matshwe",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:11:02",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476052038,
+        "Employee_Pin": "548",
+        "Employee_Fullname": "Cinah Siboya",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:03:40",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475725336,
+        "Employee_Pin": "549",
+        "Employee_Fullname": "Raeesa Sarwan",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:32:08",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475713651,
+        "Employee_Pin": "561",
+        "Employee_Fullname": "Phakama",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:10:22",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476056311,
+        "Employee_Pin": "561",
+        "Employee_Fullname": "Phakama",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:07:14",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475717323,
+        "Employee_Pin": "559",
+        "Employee_Fullname": "Thobeka Ndaba",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:06:04",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476066413,
+        "Employee_Pin": "559",
+        "Employee_Fullname": "Thobeka Ndaba",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:23:34",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476058071,
+        "Employee_Pin": "573",
+        "Employee_Fullname": "Lungi Tyana",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:09:31",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475708304,
+        "Employee_Pin": "600",
+        "Employee_Fullname": "Penelope Ngema",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:03:07",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476045896,
+        "Employee_Pin": "600",
+        "Employee_Fullname": "Penelope Ngema",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:00:07",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475723173,
+        "Employee_Pin": "599",
+        "Employee_Fullname": "Mpho Nkosi",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:27:39",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476045211,
+        "Employee_Pin": "599",
+        "Employee_Fullname": "Mpho Nkosi",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 16:59:59",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475727033,
+        "Employee_Pin": "607",
+        "Employee_Fullname": "Kgaugelo Kekana",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:35:52",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476060027,
+        "Employee_Pin": "607",
+        "Employee_Fullname": "Kgaugelo Kekana",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:12:16",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475683315,
+        "Employee_Pin": "615",
+        "Employee_Fullname": "Kathleen",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:37:34",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476054504,
+        "Employee_Pin": "615",
+        "Employee_Fullname": "Kathleen",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:05:30",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475694134,
+        "Employee_Pin": "616",
+        "Employee_Fullname": "Kgomotso",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:48:56",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476081324,
+        "Employee_Pin": "616",
+        "Employee_Fullname": "Kgomotso",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:51:58",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475731557,
+        "Employee_Pin": "644",
+        "Employee_Fullname": "Pinky",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:45:41",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476124311,
+        "Employee_Pin": "644",
+        "Employee_Fullname": "Pinky",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 19:54:58",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475713111,
+        "Employee_Pin": "664",
+        "Employee_Fullname": "Tsholo Tsele",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:09:32",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476059056,
+        "Employee_Pin": "664",
+        "Employee_Fullname": "Tsholo Tsele",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:10:41",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475704474,
+        "Employee_Pin": "676",
+        "Employee_Fullname": "Sithabiso",
+        "Device": "Durban",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:59:45",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475843639,
+        "Employee_Pin": "676",
+        "Employee_Fullname": "Sithabiso",
+        "Device": "Durban",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 12:17:52",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476063636,
+        "Employee_Pin": "676",
+        "Employee_Fullname": "Sithabiso",
+        "Device": "Durban",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:18:28",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475723313,
+        "Employee_Pin": "670",
+        "Employee_Fullname": "Nhlanhla",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:27:42",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476050390,
+        "Employee_Pin": "670",
+        "Employee_Fullname": "Nhlanhla",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:02:22",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475735146,
+        "Employee_Pin": "675",
+        "Employee_Fullname": "Nceba",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:54:18",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476093170,
+        "Employee_Pin": "675",
+        "Employee_Fullname": "Nceba",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:06:22",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475730717,
+        "Employee_Pin": "706",
+        "Employee_Fullname": "Koketso Makhene",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:43:57",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476071974,
+        "Employee_Pin": "706",
+        "Employee_Fullname": "Koketso Makhene",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:35:03",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475707431,
+        "Employee_Pin": "719",
+        "Employee_Fullname": "Ingrid Louw",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:01:43",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476093160,
+        "Employee_Pin": "719",
+        "Employee_Fullname": "Ingrid Louw",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:06:13",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475724423,
+        "Employee_Pin": "724",
+        "Employee_Fullname": "Tsholofelo Mazibuko ",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:30:12",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475663744,
+        "Employee_Pin": "737",
+        "Employee_Fullname": "Kene Nthoba",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:21:00",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475767118,
+        "Employee_Pin": "737",
+        "Employee_Fullname": "Kene Nthoba",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 10:05:35",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475734290,
+        "Employee_Pin": "641",
+        "Employee_Fullname": "Elija ",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:52:21",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476066997,
+        "Employee_Pin": "641",
+        "Employee_Fullname": "Elija ",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:24:50",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475689527,
+        "Employee_Pin": "702",
+        "Employee_Fullname": "Emma",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:44:16",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475702382,
+        "Employee_Pin": "745",
+        "Employee_Fullname": "Candice Naidoo",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:57:31",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476054488,
+        "Employee_Pin": "745",
+        "Employee_Fullname": "Candice Naidoo",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:05:23",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475727563,
+        "Employee_Pin": "773",
+        "Employee_Fullname": "Lerato Konyane",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:37:21",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476066378,
+        "Employee_Pin": "773",
+        "Employee_Fullname": "Lerato Konyane",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:23:25",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475723314,
+        "Employee_Pin": "778",
+        "Employee_Fullname": "Thabiso Molefe ",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:27:47",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476049527,
+        "Employee_Pin": "778",
+        "Employee_Fullname": "Thabiso Molefe ",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:01:57",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475730916,
+        "Employee_Pin": "770",
+        "Employee_Fullname": "Zanele Zwane",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:44:32",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476124342,
+        "Employee_Pin": "770",
+        "Employee_Fullname": "Zanele Zwane",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 19:55:32",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475724313,
+        "Employee_Pin": "787",
+        "Employee_Fullname": "Hazel Lerato Mokobane",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:30:08",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476067071,
+        "Employee_Pin": "787",
+        "Employee_Fullname": "Hazel Lerato Mokobane",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:25:08",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475724955,
+        "Employee_Pin": "769",
+        "Employee_Fullname": "Princess Sindane",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:31:21",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476059708,
+        "Employee_Pin": "769",
+        "Employee_Fullname": "Princess Sindane",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:11:44",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475734094,
+        "Employee_Pin": "766",
+        "Employee_Fullname": "Tanaka Mvunyiswa",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:51:53",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476041511,
+        "Employee_Pin": "766",
+        "Employee_Fullname": "Tanaka Mvunyiswa",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 16:56:17",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475717334,
+        "Employee_Pin": "746",
+        "Employee_Fullname": "Thulani Ngcongwane",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:13:58",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476059496,
+        "Employee_Pin": "746",
+        "Employee_Fullname": "Thulani Ngcongwane",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:11:20",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475708962,
+        "Employee_Pin": "751",
+        "Employee_Fullname": "Khosi Skhakhane",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:04:11",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476045320,
+        "Employee_Pin": "751",
+        "Employee_Fullname": "Khosi Skhakhane",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 16:59:57",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475708252,
+        "Employee_Pin": "748",
+        "Employee_Fullname": "Lerato Siphuka",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:03:10",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476093315,
+        "Employee_Pin": "748",
+        "Employee_Fullname": "Lerato Siphuka",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:06:31",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475713653,
+        "Employee_Pin": "759",
+        "Employee_Fullname": "Raisibe Pertunia Baig",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:10:27",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476110185,
+        "Employee_Pin": "759",
+        "Employee_Fullname": "Raisibe Pertunia Baig",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:49:55",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475730688,
+        "Employee_Pin": "793",
+        "Employee_Fullname": "Jeanette Jwara",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:43:50",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476059239,
+        "Employee_Pin": "793",
+        "Employee_Fullname": "Jeanette Jwara",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:10:55",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475718086,
+        "Employee_Pin": "792",
+        "Employee_Fullname": "Nomzamo Lugongqo",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:18:26",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476059197,
+        "Employee_Pin": "792",
+        "Employee_Fullname": "Nomzamo Lugongqo",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:10:49",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475707453,
+        "Employee_Pin": "794",
+        "Employee_Fullname": "Shayna Smith",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:02:09",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476062188,
+        "Employee_Pin": "794",
+        "Employee_Fullname": "Shayna Smith",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:15:50",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475735814,
+        "Employee_Pin": "798",
+        "Employee_Fullname": "Nthabiseng Mahlo",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:55:56",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476066251,
+        "Employee_Pin": "798",
+        "Employee_Fullname": "Nthabiseng Mahlo",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:23:09",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476057270,
+        "Employee_Pin": "774",
+        "Employee_Fullname": "Bongiswa Zola",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:08:32",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475717330,
+        "Employee_Pin": "799",
+        "Employee_Fullname": "Theodorah Mabona",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:13:47",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476063559,
+        "Employee_Pin": "799",
+        "Employee_Fullname": "Theodorah Mabona",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:18:06",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475709294,
+        "Employee_Pin": "768",
+        "Employee_Fullname": "Olebogeng Mongae",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:04:33",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476058548,
+        "Employee_Pin": "768",
+        "Employee_Fullname": "Olebogeng Mongae",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:10:04",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475685963,
+        "Employee_Pin": "803",
+        "Employee_Fullname": "Tumisho Mary Moetlo",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:40:31",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476056443,
+        "Employee_Pin": "803",
+        "Employee_Fullname": "Tumisho Mary Moetlo",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:07:23",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475707963,
+        "Employee_Pin": "802",
+        "Employee_Fullname": "Sphiwe Mkhonto",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:02:15",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476048798,
+        "Employee_Pin": "802",
+        "Employee_Fullname": "Sphiwe Mkhonto",
+        "Device": "Saxonwold",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:01:50",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475696522,
+        "Employee_Pin": "804",
+        "Employee_Fullname": "Keshnie Mahadeo",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:51:32",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476057087,
+        "Employee_Pin": "804",
+        "Employee_Fullname": "Keshnie Mahadeo",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:08:02",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476057090,
+        "Employee_Pin": "804",
+        "Employee_Fullname": "Keshnie Mahadeo",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:08:03",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475737888,
+        "Employee_Pin": "812",
+        "Employee_Fullname": "Christopher Simonsen",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:59:19",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476066119,
+        "Employee_Pin": "812",
+        "Employee_Fullname": "Christopher Simonsen",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:22:48",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475714263,
+        "Employee_Pin": "820",
+        "Employee_Fullname": "Reitumetse Seboka",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:11:17",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476066306,
+        "Employee_Pin": "820",
+        "Employee_Fullname": "Reitumetse Seboka",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:23:16",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475660051,
+        "Employee_Pin": "819",
+        "Employee_Fullname": "Siyaxolisa Pepe",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:17:58",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476046984,
+        "Employee_Pin": "819",
+        "Employee_Fullname": "Siyaxolisa Pepe",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:00:50",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475697449,
+        "Employee_Pin": "816",
+        "Employee_Fullname": "Queen Litsue",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:52:34",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476046972,
+        "Employee_Pin": "816",
+        "Employee_Fullname": "Queen Litsue",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:00:38",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475683399,
+        "Employee_Pin": "821",
+        "Employee_Fullname": "Themba Mngomezulu",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:37:43",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476052915,
+        "Employee_Pin": "821",
+        "Employee_Fullname": "Themba Mngomezulu",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:04:05",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475730005,
+        "Employee_Pin": "817",
+        "Employee_Fullname": "Leandra Sammuller",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:43:38",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476043024,
+        "Employee_Pin": "817",
+        "Employee_Fullname": "Leandra Sammuller",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 16:58:01",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475730622,
+        "Employee_Pin": "818",
+        "Employee_Fullname": "Nevin Blandford",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:43:45",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476043251,
+        "Employee_Pin": "818",
+        "Employee_Fullname": "Nevin Blandford",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 16:58:05",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475724879,
+        "Employee_Pin": "815",
+        "Employee_Fullname": "Mathapelo Thetele",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:31:11",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476057547,
+        "Employee_Pin": "815",
+        "Employee_Fullname": "Mathapelo Thetele",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:08:46",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475723142,
+        "Employee_Pin": "813",
+        "Employee_Fullname": "Antonio Ruiter",
+        "Device": "Saxonwold",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:27:43",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475712732,
+        "Employee_Pin": "827",
+        "Employee_Fullname": "Pfunzo Mmbengwa",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:08:46",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476048910,
+        "Employee_Pin": "827",
+        "Employee_Fullname": "Pfunzo Mmbengwa",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:01:51",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475726588,
+        "Employee_Pin": "826",
+        "Employee_Fullname": "Delores Jardim ",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:34:48",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476094928,
+        "Employee_Pin": "826",
+        "Employee_Fullname": "Delores Jardim ",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:08:42",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475705213,
+        "Employee_Pin": "825",
+        "Employee_Fullname": "Patricia Nyembe",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 08:00:22",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475742031,
+        "Employee_Pin": "832",
+        "Employee_Fullname": "Amina Kam",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 09:08:29",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475862205,
+        "Employee_Pin": "801",
+        "Employee_Fullname": "Petronella",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 12:44:39",
+        "Jobcode": 1,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476092085,
+        "Employee_Pin": "801",
+        "Employee_Fullname": "Petronella",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 18:04:49",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1475701152,
+        "Employee_Pin": "824",
+        "Employee_Fullname": "Itumeleng Pelo",
+        "Device": "Reception Door",
+        "Direction": "In",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 07:56:14",
+        "Jobcode": 0,
+        "Comment": ""
+    }, {
+        "Clock_Id": 1476066759,
+        "Employee_Pin": "824",
+        "Employee_Fullname": "Itumeleng Pelo",
+        "Device": "Gemini New",
+        "Direction": "Out",
+        "Clock_Status": "Active",
+        "Clocked": "2022-09-23 17:24:31",
+        "Jobcode": 0,
+        "Comment": ""
+    }]
+}

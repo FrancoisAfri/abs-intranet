@@ -29,6 +29,7 @@ class Kernel extends ConsoleKernel
 		  \App\Console\Commands\RemindManager::class,
 		  \App\Console\Commands\leaveEscalation::class,
 		  \App\Console\Commands\leaveBalanceReport::class,
+		  \App\Console\Commands\AutomateAbsentLeaveApplication::class,
     ];
 
     /**
@@ -56,6 +57,7 @@ class Kernel extends ConsoleKernel
 		$schedule->command('schedule:RemindManager')->weeklyOn(4, '23:00');
 		$schedule->command('schedule:leaveEscalation')->weeklyOn(4, '23:00');
         $schedule->command('schedule:LeaveBalanceReport')->monthlyOn(1, '01:00');
+        $schedule->command('schedule:absentLeaveApplication')->dailyAt('23:00');
 
     }
 

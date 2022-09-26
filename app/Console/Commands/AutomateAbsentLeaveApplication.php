@@ -4,21 +4,21 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 
-class leaveBalanceReport extends Command
+class AutomateAbsentLeaveApplication extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'schedule:leaveBalanceReport';
+    protected $signature = 'schedule:absentLeaveApplication';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'this command will send leave balance Report  to the head';
+    protected $description = 'this command will collect all absent employees and apply for leave on their behalf';
 
     /**
      * Create a new command instance.
@@ -37,7 +37,7 @@ class leaveBalanceReport extends Command
      */
     public function handle()
     {
-        app('App\Http\Controllers\Crons\SendLeaveBalanceToUsers')->sendReport();
-        \Log::info('Cron - leaveBalanceReport, artisan command schedule:leaveBalanceReport ran successfully @ ' . \Carbon\Carbon::now());
+        app('App\Service\ReadErsDetails')->getErsDetails();
+        \Log::info('Cron - absentLeaveApplication, artisan command schedule:absentLeaveApplication ran successfully @ ' . \Carbon\Carbon::now());
     }
 }

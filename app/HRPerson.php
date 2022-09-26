@@ -2,11 +2,21 @@
 
 namespace App;
 
+use App\Traits\Uuids;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
 class HRPerson extends Model
 {
+    use Uuids;
+
+    /**
+     * @var string[]
+     */
+    protected $hidden = [
+        'id'
+    ];
+
     //Specify the table name
     public $table = 'hr_people';
 

@@ -37,6 +37,7 @@ use Illuminate\View\View;
 use App\Http\Controllers\AuditReportsController;
 use RealRashid\SweetAlert\Facades\Alert;
 use Yajra\Datatables\Facades\Datatables;
+use GuzzleHttp;
 
 class AssetManagementController extends Controller
 {
@@ -48,7 +49,6 @@ class AssetManagementController extends Controller
      */
     public function index(Request $request)
     {
-
 
 
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
