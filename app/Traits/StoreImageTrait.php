@@ -34,7 +34,7 @@ trait StoreImageTrait
                 $image_name->isValid()) {
                 $filename = pathinfo($image_name->getClientOriginalName(), PATHINFO_FILENAME);
                 $fileNameToStore = $filename . '-' . time() . '.' . $image_ext;
-                $path = $image_name->storeAs('public' . '/' . $directory, $fileNameToStore);
+                $path = $image_name->storeAs($directory, $fileNameToStore);
                 $moduleName->$fieldname = $fileNameToStore;
                 return $moduleName->update();
             }
