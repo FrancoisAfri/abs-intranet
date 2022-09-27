@@ -402,8 +402,10 @@ class LeaveApplicationController extends Controller
                 ->withErrors($validator)
                 ->withInput();
         }
+
         $leaveApp = $request->all();
         unset($leaveApp['_token']);
+
         $day = $leaveApp['day'];
         $dates = explode(' - ', $day);
         $startDate = str_replace('/', '-', $dates[0]);
@@ -432,6 +434,7 @@ class LeaveApplicationController extends Controller
         $username = $HRpeople->first_name . " " . $HRpeople->surname;
         // call the function
         $ApplicationDetails = LeaveApplicationController::ApplicationDetails(0, $hrID);
+
         $applicatiionStaus = $ApplicationDetails['status'];
         $levtype = $request->input('leave_type');
         $levApp = new leave_application();

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Query\Builder;
 
 class leave_application extends Model
 {
@@ -49,12 +50,26 @@ class leave_application extends Model
     // public function getLeaveStatusAttribute () {
     //   return $status[$this->status];
     // }
-    public static function getUnapprovedApplications($date ,$managerId)
+    public static function getUnapprovedApplications($date, $managerId)
     {
-       return leave_application::where('status', '>=' , 2)
+        return leave_application::where('status', '>=', 2)
             ->where('created_at', '>=', $date)
             ->where('manager_id', $managerId)
             ->count();
+    }
+
+    /**
+     * @param $userID
+     * @param $date
+     * @return Builder|leave_application|Model
+     */
+    public static function checkIfUserApplied($userID, $date)
+    {
+        return leave_application::where(
+            [
+                'hr_id' => $userID,
+                'start_date' => $date
+            ])->first();
     }
 
 
