@@ -180,6 +180,8 @@ class ReadErsDetails
         //check if the user did apply for leave within those days
         // if not apply for leave for the user
         // send email informing the user the system has applied leave for them on their behalf
+        //check how many days the user was absent
+        //get the fist date and last date
         $from = date("Y-m-d");
         $getEscalationDays = leave_configuration::pluck('number_of_days_before_automate_application')->first();
 
@@ -219,6 +221,13 @@ class ReadErsDetails
                     'manager_id' => $managerID,
                 ]);
 
+
+//                $absent = ErsAbsentUsers::find( $absent->hr_id);
+//                $absent->hr_id =  $absent->hr_id;
+//                $absent->date = $date;
+//                $absent->is_applied = 1;
+//                $absent->update();
+
             } else {
                 $va = "do nothing";
             }
@@ -242,7 +251,7 @@ class ReadErsDetails
 
         $absentUsers = $this->getAbsentUsers();
 
-        
+
 
 
 
