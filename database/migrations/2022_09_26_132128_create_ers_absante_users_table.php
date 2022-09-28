@@ -17,7 +17,6 @@ class CreateErsAbsanteUsersTable extends Migration
             $table->increments('id');
             $table->unsignedBigInteger('hr_id')->nullable();
             $table->smallInteger('is_applied')->nullable()->default(0);
-            $table->smallInteger('is_email_sent')->nullable()->default(0);
             $table->bigInteger('date')->nullable();
             $table->timestamps();
         });

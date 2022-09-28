@@ -10,7 +10,7 @@ class ErsAbsentUsers extends Model
     public $table = 'ers_absent_users';
 
     protected $fillable = [
-        'hr_id', 'is_applied', 'date'
+        'hr_id', 'is_applied', 'date', 'is_email_sent'
     ];
 
 
@@ -22,7 +22,10 @@ class ErsAbsentUsers extends Model
         )->get();
     }
 
-    public static function checkIfRecordExists(){
-
+    public static function getLeaveTaken($hrId){
+        return  ErsAbsentUsers::where([
+            'is_applied' => 0,
+            'hr_id' => $hrId
+        ])->count();
     }
 }
