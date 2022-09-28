@@ -43,8 +43,10 @@ class ReadErsDetails
 
 
         $todo = 'get_clocks';
-        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
-        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
+//        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
+//        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
+        $date_from = '2022-09-28';
+        $date_to = '2022-09-28';
         $theUrl = 'https://r14.ersbio.co.za/api/data_client.php?'
             . 't=' . $token
             . '&to_do=' . $todo
@@ -137,8 +139,18 @@ class ReadErsDetails
 
             //check if user applied for leave
             $checkUserApplicationStatus = leave_application::checkIfUserApplied($userID, $date);
+
+            $checkEmail = ErsAbsentUsers::where(
+                [
+                    'hr_id' => $userID,
+                    'is_applied' => 0,
+                    'is_email_sent' => 1
+                ]
+            )->first();
+
+//            dd(isset($checkEmail));
             //check if record exist
-            $isRecordExist = ErsAbsentUsers::findOrFail($userID);
+
 
             if (!isset($checkUserApplicationStatus)) {
 
@@ -148,20 +160,30 @@ class ReadErsDetails
                         'hr_id' => $userID,
                         'date' => $date,
                         'is_applied' => 0,
+                        'is_email_sent' => 1,
 
                     ]);
 
                 //send email to remind them
-                if (!empty($getUsersDetails->email))
-                    Mail::to($getUsersDetails->email)->send(new remindUserToapplyLeave($fullnane, $getUsersDetails->email, $date_from));
+                if (!isset($checkEmail)) {
+                    if (!empty($getUsersDetails->email))
+                        Mail::to($getUsersDetails->email)->send(new remindUserToapplyLeave($fullnane, $getUsersDetails->email, $date_from));
+                } else {
+                    "do nothing";
+                }
+
 
             } else {
 
-                $absent = ErsAbsentUsers::find($getUsersDetails->user_id);
-                $absent->hr_id = $userID;
-                $absent->date = $date;
-                $absent->is_applied = 1;
-                $absent->update();
+                ErsAbsentUsers::updateOrCreate(
+                    [
+                        'hr_id' => $userID,
+                        'date' => $date,
+                        'is_applied' => 1,
+                        'is_email_sent' => 0,
+
+                    ]);
+                //1664143200
 
             }
 
@@ -201,7 +223,11 @@ class ReadErsDetails
 
             $totaldays = $to->diffInWeekdays($from);
 
+
             if ($getEscalationDays == $totaldays) {
+
+                //count leave taken
+                $leavetaken = ErsAbsentUsers::getLeaveTaken($absent->hr_id);
 
                 $applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id, $absent->date, $absent->date);
 
@@ -214,21 +240,24 @@ class ReadErsDetails
                     'leave_type_id' => 1,
                     'start_date' => $absent->date,
                     'end_date' => $absent->date,
-                    'leave_taken' => 1,
+                    'leave_taken' => $leavetaken,
                     'hr_id' => $absent->hr_id,
-                    'notes' => 'THe system has automatically applied for leave on your behalf',
+                    'notes' => 'The system has automatically applied for leave on your behalf',
                     'status' => $applicationStatus['status'],
                     'manager_id' => $managerID,
                 ]);
 
 
-//                $absent = ErsAbsentUsers::find( $absent->hr_id);
-//                $absent->hr_id =  $absent->hr_id;
-//                $absent->date = $date;
+                //this one is to update the erstable
+//                $absent = ErsAbsentUsers::find($absent->hr_id);
+//                $absent->hr_id = $absent->hr_id;
+//                $absent->date = $absent->date;
 //                $absent->is_applied = 1;
 //                $absent->update();
 
             } else {
+
+                ///nothing
                 $va = "do nothing";
             }
 
@@ -251,8 +280,7 @@ class ReadErsDetails
 
         $absentUsers = $this->getAbsentUsers();
 
-
-
+        dd(ErsAbsentUsers::all());
 
 
     }
