@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ManagerReport;
 use BladeView;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
@@ -120,7 +121,8 @@ class  LeaveSetupController extends Controller
     public function showSetup(Request $request)
     {
 
-        $users =  HRPerson::getAllUsers();
+        $users = HRPerson::getAllUsers();
+
 
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
             $query->orderBy('id', 'asc');
@@ -1014,5 +1016,22 @@ class  LeaveSetupController extends Controller
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Upload';
         AuditReportsController::store('Leave Management', "Leave Reactivation uploaded", "Accessed by User", 0);
+    }
+
+
+    public function storeMangerReport(Request $request)
+    {
+
+        unset($request['_token']);
+
+        $managers = $request['hr_person_id'];
+        foreach ($managers as $manager) {
+            ManagerReport::updateOrCreate([
+                'hr_id' => $manager,
+                'is_active' => 1
+            ]);
+        }
+        Alert::toast('Settings  Successfully Changed', 'success');
+        return back();
     }
 }

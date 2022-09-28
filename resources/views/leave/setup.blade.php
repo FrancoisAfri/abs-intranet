@@ -85,6 +85,56 @@
         @include('leave.partials.edit_sick_days')
     </div>
 
+    <div class="col-md-12">
+        <div class="box box-primary">
+            <div class="box-header with-border">
+                <h3 class="box-title">Users to receive Absent user report</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <form class="form-horizontal" method="post" action="{{ route('manager_report') }}">
+                    {{ csrf_field() }}
+                    <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
+                        <label for="hr_person_id" class="col-sm-2 control-label">Users</label>
+                        <div class="col-sm-10">
+                            <div class="input-group">
+                                <div class="input-group-addon">
+                                    <i class="fa fa-user-circle"></i>
+                                </div>
+                                <select class="form-control select2" multiple="multiple" style="width: 100%;"
+                                        id="hr_person_id" name="hr_person_id[]">
+                                    <option value="">*** Select an Users ***</option>
+                                    @foreach($users as $employee)
+                                        <option value="{{ $employee->id }}">{{
+                                    $employee->first_name
+                                    . ' ' .
+                                     $employee->surname }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+
+                        <button type="submit" class="btn btn-primary"><i class="fa fa-users"></i>
+                            save list of users
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <!-- /.box-body -->
+        </div>
+    </div>
+
+    <!-- Include add new prime rate modal -->
+
 
 
     <div class="col-sm-6">
@@ -195,7 +245,7 @@
                                 <td>Person to receive the Report</td>
                                 <td>
                                     <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
-                                      
+
                                         <div class="col-sm-10">
                                             <div class="input-group">
                                                 <div class="input-group-addon">
@@ -446,6 +496,8 @@
 <!-- Ajax form submit -->
 @section('page_script')
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
+    <!-- Select2 -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <script src="{{ asset('bower_components/AdminLTE/plugins/iCheck/icheck.min.js')}}"></script>
     <!-- InputMask -->
 
@@ -481,7 +533,11 @@
 
 
         $(function () {
-            var moduleId;
+
+            //Initialize Select2 Elements
+            $(".select2").select2();
+
+            let moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
 
@@ -494,7 +550,7 @@
 
             //Vertically center modals on page
             function reposition() {
-                var modal = $(this)
+                let modal = $(this)
                     , dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
                 // Dividing by two centers the modal exactly, but dividing by three
@@ -509,22 +565,22 @@
                 $('.modal:visible').each(reposition);
             });
 
-            var leavesetupId;
+            let leavesetupId;
             $('#edit-leave_taken-modal').on('show.bs.modal', function (e) {
                 //console.log('kjhsjs');
-                var btnEdit = $(e.relatedTarget);
+                let btnEdit = $(e.relatedTarget);
                 leavesetupId = btnEdit.data('id');
                 console.log('leavesetupID: ' + leavesetupId);
-                var name = btnEdit.data('name');
-                var day5min = btnEdit.data('day5min');
-                var day5max = btnEdit.data('day5max');
-                var day6min = btnEdit.data('day6min');
-                var day6max = btnEdit.data('day6max');
-                var shiftmin = btnEdit.data('shiftmin');
-                var shiftmax = btnEdit.data('shiftmax');
+                let name = btnEdit.data('name');
+                let day5min = btnEdit.data('day5min');
+                let day5max = btnEdit.data('day5max');
+                let day6min = btnEdit.data('day6min');
+                let day6max = btnEdit.data('day6max');
+                let shiftmin = btnEdit.data('shiftmin');
+                let shiftmax = btnEdit.data('shiftmax');
 
                 // var moduleFontAwesome = btnEdit.data('font_awesome');
-                var modal = $(this);
+                let modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#day5min').val(day5min);
                 modal.find('#day5max').val(day5max);
@@ -550,11 +606,11 @@
                     , _token: $('#edit-leave_taken-modal').find('input[name=_token]').val()
                 };
                 //console.log('gets here ' + JSON.stringify(objData));
-                var modalID = 'edit-leave_taken-modal';
-                var submitBtnID = 'update-leave_taken';
-                var redirectUrl = '/leave/setup';
-                var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'Leave days has been successfully added.';
+                let modalID = 'edit-leave_taken-modal';
+                let submitBtnID = 'update-leave_taken';
+                let redirectUrl = '/leave/setup';
+                let successMsgTitle = 'Changes Saved!';
+                let successMsg = 'Leave days has been successfully added.';
                 // var method = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });                        // ----edit setup leave days ------
@@ -562,42 +618,42 @@
 
         //#leave cresdit settings
         $('#save_leave_credit').on('click', function () {
-            var strUrl = '/leave/custom/add_leave';
-            var objData = {
+            let strUrl = '/leave/custom/add_leave';
+            let objData = {
                 hr_id: $('#add-custom-leave-modal').find('#hr_id').val()
                 , number_of_days: $('#add-custom-leave-modal').find('#number_of_days').val()
                 , _token: $('#add-custom-leave-modal').find('input[name=_token]').val()
             };
-            var modalID = 'add-custom-leave-modal';
-            var submitBtnID = 'add_custom_leave';
-            var redirectUrl = '/leave/types';
-            var successMsgTitle = 'Changes Saved!';
-            var successMsg = 'Leave has been successfully added.';
+            let modalID = 'add-custom-leave-modal';
+            let submitBtnID = 'add_custom_leave';
+            let redirectUrl = '/leave/types';
+            let successMsgTitle = 'Changes Saved!';
+            let successMsg = 'Leave has been successfully added.';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 
         //UPDATE
 
-        var updateNegativeID;
+        let updateNegativeID;
         $('#edit-annual-modal').on('show.bs.modal', function (e) {
-            var btnEdit = $(e.relatedTarget);
+            let btnEdit = $(e.relatedTarget);
 
             updateNegativeID = btnEdit.data('id');
-            var number_of_days_annual = btnEdit.data('number_of_days_annual');
+            let number_of_days_annual = btnEdit.data('number_of_days_annual');
             //console.log(number_of_days_annual);
-            var modal = $(this);
+            let modal = $(this);
             modal.find('#number_of_days_annual').val(number_of_days_annual);
 
         });
 
-        var updateSickID;
+        let updateSickID;
         $('#edit-sick-modal').on('show.bs.modal', function (e) {
-            var btnEdit = $(e.relatedTarget);
+            let btnEdit = $(e.relatedTarget);
 
             updateSickID = btnEdit.data('id');
-            var number_of_days_sick = btnEdit.data('number_of_days_sick');
+            let number_of_days_sick = btnEdit.data('number_of_days_sick');
             // console.log(number_of_days_sick);
-            var modal = $(this);
+            let modal = $(this);
             modal.find('#number_of_days_sick').val(number_of_days_sick);
 
         });
@@ -605,32 +661,32 @@
         //SAVE
 
         $('#update_annual').on('click', function () {
-            var strUrl = '/leave/setup/' + '1';
-            var objData = {
+            let strUrl = '/leave/setup/' + '1';
+            let objData = {
                 number_of_days_annual: $('#edit-annual-modal').find('#number_of_days_annual').val()
                 , _token: $('#edit-annual-modal').find('input[name=_token]').val()
             };
-            var modalID = 'edit-annual-modal';
-            var submitBtnID = 'edit_annual';
-            var redirectUrl = '/leave/setup';
-            var successMsgTitle = 'Changes Saved!';
-            var successMsg = 'Leave has been successfully added.';
-            var formMethod = 'PATCH';
+            let modalID = 'edit-annual-modal';
+            let submitBtnID = 'edit_annual';
+            let redirectUrl = '/leave/setup';
+            let successMsgTitle = 'Changes Saved!';
+            let successMsg = 'Leave has been successfully added.';
+            let formMethod = 'PATCH';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
         });
 
         $('#update-sick').on('click', function () {
-            var strUrl = '/leave/setup/' + '1/' + 'sick';
-            var objData = {
+            let strUrl = '/leave/setup/' + '1/' + 'sick';
+            let objData = {
                 number_of_days_sick: $('#edit-sick-modal').find('#number_of_days_sick').val()
                 , _token: $('#edit-sick-modal').find('input[name=_token]').val()
             };
-            var modalID = 'edit-sick-modal';
-            var submitBtnID = 'edit_sick';
-            var redirectUrl = '/leave/setup';
-            var successMsgTitle = 'Changes Saved!';
-            var successMsg = 'Leave has been successfully added.';
-            var formMethod = 'PATCH';
+            let modalID = 'edit-sick-modal';
+            let submitBtnID = 'edit_sick';
+            let redirectUrl = '/leave/setup';
+            let successMsgTitle = 'Changes Saved!';
+            let successMsg = 'Leave has been successfully added.';
+            let formMethod = 'PATCH';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
         });
 

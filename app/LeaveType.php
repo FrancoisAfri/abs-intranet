@@ -27,7 +27,6 @@ class LeaveType extends Model
      */
     public function leave_profle()
     {
-        //Many to many Relationship Between leavetype and leave_profile
         return $this->belongsToMany('App\leave_profile', 'type_profile', 'leave_type_id', 'leave_profile_id')->withPivot('max', 'min');
     }
 

@@ -271,6 +271,8 @@ Route::post('/leave/setup/leave_type_edit/{lev}', 'LeaveSetupController@editsetu
 Route::get('leave/setup/leave_credit', 'LeaveSetupController@apply');
 Route::patch('/leave/setup/{id}', 'LeaveSetupController@addAnnual');
 Route::patch('/leave/setup/{id}/sick', 'LeaveSetupController@addSick');
+Route::post('leave/manager_report', 'LeaveSetupController@storeMangerReport')->name('manager_report');
+
 
 //#Leave Management
 Route::post('leave/type/add_leave', 'LeaveController@addleave');

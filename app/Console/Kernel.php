@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
 		  \App\Console\Commands\leaveEscalation::class,
 		  \App\Console\Commands\leaveBalanceReport::class,
 		  \App\Console\Commands\AutomateAbsentLeaveApplication::class,
+		  \App\Console\Commands\SendListOfAbesntUsersToManager::class,
     ];
 
     /**
@@ -53,11 +54,12 @@ class Kernel extends ConsoleKernel
 		$schedule->command('schedule:leaveResetFamily')->cron('0 1 1 1 * *');
 		$schedule->command('fleet:documentsUpload')->everyTenMinutes();
 		$schedule->command('vehicle:variouDocumentsUpload')->everyThirtyMinutes();
-		$schedule->command('schedule:SendLeaveBalanceToUsers')->twiceMonthly(2, 16, '22:00');
+		$schedule->command('schedule:SendLeaveBalanceToUsers')->monthlyOn(1, '22:00');
 		$schedule->command('schedule:RemindManager')->weeklyOn(4, '23:00');
 		$schedule->command('schedule:leaveEscalation')->weeklyOn(4, '23:00');
         $schedule->command('schedule:LeaveBalanceReport')->monthlyOn(1, '01:00');
-        $schedule->command('schedule:absentLeaveApplication')->dailyAt('23:00');
+        $schedule->command('schedule:absentLeaveApplication')->weekdays()->dailyAt("23:00");
+        $schedule->command('schedule:SendListOfAbesntUsersToManager')->weekdays()->dailyAt("07:00");
 
     }
 

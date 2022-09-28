@@ -21,6 +21,7 @@ use App\Mail\SendLeaveApplicationToHrManager;
 use App\Mail\leave_applications;
 use App\Mail\LeaveRejection;
 use App\Users;
+use App\Traits\uploadFilesTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -32,6 +33,8 @@ use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolve
 
 class LeaveApplicationController extends Controller
 {
+    use uploadFilesTrait;
+
     public function __construct()
     {
         $this->middleware('auth');
@@ -210,7 +213,7 @@ class LeaveApplicationController extends Controller
         else return $leaveStatusNames;
     }
 
-    public function ApplicationDetails($status = 0, $hrID = 0, $startDate = 0, $endDate = 0)
+    public static function  ApplicationDetails($status = 0, $hrID = 0, $startDate = 0, $endDate = 0)
     {
         // query the leave congif table and bring back the values
         $approvals = DB::table('leave_configuration')
@@ -331,8 +334,8 @@ class LeaveApplicationController extends Controller
      */
     public function day(Request $request)
     {
-
         //Validation
+
         $validator = Validator::make($request->all(), [
             'hr_person_id' => 'required',
             'leave_type' => 'required',
@@ -426,7 +429,6 @@ class LeaveApplicationController extends Controller
         $hrID = $leaveApp['hr_person_id'];
         $typID = $leaveApp['leave_type'];
 
-
         $dayRequested = $leaveApp['day_requested'] * 8;
         //get managger details
         $managerDetails = HRPerson::getManagerDetails($hrID);
@@ -441,7 +443,8 @@ class LeaveApplicationController extends Controller
         $fullname = $managerDetails->first_name . " " . $managerDetails->surname;
 
         // call the function
-        $ApplicationDetails = LeaveApplicationController::ApplicationDetails(0, $hrID, $startDate, $endDate);
+        $ApplicationDetails = $this->ApplicationDetails(0, $hrID, $startDate, $endDate);
+            //LeaveApplicationController::ApplicationDetails(0, $hrID, $startDate, $endDate);
 
         $applicationStatus = $ApplicationDetails['status'];
 
@@ -469,13 +472,43 @@ class LeaveApplicationController extends Controller
                 $fullname
             ));
 
-        AuditReportsController::store('Leave Management', 'Leave day application', "Accessed By User", 0);
-        #leave history audit
-        LeaveHistoryAuditController::store("Leave application submitted by : $fullname", '', $leaveBalance, $dayRequested, $leaveBalance, $request['leave_type'], $hrID);
+        /**
+         * Global; audit
+         */
+        AuditReportsController::store(
+            'Leave Management',
+            'Leave day application',
+            "Accessed By User",
+            0
+        );
+
+        /**
+         * leave history audit
+         */
+        LeaveHistoryAuditController::store(
+            "Leave application submitted by : $fullname",
+            'Leave application for day',
+            $leaveBalance,
+            $dayRequested,
+            $leaveBalance,
+            $request['leave_type'],
+            $hrID
+        );
+
         return back()->with('success_application', "leave application was successful.");
+
     }
 
-    public function persistLeaveApplicationDetails(
+    /**
+     * @param $request
+     * @param $startDate
+     * @param $endDate
+     * @param $dayRequested
+     * @param $applicationStatus
+     * @param $managerID
+     * @return void
+     */
+    public static function persistLeaveApplicationDetails(
         $request,
         $startDate,
         $endDate,
@@ -505,8 +538,13 @@ class LeaveApplicationController extends Controller
                 $levApp->update();
             }
         }
+
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Foundation\Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
     public function hours(Request $request)
     {
 
@@ -618,6 +656,11 @@ class LeaveApplicationController extends Controller
         return back()->with('success_application', "leave application was successful.");
     }
 
+    /**
+     * @param leave_application $leave
+     * @return mixed
+     * @throws \Throwable
+     */
     public function viewApplication(leave_application $leave)
     {
         if (!empty($leave)) $leave = $leave->load('person', 'manager', 'leavetpe');
@@ -642,7 +685,12 @@ class LeaveApplicationController extends Controller
         return $pdf->output();
     }
 
-    //Function to accept leave applications
+    /**
+     * @param Request $request
+     * @param leave_application $leaveId
+     * @return \Illuminate\Http\RedirectResponse
+     * @throws \Throwable
+     */
     public function AcceptLeave(Request $request, leave_application $leaveId)
     {
         #query the hr person table
