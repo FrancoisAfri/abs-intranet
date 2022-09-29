@@ -14,7 +14,7 @@ class CreateAddUuidToHrPeopleTable extends Migration
     public function up()
     {
         Schema::table('hr_people', function($table) {
-            $table->uuid('uuid')->index();
+            $table->uuid('uuid')->index()->nullable();
         });
     }
 

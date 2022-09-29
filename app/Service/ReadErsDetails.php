@@ -204,7 +204,7 @@ class ReadErsDetails
         // send email informing the user the system has applied leave for them on their behalf
         //check how many days the user was absent
         //get the fist date and last date
-        $from = date("Y-m-d");
+        $today = date("Y-m-d");
         $getEscalationDays = leave_configuration::pluck('number_of_days_before_automate_application')->first();
 
 
@@ -214,39 +214,30 @@ class ReadErsDetails
             throw new ErrorException('No days set');
         }
 
-
         $check = ErsAbsentUsers::getAbsentUsers();
 
         foreach ($check as $absent) {
 
-            $to = Carbon::parse(date("Y-m-d", $absent->date));
+            $absentDate = Carbon::parse(date("Y-m-d", $absent->date));
+            $totaldays = LeaveApplicationController::calculatedays($absentDate, $today);
 
-            $totaldays = $to->diffInWeekdays($from);
+            if ($days == $totaldays) {
 
-
-            if ($getEscalationDays == $totaldays) {
-
-                //count leave taken
-                $leavetaken = ErsAbsentUsers::getLeaveTaken($absent->hr_id);
-
-                $applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id, $absent->date, $absent->date);
-
-                //get manager details
-                $managerDetails = HRPerson::getManagerDetails($absent->hr_id);
-                $managerID = !empty($managerDetails['manager_id']) ? $managerDetails['manager_id'] : 0;
+                $applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id);
 
                 //persist to db
                 $levApp = leave_application::create([
                     'leave_type_id' => 1,
                     'start_date' => $absent->date,
                     'end_date' => $absent->date,
-                    'leave_taken' => $leavetaken,
+                    'leave_taken' => 8,
                     'hr_id' => $absent->hr_id,
                     'notes' => 'The system has automatically applied for leave on your behalf',
                     'status' => $applicationStatus['status'],
-                    'manager_id' => $managerID,
+                    'manager_id' => $applicationStatus['manager_id'],
                 ]);
-
+				// save audit and send emails
+				LeaveApplicationController::historyLeaveApplicationDetails(1, $applicationStatus, $absent->hr_id, 8);
 
                 //this one is to update the erstable
 //                $absent = ErsAbsentUsers::find($absent->hr_id);
