@@ -70,7 +70,9 @@ class SendLeaveBalanceToUsers extends Controller
 
         $outputArray = array();
         foreach ($users as $empID) {
-            $leaveApplications = leave_application::where('hr_id', $empID)->first();
+            $leaveApplications = leave_application::where(
+                'hr_id', $empID
+            )->first();
             if (isset($leaveApplications->manager_id))
                 $managerId = $leaveApplications->manager_id;
 
