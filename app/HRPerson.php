@@ -167,7 +167,7 @@ class HRPerson extends Model
     public static function getUserDetails($employeeNumber)
     {
         return HRPerson::where(['employee_number' => $employeeNumber, 'status' => 1])
-            ->select('user_id', 'first_name', 'surname', 'email')
+            ->select('user_id', 'first_name', 'surname', 'email', 'employee_number')
             ->first();
     }
 

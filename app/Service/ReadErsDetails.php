@@ -16,6 +16,8 @@ use App\Models\ManagerReport;
 use Carbon\Carbon;
 use ErrorException;
 use Exception;
+use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp;
@@ -46,6 +48,9 @@ class ReadErsDetails
 
 
         $todo = 'get_clocks';
+
+//        $date_from = '2022-09-29';
+//        $date_to = '2022-09-29';
 
         $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
         $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
@@ -216,7 +221,7 @@ class ReadErsDetails
 
                 $applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id);
 
-                $credit = leave_credit::getLeaveCredit($absent->hr_id ,1 );
+                $credit = leave_credit::getLeaveCredit($absent->hr_id, 1);
 
                 $leaveBalance = $credit['leave_balance'];
                 //persist to db
@@ -234,9 +239,9 @@ class ReadErsDetails
 
                 // save audit
                 LeaveHistoryAuditController::store(
-                    "Leave application submitted by :". HRPerson::getFullName(  $applicationStatus['first_name'] , $applicationStatus['surname']),
+                    "Leave application submitted by :" . HRPerson::getFullName($applicationStatus['first_name'], $applicationStatus['surname']),
                     'Leave application for day',
-                     $credit['leave_balance'],
+                    $credit['leave_balance'],
                     1,
                     $credit['leave_balance'] - 1,
                     1,
@@ -274,23 +279,56 @@ class ReadErsDetails
         //get list of managers from settings
         //get list of absent users for the day
         //compile a document with list of ansent users
+        $date_now = Carbon::now()->toDayDateTimeString();
+        $users = ManagerReport::getListOfManagers();
 
-        $managers = ManagerReport::getListOfManagers();
-
-        $absentUsers = $this->getAbsentUsers();
-
-       // dd(ErsAbsentUsers::all());
-
-
-
+        $firstManager = ManagerReport::first();
 
         try {
-            Mail::to(0)->send(new sendManagersListOfAbsentUsers(0,0,0);
-            echo 'Mail send successfully';
-        } catch (\Exception $e) {
-            echo 'Error - ' . $e;
+            $absentUsers = $this->getAbsentUsers();
+        } catch (ErrorException $e) {
+            echo $e;
+        }
+        //HRPerson::getManagerDetails($users->hr_id);
+
+        //create a new collection with name, surname, and employee  number
+        $AbsentUsersColl = array();
+        foreach ($absentUsers as $absentUser) {
+            $details = HRPerson::getUserDetails($absentUser);
+            $AbsentUsersColl[] = ([
+                $details['first_name'],
+                $details['surname'],
+                $details['email'],
+            ]);
         }
 
+        // save to db then send email
+        $file = Excel::create('Absent Users', function ($excel) use ($AbsentUsersColl) {
+            $excel->sheet('Shortname', function ($sheet) use ($AbsentUsersColl) {
+                $sheet->fromArray($AbsentUsersColl);
+            });
+        });
+
+
+        $UsersArr = array();
+        foreach ($users as $managers) {
+            $managersDet = HRPerson::getManagerDetails($managers['hr_id']);
+
+            $UsersArr[] = ([
+                $managersDet['first_name'],
+                $managersDet['surname'],
+                $managersDet['email'],
+            ]);
+
+            try {
+
+                Mail::to($managersDet['email'])->send(new sendManagersListOfAbsentUsers($managersDet['first_name'], $file, $date_now));
+
+                echo 'Mail send successfully';
+            } catch (\Exception $e) {
+                echo 'Error - ' . $e;
+            }
+        }
 
     }
 

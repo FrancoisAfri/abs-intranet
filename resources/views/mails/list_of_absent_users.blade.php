@@ -243,5 +243,4 @@
     </tr>
 </table>
 </body>
-</html><?php
-       <?php
+</html>

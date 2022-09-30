@@ -160,6 +160,10 @@ class SendLeaveBalanceToUsers extends Controller
     }
 
 
+    /**
+     * @return mixed
+     * @throws \Throwable
+     */
     public function viewBalance()
     {
         $credit =  leave_history::getLeaveBalance();
@@ -193,8 +197,11 @@ class SendLeaveBalanceToUsers extends Controller
     /**
      * @return \Illuminate\Http\Response
      * function to send reports to the head
+     * @return void
+     * @throws \Throwable
      */
-    public function sendReport(){
+    public function sendReport(): \Illuminate\Http\Response
+    {
 
         //get the user selected on the settings
         $userId = leave_configuration::pluck('hr_person_id')->first();
@@ -203,8 +210,6 @@ class SendLeaveBalanceToUsers extends Controller
 
 
         $leaveAttachment = $this->viewBalance();
-
-
 
         try {
             Mail::to($userDetails->email)->send(new leaveBalanceReport($userDetails->email, $leaveAttachment));
