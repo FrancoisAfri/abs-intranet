@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\DivisionLevelTwo;
-use App\hr_person;
 use App\HRPerson;
 use App\CompanyIdentity;
 use App\Http\Requests;
-use APP\leavDetails;
 use App\DivisionLevelFive;
 use App\leave_application;
 use App\leave_configuration;
@@ -20,12 +18,12 @@ use App\Mail\SendLeaveApplicationToManager;
 use App\Mail\SendLeaveApplicationToHrManager;
 use App\Mail\leave_applications;
 use App\Mail\LeaveRejection;
-use App\Users;
 use App\Traits\uploadFilesTrait;
 use Carbon\Carbon;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -35,6 +33,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
+use Throwable;
 
 class LeaveApplicationController extends Controller
 {
@@ -47,9 +46,14 @@ class LeaveApplicationController extends Controller
 
     public function index()
     {
-        $leave_customs = leave_custom::orderBy('hr_id', 'asc')->get();
+        $leave_customs = leave_custom::orderBy(
+            'hr_id', 'asc'
+        )->get();
+
         if (!empty($leave_customs))
             $leave_customs = $leave_customs->load('userCustom');
+
+
         $hrID = Auth::user()->id;
         $currentUser = Auth::user()->person->id;
         $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
@@ -63,7 +67,7 @@ class LeaveApplicationController extends Controller
                 ->get();
         else {
             $reportsTo = HRPerson::where('status', 1)
-				->where(
+                ->where(
                     [
                         'manager_id' => $currentUser,
                         'id' => $currentUser
@@ -93,6 +97,7 @@ class LeaveApplicationController extends Controller
                 ['id' => 1,
                     'allow_annualLeave_credit' => 1
                 ])->get();
+
         $negannualDays = !empty($negativeannualDays
             ->first()
             ->allow_annual_negative_days) ? $negativeannualDays
@@ -107,7 +112,12 @@ class LeaveApplicationController extends Controller
                     'allow_sickLeave_credit' => 1
                 ])->get();
 
-        $negsickDays = !empty($negativesickDays->first()->allow_sick_negative_days) ? $negativesickDays->first()->allow_sick_negative_days : 0;;
+        $negsickDays = !empty(
+        $negativesickDays
+            ->first()
+            ->allow_sick_negative_days) ? $negativesickDays
+            ->first()
+            ->allow_sick_negative_days : 0;
 
         $data['negannualDays'] = $negannualDays;
         $data['negsickDays'] = $negsickDays;
@@ -135,7 +145,11 @@ class LeaveApplicationController extends Controller
 
     public function getAllSubordinates($users, $managerID)
     {
-        $employees = HRPerson::where('status', 1)->where('manager_id', $managerID)->pluck('id');
+        $employees = HRPerson::where(
+            [
+                'status' => 1,
+                'manager_id' => $managerID
+            ])->pluck('id');
 
         foreach ($employees as $employee) {
             if (array_key_exists($employee, $users)) continue;
@@ -178,7 +192,7 @@ class LeaveApplicationController extends Controller
             9 => 'rejectd_by_payroll',
             10 => 'Cancelled'
         );
-		
+
         $leaveApplications = DB::table('leave_application')
             ->select('leave_application.*'
                 , 'hr_people.first_name as firstname'
@@ -220,8 +234,8 @@ class LeaveApplicationController extends Controller
         $data['leaveTypes'] = $leaveTypes;
         $data['leaveApplications'] = $leaveApplications;
         $data['subLeaveApplications'] = $subLeaveApplications;
-        
-		AuditReportsController::store(
+
+        AuditReportsController::store(
             'Leave Management',
             'Leave Approval Page Accessed',
             "Accessed By User",
@@ -242,6 +256,7 @@ class LeaveApplicationController extends Controller
                 'cancellation_reason' => 'required'
             ]);
             $user = Auth::user()->load('person');
+
             $leaveApplication->status = 10;
             $leaveApplication->canceller_id = $user->person->id;
             $leaveApplication->cancellation_reason = $request->input('cancellation_reason');
@@ -257,6 +272,7 @@ class LeaveApplicationController extends Controller
      */
     public static function status($status = 0)
     {
+
         $leaveStatusNames = [
             1 => 'Approved',
             2 => 'Require managers approval ',
@@ -272,7 +288,8 @@ class LeaveApplicationController extends Controller
         if ($status && $status > 0) return $leaveStatusNames[$status];
         else return $leaveStatusNames;
     }
-	/**
+
+    /**
      * @param $status
      * @param $hrID
      * @param $startDate
@@ -281,15 +298,18 @@ class LeaveApplicationController extends Controller
      */
     public static function ApplicationDetails($status = 0, $hrID)
     {
-		$date = Carbon::now(); // or whatever you're using to set it
+
+        $date = Carbon::now(); // or whatever you're using to set it
         $start = $date->copy()->startOfDay();
         $end = $date->copy()->endOfDay();
 
         $startDate = strtotime($start);
         $endDate = strtotime($end);
 
-		// query the leave congif table and bring back the values
-		$approvals = DB::table('leave_configuration')
+
+        // $startDate =
+        // query the leave congif table and bring back the values
+        $approvals = DB::table('leave_configuration')
             ->select('require_managers_approval',
                 'require_department_head_approval',
                 'require_hr_approval',
@@ -299,8 +319,10 @@ class LeaveApplicationController extends Controller
 
         $hrDetails = HRPerson::where([
             'id' => $hrID,
-            'status'=> 1
+            'status' => 1
         ])->first();
+
+
         if ($approvals->require_managers_approval == 1) {
 
             #check if the manager is on leave or not
@@ -311,12 +333,15 @@ class LeaveApplicationController extends Controller
                         ->orwherebetween('end_date', [$startDate, $endDate]);
                 })->first();
 
+
+
             /**
              * if the manager is on leave the second in charge will have toa approve the application
              */
             if (isset($isOnleave)) {
                 #get the second in charge
                 $managerDetails = HRPerson::getManagerDetails($hrDetails->second_manager_id);
+
             } else
                 # code...
                 // query the hrperon  model and bring back the values of the manager
@@ -329,10 +354,8 @@ class LeaveApplicationController extends Controller
                 'first_name' => $managerDetails->first_name,
                 'surname' => $managerDetails->surname,
                 'email' => $managerDetails->email,
-                'manager_id' => $managerDetails->id
+                'manager_id' => $managerDetails->manager_id
             );
-
-            return $details;
 
         } elseif ($approvals->require_department_head_approval == 1) {
             # code...  division_level_twos
@@ -342,10 +365,12 @@ class LeaveApplicationController extends Controller
             $deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
                 ->select('first_name', 'surname', 'email')
                 ->first();
+
             // array to store manager details
-            $details = array('status' => 3, 'first_name' => $deptDetails->first_name, 'surname' => $deptDetails->surname, 'email' => $deptDetails->email);
-            return $details;
+            $details = array('status' => 3, 'first_name' => $deptDetails->first_name, 'surname' => $deptDetails->surname, 'email' => $deptDetails->email , 'manager id' =>  $deptDetails->id);
+
         } #code here .. Require Hr
+        return $details;
     }
 
     #function to get available days for user based on userID and LeaveID
@@ -419,7 +444,7 @@ class LeaveApplicationController extends Controller
 
     /**
      * @param Request $request
-     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function day(Request $request)
     {
@@ -516,11 +541,26 @@ class LeaveApplicationController extends Controller
         $ApplicationDetails = array();
         $status = array();
         $hrID = $leaveApp['hr_person_id'];
+        $typID = $leaveApp['leave_type'];
+
         $dayRequested = $leaveApp['day_requested'] * 8;
+        //get manager details
+        $managerDetails = HRPerson::getManagerDetails($hrID);
+
+        $managerID = !empty($managerDetails['manager_id']) ? $managerDetails['manager_id'] : 0;
+
+        $Details = leave_credit::getLeaveCredit($hrID, $typID);
+
+        $leaveBalance = !empty($Details['leave_balance']) ? $Details['leave_balance'] : 0;
+        //query the hr table based on employeeId
+
+        $fullname = $managerDetails->first_name . " " . $managerDetails->surname;
 
         // call the function
         $ApplicationDetails = $this->ApplicationDetails(0, $hrID);
-		$managerID = !empty($ApplicationDetails['manager_id']) ? $ApplicationDetails['manager_id'] : 0;
+
+        //LeaveApplicationController::ApplicationDetails(0, $hrID, $startDate, $endDate);
+
         $applicationStatus = $ApplicationDetails['status'];
 
         // save details into leave application
@@ -532,14 +572,44 @@ class LeaveApplicationController extends Controller
             $applicationStatus,
             $managerID
         );
-		// save audit and email
-        $this->historyLeaveApplicationDetails(					  
-            $request['leave_type'],
-            $ApplicationDetails,
-            $hrID,
-            $dayRequested
-        );
+
         Alert::toast('Application was Successfully ', 'success');
+        // get leave type value
+        $leaveTypes = LeaveType::getAllLeaveTypes($request['leave_type']);
+
+        // send email to manager
+        if (!empty($ApplicationDetails['email']))
+            Mail::to(
+                $ApplicationDetails['email'])->send(new leave_applications(
+                $ApplicationDetails['first_name'],
+                $ApplicationDetails['email'],
+                $leaveTypes->name,
+                $fullname
+            ));
+
+        /**
+         * Global; audit
+         */
+        AuditReportsController::store(
+            'Leave Management',
+            'Leave day application',
+            "Accessed By User",
+            0
+        );
+
+        /**
+         * leave history audit
+         */
+        LeaveHistoryAuditController::store(
+            "Leave application submitted by : $fullname",
+            'Leave application for day',
+            $leaveBalance,
+            $dayRequested,
+            $leaveBalance,
+            $request['leave_type'],
+            $hrID
+        );
+
         return back()->with('success_application', "leave application was successful.");
 
     }
@@ -583,65 +653,12 @@ class LeaveApplicationController extends Controller
                 $levApp->update();
             }
         }
-    }
-	
-	/**
-     * @param $leave_type
-     * @param $ApplicationDetails array()
-     * @param $hrID
-     * @param $dayRequested
-     * @return void
-     */
-    public static function historyLeaveApplicationDetails(
-        $leave_type,
-        $ApplicationDetails,
-        $hrID,
-        $dayRequested
-    )
-    {
-		// get leave type value
-        $leaveTypes = LeaveType::getAllLeaveTypes($leave_type);
-		$user = Auth::user()->load('person');
-		$Details = leave_credit::getLeaveCredit($hrID, $leave_type);
-        $leaveBalance = !empty($Details['leave_balance']) ? $Details['leave_balance'] : 0;
-
-        // send email to manager
-        if (!empty($ApplicationDetails['email']))
-            Mail::to(
-                $ApplicationDetails['email'])->send(new leave_applications(
-                $ApplicationDetails['first_name'],
-                $ApplicationDetails['email'],
-                $leaveTypes->name,
-				$ApplicationDetails['first_name'] . " " . $ApplicationDetails['surname'];
-            ));
-
-        /**
-         * Global; audit
-         */
-        AuditReportsController::store(
-            'Leave Management',
-            'Leave day application',
-            "Accessed By User",
-            0
-        );
-
-        /**
-         * leave history audit
-         */
-        LeaveHistoryAuditController::store(
-            "Leave application submitted by : $user->person->first_name.' '. $user->person->surname",
-            'Leave application for day',
-            $leaveBalance,
-            $dayRequested,
-            $leaveBalance,
-            $leave_type,
-            $hrID
-        );
 
     }
+
     /**
      * @param Request $request
-     * @return Application|\Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     * @return Application|RedirectResponse|\Illuminate\Routing\Redirector
      */
     public function hours(Request $request)
     {
@@ -656,19 +673,26 @@ class LeaveApplicationController extends Controller
         ]);
 
         $validator->after(function ($validator) use ($request) {
-            $hrPersonId = $request->input('hr_person_id');
-            $leaveType = $request->input('leave_type');
-            $hours = $request->input('hours');
-            $applicationType = $request->input('application_type');
+            $hrPersonId = $request['hr_person_id'];
+            $leaveType = $request['leave_type'];
+            $hours = $request['hours'];
+            $applicationType = $request['application_type'];
+           // $dayRequested = $request['day_requested'];
             $availableBalance = 0;
             $extraDays = 0;
+
             if (!empty($hrPersonId) && !empty($leaveType)) {
                 $balance = DB::table('leave_credit')
                     ->select('leave_balance')
-                    ->where('hr_id', $hrPersonId)
-                    ->where('leave_type_id', $leaveType)
-                    ->first();
+                    ->where(
+                        [
+                            'hr_id' => $hrPersonId,
+                            'leave_type_id' => $leaveType
+                        ])->first();
+
+
                 $row = leave_configuration::first();
+
                 $numberAnnual = !empty($row->allow_annual_negative_days) ? $row->allow_annual_negative_days : 0;
                 $numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
                 if ($leaveType == 1) $extraDays = $numberAnnual;
@@ -699,38 +723,60 @@ class LeaveApplicationController extends Controller
                 ->withInput();
         }
         $leaveApp = $request->all();
+
         unset($leaveApp['_token']);
+
         $hrID = $leaveApp['hr_person_id'];
+
         $hours = $leaveApp['hours'];
+
         $ApplicationDetails = array();
+
         $date = strtotime($leaveApp['date']);
+
         $hrID = $request->input('hr_person_id');
+
         $HRpeople = HRPerson::find($hrID);
+
         $username = $HRpeople->first_name . " " . $HRpeople->surname;
+
         $managerDetails = HRPerson::where('id', $hrID)
-            ->select('manager_id')->get()->first();
+            ->select('manager_id')
+            ->first();
+
         $managerID = $managerDetails['manager_id'];
+
         $ApplicationDetails = LeaveApplicationController::ApplicationDetails(0, $hrID);
+
         $applicatiionStaus = $ApplicationDetails['status'];
+
         $employees = $request->input('hr_person_id');
+
         $typID = $request->input('leave_type');
+
         $HRpeople = HRPerson::find($employees);
+
         $username = $HRpeople->first_name;
+
         $Details = leave_credit::where('hr_id', $employees)
             ->where('leave_type_id', $typID)
             ->first();
+
         $leave_balance = $Details['leave_balance'];
         #
-        $levApp = new leave_application();
-        $levApp->leave_type_id = $typID;
-        $levApp->hr_id = $employees;
-        $levApp->notes = $request->input('description');
-        $levApp->status = $applicatiionStaus;
-        $levApp->start_date = $date;
-        $levApp->end_date = $date;
-        $levApp->leave_taken = $hours;
-        $levApp->manager_id = $managerID;
-        $levApp->save();
+
+        $levApp = leave_application::create([
+            'leave_type_id' => $typID,
+            'hr_id' => $employees,
+            'notes' => $request['description'],
+            'status' => $applicatiionStaus,
+            'start_date' => $date,
+            'end_date' => $date,
+            'leave_taken' => $hours,
+            'manager_id' => $managerID,
+        ]);
+
+
         //Upload supporting Documents
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
@@ -743,27 +789,59 @@ class LeaveApplicationController extends Controller
             }
         }
         // get leave type value
-        $leaveTypes = LeaveType::where('id', $request->input('leave_type'))->where('status', 1)->first();
+        $leaveTypes = LeaveType::where(
+            [
+                'id' => $request['leave_type'],
+                'status' => 1
+            ])->first();
+
         // send email to manager
         if (!empty($ApplicationDetails['email']))
-            Mail::to($ApplicationDetails['email'])->send(new leave_applications($ApplicationDetails['first_name'], $leaveTypes->name, $ApplicationDetails['email'], $username));
+            Mail::to(
+                $ApplicationDetails['email'])->send(
+                new leave_applications(
+                    $ApplicationDetails['first_name'],
+                    $leaveTypes->name,
+                    $ApplicationDetails['email'],
+                    $username)
+            );
 
         #$action='',$descriptionAction ='',$previousBalance='',$transcation='' ,$currentBalance ='',$leave_type ='')
-        AuditReportsController::store('Leave Management', 'Leave hours application ', "Accessed By User", 0);
-        LeaveHistoryAuditController::store("Hours leave application submitted by : $username", 0, $leave_balance, 0, $leave_balance, $typID, $employees);
+        AuditReportsController::store(
+            'Leave Management',
+            'Leave hours application ',
+            "Accessed By User",
+            0
+        );
+
+        LeaveHistoryAuditController::store(
+            "Hours leave application submitted by : $username",
+            0,
+            $leave_balance,
+            0,
+            $leave_balance,
+            $typID,
+            $employees
+        );
+
         return back()->with('success_application', "leave application was successful.");
     }
 
     /**
      * @param leave_application $leave
      * @return mixed
-     * @throws \Throwable
+     * @throws Throwable
      */
     public function viewApplication(leave_application $leave)
     {
         if (!empty($leave)) $leave = $leave->load('person', 'manager', 'leavetpe');
 
-        AuditReportsController::store('Leave Management', 'Leave Application Printed', "Accessed By User");
+        AuditReportsController::store(
+            'Leave Management',
+            'Leave Application Printed',
+            "Accessed By User"
+        );
+
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
         $user = Auth::user()->load('person');
@@ -786,8 +864,8 @@ class LeaveApplicationController extends Controller
     /**
      * @param Request $request
      * @param leave_application $leaveId
-     * @return \Illuminate\Http\RedirectResponse
-     * @throws \Throwable
+     * @return RedirectResponse
+     * @throws Throwable
      */
     public function AcceptLeave(Request $request, leave_application $leaveId)
     {
@@ -800,20 +878,19 @@ class LeaveApplicationController extends Controller
             ->first();
         $ManHed = $approvals->require_managers_approval;
         $DepHead = $approvals->require_department_head_approval;
-        //update leave applicatiion status
+        //update leave application status
         if ($leaveId->status == 2 && $DepHead == 1) {
             $leaveId->status = 3;
             $leaveId->update();
 
         } elseif ($leaveId->status == 2 && $ManHed == 1) {
-            // update leave applicatiion status
+            // update leave application status
             $leaveId->status = 1;
             $leaveId->update();
             // #Query the  leave_config days for value
-            $credit = leave_credit::where([
-                'hr_id' => $leaveId->hr_id,
-                'leave_type_id' => $leaveId->leave_type_id
-            ])->first();
+            $credit = leave_credit::getLeaveCredit($leaveId->hr_id ,$leaveId->leave_type_id );
+
+
             $leaveBalance = $credit->leave_balance;
 
             #subract current balance from the one applied for
@@ -854,6 +931,7 @@ class LeaveApplicationController extends Controller
             "Edited by User: $leaveId->hr_id",
             0
         );
+
         return back()->with('success_application', "leave application was successful.");
     }
 
@@ -897,12 +975,16 @@ class LeaveApplicationController extends Controller
                 , $usedetails['surname']
                 , $usedetails['email'])
         );
+
+
         AuditReportsController::store(
             'Leave Management: ',
             'leave rejected',
             "By User",
             0
         );
+
+
         LeaveHistoryAuditController::store(
             "leave application Rejected",
             0,
@@ -914,7 +996,7 @@ class LeaveApplicationController extends Controller
         );
         return response()->json();
     }
-	// view leave cancellation page_description
+    // view leave cancellation page_description
     // cancel approved applicatiion
     /**
      * @return Factory|Application|View
@@ -922,8 +1004,16 @@ class LeaveApplicationController extends Controller
     public function leaveSearch()
     {
 
-        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-        $leaveTypes = LeaveType::where('status', 1)->orderBy('name', 'asc')->get();
+        $employees = HRPerson::where('status', 1)
+            ->orderBy('first_name', 'asc')
+            ->orderBy('surname', 'asc')
+            ->get();
+
+
+        $leaveTypes = LeaveType::where('status', 1)
+            ->orderBy('name', 'asc')
+            ->get();
+
 
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
@@ -937,7 +1027,13 @@ class LeaveApplicationController extends Controller
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Search';
 
-        AuditReportsController::store('Leave Management', 'Leave Type Page Accessed', "Accessed By User", 0);
+        AuditReportsController::store(
+            'Leave Management',
+            'Leave Type Page Accessed',
+            "Accessed By User",
+            0
+        );
+
         return view('leave.cancellation')->with($data);
     }
 
@@ -958,8 +1054,23 @@ class LeaveApplicationController extends Controller
         $managerId = $request['manager_id'];
         $LevTypID = !empty($request['leave_type']) ? $request['leave_type'] : 0;
         $status = !empty($request['status']) ? $request['status'] : 0;
-        $leaveStatus = array(1 => 'Approved', 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 => 'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejected', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr', 9 => 'rejectd_by_payroll', 10 => 'Cancelled');
+
+        $leaveStatus = array(
+            1 => 'Approved',
+            2 => 'Require managers approval ',
+            3 => 'Require department head approval',
+            4 => 'Require hr approval',
+            5 => 'Require payroll approval',
+            6 => 'rejected',
+            7 => 'rejectd_by_department_head',
+            8 => 'rejectd_by_hr',
+            9 => 'rejectd_by_payroll',
+            10 => 'Cancelled'
+        );
+
+
         $actionDate = $request['date_applied'];
+
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
@@ -1015,19 +1126,44 @@ class LeaveApplicationController extends Controller
             ['title' => 'Leave Management', 'path' => 'leave/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'leave Approval', 'active' => 1, 'is_module' => 0]
         ];
-        AuditReportsController::store('Leave Management', 'Leave Approval Page Accessed', "Accessed By User", 0);
+
+        AuditReportsController::store(
+            'Leave Management',
+            'Leave Approval Page Accessed',
+            "Accessed By User",
+            0
+        );
+
         return view('leave.leave_cancel')->with($data);
     }
 
-	/**
+    /**
      * @param leave_application $leave
      * @return Factory|Application|View
      */
     public function viewLeaveApplication(leave_application $leave)
     {
         if (!empty($leave)) $leave = $leave->load('person', 'manager', 'leavetpe', 'canceller');
-        AuditReportsController::store('Leave Management', 'Leave Application Printed', "Accessed By User");
-        $leaveStatus = array(1 => 'Approved', 2 => 'Require managers approval ', 3 => 'Require department head approval', 4 => 'Require hr approval', 5 => 'Require payroll approval', 6 => 'rejected', 7 => 'rejectd_by_department_head', 8 => 'rejectd_by_hr', 9 => 'rejectd_by_payroll', 10 => 'Cancelled');
+
+        AuditReportsController::store(
+            'Leave Management',
+            'Leave Application Printed',
+            "Accessed By User"
+        );
+
+        $leaveStatus = array(
+            1 => 'Approved',
+            2 => 'Require managers approval ',
+            3 => 'Require department head approval',
+            4 => 'Require hr approval',
+            5 => 'Require payroll approval',
+            6 => 'rejected',
+            7 => 'rejectd_by_department_head',
+            8 => 'rejectd_by_hr',
+            9 => 'rejectd_by_payroll',
+            10 => 'Cancelled'
+        );
+
         //
         $currentUserID = Auth::user()->id;
         $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
@@ -1067,22 +1203,29 @@ class LeaveApplicationController extends Controller
 
             if ($leave->status == 1) {
                 // get leave creadit
-                $credit = leave_credit::where('hr_id', $leave->hr_id)->where('leave_type_id', $leave->leave_type_id)->first();
+                $credit = leave_credit::where(
+                    [
+                        'hr_id' => $leave->hr_id,
+                        'leave_type_id' => $leave->leave_type_id
+                    ])->first();
+
                 $leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
                 // update leave balance
                 $credit->leave_balance = $leaveBalance + $leave->leave_taken;
                 $credit->update();
-                // insert into leave history
-                $levHist = new leave_history();
-                $levHist->hr_id = $user->person->id;
-                $levHist->action_date = time();
-                $levHist->description_action = "Leave application canceled and credit been updated";
-                $levHist->previous_balance = $leaveBalance;
-                $levHist->leave_type_id = $leave->leave_type_id;
-                $levHist->transcation = $leave->leave_taken;
-                $levHist->current_balance = $credit->leave_balance;
-                $levHist->added_by = $user->person->id;
-                $levHist->save();
+
+                leave_history::create([
+                    'hr_id' => $user->person->id,
+                    'action_date' => time(),
+                    'description_action' => "Leave application canceled and credit been updated",
+                    'previous_balance' => $leaveBalance,
+                    'leave_type_id' => $leave->leave_type_id,
+                    'transcation' => $leave->leave_taken,
+                    'current_balance' => $credit->leave_balance,
+                    'added_by' => $user->person->id
+                ]);
+
+
             }
             // update leave applicatiion
             $leave->status = 10;
@@ -1092,4 +1235,5 @@ class LeaveApplicationController extends Controller
             return response()->json(['success' => 'Leave application successfully cancelled.'], 200);
         }
     }
+
 }

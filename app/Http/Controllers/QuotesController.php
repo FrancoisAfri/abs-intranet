@@ -228,6 +228,7 @@ class QuotesController extends Controller
 			->orderBy('cat_name')
 			->orderBy('term_name')
 			->get();
+
         $data['page_title'] = 'Quotes';
         $data['page_description'] = 'Create a quotation';
         $data['breadcrumb'] = [

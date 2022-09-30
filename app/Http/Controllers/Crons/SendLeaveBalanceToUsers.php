@@ -6,17 +6,22 @@ use App\CompanyIdentity;
 use App\DivisionLevelFour;
 use App\DivisionLevelTwo;
 use App\HRPerson;
+use App\Http\Controllers\AuditReportsController;
 use App\leave_application;
 use App\leave_configuration;
 use App\leave_credit;
 use App\leave_history;
 use App\Mail\escalateleaveApplication;
 use App\Mail\LeaveBalanceReminder;
+use App\Mail\leaveBalanceReport;
 use App\Mail\managerReminder;
+use App\Mail\remindUserToapplyLeave;
 use Barryvdh\DomPDF\Facade as PDF;
 use Carbon\Carbon;
+use Excel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Array_;
 
@@ -70,7 +75,9 @@ class SendLeaveBalanceToUsers extends Controller
 
         $outputArray = array();
         foreach ($users as $empID) {
-            $leaveApplications = leave_application::where('hr_id', $empID)->first();
+            $leaveApplications = leave_application::where(
+                'hr_id', $empID
+            )->first();
             if (isset($leaveApplications->manager_id))
                 $managerId = $leaveApplications->manager_id;
 
@@ -152,38 +159,64 @@ class SendLeaveBalanceToUsers extends Controller
             Mail::to($deptDetails->email)->send(new escalateleaveApplication($headName, $hrDetail->email, $date_now, $unapproved , $fullnane));
     }
 
+
+    /**
+     * @return mixed
+     * @throws \Throwable
+     */
+    public function viewBalance()
+    {
+        $credit =  leave_history::getLeaveBalance();
+
+        $date_now = Carbon::now()->toDayDateTimeString();
+
+
+
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+
+        $data['date'] = $date_now;
+        $data['credit'] = $credit;
+        $data['file_name'] = 'LeaveApplication';
+        $view = view('leave.reports.leave_balance', $data)->render();
+
+        $pdf = resolve('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option('enable_html5_parser', true);
+        $pdf->loadHTML($view);
+        return $pdf->output();
+
+    }
+
+
     /**
      * @return \Illuminate\Http\Response
      * function to send reports to the head
+     * @return void
+     * @throws \Throwable
      */
-    public function sendReport(){
+    public function sendReport(): \Illuminate\Http\Response
+    {
 
         //get the user selected on the settings
-        $companyDetails = CompanyIdentity::first();
-
-        $date_now = Carbon::now()->toDayDateTimeString();
         $userId = leave_configuration::pluck('hr_person_id')->first();
-
         $userDetails = HRPerson::getManagerDetails($userId);
-
         $fullname = $userDetails->firstname . ' ' . $userDetails->surname;
 
-        //get report leave balnace
-        $credit =  leave_history::getLeaveBalance();
 
-       //create a pdf
-        $data['companyDetails'] = $companyDetails;
-        $data['date'] = $date_now;
-        $data['fullname'] = $fullname;
-        $data['credit'] = $credit;
+        $leaveAttachment = $this->viewBalance();
 
-
-        $pdf = PDF::loadView('leave.reports.leave_balance', $data)->setPaper('a4', 'portrait');
-
-        $pdf->save(public_path('public' . '/' .'files/leaveBalance.pdf'))->stream('download.pdf');
-
-        if (!empty($userDetails->email))
-            Mail::to($userDetails->email)->send(new escalateleaveApplication($headName, $hrDetail->email, $date_now, $unapproved , $fullnane));
+        try {
+            Mail::to($userDetails->email)->send(new leaveBalanceReport($userDetails->email, $leaveAttachment));
+            echo 'Mail send successfully';
+        } catch (\Exception $e) {
+            echo 'Error - ' . $e;
+        }
 
     }
 }

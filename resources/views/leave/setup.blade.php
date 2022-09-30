@@ -111,10 +111,7 @@
                                         id="hr_person_id" name="hr_person_id[]">
                                     <option value="">*** Select an Users ***</option>
                                     @foreach($users as $employee)
-                                        <option value="{{ $employee->id }}">{{
-                                    $employee->first_name
-                                    . ' ' .
-                                     $employee->surname }}
+                                        <option value="{{ $employee->id }}  {{ $managerList ? "selected" : "" }}">{{$employee->first . ' ' . $employee->surname }}
                                         </option>
                                     @endforeach
                                 </select>

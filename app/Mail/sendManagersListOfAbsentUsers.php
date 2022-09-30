@@ -8,7 +8,7 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class leaveBalanceReport extends Mailable
+class sendManagersListOfAbsentUsers extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -19,11 +19,13 @@ class leaveBalanceReport extends Mailable
      */
     public $first_name;
     public $leaveAttachment;
+    public $date;
 
-    public function __construct($first_name, $leaveAttachment)
+    public function __construct($first_name, $Attachment , $date)
     {
         $this->first_name = $first_name;
-        $this->leaveAttachment = $leaveAttachment;
+        $this->Attachment = $Attachment;
+        $this->date = $date;
     }
 
     /**
@@ -35,21 +37,19 @@ class leaveBalanceReport extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "Leave Balance Report for $companyName online system.";
+        $subject = "List of Absent Employees   for $companyName online system.";
 
-        $data['attachment'] = $this->leaveAttachment;
+        $data['date'] = $this->date;
+        $data['attachment'] = $this->Attachment;
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') .$companyDetails['company_logo_url'];
 
-        return $this->view('mails.leave_balance_report')
+        return $this->view('mails.list_of_absent_users')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
-            ->attachData($this->leaveAttachment, 'Leave balances.pdf', [
-                'mime' => 'application/pdf',
-                
-            ])
+            ->attachData($this->Attachment->string("xls"), 'Absent Users.xls')
             ->with($data);
     }
 }

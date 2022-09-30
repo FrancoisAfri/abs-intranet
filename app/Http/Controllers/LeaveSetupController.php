@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use phpDocumentor\Reflection\Types\Array_;
 use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
 
@@ -122,6 +123,13 @@ class  LeaveSetupController extends Controller
     {
 
         $users = HRPerson::getAllUsers();
+        $managerList = ManagerReport::all();
+
+        $managerArr = array();
+        foreach ($managerList as $list){
+            $managerArr[] = $list['hr_id'];
+        }
+
 
 
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
@@ -140,6 +148,7 @@ class  LeaveSetupController extends Controller
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'setup';
         $data['users'] = $users;
+        $data['managerList'] = $managerArr;
         $data['leave_configuration'] = $leave_configuration;
         $data['leaveTypes'] = $leaveTypes;
         $data['type_profile'] = $type_profile;
@@ -1019,6 +1028,10 @@ class  LeaveSetupController extends Controller
     }
 
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function storeMangerReport(Request $request)
     {
 

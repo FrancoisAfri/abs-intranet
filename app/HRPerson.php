@@ -25,7 +25,7 @@ class HRPerson extends Model
         'first_name', 'surname', 'middle_name', 'maiden_name', 'aka', 'initial', 'email', 'cell_number',
         'phone_number', 'id_number', 'date_of_birth', 'passport_number', 'drivers_licence_number', 'drivers_licence_code',
         'proof_drive_permit', 'proof_drive_permit_exp_date', 'drivers_licence_exp_date', 'gender', 'own_transport', 'marital_status',
-        'ethnicity', 'profile_pic', 'status', 'division_level_1', 'division_level_2', 'division_level_3','employee_number',
+        'ethnicity', 'profile_pic', 'status', 'division_level_1', 'division_level_2', 'division_level_3', 'employee_number',
         'division_level_4', 'division_level_5', 'leave_profile', 'manager_id', 'date_joined', 'date_left', 'role_id', 'position',
 
     ];
@@ -152,21 +152,40 @@ class HRPerson extends Model
         return $hrPeople;
     }
 
-    public static function getAllUsers(){
+    public static function getAllUsers()
+    {
         return HRPerson::where('status', 1)->get();
     }
 
     public static function getManagerDetails($hrDetails)
     {
-        return HRPerson::where(['id' => $hrDetails , 'status' => 1])
+        return HRPerson::where(['id' => $hrDetails, 'status' => 1])
             ->select('first_name', 'surname', 'email', 'manager_id')
             ->first();
     }
 
-    public static function getUserDetails($employeeNumber){
-        return HRPerson::where(['employee_number' => $employeeNumber , 'status' => 1])
-            ->select('user_id','first_name', 'surname', 'email')
+    public static function getUserDetails($employeeNumber)
+    {
+        return HRPerson::where(['employee_number' => $employeeNumber, 'status' => 1])
+            ->select('user_id', 'first_name', 'surname', 'email', 'employee_number')
             ->first();
+    }
+
+    public static function getEmployeeNumber()
+    {
+        return HRPerson::where(
+            'status', 1
+        )->pluck('employee_number');
+    }
+
+    /**
+     * @param $first_name
+     * @param $surname
+     * @return string
+     */
+    public static function getFullName($first_name, $surname): string
+    {
+        return $first_name . ' ' . $surname;
     }
 
 }
