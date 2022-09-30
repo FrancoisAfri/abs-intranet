@@ -3,11 +3,14 @@
 namespace App\Service;
 
 use App\Http\Controllers\LeaveApplicationController;
+use App\Http\Controllers\LeaveHistoryAuditController;
 use App\Http\Controllers\UsersController;
 use App\HRPerson;
 use App\leave_application;
 use App\leave_configuration;
+use App\leave_credit;
 use App\Mail\remindUserToapplyLeave;
+use App\Mail\sendManagersListOfAbsentUsers;
 use App\Models\ErsAbsentUsers;
 use App\Models\ManagerReport;
 use Carbon\Carbon;
@@ -43,10 +46,10 @@ class ReadErsDetails
 
 
         $todo = 'get_clocks';
-//        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
-//        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
-        $date_from = '2022-09-28';
-        $date_to = '2022-09-28';
+
+        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
+        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
+
         $theUrl = 'https://r14.ersbio.co.za/api/data_client.php?'
             . 't=' . $token
             . '&to_do=' . $todo
@@ -104,7 +107,7 @@ class ReadErsDetails
         }
 
 
-        $Employees = HRPerson::where('status', 1)->pluck('employee_number');
+        $Employees = HRPerson::getEmployeeNumber();
 
         $userArr = collect([]);
 
@@ -134,26 +137,14 @@ class ReadErsDetails
         foreach ($absentUsers as $usersId) {
 
             $getUsersDetails = HRPerson::getUserDetails($usersId);
-            $fullnane = $getUsersDetails->first_name . ' ' . $getUsersDetails->surname;
+            $full_nane = HRPerson::getFullName($getUsersDetails->first_name, $getUsersDetails->surname);
+
             $userID = $getUsersDetails->user_id;
 
             //check if user applied for leave
             $checkUserApplicationStatus = leave_application::checkIfUserApplied($userID, $date);
 
-            $checkEmail = ErsAbsentUsers::where(
-                [
-                    'hr_id' => $userID,
-                    'is_applied' => 0,
-                    'is_email_sent' => 1
-                ]
-            )->first();
-
-//            dd(isset($checkEmail));
-            //check if record exist
-
-
             if (!isset($checkUserApplicationStatus)) {
-
                 //   persint in db date, user-id, isApplied
                 ErsAbsentUsers::updateOrCreate(
                     [
@@ -164,12 +155,18 @@ class ReadErsDetails
 
                     ]);
 
+                $valueArr = [
+                    'name' => $full_nane,
+                    'email' => $getUsersDetails->email,
+                    'date_from' => $date_from
+                ];
+
                 //send email to remind them
-                if (!isset($checkEmail)) {
-                    if (!empty($getUsersDetails->email))
-                        Mail::to($getUsersDetails->email)->send(new remindUserToapplyLeave($fullnane, $getUsersDetails->email, $date_from));
-                } else {
-                    "do nothing";
+                try {
+                    Mail::to($getUsersDetails->email)->send(new remindUserToapplyLeave($full_nane, $getUsersDetails->email, $date_from));
+                    echo 'Mail send successfully';
+                } catch (\Exception $e) {
+                    echo 'Error - ' . $e;
                 }
 
 
@@ -183,8 +180,6 @@ class ReadErsDetails
                         'is_email_sent' => 0,
 
                     ]);
-                //1664143200
-
             }
 
         }
@@ -198,12 +193,6 @@ class ReadErsDetails
     public function applyLeaveForUser(): void
     {
 
-        // check the days from the settings to dertemine the days to auto apply for leave
-        //check if the user did apply for leave within those days
-        // if not apply for leave for the user
-        // send email informing the user the system has applied leave for them on their behalf
-        //check how many days the user was absent
-        //get the fist date and last date
         $today = date("Y-m-d");
         $getEscalationDays = leave_configuration::pluck('number_of_days_before_automate_application')->first();
 
@@ -216,7 +205,9 @@ class ReadErsDetails
 
         $check = ErsAbsentUsers::getAbsentUsers();
 
+
         foreach ($check as $absent) {
+
 
             $absentDate = Carbon::parse(date("Y-m-d", $absent->date));
             $totaldays = LeaveApplicationController::calculatedays($absentDate, $today);
@@ -225,6 +216,9 @@ class ReadErsDetails
 
                 $applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id);
 
+                $credit = leave_credit::getLeaveCredit($absent->hr_id ,1 );
+
+                $leaveBalance = $credit['leave_balance'];
                 //persist to db
                 $levApp = leave_application::create([
                     'leave_type_id' => 1,
@@ -236,15 +230,29 @@ class ReadErsDetails
                     'status' => $applicationStatus['status'],
                     'manager_id' => $applicationStatus['manager_id'],
                 ]);
-				// save audit and send emails
-				LeaveApplicationController::historyLeaveApplicationDetails(1, $applicationStatus, $absent->hr_id, 8);
 
-                //this one is to update the erstable
-//                $absent = ErsAbsentUsers::find($absent->hr_id);
-//                $absent->hr_id = $absent->hr_id;
-//                $absent->date = $absent->date;
-//                $absent->is_applied = 1;
-//                $absent->update();
+
+                // save audit
+                LeaveHistoryAuditController::store(
+                    "Leave application submitted by :". HRPerson::getFullName(  $applicationStatus['first_name'] , $applicationStatus['surname']),
+                    'Leave application for day',
+                     $credit['leave_balance'],
+                    1,
+                    $credit['leave_balance'] - 1,
+                    1,
+                    0,
+                    1,
+                    $absent->hr_id
+                );
+
+                //this one is to update the ers table
+
+                ErsAbsentUsers::where('id', $absent->hr_id)
+                    ->update([
+                        'hr_id' => $absent->hr_id,
+                        'date' => $absent->date,
+                        'is_applied' => 1
+                    ]);
 
             } else {
 
@@ -271,7 +279,17 @@ class ReadErsDetails
 
         $absentUsers = $this->getAbsentUsers();
 
-        dd(ErsAbsentUsers::all());
+       // dd(ErsAbsentUsers::all());
+
+
+
+
+        try {
+            Mail::to(0)->send(new sendManagersListOfAbsentUsers(0,0,0);
+            echo 'Mail send successfully';
+        } catch (\Exception $e) {
+            echo 'Error - ' . $e;
+        }
 
 
     }
