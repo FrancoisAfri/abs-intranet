@@ -289,47 +289,37 @@ class ReadErsDetails
         } catch (ErrorException $e) {
             echo $e;
         }
-        //HRPerson::getManagerDetails($users->hr_id);
+
 
         //create a new collection with name, surname, and employee  number
         $AbsentUsersColl = array();
-        foreach ($absentUsers as $absentUser) {
-            $details = HRPerson::getUserDetails($absentUser);
+        if(count($absentUsers) > 0){
+            foreach ($absentUsers as $absentUser) {
+                $details = HRPerson::getUserDetails($absentUser);
 
-            $AbsentUsersColl[] = ([
-                'Employee Number' => $details['employee_number'],
-                'Name' => $details['first_name'],
-                'Surname' => $details['surname'],
-                'Email' => $details['email'],
-            ]);
+                $AbsentUsersColl[] = ([
+                    'Employee Number' => $details['employee_number'],
+                    'Name' => $details['first_name'],
+                    'Surname' => $details['surname'],
+                    'Email' => $details['email'],
+                ]);
+            }
         }
 
-
-        //TODO TRY TO GET HEADERS
-        // save to db then send email
-        $file = Excel::create('Absent Users', function ($excel) use ($AbsentUsersColl) {
-            $excel->sheet('Shortname', function ($sheet) use ($AbsentUsersColl) {
-                $sheet->fromArray($AbsentUsersColl, null, 'A1');
-            });
-
-        });
+       // Excel Doc
+        $file =  $this->createExcelDoc($AbsentUsersColl);
 
 
         $UsersArr = array();
         foreach ($users as $managers) {
             $managersDet = HRPerson::getManagerDetails($managers['hr_id']);
 
-            $UsersArr[] = ([
-                $managersDet['first_name'],
-                $managersDet['surname'],
-                $managersDet['email'],
-            ]);
-
             try {
-
-                Mail::to($managersDet['email'])->send(new sendManagersListOfAbsentUsers($managersDet['first_name'], $file, $date_now));
-
-                echo 'Mail send successfully';
+                Mail::to($managersDet['email'])->send(
+                    new sendManagersListOfAbsentUsers(
+                        $managersDet['first_name']
+                        , $file, $date_now
+                    ));
             } catch (\Exception $e) {
                 echo 'Error - ' . $e;
             }
@@ -337,5 +327,18 @@ class ReadErsDetails
 
     }
 
+    /**
+     * @param $AbsentUsersColl
+     * @return mixed
+     */
+    private function createExcelDoc($AbsentUsersColl)
+    {
+        return Excel::create('Absent Users', function ($excel) use ($AbsentUsersColl) {
+            $excel->sheet('Shortname', function ($sheet) use ($AbsentUsersColl) {
+                $sheet->fromArray($AbsentUsersColl, null, 'A1');
+            });
 
+        });
+
+    }
 }
