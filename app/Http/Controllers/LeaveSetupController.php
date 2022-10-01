@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManagerReport;
+use App\Models\StoreRoom;
 use BladeView;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
@@ -123,13 +124,8 @@ class  LeaveSetupController extends Controller
     {
 
         $users = HRPerson::getAllUsers();
-        $managerList = ManagerReport::all();
 
-        $managerArr = array();
-        foreach ($managerList as $list){
-            $managerArr[] = $list['hr_id'];
-        }
-
+        $managerList = ManagerReport::getListOfManagers();
 
 
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
@@ -148,7 +144,7 @@ class  LeaveSetupController extends Controller
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'setup';
         $data['users'] = $users;
-        $data['managerList'] = $managerArr;
+        $data['managerList'] = $managerList;
         $data['leave_configuration'] = $leave_configuration;
         $data['leaveTypes'] = $leaveTypes;
         $data['type_profile'] = $type_profile;
@@ -1038,13 +1034,28 @@ class  LeaveSetupController extends Controller
         unset($request['_token']);
 
         $managers = $request['hr_person_id'];
+
         foreach ($managers as $manager) {
-            ManagerReport::updateOrCreate([
+            ManagerReport::create([
                 'hr_id' => $manager,
                 'is_active' => 1
             ]);
         }
         Alert::toast('Settings  Successfully Changed', 'success');
+        return response()->json();
+    }
+
+
+    /**
+     * @param ManagerReport $manager
+     * @return RedirectResponse
+     * @throws \Exception
+     */
+    public function deleteManager($manager): RedirectResponse
+    {
+        $manage = ManagerReport::find($manager);
+        $manage->delete();
+
         return back();
     }
 }

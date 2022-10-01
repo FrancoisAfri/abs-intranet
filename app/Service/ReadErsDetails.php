@@ -47,11 +47,9 @@ class ReadErsDetails
         }
 
 
-        $todo = 'get_clocks';
-
-
         $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
         $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
+        $todo = 'get_clocks';
 
         $theUrl = 'https://r14.ersbio.co.za/api/data_client.php?'
             . 't=' . $token

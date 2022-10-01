@@ -12,8 +12,8 @@ class leave_history extends Model
 {
     //
     protected $table = 'leave_history';
-    protected $fillable = ['hr_id', 'action', 'description_action', 'action_date', 'previous_balance'
-        , 'leave_type_id', 'transcation', 'added_by', 'added_by_name'];
+    protected $fillable = ['hr_id', 'action', 'description_action', 'action_date', 'previous_balance',
+         'leave_type_id', 'transcation', 'added_by', 'added_by_name'];
 
     // #types of leave profiles belonging to leave types
     public function leavehistory()

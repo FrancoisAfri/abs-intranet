@@ -1,6 +1,7 @@
 @extends('layouts.main_layout')
 
 @section('page_dependencies')
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.css">
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/iCheck/square/blue.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css"/>
 
@@ -98,36 +99,59 @@
             </div>
             <!-- /.box-header -->
             <div class="box-body">
-                <form class="form-horizontal" method="post" action="{{ route('manager_report') }}">
-                    {{ csrf_field() }}
-                    <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
-                        <label for="hr_person_id" class="col-sm-2 control-label">Users</label>
-                        <div class="col-sm-10">
-                            <div class="input-group">
-                                <div class="input-group-addon">
-                                    <i class="fa fa-user-circle"></i>
-                                </div>
-                                <select class="form-control select2" multiple="multiple" style="width: 100%;"
-                                        id="hr_person_id" name="hr_person_id[]">
-                                    <option value="">*** Select an Users ***</option>
-                                    @foreach($users as $employee)
-                                        <option value="{{ $employee->id }}  {{ $managerList ? "selected" : "" }}">{{$employee->first . ' ' . $employee->surname }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
+                <div style="overflow-X:auto;">
+                    <table id=" " class="display table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 10px; text-align: center;">#</th>
+                            <th style="width: 10px; text-align: center;">Name</th>
+                            <th style="width: 5px; text-align: center;">Action</th>
 
-                        <button type="submit" class="btn btn-primary"><i class="fa fa-users"></i>
-                            save list of users
+                            {{--                                <th style="width: 5px; text-align: center;">.</th>--}}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if (count($managerList) > 0)
+                            <ul class="products-list product-list-in-box">
+                                @foreach ($managerList as $key => $assetTypes)
+                                    <tr id="categories-list">
+                                        <td></td>
+                                        <td style="width: 5px; text-align: left;">{{ $assetTypes->first_name . ' ' . $assetTypes->surname ?? ''}} </td>
+                                        {{--                                        <td>{{ $assetTypes->description ?? ''}} </td>--}}
+
+                                        <td style="width: 5px; text-align: right;">
+                                            <form action="{{ route('manager.destroy', $assetTypes->id) }}"
+                                                  method="POST"
+                                                  style="display: inline-block;">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                                <button type="submit"
+                                                        class="btn btn-xs btn-danger btn-flat delete_confirm"
+                                                        data-toggle="tooltip" title='Delete'>
+                                                    <i class="fa fa-trash"> Delete </i>
+
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                            @endforeach
+
+                        @endif
+                        </tbody>
+                    </table>
+
+                    <div class="box-footer">
+                        <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
+                                data-target="#add-managers-modal">Add Managers
                         </button>
                     </div>
-                </form>
+                </div>
+
             </div>
             <!-- /.box-body -->
         </div>
+        @include('leave.partials.settings.add_managers_report')
     </div>
 
     <!-- Include add new prime rate modal -->
@@ -492,10 +516,16 @@
 @endsection
 <!-- Ajax form submit -->
 @section('page_script')
+    <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
+
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <!-- Select2 -->
     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <script src="{{ asset('bower_components/AdminLTE/plugins/iCheck/icheck.min.js')}}"></script>
+    <script src="/custom_components/js/deleteAlert.js"></script>
+        <script src="/custom_components/js/dataTable.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <!-- InputMask -->
 
     <script>
@@ -510,6 +540,34 @@
 
             // toggle the icon
             this.classList.toggle("bi-eye");
+        });
+
+        $('.delete_confirm').click(function (event) {
+
+            let form = $(this).closest("form");
+
+            let name = $(this).data("name");
+
+            event.preventDefault();
+
+            swal({
+
+                title: `Are you sure you want to delete this record?`,
+                text: "If you delete this, it will be gone forever.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        form.submit();
+                        swal("Poof! Your Record has been deleted!", {
+                            icon: "success",
+                        });
+                    }
+
+                });
+
         });
 
         // prevent form submit
@@ -545,22 +603,10 @@
             });
 
 
-            //Vertically center modals on page
-            function reposition() {
-                let modal = $(this)
-                    , dialog = modal.find('.modal-dialog');
-                modal.css('display', 'block');
-                // Dividing by two centers the modal exactly, but dividing by three
-                // or four works better for larger screens.
-                dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-            }
-
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
-            $(window).on('resize', function () {
-                $('.modal:visible').each(reposition);
-            });
+
 
             let leavesetupId;
             $('#edit-leave_taken-modal').on('show.bs.modal', function (e) {
@@ -628,6 +674,25 @@
             let successMsg = 'Leave has been successfully added.';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
+
+        /**
+         * Add managers
+         */
+
+        $('#add-manager').on('click', function () {
+
+            let strUrl = '{{ route('manager_report') }}';
+            let modalID = 'add-managers-modal';
+            let formName = 'add-manager_module-form';
+
+            let submitBtnID = 'add-manager';
+            let redirectUrl = '/leave/setup';
+            let successMsgTitle = 'Manager Added to List!';
+            let successMsg = 'Record has been updated successfully.';
+
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
+
 
         //UPDATE
 

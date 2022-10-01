@@ -388,9 +388,11 @@ class LeaveApplicationController extends Controller
         $extraDays = 0;
         $balance = DB::table('leave_credit')
             ->select('leave_balance')
-            ->where('hr_id', $hrID)
-            ->where('leave_type_id', $typID)
-            ->get();
+            ->where([
+                'hr_id'=> $hrID ,
+                'leave_type_id' => $typID
+            ])->get();
+
         if ($typID == 1) $extraDays = $numberAnnual;
         elseif ($typID == 5) $extraDays = $numberSick;
         $leaveDays = !empty($balance->first()->leave_balance) ? $balance->first()->leave_balance / 8 : 0;

@@ -200,8 +200,6 @@
         });
 
 
-
-
         //TODO WILL CREATE A SIGLE GLOBAL FILE
         $('.delete_confirm').click(function (event) {
 
