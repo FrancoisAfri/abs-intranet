@@ -49,11 +49,9 @@ class ReadErsDetails
 
         $todo = 'get_clocks';
 
-        $date_from = '2022-09-29';
-        $date_to = '2022-09-29';
 
-//        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
-//        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
+        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
+        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
 
         $theUrl = 'https://r14.ersbio.co.za/api/data_client.php?'
             . 't=' . $token
@@ -84,9 +82,6 @@ class ReadErsDetails
 
         $date = strtotime($date_from);
 
-        /**
-         *  call the absent user function to get all absent users
-         */
         $absentUsers = $this->getAbsentUsers();
 
         $this->sendEmailToUser($absentUsers, $date, $date_from);
@@ -127,7 +122,6 @@ class ReadErsDetails
         $EmployeeId = $userArr->unique();
 
         return $Employees->diff($EmployeeId);
-
     }
 
     /**
@@ -186,9 +180,7 @@ class ReadErsDetails
 
                     ]);
             }
-
         }
-
     }
 
     /**
@@ -201,7 +193,6 @@ class ReadErsDetails
         $today = date("Y-m-d");
         $getEscalationDays = leave_configuration::pluck('number_of_days_before_automate_application')->first();
 
-
         if (!empty($getEscalationDays)) {
             $days = $getEscalationDays;
         } else {
@@ -209,7 +200,6 @@ class ReadErsDetails
         }
 
         $check = ErsAbsentUsers::getAbsentUsers();
-
 
         foreach ($check as $absent) {
 
@@ -239,7 +229,9 @@ class ReadErsDetails
 
                 // save audit
                 LeaveHistoryAuditController::store(
-                    "Leave application submitted by :" . HRPerson::getFullName($applicationStatus['first_name'], $applicationStatus['surname']),
+                    "Leave application submitted by :"
+                    . HRPerson::getFullName($applicationStatus['first_name']
+                        , $applicationStatus['surname']),
                     'Leave application for day',
                     $credit['leave_balance'],
                     1,
@@ -260,25 +252,19 @@ class ReadErsDetails
                     ]);
 
             } else {
-
                 ///nothing
                 $va = "do nothing";
             }
-
         }
-
     }
-
 
     /**
      * @return void
+     * @throws GuzzleException
      */
     public function sendAbsentUsersToManagers()
     {
 
-        //get list of managers from settings
-        //get list of absent users for the day
-        //compile a document with list of ansent users
         $date_now = Carbon::now()->toDayDateTimeString();
         $users = ManagerReport::getListOfManagers();
 
