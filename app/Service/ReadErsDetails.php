@@ -18,13 +18,13 @@ use ErrorException;
 use Exception;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Concerns\WithHeadings;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp;
 use App\Traits\TotalDaysWithoutWeekendsTrait;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Integer;
-
 
 //import gu zzle
 
@@ -49,11 +49,11 @@ class ReadErsDetails
 
         $todo = 'get_clocks';
 
-//        $date_from = '2022-09-29';
-//        $date_to = '2022-09-29';
+        $date_from = '2022-09-29';
+        $date_to = '2022-09-29';
 
-        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
-        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
+//        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
+//        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
 
         $theUrl = 'https://r14.ersbio.co.za/api/data_client.php?'
             . 't=' . $token
@@ -295,18 +295,23 @@ class ReadErsDetails
         $AbsentUsersColl = array();
         foreach ($absentUsers as $absentUser) {
             $details = HRPerson::getUserDetails($absentUser);
+
             $AbsentUsersColl[] = ([
-                $details['first_name'],
-                $details['surname'],
-                $details['email'],
+                'Employee Number' => $details['employee_number'],
+                'Name' => $details['first_name'],
+                'Surname' => $details['surname'],
+                'Email' => $details['email'],
             ]);
         }
 
+
+        //TODO TRY TO GET HEADERS
         // save to db then send email
         $file = Excel::create('Absent Users', function ($excel) use ($AbsentUsersColl) {
             $excel->sheet('Shortname', function ($sheet) use ($AbsentUsersColl) {
-                $sheet->fromArray($AbsentUsersColl);
+                $sheet->fromArray($AbsentUsersColl, null, 'A1');
             });
+
         });
 
 
