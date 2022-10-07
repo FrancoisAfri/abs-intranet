@@ -862,59 +862,59 @@
             @endif
 
             @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
-            document.getElementById("notes").placeholder = "Enter Task Note or Summary";
-            //Post end task form to server using ajax (add)
-            var taskID;
-            var employeeID;
-            var uploadRequired;
-            $('#end-task-modal').on('show.bs.modal', function (e) {
-                var btnEnd = $(e.relatedTarget);
-                taskID = btnEnd.data('task_id');
-                employeeID = btnEnd.data('employee_id');
-                uploadRequired = btnEnd.data('upload_required');
-                var modal = $(this);
-                modal.find('#task_id').val(taskID);
-                modal.find('#employee_id').val(employeeID);
-                modal.find('#upload_required').val(uploadRequired);
-            });
+				document.getElementById("notes").placeholder = "Enter Task Note or Summary";
+				//Post end task form to server using ajax (add)
+				var taskID;
+				var employeeID;
+				var uploadRequired;
+				$('#end-task-modal').on('show.bs.modal', function (e) {
+					var btnEnd = $(e.relatedTarget);
+					taskID = btnEnd.data('task_id');
+					employeeID = btnEnd.data('employee_id');
+					uploadRequired = btnEnd.data('upload_required');
+					var modal = $(this);
+					modal.find('#task_id').val(taskID);
+					modal.find('#employee_id').val(employeeID);
+					modal.find('#upload_required').val(uploadRequired);
+				});
 
-            $('#end-task').on('click', function () {
-                endTask(taskID);
-                /*
-                var strUrl = '/task/end';
-                var formName = 'end-task-form';
-                var modalID = 'end-task-modal';
-                var submitBtnID = 'end-task';
-                var redirectUrl = '/';
-                var successMsgTitle = 'Task Ended!';
-                var successMsg = 'Task has been Successfully ended!';
+				$('#end-task').on('click', function () {
+					endTask(taskID);
+					/*
+					var strUrl = '/task/end';
+					var formName = 'end-task-form';
+					var modalID = 'end-task-modal';
+					var submitBtnID = 'end-task';
+					var redirectUrl = '/';
+					var successMsgTitle = 'Task Ended!';
+					var successMsg = 'Task has been Successfully ended!';
 
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                */
-            });
+					modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+					*/
+				});
 
-            $('#close-task-modal').on('show.bs.modal', function (e) {
-                var btnEnd = $(e.relatedTarget);
-                taskID = btnEnd.data('task_id');
-                var modal = $(this);
-                modal.find('#task_id').val(taskID);
-            });
+				$('#close-task-modal').on('show.bs.modal', function (e) {
+					var btnEnd = $(e.relatedTarget);
+					taskID = btnEnd.data('task_id');
+					var modal = $(this);
+					modal.find('#task_id').val(taskID);
+				});
 
-            $('#close-task').on('click', function () {
-                var strUrl = '/task/check';
-                var formName = 'close-task-form';
-                var modalID = 'close-task-modal';
-                var submitBtnID = 'close-task';
-                var redirectUrl = '/';
-                var successMsgTitle = 'Task Checked!';
-                var successMsg = 'Task has been Successfully checked!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
+				$('#close-task').on('click', function () {
+					var strUrl = '/task/check';
+					var formName = 'close-task-form';
+					var modalID = 'close-task-modal';
+					var submitBtnID = 'close-task';
+					var redirectUrl = '/';
+					var successMsgTitle = 'Task Checked!';
+					var successMsg = 'Task has been Successfully checked!';
+					modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+				});
 
-            //Launch counter for running tasks
-            @foreach($tasks as $task)
-            increment({{ $task->task_id }});
-            @endforeach
+				//Launch counter for running tasks
+				@foreach($tasks as $task)
+				increment({{ $task->task_id }});
+				@endforeach
             @endif
 
             //Show success action modal
