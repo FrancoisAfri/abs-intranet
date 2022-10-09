@@ -276,7 +276,7 @@
                                                         id="hr_person_id" name="hr_person_id">
                                                     <option value="">*** Select an Employee ***</option>
                                                     @foreach($users as $employee)
-                                                        <option value="{{ $employee->id }}" {{ ($employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
+                                                        <option value="{{ $employee->id }}" {{ ($employee->id == $leave_configuration->hr_person_id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>

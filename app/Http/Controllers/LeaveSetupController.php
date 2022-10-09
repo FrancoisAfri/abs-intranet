@@ -485,6 +485,7 @@ class  LeaveSetupController extends Controller
     public function store(Request $request, leave_configuration $levg)
     {
         $levg->update($request->all());
+		return $levg;
         Alert::toast('Settings  Successfully Changed', 'success');
         return back();
     }
