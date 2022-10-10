@@ -147,7 +147,7 @@
         <!-- /.box-header -->
         <div class="box-body">
 
-            <img src="{{ asset('storage/assets/images/'.$asset->picture) }} "
+            <img src="{{ asset('storage/app/assets/images/'.$asset->picture) }} "
                  class="card-img-top" alt="Wild Landscape"
                  style='height: 500%; width: 100%; object-fit: contain'/>
 
