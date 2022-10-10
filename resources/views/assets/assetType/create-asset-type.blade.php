@@ -150,9 +150,7 @@
                     $(function () {
                         //Initialize Select2 Elements
 
-                        $('.modal').on('show.bs.modal', reposition);
-
-                        $('#add-asset').on('click', function() {
+                         $('#add-asset').on('click', function() {
 
                             let strUrl = '/assets/type';
                             let modalID = 'add-asset-modal';
