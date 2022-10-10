@@ -147,7 +147,7 @@
         <!-- /.box-header -->
         <div class="box-body">
 
-            <img src="{{ (!empty($asset->picture)) ? Storage::disk('local')->url("assets/images/$asset->picture") : 'http://placehold.it/60x50' }}"
+            <img src="{{ asset('storage/app/assets/images/'.$asset->picture) }} "
                  class="card-img-top" alt="Wild Landscape"
                  style='height: 500%; width: 100%; object-fit: contain'/>
 
