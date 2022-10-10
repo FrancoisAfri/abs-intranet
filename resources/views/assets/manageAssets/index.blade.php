@@ -141,10 +141,6 @@
                 autoWidth: true,
             });
 
-
-            // reposition modal
-            $('.modal').on('show.bs.modal', reposition);
-
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-green',
