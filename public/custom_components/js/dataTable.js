@@ -15,6 +15,5 @@ $(function () {
         ]
     });
 
-    $('.modal').on('show.bs.modal', reposition);
 });
 
