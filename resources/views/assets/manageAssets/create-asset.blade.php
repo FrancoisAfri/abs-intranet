@@ -245,8 +245,6 @@
                 ]
             });
 
-            $('.modal').on('show.bs.modal', reposition);
-
             $('#add-asset').on('click', function () {
                 let strUrl = '{{route('store')}}';
                 let modalID = 'add-asset-modal';
