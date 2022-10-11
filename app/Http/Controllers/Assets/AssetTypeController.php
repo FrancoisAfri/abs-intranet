@@ -32,14 +32,14 @@ class AssetTypeController extends Controller
     public function index()
     {
         //check if they are licence types
-        $licences = LicensesType::first();
+        //$licences = LicensesType::first();
 
-        if (is_null($licences)) {
-            Alert::error('Licence Type Empty', 'Please add License Type first');
-            return redirect()->route('licence.index');
-        } else
+        //if (is_null($licences)) {
+        //    Alert::error('Licence Type Empty', 'Please add License Type first');
+        //    return redirect()->route('licence.index');
+        //} else
             $assetType = AssetType::all();
-            $licences = LicensesType::all();
+           // $licences = LicensesType::all();
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -52,7 +52,7 @@ class AssetTypeController extends Controller
         );
 
         $data['assetType'] = $assetType;
-        $data['licenceType'] = $licences;
+        //$data['licenceType'] = $licences;
 
         AuditReportsController::store(
             'Asset Management',

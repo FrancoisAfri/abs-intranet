@@ -106,7 +106,7 @@ class LeaveHistoryAuditController extends Controller
 
         } else {
             $userID = 0;
-            $userName = '';
+            $userName = 'Cron Job';
         }
         $leave_history = new leave_history();
         //$leave_history

@@ -124,17 +124,14 @@ class  LeaveSetupController extends Controller
     {
 
         $users = HRPerson::getAllUsers();
-
         $managerList = ManagerReport::getListOfManagers();
-
-
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
             $query->orderBy('id', 'asc');
         }]);
 
         $type_profile = DB::table('type_profile')->orderBy('min', 'asc')->get();
         $leave_configuration = DB::table('leave_configuration')->where("id", 1)->get()->first();
-        $employees = HRPerson::where('status', 1)->get();
+        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
 
         $data['page_title'] = "leave type";
         $data['page_description'] = "leave set up ";

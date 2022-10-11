@@ -141,10 +141,6 @@
                 autoWidth: true,
             });
 
-
-            // reposition modal
-            $('.modal').on('show.bs.modal', reposition);
-
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-green',
@@ -220,8 +216,6 @@
                 }
 
             }
-
-
             <!-- add asset file -->
 
             $('#upload-asset').on('click', function () {
@@ -235,8 +229,6 @@
                 let successMsg = 'The Asset  has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-
-
             <!-- add component file -->
 
             $('#add-component').on('click', function () {
@@ -277,10 +269,6 @@
                 let Method = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-
-
-
-
 
             <!-- edit component file -->
             let componentId;

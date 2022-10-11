@@ -100,7 +100,6 @@
                 <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
                 <script src="/custom_components/js/modal_ajax_submit.js"></script>
                 <script src="/custom_components/js/deleteAlert.js"></script>
-                <script src="/custom_components/js/dataTable.js"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
                 {{--      data tables add ons         --}}
 
@@ -150,9 +149,7 @@
                     $(function () {
                         //Initialize Select2 Elements
 
-                        $('.modal').on('show.bs.modal', reposition);
-
-                        $('#add-asset').on('click', function() {
+                         $('#add-asset').on('click', function() {
 
                             let strUrl = '/assets/type';
                             let modalID = 'add-asset-modal';

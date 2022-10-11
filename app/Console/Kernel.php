@@ -52,14 +52,14 @@ class Kernel extends ConsoleKernel
 		$schedule->command('schedule:leaveResetSick')->dailyAt('06:00');
 		$schedule->command('schedule:leaveResetPartenity')->cron('0 0 1 1 * *');
 		$schedule->command('schedule:leaveResetFamily')->cron('0 1 1 1 * *');
-		$schedule->command('fleet:documentsUpload')->everyTenMinutes();
-		$schedule->command('vehicle:variouDocumentsUpload')->everyThirtyMinutes();
+		//$schedule->command('fleet:documentsUpload')->everyTenMinutes();
+		//$schedule->command('vehicle:variouDocumentsUpload')->everyThirtyMinutes();
 		$schedule->command('schedule:SendLeaveBalanceToUsers')->monthlyOn(1, '22:00');
-		$schedule->command('schedule:RemindManager')->weeklyOn(4, '23:00');
-		$schedule->command('schedule:leaveEscalation')->weeklyOn(4, '23:00');
+		$schedule->command('schedule:RemindManager')->weekdays()->dailyAt("22:00");
+		$schedule->command('schedule:leaveEscalation')->weekdays()->dailyAt("21:00");
         $schedule->command('schedule:LeaveBalanceReport')->monthlyOn(1, '01:00');
         $schedule->command('schedule:absentLeaveApplication')->weekdays()->dailyAt("23:00");
-        $schedule->command('schedule:SendListOfAbesntUsersToManager')->weekdays()->dailyAt("07:00");
+        $schedule->command('schedule:SendListOfAbesntUsersToManager')->weekdays()->dailyAt("10:00");
 
     }
 

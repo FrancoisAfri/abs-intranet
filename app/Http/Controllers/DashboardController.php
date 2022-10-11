@@ -139,8 +139,7 @@ class DashboardController extends Controller
                 , 'employee_tasks.id as task_id', 'contact_companies.name as client_name'
 				, 'employee_tasks.duration', 'employee_tasks.date_paused'
 				, 'employee_tasks.date_started', 'employee_tasks.document_on_task')
-                ->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
-                ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
+                ->leftJoin('contact_companies', 'employee_tasks.client_id', '=', 'contact_companies.id')
                 ->where('employee_tasks.employee_id', $user->person->id)
                 ->where('employee_tasks.start_date', '<=', $today)
                 ->where('employee_tasks.status', '<', 4)
