@@ -13,7 +13,7 @@ class leave_history extends Model
     //
     protected $table = 'leave_history';
     protected $fillable = ['hr_id', 'action', 'description_action', 'action_date', 'previous_balance',
-         'leave_type_id', 'transcation', 'added_by', 'added_by_name'];
+        'leave_type_id', 'transcation', 'added_by', 'added_by_name'];
 
     // #types of leave profiles belonging to leave types
     public function leavehistory()
@@ -50,7 +50,13 @@ class leave_history extends Model
      * @param string $date
      * @return leave_history[]|Collection|Builder[]|\Illuminate\Support\Collection
      */
-    public static function getLeaveHistory(string $actionFrom = "", string $actionTo = "", string $hr_person_id = "", string $LevTypID = "" , string $date="")
+    public static function getLeaveHistory(
+        string $actionFrom = "",
+        string $actionTo = "",
+        string $hr_person_id = "",
+        string $LevTypID = "",
+        string $date = ""
+    )
     {
 
         return leave_history::select('leave_history.*',
@@ -66,7 +72,7 @@ class leave_history extends Model
             })
             ->where(function ($query) use ($date) {
                 if (!empty($date)) {
-                    $query->where('leave_history.created_at', '>=' , $date);
+                    $query->where('leave_history.created_at', '>=', $date);
                 }
             })
             ->where(function ($query) use ($hr_person_id) {
@@ -155,7 +161,12 @@ class leave_history extends Model
      * @param string $actionTo
      * @return leave_application[]|Collection|Builder[]|\Illuminate\Support\Collection
      */
-    public static function getLeaveTaken(string $userID = "", string $LevTypID = "", string $actionFrom = "", string $actionTo = "")
+    public static function getLeaveTaken(
+        string $userID = "",
+        string $LevTypID = "",
+        string $actionFrom = "",
+        string $actionTo = ""
+    )
     {
         return leave_application::select(
             'leave_application.*',

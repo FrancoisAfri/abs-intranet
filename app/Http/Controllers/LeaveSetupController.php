@@ -1000,10 +1000,18 @@ class  LeaveSetupController extends Controller
                                         $currentBalance = $previousBalance + $days;
                                         $credits->leave_balance = $currentBalance;
                                         $credits->update();
-                                        LeaveHistoryAuditController::store('leave days reactivation', 'leave days reactivation', $previousBalance, $days, $currentBalance, 1, $employees->id);
+                                        LeaveHistoryAuditController::store(
+                                            'leave days reactivation',
+                                            'leave days reactivation',
+                                            $previousBalance, $days, $currentBalance,
+                                            1,
+                                            $employees->id);
                                     }
                                 }
-                                AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");
+                                AuditReportsController::store('Leave Management',
+                                    'leave days adjusted ',
+                                    "Edited by User"
+                                );
                             }
                         }
                     }
@@ -1026,7 +1034,7 @@ class  LeaveSetupController extends Controller
 
     /**
      * @param Request $request
-     * @return RedirectResponse
+     * @return \Illuminate\Http\JsonResponse
      */
     public function storeMangerReport(Request $request)
     {

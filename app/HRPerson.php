@@ -3,6 +3,8 @@
 namespace App;
 
 use App\Traits\Uuids;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
@@ -141,7 +143,7 @@ class HRPerson extends Model
     //function to get people from a specific div level
     public static function peopleFronDivLvl($whereField, $divValue, $incInactive)
     {
-        $hrPeople = HRPerson::where($whereField, $divValue)
+        return HRPerson::where($whereField, $divValue)
             ->where(function ($query) use ($incInactive) {
                 if ($incInactive == -1) {
                     $query->where('status', 1);
@@ -149,7 +151,6 @@ class HRPerson extends Model
             })->get()
             ->sortBy('full_name')
             ->pluck('id', 'full_name');
-        return $hrPeople;
     }
 
     public static function getAllUsers()
@@ -186,6 +187,89 @@ class HRPerson extends Model
     public static function getFullName($first_name, $surname): string
     {
         return $first_name . ' ' . $surname;
+    }
+
+//     $STATUS_SELECT = [
+//        '1' => 'Active',
+//        '0' => 'De-Activated',
+//    ];
+//
+
+    public static function STATUS_SELECT(): \Illuminate\Support\Collection
+    {
+        $status = [
+            '1' => 'Active',
+            '0' => 'De-Activated',
+        ];
+
+        return collect($status);
+    }
+
+
+    public static function getAllEmployeesByStatus($status = 1, $user, $collector)
+    {
+
+        $query = HRPerson::select(
+            'hr_people.*',
+            'hp.first_name as manager_first_name',
+            'hp.surname as manager_surname',
+//            'hpm.first_name as second_manager_first_name',
+//            'hpm.first_name as second_manager_surname',
+            'd4.name as department',
+            'd5.name as division',
+            'provinces.name as province'
+        )
+            ->whereHas('user', function ($query) use ($user, $status) {
+
+                if ($user > 0) {
+                    $query->where('id', $user);
+                    $query->whereIn('type', [1, 3]);
+                    $query->where('status', $status);
+                } elseif ($status == null) {
+                    $query->whereIn('type', [1, 3]);
+                    $query->where('status', 1);
+                } else {
+                    $query->whereIn('type', [1, 3]);
+                    $query->where('status', $status);
+                }
+            })
+            ->leftJoin(
+                'hr_people as hp',
+                'hr_people.manager_id',
+                '=',
+                'hp.id'
+            )
+//            ->leftJoin(
+//                'hr_people as hp',
+//                'hr_people.second_manager_id',
+//                '=',
+//                'hp.id'
+//            )
+            ->leftJoin(
+                'provinces',
+                'hr_people.res_province_id',
+                '=',
+                'provinces.id'
+            )
+            ->leftJoin(
+                'division_level_fives as d5',
+                'hr_people.division_level_5',
+                '=',
+                'd5.id'
+            )
+            ->leftJoin(
+                'division_level_fours as d4',
+                'hr_people.division_level_4',
+                '=',
+                'd4.id'
+            )
+            ->with('jobTitle')
+            ->limit(50)
+            ->$collector();
+
+        return $query;
+
+
     }
 
 }

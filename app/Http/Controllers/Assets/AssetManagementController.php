@@ -50,8 +50,11 @@ class AssetManagementController extends Controller
     public function index(Request $request)
     {
 
+        unset($request['_token']);
+
 
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
+
         $asset_type = $request['asset_type_id'];
         $assetType = AssetType::all();
         $asserts = Assets::getAssetsByStatus($status, $asset_type);

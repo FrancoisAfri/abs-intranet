@@ -13,17 +13,27 @@ class leave_application extends Model
         'end_time', 'manager_id', 'reject_reason', 'leave_days', 'leave_hours'
         , 'leave_taken'
     ];
-    // public $status = [
-    // 0 => 'Pending', 
-    // 1 => 'require_managers_approval',
-    // 2 => 'require_department_head_approval',
-    // 3 => 'require_hr_approval',
-    // 4 => 'require_payroll_approval',
-    // 5 => 'Approved', 5 => 'Rejected'
-    // ];
-    //->status
-    //->leave_status
-    //Relationship leave_application and leave_type
+
+    /**
+     * @return string[]
+     */
+    public static function getAllLeaveStatus()
+    {
+        return [
+            1 => 'Approved',
+            2 => 'Require managers approval ',
+            3 => 'Require department head approval',
+            4 => 'Require hr approval',
+            5 => 'Require payroll approval',
+            6 => 'rejected',
+            7 => 'rejectd_by_department_head',
+            8 => 'rejectd_by_hr',
+            9 => 'rejectd_by_payroll',
+            10 => 'Cancelled'
+        ];
+
+    }
+
     public function leavetpe()
     {
         return $this->belongsTo(LeaveType::class, 'leave_type_id');

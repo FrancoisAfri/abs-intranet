@@ -666,14 +666,14 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 3;
-        $ribbon->ribbon_name = 'Business card';
-        $ribbon->description = 'Business card';
-        $ribbon->ribbon_path = 'hr/business_card';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
+//        $ribbon = new module_ribbons();
+//        $ribbon->active = 1;
+//        $ribbon->sort_order = 3;
+//        $ribbon->ribbon_name = 'Business card';
+//        $ribbon->description = 'Business card';
+//        $ribbon->ribbon_path = 'hr/business_card';
+//        $ribbon->access_level = 4;
+//        $module->addRibbon($ribbon);
 
         // $ribbon = new module_ribbons();
         // $ribbon->active = 1;
@@ -683,6 +683,16 @@ class DatabaseSeeder extends Seeder
         // $ribbon->ribbon_path = 'hr/emp_document';
         // $ribbon->access_level = 4;
         // $module->addRibbon($ribbon);
+
+
+         $ribbon = new module_ribbons();
+         $ribbon->active = 1;
+         $ribbon->sort_order = 5;
+         $ribbon->ribbon_name = 'Video Management ';
+         $ribbon->description = 'Video Management ';
+         $ribbon->ribbon_path = 'employee/video_management';
+         $ribbon->access_level = 4;
+         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
@@ -696,9 +706,9 @@ class DatabaseSeeder extends Seeder
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 6;
-        $ribbon->ribbon_name = 'Talent Pool';
-        $ribbon->description = 'Talent Pool';
-        $ribbon->ribbon_path = 'hr/talent_pool';
+        $ribbon->ribbon_name = 'Employee Management';
+        $ribbon->description = 'Employee Management';
+        $ribbon->ribbon_path = 'employee';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 

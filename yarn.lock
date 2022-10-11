@@ -5332,6 +5332,11 @@
     "rechoir" "^0.6.2"
     "resolve" "^1.1.7"
 
+"lightbox2@^2.11.3":
+  "integrity" "sha512-Q4v6il/OK9ttgEkAxSok/jrI/LUbqTrePFchqP2x/59qaDIZgJjEEc5Xf7peSMc/55Zo5PAgmX6EiN/BeEeUBQ=="
+  "resolved" "https://registry.npmjs.org/lightbox2/-/lightbox2-2.11.3.tgz"
+  "version" "2.11.3"
+
 "lilconfig@^2.0.3", "lilconfig@^2.0.5":
   "integrity" "sha512-9JROoBW7pobfsx+Sq2JsASvCo6Pfo6WWoUW79HuB1BCoBXD4PLWJPqDF6fNj67pqBYTbAHkE57M1kS/+L1neOg=="
   "resolved" "https://registry.npmjs.org/lilconfig/-/lilconfig-2.0.6.tgz"

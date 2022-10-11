@@ -55,10 +55,6 @@
                         </div>
                         <br>
 
-{{--                        @foreach($assetType as $assets)--}}
-{{--                            <option value="{{ $assets->id }}">{{ $assets->name }}</option>--}}
-{{--                        @endforeach--}}
-
                         <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
                                 data-target="#add-asset-modal">Add Asset
                         </button>

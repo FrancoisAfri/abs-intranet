@@ -26,7 +26,6 @@ use App\Traits\TotalDaysWithoutWeekendsTrait;
 use Illuminate\Support\Facades\Mail;
 use phpDocumentor\Reflection\Types\Integer;
 
-//import gu zzle
 
 class ReadErsDetails
 {
@@ -233,11 +232,11 @@ class ReadErsDetails
                     'Leave application for day',
                     $credit['leave_balance'],
                     1,
-                    $credit['leave_balance'] - 1,
+                    $credit['leave_balance'],
                     1,
                     0,
                     1,
-                    $absent->hr_id
+                    0
                 );
 
                 //this one is to update the ers table
@@ -277,7 +276,7 @@ class ReadErsDetails
 
         //create a new collection with name, surname, and employee  number
         $AbsentUsersColl = array();
-        if(count($absentUsers) > 0){
+        if (count($absentUsers) > 0) {
             foreach ($absentUsers as $absentUser) {
                 $details = HRPerson::getUserDetails($absentUser);
 
@@ -290,8 +289,8 @@ class ReadErsDetails
             }
         }
 
-       // Excel Doc
-        $file =  $this->createExcelDoc($AbsentUsersColl);
+        // Excel Doc
+        $file = $this->createExcelDoc($AbsentUsersColl);
 
 
         $UsersArr = array();

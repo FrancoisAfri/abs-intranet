@@ -27,10 +27,20 @@ class ManagerReport extends Model
 
         //ManagerReport::
         return DB::table('manager_report', 'hr')
-            ->select('hr_id', 'is_active', 'hr_people.id' ,'hr_people.first_name', 'hr_people.surname')
-            ->leftJoin('hr_people', 'manager_report.hr_id', '=', 'hr_people.id')
-            ->orderBy('manager_report.id')
-            ->get();
+            ->select('hr_id',
+                'is_active',
+                'hr_people.id',
+                'hr_people.first_name',
+                'hr_people.surname'
+            )
+            ->leftJoin('hr_people',
+                'manager_report.hr_id',
+                '=',
+                'hr_people.id'
+            )
+            ->orderBy(
+                'manager_report.id'
+            )->get();
 
     }
 

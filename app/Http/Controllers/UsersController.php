@@ -415,6 +415,8 @@ class UsersController extends Controller
         $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         // return $businessCard;
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
+
+
         $data['page_title'] = "Users";
         $data['businessCard'] = $businessCard;
         $data['page_description'] = "View/Update user details";
@@ -558,6 +560,7 @@ class UsersController extends Controller
     }
 
     public function getSearch(Request $request) {
+
         $personName = trim($request->person_name);
         $personIDNum = trim($request->id_number);
         $personPassport = trim($request->passport_number);
@@ -1077,6 +1080,7 @@ class UsersController extends Controller
         AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
         return view('security.users_date_joined_report_print')->with($data);
     }
+
 	public function usersApproval() {
 		
 		$users = User::where('status',2)->get();

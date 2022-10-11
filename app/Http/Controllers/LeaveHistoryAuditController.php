@@ -82,16 +82,28 @@ class LeaveHistoryAuditController extends Controller
      * @param $hrID
      * @return void
      */
-    public static function store($action = '', $descriptionAction = '', $previousBalance = 0, $transcation = 0, $current_balance = 0, $leave_type = 0, $hrID = 0, $isCron = 0, $user = 0)
+    public static function store(
+        $action = '',
+        $descriptionAction = '',
+        $previousBalance = 0,
+        $transcation = 0,
+        $current_balance = 0,
+        $leave_type = 0,
+        $hrID = 0,
+        $isCron = 0,
+        $user = 0
+    )
     {
 
         if ($isCron == 0)
             $user = Auth::user()->load('person');
 
+
         if (!empty($user)) {
 
             $userID = $user->person->id;
             $userName = $user->person->first_name . " " . $user->person->surname;
+
         } else {
             $userID = 0;
             $userName = '';

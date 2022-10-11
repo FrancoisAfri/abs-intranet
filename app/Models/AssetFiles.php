@@ -13,6 +13,7 @@ class AssetFiles extends Model
     use Uuids;
 
     public $table = 'asset_files';
+
     public $timestamps = true;
 
     protected $fillable = [

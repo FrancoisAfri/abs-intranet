@@ -129,7 +129,9 @@ class DashboardController extends Controller
 
             // Get tasks for logged user
             $today = strtotime(date('Y-m-d'));
+
             $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+
             $tasks = EmployeeTasks::
             select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
                 , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
@@ -147,12 +149,17 @@ class DashboardController extends Controller
                 ->get();
 
             #leave Balance
+            /**
+             *
+             */
             $balances = DB::table('leave_credit')
                 ->select('leave_credit.*', 'leave_types.name as leavetype')
                 ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
                 ->where('leave_credit.hr_id', $user->person->id)
                 ->orderBy('leave_types.name')
                 ->get();
+
+
             #leave Application
             $application = DB::table('leave_application')
                 ->select('leave_application.*', 'leave_types.name as leavetype')

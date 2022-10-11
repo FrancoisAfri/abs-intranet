@@ -43,39 +43,44 @@
                                         </div>
                             @endforeach
                         @endif
-                        <div class="form-group">
-                            <label for="first_name" class="col-sm-2 control-label">First Name </label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                            <div class="form-group">
+                                <label for="first_name" class="col-sm-2 control-label">First Name </label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </div>
+                                        <input type="text" class="form-control" id="first_name" name="first_name"
+                                               value="{{ $user->person->first_name }}" placeholder="First Name"
+                                               required>
                                     </div>
-                                    <input type="text" class="form-control" id="first_name" name="first_name" value="{{ $user->person->first_name }}" placeholder="First Name" required>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="surname" class="col-sm-2 control-label">Surname</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                            <div class="form-group">
+                                <label for="surname" class="col-sm-2 control-label">Surname</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </div>
+                                        <input type="text" class="form-control" id="surname" name="surname"
+                                               value="{{ $user->person->surname }}" placeholder="Surname" required>
                                     </div>
-                                    <input type="text" class="form-control" id="surname" name="surname" value="{{ $user->person->surname }}" placeholder="Surname" required>
                                 </div>
                             </div>
-                        </div>
-                          <div class="form-group">
-                            <label for="employee_number" class="col-sm-2 control-label">Employee Number</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-user"></i>
+                            <div class="form-group">
+                                <label for="employee_number" class="col-sm-2 control-label">Employee Number</label>
+                                <div class="col-sm-10">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">
+                                            <i class="fa fa-user"></i>
+                                        </div>
+                                        <input type="text" class="form-control" id="employee_number"
+                                               name="employee_number" value="{{ $user->person->employee_number }}"
+                                               placeholder="Employee Number">
                                     </div>
-                                    <input type="text" class="form-control" id="employee_number" name="employee_number" value="{{ $user->person->employee_number }}" placeholder="Employee Number">
                                 </div>
                             </div>
-                        </div>
                             {{--add leave porfile--}}
                             <div class="form-group">
                                 <label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>

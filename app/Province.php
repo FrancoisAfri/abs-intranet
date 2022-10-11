@@ -10,6 +10,8 @@ class Province extends Model
         'name', 'abbreviation'
     ];
 
+    public $table = 'provinces';
+
     //Province - Country relationship
     public function country() {
         return $this->belongsTo(Country::class, 'country_id');

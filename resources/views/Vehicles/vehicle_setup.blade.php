@@ -16,7 +16,7 @@
                     <h3 class="box-title">Vehicle Configuration</h3>
                 </div>
                 <form class="form-horizontal" method="POST"
-                      action="/vehicle_management/configuration/{{ $configuration->id }}" enctype="multipart/form-data">
+                      action="/vehicle_management/configuration/{{ (!empty($configuration->id)) ?  $configuration->id : ''}}" enctype="multipart/form-data">
                     {{ csrf_field() }}
                     <div class="box-body">
                         @if (count($errors) > 0)
@@ -37,33 +37,33 @@
                                     <td class="caption" colspan="2">Allow Sending of Messages</td>
                                     <input type="hidden" name="allow_sending_messages" value="0">
                                     <td colspan="3"><input type="checkbox" name="allow_sending_messages"
-                                                           value="1" {{ $configuration->allow_sending_messages === 1 ? 'checked ="checked"' : 0 }} >
+                                                           value="1"{{ (!empty($configuration->allow_sending_messages) && $configuration->allow_sending_messages === 1) ? 'checked ="checked"' : 0 }} >
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="caption" colspan="2">Use Fleet Number</td>
                                     <td colspan="3"><input type="checkbox" name="use_fleet_number"
-                                                           value="1" {{ $configuration->use_fleet_number === 1 ? 'checked ="checked"' : 0 }} >
+                                                           value="1" {{ (!empty($configuration->use_fleet_number) && $configuration->use_fleet_number === 1) ? 'checked ="checked"' : 0 }} >
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="caption" colspan="2">Include Inspection Documents</td>
                                     <td colspan="3"><input type="checkbox" name="include_inspection_document"
-                                                           value="1" {{ $configuration->include_inspection_document === 1 ? 'checked ="checked"' : 0 }} >
+                                                           value="1" {{ (!empty($configuration->include_inspection_document) && $configuration->include_inspection_document === 1) ? 'checked ="checked"' : 0 }} >
                                     </td>
 
                                 </tr>
                                 <tr>
                                     <td class="caption" colspan="2">Inforce Vehicle Documents</td>
                                     <td colspan="3"><input type="checkbox" name="inforce_vehicle_documents"
-                                                           value="1" {{ $configuration->inforce_vehicle_documents === 1 ? 'checked ="checked"' : 0 }} >
+                                                           value="1" {{ (!empty($configuration->inforce_vehicle_documents) && $configuration->inforce_vehicle_documents === 1) ? 'checked ="checked"' : 0 }} >
                                     </td>
 
                                 </tr>
                                 <tr>
                                     <td class="caption" colspan="2">Inforce Vehicle Images</td>
                                     <td colspan="3"><input type="checkbox" name="inforce_vehicle_image"
-                                                           value="1" {{ $configuration->inforce_vehicle_image === 1 ? 'checked ="checked"' : 0 }} >
+                                                           value="1" {{ (!empty($configuration->inforce_vehicle_image) && $configuration->inforce_vehicle_image === 1) ? 'checked ="checked"' : 0 }} >
                                     </td>
 
                                 </tr>

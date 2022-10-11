@@ -55,8 +55,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                </td>
+
                                                 <td align="center">{{ !empty($document->description) ? $document->description : ''}}</td>
                                                 <td>{{ !empty($document->upload_date) ? date(' d M Y', $document->upload_date) : '' }}</td>
 

@@ -3,7 +3,7 @@
     <br>
     <div class="box box-primary">
         <div class="box-header with-border">
-            <h3 class="box-title">{{ $asset->name}}</h3>
+            <h3 class="box-title">{{ (!empty($asset->name)) ? $asset->name : ''}}</h3>
         </div>
         <!-- /.box-header -->
         <div class="box-body">
@@ -17,7 +17,8 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{$asset->name}}
+
+                            {{ (!empty( $asset->name)) ? $asset->name : ''}}
                         </div>
 
                     </td>
@@ -30,7 +31,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{$asset->description}}
+                            {{ (!empty($asset->description)) ? $asset->description : '' }}
                         </div>
 
                     </td>
@@ -43,7 +44,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{$asset->AssetType->name}}
+                            {{ (!empty($asset->AssetType->name)) ? $asset->AssetType->name : '' }}
                         </div>
 
                     </td>
@@ -57,7 +58,9 @@
                         </div>
                     </td>
                     <td>
-                        <span class="label label-success">{{$asset->asset_status}}</span>
+                        <span class="label label-success">
+                             {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}
+                        </span>
                     </td>
                 </tr>
                 <tr>
@@ -68,7 +71,8 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{$asset->serial_number}}
+                            {{ (!empty( $asset->serial_number)) ?  $asset->serial_number : ''}}
+
                         </div>
                     </td>
                 </tr>
@@ -92,7 +96,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{$asset->make_number}}
+                            {{(!empty($asset->make_number)) ? $asset->make_number : ''}}
                         </div>
 
                     </td>
@@ -105,7 +109,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{$asset->price}}
+                            {{ (!empty( $asset->price)) ? $asset->price : ''}}
                         </div>
                     </td>
 
@@ -121,8 +125,8 @@
                         <div class="col-md-6">
                             <button type="button" id="efit_status" class="btn btn-secondary pull-right btn-sm"
                                     data-toggle="modal" data-target="#change-asset_status-modal"
-                                    data-id="{{ $asset->id }}"
-                                    data-name="{{ $asset->asset_status}}">Change Status
+                                    data-id="{{ isset($asset->id) }}"
+                                    data-name="{{ isset($asset->asset_status)}}">Change Status
                             </button>
                         </div>
                     </td>

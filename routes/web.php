@@ -119,6 +119,40 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
     Route::resource('reports', AssetReportsController::class);
 });
 
+
+Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' => ['auth']], function () {
+    //Route::resource('/', EmployeeManagementController::class);
+
+    Route::get('/', 'EmployeeManagementController@index')
+        ->name('employee.index');
+
+    Route::get('show/{employee}', 'EmployeeManagementController@show')
+        ->name('employee.show');
+
+    Route::get('act/{user}', 'EmployeeManagementController@activate')
+        ->name('employee.activate');
+
+
+    Route::get('/video_management', 'VideoManagementController@index')
+        ->name('video.index');
+
+
+    Route::post('videos', 'VideoManagementController@store')
+        ->name('employee.videos');
+
+    Route::get('video_show/{videos}', 'VideoManagementController@show')
+        ->name('videos.show');
+
+    Route::get('video/{videos}', 'VideoManagementController@activate')
+        ->name('video.activate');
+
+    Route::post('video/assign', 'VideoManagementController@assign')
+        ->name('video.assign');
+
+});
+
+
+
 Route::post('users', 'UsersController@store');
 
 Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {

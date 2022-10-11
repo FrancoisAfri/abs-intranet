@@ -5,9 +5,11 @@
  * Nkosana Gift
  * ncubesss@gmail.com
  */
+
 namespace App\Traits;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 trait StoreImageTrait
 {
@@ -41,4 +43,5 @@ trait StoreImageTrait
         }
         return null;
     }
+
 }

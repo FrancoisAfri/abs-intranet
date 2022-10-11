@@ -54,20 +54,22 @@ trait uploadFilesTrait
     )
     {
 
-            if ($request->hasFile($fieldname)) {
-                $file_name = $request->file($fieldname);
-                $file_ext = $file_name->extension();
-                if (in_array($file_ext, ['jpg', 'png', 'jpeg', 'png', 'gif', 'doc', 'docx',
-                        'pdf', 'xls', 'xlsx', 'txt', 'lic', 'xml', 'zip', 'rtf', 'rar']) &&
-                    $file_name->isValid()) {
-                    $filename = pathinfo($file_name->getClientOriginalName(), PATHINFO_FILENAME);
-                    $fileNameToStore = time() . $filename . $file_ext;
-                    $path = $file_name->storeAs($directory, $fileNameToStore);
-                    $moduleName->$fieldname = $fileNameToStore;
-                    return $moduleName->update();
-                }
+        if ($request->hasFile($fieldname)) {
+            $file_name = $request->file($fieldname);
+            $file_ext = $file_name->extension();
+            if (in_array($file_ext, ['jpg', 'png', 'jpeg', 'png', 'gif', 'doc', 'docx',
+                    'pdf', 'xls', 'xlsx', 'txt', 'lic', 'xml', 'zip', 'rtf', 'rar',
+                    "mp4", "3gp", "mov", "avi", "wmv", "m3u8", "ts", "flv",
+                ]) &&
+                $file_name->isValid()) {
+                $filename = pathinfo($file_name->getClientOriginalName(), PATHINFO_FILENAME);
+                $fileNameToStore = time() . $filename . $file_ext;
+                $path = $file_name->storeAs($directory, $fileNameToStore);
+                $moduleName->$fieldname = $fileNameToStore;
+                return $moduleName->update();
             }
-            return null;
+        }
+        return null;
 
     }
 }
