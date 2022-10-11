@@ -4,7 +4,7 @@
         <div class="box box-primary">
             <div class="box-header with-border">
                 <i class="fa fa-barcode pull-right"></i>
-                <h3 class="box-title"> Components </h3>
+                <h3 class="box-title"> My Videos </h3>
             </div>
             <div class="box-body">
                 <div style="overflow-X:auto;">

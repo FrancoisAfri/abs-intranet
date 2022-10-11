@@ -76,12 +76,11 @@
 
                                         {{--  Files  tab  --}}
                                         <div class="tab-pane" id="Video">
-                                            video
                                             @include('Employees.Tabs.videos-tab')
                                         </div>
                                         <!-- /.tab-pane -->
                                         <div class="tab-pane" id="drive">
-                                            drive
+                                            @include('Employees.Tabs.documents-tab')
                                         </div>
 
                                     </div>
@@ -131,6 +130,8 @@
     <script src="{{asset('custom_components/js/modal_ajax_submit.js')}}"></script>
     <!-- Ajax dropdown options load -->
     <script src="{{ asset('custom_components/js/load_dropdown_options.js') }}"></script>
+
+    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>
 
     <script>
         $(function () {
