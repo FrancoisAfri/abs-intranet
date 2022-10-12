@@ -162,8 +162,8 @@ Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {
 
     Route::get('/', 'UsersController@index');
     Route::get('create', 'UsersController@create');
-    Route::get('{user}/edit', 'UsersController@edit');
-    Route::get('profile', 'UsersController@profile');
+    Route::get('{user}/edit', 'UsersController@edit')->name('user.edit');
+    Route::get('profile', 'UsersController@profile')->name('profile');
 
     Route::post('search', 'UsersController@getSearch');
     Route::post('search/activate', 'UsersController@activateUsers');

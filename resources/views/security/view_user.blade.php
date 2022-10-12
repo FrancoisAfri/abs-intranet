@@ -436,7 +436,7 @@
         $(function () {
             //Cancel button click event
             document.getElementById("cancel").onclick = function () {
-                location.href = "{{ $back }}";
+                location.href = "{{ route('employee.index') }}";
             };
 
             //Date picker

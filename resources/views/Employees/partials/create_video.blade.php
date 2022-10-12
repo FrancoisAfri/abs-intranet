@@ -36,11 +36,8 @@
                         <div class="col-sm-8">
 
                             <input type="file" id="path" name="path" class="file file-loading"
-                                   data-allowed-file-extensions='["ts", "m3u8", "flv", "3gp", "webm","mov","avi","wmv",
-                                   "mp4", "mkv"]' data-show-upload="false">
-                            <strong> Allowed filetypes are mp4, wmv,
-                                avi, mov, 3gp, ts, m3u8 and
-                                flv. Max upload size allowed is 50M."</strong>
+                                   data-allowed-file-extensions='["mp4"]' data-show-upload="false">
+                            <strong> Allowed filetypes are mp4. Max upload size allowed is 50M."</strong>
                         </div>
                     </div>
 

@@ -131,6 +131,10 @@
 
             $(".select2").select2();
             $('[data-toggle="tooltip"]').tooltip();
+			$('#user_profile').click(function () {
+                location.href = '{{ route('user.edit',$employee->id ) }} ';
+
+            });
             //back
             $('#back_button').click(function () {
                location.href = '{{route('employee.index')}}';

@@ -23,7 +23,12 @@
                             <ul class="products-list product-list-in-box">
                                 @foreach ($videos as $key => $video)
                                     <tr id="categories-list">
-                                        <td></td>
+                                        <td>
+                                            <video  height="60" width="150" controls>
+                                                <source src="{{URL::asset("storage/videos/$video->path")}}" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
+                                        </td>
                                         <td style="text-align: center;">{{ (!empty( $video->name)) ?  $video->name : ''}} </td>
                                         <td style="text-align: center;">{{ (!empty( $video->description)) ?  $video->description : ''}} </td>
 

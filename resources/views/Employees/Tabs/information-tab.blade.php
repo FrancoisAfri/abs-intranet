@@ -219,26 +219,16 @@
 
                     </td>
                 </tr>
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <strong>
-                                Date Joined
-                            </strong>
-                        </div>
-                    </td>
-                    <td>
-                        <span class="label label-success">
-                             {{ (!empty( $employee->date_joined)) ?  date(' d M Y', $employee->date_joined) : ''}}
-                        </span>
-                    </td>
-                </tr>
 
                 </tbody>
             </table>
         </div>
         <div class="box-footer">
-            <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#edit-user-modal">Edit My Details</button>
+{{--            <button type="button" id="cat_module" class="btn btn-default pull-right" href="">Edit My Details</button>--}}
+            <button type="button" class="btn btn-default pull-right" id="user_profile"><i
+                        class="fa fa-user-secret"></i> Edit My Profile
+            </button>
+{{--            {{ route('users/profile') }}--}}
         </div>
     </div>
 
@@ -256,9 +246,10 @@
         <!-- /.box-header -->
         <div class="box-body">
 
-            <img src="{{ (!empty($employee->profile_pic)) ? asset('storage/app/avatars/'.$employee->profile_pic)  : (($employee->gender === 0) ? $f_silhouette : $m_silhouette)}} "
+            <img src="{{ (!empty($employee->profile_pic)) ? asset('storage/avatars/'.$employee->profile_pic)  : (($employee->gender === 0) ? $f_silhouette : $m_silhouette)}} "
                  class="card-img-top" alt="Wild Landscape"
                  style='height: 400%; width: 100%; object-fit: contain'/>
+
 
         </div>
         <!-- /.box-body -->

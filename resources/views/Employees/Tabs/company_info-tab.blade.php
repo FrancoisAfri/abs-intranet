@@ -1,4 +1,4 @@
-<div class="col-lg-6 col-sm-6 pull-left">
+<div class="col-lg-12 ">
     <br>
     <br>
     <div class="box box-primary">
@@ -162,4 +162,11 @@
             </table>
         </div>
     </div>
+</div>
+
+
+<div class="col-lg-6 col-sm-6">
+    <br>
+    <br>
+
 </div>

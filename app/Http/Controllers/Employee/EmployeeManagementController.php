@@ -97,11 +97,26 @@ class EmployeeManagementController extends Controller
     {
 
         $videos = Video::all();
+        
 
         $slugs = explode("-", str_replace('_', ' ', $id));
 
         $employee = HRPerson::getAllEmployeesByStatus($status = 1, $slugs[1], 'first');
 
+		$divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
+        $divLevel2 = (!empty($employee['division_level_2'])) ? $employee['division_level_2'] : 0;
+        $divLevel3 = (!empty($employee['division_level_3'])) ? $employee['division_level_3'] : 0;
+        $divLevel4 = (!empty($employee['division_level_4'])) ? $employee['division_level_4'] : 0;
+        $divLevel5 = (!empty($employee['division_level_5'])) ? $employee['division_level_5'] : 0;
+
+
+        $hrPersonID = $slugs[1];
+        $moduleID = 1;
+        $status = 1;
+
+        $specificVids = Video::getVideosByUser($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5);
+
+        $generalVids = Video::getAllGeneralVideos();
         $MaritalStatus = [
             1 => 'Single',
             2 => 'Married',
@@ -137,6 +152,7 @@ class EmployeeManagementController extends Controller
         $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
 
+
         $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
 		
 		// task list
@@ -154,11 +170,17 @@ class EmployeeManagementController extends Controller
                 ->orderBy('employee_tasks.order_no')
                 ->get();
 				
+
+
+        $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
+
+
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
+
 		$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $division_levels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 		$routeUser = str_replace(' ', '_', strtolower($employee->first_name) ).'-'.$employee->id.'-'.str_replace(' ', '_', strtolower($employee->surname));
@@ -227,6 +249,8 @@ class EmployeeManagementController extends Controller
         $data['taskStatus'] = $taskStatus;
         $data['marital_statuses'] = $marital_statuses;
         $data['ethnicities'] = $ethnicities;
+        $data['specific'] = $specificVids;
+        $data['general'] = $generalVids;				  
         $data['employees'] = $employees;
         $data['positions'] = $positions;
         $data['leave_profile'] = $leave_profile;

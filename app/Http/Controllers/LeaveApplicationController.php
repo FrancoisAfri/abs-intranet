@@ -342,7 +342,7 @@ class LeaveApplicationController extends Controller
 
             } else
                 # code...
-                // query the hrperon  model and bring back the values of the manager
+                // query the hrperson  model and bring back the values of the manager
                 $managerDetails = HRPerson::getManagerDetails($hrDetails->manager_id);
 
 

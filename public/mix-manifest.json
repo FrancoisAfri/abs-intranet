@@ -1,4 +1,6 @@
 {
+    "/js/app.js": "/js/app.js",
+    "/css/app.css": "/css/app.css",
     "/js/global.js": "/js/global.js",
     "/css/global.css": "/css/global.css",
     "/Plugins/bootstrap-slider/bootstrap-slider.js": "/Plugins/bootstrap-slider/bootstrap-slider.js",
@@ -838,6 +840,7 @@
     "/Plugins/timepicker/bootstrap-timepicker.js": "/Plugins/timepicker/bootstrap-timepicker.js",
     "/Plugins/timepicker/bootstrap-timepicker.min.css": "/Plugins/timepicker/bootstrap-timepicker.min.css",
     "/Plugins/timepicker/bootstrap-timepicker.min.js": "/Plugins/timepicker/bootstrap-timepicker.min.js",
+    "/customComponents/css/album.css": "/customComponents/css/album.css",
     "/customComponents/css/dropzone.css": "/customComponents/css/dropzone.css",
     "/customComponents/css/style.css": "/customComponents/css/style.css",
     "/customComponents/js/admindbcharts.js": "/customComponents/js/admindbcharts.js",
