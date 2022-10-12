@@ -142,6 +142,18 @@
 			$('#Apply').click(function () {
                 location.href = '/leave/application';
             });
+
+            //back
+            $('#user_profile').click(function () {
+                location.href = '{{ route('user.edit',$employee->id ) }} ';
+
+            });
+            $('#back_button').click(function () {
+                location.href = '{{ route('employee.index') }} ';
+
+            });
+
+            //Load divisions drop down
             $('table.files').DataTable({
                 paging: true,
                 lengthChange: true,

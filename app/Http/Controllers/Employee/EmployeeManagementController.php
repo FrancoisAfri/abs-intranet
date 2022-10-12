@@ -8,6 +8,7 @@ use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
 use App\Models\StoreRoom;
 use App\Models\Video;
+use App\modules;
 use App\Province;
 use App\modules;
 use App\employee_documents;
@@ -97,7 +98,7 @@ class EmployeeManagementController extends Controller
     {
 
         $videos = Video::all();
-        
+
 
         $slugs = explode("-", str_replace('_', ' ', $id));
 
@@ -109,6 +110,15 @@ class EmployeeManagementController extends Controller
         $divLevel4 = (!empty($employee['division_level_4'])) ? $employee['division_level_4'] : 0;
         $divLevel5 = (!empty($employee['division_level_5'])) ? $employee['division_level_5'] : 0;
 
+        $userID = User::where('id', $slugs[1])->first();
+        $user = $userID->load('person');
+
+
+        $divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
+        $divLevel2 = (!empty($employee['division_level_2'])) ? $employee['division_level_2'] : 0;
+        $divLevel3 = (!empty($employee['division_level_3'])) ? $employee['division_level_3'] : 0;
+        $divLevel4 = (!empty($employee['division_level_4'])) ? $employee['division_level_4'] : 0;
+        $divLevel5 = (!empty($employee['division_level_5'])) ? $employee['division_level_5'] : 0;
 
         $hrPersonID = $slugs[1];
         $moduleID = 1;
@@ -117,6 +127,7 @@ class EmployeeManagementController extends Controller
         $specificVids = Video::getVideosByUser($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5);
 
         $generalVids = Video::getAllGeneralVideos();
+
         $MaritalStatus = [
             1 => 'Single',
             2 => 'Married',
@@ -251,6 +262,11 @@ class EmployeeManagementController extends Controller
         $data['ethnicities'] = $ethnicities;
         $data['specific'] = $specificVids;
         $data['general'] = $generalVids;				  
+
+        $data['checkTasks'] = $checkTasks;
+        $data['specific'] = $specificVids;
+        $data['general'] = $generalVids;
+        $data['user'] = $user;
         $data['employees'] = $employees;
         $data['positions'] = $positions;
         $data['leave_profile'] = $leave_profile;
@@ -259,7 +275,6 @@ class EmployeeManagementController extends Controller
         $data['division_levels'] = $division_levels;
         $data['videos'] = $videos;
 		$data['tasks'] = $tasks;
-        $data['leaveProfiles'] = $leaveProfiles;
         $data['leaveProfiles'] = $leaveProfiles;
         $data['m_silhouette'] = $m_silhouette;
         $data['f_silhouette'] = $f_silhouette;
