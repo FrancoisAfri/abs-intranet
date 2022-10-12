@@ -8,6 +8,7 @@ use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
 use App\Models\StoreRoom;
 use App\Models\Video;
+use App\modules;
 use App\Province;
 use App\Traits\BreadCrumpTrait;
 use App\User;
@@ -94,13 +95,30 @@ class EmployeeManagementController extends Controller
     {
 
         $videos = Video::all();
-        
+
 
         $slugs = explode("-", str_replace('_', ' ', $id));
 
         $employee = HRPerson::getAllEmployeesByStatus($status = 1, $slugs[1], 'first');
+
         $userID = User::where('id', $slugs[1])->first();
         $user = $userID->load('person');
+
+
+        $divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
+        $divLevel2 = (!empty($employee['division_level_2'])) ? $employee['division_level_2'] : 0;
+        $divLevel3 = (!empty($employee['division_level_3'])) ? $employee['division_level_3'] : 0;
+        $divLevel4 = (!empty($employee['division_level_4'])) ? $employee['division_level_4'] : 0;
+        $divLevel5 = (!empty($employee['division_level_5'])) ? $employee['division_level_5'] : 0;
+
+
+        $hrPersonID = $slugs[1];
+        $moduleID = 1;
+        $status = 1;
+
+        $specificVids = Video::getVideosByUser($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5);
+
+        $generalVids = Video::getAllGeneralVideos();
 
 
         $MaritalStatus = [
@@ -171,6 +189,8 @@ class EmployeeManagementController extends Controller
         $data['marital_statuses'] = $marital_statuses;
         $data['ethnicities'] = $ethnicities;
         $data['checkTasks'] = $checkTasks;
+        $data['specific'] = $specificVids;
+        $data['general'] = $generalVids;
         $data['user'] = $user;
         $data['employees'] = $employees;
         $data['positions'] = $positions;
@@ -179,7 +199,6 @@ class EmployeeManagementController extends Controller
         $data['view_by_admin'] = 1;
         $data['division_levels'] = $division_levels;
         $data['videos'] = $videos;
-        $data['leaveProfiles'] = $leaveProfiles;
         $data['leaveProfiles'] = $leaveProfiles;
         $data['m_silhouette'] = $m_silhouette;
         $data['f_silhouette'] = $f_silhouette;

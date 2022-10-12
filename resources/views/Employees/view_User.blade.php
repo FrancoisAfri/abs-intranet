@@ -142,8 +142,11 @@
 
             //back
             $('#user_profile').click(function () {
-
                 location.href = '{{ route('user.edit',$employee->id ) }} ';
+
+            });
+            $('#back_button').click(function () {
+                location.href = '{{ route('employee.index') }} ';
 
             });
 
