@@ -8,88 +8,86 @@
 @section('content')
     <div class="row">
         <!-- New User Form -->
-        <div class="col-md-12">
-            <!-- Horizontal Form -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <i class="fa fa-anchor pull-right"></i>
-                    <h3 class="box-title">Leave Allocation</h3>
-                    <p id="box-subtitle">leave allocation</p>
-                </div>
-                <!-- /.box-header -->
-                <!-- form start -->
+            <div class="col-md-12">
+                <!-- Horizontal Form -->
+                <div class="box box-primary">
+                    <div class="box-header with-border">
+                        <i class="fa fa-anchor pull-right"></i>
+                        <h3 class="box-title">Video Assign</h3>
+                        {{--                    <p id="box-subtitle">leave allocation</p>--}}
+                    </div>
+                    <!-- /.box-header -->
+                    <!-- form start -->
 
-                <form name="leave-alloccation-form" class="form-horizontal" method="POST" action=""
-                      enctype="multipart/form-data">
-                    {{ csrf_field() }}
+                    <form  class="form-horizontal" method="POST"
+                           action="{{ route('video.assign') }}">
+                        {{ csrf_field() }}
 
-                    <div class="box-body" id="view_users">
-                        @if (count($errors) > 0)
-                            <div class="alert alert-danger alert-dismissible fade in">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
-                                </button>
-                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                        @endif
-                        <div class="form-group{{ $errors->has('allocation_type') ? ' has-error' : '' }}">
-                            <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
+                        <div class="box-body" id="view_users">
+                            @if (count($errors) > 0)
+                                <div class="alert alert-danger alert-dismissible fade in">
+                                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
+                                    </button>
+                                    <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                    <ul>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            @endif
+                            <div class="form-group{{ $errors->has('allocation_type') ? ' has-error' : '' }}">
+                                <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
 
-                            <div class="col-sm-9">
-                                <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
-                                                                                              id="rdo_adjust"
-                                                                                              name="allocation_type"
-                                                                                              value="1" checked> General
-                                </label>
-                                <label class="radio-inline"><input type="radio" id="rdo_resert" name="allocation_type"
-                                                                   value="2"> Specific Department </label>
-                            </div>
-                        </div>
-
-                        <!--                        <div class="form-group ">-->
-                        @foreach($division_levels as $division_level)
-                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                                <label for="{{ 'division_level_' . $division_level->level }}"
-                                       class="col-sm-2 control-label">{{ $division_level->name }}</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select id="{{ 'division_level_' . $division_level->level }}"
-                                                name="{{ 'division_level_' . $division_level->level }}"
-                                                class="form-control"
-                                                onchange="divDDOnChange(this, 'hr_person_id', 'view_users')">
-                                        </select>
-                                    </div>
+                                <div class="col-sm-9">
+                                    <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
+                                                                                                  id="rdo_adjust"
+                                                                                                  name="allocation_type"
+                                                                                                  value="1" checked> General
+                                    </label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_resert" name="allocation_type"
+                                                                       value="2"> Specific Department </label>
                                 </div>
                             </div>
-                        @endforeach
 
-                        <!-- /.box-body -->
-                        <div class="box-footer">
-                            <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i>
-                                Cancel
-                            </button>
-                            <input type="submit" id="load-allocation" name="load-allocation"
-                                   class="btn btn-primary pull-right" value="Submit">
-                        </div>
-                        <!-- /.box-footer -->
-                </form>
+                            <!--                        <div class="form-group ">-->
+                            @foreach($division_levels as $division_level)
+                                <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+                                    <label for="{{ 'division_level_' . $division_level->level }}"
+                                           class="col-sm-2 control-label">{{ $division_level->name }}</label>
+                                    <div class="col-sm-10">
+                                        <div class="input-group">
+                                            <div class="input-group-addon">
+                                                <i class="fa fa-black-tie"></i>
+                                            </div>
+                                            <select id="{{ 'division_level_' . $division_level->level }}"
+                                                    name="{{ 'division_level_' . $division_level->level }}"
+                                                    class="form-control"
+                                                    onchange="divDDOnChange(this, 'hr_person_id', 'view_users')">
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            <input type="hidden" id="video_id" name="video_id" value="{{ $video->id }}">
+
+
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i>
+                                    Back
+                                </button>
+                                <input type="submit" id="load-allocation" name="load-allocation"
+                                       class="btn btn-primary pull-right" value="Submit">
+                            </div>
+                            <!-- /.box-footer -->
+                    </form>
+                </div>
+                <!-- /.box -->
             </div>
-            <!-- /.box -->
-        </div>
-        <!-- End new User Form-->
-        <!-- Confirmation Modal -->
-        @if(Session('success_application'))
-            @include('leave.partials.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
-        @endif
     </div>
-@endsection
+@stop
 
 @section('page_script')
     <!-- Select2 -->
@@ -130,26 +128,21 @@
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
     <script type="text/javascript">
         $(function () {
+
+            $('#cancel').click(function () {
+                location.href = '{{ route('video.index') }}';
+            });
+
             //Initialize Select2 Elements
             $(".select2").select2();
-            //Cancel button click event
-            $('#cancel').click(function () {
-                location.href = '/leave/Allocate_leave_types';
-            });
+
             //Initialize iCheck/iRadio Elements
             $('input').iCheck({
                 checkboxClass: 'icheckbox_square-blue',
                 radioClass: 'iradio_square-blue',
                 increaseArea: '20%' // optional
             });
-            hideFields();
-            //show/hide fields on radio button toggles (depending on registration type)
-            $('#rdo_adjust, #rdo_resert, #rdo_allocate').on('ifChecked', function () {
-                var allType = hideFields();
-                if (allType == 1) $('#box-subtitle').html('Adjust leave allocation');
-                else if (allType == 2) $('#box-subtitle').html('Resert leave allocation');
-                else if (allType == 3) $('#box-subtitle').html('Allocate leave allocation');
-            });
+
 
             //Vertically center modals on page
             function reposition() {
@@ -173,26 +166,21 @@
             $('#success-action-modal').modal('show');
         });
 
+        hideFields();
+        //show/hide fields on radio button toggles (depending on registration type)
+        $('#rdo_adjust, #rdo_resert').on('ifChecked', function () {
+            var allType = hideFields();
+            if (allType == 1) $('#box-subtitle').html(' General Video');
+            else if (allType == 2) $('#box-subtitle').html('Please Select Specific department');
+        });
+
         //function to hide/show fields depending on the allocation  type
         function hideFields() {
             var allType = $("input[name='allocation_type']:checked").val();
-            if (allType == 1) { //adjsut leave
-                $('.resert-field, .allocaion-field').hide();
-                $('.adjust-field').show();
-                $('form[name="leave-alloccation-form"]').attr('action', '/leave/Allocate_leave');
-                $('#load-allocation').val("Submit");
-            } else if (allType == 2) { //resert leave
-//
-                $('.adjust-field, .allocate-field').hide();
-                $('.resert-field').show();
-                $('form[name="leave-alloccation-form"]').attr('action', '/leave/Allocate_leave/resert');
-                $('#load-allocation').val("Submit");
-            } else if (allType == 3) { //allocate leave
-//
-                $('.resert-field, .adjust-field').hide();
-                $('.allocaion-field').show();
-                $('form[name="leave-alloccation-form"]').attr('action', '/leave/Allocate_leave/add');
-                $('#load-allocation').val("Submit");
+            if (allType == 1) {
+               $('.manual-field').hide();
+            } else if (allType == 2) {
+                $('.manual-field').show();
             }
             return allType;
         }

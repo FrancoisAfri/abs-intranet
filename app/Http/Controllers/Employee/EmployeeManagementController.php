@@ -94,6 +94,7 @@ class EmployeeManagementController extends Controller
     {
 
         $videos = Video::all();
+        
 
         $slugs = explode("-", str_replace('_', ' ', $id));
 
@@ -138,10 +139,6 @@ class EmployeeManagementController extends Controller
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
 
 
-//        $checkTasks = DB::table('employee_tasks')
-//            ->where('employee_id', $slugs[1])
-//            ->get();
-
         $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
 
         $checkTasks = EmployeeTasks::
@@ -154,13 +151,11 @@ class EmployeeManagementController extends Controller
             ->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
             ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
             ->where('employee_tasks.employee_id', $user->person->id)
-            ->where('employee_tasks.start_date', '<=',  strtotime(date('Y-m-d')))
+            ->where('employee_tasks.start_date', '<=', strtotime(date('Y-m-d')))
             ->where('employee_tasks.status', '<', 4)
             ->orderBy('client_name')
             ->orderBy('employee_tasks.order_no')
             ->get();
-
-
 
 
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
@@ -168,7 +163,7 @@ class EmployeeManagementController extends Controller
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-//        $businessCard = DB::table('business_card')->get();
+
         $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $division_levels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 

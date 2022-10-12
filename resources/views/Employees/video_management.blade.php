@@ -5,6 +5,8 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
+    <link href="https://unpkg.com/cloudinary-video-player@1.9.0/dist/cld-video-player.min.css" rel="stylesheet">
+
 
 @stop
 @section('content')
@@ -68,8 +70,13 @@
                                         <tr id="categories-list">
 
                                             <td>
-
+                                                <video width="150" height="40" controls>
+                                                    <source src="{{URL::asset("storage/videos/$video->path")}}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
                                             </td>
+
+
                                             <td style="text-align:center;">
                                                 <a data-toggle="tooltip" title="Click to View Asset"
                                                    href="{{ route('videos.show',['videos' => $video->uuid]) }}">
@@ -79,12 +86,12 @@
 
                                             <td style="text-align:center;">
                                                 <span data-toggle="tooltip" title="description"
-                                                     href="{{ route('videos.show',['videos' => $video->uuid]) }} ">
+                                                      href="{{ route('videos.show',['videos' => $video->uuid]) }} ">
                                                     {{ (!empty($video->description)) ? $video->description : '' }}</span>
                                             </td>
 
                                             <td>
-                                                     {{ (!empty($video->video_type)) ?  $videoType[$video->video_type] : ' ' }}
+                                                {{ (!empty($video->video_type)) ?  $videoType[$video->video_type] : ' ' }}
                                             </td>
 
                                             <td>
@@ -95,9 +102,9 @@
                                             </td>
 
                                         </tr>
-                                @endforeach
-                            @endif
-                            </tbody>
+                                    @endforeach
+                                    @endif
+                                </ul></tbody>
                         </table>
                         <!-- /.box-body -->
                     </div>
@@ -118,6 +125,7 @@
     <script src="{{ asset('bower_components/bootstrap_fileinput/js/fileinput.min.js') }}"></script>
 
     <script src="{{ asset('plugins/axios/dist/axios.min.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
@@ -127,6 +135,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+
+    <script src="https://unpkg.com/cloudinary-video-player@1.9.0/dist/cld-video-player.min.js"
+            type="text/javascript"></script>
+
     {{--    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>--}}
     <!-- Ajax form submit -->
     <script src="{{asset('custom_components/js/modal_ajax_submit.js')}}"></script>
@@ -135,6 +147,12 @@
 
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
+
+
+
+        // var demoplayer = cloudinary.videoPlayer('doc-player', { cloud_name: 'demo' });
+        // demoplayer.source('race_road_car')
+
 
         function sendStatus() {
 

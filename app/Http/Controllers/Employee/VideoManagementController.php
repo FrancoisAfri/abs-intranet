@@ -61,8 +61,10 @@ class VideoManagementController extends Controller
     public function assign(Request $request)
     {
 
+
         $video =  Video::where('id', $request['video_id'])->update(
             [
+                'video_type' => !empty( $request['allocation_type']) ?  $request['allocation_type'] : 0 ,
                 'division_level_5' => !empty( $request['division_level_5']) ?  $request['division_level_5'] : 0,
                 'division_level_4' => !empty( $request['division_level_4']) ?  $request['division_level_4'] : 0,
                 'division_level_3' => !empty( $request['division_level_3']) ?  $request['division_level_3'] : 0,
@@ -96,7 +98,7 @@ class VideoManagementController extends Controller
         $video_name = $request->file('path');
         $File_ex = $video_name->extension();
         $filePath = 'emp_vid' . ' ' . str_random(16) . '.' . $File_ex;
-        $isFileUploaded = Storage::disk('public')->put('app/videos/' . $filePath,
+        $isFileUploaded = Storage::disk('public')->put('videos/' . $filePath,
             file_get_contents($request->file('path')));
 
         // File URL to access the video in frontend

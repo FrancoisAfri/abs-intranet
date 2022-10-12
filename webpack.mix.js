@@ -23,6 +23,11 @@ mix.styles([
     'node_modules/datatables.net-bs4/css/dataTables.bootstrap4.css'
 ], 'public/css/global.css');
 
+mix.js('resources/js/app.js', 'public/js')
+    .postCss('resources/css/app.css', 'public/css', [
+        //
+    ]);
+
 mix.copyDirectory('public/bower_components/AdminLTE/plugins', 'public/Plugins');
 mix.copyDirectory('public/custom_components', 'public/customComponents');
 mix.copyDirectory('node_modules/dropzone', 'public/dropzone');
