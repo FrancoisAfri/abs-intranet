@@ -37,7 +37,7 @@ class remindUserToapplyLeave extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "Leave Balance Reminder";
+        $subject = "Leave Application Reminder";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['fullname'] = $this->name;

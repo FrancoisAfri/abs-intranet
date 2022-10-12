@@ -233,7 +233,7 @@
                                         <h4>{{ $company_name }}</h4>
                                         <i></i><br>
                                         Please do not reply to this email. If you have received this email by mistake, please contact our support team on <a href="mailto:{{ $support_email }}">{{ $support_email }}</a>.<br>
-										Powered by <a href="http://afrixcel.co.za/" target="_blank">Afrixcel Business Solutions</a>
+										Powered by <a href="https://mkhayamk.co.za/" target="_blank">Mkhaya MK</a>
                                     </td>
                                 </tr>
                             </table>

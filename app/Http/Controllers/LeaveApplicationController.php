@@ -333,8 +333,6 @@ class LeaveApplicationController extends Controller
                         ->orwherebetween('end_date', [$startDate, $endDate]);
                 })->first();
 
-
-
             /**
              * if the manager is on leave the second in charge will have toa approve the application
              */

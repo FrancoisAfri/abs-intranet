@@ -31,7 +31,6 @@ class HrController extends Controller {
         $hrRoles = DB::table('hr_roles')->orderBy('description')->get();
         $division_types = DB::table('division_setup')->orderBy('level', 'desc')->get();
         $Qualif_type = DB::table('Qualification_type')->orderBy('status', 1)->get();
-        $Doc_type = DB::table('doc_type')->orderBy('active', 1)->get();
 
         $jobCategories = JobCategory::orderBy('name', 'asc')->get();
         if (!empty($leave_customs))
@@ -41,7 +40,6 @@ class HrController extends Controller {
         $data['hrRoles'] = $hrRoles;
         $data['jobCategories'] = $jobCategories;
         $data['Qualif_type'] = $Qualif_type;
-        $data['Doc_type'] = $Doc_type;
         $data['page_title'] = "HR";
         $data['page_description'] = "Employee records";
         $data['breadcrumb'] = [
@@ -306,7 +304,7 @@ class HrController extends Controller {
 
     #Document Type
 
-    public function addDocType(Request $request, Categories $category) {
+    public function addDocType(Request $request) {
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
@@ -317,18 +315,20 @@ class HrController extends Controller {
 
         $documentType = new doc_type($docData);
         $documentType->active = 1;
-        $category->addDocumenttype($documentType);
+        $documentType->save();
+        
 
         AuditReportsController::store('Document Type', 'Document Type saved ', "Edited by User", 0);
         return response()->json();
     }
 
-    public function editDocType(Request $request, doc_type $edit_DocID) {
+    public function editDocType(Request $request, $edit_DocID) {
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
         ]);
-        //$lev->hr_id = $request->input('hr_id');
+		$edit_DocID = doc_type::find($edit_DocID);
+		
         $edit_DocID->name = $request->input('name');
         $edit_DocID->description = $request->input('description');
         $edit_DocID->update();
@@ -337,7 +337,9 @@ class HrController extends Controller {
         return response()->json();
     }
 
-    public function DocAct(doc_type $sta) {
+    public function DocAct($sta) {
+		$sta = doc_type::find($sta);
+
         if ($sta->active == 1)
             $stastus = 0;
         else

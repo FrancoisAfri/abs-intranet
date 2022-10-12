@@ -137,7 +137,10 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
         ->name('video.index');
 
 
-    Route::post('videos', 'VideoManagementController@store')
+    Route::post('add_employeedocument', 'EmployeeManagementController@addDoc')
+        ->name('employee.doc');
+	
+	Route::post('videos', 'VideoManagementController@store')
         ->name('employee.videos');
 
     Route::get('video_show/{videos}', 'VideoManagementController@show')
@@ -316,7 +319,7 @@ Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
 Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
 
 // Search
-Route::get('/leave/search', 'LeaveApplicationController@leaveSearch');
+Route::get('leave/search', 'LeaveApplicationController@leaveSearch');
 Route::post('leave/admin-cancellation', 'LeaveApplicationController@leaveSearchResults');
 Route::get('/leave/view/application/{leave}', 'LeaveApplicationController@viewLeaveApplication');
 Route::post('leave/cancellation/{leave}', 'LeaveApplicationController@cancelApplicationAdmin');
@@ -445,6 +448,9 @@ Route::patch('hr/role/edit/{role}', 'HrController@editRole');
 Route::get('/hr/role_users/{user}', 'HrController@assignRole');
 Route::get('/hr/role/activate/{role}', 'HrController@roleAct');
 Route::post('hr/roles-access/{user}', 'HrController@userRoleSave');
+Route::post('hr/add_document_type', 'HrController@addDocType');
+Route::patch('hr/document_type/update/{type}', 'HrController@editDocType');
+Route::get('hr/document_act/{type}', 'HrController@DocAct');
 // Audit Module
 Route::get('audit/reports', 'AuditReportsController@index');
 Route::post('audits', 'AuditReportsController@getReport');

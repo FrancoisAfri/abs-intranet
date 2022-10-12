@@ -62,7 +62,7 @@ class TaskManagementController extends Controller
 
 	public function addTask()
     {
-        $companies = ContactCompany::where('status', 2)->orderBy('name', 'asc')->get();
+        $companies = ContactCompany::where('status', 1)->orderBy('name', 'asc')->get();
 		$users = DB::table('hr_people')->where('status', 1)->orderBy('first_name', 'asc')->get();
                 $data['page_title'] = "Add Task";
         $data['page_description'] = "Add Task";
@@ -82,19 +82,7 @@ class TaskManagementController extends Controller
 	public function startTask(EmployeeTasks $task) 
 	{
 		$user = Auth::user()->load('person');
-		/*if ($task->is_dependent == 1 && !empty($task->induction_id))
-		{
-			$order = $task->order_no - 1;
-			$oldTask = DB::table('employee_tasks')
-			->select('employee_tasks.status','employee_tasks.order_no','employee_tasks.id')
-			->where('employee_tasks.induction_id', $task->induction_id)
-			->where('employee_tasks.order_no', $order)
-			->orderBy('employee_tasks.order_no')
-			->first();
-			
-			if (!empty($oldTask->status) && $oldTask->status != 4) 
-				return redirect('/')->with('error_starting', "You can not start this task, The task it depends on have not been completed yet.");
-		}*/
+
 		$OnProgress = DB::table('employee_tasks')
 		->select('employee_tasks.id')
 		->where('employee_tasks.employee_id', $user->person->id)

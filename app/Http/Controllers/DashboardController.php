@@ -127,70 +127,6 @@ class DashboardController extends Controller
 
             $statusLabels = [10 => "label-danger", 50 => "label-warning", 80 => 'label-success', 100 => 'label-info'];
 
-            // Get tasks for logged user
-            $today = strtotime(date('Y-m-d'));
-
-            $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
-
-            $tasks = EmployeeTasks::
-            select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
-                , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
-                , 'employee_tasks.order_no', 'employee_tasks.status', 'employee_tasks.due_date'
-                , 'employee_tasks.id as task_id', 'contact_companies.name as client_name'
-				, 'employee_tasks.duration', 'employee_tasks.date_paused'
-				, 'employee_tasks.date_started', 'employee_tasks.document_on_task')
-                ->leftJoin('contact_companies', 'employee_tasks.client_id', '=', 'contact_companies.id')
-                ->where('employee_tasks.employee_id', $user->person->id)
-                ->where('employee_tasks.start_date', '<=', $today)
-                ->where('employee_tasks.status', '<', 4)
-                ->orderBy('client_name')
-                ->orderBy('employee_tasks.order_no')
-                ->get();
-
-            #leave Balance
-            /**
-             *
-             */
-            $balances = DB::table('leave_credit')
-                ->select('leave_credit.*', 'leave_types.name as leavetype')
-                ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
-                ->where('leave_credit.hr_id', $user->person->id)
-                ->orderBy('leave_types.name')
-                ->get();
-
-
-            #leave Application
-            $application = DB::table('leave_application')
-                ->select('leave_application.*', 'leave_types.name as leavetype')
-                ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
-                ->where('leave_application.hr_id', $user->person->id)
-                ->orderBy('leave_application.id', 'desc')
-				->limit(15)
-                ->get();
-			// get surbodinates leave balances
-			$surbodinateArray = array();
-			
-			$surbs = HRPerson::where('status', 1)->where('manager_id', $user->person->id)->first();
-			$surbodinates = HRPerson::where('status', 1)->where('manager_id', $user->person->id)->pluck('id');
-			if (!empty($surbodinates))
-			{
-				foreach ($surbodinates as $surbodinate) 
-				{
-					$surbodinateArray[] = $surbodinate;
-				}
-
-				$surbodinateBalances = DB::table('leave_credit')
-					->select('leave_credit.*', 'leave_types.name as leave_types'
-					,'hr_people.first_name as hr_first_name', 'hr_people.surname as hr_surname'
-					, 'hr_people.employee_number as hr_employee_number')
-					->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
-					->leftJoin('hr_people', 'leave_credit.hr_id', '=', 'hr_people.id')
-					->whereIn('leave_credit.hr_id', $surbodinateArray)
-					->orderBy('hr_people.first_name')
-					->orderBy('hr_people.surname')
-					->orderBy('leave_types.name')
-					->get();
-			}
             //Get Employees on leave this month
             $monthStart = new Carbon('first day of this month');
             $monthStart->startOfDay();
@@ -274,17 +210,6 @@ class DashboardController extends Controller
 					if (date('j',$employee->date_joined) === date('j')) $staffAnniversaries[$employee->id]['is_birthday_today'] =  1;
 				}
             }
-            // check task
-            $checkTasks = DB::table('employee_tasks')
-                ->select('employee_tasks.description', 'employee_tasks.employee_id'
-                    , 'employee_tasks.status', 'employee_tasks.id as task_id'
-                    , 'hr_people.first_name as firstname', 'hr_people.surname as surname')
-                ->leftJoin('hr_people', 'employee_tasks.employee_id', '=', 'hr_people.id')
-                ->where('employee_tasks.check_by_id', $user->person->id)
-                ->where('employee_tasks.status', '=', 4)
-                ->whereNull('checked')
-                ->orderBy('employee_tasks.employee_id')
-                ->get();
 
             $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
 
@@ -378,7 +303,6 @@ class DashboardController extends Controller
                 })
                 ->get();
 
-
 			$cms_rating =   cms_rating::all();
 			//return $cms_rating;
             $Cmsnews = Cmsnews::orderBy('id', 'asc')->get();
@@ -387,17 +311,10 @@ class DashboardController extends Controller
             select('client_inductions.*', 'hr_people.first_name as firstname', 'hr_people.surname as surname', 'contact_companies.name as company_name')
                 ->leftJoin('hr_people', 'client_inductions.create_by', '=', 'hr_people.user_id')
                 ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
-                //->where('client_inductions.id', 13)
                 ->get();
-
-            $ClientTask = $ClientInduction->load('TasksList');
-			
+				
             $data['staffAnniversaries'] = $staffAnniversaries;
             $data['birthdays'] = $birthdays;
-            $data['surbodinates'] = $surbodinates;
-            $data['surbs'] = $surbs;
-			if (!empty($surbodinates))
-				$data['surbodinateBalances'] = $surbodinateBalances;
             $data['ceonews'] = $ceonews;
             $data['ClientInduction'] = $ClientInduction;
             $data['$ticketLabels'] = $ticketLabels;
@@ -416,19 +333,14 @@ class DashboardController extends Controller
             $data['helpdeskTickets'] = $helpdeskTickets;
             $data['tickets'] = $tickets;
             $data['statusLabels'] = $statusLabels;
-            $data['balances'] = $balances;
-            $data['application'] = $application;
+
             $data['leaveStatusNames'] = LeaveApplicationController::status();
             $data['onLeaveThisMonth'] = $onLeaveThisMonth;
-            $data['taskStatus'] = $taskStatus;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;
             $data['topGroupLvl'] = $topGroupLvl;
             $data['isSuperuser'] = $isSuperuser;
             $data['isDivHead'] = $isDivHead;
-            $data['tasks'] = $tasks;
-            $data['checkTasks'] = $checkTasks;
-            //$data['managedDivsIDs'] = json_encode($managedDivsIDs);
             $data['managedDivsLevel'] = $managedDivsLevel;
             $data['isSupervisor'] = $isSupervisor;
             $data['canViewCPWidget'] = $canViewCPWidget;

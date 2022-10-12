@@ -73,13 +73,15 @@ class leave_application extends Model
      * @param $date
      * @return Builder|leave_application|Model
      */
-    public static function checkIfUserApplied($userID, $date)
+    public static function checkIfUserApplied($userID, $startDate, $endDate)
     {
-        return leave_application::where(
-            [
-                'hr_id' => $userID,
-                'start_date' => $date
-            ])->first();
+		
+		#check if the manager is on leave or not
+		return leave_application::where('hr_id', $userID)
+			->where(function ($query) use ($startDate, $endDate) {
+				$query->wherebetween('start_date', [$startDate, $endDate])
+					->orwherebetween('end_date', [$startDate, $endDate]);
+			})->first();
     }
 
 

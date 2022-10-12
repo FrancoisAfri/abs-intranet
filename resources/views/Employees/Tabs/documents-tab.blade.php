@@ -1,61 +1,91 @@
-
 <div class="row">
-    <div class="col-md-12 col-md-offset-0">
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <i class="fa fa-barcode pull-right"></i>
-                <h3 class="box-title"> My Documents </h3>
-            </div>
-            <div class="box-body">
-                <div style="overflow-X:auto;">
-                    <table id=" " class="display table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            Description
-                            <th style="width: 10px; text-align: center;">#</th>
-                            <th style="text-align: center;">Task Description</th>
-                            <th style="text-align: center;">Task Duration</th>
-                            <th style="width: 5px; text-align: center;">Due Date</th>
-                            <th style="width: 5px; text-align: center;">Client Name</th>
-                            <th style="width: 5px; text-align: center;">Document </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @if (count($checkTasks) > 0)
-                            <ul class="products-list product-list-in-box">
-                                @foreach ($checkTasks as $key => $Tasks)
-                                    <tr id="categories-list">
-                                        <td></td>
-                                        <td style="text-align: center;">{{ (!empty( $Tasks->description)) ?  $Tasks->description : ''}} </td>
-                                        <td style="text-align: center;">{{ (!empty( $Tasks->description)) ?  $Tasks->description : ''}} </td>
-                                        <td style="text-align: center;">{{ (!empty( $Tasks->due_date)) ?  $Tasks->due_date : ''}} </td>
-                                        <td style="text-align: center;">{{ (!empty( $Tasks->size)) ?  $Tasks->size : ''}} </td>
-                                        <td></td>
-                                    </tr>
-                            @endforeach
-                        @endif
-                        </tbody>
-                        <tfoot>
-                        <tr>
-                            <th style="width: 10px; text-align: center;"></th>
-                            <th>Name</th>
-                            <th>Description</th>
-                            <th style="width: 5px; text-align: center;"></th>
-                            <th style="width: 5px; text-align: center;"></th>
-                            {{--                                <th style="width: 5px; text-align: center;"></th>--}}
-                        </tr>
-                        </tfoot>
-                    </table>
-                    <!-- /.box-body -->
-                    <div class="box-footer">
-                        <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal" data-target="#add-component-modal">Add component </button>
-                        <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                    </div>
-                </div>
-            </div>
+	<div class="col-md-12">
+		<div class="box box-warning">
+			<div class="box-header with-border">
+				<h3 class="box-title"></h3>
+				<div class="box-tools pull-right">
+					<button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+								class="fa fa-minus"></i></button>
+					<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
+					</button>
+				</div>
+			</div>
+			<!-- /.box-header -->
+			<div class="box-body">
+				<table class="table table-bordered">
+					<tr>
+						<th style="width: 10px; text-align: center;"></th>
+						<th style="width: 5px; text-align: center;"></th>
+						<th>Document Type</th>
+						<th>Description</th>
+						<th>Date From</th>
+						<th>Expiry Date</th>
+						<th style="width: 5px; text-align: center;"></th>
+					</tr>
+					@if (count($documents) > 0)
+						@foreach ($documents as $doc)
+							<tr id="categories-list">
+								<td nowrap>
+									<button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
+											data-toggle="modal" data-target="#edit-newdoc-modal"
+											data-id="{{ $doc->id }}" data-doc_description="{{ $doc->doc_description }}"
+											data-role="{{ $doc->role }}"
+											data-doc_type="{{ $doc->doc_type }}"
+											data-date_from="{{  date(' d M Y', $doc->date_from) }}"
+											data-expirydate="{{ date(' d M Y', $doc->expirydate) }}"
+									><i class="fa fa-pencil-square-o"></i> Edit
+									</button>
+								</td>
+								<td nowrap>
+									<div class="form-group{{ $errors->has('supporting_docs') ? ' has-error' : '' }}">
+										<label for="document" class="control-label"></label>
+										@if(!empty($doc->supporting_docs))
+											<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+											   href="{{ Storage::disk('local')->url("ContactCompany/company_documents/$doc->supporting_docs") }}"
+											   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+										@else
+											<a class="btn btn-default pull-centre btn-xs"><i
+														class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+										@endif
+									</div>
+								</td>
+								<td>{{ !empty($doc->documentType->name) ? $doc->documentType->name : ''}}</td>
+								<td>{{ !empty($doc->doc_description) ? $doc->doc_description : ''}}</td>
+								<td>{{ !empty($doc->date_from) ? date(' d M Y', $doc->date_from) : '' }}</td>
+								<td>{{ !empty($doc->expirydate) ? date(' d M Y', $doc->expirydate) : '' }}</td>
+								<td>
+									<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
+											data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
+										Delete
+									</button>
+								</td>
+							</tr>
+						@endforeach
+					@else
+						<tr id="categories-list">
+							<td colspan="7">
+								<div class="callout callout-danger">
+									<h4><i class="fa fa-database"></i> No Records found</h4>
 
-        </div>
-    </div>
+									<p>No document found in the database. Please start by adding a document.</p>
+								</div>
+							</td>
+						</tr>
+					@endif
+				</table>
+				<!--   </div> -->
+				<!-- /.box-body -->
+				<div class="box-footer">
+					<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+					<button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
+							data-target="#add-document-modal">Add Document
+					</button>
+				</div>
+			</div>
+		</div>
+		<!-- Include add new prime rate modal -->
+		@include('Employees.partials.add_document_modal')
+		@include('Employees.partials.edit_document_modal')
+		<!-- Include delete warning Modal form-->
+	</div>
 </div>
-
-

@@ -191,57 +191,6 @@
             @endif
 		@endif
 		@if($activeModules->where('code_name', 'leave')->first())
-            <div class="col-md-12 box box-default collapsed-box">
-				<div class="box-header">
-					<h3 class="box-title"><i class="fa fa-hourglass"></i> Leave Balance</h3>
-					<div class="box-tools pull-right">
-						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-					</div>
-				</div>
-				<!-- /.box-header -->
-				<div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-					<div class="table-responsive">
-						<table class="table no-margin">
-							<thead>
-								<tr>
-									<th>Leave Type</th>
-									<th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave
-										Balance
-									</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-							@if (!empty($balances))
-								@foreach($balances as $balance)
-									<tr>
-										<td>{{ (!empty($balance->leavetype)) ?  $balance->leavetype : ''}}</td>
-										<td style="text-align: right;">{{ (!empty($balance->leave_balance)) ?  $balance->leave_balance / 8: 0}}</td>
-									</tr>
-								@endforeach
-							@endif
-							</tbody>
-						</table>
-						<div class="box-footer">
-							@if (!empty($surbs))
-								<button type="button" id="leave-balance" class="btn btn-primary pull-left"
-								data-toggle="modal" data-target="#leave-balance-modal"
-										>Subordinates Balances</button>
-							@endif
-							<button id="Apply" class="btn btn-primary pull-right"><i
-										class="fa fa-cloud-download"></i> Apply For Leave
-							</button>
-						</div>
-					</div>
-					@if (!empty($surbs))
-						@include('dashboard.partials.widgets.leave_balance')
-					@endif
-				</div>
-				<!-- /.box-body -->
-				<div class="box-footer clearfix">
-				</div>
-            </div>
 			<div class="col-md-12 box box-default collapsed-box">
 				<div class="box-header">
 					<h3 class="box-title"><i class="fa fa-hourglass"></i> People On Leave This Month</h3>
@@ -287,81 +236,7 @@
 				<!-- /.box-body -->
 				<div class="box-footer clearfix">
 				</div>
-            </div> 
-			<div class="col-md-12 box box-default collapsed-box">
-				<div class="box-header">
-					<h3 class="box-title"><i class="fa fa-hourglass"></i> My Leave Applications</h3>
-					<div class="box-tools pull-right">
-						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-					</div>
-				</div>
-                <!-- /.box-header -->
-				<div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-					<div class="table-responsive">
-						<table class="table no-margin">
-							<thead>
-								<tr>
-									<th><i class="material-icons">shop_two</i> Leave Type</th>
-									<th><i class="fa fa-calendar-o"></i> Date From</th>
-									<th><i class="fa fa-calendar-o"></i> Date To</th>
-									<th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
-									<th style="text-align: right;"><i class="fa fa-info-circle"></i> Rejection/Cancellation Reason
-									</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								@if (!empty($application))
-									@foreach($application as $app)
-										<tr>
-											<td style="vertical-align: middle;">{{ (!empty($app->leavetype)) ?  $app->leavetype : ''}}</td>
-											<td style="vertical-align: middle;">
-												{{ !empty($app->start_date) ? date('d M Y ', $app->start_date) : '' }}
-											</td>
-											<td style="vertical-align: middle;">{{ !empty($app->end_date) ? date('d M Y ', $app->end_date) : '' }}</td>
-											<td style="text-align: right; vertical-align: middle;">
-												{{ (!empty($app->status) && $app->status > 0) ? $leaveStatusNames[$app->status]." ".$app->reject_reason  : ''}}
-											</td>
-											<td style="text-align: right; vertical-align: middle;">
-												@if ($app->status == 10)
-													{{ !empty($app->cancellation_reason) ? $app->cancellation_reason  : ''}}
-												@else
-													{{ !empty($app->reject_reason) ? $app->reject_reason  : ''}}
-												@endif
-											</td>
-											<td class="text-right" style="vertical-align: middle;">
-												@if(in_array($app->status, [2, 3, 4, 5]))
-													<button class="btn btn-xs btn-warning"
-															title="Cancel Leave Application" data-toggle="modal"
-															data-target="#cancel-leave-application-modal"
-															data-leave_application_id="{{ $app->id }}"><i
-																class="fa fa-times"></i></button>
-												@endif
-											</td>
-										</tr>
-									@endforeach
-								@endif
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<!-- /.box-body -->
-				<div class="box-footer clearfix">
-				</div>
-				<!-- Include cancellation reason modal -->
-				@include('dashboard.partials.cancel_leave_application_modal')
             </div>
-		@endif
-		@if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
-            <div class="col-md-12 box box-default collapsed-box">
-                <!-- Include tasks widget -->
-                @include('dashboard.partials.widgets.tasks_widget')
-            </div>
-			@if(Session('error_starting'))
-				@include('tasks.partials.error_tasks', ['modal_title' => "Task Error!", 'modal_content' => session('error_starting')])
-			@endif
-			@include('tasks.partials.end_task')
 		@endif
 		@if($activeModules->whereIn('code_name', 'security')->first())
             <div class="col-md-12 box box-default collapsed-box">
@@ -615,14 +490,7 @@
         }
 
         $(function () {
-            // hide end button when page load
-            //$("#end-button").show();
-            //Initialize Select2 Elements
             $(".select2").select2();
-
-            $('#Apply').click(function () {
-                location.href = '/leave/application';
-            });
 
             $('#ticket').click(function () {
                 location.href = '/helpdesk/ticket';
@@ -695,15 +563,6 @@
                 parentDDID = ddID;
                 loadAllDivs = -1;
                 @endforeach
-
-                //Load top ten performing employees (widget)
-                //var topTenList = $('#emp-top-ten-list');
-                //loadEmpListPerformance(topTenList, 0, 0, true);
-
-                //Load Bottom ten performing employees (widget)
-                //var bottomTenList = $('#emp-bottom-ten-list');
-                //var totNumEmp = parseInt('{{ $totNumEmp }}');
-                //loadEmpListPerformance(bottomTenList, 0, 0, false, true, totNumEmp);
             }
 
             if (canViewTaskWidget == 1) {
@@ -831,94 +690,6 @@
                 perkDetailsOnShow(perkLink, modal);
             });
             @endif
-
-            @if($activeModules->where('code_name', 'leave')->first())
-            //leave status (widget)
-            var LeaveStatus = $('#leave-status-list');
-            //loadLeaveStatus();
-
-            //leave cancellation reason form on show
-            var cancelApplicationModal = $('#cancel-leave-application-modal');
-            var leaveApplicationID;
-            cancelApplicationModal.on('show.bs.modal', function (e) {
-                //console.log('gets here');
-                var btnCancel = $(e.relatedTarget);
-                leaveApplicationID = btnCancel.data('leave_application_id');
-                //var modal = $(this);
-                //modal.find('#task_id').val(taskID);
-            });
-
-            //perform leave application cancellation
-            cancelApplicationModal.find('#cancel-leave-application').on('click', function () {
-                var strUrl = '/leave/application/' + leaveApplicationID + '/cancel';
-                var formName = 'cancel-leave-application-form';
-                var modalID = 'cancel-leave-application-modal';
-                var submitBtnID = 'cancel-leave-application';
-                var redirectUrl = '/';
-                var successMsgTitle = 'Leave Application Cancelled!';
-                var successMsg = 'Your leave application has been cancelled!';
-                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-            });
-            @endif
-
-            @if($activeModules->whereIn('code_name', ['induction', 'tasks', 'meeting'])->first())
-				document.getElementById("notes").placeholder = "Enter Task Note or Summary";
-				//Post end task form to server using ajax (add)
-				var taskID;
-				var employeeID;
-				var uploadRequired;
-				$('#end-task-modal').on('show.bs.modal', function (e) {
-					var btnEnd = $(e.relatedTarget);
-					taskID = btnEnd.data('task_id');
-					employeeID = btnEnd.data('employee_id');
-					uploadRequired = btnEnd.data('upload_required');
-					var modal = $(this);
-					modal.find('#task_id').val(taskID);
-					modal.find('#employee_id').val(employeeID);
-					modal.find('#upload_required').val(uploadRequired);
-				});
-
-				$('#end-task').on('click', function () {
-					endTask(taskID);
-					/*
-					var strUrl = '/task/end';
-					var formName = 'end-task-form';
-					var modalID = 'end-task-modal';
-					var submitBtnID = 'end-task';
-					var redirectUrl = '/';
-					var successMsgTitle = 'Task Ended!';
-					var successMsg = 'Task has been Successfully ended!';
-
-					modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-					*/
-				});
-
-				$('#close-task-modal').on('show.bs.modal', function (e) {
-					var btnEnd = $(e.relatedTarget);
-					taskID = btnEnd.data('task_id');
-					var modal = $(this);
-					modal.find('#task_id').val(taskID);
-				});
-
-				$('#close-task').on('click', function () {
-					var strUrl = '/task/check';
-					var formName = 'close-task-form';
-					var modalID = 'close-task-modal';
-					var submitBtnID = 'close-task';
-					var redirectUrl = '/';
-					var successMsgTitle = 'Task Checked!';
-					var successMsg = 'Task has been Successfully checked!';
-					modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-				});
-
-				//Launch counter for running tasks
-				@foreach($tasks as $task)
-				increment({{ $task->task_id }});
-				@endforeach
-            @endif
-
-            //Show success action modal
-            //$('#success-action-modal').modal('show');
 
             $(window).load(function () {
                 $('#myCarousel').carousel({
