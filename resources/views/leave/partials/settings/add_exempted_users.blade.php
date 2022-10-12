@@ -1,13 +1,13 @@
-<div id="add-managers-modal" class="modal modal-default fade">
+<div id="add-exempted-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="add-manager_module-form">
+            <form class="form-horizontal" method="POST" name="add-exempted-form">
                 {{ csrf_field() }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Add Managers </h4>
+                    <h4 class="modal-title">Add Exempted Users</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -35,7 +35,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
-                    <button type="button" id="add-manager" class="btn btn-warning"><i
+                    <button type="button" id="add-exempted" class="btn btn-warning"><i
                                 class="fa fa-cloud-upload"></i> Save
                     </button>
                 </div>
