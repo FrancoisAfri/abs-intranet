@@ -78,10 +78,17 @@ class ReadErsDetails
         $date_from = date("F jS, Y");
 
         $date = strtotime($date_from);
+		
+		$today = Carbon::now(); 
+        $start = $today->copy()->startOfDay();
+        $end = $today->copy()->endOfDay();
 
+        $startDate = strtotime($start);
+        $endDate = strtotime($end); 
+		
         $absentUsers = $this->getAbsentUsers();
 
-        $this->sendEmailToUser($absentUsers, $date, $date_from);
+        $this->sendEmailToUser($absentUsers, $date, $date_from, $startDate, $endDate);
 
         $this->applyLeaveForUser();
 
@@ -102,7 +109,6 @@ class ReadErsDetails
         } else {
             throw new ErrorException('No data found');
         }
-
 
         $Employees = HRPerson::getEmployeeNumber();
 
@@ -127,7 +133,7 @@ class ReadErsDetails
      * @param $date_from
      * @return void
      */
-    public function sendEmailToUser($absentUsers, $date, $date_from): void
+    public function sendEmailToUser($absentUsers, $date, $date_from, $startDate, $endDate): void
     {
 
         foreach ($absentUsers as $usersId) {
@@ -135,10 +141,10 @@ class ReadErsDetails
             $getUsersDetails = HRPerson::getUserDetails($usersId);
             $full_nane = HRPerson::getFullName($getUsersDetails->first_name, $getUsersDetails->surname);
 
-            $userID = $getUsersDetails->user_id;
+            $userID = $getUsersDetails->id;
 
             //check if user applied for leave
-            $checkUserApplicationStatus = leave_application::checkIfUserApplied($userID, $date);
+            $checkUserApplicationStatus = leave_application::checkIfUserApplied($userID, $startDate, $endDate);
 
             if (!isset($checkUserApplicationStatus)) {
                 //   persint in db date, user-id, isApplied
@@ -150,12 +156,6 @@ class ReadErsDetails
                         'is_email_sent' => 1,
 
                     ]);
-
-                $valueArr = [
-                    'name' => $full_nane,
-                    'email' => $getUsersDetails->email,
-                    'date_from' => $date_from
-                ];
 
                 //send email to remind them
                 try {
@@ -199,59 +199,79 @@ class ReadErsDetails
         $check = ErsAbsentUsers::getAbsentUsers();
 
         foreach ($check as $absent) {
+			
+			$absentDate = Carbon::parse(date("Y-m-d", $absent->date));
+			$totaldays = LeaveApplicationController::calculatedays($absentDate, $today);
+
+			if ($days == $totaldays) {
+				
+				// check if user applied for leave //check if user applied for leave
+				$absentday = Carbon::parse(date("Y-m-d", $absent->date)); 
+				$start = $absentday->copy()->startOfDay();
+				$end = $absentday->copy()->endOfDay();
+
+				$startDate = strtotime($start);
+				$endDate = strtotime($end); 
+				$checkUserApplicationStatus = leave_application::checkIfUserApplied($absent->hr_id, $startDate, $endDate);
+				// if user applied for leave
+				if (!isset($checkUserApplicationStatus)) {
+					
+					$applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id);
+
+					$credit = leave_credit::getLeaveCredit($absent->hr_id, 1);
+
+					//persist to db
+					$levApp = leave_application::create([
+						'leave_type_id' => 1,
+						'start_date' => $absent->date,
+						'end_date' => $absent->date,
+						'leave_taken' => 8,
+						'hr_id' => $absent->hr_id,
+						'notes' => 'The system has automatically applied for leave on your behalf',
+						'status' => $applicationStatus['status'],
+						'manager_id' => $applicationStatus['manager_id'],
+					]);
 
 
-            $absentDate = Carbon::parse(date("Y-m-d", $absent->date));
-            $totaldays = LeaveApplicationController::calculatedays($absentDate, $today);
-
-            if ($days == $totaldays) {
-
-                $applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id);
-
-                $credit = leave_credit::getLeaveCredit($absent->hr_id, 1);
-
-                $leaveBalance = $credit['leave_balance'];
-                //persist to db
-                $levApp = leave_application::create([
-                    'leave_type_id' => 1,
-                    'start_date' => $absent->date,
-                    'end_date' => $absent->date,
-                    'leave_taken' => 8,
-                    'hr_id' => $absent->hr_id,
-                    'notes' => 'The system has automatically applied for leave on your behalf',
-                    'status' => $applicationStatus['status'],
-                    'manager_id' => $applicationStatus['manager_id'],
-                ]);
+					// save audit
+					LeaveHistoryAuditController::store(
+						"Leave application submitted by : Cron Job system",
+						'Leave application for day',
+						$credit['leave_balance'],
+						1,
+						$credit['leave_balance'],
+						1,
+						0,
+						1,
+						0
+					);
 
 
-                // save audit
-                LeaveHistoryAuditController::store(
-                    "Leave application submitted by :"
-                    . HRPerson::getFullName($applicationStatus['first_name']
-                        , $applicationStatus['surname']),
-                    'Leave application for day',
-                    $credit['leave_balance'],
-                    1,
-                    $credit['leave_balance'],
-                    1,
-                    0,
-                    1,
-                    0
-                );
+					//this one is to update the ers table
 
-                //this one is to update the ers table
+					ErsAbsentUsers::where('id', $absent->id)
+						->update([
+							'hr_id' => $absent->hr_id,
+							'date' => $absent->date,
+							'is_applied' => 1
+						]);
+				}
+				else {
+					
+					//this one is to update the ers table
 
-                ErsAbsentUsers::where('id', $absent->hr_id)
-                    ->update([
-                        'hr_id' => $absent->hr_id,
-                        'date' => $absent->date,
-                        'is_applied' => 1
-                    ]);
+					ErsAbsentUsers::where('id', $absent->id)
+						->update([
+							'hr_id' => $absent->hr_id,
+							'date' => $absent->date,
+							'is_applied' => 1
+						]);
+				}
 
-            } else {
-                ///nothing
-                $va = "do nothing";
-            }
+			} else {
+				///nothing
+				$va = "do nothing";
+			}
         }
     }
 
@@ -264,8 +284,6 @@ class ReadErsDetails
 
         $date_now = Carbon::now()->toDayDateTimeString();
         $users = ManagerReport::getListOfManagers();
-
-        $firstManager = ManagerReport::first();
 
         try {
             $absentUsers = $this->getAbsentUsers();
@@ -292,8 +310,6 @@ class ReadErsDetails
         // Excel Doc
         $file = $this->createExcelDoc($AbsentUsersColl);
 
-
-        $UsersArr = array();
         foreach ($users as $managers) {
             $managersDet = HRPerson::getManagerDetails($managers['hr_id']);
 

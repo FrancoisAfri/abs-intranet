@@ -156,7 +156,7 @@
                         <!-- Menu Footer-->
                         <li class="user-footer">
                             <div class="pull-left">
-                                <a href="{{ ($user->type === 2) ? '/contacts/profile' : '/users/profile' }}" class="btn btn-default btn-flat">Profile</a>
+                                <a href="/employee/show/{{str_replace(' ', '_', strtolower($user->person->first_name) )}}-{{$user->person->id}}-{{str_replace(' ', '_', strtolower($user->person->surname))}}" class="btn btn-default btn-flat">Profile</a>
                             </div>
                                     <div class="pull-left">
                                 <a href="{{ ($user->type === 2) ? '' : '/general_information/view' }}" class="btn btn-default btn-flat">Informations</a>

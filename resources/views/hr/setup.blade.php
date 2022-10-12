@@ -44,125 +44,68 @@
                         <!-- /.box-body -->
 
                 </form>
-        </div>
-        <!-- Include add new prime rate modal -->
-          @include('hr.partials.edit_group_level')
-    </div>
+			</div>
+			<!-- Include add new prime rate modal -->
+			@include('hr.partials.edit_group_level')
+		</div>
     </div>
     <!--  -->
-    <div class="row">
-    <div class="col-md-12">
-        <div class="box box-primary">
-            <div class="box-header with-border">
-                <h3 class="box-title">Qualification Types</h3>
-                <div class="box-tools pull-right">
-                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-                </div>
-            </div>
-            <!-- /.box-header -->
-
-            <div class="box-body"> <!-- {{-- start custom leave--}} -->
-                <table class="table table-bordered">
-                    <tr>
-                        <th style="width: 10px; text-align: center;"></th>
-                        <th>Qualification Type Name</th>
-                        <th>Description</th>
-                        <th style="width: 40px; text-align: center;"></th>
-                    </tr> @if (count($Qualif_type) > 0)
-                    @foreach($Qualif_type as $leavecustom)
-                    <tr id="modules-list">
-                        <td nowrap>
-                            <button type="button" id="edit_leave" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-qualificationType-modal" data-id="{{ $leavecustom->id }}" data-name="{{$leavecustom->name}}" data-description="{{ $leavecustom->description }}"> <i class="fa fa-pencil-square-o">
-                                </i> Edit</button>
-                        </td>
-                        <td>{{ $leavecustom->name }} </td>
-                        <td>{{ $leavecustom->description }} </td>
-                        <td>
-                            <!--   leave here  -->
-                            <button type="button" id="view_ribbons" class="btn {{ (!empty($leavecustom->status) && $leavecustom->status == 1) ? " btn-danger " : "btn-success " }}
-                                        btn-xs" onclick="postData({{$leavecustom->id}}, 'qual');"><i class="fa {{ (!empty($leavecustom->status) && $leavecustom->status == 1) ?
-                              " fa-times " : "fa-check " }}"></i> {{(!empty($leavecustom->status) && $leavecustom->status == 1) ? "De-Activate" : "Activate"}}</button>
-                        </td>
-                    </tr>
-                    @endforeach @else
-                    <tr id="modules-list">
-                        <td colspan="5">
-                            <div class="alert alert-danger alert-dismissable">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> No Custom leaves to display, please start by adding a new Custom leave . </div>
-                        </td>
-                    </tr>
-                    @endif
-                </table>
-            </div>
-            <!-- /.box-body -->
-             <div class="box-footer">
-                    <button type="button" id="add-new-doc" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-qualificationType-modal">Add Qualification Type</button>
-            </div>
-          @include('hr.partials.add_qualificationType_modal')
-          @include('hr.partials.edit_qualificationType_modal')
-        </div>
-   <div class="row">
+	<div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Roles Management</h3>
+                    <h3 class="box-title">Document Type</h3>
                     <div class="box-tools pull-right">
                         <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                         <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
                     </div>
                 </div>
-                <form class="form-horizontal" method="POST" action="/hr/document">
-                    {{ csrf_field() }}
-                    {{ method_field('PATCH') }}
-                    <!-- /.box-header -->
-                    <div class="box-body">
-                        <table class="table table-bordered">
-                            <tr>
-                                <th style="width: 10px; text-align: center;"></th>
-                                <th>Name</th>
-                                <th style="width: 5px; text-align: center;"></th>
-                            </tr>
-                            @if (count($hrRoles) > 0)
-                              @foreach ($hrRoles as $hrRole)
-                               <tr id="categories-list">
-                               <td nowrap>
-                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-role-modal" data-id="{{ $hrRole->id }}" data-description="{{$hrRole->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-                                    </td>
-                                    <td>{{ $hrRole->description }}</td>
-                                    <td>
-                                    <button type="button" id="view_ribbons" class="btn {{ (!empty($hrRole->status) && $hrRole->status == 1) ? " btn-danger " : "btn-success " }}
-                                      btn-xs" onclick="postData({{$hrRole->id}}, 'ractive');"><i class="fa {{ (!empty($hrRole->status) && $hrRole->status == 1) ?
-                                      " fa-times " : "fa-check " }}"></i> {{(!empty($hrRole->status) && $hrRole->status == 1) ? "De-Activate" : "Activate"}}</button>
-                                    </td>
-                                </tr>
-                                   @endforeach
-                               @else
-                               <tr id="categories-list">
-                        <td colspan="5">
-                        <div class="alert alert-danger alert-dismissable">
-                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                            No role to display, please start by adding a new role.
-                        </div>
-                        </td>
-                        </tr>
-                           @endif
-                            </table>
-                        </div>
-                                   <!-- /.box-body -->
-                    <div class="box-footer">
-                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-role-modal">Add new Role </button>
-                    </div>
-             </div>
+				<div class="box-body">
+					<table class="table table-bordered">
+						<tr>
+							<th style="width: 10px; text-align: center;"></th>
+							<th>Name</th>
+							<th style="width: 5px; text-align: center;"></th>
+						</tr>
+						@if (count($doc_type) > 0)
+							@foreach ($doc_type as $doc)
+								<tr id="categories-list">
+									<td nowrap>
+										<button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-document-type-modal" data-id="{{ $doc->id }}" data-name="{{$doc->name}}"data-description="{{$doc->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+									</td>
+									<td>{{ $doc->name }}</td>
+									<td>{{ $doc->description }}</td>
+									<td style="text-align: right;">
+										<button type="button" id="view_ribbons" class="btn {{ (!empty($doc->active) && $doc->active == 1) ? " btn-danger " : "btn-success " }}
+									  btn-xs" onclick="postData({{$doc->id}}, 'ractive');"><i class="fa {{ (!empty($doc->active) && $doc->active == 1) ?
+									  " fa-times " : "fa-check " }}"></i> {{(!empty($doc->active) && $doc->active == 1) ? "De-Activate" : "Activate"}}</button>
+									</td>
+								</tr>
+							@endforeach
+						@else
+							<tr id="categories-list">
+								<td colspan="4">
+									<div class="alert alert-danger alert-dismissable">
+										<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+										No document type to display, please start by adding a new role.
+									</div>
+								</td>
+							</tr>
+						@endif
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer">
+					<button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-document-modal">Add new Role </button>
+				</div>
+            </div>
         </div>
-   <!-- Include add new prime rate modal -->
-        @include('hr.partials.add_role_modal')
-        @include('hr.partials.edit_role_modal')
+		<!-- Include add new prime rate modal -->
+        @include('hr.partials.add_document_type_modal')
+        @include('hr.partials.edit_document_type_modal')
+	</div>
 
-
-</div>
-
-
+	
 @endsection
 
 @section('page_script')
@@ -174,7 +117,7 @@
             else if (data == 'doc') location.href = "/hr/adddoc/" + id;
             else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
             else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
-            else if (data == 'ractive') location.href = '/hr/role/activate/' + id;
+            else if (data == 'ractive') location.href = '/hr/document_act/' + id;
 		}
         $(function () {
             var moduleId;
@@ -226,9 +169,6 @@
                 //var formMethod = 'PATCH';
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-
-
-
             // Edit
               var edit_QualID;
         $('#edit-qualificationType-modal').on('show.bs.modal', function (e) {
@@ -341,7 +281,39 @@
                 var Method = 'PATCH';
          modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
+			var typeID;			
+			$('#add-document-type').on('click', function() {
+				var strUrl = '/hr/add_document_type';
+				var formName = 'add-document-form';
+				var modalID = 'add-document-modal';
+				var submitBtnID = 'add-document-type';
+				var redirectUrl = '/hr/setup';
+				var successMsgTitle = 'Document Type Added!';
+				var successMsg = 'The Document Type has been updated successfully!';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
 
+            $('#edit-document-type-modal').on('show.bs.modal', function (e) {
+                //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                typeID = btnEdit.data('id');
+                var Name = btnEdit.data('name');
+                var Description = btnEdit.data('description');
+                var modal = $(this);
+                modal.find('#name').val(Name);
+                modal.find('#description').val(Description);
+             });
+			// update note
+			$('#update_document').on('click', function() {
+				var strUrl = '/hr/document_type/update/'+ typeID;
+				var formName = 'edit-document-type-form';
+				var modalID = 'edit-document-type-modal';
+				var submitBtnID = 'update_document';
+				var redirectUrl = '/hr/setup';
+				var successMsgTitle = 'Record Updated!';
+				var successMsg = 'Document Type have been updated successfully!';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
         });
     </script>
 @endsection

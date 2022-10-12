@@ -9,8 +9,11 @@ use App\Http\Controllers\AuditReportsController;
 use App\Models\StoreRoom;
 use App\Models\Video;
 use App\Province;
+use App\modules;
+use App\employee_documents;
 use App\Traits\BreadCrumpTrait;
 use App\User;
+use App\doc_type;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
@@ -98,9 +101,6 @@ class EmployeeManagementController extends Controller
         $slugs = explode("-", str_replace('_', ' ', $id));
 
         $employee = HRPerson::getAllEmployeesByStatus($status = 1, $slugs[1], 'first');
-        $userID = User::where('id', $slugs[1])->first();
-        $user = $userID->load('person');
-
 
         $MaritalStatus = [
             1 => 'Single',
@@ -137,46 +137,96 @@ class EmployeeManagementController extends Controller
         $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
 
-
-//        $checkTasks = DB::table('employee_tasks')
-//            ->where('employee_id', $slugs[1])
-//            ->get();
-
         $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
-
-        $checkTasks = EmployeeTasks::
-        select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
-            , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
-            , 'employee_tasks.order_no', 'employee_tasks.status', 'employee_tasks.due_date'
-            , 'employee_tasks.id as task_id', 'contact_companies.name as client_name'
-            , 'employee_tasks.duration', 'employee_tasks.date_paused'
-            , 'employee_tasks.date_started', 'employee_tasks.document_on_task')
-            ->leftJoin('client_inductions', 'employee_tasks.induction_id', '=', 'client_inductions.id')
-            ->leftJoin('contact_companies', 'client_inductions.company_id', '=', 'contact_companies.id')
-            ->where('employee_tasks.employee_id', $user->person->id)
-            ->where('employee_tasks.start_date', '<=',  strtotime(date('Y-m-d')))
-            ->where('employee_tasks.status', '<', 4)
-            ->orderBy('client_name')
-            ->orderBy('employee_tasks.order_no')
-            ->get();
-
-
-
-
+		
+		// task list
+		$tasks = EmployeeTasks::
+            select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
+                , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
+                , 'employee_tasks.order_no', 'employee_tasks.status', 'employee_tasks.due_date'
+                , 'employee_tasks.id as task_id', 'contact_companies.name as client_name'
+				, 'employee_tasks.duration', 'employee_tasks.date_paused'
+				, 'employee_tasks.date_started', 'employee_tasks.document_on_task')
+                ->leftJoin('contact_companies', 'employee_tasks.client_id', '=', 'contact_companies.id')
+                ->where('employee_tasks.employee_id', $employee->id)
+                ->where('employee_tasks.status', '<', 4)
+                ->orderBy('client_name')
+                ->orderBy('employee_tasks.order_no')
+                ->get();
+				
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
-//        $businessCard = DB::table('business_card')->get();
-        $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
+		$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $division_levels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+		$routeUser = str_replace(' ', '_', strtolower($employee->first_name) ).'-'.$employee->id.'-'.str_replace(' ', '_', strtolower($employee->surname));
+		/// leave code
+		 #leave Balance
+            /**
+             *
+             */
+		$balances = DB::table('leave_credit')
+			->select('leave_credit.*', 'leave_types.name as leavetype')
+			->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
+			->where('leave_credit.hr_id', $employee->id)
+			->orderBy('leave_types.name')
+			->get();
 
+		#leave Application
+		$application = DB::table('leave_application')
+			->select('leave_application.*', 'leave_types.name as leavetype')
+			->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
+			->where('leave_application.hr_id', $employee->id)
+			->orderBy('leave_application.id', 'desc')
+			->limit(15)
+			->get();
+		// get surbodinates leave balances
+		$surbodinateArray = array();
+		
+		$surbs = HRPerson::where('status', 1)->where('manager_id', $employee->id)->first();
+		$surbodinates = HRPerson::where('status', 1)->where('manager_id', $employee->id)->pluck('id');
+		if (!empty($surbodinates))
+		{
+			foreach ($surbodinates as $surbodinate) 
+			{
+				$surbodinateArray[] = $surbodinate;
+			}
 
+			$surbodinateBalances = DB::table('leave_credit')
+				->select('leave_credit.*', 'leave_types.name as leave_types'
+				,'hr_people.first_name as hr_first_name', 'hr_people.surname as hr_surname'
+				, 'hr_people.employee_number as hr_employee_number')
+				->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
+				->leftJoin('hr_people', 'leave_credit.hr_id', '=', 'hr_people.id')
+				->whereIn('leave_credit.hr_id', $surbodinateArray)
+				->orderBy('hr_people.first_name')
+				->orderBy('hr_people.surname')
+				->orderBy('leave_types.name')
+				->get();
+		}
+		// get active modules
+		$activeModules = modules::where('active', 1)->get();
+		// get document 
+		$documents = employee_documents::orderby('doc_description', 'asc')->where('hr_person_id', $employee->id)->get();
+		if (!empty($documents)) $documents = $documents->load('documentType');
+		$types = doc_type::where('active', 1)->orderBy('name', 'asc')->get();
+		
+		
+		$data['documents'] = $documents;
+		$data['activeModules'] = $activeModules;
+		$data['surbs'] = $surbs;
+		$data['surbodinates'] = $surbodinates;
+		if (!empty($surbodinates))
+			$data['surbodinateBalances'] = $surbodinateBalances;
+		$data['balances'] = $balances;
+		$data['types'] = $types;
+        $data['application'] = $application;
+        $data['routeUser'] = $routeUser;
+        $data['taskStatus'] = $taskStatus;
         $data['marital_statuses'] = $marital_statuses;
         $data['ethnicities'] = $ethnicities;
-        $data['checkTasks'] = $checkTasks;
-        $data['user'] = $user;
         $data['employees'] = $employees;
         $data['positions'] = $positions;
         $data['leave_profile'] = $leave_profile;
@@ -184,6 +234,7 @@ class EmployeeManagementController extends Controller
         $data['view_by_admin'] = 1;
         $data['division_levels'] = $division_levels;
         $data['videos'] = $videos;
+		$data['tasks'] = $tasks;
         $data['leaveProfiles'] = $leaveProfiles;
         $data['leaveProfiles'] = $leaveProfiles;
         $data['m_silhouette'] = $m_silhouette;
@@ -194,7 +245,109 @@ class EmployeeManagementController extends Controller
         return view('Employees.view_User')->with($data);
     }
 
-    /**
+     public function addDoc(Request $request)
+    {
+        $this->validate($request, [
+            'doc_description' => 'required',
+            'supporting_docs' => 'required',
+            'doc_type_id' => 'required',
+            'hr_person_id' => 'required',
+        ]);
+
+        $contactsEmpdocs = $request->all();
+        unset($contactsEmpdocs['_token']);
+		if (!empty($contactsEmpdocs['date_from']))
+		{
+			$Datefrom = $contactsEmpdocs['date_from'] = str_replace('/', '-', $contactsEmpdocs['date_from']);
+			$Datefrom = $contactsEmpdocs['date_from'] = strtotime($contactsEmpdocs['date_from']);
+		}
+		else $Datefrom = 0;
+		if (!empty($contactsEmpdocs['expirydate']))
+		{
+			$Expirydate = $contactsEmpdocs['expirydate'] = str_replace('/', '-', $contactsEmpdocs['expirydate']);
+			$Expirydate = $contactsEmpdocs['expirydate'] = strtotime($contactsEmpdocs['expirydate']);
+		}
+		else $Expirydate = 0;
+		
+        $employeeDoc = new employee_documents();
+        $employeeDoc->doc_description = $contactsEmpdocs['doc_description'];
+        $employeeDoc->date_from = $Datefrom;
+        $employeeDoc->expirydate = $Expirydate;
+        $employeeDoc->hr_person_id = $contactsEmpdocs['hr_person_id'];
+        $employeeDoc->doc_type_id = $contactsEmpdocs['doc_type_id'];
+        $employeeDoc->save();
+		$employee = HRPerson::find($contactsEmpdocs['hr_person_id']);
+		//Upload supporting document
+        if ($request->hasFile('supporting_docs')) {
+            $fileExt = $request->file('supporting_docs')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
+                $fileName = time(). "_client_documents." . $fileExt;
+                $request->file('supporting_docs')->storeAs('ContactCompany/company_documents', $fileName);
+                //Update file name in the table
+                $employeeDoc->supporting_docs = $fileName;
+                $employeeDoc->update();
+            }
+        }
+        AuditReportsController::store('Contacts', 'Company Document Added', "Company Document added , Document Name: $contactsEmpdocs[doc_description], 
+		Document description: $contactsEmpdocs[doc_description], Document expiry date: $Expirydate ,  Company Name : $employee->first_name $employee->surname", 0);
+		return response()->json();
+    }
+	
+	// delete employee
+    public function deleteCompanyDoc(contactsEmpdocs $document)
+    {
+		$companyDetails = ContactCompany::where('id', $document->company_id)->first();
+        $document->delete();
+
+        AuditReportsController::store('Contacts', "Company Document Deleted: $document->name For: $companyDetails->name", "Deleted By User", 0);
+        return back();
+    }
+	// edit employee doc
+    public function editCompanydoc(Request $request, contactsEmpdocs $company)
+    {
+        $this->validate($request, [
+			 'name_update' => 'required',
+//            'name' => 'required|unique:contactsEmpdocs,name',
+//            'exp_date' => 'required',
+            'doc_type_update' => 'required',
+        ]);
+
+        $contactsEmpdocs = $request->all();
+        unset($contactsEmpdocs['_token']);
+
+        $Datefrom = $contactsEmpdocs['date_from_update'] = str_replace('/', '-', $contactsEmpdocs['date_from_update']);
+        $Datefrom = $contactsEmpdocs['date_from_update'] = strtotime($contactsEmpdocs['date_from_update']);
+
+        $Expirydatet = $contactsEmpdocs['expirydate'] = str_replace('/', '-', $contactsEmpdocs['expirydate']);
+        $Expirydate = $contactsEmpdocs['expirydate'] = str_replace('/', '-', $contactsEmpdocs['expirydate']);
+        $Expirydate = $contactsEmpdocs['expirydate'] = strtotime($contactsEmpdocs['expirydate']);
+
+        $company->name = $contactsEmpdocs['name_update'];
+        $company->description = $contactsEmpdocs['description_update'];
+        $company->date_from = $Datefrom;
+        $company->expirydate = $Expirydate;
+        $company->doc_type = $contactsEmpdocs['doc_type_update'];
+        $company->update();
+
+        //Upload supporting document
+        if ($request->hasFile('supporting_docs_update')) {
+            $fileExt = $request->file('supporting_docs_update')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs_update')->isValid()) {
+                $fileName = time() . "_client_documents." . $fileExt;
+                $request->file('supporting_docs_update')->storeAs('ContactCompany/company_documents', $fileName);
+                //Update file name in the table
+                $company->supporting_docs = $fileName;
+                $company->update();
+            }
+        }
+		$companyDetails = ContactCompany::where('id', $company->company_id)->first();
+        // request fields
+
+        AuditReportsController::store('Contacts', 'Document Updated', "Company Document Updated, Document Name: $contactsEmpdocs[name_update], 
+		Document description: $contactsEmpdocs[description_update], Document expiry date: $Expirydatet, Company Name : $companyDetails->name ", 0);
+        return response()->json();
+    }
+	/**
      * Show the form for editing the specified resource.
      *
      * @param int $id

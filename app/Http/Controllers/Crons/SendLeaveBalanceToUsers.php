@@ -144,7 +144,6 @@ class SendLeaveBalanceToUsers extends Controller
             ->select('first_name', 'surname', 'email')
             ->first();
 
-
             $unapproved = leave_application::getUnapprovedApplications($date , $hrDetail->id);
 
             $fullnane = $hrDetail->first_name . ' ' . $hrDetail->surname;
@@ -170,11 +169,8 @@ class SendLeaveBalanceToUsers extends Controller
 
         $date_now = Carbon::now()->toDayDateTimeString();
 
-
-
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
@@ -202,12 +198,10 @@ class SendLeaveBalanceToUsers extends Controller
      */
     public function sendReport(): \Illuminate\Http\Response
     {
-
         //get the user selected on the settings
         $userId = leave_configuration::pluck('hr_person_id')->first();
         $userDetails = HRPerson::getManagerDetails($userId);
         $fullname = $userDetails->firstname . ' ' . $userDetails->surname;
-
 
         $leaveAttachment = $this->viewBalance();
 

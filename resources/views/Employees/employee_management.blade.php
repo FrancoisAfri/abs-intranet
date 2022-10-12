@@ -25,7 +25,7 @@
                                 <div class="col-md-6">
                                     <div class="form-group">
                                         <div class="col-sm-4">
-                                            <label>Asset Status</label>
+                                            <label>Status</label>
                                             <select class="form-control select2 " style="width: 100%;"
                                                     id="status_id" name="status_id" data-select2-id="1" tabindex="-1"
                                                     aria-hidden="true">
@@ -94,25 +94,20 @@
                                                         <div class="modal-body" align="center">
                                                             <img src="" class="enlargeImageModalSource"
                                                                  style="width: 200%;">
-
                                                         </div>
                                                     </div>
                                                 </div>
                                             </td>
-
                                             <td style="text-align:center;">
                                                 <span data-toggle="tooltip" title="" class="badge bg-grey"
                                                       data-original-title="">{{ (!empty($person->employee_number)) ? $person->employee_number : '' }}</span>
                                             </td>
-
                                             <td>
-
                                                 <a data-toggle="tooltip" title="Click to View User"
                                                    {
                                                    href="/employee/show/{{str_replace(' ', '_', strtolower($person->first_name) )}}-{{$person->id}}-{{str_replace(' ', '_', strtolower($person->surname))}}">
                                                     {{ (!empty( $person->first_name . ' ' . $person->surname)) ?  $person->first_name . ' ' . $person->surname : ''}}
                                                 </a>
-
                                             </td>
 
                                             <td>

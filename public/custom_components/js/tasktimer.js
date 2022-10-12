@@ -101,7 +101,7 @@ function getTaskDurationAndIncrement(taskID) {
 }
 
 //function to end the task timer
-function endTask(taskID) {
+function endTask(taskID, routeb) {
     if (running[taskID] = 1) { //first update the duration if the task is running
         //running = 0;
         updateTaskDuration(taskID, time[taskID] / 10);
@@ -112,7 +112,7 @@ function endTask(taskID) {
     var formName = 'end-task-form';
     var modalID = 'end-task-modal';
     var submitBtnID = 'end-task';
-    var redirectUrl = '/';
+    var redirectUrl = routeb;
     var successMsgTitle = 'Task Ended!';
     var successMsg = 'Task has been Successfully ended!';
 
