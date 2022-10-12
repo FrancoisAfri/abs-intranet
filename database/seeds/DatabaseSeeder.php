@@ -696,7 +696,7 @@ class DatabaseSeeder extends Seeder
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 5;
+        $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'Search';
         $ribbon->description = 'Search';
         $ribbon->ribbon_path = 'hr/emp_qualification';
@@ -705,7 +705,7 @@ class DatabaseSeeder extends Seeder
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 6;
+        $ribbon->sort_order = 7;
         $ribbon->ribbon_name = 'Employee Management';
         $ribbon->description = 'Employee Management';
         $ribbon->ribbon_path = 'employee';
@@ -714,7 +714,7 @@ class DatabaseSeeder extends Seeder
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 7;
+        $ribbon->sort_order = 8;
         $ribbon->ribbon_name = 'Hr Admin';
         $ribbon->description = 'Hr Admin';
         $ribbon->ribbon_path = 'hr/Admin';
@@ -723,16 +723,34 @@ class DatabaseSeeder extends Seeder
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 8;
+        $ribbon->sort_order = 9;
         $ribbon->ribbon_name = 'Upload';
         $ribbon->description = 'Upload';
         $ribbon->ribbon_path = 'hr/upload';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = `0;
+        $ribbon->ribbon_name = 'Clockin';
+        $ribbon->description = 'Clockin';
+        $ribbon->ribbon_path = 'employee/clockin';
+        $ribbon->access_level = 1;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 11;
+        $ribbon->ribbon_name = 'Clockin Report';
+        $ribbon->description = 'Clockin Report';
+        $ribbon->ribbon_path = 'employee/clockin_report';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 9;
+        $ribbon->sort_order = 10;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'hr/setup';

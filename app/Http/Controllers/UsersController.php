@@ -415,10 +415,11 @@ class UsersController extends Controller
         $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         // return $businessCard;
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();//->load('divisionLevelGroup');
-
+		$routeUser = str_replace(' ', '_', strtolower($user->person->first_name) ).'-'.$user->person->id.'-'.str_replace(' ', '_', strtolower($user->person->surname));
 
         $data['page_title'] = "Users";
         $data['businessCard'] = $businessCard;
+        $data['routeUser'] = $routeUser;
         $data['page_description'] = "View/Update user details";
         $data['back'] = "/users";
         $data['view_by_admin'] = 1;
@@ -449,12 +450,14 @@ class UsersController extends Controller
         $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $leave_profile = DB::table('leave_profile')->where('name', 1)->orderBy('name', 'asc')->get();
 		$employees = HRPerson::where('status', 1)->get();
-        
+        $routeUser = str_replace(' ', '_', strtolower($user->person->first_name) ).'-'.$user->person->id.'-'.str_replace(' ', '_', strtolower($user->person->surname));
+		
         $data['page_title'] = "Users";
         $data['page_description'] = "View/Update your details";
         $data['back'] = "/";
         $data['user_profile'] = 1;
         $data['user'] = $user;
+		$data['routeUser'] = $routeUser;
         $data['avatar'] = (!empty($avatar)) ? Storage::disk('local')->url("avatars/$avatar") : '';
         $data['provinces'] = $provinces;
         $data['ethnicities'] = $ethnicities;

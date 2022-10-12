@@ -115,12 +115,12 @@ class VideoManagementController extends Controller
                 ]
             );
 
-            AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+            AuditReportsController::store('Employee  Records', 'Video Management Page Accessed', "Accessed By User", 0);;
             return response()->json();
         }
 
 
-        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+        AuditReportsController::store('Employee  Records', 'Video Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
     }
 

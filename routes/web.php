@@ -139,6 +139,9 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 
     Route::post('add_employeedocument', 'EmployeeManagementController@addDoc')
         ->name('employee.doc');
+		
+	Route::patch('edit_doc/{doc}', 'EmployeeManagementController@editdoc')
+        ->name('employee.doc_update');
 	
 	Route::post('videos', 'VideoManagementController@store')
         ->name('employee.videos');

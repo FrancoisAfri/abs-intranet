@@ -29,8 +29,7 @@
 									<button document="button" id="edit_compan" class="btn btn-warning  btn-xs"
 											data-toggle="modal" data-target="#edit-newdoc-modal"
 											data-id="{{ $doc->id }}" data-doc_description="{{ $doc->doc_description }}"
-											data-role="{{ $doc->role }}"
-											data-doc_type="{{ $doc->doc_type }}"
+											data-doc_type_id="{{ $doc->doc_type_id }}"
 											data-date_from="{{  date(' d M Y', $doc->date_from) }}"
 											data-expirydate="{{ date(' d M Y', $doc->expirydate) }}"
 									><i class="fa fa-pencil-square-o"></i> Edit
@@ -41,7 +40,7 @@
 										<label for="document" class="control-label"></label>
 										@if(!empty($doc->supporting_docs))
 											<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-											   href="{{ Storage::disk('local')->url("ContactCompany/company_documents/$doc->supporting_docs") }}"
+											   href="{{ Storage::disk('local')->url("Employee/documents/$doc->supporting_docs") }}"
 											   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
 										@else
 											<a class="btn btn-default pull-centre btn-xs"><i
@@ -54,10 +53,7 @@
 								<td>{{ !empty($doc->date_from) ? date(' d M Y', $doc->date_from) : '' }}</td>
 								<td>{{ !empty($doc->expirydate) ? date(' d M Y', $doc->expirydate) : '' }}</td>
 								<td>
-									<button type="button" class="btn btn-danger btn-xs" data-toggle="modal"
-											data-target="#delete-contact-warning-modal"><i class="fa fa-trash"></i>
-										Delete
-									</button>
+									
 								</td>
 							</tr>
 						@endforeach
