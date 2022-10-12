@@ -312,6 +312,7 @@ Route::get('leave/setup/leave_credit', 'LeaveSetupController@apply');
 Route::patch('/leave/setup/{id}', 'LeaveSetupController@addAnnual');
 Route::patch('/leave/setup/{id}/sick', 'LeaveSetupController@addSick');
 Route::post('leave/manager_report', 'LeaveSetupController@storeMangerReport')->name('manager_report');
+Route::post('leave/exempted_users', 'LeaveSetupController@storeExemptedUsers')->name('exempted_users');
 Route::delete('manager_report/{person}/delete', 'LeaveSetupController@deleteManager')->name('manager.destroy');
 
 

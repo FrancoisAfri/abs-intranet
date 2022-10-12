@@ -19,6 +19,7 @@ use App\leave_custom;
 use App\leave_configuration;
 use App\LeaveAllocation;
 use App\HRPerson;
+use App\Models\ExemptedUsers;
 use App\modules;
 use App\leave_credit;
 use App\leave_application;
@@ -125,6 +126,7 @@ class  LeaveSetupController extends Controller
 
         $users = HRPerson::getAllUsers();
         $managerList = ManagerReport::getListOfManagers();
+        $exemptedUsers = ExemptedUsers::getListOfExemptedUsers();
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
             $query->orderBy('id', 'asc');
         }]);
@@ -142,6 +144,7 @@ class  LeaveSetupController extends Controller
         $data['active_rib'] = 'setup';
         $data['users'] = $users;
         $data['managerList'] = $managerList;
+        $data['exemptedUsers'] = $exemptedUsers;
         $data['leave_configuration'] = $leave_configuration;
         $data['leaveTypes'] = $leaveTypes;
         $data['type_profile'] = $type_profile;
@@ -1044,6 +1047,24 @@ class  LeaveSetupController extends Controller
             ManagerReport::create([
                 'hr_id' => $manager,
                 'is_active' => 1
+            ]);
+        }
+        Alert::toast('Settings  Successfully Changed', 'success');
+        return response()->json();
+    }
+
+
+    public function storeExemptedUsers(Request $request)
+    {
+        unset($request['_token']);
+
+        $managers = $request['hr_person_id'];
+
+        foreach ($managers as $manager) {
+
+            ExemptedUsers::create([
+                'hr_id' => $manager,
+                'status' => 1
             ]);
         }
         Alert::toast('Settings  Successfully Changed', 'success');

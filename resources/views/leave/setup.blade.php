@@ -11,7 +11,7 @@
 
     <div class="row">
         <div class="col-md-12">
-            <div class="box box-primary">
+            <div class="box box-success">
                 <div class="box-header with-border">
                     <h3 class="box-title">Leave Types Set Up</h3>
                     <div class="box-tools pull-right">
@@ -87,7 +87,7 @@
     </div>
 
     <div class="col-md-12">
-        <div class="box box-primary">
+        <div class="box box-default">
             <div class="box-header with-border">
                 <h3 class="box-title">Users to receive Absent user report</h3>
                 <div class="box-tools pull-right">
@@ -155,6 +155,74 @@
     </div>
 
     <!-- Include add new prime rate modal -->
+
+    <div class="col-md-12">
+        <div class="box box-danger">
+            <div class="box-header with-border">
+                <h3 class="box-title">Users Exempted</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div style="overflow-X:auto;">
+                    <table id=" " class="display table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 10px; text-align: center;">#</th>
+                            <th style="width: 10px; text-align: center;">Name</th>
+                            <th style="width: 5px; text-align: center;">Action</th>
+
+                            {{--                                <th style="width: 5px; text-align: center;">.</th>--}}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if (count($exemptedUsers) > 0)
+                            <ul class="products-list product-list-in-box">
+                                @foreach ($exemptedUsers as $key => $exempted)
+                                    <tr id="categories-list">
+                                        <td></td>
+                                        <td style="width: 5px; text-align: left;">{{ $exempted->first_name . ' ' . $exempted->surname ?? ''}} </td>
+                                        {{--                                        <td>{{ $assetTypes->description ?? ''}} </td>--}}
+
+                                        <td style="width: 5px; text-align: right;">
+                                            <form action="{{ route('manager.destroy', $exempted->id) }}"
+                                                  method="POST"
+                                                  style="display: inline-block;">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                                <button type="submit"
+                                                        class="btn btn-xs btn-danger btn-flat delete_confirm"
+                                                        data-toggle="tooltip" title='Delete'>
+                                                    <i class="fa fa-trash"> Delete </i>
+
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                            @endforeach
+
+                        @endif
+                        </tbody>
+                    </table>
+
+                    <div class="box-footer">
+                        <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
+                                data-target="#add-exempted-modal">Add Exempted Users
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        @include('leave.partials.settings.add_exempted_users')
+    </div>
 
 
 
@@ -673,6 +741,24 @@
             let successMsgTitle = 'Changes Saved!';
             let successMsg = 'Leave has been successfully added.';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
+
+
+        /**
+         * Add Exempted users
+         */
+        $('#add-exempted').on('click', function () {
+
+            let strUrl = '{{ route('exempted_users') }}';
+            let modalID = 'add-exempted-modal';
+            let formName = 'add-exempted-form';
+
+            let submitBtnID = 'add-exempted';
+            let redirectUrl = '/leave/setup';
+            let successMsgTitle = 'User Added to List!';
+            let successMsg = 'Record has been updated successfully.';
+
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 
         /**
