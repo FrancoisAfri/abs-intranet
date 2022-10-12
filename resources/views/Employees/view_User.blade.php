@@ -91,7 +91,7 @@
                             <!-- /.col -->
                         </div>
                         <!-- /.row -->
-                        @include('Employees.partials.edit_user')
+{{--                        @include('Employees.partials.edit_user')--}}
                     </section>
                 </div>
 
@@ -141,9 +141,11 @@
             $('[data-toggle="tooltip"]').tooltip();
 
             //back
-            {{--$('#back_button').click(function () {--}}
-            {{--    location.href = '{{route('index')}}';--}}
-            {{--});--}}
+            $('#user_profile').click(function () {
+            
+                location.href = '{{ route('user.edit',$employee->id ) }} ';
+
+            });
 
             //Load divisions drop down
 
@@ -162,8 +164,6 @@
 
             // reposition modal
             $('.modal').on('show.bs.modal', reposition);
-
-
 
         })
         ;
