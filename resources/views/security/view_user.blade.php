@@ -82,6 +82,7 @@
                                 </div>
                             </div>
                             {{--add leave porfile--}}
+							@if (isset($view_by_admin) && $view_by_admin === 1)
                             <div class="form-group">
                                 <label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>
                                 <div class="col-sm-10">
@@ -99,7 +100,6 @@
                                     </div>
                                 </div>
                             </div>
-                        @if (isset($view_by_admin) && $view_by_admin === 1)
                             <div class="form-group">
                                 <label for="position" class="col-sm-2 control-label">Position</label>
                                 <div class="col-sm-10">
@@ -116,8 +116,6 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif
-						@if (isset($view_by_admin) && $view_by_admin === 1)
 						<div class="form-group">
 						<label for="action" class="col-sm-2 control-label">Reports to</label>
 							<div class="col-sm-10">
@@ -318,6 +316,7 @@
                                 </div>
                             </div>
                         </div>
+						@if (isset($view_by_admin) && $view_by_admin === 1)
 						  <div class="form-group">
                             <label for="date_joined" class="col-sm-2 control-label">Date Joined</label>
                             <div class="col-sm-10">
@@ -330,7 +329,6 @@
                             </div>
                         </div>
 						  <div class="form-group">
-						  @if (isset($view_by_admin) && $view_by_admin === 1)
                             <label for="date_left" class="col-sm-2 control-label">Date Left Company</label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -365,7 +363,7 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer" style="text-align: center;">
-                        <button type="button" id="cancel" class="btn btn-default pull-left">Cancel</button>
+                        <button type="button" id="cancel" class="btn btn-default pull-left">Profile</button>
                         <button type="submit" name="command" id="update" class="btn btn-primary pull-right">Update</button>
 						@if (isset($view_by_admin) && $view_by_admin === 1)
 						<!--<button type="button" class="btn btn-primary" id="role_button" onclick="postData({{$user->id}}, 'roles');">Roles</button>-->
@@ -436,7 +434,7 @@
         $(function () {
             //Cancel button click event
             document.getElementById("cancel").onclick = function () {
-                location.href = "{{ route('employee.index') }}";
+				location.href = '{{ route('employee.show',$routeUser ) }} ';
             };
 
             //Date picker

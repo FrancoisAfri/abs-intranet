@@ -14,51 +14,12 @@
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
-                            <strong> Name</strong>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-md-6">
-                            {{ (!empty( $employee->first_name)) ? $employee->first_name : ''}}
-                        </div>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <strong>Surname </strong>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-md-12">
-                            {{ (!empty( $employee->surname)) ? $employee->surname : ''}}
-                        </div>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center">
                             <strong>Employee Number </strong>
                         </div>
                     </td>
                     <td>
                         <div class="col-md-6">
                             {{ (!empty($employee->employee_number)) ? $employee->employee_number : '' }}
-                        </div>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center">
-                            <strong>Email </strong>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-md-6">
-                            {{ (!empty($employee->email)) ? $employee->email : '' }}
                         </div>
 
                     </td>
@@ -136,13 +97,11 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-{{--                            {{ (!empty($employee->second_manager_first_name . ''. $employee->second_manager_surname)) ? $employee->second_manager_first_name . ''. $employee->second_manager_surname : '' }}--}}
+                          {{ (!empty($employee->second_manager_first_name . ''. $employee->second_manager_surname)) ? $employee->second_manager_first_name . ''. $employee->second_manager_surname : '' }}
                         </div>
 
                     </td>
                 </tr>
-
-
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
@@ -155,6 +114,18 @@
                         <span class="label label-success">
                              {{ (!empty( $employee->date_joined)) ?  date(' d M Y', $employee->date_joined) : ''}}
                         </span>
+                    </td>
+                </tr>
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>
+                                Date Left
+                            </strong>
+                        </div>
+                    </td>
+                    <td>
+                         {{ (!empty( $employee->date_left)) ?  date(' d M Y', $employee->date_left) : ''}}
                     </td>
                 </tr>
 

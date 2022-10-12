@@ -9,8 +9,8 @@ use App\Http\Controllers\AuditReportsController;
 use App\Models\StoreRoom;
 use App\Models\Video;
 use App\modules;
+use App\module_access;
 use App\Province;
-use App\modules;
 use App\employee_documents;
 use App\Traits\BreadCrumpTrait;
 use App\User;
@@ -22,6 +22,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -51,7 +52,7 @@ class EmployeeManagementController extends Controller
 
         $data = $this->breadCrump(
             "Employee Records",
-            "Employee Management", "fa fa-lock",
+            "Search", "fa fa-lock",
             "Employee Management",
             "Employee Management",
             "/hr",
@@ -98,12 +99,17 @@ class EmployeeManagementController extends Controller
     {
 
         $videos = Video::all();
-
-
         $slugs = explode("-", str_replace('_', ' ', $id));
 
         $employee = HRPerson::getAllEmployeesByStatus($status = 1, $slugs[1], 'first');
-
+		//chexk user right
+		$userLog = Auth::user()->load('person');
+		$objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();
+		if ($objModAccess && count($objModAccess) > 0)
+			$modAccess = $objModAccess->first()->access_level;
+		else
+			$modAccess = 0;
+		
 		$divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
         $divLevel2 = (!empty($employee['division_level_2'])) ? $employee['division_level_2'] : 0;
         $divLevel3 = (!empty($employee['division_level_3'])) ? $employee['division_level_3'] : 0;
@@ -152,7 +158,7 @@ class EmployeeManagementController extends Controller
 
         $data = $this->breadCrump(
             "Employee Records",
-            "Employee Management", "fa fa-lock",
+            "Search", "fa fa-lock",
             "Employee Management",
             "Employee Management",
             "/hr",
@@ -257,13 +263,12 @@ class EmployeeManagementController extends Controller
 		$data['types'] = $types;
         $data['application'] = $application;
         $data['routeUser'] = $routeUser;
+        $data['modAccess'] = $modAccess;
         $data['taskStatus'] = $taskStatus;
         $data['marital_statuses'] = $marital_statuses;
         $data['ethnicities'] = $ethnicities;
         $data['specific'] = $specificVids;
         $data['general'] = $generalVids;				  
-
-        $data['checkTasks'] = $checkTasks;
         $data['specific'] = $specificVids;
         $data['general'] = $generalVids;
         $data['user'] = $user;
@@ -320,15 +325,15 @@ class EmployeeManagementController extends Controller
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = time(). "_client_documents." . $fileExt;
-                $request->file('supporting_docs')->storeAs('ContactCompany/company_documents', $fileName);
+                $fileName = time(). "_employee_documents." . $fileExt;
+                $request->file('supporting_docs')->storeAs('Employee/documents', $fileName);
                 //Update file name in the table
                 $employeeDoc->supporting_docs = $fileName;
                 $employeeDoc->update();
             }
         }
         AuditReportsController::store('Contacts', 'Company Document Added', "Company Document added , Document Name: $contactsEmpdocs[doc_description], 
-		Document description: $contactsEmpdocs[doc_description], Document expiry date: $Expirydate ,  Company Name : $employee->first_name $employee->surname", 0);
+		Document description: $contactsEmpdocs[doc_description], Document expiry date: $Expirydate ,  Name : $employee->first_name $employee->surname", 0);
 		return response()->json();
     }
 	
@@ -342,10 +347,10 @@ class EmployeeManagementController extends Controller
         return back();
     }
 	// edit employee doc
-    public function editCompanydoc(Request $request, contactsEmpdocs $company)
+    public function editdoc(Request $request, employee_documents $doc)
     {
         $this->validate($request, [
-			 'name_update' => 'required',
+			 'description_update' => 'required',
 //            'name' => 'required|unique:contactsEmpdocs,name',
 //            'exp_date' => 'required',
             'doc_type_update' => 'required',
@@ -360,30 +365,28 @@ class EmployeeManagementController extends Controller
         $Expirydatet = $contactsEmpdocs['expirydate'] = str_replace('/', '-', $contactsEmpdocs['expirydate']);
         $Expirydate = $contactsEmpdocs['expirydate'] = str_replace('/', '-', $contactsEmpdocs['expirydate']);
         $Expirydate = $contactsEmpdocs['expirydate'] = strtotime($contactsEmpdocs['expirydate']);
-
-        $company->name = $contactsEmpdocs['name_update'];
-        $company->description = $contactsEmpdocs['description_update'];
-        $company->date_from = $Datefrom;
-        $company->expirydate = $Expirydate;
-        $company->doc_type = $contactsEmpdocs['doc_type_update'];
-        $company->update();
+		// update database
+        $doc->doc_description = $contactsEmpdocs['description_update'];
+        $doc->date_from = $Datefrom;
+        $doc->expirydate = $Expirydate;
+        $doc->doc_type_id = $contactsEmpdocs['doc_type_update'];
+        $doc->update();
 
         //Upload supporting document
         if ($request->hasFile('supporting_docs_update')) {
             $fileExt = $request->file('supporting_docs_update')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs_update')->isValid()) {
-                $fileName = time() . "_client_documents." . $fileExt;
-                $request->file('supporting_docs_update')->storeAs('ContactCompany/company_documents', $fileName);
+                $fileName = time() . "_employee_documents." . $fileExt;
+                $request->file('supporting_docs_update')->storeAs('Employee/documents', $fileName);
                 //Update file name in the table
-                $company->supporting_docs = $fileName;
-                $company->update();
+                $doc->supporting_docs = $fileName;
+                $doc->update();
             }
         }
-		$companyDetails = ContactCompany::where('id', $company->company_id)->first();
-        // request fields
+		$employee = HRPerson::find($doc->hr_person_id);
 
-        AuditReportsController::store('Contacts', 'Document Updated', "Company Document Updated, Document Name: $contactsEmpdocs[name_update], 
-		Document description: $contactsEmpdocs[description_update], Document expiry date: $Expirydatet, Company Name : $companyDetails->name ", 0);
+        AuditReportsController::store('Contacts', 'Document Updated', "Company Document Updated,, 
+		Document description: $contactsEmpdocs[description_update], Document expiry date: $Expirydatet, Name : $employee->first_name $employee->surname ", 0);
         return response()->json();
     }
 	/**

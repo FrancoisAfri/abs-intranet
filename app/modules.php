@@ -9,7 +9,7 @@ class modules extends Model
 	protected $table = 'security_modules';
 	
     	 protected $fillable = [
-        'name', 'path', 'active', 'font_awesome'
+        'name', 'path', 'active', 'font_awesome', 'code_name'
     ];
 	
 	 //Relationship module and ribbon

@@ -132,7 +132,9 @@
             $(".select2").select2();
             $('[data-toggle="tooltip"]').tooltip();
 			$('#user_profile').click(function () {
-                location.href = '{{ route('user.edit',$employee->id ) }} ';
+				if ({{$modAccess}} < 3)
+					location.href = '{{ route('user.edit',$employee->id ) }} ';
+				else location.href = '{{ route('profile') }} ';
 
             });
             //back
@@ -144,14 +146,14 @@
             });
 
             //back
-            $('#user_profile').click(function () {
+            /*$('#user_profile').click(function () {
                 location.href = '{{ route('user.edit',$employee->id ) }} ';
 
             });
             $('#back_button').click(function () {
                 location.href = '{{ route('employee.index') }} ';
 
-            });
+            });*/
 
             //Load divisions drop down
             $('table.files').DataTable({
@@ -281,19 +283,18 @@
 				docID = btnEdit.data('id');
 				var name = btnEdit.data('name');
 				var doc_description = btnEdit.data('doc_description');
-				var doc_type = btnEdit.data('doc_type');
+				var doc_type = btnEdit.data('doc_type_id');
 				var date_from = btnEdit.data('date_from');
 				var expirydate = btnEdit.data('expirydate');
 				var modal = $(this);
-				modal.find('#name_update').val(name);
-				modal.find('#doc_description').val(doc_description);
+				modal.find('#description_update').val(doc_description);
 				modal.find('#doc_type_update').val(doc_type);
 				modal.find('#date_from_update').val(date_from);
 				modal.find('#expirydate').val(expirydate);
 			});
 
 			$('#edit_doc').on('click', function () {
-				var strUrl = '/contacts/edit_companydoc/' + docID;
+				var strUrl = '/employee/edit_doc/' + docID;
 				var formName = 'edit-newdoc-form';
 				var modalID = 'edit-newdoc-modal';
 				var submitBtnID = 'edit_doc';
