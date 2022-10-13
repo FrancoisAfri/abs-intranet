@@ -10,9 +10,23 @@ class ExemptedUsers extends Model
     public $table = 'exempted_users';
 
     protected $fillable = [
-        'hr_id', 'status'
+        'hr_id', 'status', 'employee_number'
     ];
 
+
+    /**
+     * @param $id
+     * @return \Illuminate\Support\Collection
+     */
+    public static function getExemptedUsers()
+    {
+        return ExemptedUsers::where('status', 1)->pluck('employee_number');
+    }
+
+
+    /**
+     * @return mixed
+     */
     public static function getListOfExemptedUsers()
     {
 
@@ -25,9 +39,9 @@ class ExemptedUsers extends Model
                 'hr_people.surname'
             )
             ->leftJoin('hr_people',
-                'exempted_users.hr_id',
+                'exempted_users.employee_number',
                 '=',
-                'hr_people.id'
+                'hr_people.employee_number'
             )
             ->orderBy(
                 'exempted_users.id'

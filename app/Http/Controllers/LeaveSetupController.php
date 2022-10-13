@@ -1064,6 +1064,7 @@ class  LeaveSetupController extends Controller
 
             ExemptedUsers::create([
                 'hr_id' => $manager,
+                'employee_number' => $manager,
                 'status' => 1
             ]);
         }
@@ -1080,6 +1081,15 @@ class  LeaveSetupController extends Controller
     public function deleteManager($manager): RedirectResponse
     {
         $manage = ManagerReport::find($manager);
+        $manage->delete();
+
+        return back();
+    }
+
+
+    public function deleteExempted($exempted): RedirectResponse
+    {
+        $manage = ExemptedUsers::where('hr_id', $exempted)->first();
         $manage->delete();
 
         return back();
