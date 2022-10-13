@@ -47,10 +47,8 @@ class ReadErsDetails
         }
 
 
-        $date_from = '2022/10/12';
-        //Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
-        $date_to = '2022/10/12';
-        //Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
+        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
+        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
         $todo = 'get_clocks';
 
         $theUrl = 'https://r14.ersbio.co.za/api/data_client.php?'
@@ -115,7 +113,13 @@ class ReadErsDetails
 
         $Employees = HRPerson::getEmployeeNumber();
 
-        $exemptedUsers = ExemptedUsers::getExemptedUsers();
+        $exempted = ExemptedUsers::getExemptedUsers();
+
+        if (empty($exemptedUsers)) {
+            $exemptedUsers = $exempted;
+        } else {
+            throw new ErrorException('No data found');
+        }
 
         /**
          * We remove list of exempted users from the Hr records collection

@@ -732,7 +732,7 @@ class DatabaseSeeder extends Seeder
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = `0;
+        $ribbon->sort_order = 0;
         $ribbon->ribbon_name = 'Clockin';
         $ribbon->description = 'Clockin';
         $ribbon->ribbon_path = 'employee/clockin';
@@ -1596,6 +1596,3 @@ class DatabaseSeeder extends Seeder
 
     }
 }
-/*INSERT INTO public.stock_levels(
-	 level, active)
-	VALUES (1, 0);*/
