@@ -102,7 +102,9 @@ class ReadErsDetails
      */
     public function getAbsentUsers(): \Illuminate\Support\Collection
     {
-
+        /**
+         * call  connect to Ers class for the api response
+         */
         $resp = $this->connectToErs();
 
         if (!empty($resp)) {
@@ -110,22 +112,6 @@ class ReadErsDetails
         } else {
             throw new ErrorException('No data found');
         }
-
-        $Employees = HRPerson::getEmployeeNumber();
-
-        $exempted = ExemptedUsers::getExemptedUsers();
-
-        if (empty($exemptedUsers)) {
-            $exemptedUsers = $exempted;
-        } else {
-            throw new ErrorException('No data found');
-        }
-
-        /**
-         * We remove list of exempted users from the Hr records collection
-         */
-        $CollectionWithExemptedUsers = $Employees->diff($exemptedUsers);
-
 
         /**
          * loop through the api response to get only employee ids
@@ -135,21 +121,33 @@ class ReadErsDetails
         foreach ($response as $key => $users) {
 
             unset($key);
-            foreach ($users as $keys => $user) {
+            foreach ($users as $user) {
                 $userColl->push($user['Employee_Pin']);
             }
         }
+
+
+        $Employees = HRPerson::getEmployeeNumber();
+
+        $exemptedUsers = ExemptedUsers::getExemptedUsers();
 
         /**
          * remove duplicate records fromm the api response to get unique employee ids
          */
         $EmployeeId = $userColl->unique();
 
+
+        /**
+         * We remove list of exempted users from the Hr records collection
+         */
+        $CollectionWithExemptedUsers = $Employees->diff($exemptedUsers);
+
+
         /**
          * Compare the employee records with exempted users to the api response
          * to get absent users for the day
          */
-        return $CollectionWithExemptedUsers->diff($EmployeeId);
+        return  dd($CollectionWithExemptedUsers->diff($EmployeeId));
     }
 
     /**

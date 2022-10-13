@@ -1085,4 +1085,13 @@ class  LeaveSetupController extends Controller
 
         return back();
     }
+
+
+    public function deleteExempted($exempted): RedirectResponse
+    {
+        $manage = ExemptedUsers::where('hr_id', $exempted)->first();
+        $manage->delete();
+
+        return back();
+    }
 }

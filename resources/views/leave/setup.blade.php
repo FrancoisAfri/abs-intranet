@@ -190,7 +190,7 @@
                                         {{--                                        <td>{{ $assetTypes->description ?? ''}} </td>--}}
 
                                         <td style="width: 5px; text-align: right;">
-                                            <form action="{{ route('manager.destroy', $exempted->id) }}"
+                                            <form action="{{ route('exempted.destroy', $exempted->hr_id) }}"
                                                   method="POST"
                                                   style="display: inline-block;">
                                                 <input type="hidden" name="_method" value="DELETE">
