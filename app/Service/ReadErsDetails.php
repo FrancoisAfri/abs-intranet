@@ -12,6 +12,7 @@ use App\leave_credit;
 use App\Mail\remindUserToapplyLeave;
 use App\Mail\sendManagersListOfAbsentUsers;
 use App\Models\ErsAbsentUsers;
+use App\Models\ExemptedUsers;
 use App\Models\ManagerReport;
 use Carbon\Carbon;
 use ErrorException;
@@ -46,8 +47,10 @@ class ReadErsDetails
         }
 
 
-        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
-        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
+        $date_from = '2022/10/12';
+        //Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
+        $date_to = '2022/10/12';
+        //Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
         $todo = 'get_clocks';
 
         $theUrl = 'https://r14.ersbio.co.za/api/data_client.php?'
@@ -78,14 +81,14 @@ class ReadErsDetails
         $date_from = date("F jS, Y");
 
         $date = strtotime($date_from);
-		
-		$today = Carbon::now(); 
+
+        $today = Carbon::now();
         $start = $today->copy()->startOfDay();
         $end = $today->copy()->endOfDay();
 
         $startDate = strtotime($start);
-        $endDate = strtotime($end); 
-		
+        $endDate = strtotime($end);
+
         $absentUsers = $this->getAbsentUsers();
 
         $this->sendEmailToUser($absentUsers, $date, $date_from, $startDate, $endDate);
@@ -112,19 +115,37 @@ class ReadErsDetails
 
         $Employees = HRPerson::getEmployeeNumber();
 
-        $userArr = collect([]);
+        $exemptedUsers = ExemptedUsers::getExemptedUsers();
 
+        /**
+         * We remove list of exempted users from the Hr records collection
+         */
+        $CollectionWithExemptedUsers = $Employees->diff($exemptedUsers);
+
+
+        /**
+         * loop through the api response to get only employee ids
+         * and then push them into an empty $userColl collection
+         */
+        $userColl = collect([]);
         foreach ($response as $key => $users) {
 
             unset($key);
             foreach ($users as $keys => $user) {
-                $userArr->push($user['Employee_Pin']);
+                $userColl->push($user['Employee_Pin']);
             }
         }
 
-        $EmployeeId = $userArr->unique();
+        /**
+         * remove duplicate records fromm the api response to get unique employee ids
+         */
+        $EmployeeId = $userColl->unique();
 
-        return $Employees->diff($EmployeeId);
+        /**
+         * Compare the employee records with exempted users to the api response
+         * to get absent users for the day
+         */
+        return $CollectionWithExemptedUsers->diff($EmployeeId);
     }
 
     /**
@@ -199,79 +220,78 @@ class ReadErsDetails
         $check = ErsAbsentUsers::getAbsentUsers();
 
         foreach ($check as $absent) {
-			
-			$absentDate = Carbon::parse(date("Y-m-d", $absent->date));
-			$totaldays = LeaveApplicationController::calculatedays($absentDate, $today);
 
-			if ($days == $totaldays) {
-				
-				// check if user applied for leave //check if user applied for leave
-				$absentday = Carbon::parse(date("Y-m-d", $absent->date)); 
-				$start = $absentday->copy()->startOfDay();
-				$end = $absentday->copy()->endOfDay();
+            $absentDate = Carbon::parse(date("Y-m-d", $absent->date));
+            $totaldays = LeaveApplicationController::calculatedays($absentDate, $today);
 
-				$startDate = strtotime($start);
-				$endDate = strtotime($end); 
-				$checkUserApplicationStatus = leave_application::checkIfUserApplied($absent->hr_id, $startDate, $endDate);
-				// if user applied for leave
-				if (!isset($checkUserApplicationStatus)) {
-					
-					$applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id);
+            if ($days == $totaldays) {
 
-					$credit = leave_credit::getLeaveCredit($absent->hr_id, 1);
+                // check if user applied for leave //check if user applied for leave
+                $absentday = Carbon::parse(date("Y-m-d", $absent->date));
+                $start = $absentday->copy()->startOfDay();
+                $end = $absentday->copy()->endOfDay();
 
-					//persist to db
-					$levApp = leave_application::create([
-						'leave_type_id' => 1,
-						'start_date' => $absent->date,
-						'end_date' => $absent->date,
-						'leave_taken' => 8,
-						'hr_id' => $absent->hr_id,
-						'notes' => 'The system has automatically applied for leave on your behalf',
-						'status' => $applicationStatus['status'],
-						'manager_id' => $applicationStatus['manager_id'],
-					]);
+                $startDate = strtotime($start);
+                $endDate = strtotime($end);
+                $checkUserApplicationStatus = leave_application::checkIfUserApplied($absent->hr_id, $startDate, $endDate);
+                // if user applied for leave
+                if (!isset($checkUserApplicationStatus)) {
 
+                    $applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id);
 
-					// save audit
-					LeaveHistoryAuditController::store(
-						"Leave application submitted by : Cron Job system",
-						'Leave application for day',
-						$credit['leave_balance'],
-						1,
-						$credit['leave_balance'],
-						1,
-						0,
-						1,
-						0
-					);
+                    $credit = leave_credit::getLeaveCredit($absent->hr_id, 1);
+
+                    //persist to db
+                    $levApp = leave_application::create([
+                        'leave_type_id' => 1,
+                        'start_date' => $absent->date,
+                        'end_date' => $absent->date,
+                        'leave_taken' => 8,
+                        'hr_id' => $absent->hr_id,
+                        'notes' => 'The system has automatically applied for leave on your behalf',
+                        'status' => $applicationStatus['status'],
+                        'manager_id' => $applicationStatus['manager_id'],
+                    ]);
 
 
-					//this one is to update the ers table
+                    // save audit
+                    LeaveHistoryAuditController::store(
+                        "Leave application submitted by : Cron Job system",
+                        'Leave application for day',
+                        $credit['leave_balance'],
+                        1,
+                        $credit['leave_balance'],
+                        1,
+                        0,
+                        1,
+                        0
+                    );
 
-					ErsAbsentUsers::where('id', $absent->id)
-						->update([
-							'hr_id' => $absent->hr_id,
-							'date' => $absent->date,
-							'is_applied' => 1
-						]);
-				}
-				else {
-					
-					//this one is to update the ers table
 
-					ErsAbsentUsers::where('id', $absent->id)
-						->update([
-							'hr_id' => $absent->hr_id,
-							'date' => $absent->date,
-							'is_applied' => 1
-						]);
-				}
+                    //this one is to update the ers table
 
-			} else {
-				///nothing
-				$va = "do nothing";
-			}
+                    ErsAbsentUsers::where('id', $absent->id)
+                        ->update([
+                            'hr_id' => $absent->hr_id,
+                            'date' => $absent->date,
+                            'is_applied' => 1
+                        ]);
+                } else {
+
+                    //this one is to update the ers table
+
+                    ErsAbsentUsers::where('id', $absent->id)
+                        ->update([
+                            'hr_id' => $absent->hr_id,
+                            'date' => $absent->date,
+                            'is_applied' => 1
+                        ]);
+                }
+
+            } else {
+                ///nothing
+                $va = "do nothing";
+            }
         }
     }
 

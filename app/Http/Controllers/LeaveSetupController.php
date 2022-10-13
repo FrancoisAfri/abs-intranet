@@ -1064,6 +1064,7 @@ class  LeaveSetupController extends Controller
 
             ExemptedUsers::create([
                 'hr_id' => $manager,
+                'employee_number' => $manager,
                 'status' => 1
             ]);
         }
