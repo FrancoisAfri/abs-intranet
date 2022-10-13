@@ -147,7 +147,7 @@ class ReadErsDetails
          * Compare the employee records with exempted users to the api response
          * to get absent users for the day
          */
-        return  dd($CollectionWithExemptedUsers->diff($EmployeeId));
+        return  $CollectionWithExemptedUsers->diff($EmployeeId);
     }
 
     /**
@@ -333,7 +333,8 @@ class ReadErsDetails
         $file = $this->createExcelDoc($AbsentUsersColl);
 
         foreach ($users as $managers) {
-            $managersDet = HRPerson::getManagerDetails($managers['hr_id']);
+            
+            $managersDet = HRPerson::getManagerDetails($managers->hr_id);
 
             try {
                 Mail::to($managersDet['email'])->send(
