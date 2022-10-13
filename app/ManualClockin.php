@@ -41,4 +41,42 @@ class ManualClockin extends Model
             ->select('id', 'created_at', 'ip_addresss', 'clockin_type', 'clockin_time', 'location')
             ->first();
     }
+	// get Clockout
+	public static function checkClockout($employeeNo)
+    {
+        return ManualClockin::where(['employee_number' => $employeeNo, 'clockin_type' => 2])
+			->where('created_at', '>=', date('Y-m-d').' 00:00:00')
+            ->select('id', 'created_at', 'ip_addresss', 'clockin_type', 'clockin_time', 'location')
+            ->first();
+    }
+	// get Clockout and clockin
+	
+	public static function getAllattendance($clockinType , $employeeNo, $dates)
+    {
+		// convert date
+		if (!empty($dates)) {
+            $startExplode = explode('-', $dates);
+            $actionFrom = strtotime(str_replace('/', '-', $startExplode[0]));
+            $actionTo = strtotime(str_replace('/', '-', $startExplode[1]));
+        }
+		else $actionFrom = $actionTo = 0;
+		// query
+        $query = ManualClockin::with('user')
+            ->orderBy('clockin_type', 'asc')
+            ->orderBy('id', 'desc')
+			->where(function ($query) use ($actionFrom, $actionTo) {
+                if ($actionFrom > 0 && $actionTo > 0) {
+                    $query->whereBetween('clockin_time', [$actionFrom, $actionTo]);
+                }
+            });
+        if (!empty($employeeNo)){
+            $query->where('employee_number', $employeeNo);
+        } 
+		if (!empty($clockinType)){
+            $query->where('clockin_type', $clockinType);
+        }
+        $query->limit(2000);
+        return $query->get();
+
+    }
 }

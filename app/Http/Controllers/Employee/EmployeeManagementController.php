@@ -47,7 +47,7 @@ class EmployeeManagementController extends Controller
             $status = $request['status_id'];
 
         $employee = HRPerson::getAllEmployeesByStatus($status, 0, 'get');
-
+		$employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
         $data = $this->breadCrump(
             "Employee Records",
             "Search", "fa fa-lock",
@@ -60,12 +60,44 @@ class EmployeeManagementController extends Controller
 
         $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
-
-        $data['m_silhouette'] = $m_silhouette;
+		
+		$data['m_silhouette'] = $m_silhouette;
         $data['f_silhouette'] = $f_silhouette;
+        $data['employees'] = $employees;
         $data['employee'] = $employee;
 
         return view('Employees.employee_management')->with($data);
+    }
+	// clockin Report
+	public function clockinReports(Request $request)
+    {
+		//Inputs
+		$employeID = !empty($request['employee_number']) ? $request['employee_number']  : 0;
+		$date = !empty($request['action_date']) ? $request['action_date']  : 0;
+		$clocktypes = !empty($request['clockin_type']) ? $request['clockin_type']  : 0;
+		$employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
+		// get data
+        $clockins = ManualClockin::getAllattendance($clocktypes,$employeID,$date );
+		//return $clockins;
+        $data = $this->breadCrump(
+            "Employee Records",
+            "Clockin Report", "fa fa-lock",
+            "Employee",
+            "Clockin Report",
+            "employee/clockin_report",
+            "Employee Management",
+            "Employee Management"
+        );
+
+        $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+
+        $data['m_silhouette'] = $m_silhouette;
+        $data['f_silhouette'] = $f_silhouette;
+        $data['clockins'] = $clockins;
+        $data['employees'] = $employees;
+
+        return view('Employees.clockin_report')->with($data);
     }
 
     /**
@@ -79,6 +111,7 @@ class EmployeeManagementController extends Controller
 		$user = Auth::user()->load('person');
 		// check if user clockin
 		$clockin = ManualClockin::checkClockin($user->person->employee_number);
+		$clockout = ManualClockin::checkClockout($user->person->employee_number);
         $data = $this->breadCrump(
             "Employee Records",
             "Clockin", "fa fa-lock",
@@ -89,6 +122,7 @@ class EmployeeManagementController extends Controller
             "Employee Management"
         );
 
+        $data['clockout'] = $clockout;
         $data['clockin'] = $clockin;
         $data['user'] = $user;
 

@@ -22,7 +22,7 @@
                                 </div>
                                 <select class="form-control select2" multiple="multiple" style="width: 100%;"
                                         id="hr_person_id" name="hr_person_id[]">
-                                    <option value="">*** Select an Users ***</option>
+                                    <option value="">*** Select Employee ***</option>
                                     @foreach($users as $employee)
                                         <option value="{{ $employee->employee_number }} ">{{$employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach

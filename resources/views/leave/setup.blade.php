@@ -113,14 +113,14 @@
                         <tbody>
                         @if (count($managerList) > 0)
                             <ul class="products-list product-list-in-box">
-                                @foreach ($managerList as $key => $assetTypes)
+                                @foreach ($managerList as $key => $manager)
                                     <tr id="categories-list">
                                         <td></td>
-                                        <td style="width: 5px; text-align: left;">{{ $assetTypes->first_name . ' ' . $assetTypes->surname ?? ''}} </td>
-                                        {{--                                        <td>{{ $assetTypes->description ?? ''}} </td>--}}
+                                        <td style="width: 5px; text-align: left;">{{ $manager->first_name . ' ' . $manager->surname ?? ''}} </td>
+                                        {{--                                        <td>{{ $manager->description ?? ''}} </td>--}}
 
                                         <td style="width: 5px; text-align: right;">
-                                            <form action="{{ route('manager.destroy', $assetTypes->id) }}"
+                                            <form action="{{ route('manager.destroy', $manager->id) }}"
                                                   method="POST"
                                                   style="display: inline-block;">
                                                 <input type="hidden" name="_method" value="DELETE">
@@ -187,7 +187,7 @@
                                     <tr id="categories-list">
                                         <td></td>
                                         <td style="width: 5px; text-align: left;">{{ $exempted->first_name . ' ' . $exempted->surname ?? ''}} </td>
-                                        {{--                                        <td>{{ $assetTypes->description ?? ''}} </td>--}}
+                                        {{--                                        <td>{{ $manager->description ?? ''}} </td>--}}
 
                                         <td style="width: 5px; text-align: right;">
                                             <form action="{{ route('exempted.destroy', $exempted->hr_id) }}"
