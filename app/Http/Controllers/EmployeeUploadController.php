@@ -42,7 +42,7 @@ class EmployeeUploadController extends Controller
         ];
 		
         $data['active_mod'] = 'Employee records';
-        $data['active_rib'] = 'Employees Upload';
+        $data['active_rib'] = 'Upload';
         AuditReportsController::store('Employee Records', 'Upload page accessed', "Accessed by User", 0);
         return view('hr.employee_upload')->with($data);
     }

@@ -540,28 +540,10 @@ class DatabaseSeeder extends Seeder
         $module->path = 'users';
         $module->font_awesome = 'fa-lock';
         $module->save();
-
+		
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
-        $ribbon->ribbon_name = 'Create User';
-        $ribbon->description = 'Add User';
-        $ribbon->ribbon_path = 'users/create';
-        $ribbon->access_level = 3;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 2;
-        $ribbon->ribbon_name = 'Search Users';
-        $ribbon->description = 'Search Users';
-        $ribbon->ribbon_path = 'users';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Modules';
         $ribbon->description = 'Modules';
         $ribbon->ribbon_path = 'users/modules';
@@ -570,16 +552,16 @@ class DatabaseSeeder extends Seeder
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 4;
+        $ribbon->sort_order = 2;
         $ribbon->ribbon_name = 'Users Access';
         $ribbon->description = 'Users Access';
         $ribbon->ribbon_path = 'users/users-access';
-        $ribbon->access_level = 5;
+        $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 5;
+        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Public Holidays Management';
         $ribbon->description = 'Public Holidays Management';
         $ribbon->ribbon_path = 'users/public-holiday';
@@ -588,7 +570,7 @@ class DatabaseSeeder extends Seeder
 		
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 6;
+        $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'users/setup';
@@ -597,16 +579,7 @@ class DatabaseSeeder extends Seeder
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 7;
-        $ribbon->ribbon_name = 'Reports';
-        $ribbon->description = 'Reports';
-        $ribbon->ribbon_path = 'users/reports';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon); 
-		
-		$ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 8;
+        $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'User Approval';
         $ribbon->description = 'User Approval';
         $ribbon->ribbon_path = 'users/approval';
@@ -615,7 +588,7 @@ class DatabaseSeeder extends Seeder
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 9;
+        $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'Reports To';
         $ribbon->description = 'Reports To';
         $ribbon->ribbon_path = 'users/reports_to';
@@ -624,7 +597,7 @@ class DatabaseSeeder extends Seeder
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 10;
+        $ribbon->sort_order = 7;
         $ribbon->ribbon_name = 'Reset Password';
         $ribbon->description = 'Reset Password';
         $ribbon->ribbon_path = 'security/password-reset';
@@ -633,7 +606,7 @@ class DatabaseSeeder extends Seeder
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 11;
+        $ribbon->sort_order = 8;
         $ribbon->ribbon_name = 'Assign Job Titles';
         $ribbon->description = 'Assign Job Titles';
         $ribbon->ribbon_path = 'security/assign-jobtitles';
@@ -648,79 +621,78 @@ class DatabaseSeeder extends Seeder
         $module->font_awesome = 'fa-users';
         $module->save();
 
-        $ribbon = new module_ribbons();
+		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Create User';
+        $ribbon->description = 'Add User';
+        $ribbon->ribbon_path = 'users/create';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);  
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Clockin';
+        $ribbon->description = 'Clockin';
+        $ribbon->ribbon_path = 'employee/clockin';
+        $ribbon->access_level = 1;
+        $module->addRibbon($ribbon);
+		
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Job Titles';
         $ribbon->description = 'Job Titles';
         $ribbon->ribbon_path = 'hr/job_title';
-        $ribbon->access_level = 4;
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search';
+        $ribbon->ribbon_path = 'employee';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 5;
+        $ribbon->ribbon_name = 'Video Management';
+        $ribbon->description = 'Video Management';
+        $ribbon->ribbon_path = 'employee/video_management';
+        $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 2;
+        $ribbon->sort_order = 6;
         $ribbon->ribbon_name = 'Company Setup';
         $ribbon->description = 'Company Setup';
         $ribbon->ribbon_path = 'hr/company_setup';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
-
-//        $ribbon = new module_ribbons();
-//        $ribbon->active = 1;
-//        $ribbon->sort_order = 3;
-//        $ribbon->ribbon_name = 'Business card';
-//        $ribbon->description = 'Business card';
-//        $ribbon->ribbon_path = 'hr/business_card';
-//        $ribbon->access_level = 4;
-//        $module->addRibbon($ribbon);
-
-        // $ribbon = new module_ribbons();
-        // $ribbon->active = 1;
-        // $ribbon->sort_order = 4;
-        // $ribbon->ribbon_name = 'Employees Documents';
-        // $ribbon->description = 'Employees Documents';
-        // $ribbon->ribbon_path = 'hr/emp_document';
-        // $ribbon->access_level = 4;
-        // $module->addRibbon($ribbon);
-
-
-         $ribbon = new module_ribbons();
-         $ribbon->active = 1;
-         $ribbon->sort_order = 5;
-         $ribbon->ribbon_name = 'Video Management';
-         $ribbon->description = 'Video Management';
-         $ribbon->ribbon_path = 'employee/video_management';
-         $ribbon->access_level = 4;
-         $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 6;
-        $ribbon->ribbon_name = 'Search';
-        $ribbon->description = 'Search';
-        $ribbon->ribbon_path = 'hr/emp_qualification';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
+		
+		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 7;
-        $ribbon->ribbon_name = 'Employee Management';
-        $ribbon->description = 'Employee Management';
-        $ribbon->ribbon_path = 'employee';
-        $ribbon->access_level = 4;
+        $ribbon->ribbon_name = 'Clockin Report';
+        $ribbon->description = 'Clockin Report';
+        $ribbon->ribbon_path = 'employee/clockin_report';
+        $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
-        $ribbon = new module_ribbons();
+		$ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 8;
-        $ribbon->ribbon_name = 'Hr Admin';
-        $ribbon->description = 'Hr Admin';
-        $ribbon->ribbon_path = 'hr/Admin';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
-
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'users/reports';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon); 
+		
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 9;
@@ -732,30 +704,12 @@ class DatabaseSeeder extends Seeder
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = `0;
-        $ribbon->ribbon_name = 'Clockin';
-        $ribbon->description = 'Clockin';
-        $ribbon->ribbon_path = 'employee/clockin';
-        $ribbon->access_level = 1;
-        $module->addRibbon($ribbon);
-		
-		$ribbon = new module_ribbons();
-        $ribbon->active = 1;
-        $ribbon->sort_order = 11;
-        $ribbon->ribbon_name = 'Clockin Report';
-        $ribbon->description = 'Clockin Report';
-        $ribbon->ribbon_path = 'employee/clockin_report';
-        $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
-
-        $ribbon = new module_ribbons();
-        $ribbon->active = 1;
         $ribbon->sort_order = 10;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'hr/setup';
         $ribbon->access_level = 4;
-        $module->addRibbon($ribbon);
+        $module->addRibbon($ribbon);   
 
         $module = new modules(); //Leave Management
         $module->active = 1;

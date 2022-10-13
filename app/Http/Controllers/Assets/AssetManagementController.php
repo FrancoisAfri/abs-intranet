@@ -69,7 +69,6 @@ class AssetManagementController extends Controller
             "Asset Management Set Up"
         );
 
-
         $data['assetType'] = $assetType;
         $data['asserts'] = $asserts;
         $data['info'] = 'info';

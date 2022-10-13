@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Employee;
 
+use App\ManualClockin;
 use App\DivisionLevel;
 use App\EmployeeTasks;
 use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
+use App\Http\Controllers\LeaveApplicationController;
 use App\Models\StoreRoom;
 use App\Models\Video;
 use App\modules;
@@ -38,11 +40,7 @@ class EmployeeManagementController extends Controller
      */
     public function index(Request $request)
     {
-
-        //$status = !empty($request['status_id']) ? $request['status_id'] : 'empty';
-
-        //dd(isset($request['status_id']));
-
+		
         if (!empty($request['status_id'])) {
             $status = 1;
         } else
@@ -75,9 +73,26 @@ class EmployeeManagementController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function clockin()
     {
-        //
+		// get user details
+		$user = Auth::user()->load('person');
+		// check if user clockin
+		$clockin = ManualClockin::checkClockin($user->person->employee_number);
+        $data = $this->breadCrump(
+            "Employee Records",
+            "Clockin", "fa fa-lock",
+            "Employee",
+            "Attendance Management",
+            "/hr",
+            "Employee Management",
+            "Employee Management"
+        );
+
+        $data['clockin'] = $clockin;
+        $data['user'] = $user;
+
+        return view('Employees.clockin')->with($data);
     }
 
     /**
@@ -86,9 +101,21 @@ class EmployeeManagementController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
+		// get user details
+		$user = Auth::user()->load('person');
+		$status = !empty($request['clockin']) ? 1 : 2 ;
+		ManualClockin::create([
+                'ip_addresss' => 'ddddd',
+                'hr_id' => $user->person->id,
+                'clockin_type' => $status,
+                'clockin_time' => strtotime(date('Y-m-d H:i:s')),
+                'location' => 'ddddd',
+                'employee_number' => $user->person->employee_number
+            ]);
+		
+		return redirect()->route('employee.clockin')->with('status', 'Clockin Saved!');
     }
 
     /**
@@ -97,7 +124,6 @@ class EmployeeManagementController extends Controller
      */
     public function show($id)
     {
-
         $videos = Video::all();
         $slugs = explode("-", str_replace('_', ' ', $id));
 
@@ -252,7 +278,7 @@ class EmployeeManagementController extends Controller
 		if (!empty($documents)) $documents = $documents->load('documentType');
 		$types = doc_type::where('active', 1)->orderBy('name', 'asc')->get();
 		
-		
+		$data['leaveStatusNames'] = LeaveApplicationController::status();
 		$data['documents'] = $documents;
 		$data['activeModules'] = $activeModules;
 		$data['surbs'] = $surbs;
@@ -337,15 +363,6 @@ class EmployeeManagementController extends Controller
 		return response()->json();
     }
 	
-	// delete employee
-    public function deleteCompanyDoc(contactsEmpdocs $document)
-    {
-		$companyDetails = ContactCompany::where('id', $document->company_id)->first();
-        $document->delete();
-
-        AuditReportsController::store('Contacts', "Company Document Deleted: $document->name For: $companyDetails->name", "Deleted By User", 0);
-        return back();
-    }
 	// edit employee doc
     public function editdoc(Request $request, employee_documents $doc)
     {

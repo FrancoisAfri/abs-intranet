@@ -80,7 +80,6 @@
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
-                        <button id="cancel" class="btn btn-default"><i class="fa fa-arrow-left"></i> Cancel</button>
                         <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-user-plus"></i> Create</button>
                     </div>
                     <!-- /.box-footer -->

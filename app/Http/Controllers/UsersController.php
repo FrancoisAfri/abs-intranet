@@ -55,10 +55,10 @@ class UsersController extends Controller
         $data['page_title'] = "Users";
         $data['page_description'] = "Create a New User";
         $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/users', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Employee Records', 'path' => '/employee', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Create user', 'active' => 1, 'is_module' => 0]
         ];
-		$data['active_mod'] = 'Security';
+		$data['active_mod'] = 'Employee Records';
         $data['active_rib'] = 'Create user';		
 				
 		AuditReportsController::store('Security', 'Create User Page Accessed', "Accessed By User", 0);
@@ -73,7 +73,7 @@ class UsersController extends Controller
 		AuditReportsController::store('Security', 'User Deleted', "Del: $name ", 0);
 		DB::table('users')->where('id', '=', $user->id)->delete();
 		DB::table('hr_people')->where('user_id', '=', $user->id)->delete();
-		return redirect('/users')->with('success_delete', "User Successfully Deleted.");
+		return redirect('/employee')->with('success_delete', "User Successfully Deleted.");
 	}
 
 	public function deleteHoliday(Request $request, PublicHoliday $holidayId)
@@ -399,7 +399,7 @@ class UsersController extends Controller
 			}
 		}
 		//Redirect to all usr view
-        return redirect('/users')->with('success_add', "The user has been added successfully. \nYou can use the search menu to view the user details.");
+        return redirect('/employee')->with('success_add', "The user has been added successfully. \nYou can use the search menu to view the user details.");
     }
 
     public function edit(User $user) {
@@ -676,7 +676,7 @@ class UsersController extends Controller
             }
         }
 
-        return redirect('/users')->with('changes_saved', "Your changes have been saved successfully.");
+        return redirect('/employee')->with('changes_saved', "Your changes have been saved successfully.");
     }
 	// Reset Password
 	public function recoverPassword(Request $request) {
@@ -707,14 +707,14 @@ class UsersController extends Controller
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
         
-		$data['page_title'] = "Users Access";
-        $data['page_description'] = "Admin page to manage users access";
+		$data['page_title'] = "Reports";
+        $data['page_description'] = "Employees Reports";
         $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/users/modules', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Users Access', 'active' => 1, 'is_module' => 0]
+            ['title' => 'employee', 'path' => '/users/reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Security';
-        $data['active_rib'] = 'users access';
+        $data['active_mod'] = 'Employee Records';
+        $data['active_rib'] = 'Reports';
         $data['modules'] = $modules;
         $data['employees'] = $employees;
         $data['division_levels'] = $divisionLevels;
@@ -761,13 +761,13 @@ class UsersController extends Controller
 					->on("security_modules_access.user_id","=", "hr_people.user_id");
 			})->get();
 
-        $data['page_title'] = "Users Access";
-        $data['page_description'] = "Admin page to manage users access";
+        $data['page_title'] = "Employees ";
+        $data['page_description'] = "Access Reports";
         $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/users/modules', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Users Access', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Employees', 'path' => '/users/reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Users Access Reports', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Security';
+        $data['active_mod'] = 'Employee Records';
         $data['active_rib'] = 'Reports';
         $data['moduleName'] = $moduleName;
         $data['employees'] = $employees;
@@ -784,70 +784,6 @@ class UsersController extends Controller
         return view('security.users_list_access_report')->with($data);
     }
 
-	public function getEmployeesReportPrint(Request $request)
-    {
-        $reportData = $request->all();
-        unset($reportData['_token']);
-		
-        $divLevel1 = ($request->input('division_level_1')) ? $request->input('division_level_1') : 0;
-        $divLevel2 = ($request->input('division_level_2')) ? $request->input('division_level_2') : 0;
-        $divLevel3 = ($request->input('division_level_3')) ? $request->input('division_level_3') : 0;
-        $divLevel4 = ($request->input('division_level_4')) ? $request->input('division_level_4') : 0;
-        $divLevel5 = ($request->input('division_level_5')) ? $request->input('division_level_5') : 0;
-        $hrPersonID = ($request->input('hr_person_id')) ? $request->input('hr_person_id') : 0;
-        $moduleID = ($request->input('module_id')) ? $request->input('module_id') : 0;
-		$status = !empty($request->input('status')) ? $request->input('status') : 0;
-		$moduleName = modules::find($moduleID)->name;
-
-        $employees = HRPerson::select('hr_people.*'
-			, 'hr_people.user_id as uid'
-			, 'security_modules_access.id',
-            'security_modules_access.module_id'
-			, 'security_modules_access.user_id',
-            'security_modules_access.access_level')
-            ->whereNotNull('hr_people.user_id')
-			->where('hr_people.status', $status)
-            ->where('status', 1)->where(function ($query) use($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5){
-            if ($divLevel1 > 0) $query->where('hr_people.division_level_1', $divLevel1);
-            if ($divLevel2 > 0) $query->where('hr_people.division_level_2', $divLevel2);
-            if ($divLevel3 > 0) $query->where('hr_people.division_level_3', $divLevel3);
-            if ($divLevel4 > 0) $query->where('hr_people.division_level_4', $divLevel4);
-            if ($divLevel5 > 0) $query->where('hr_people.division_level_5', $divLevel5);
-			})->where(function ($query) use($hrPersonID){
-				if (!empty($hrPersonID)) {
-					$query->where('hr_people.id',$hrPersonID);
-				}
-			})->leftjoin("security_modules_access",function($join) use ($moduleID) {
-				$join->on("security_modules_access.module_id", "=", DB::raw($moduleID))
-					->on("security_modules_access.user_id","=", "hr_people.user_id");
-			})->get();
-		
-		$data['employees'] = $employees;
-		$data['moduleName'] = $moduleName;
-        
-		$data['page_title'] = "Users Access";
-        $data['page_description'] = "Admin page to manage users access";
-        $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/users/reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Users Access', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Security';
-        $data['active_rib'] = 'Reports';
-
-        $companyDetails = CompanyIdentity::systemSettings();
-        $companyName = $companyDetails['company_name'];
-        $user = Auth::user()->load('person');
-
-        $data['support_email'] = $companyDetails['support_email'];
-        $data['company_name'] = $companyName;
-        $data['full_company_name'] = $companyDetails['full_company_name'];
-        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['date'] = date("d-m-Y");
-        $data['user'] = $user;
-
-        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
-        return view('security.users_list_access_report_print')->with($data);
-    }
 	/// get users reports
 	public function getUsersReport(Request $request)
     {
@@ -883,14 +819,14 @@ class UsersController extends Controller
 			->orderBy('hr_people.first_name', 'asc')
 			->orderBy('hr_people.surname', 'asc')
 			->get();
-		
-        $data['page_title'] = "Users Report";
-        $data['page_description'] = "Admin page to manage users";
+
+        $data['page_title'] = "Employees ";
+        $data['page_description'] = "List Report";
         $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/users/reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Users Access', 'active' => 1, 'is_module' => 0]
+            ['title' => 'employees', 'path' => '/users/reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Employees List', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Security';
+        $data['active_mod'] = 'Employee Records';
         $data['active_rib'] = 'Reports';
         $data['employees'] = $employees;
         $data['hr_person_id'] = $hrPersonID;
@@ -904,67 +840,6 @@ class UsersController extends Controller
         return view('security.users_list_report')->with($data);
     }
 	
-	public function getUsersReportPrint(Request $request)
-    {
-        $reportData = $request->all();
-        unset($reportData['_token']);
-		
-        $divLevel1 = ($request->input('division_level_1')) ? $request->input('division_level_1') : 0;
-        $divLevel2 = ($request->input('division_level_2')) ? $request->input('division_level_2') : 0;
-        $divLevel3 = ($request->input('division_level_3')) ? $request->input('division_level_3') : 0;
-        $divLevel4 = ($request->input('division_level_4')) ? $request->input('division_level_4') : 0;
-        $divLevel5 = ($request->input('division_level_5')) ? $request->input('division_level_5') : 0;
-        $hrPersonID = ($request->input('hr_person_id')) ? $request->input('hr_person_id') : 0;
-		$status = !empty($request->input('status')) ? $request->input('status') : 0;
-		
-        $employees = HRPerson::select('hr_people.*'
-			, 'hr_positions.name as job_title', 'hp.first_name as manager_first_name'
-			, 'hp.surname as manager_surname'
-			, 'leave_profile.name as profile_name')
-			->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
-			->leftJoin('leave_profile', 'hr_people.leave_profile', '=', 'leave_profile.id')
-			->leftJoin('hr_people as hp', 'hp.manager_id', '=', 'hr_people.id')
-			->where('hr_people.status', $status)
-			->where(function ($query) use($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5){
-            if ($divLevel1 > 0) $query->where('hr_people.division_level_1', $divLevel1);
-            if ($divLevel2 > 0) $query->where('hr_people.division_level_2', $divLevel2);
-            if ($divLevel3 > 0) $query->where('hr_people.division_level_3', $divLevel3);
-            if ($divLevel4 > 0) $query->where('hr_people.division_level_4', $divLevel4);
-            if ($divLevel5 > 0) $query->where('hr_people.division_level_5', $divLevel5);
-			})->where(function ($query) use($hrPersonID){
-				if (!empty($hrPersonID)) {
-					$query->where('hr_people.id',$hrPersonID);
-				}
-			})
-			->orderBy('hr_people.first_name', 'asc')
-			->orderBy('hr_people.surname', 'asc')
-			->get();
-		
-		$data['employees'] = $employees;
-        
-		$data['page_title'] = "Users List";
-        $data['page_description'] = "Admin page to manage users access";
-        $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/users/reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Users Access', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Security';
-        $data['active_rib'] = 'Reports';
-
-        $companyDetails = CompanyIdentity::systemSettings();
-        $companyName = $companyDetails['company_name'];
-        $user = Auth::user()->load('person');
-
-        $data['support_email'] = $companyDetails['support_email'];
-        $data['company_name'] = $companyName;
-        $data['full_company_name'] = $companyDetails['full_company_name'];
-        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['date'] = date("d-m-Y");
-        $data['user'] = $user;
-
-        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
-        return view('security.users_list_report_print')->with($data);
-    }
 	/// get users date started reports
 	public function getEmployeesStartDateReport(Request $request)
     {
@@ -1001,13 +876,13 @@ class UsersController extends Controller
 			->orderBy('hr_people.surname', 'asc')
 			->get();
 		
-        $data['page_title'] = "Users Report";
-        $data['page_description'] = "Admin page to manage users";
+        $data['page_title'] = "Dates Report";
+        $data['page_description'] = "Show employees date joined";
         $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/users/reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Users Access', 'active' => 1, 'is_module' => 0]
+            ['title' => 'employees', 'path' => '/users/reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
+            ['title' => 'employees dates', 'active' => 1, 'is_module' => 0]
         ];
-        $data['active_mod'] = 'Security';
+        $data['active_mod'] = 'Employee Records';
         $data['active_rib'] = 'Reports';
         $data['employees'] = $employees;
         $data['hr_person_id'] = $hrPersonID;
@@ -1022,67 +897,6 @@ class UsersController extends Controller
         return view('security.users_date_joined_report')->with($data);
     }
 	
-	public function getEmployeesStartDateReportPrint(Request $request)
-    {
-        $reportData = $request->all();
-        unset($reportData['_token']);
-		
-        $divLevel1 = ($request->input('division_level_1')) ? $request->input('division_level_1') : 0;
-        $divLevel2 = ($request->input('division_level_2')) ? $request->input('division_level_2') : 0;
-        $divLevel3 = ($request->input('division_level_3')) ? $request->input('division_level_3') : 0;
-        $divLevel4 = ($request->input('division_level_4')) ? $request->input('division_level_4') : 0;
-        $divLevel5 = ($request->input('division_level_5')) ? $request->input('division_level_5') : 0;
-        $hrPersonID = ($request->input('hr_person_id')) ? $request->input('hr_person_id') : 0;
-		$status = !empty($request->input('status')) ? $request->input('status') : 0;
-		
-        $employees = HRPerson::select('hr_people.*'
-			, 'hr_positions.name as job_title', 'hp.first_name as manager_first_name'
-			, 'hp.surname as manager_surname'
-			, 'leave_profile.name as profile_name')
-			->leftJoin('hr_positions', 'hr_people.position', '=', 'hr_positions.id')
-			->leftJoin('leave_profile', 'hr_people.leave_profile', '=', 'leave_profile.id')
-			->leftJoin('hr_people as hp', 'hp.manager_id', '=', 'hr_people.id')
-			->where('hr_people.status', $status)
-			->where(function ($query) use($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5){
-            if ($divLevel1 > 0) $query->where('hr_people.division_level_1', $divLevel1);
-            if ($divLevel2 > 0) $query->where('hr_people.division_level_2', $divLevel2);
-            if ($divLevel3 > 0) $query->where('hr_people.division_level_3', $divLevel3);
-            if ($divLevel4 > 0) $query->where('hr_people.division_level_4', $divLevel4);
-            if ($divLevel5 > 0) $query->where('hr_people.division_level_5', $divLevel5);
-			})->where(function ($query) use($hrPersonID){
-				if (!empty($hrPersonID)) {
-					$query->where('hr_people.id',$hrPersonID);
-				}
-			})
-			->orderBy('hr_people.first_name', 'asc')
-			->orderBy('hr_people.surname', 'asc')
-			->get();
-		
-		$data['employees'] = $employees;
-        
-		$data['page_title'] = "Users List";
-        $data['page_description'] = "Admin page to manage users access";
-        $data['breadcrumb'] = [
-            ['title' => 'Security', 'path' => '/users/reports', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'Users Access', 'active' => 1, 'is_module' => 0]
-        ];
-        $data['active_mod'] = 'Security';
-        $data['active_rib'] = 'Reports';
-
-        $companyDetails = CompanyIdentity::systemSettings();
-        $companyName = $companyDetails['company_name'];
-        $user = Auth::user()->load('person');
-
-        $data['support_email'] = $companyDetails['support_email'];
-        $data['company_name'] = $companyName;
-        $data['full_company_name'] = $companyDetails['full_company_name'];
-        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['date'] = date("d-m-Y");
-        $data['user'] = $user;
-
-        AuditReportsController::store('Fleet Management', 'Fleet Management Search Page Accessed', "Accessed By User", 0);
-        return view('security.users_date_joined_report_print')->with($data);
-    }
 
 	public function usersApproval() {
 		

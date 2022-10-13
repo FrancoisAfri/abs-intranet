@@ -18,7 +18,7 @@
                 <form name="users-report-form" class="form-horizontal" method="POST" action="">
                     {{ csrf_field() }}
                     <div class="box-header with-border">
-                        <h3 class="box-title">Users Reports</h3>
+                        <h3 class="box-title">Reports Criteria</h3>
                         <div class="box-tools pull-right">
                             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
                             <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>

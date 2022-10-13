@@ -333,8 +333,6 @@ class DashboardController extends Controller
             $data['helpdeskTickets'] = $helpdeskTickets;
             $data['tickets'] = $tickets;
             $data['statusLabels'] = $statusLabels;
-
-            $data['leaveStatusNames'] = LeaveApplicationController::status();
             $data['onLeaveThisMonth'] = $onLeaveThisMonth;
             $data['user'] = $user;
             $data['totNumEmp'] = $totNumEmp;

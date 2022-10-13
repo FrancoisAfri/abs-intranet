@@ -260,7 +260,7 @@
                 var formName = 'cancel-leave-application-form';
                 var modalID = 'cancel-leave-application-modal';
                 var submitBtnID = 'cancel-leave-application';
-                var redirectUrl = '/';
+                var redirectUrl = '{{$routeUser}}';
                 var successMsgTitle = 'Leave Application Cancelled!';
                 var successMsg = 'Your leave application has been cancelled!';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);

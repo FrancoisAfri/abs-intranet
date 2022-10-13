@@ -15,6 +15,12 @@ class CreateManualClockinsTable extends Migration
     {
         Schema::create('manual_clockins', function (Blueprint $table) {
             $table->increments('id');
+			$table->uuid('uuid')->index();
+			$table->integer('ip_address')->nullable();
+			$table->integer('hr_id')->nullable();
+			$table->integer('clockin_type')->nullable();
+			$table->bigInteger('clockin_time')->nullable();
+			$table->string('location')->nullable();
             $table->timestamps();
         });
     }
