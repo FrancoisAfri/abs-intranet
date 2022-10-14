@@ -76,7 +76,6 @@
                             <thead>
                             <tr>
                                 <th style="width: 5px; text-align: center;">Asset Name</th>
-
                                 <th style="width: 5px; text-align: center;">Asset Image</th>
                                 <th style="width: 5px; text-align: center;">Transaction Date</th>
                                 <th style="width: 5px; text-align: center;">Transfer Date</th>

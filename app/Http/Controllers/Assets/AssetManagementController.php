@@ -101,6 +101,19 @@ class AssetManagementController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'serial_number' => 'required|string|max:255',
+            'asset_tag' => 'required|string|max:255',
+            'model_number' => 'required|string|max:255',
+            'make_number' => 'required|string|max:255',
+            'price' => 'required',
+            'asset_type_id' => 'required',
+            'path' => 'picture',
+        ]);
+
+
         $asset = Assets::create($request->all());
 
         AssetTransfers::create(

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\HRPerson;
 use App\Traits\Uuids;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\Collection;
@@ -70,6 +71,11 @@ class Assets extends Model
     public function AssetType(): BelongsTo
     {
         return $this->belongsTo(AssetType::class, 'asset_type_id')->orderBy('id');
+    }
+
+    public function HrPeople(): BelongsTo
+    {
+        return $this->belongsTo(HRPerson::class, 'user_id')->orderBy('id');
     }
 
     /**

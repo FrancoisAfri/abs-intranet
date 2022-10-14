@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\CompanyIdentity;
 use App\Http\Controllers\LeaveApplicationController;
 use App\Http\Controllers\LeaveHistoryAuditController;
 use App\Http\Controllers\UsersController;
@@ -9,6 +10,8 @@ use App\HRPerson;
 use App\leave_application;
 use App\leave_configuration;
 use App\leave_credit;
+use App\leave_history;
+use App\Mail\sendManagersListOfAbsentUsersToday;
 use App\Mail\remindUserToapplyLeave;
 use App\Mail\sendManagersListOfAbsentUsers;
 use App\Models\ErsAbsentUsers;
@@ -307,6 +310,7 @@ class ReadErsDetails
     /**
      * @return void
      * @throws GuzzleException
+     * @throws \Throwable
      */
     public function sendAbsentUsersToManagers()
     {
@@ -328,27 +332,31 @@ class ReadErsDetails
                 $details = HRPerson::getUserDetails($absentUser);
 
                 $AbsentUsersColl[] = ([
-                    'Employee Number' => $details['employee_number'],
-                    'Name' => $details['first_name'],
-                    'Surname' => $details['surname'],
-                    'Email' => $details['email'],
+                    'employee_number' => $details['employee_number'],
+                    'name' => $details['first_name'],
+                    'surname' => $details['surname'],
+                    'email' => $details['email'],
                 ]);
             }
         }
 
+        $credit =  leave_history::getLeaveBalance();
+        //dd($AbsentUsersColl);
         // Excel Doc
-        $file = $this->createExcelDoc($AbsentUsersColl);
+        //$file = $this->createExcelDoc($AbsentUsersColl);
+        $file = $this->viewBalance($AbsentUsersColl);
 
         foreach ($users as $managers) {
-            
+
             $managersDet = HRPerson::getManagerDetails($managers->hr_id);
 
             try {
-                Mail::to($managersDet['email'])->send(
-                    new sendManagersListOfAbsentUsers(
-                        $managersDet['first_name']
-                        , $file, $date_now
-                    ));
+//                Mail::to($managersDet['email'])->send(
+//                    new sendManagersListOfAbsentUsers(
+//                        $managersDet['first_name']
+//                        , $file, $date_now
+//                    ));
+                Mail::to($managersDet['email'])->send(new sendManagersListOfAbsentUsersToday($managersDet['first_name'], $file));
             } catch (\Exception $e) {
                 echo 'Error - ' . $e;
             }
@@ -357,17 +365,34 @@ class ReadErsDetails
     }
 
     /**
-     * @param $AbsentUsersColl
      * @return mixed
+     * @throws \Throwable
      */
-    private function createExcelDoc($AbsentUsersColl)
+    public function viewBalance($credit)
     {
-        return Excel::create('Absent Users', function ($excel) use ($AbsentUsersColl) {
-            $excel->sheet('Shortname', function ($sheet) use ($AbsentUsersColl) {
-                $sheet->fromArray($AbsentUsersColl, null, 'A1');
-            });
 
-        });
+
+        $date_now = Carbon::now()->toDayDateTimeString();
+
+        $companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+
+        $data['date'] = $date_now;
+        $data['credit'] = $credit;
+        $data['file_name'] = 'LeaveApplication';
+//        $view = view('leave.reports.leave_balance', $data)->render();
+       $view = view('Employees.Report.listOfAbsentUsers', $data)->render();
+
+        $pdf = resolve('dompdf.wrapper');
+        $pdf->getDomPDF()->set_option('enable_html5_parser', true);
+        $pdf->loadHTML($view);
+        return $pdf->output();
 
     }
+
 }

@@ -97,7 +97,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                          {{ (!empty($employee->second_manager_first_name . ''. $employee->second_manager_surname)) ? $employee->second_manager_first_name . ''. $employee->second_manager_surname : '' }}
+                            {{ (!empty($employee->second_manager_first_name . ''. $employee->second_manager_surname)) ? $employee->second_manager_first_name . ''. $employee->second_manager_surname : '' }}
                         </div>
 
                     </td>
@@ -116,7 +116,7 @@
                         </span>
                     </td>
                 </tr>
-				<tr>
+                <tr>
                     <td>
                         <div class="d-flex align-items-center">
                             <strong>
@@ -125,7 +125,7 @@
                         </div>
                     </td>
                     <td>
-                         {{ (!empty( $employee->date_left)) ?  date(' d M Y', $employee->date_left) : ''}}
+                        {{ (!empty( $employee->date_left)) ?  date(' d M Y', $employee->date_left) : ''}}
                     </td>
                 </tr>
 
@@ -136,8 +136,4 @@
 </div>
 
 
-<div class="col-lg-6 col-sm-6">
-    <br>
-    <br>
 
-</div>
