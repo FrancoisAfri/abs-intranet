@@ -76,9 +76,7 @@
                             @include('Employees.Tabs.leave-tab')
                         </div>
 
-                        <div class="tab-pane" id="assets">
-                            @include('Employees.Tabs.asets-tab')
-                        </div>
+
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="drive">
                             @include('Employees.Tabs.documents-tab')
