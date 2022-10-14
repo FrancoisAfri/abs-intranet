@@ -33,6 +33,8 @@
 						<input type="hidden" name="clockin" value="1">
 						<button type="submit" class="btn btn-primary pull-right"> CLOCK IN</button>
 					@endif
+
+                        <input type="hidden" name="location" value="1">
                     </div>
                     <!-- /.box-footer -->
                 </form>

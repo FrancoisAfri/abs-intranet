@@ -13,7 +13,7 @@ use App\leave_credit;
 use App\leave_history;
 use App\Mail\escalateleaveApplication;
 use App\Mail\LeaveBalanceReminder;
-use App\Mail\leaveBalanceReport;
+use App\Mail\sendManagersListOfAbsentUsersToday;
 use App\Mail\managerReminder;
 use App\Mail\remindUserToapplyLeave;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -206,7 +206,7 @@ class SendLeaveBalanceToUsers extends Controller
         $leaveAttachment = $this->viewBalance();
 
         try {
-            Mail::to($userDetails->email)->send(new leaveBalanceReport($userDetails->email, $leaveAttachment));
+            Mail::to($userDetails->email)->send(new sendManagersListOfAbsentUsersToday($userDetails->email, $leaveAttachment));
             echo 'Mail send successfully';
         } catch (\Exception $e) {
             echo 'Error - ' . $e;
