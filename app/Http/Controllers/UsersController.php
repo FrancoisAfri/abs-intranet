@@ -442,6 +442,7 @@ class UsersController extends Controller
     }
 
     public function profile() {
+		
         $user = Auth::user()->load('person');
         $avatar = $user->person->profile_pic;
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
