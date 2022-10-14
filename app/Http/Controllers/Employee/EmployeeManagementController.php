@@ -8,8 +8,6 @@ use App\EmployeeTasks;
 use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Controllers\LeaveApplicationController;
-use App\Models\Assets;
-use App\Models\AssetTransfers;
 use App\Models\StoreRoom;
 use App\Models\Video;
 use App\modules;
@@ -42,14 +40,14 @@ class EmployeeManagementController extends Controller
      */
     public function index(Request $request)
     {
-
+		
         if (!empty($request['status_id'])) {
             $status = 1;
         } else
             $status = $request['status_id'];
 
         $employee = HRPerson::getAllEmployeesByStatus($status, 0, 'get');
-
+		$employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
         $data = $this->breadCrump(
             "Employee Records",
             "Search", "fa fa-lock",
@@ -62,12 +60,44 @@ class EmployeeManagementController extends Controller
 
         $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
-
-        $data['m_silhouette'] = $m_silhouette;
+		
+		$data['m_silhouette'] = $m_silhouette;
         $data['f_silhouette'] = $f_silhouette;
+        $data['employees'] = $employees;
         $data['employee'] = $employee;
 
         return view('Employees.employee_management')->with($data);
+    }
+	// clockin Report
+	public function clockinReports(Request $request)
+    {
+		//Inputs
+		$employeID = !empty($request['employee_number']) ? $request['employee_number']  : 0;
+		$date = !empty($request['action_date']) ? $request['action_date']  : 0;
+		$clocktypes = !empty($request['clockin_type']) ? $request['clockin_type']  : 0;
+		$employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
+		// get data
+        $clockins = ManualClockin::getAllattendance($clocktypes,$employeID,$date );
+		//return $clockins;
+        $data = $this->breadCrump(
+            "Employee Records",
+            "Clockin Report", "fa fa-lock",
+            "Employee",
+            "Clockin Report",
+            "employee/clockin_report",
+            "Employee Management",
+            "Employee Management"
+        );
+
+        $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+
+        $data['m_silhouette'] = $m_silhouette;
+        $data['f_silhouette'] = $f_silhouette;
+        $data['clockins'] = $clockins;
+        $data['employees'] = $employees;
+
+        return view('Employees.clockin_report')->with($data);
     }
 
     /**
@@ -77,10 +107,12 @@ class EmployeeManagementController extends Controller
      */
     public function clockin()
     {
-        // get user details
-        $user = Auth::user()->load('person');
-        // check if user clockin
-        $clockin = ManualClockin::checkClockin($user->person->employee_number);
+		// get user details
+		$user = Auth::user()->load('person');
+		// check if user clockin
+		$clockin = ManualClockin::checkClockin($user->person->employee_number);
+		$clockout = ManualClockin::checkClockout($user->person->employee_number);
+
         $data = $this->breadCrump(
             "Employee Records",
             "Clockin", "fa fa-lock",
@@ -91,6 +123,7 @@ class EmployeeManagementController extends Controller
             "Employee Management"
         );
 
+        $data['clockout'] = $clockout;
         $data['clockin'] = $clockin;
         $data['user'] = $user;
 
@@ -105,19 +138,19 @@ class EmployeeManagementController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        // get user details
-        $user = Auth::user()->load('person');
-        $status = !empty($request['clockin']) ? 1 : 2;
-        ManualClockin::create([
-            'ip_addresss' => 'ddddd',
-            'hr_id' => $user->person->id,
-            'clockin_type' => $status,
-            'clockin_time' => strtotime(date('Y-m-d H:i:s')),
-            'location' => 'ddddd',
-            'employee_number' => $user->person->employee_number
-        ]);
-
-        return redirect()->route('employee.clockin')->with('status', 'Clockin Saved!');
+		// get user details
+		$user = Auth::user()->load('person');
+		$status = !empty($request['clockin']) ? 1 : 2 ;
+		ManualClockin::create([
+                'ip_addresss' => 'ddddd',
+                'hr_id' => $user->person->id,
+                'clockin_type' => $status,
+                'clockin_time' => strtotime(date('Y-m-d H:i:s')),
+                'location' => 'ddddd',
+                'employee_number' => $user->person->employee_number
+            ]);
+		
+		return redirect()->route('employee.clockin')->with('status', 'Clockin Saved!');
     }
 
     /**
@@ -130,36 +163,22 @@ class EmployeeManagementController extends Controller
         $slugs = explode("-", str_replace('_', ' ', $id));
 
         $employee = HRPerson::getAllEmployeesByStatus($status = 1, $slugs[1], 'first');
-        //chexk user right
-        $userLog = Auth::user()->load('person');
-        $objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();
-        if ($objModAccess && count($objModAccess) > 0)
-            $modAccess = $objModAccess->first()->access_level;
-        else
-            $modAccess = 0;
-
+		//chexk user right
+		$userLog = Auth::user()->load('person');
+		$objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();
+		if ($objModAccess && count($objModAccess) > 0)
+			$modAccess = $objModAccess->first()->access_level;
+		else
+			$modAccess = 0;
+		
+		$divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
+        $divLevel2 = (!empty($employee['division_level_2'])) ? $employee['division_level_2'] : 0;
+        $divLevel3 = (!empty($employee['division_level_3'])) ? $employee['division_level_3'] : 0;
+        $divLevel4 = (!empty($employee['division_level_4'])) ? $employee['division_level_4'] : 0;
+        $divLevel5 = (!empty($employee['division_level_5'])) ? $employee['division_level_5'] : 0;
 
         $userID = User::where('id', $slugs[1])->first();
         $user = $userID->load('person');
-
-
-        $assetTransfer = AssetTransfers::with(
-            'AssetTransfers',
-            'AssetImages',
-            'HrPeople',
-            'store')
-            //->where('id', 2)
-//            ->where(
-//                'AssetTransfers.user_id',
-//                $slugs[1]
-//            )
-            ->orderBy('id',
-                'asc'
-            )->get();
-        //dd($myAssets);
-
-
-
 
 
         $divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
@@ -213,21 +232,22 @@ class EmployeeManagementController extends Controller
 
 
         $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
-
-        // task list
-        $tasks = EmployeeTasks::
-        select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
-            , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
-            , 'employee_tasks.order_no', 'employee_tasks.status', 'employee_tasks.due_date'
-            , 'employee_tasks.id as task_id', 'contact_companies.name as client_name'
-            , 'employee_tasks.duration', 'employee_tasks.date_paused'
-            , 'employee_tasks.date_started', 'employee_tasks.document_on_task')
-            ->leftJoin('contact_companies', 'employee_tasks.client_id', '=', 'contact_companies.id')
-            ->where('employee_tasks.employee_id', $employee->id)
-            ->where('employee_tasks.status', '<', 4)
-            ->orderBy('client_name')
-            ->orderBy('employee_tasks.order_no')
-            ->get();
+		
+		// task list
+		$tasks = EmployeeTasks::
+            select('employee_tasks.description', 'employee_tasks.start_date', 'employee_tasks.manager_duration'
+                , 'employee_tasks.employee_id', 'employee_tasks.upload_required'
+                , 'employee_tasks.order_no', 'employee_tasks.status', 'employee_tasks.due_date'
+                , 'employee_tasks.id as task_id', 'contact_companies.name as client_name'
+				, 'employee_tasks.duration', 'employee_tasks.date_paused'
+				, 'employee_tasks.date_started', 'employee_tasks.document_on_task')
+                ->leftJoin('contact_companies', 'employee_tasks.client_id', '=', 'contact_companies.id')
+                ->where('employee_tasks.employee_id', $employee->id)
+                ->where('employee_tasks.status', '<', 4)
+                ->orderBy('client_name')
+                ->orderBy('employee_tasks.order_no')
+                ->get();
+				
 
 
         $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
@@ -239,74 +259,77 @@ class EmployeeManagementController extends Controller
         $leave_profile = DB::table('leave_profile')->orderBy('name', 'asc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
 
-        $positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
+		$positions = DB::table('hr_positions')->where('status', 1)->orderBy('name', 'asc')->get();
         $division_levels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $routeUser = str_replace(' ', '_', strtolower($employee->first_name)) . '-' . $employee->id . '-' . str_replace(' ', '_', strtolower($employee->surname));
-        /// leave code
-        #leave Balance
-        /**
-         *
-         */
-        $balances = DB::table('leave_credit')
-            ->select('leave_credit.*', 'leave_types.name as leavetype')
-            ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
-            ->where('leave_credit.hr_id', $employee->id)
-            ->orderBy('leave_types.name')
-            ->get();
+		$routeUser = str_replace(' ', '_', strtolower($employee->first_name) ).'-'.$employee->id.'-'.str_replace(' ', '_', strtolower($employee->surname));
+		/// leave code
+		 #leave Balance
+            /**
+             *
+             */
+		$balances = DB::table('leave_credit')
+			->select('leave_credit.*', 'leave_types.name as leavetype')
+			->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
+			->where('leave_credit.hr_id', $employee->id)
+			->orderBy('leave_types.name')
+			->get();
 
-        #leave Application
-        $application = DB::table('leave_application')
-            ->select('leave_application.*', 'leave_types.name as leavetype')
-            ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
-            ->where('leave_application.hr_id', $employee->id)
-            ->orderBy('leave_application.id', 'desc')
-            ->limit(15)
-            ->get();
-        // get surbodinates leave balances
-        $surbodinateArray = array();
+		#leave Application
+		$application = DB::table('leave_application')
+			->select('leave_application.*', 'leave_types.name as leavetype')
+			->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
+			->where('leave_application.hr_id', $employee->id)
+			->orderBy('leave_application.id', 'desc')
+			->limit(15)
+			->get();
+		// get surbodinates leave balances
+		$surbodinateArray = array();
+		
+		$surbs = HRPerson::where('status', 1)->where('manager_id', $employee->id)->first();
+		$surbodinates = HRPerson::where('status', 1)->where('manager_id', $employee->id)->pluck('id');
+		if (!empty($surbodinates))
+		{
+			foreach ($surbodinates as $surbodinate) 
+			{
+				$surbodinateArray[] = $surbodinate;
+			}
 
-        $surbs = HRPerson::where('status', 1)->where('manager_id', $employee->id)->first();
-        $surbodinates = HRPerson::where('status', 1)->where('manager_id', $employee->id)->pluck('id');
-        if (!empty($surbodinates)) {
-            foreach ($surbodinates as $surbodinate) {
-                $surbodinateArray[] = $surbodinate;
-            }
-
-            $surbodinateBalances = DB::table('leave_credit')
-                ->select('leave_credit.*', 'leave_types.name as leave_types'
-                    , 'hr_people.first_name as hr_first_name', 'hr_people.surname as hr_surname'
-                    , 'hr_people.employee_number as hr_employee_number')
-                ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
-                ->leftJoin('hr_people', 'leave_credit.hr_id', '=', 'hr_people.id')
-                ->whereIn('leave_credit.hr_id', $surbodinateArray)
-                ->orderBy('hr_people.first_name')
-                ->orderBy('hr_people.surname')
-                ->orderBy('leave_types.name')
-                ->get();
-        }
-        // get active modules
-        $activeModules = modules::where('active', 1)->get();
-        // get document
-        $documents = employee_documents::orderby('doc_description', 'asc')->where('hr_person_id', $employee->id)->get();
-        if (!empty($documents)) $documents = $documents->load('documentType');
-        $types = doc_type::where('active', 1)->orderBy('name', 'asc')->get();
-
-        $data['leaveStatusNames'] = LeaveApplicationController::status();
-        $data['documents'] = $documents;
-        $data['activeModules'] = $activeModules;
-        $data['surbs'] = $surbs;
-        $data['surbodinates'] = $surbodinates;
-        if (!empty($surbodinates))
-            $data['surbodinateBalances'] = $surbodinateBalances;
-        $data['balances'] = $balances;
-        $data['types'] = $types;
+			$surbodinateBalances = DB::table('leave_credit')
+				->select('leave_credit.*', 'leave_types.name as leave_types'
+				,'hr_people.first_name as hr_first_name', 'hr_people.surname as hr_surname'
+				, 'hr_people.employee_number as hr_employee_number')
+				->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
+				->leftJoin('hr_people', 'leave_credit.hr_id', '=', 'hr_people.id')
+				->whereIn('leave_credit.hr_id', $surbodinateArray)
+				->orderBy('hr_people.first_name')
+				->orderBy('hr_people.surname')
+				->orderBy('leave_types.name')
+				->get();
+		}
+		// get active modules
+		$activeModules = modules::where('active', 1)->get();
+		// get document 
+		$documents = employee_documents::orderby('doc_description', 'asc')->where('hr_person_id', $employee->id)->get();
+		if (!empty($documents)) $documents = $documents->load('documentType');
+		$types = doc_type::where('active', 1)->orderBy('name', 'asc')->get();
+		
+		$data['leaveStatusNames'] = LeaveApplicationController::status();
+		$data['documents'] = $documents;
+		$data['activeModules'] = $activeModules;
+		$data['surbs'] = $surbs;
+		$data['surbodinates'] = $surbodinates;
+		if (!empty($surbodinates))
+			$data['surbodinateBalances'] = $surbodinateBalances;
+		$data['balances'] = $balances;
+		$data['types'] = $types;
         $data['application'] = $application;
         $data['routeUser'] = $routeUser;
         $data['modAccess'] = $modAccess;
         $data['taskStatus'] = $taskStatus;
         $data['marital_statuses'] = $marital_statuses;
         $data['ethnicities'] = $ethnicities;
-        $data['assetTransfer'] = $assetTransfer;
+        $data['specific'] = $specificVids;
+        $data['general'] = $generalVids;				  
         $data['specific'] = $specificVids;
         $data['general'] = $generalVids;
         $data['user'] = $user;
@@ -317,7 +340,7 @@ class EmployeeManagementController extends Controller
         $data['view_by_admin'] = 1;
         $data['division_levels'] = $division_levels;
         $data['videos'] = $videos;
-        $data['tasks'] = $tasks;
+		$data['tasks'] = $tasks;
         $data['leaveProfiles'] = $leaveProfiles;
         $data['m_silhouette'] = $m_silhouette;
         $data['f_silhouette'] = $f_silhouette;
@@ -338,15 +361,19 @@ class EmployeeManagementController extends Controller
 
         $contactsEmpdocs = $request->all();
         unset($contactsEmpdocs['_token']);
-        if (!empty($contactsEmpdocs['date_from'])) {
-            $Datefrom = $contactsEmpdocs['date_from'] = str_replace('/', '-', $contactsEmpdocs['date_from']);
-            $Datefrom = $contactsEmpdocs['date_from'] = strtotime($contactsEmpdocs['date_from']);
-        } else $Datefrom = 0;
-        if (!empty($contactsEmpdocs['expirydate'])) {
-            $Expirydate = $contactsEmpdocs['expirydate'] = str_replace('/', '-', $contactsEmpdocs['expirydate']);
-            $Expirydate = $contactsEmpdocs['expirydate'] = strtotime($contactsEmpdocs['expirydate']);
-        } else $Expirydate = 0;
-
+		if (!empty($contactsEmpdocs['date_from']))
+		{
+			$Datefrom = $contactsEmpdocs['date_from'] = str_replace('/', '-', $contactsEmpdocs['date_from']);
+			$Datefrom = $contactsEmpdocs['date_from'] = strtotime($contactsEmpdocs['date_from']);
+		}
+		else $Datefrom = 0;
+		if (!empty($contactsEmpdocs['expirydate']))
+		{
+			$Expirydate = $contactsEmpdocs['expirydate'] = str_replace('/', '-', $contactsEmpdocs['expirydate']);
+			$Expirydate = $contactsEmpdocs['expirydate'] = strtotime($contactsEmpdocs['expirydate']);
+		}
+		else $Expirydate = 0;
+		
         $employeeDoc = new employee_documents();
         $employeeDoc->doc_description = $contactsEmpdocs['doc_description'];
         $employeeDoc->date_from = $Datefrom;
@@ -354,12 +381,12 @@ class EmployeeManagementController extends Controller
         $employeeDoc->hr_person_id = $contactsEmpdocs['hr_person_id'];
         $employeeDoc->doc_type_id = $contactsEmpdocs['doc_type_id'];
         $employeeDoc->save();
-        $employee = HRPerson::find($contactsEmpdocs['hr_person_id']);
-        //Upload supporting document
+		$employee = HRPerson::find($contactsEmpdocs['hr_person_id']);
+		//Upload supporting document
         if ($request->hasFile('supporting_docs')) {
             $fileExt = $request->file('supporting_docs')->extension();
             if (in_array($fileExt, ['pdf', 'docx', 'doc']) && $request->file('supporting_docs')->isValid()) {
-                $fileName = time() . "_employee_documents." . $fileExt;
+                $fileName = time(). "_employee_documents." . $fileExt;
                 $request->file('supporting_docs')->storeAs('Employee/documents', $fileName);
                 //Update file name in the table
                 $employeeDoc->supporting_docs = $fileName;
@@ -368,14 +395,14 @@ class EmployeeManagementController extends Controller
         }
         AuditReportsController::store('Contacts', 'Company Document Added', "Company Document added , Document Name: $contactsEmpdocs[doc_description], 
 		Document description: $contactsEmpdocs[doc_description], Document expiry date: $Expirydate ,  Name : $employee->first_name $employee->surname", 0);
-        return response()->json();
+		return response()->json();
     }
-
-    // edit employee doc
+	
+	// edit employee doc
     public function editdoc(Request $request, employee_documents $doc)
     {
         $this->validate($request, [
-            'description_update' => 'required',
+			 'description_update' => 'required',
 //            'name' => 'required|unique:contactsEmpdocs,name',
 //            'exp_date' => 'required',
             'doc_type_update' => 'required',
@@ -390,7 +417,7 @@ class EmployeeManagementController extends Controller
         $Expirydatet = $contactsEmpdocs['expirydate'] = str_replace('/', '-', $contactsEmpdocs['expirydate']);
         $Expirydate = $contactsEmpdocs['expirydate'] = str_replace('/', '-', $contactsEmpdocs['expirydate']);
         $Expirydate = $contactsEmpdocs['expirydate'] = strtotime($contactsEmpdocs['expirydate']);
-        // update database
+		// update database
         $doc->doc_description = $contactsEmpdocs['description_update'];
         $doc->date_from = $Datefrom;
         $doc->expirydate = $Expirydate;
@@ -408,14 +435,13 @@ class EmployeeManagementController extends Controller
                 $doc->update();
             }
         }
-        $employee = HRPerson::find($doc->hr_person_id);
+		$employee = HRPerson::find($doc->hr_person_id);
 
         AuditReportsController::store('Contacts', 'Document Updated', "Company Document Updated,, 
 		Document description: $contactsEmpdocs[description_update], Document expiry date: $Expirydatet, Name : $employee->first_name $employee->surname ", 0);
         return response()->json();
     }
-
-    /**
+	/**
      * Show the form for editing the specified resource.
      *
      * @param int $id

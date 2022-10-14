@@ -14,7 +14,7 @@ class CreateAddEmployeeNumberToExemptionTable extends Migration
     public function up()
     {
         Schema::table('exempted_users', function ($table) {
-            $table->bigInteger('employee_number')->nullable();
+            $table->string('employee_number')->nullable();
 
         });
     }

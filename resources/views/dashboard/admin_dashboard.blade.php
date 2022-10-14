@@ -191,7 +191,7 @@
             @endif
 		@endif
 		@if($activeModules->where('code_name', 'leave')->first())
-			<div class="col-md-12 box box-default collapsed-box">
+			<div class="col-md-6 box box-default">
 				<div class="box-header">
 					<h3 class="box-title"><i class="fa fa-hourglass"></i> People On Leave This Month</h3>
 					<div class="box-tools pull-right">
@@ -239,7 +239,7 @@
             </div>
 		@endif
 		@if($activeModules->whereIn('code_name', 'security')->first())
-            <div class="col-md-12 box box-default collapsed-box">
+            <div class="col-md-6 box box-default collapsed-box">
 				<div class="box-header">
 					<h3 class="box-title"><i class="fa fa-hourglass"></i> Staff Anniversary</h3>
 					<div class="box-tools pull-right">
@@ -284,7 +284,7 @@
 				<!-- /.box-footer -->
                 <!-- /Tasks List End -->
             </div>
-			<div class="col-md-12 box box-default collapsed-box">
+			<div class="col-md-6 box box-default collapsed-box">
 				<div class="box-header">
 					<h3 class="box-title"><i class="fa fa-hourglass"></i> Birthdays This Month</h3>
 					<div class="box-tools pull-right">
@@ -327,7 +327,7 @@
 		@endif
 		@if($activeModules->where('code_name', 'appraisal')->first())
 			@if($canViewEmpRankWidget)
-				<div class="col-md-12 box box-default collapsed-box"  id="empPerformanceRankingWidgetBox">
+				<div class="col-md-6 box box-default collapsed-box"  id="empPerformanceRankingWidgetBox">
 					<div class="box-header">
 						<h3 class="box-title"><i class="fa fa-hourglass"></i> Employees Ranking</h3>
 						<div class="box-tools pull-right">
@@ -394,7 +394,7 @@
 			@endif
 		@endif
 		@if($activeModules->where('code_name', 'appraisal')->first())
-            <div class="col-md-12 box box-default collapsed-box">
+            <div class="col-md-6 box box-default collapsed-box">
 				<div class="box-header">
 					<h3 class="box-title"><i class="fa fa-hourglass"></i> Available Perks</h3>
 					<div class="box-tools pull-right">
@@ -418,7 +418,7 @@
             </div>
 		@endif
 		@if($activeModules->where('code_name', 'induction')->first())
-            <div class="col-md-12 box box-default collapsed-box">
+            <div class="col-md-6 box box-default">
 				<div class="box-header">
 					<h3 class="box-title"><i class="fa fa-hourglass"></i> Induction</h3>
 					<div class="box-tools pull-right">

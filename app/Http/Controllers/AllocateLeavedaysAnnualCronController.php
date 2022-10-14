@@ -62,7 +62,7 @@ class AllocateLeavedaysAnnualCronController extends Controller {
 							->where('leave_profile_id', $proId)
 							->first();
 		
-					if (count($minimum) > 0) {
+					if (!empty($minimum)) {
 						if (!empty($minimum->min))
 							$days = ($minimum->min / 12) * 8;
 						if (!empty($minimum->max))
@@ -78,7 +78,7 @@ class AllocateLeavedaysAnnualCronController extends Controller {
 						->first();
 					
 
-					if (count($credits) > 0)
+					if (!empty($credits))
 					{
 						$previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
 						$currentBalance =  $previousBalance + $days;

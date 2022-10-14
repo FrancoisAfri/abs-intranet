@@ -125,6 +125,9 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 
     Route::get('/', 'EmployeeManagementController@index')
         ->name('employee.index');
+	
+	Route::get('clockin_report', 'EmployeeManagementController@clockinReports')
+        ->name('employee.clockin_report');
 		
 	Route::get('clockin', 'EmployeeManagementController@clockin')
         ->name('employee.clockin');

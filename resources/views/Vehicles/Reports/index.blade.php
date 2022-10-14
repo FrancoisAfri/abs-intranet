@@ -78,9 +78,6 @@
     <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
     <!-- optionally if you need translation for your language then include locale file as mentioned below
     <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
-    <!-- End Bootstrap File input -->
-
-    <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 

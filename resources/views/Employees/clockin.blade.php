@@ -16,19 +16,39 @@
                     {{ csrf_field() }}
                     <div class="box-body">
                         @if (!empty($clockin))
-							<div>
-								<label for="clockin" class="col-sm-3 control-label">CLOCK IN</label>
-								<div>
-									{{$clockin->created_at}}
-								</div>
+							<div class="form-group">
+								<label for="clockin" class="col-sm-2 control-label">CLOCK IN</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-unlock-alt"></i>
+										</div>
+										{{$clockin->created_at}}
+									</div>
+								</div>		
+							</div>
+						@endif 
+						@if (!empty($clockout))
+							<div class="form-group">
+								<label for="clockin" class="col-sm-2 control-label">CLOCK OUT</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-unlock-alt"></i>
+										</div>
+										{{$clockout->created_at}}
+									</div>
+								</div>		
 							</div>
 						@endif
                     </div>
                     <!-- /.box-body -->
                     <div class="box-footer">
 					@if (!empty($clockin))
-						<input type="hidden" name="clockout" value="1">
-                        <button type="submit" class="btn btn-primary pull-right"> CLOCK OUT</button>
+						@if (empty($clockout))
+							<input type="hidden" name="clockout" value="2">
+							<button type="submit" class="btn btn-primary pull-right"> CLOCK OUT</button>
+						@endif
 					@else
 						<input type="hidden" name="clockin" value="1">
 						<button type="submit" class="btn btn-primary pull-right"> CLOCK IN</button>

@@ -97,6 +97,23 @@ class HRPerson extends Model
     {
         return $this->belongsTo(HRRoles::class, 'role_id');
     }
+		//Relationship hr person and province
+    public function province()
+    {
+        return $this->belongsTo(Province::class, 'res_province_id');
+    }
+	
+		//Relationship hr person and province
+    public function division()
+    {
+        return $this->belongsTo(DivisionLevelFive::class, 'division_level_5');
+    }	
+	
+	//Relationship hr person and province
+    public function department()
+    {
+        return $this->belongsTo(DivisionLevelFour::class, 'division_level_4');
+    }
 
     //Relationship hr person and 360 person
     public function threeSixtyPeople()
@@ -213,8 +230,6 @@ class HRPerson extends Model
             'hr_people.*',
             'hp.first_name as manager_first_name',
             'hp.surname as manager_surname',
-//            'hpm.first_name as second_manager_first_name',
-//            'hpm.first_name as second_manager_surname',
             'd4.name as department',
             'd5.name as division',
             'provinces.name as province'
@@ -239,12 +254,6 @@ class HRPerson extends Model
                 '=',
                 'hp.id'
             )
-//            ->leftJoin(
-//                'hr_people as hp',
-//                'hr_people.second_manager_id',
-//                '=',
-//                'hp.id'
-//            )
             ->leftJoin(
                 'provinces',
                 'hr_people.res_province_id',
@@ -264,7 +273,6 @@ class HRPerson extends Model
                 'd4.id'
             )
             ->with('jobTitle')
-            ->limit(50)
             ->$collector();
 
         return $query;

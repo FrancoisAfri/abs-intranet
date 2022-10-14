@@ -554,7 +554,7 @@ class QuotesController extends Controller
         //Get products
         $productIDs = $request->input('product_id');
         $products = [];
-        if (count($productIDs) > 0) {
+        if (!empty($productIDs)) {
             $products = product_products::whereIn('id', $productIDs)
                 ->with(['ProductPackages', 'productPrices' => function ($query) {
                     $query->orderBy('id', 'desc');
@@ -581,7 +581,7 @@ class QuotesController extends Controller
         //Get packages
         $packageIDs = $request->input('package_id');
         $packages = [];
-        if (count($packageIDs) > 0) {
+        if (!empty($packageIDs) > 0) {
             $packages = product_packages::whereIn('id', $packageIDs)
                 ->with(['products_type' => function ($query) {
                     $query->with(['productPrices' => function ($query) {

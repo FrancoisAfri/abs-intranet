@@ -16,6 +16,7 @@ use App\Mail\remindUserToapplyLeave;
 use App\Mail\sendManagersListOfAbsentUsers;
 use App\Models\ErsAbsentUsers;
 use App\Models\ExemptedUsers;
+use App\ManualClockin;
 use App\Models\ManagerReport;
 use Carbon\Carbon;
 use ErrorException;
@@ -133,6 +134,7 @@ class ReadErsDetails
         $Employees = HRPerson::getEmployeeNumber();
 
         $exemptedUsers = ExemptedUsers::getExemptedUsers();
+		$clockinUsers = ManualClockin::getclokinUsers();
 
         /**
          * remove duplicate records fromm the api response to get unique employee ids
@@ -145,7 +147,12 @@ class ReadErsDetails
          */
         $CollectionWithExemptedUsers = $Employees->diff($exemptedUsers);
 
-
+		/**
+         * We remove users who clocked In on the manual system
+         */
+		 
+		$CollectionWithExemptedUsers = $CollectionWithExemptedUsers->diff($clockinUsers); 
+		
         /**
          * Compare the employee records with exempted users to the api response
          * to get absent users for the day
@@ -156,7 +163,7 @@ class ReadErsDetails
     /**
      * @param $absentUsers
      * @param $date
-     * @param $date_from
+     * @param $date_from  schedule:sendAbsentUsersToManager
      * @return void
      */
     public function sendEmailToUser($absentUsers, $date, $date_from, $startDate, $endDate): void
