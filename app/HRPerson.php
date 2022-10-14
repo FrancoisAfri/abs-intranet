@@ -276,8 +276,48 @@ class HRPerson extends Model
             ->$collector();
 
         return $query;
-
-
     }
+	// get employee details
+	
+	public static function getEmployee($user)
+    {
 
+        $query = HRPerson::select(
+            'hr_people.*',
+            'hp.first_name as manager_first_name',
+            'hp.surname as manager_surname',
+            'd4.name as department',
+            'd5.name as division',
+            'provinces.name as province'
+        )
+            ->where('hr_people.id', $user)
+            ->leftJoin(
+                'hr_people as hp',
+                'hr_people.manager_id',
+                '=',
+                'hp.id'
+            )
+            ->leftJoin(
+                'provinces',
+                'hr_people.res_province_id',
+                '=',
+                'provinces.id'
+            )
+            ->leftJoin(
+                'division_level_fives as d5',
+                'hr_people.division_level_5',
+                '=',
+                'd5.id'
+            )
+            ->leftJoin(
+                'division_level_fours as d4',
+                'hr_people.division_level_4',
+                '=',
+                'd4.id'
+            )
+            ->with('jobTitle')
+            ->first();
+
+        return $query;
+    }
 }

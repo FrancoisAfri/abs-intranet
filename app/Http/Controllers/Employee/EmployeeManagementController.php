@@ -162,7 +162,7 @@ class EmployeeManagementController extends Controller
         $videos = Video::all();
         $slugs = explode("-", str_replace('_', ' ', $id));
 
-        $employee = HRPerson::getAllEmployeesByStatus($status = 1, $slugs[1], 'first');
+        $employee = HRPerson::getEmployee($slugs[1]);
 		//chexk user right
 		$userLog = Auth::user()->load('person');
 		$objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();
