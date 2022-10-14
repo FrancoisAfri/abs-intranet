@@ -62,8 +62,8 @@ class ManualClockin extends Model
 		else $actionFrom = $actionTo = 0;
 		// query
         $query = ManualClockin::with('user')
-            ->orderBy('clockin_type', 'asc')
-            ->orderBy('id', 'desc')
+            ->orderBy('clockin_time', 'desc')
+            ->orderBy('hr_id', 'asc')
 			->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('clockin_time', [$actionFrom, $actionTo]);
@@ -78,5 +78,13 @@ class ManualClockin extends Model
         $query->limit(2000);
         return $query->get();
 
+    }
+	// get user who clokin to remove cron job
+
+    public static function getclokinUsers()
+    {
+		return ManualClockin::where(['clockin_type' => 1])
+			->where('created_at', '>=', date('Y-m-d').' 00:00:00')
+            ->pluck('employee_number');
     }
 }

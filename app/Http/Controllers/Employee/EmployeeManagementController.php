@@ -112,6 +112,7 @@ class EmployeeManagementController extends Controller
 		// check if user clockin
 		$clockin = ManualClockin::checkClockin($user->person->employee_number);
 		$clockout = ManualClockin::checkClockout($user->person->employee_number);
+
         $data = $this->breadCrump(
             "Employee Records",
             "Clockin", "fa fa-lock",
@@ -349,7 +350,7 @@ class EmployeeManagementController extends Controller
         return view('Employees.view_User')->with($data);
     }
 
-     public function addDoc(Request $request)
+    public function addDoc(Request $request)
     {
         $this->validate($request, [
             'doc_description' => 'required',

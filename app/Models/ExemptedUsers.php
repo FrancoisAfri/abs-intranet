@@ -45,7 +45,8 @@ class ExemptedUsers extends Model
             )
             ->orderBy(
                 'exempted_users.id'
-            )->get();
+            )
+			->get();
 
     }
 }
