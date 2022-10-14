@@ -273,7 +273,6 @@ class HRPerson extends Model
                 'd4.id'
             )
             ->with('jobTitle')
-            ->limit(50)
             ->$collector();
 
         return $query;
