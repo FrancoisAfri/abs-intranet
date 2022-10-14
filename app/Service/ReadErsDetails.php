@@ -356,7 +356,7 @@ class ReadErsDetails
 //                        $managersDet['first_name']
 //                        , $file, $date_now
 //                    ));
-                Mail::to($managersDet->email)->send(new sendManagersListOfAbsentUsersToday($managersDet['first_name'], $file));
+                Mail::to($managersDet['email'])->send(new sendManagersListOfAbsentUsersToday($managersDet['first_name'], $file));
             } catch (\Exception $e) {
                 echo 'Error - ' . $e;
             }
@@ -364,15 +364,13 @@ class ReadErsDetails
 
     }
 
-
     /**
      * @return mixed
      * @throws \Throwable
      */
     public function viewBalance($credit)
     {
-      //  $credit =  leave_history::getLeaveBalance();
-       // dd($credit);
+
 
         $date_now = Carbon::now()->toDayDateTimeString();
 
@@ -397,46 +395,4 @@ class ReadErsDetails
 
     }
 
-
-    /**
-     * @return \Illuminate\Http\Response
-     * function to send reports to the head
-     * @return void
-     * @throws \Throwable
-     */
-    public function sendReport(): \Illuminate\Http\Response
-    {
-        //get the user selected on the settings
-        $userId = leave_configuration::pluck('hr_person_id')->first();
-        $userDetails = HRPerson::getManagerDetails($userId);
-        $fullname = $userDetails->firstname . ' ' . $userDetails->surname;
-
-        $leaveAttachment = $this->viewBalance();
-
-        try {
-            Mail::to($userDetails->email)->send(new sendManagersListOfAbsentUsersToday($userDetails->email, $leaveAttachment));
-            echo 'Mail send successfully';
-        } catch (\Exception $e) {
-            echo 'Error - ' . $e;
-        }
-
-    }
-
-
-
-
-    /**
-     * @param $AbsentUsersColl
-     * @return mixed
-     */
-    private function createExcelDoc($AbsentUsersColl)
-    {
-        return Excel::create('Absent Users', function ($excel) use ($AbsentUsersColl) {
-            $excel->sheet('Shortname', function ($sheet) use ($AbsentUsersColl) {
-                $sheet->fromArray($AbsentUsersColl, null, 'A1');
-            });
-
-        });
-
-    }
 }
