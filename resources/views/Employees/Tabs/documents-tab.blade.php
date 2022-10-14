@@ -21,9 +21,9 @@
 						</tr>
 						</thead>
 						<tbody>
-						@if (count($documents) > 0)
+						@if (!empty($documents))
 							<ul class="products-list product-list-in-box">
-								@foreach ($documents as $key => $video)
+								@foreach ($documents as $key => $doc)
 									<tr id="categories-list">
 
 										<td nowrap>

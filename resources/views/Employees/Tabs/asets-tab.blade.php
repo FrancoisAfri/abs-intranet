@@ -21,7 +21,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        @if (count($assetTransfer) > 0)
+                        @if (!empty($assetTransfer))
                             <ul class="products-list product-list-in-box">
                                 @foreach ($assetTransfer as $key => $assets)
                                     <tr id="categories-list">
