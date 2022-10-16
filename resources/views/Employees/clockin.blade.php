@@ -15,6 +15,7 @@
                 <form class="form-horizontal" method="POST" action="/employee/clockin/assign">
                     {{ csrf_field() }}
                     <div class="box-body">
+
                         @if (!empty($clockin))
 							<div class="form-group">
 								<label for="clockin" class="col-sm-2 control-label">CLOCK IN</label>
@@ -54,7 +55,8 @@
 						<button type="submit" class="btn btn-primary pull-right"> CLOCK IN</button>
 					@endif
 
-                        <input type="hidden" name="location" value="1">
+                        <input type="hidden" id="latitudes" name="latitudes" >
+                        <input type="hidden" id="longitudes" name="longitudes" >
                     </div>
                     <!-- /.box-footer -->
                 </form>
@@ -72,10 +74,27 @@
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
 
     <script type="text/javascript">
-        //Cancel button click event
-        document.getElementById("cancel").onclick = function () {
-            location.href = "/users";
-        };
+
+        let button = document.getElementById("get-location");
+        let latText = document.getElementById("latitude");
+        let longText = document.getElementById("longitude");
+        let vras =  'hfjhjf';
+
+       function getLocation(){
+           navigator.geolocation.getCurrentPosition((position) => {
+               let lat = position.coords.latitude;
+               let long = position.coords.longitude;
+
+               // latText.innerText = lat.toFixed(2);
+               // longText.innerText = long.toFixed(2);
+
+               document.getElementById("latitudes").value = lat;
+               document.getElementById("longitudes").value = long;
+           });
+       }
+        getLocation()
+
+
 
         //Phone mask
         $("[data-mask]").inputmask();

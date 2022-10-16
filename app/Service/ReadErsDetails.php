@@ -346,9 +346,18 @@ class ReadErsDetails
         //$file = $this->createExcelDoc($AbsentUsersColl);
         $file = $this->viewBalance($AbsentUsersColl);
 
+//        $file = Excel::create('myexcel', function($excel) use($AbsentUsersColl) {
+//
+//            $excel->sheet('Sheet 1', function($sheet) use($AbsentUsersColl) {
+//
+//                $sheet->fromArray($AbsentUsersColl);
+//            });
+//
+//        })->export('xls');
+
         foreach ($users as $managers) {
 
-            $managersDet = HRPerson::getManagerDetails($managers->hr_id);
+            $managersDet = HRPerson::getManagerDetails($managers['hr_id']);
 
             try {
 //                Mail::to($managersDet['email'])->send(

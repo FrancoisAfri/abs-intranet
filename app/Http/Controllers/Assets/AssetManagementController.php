@@ -21,6 +21,8 @@ use App\Models\LicensesType;
 use App\Models\StoreRoom;
 use Carbon\Carbon;
 use Exception;
+use HttpException;
+use HttpRequest;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\JsonResponse;
@@ -50,8 +52,9 @@ class AssetManagementController extends Controller
     public function index(Request $request)
     {
 
-        unset($request['_token']);
 
+
+        unset($request['_token']);
 
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
 

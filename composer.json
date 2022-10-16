@@ -18,7 +18,9 @@
         "realrashid/sweet-alert": "^v3.1.6",
         "spatie/enum": "^2.3",
         "ramsey/uuid-doctrine": "^1.8",
-      "ext-json": "*"
+      "ext-json": "*",
+        "phpoffice/phpspreadsheet": "^1.25",
+        "ext-http": "*"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
