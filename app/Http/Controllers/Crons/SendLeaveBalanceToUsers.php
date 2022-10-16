@@ -37,7 +37,7 @@ class SendLeaveBalanceToUsers extends Controller
 
         foreach ($users as $empID) {
 
-            $leaveBalance = leave_credit::where('hr_id', $users)->pluck('leave_balance')->first();
+            $leaveBalance = leave_credit::where('hr_id', $empID)->pluck('leave_balance')->get();
             $hrDetails =  HRPerson::getManagerDetails($empID);
             $fullnane = $hrDetails->first_name . ' ' . $hrDetails->surname;
             $datanow = Carbon::now()->toDayDateTimeString();
@@ -179,7 +179,7 @@ class SendLeaveBalanceToUsers extends Controller
 
         $data['date'] = $date_now;
         $data['credit'] = $credit;
-        $data['file_name'] = 'LeaveApplication';
+        $data['file_name'] = 'LeaveBalance';
         $view = view('leave.reports.leave_balance', $data)->render();
 
         $pdf = resolve('dompdf.wrapper');
