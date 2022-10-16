@@ -52,7 +52,7 @@ class sendManagersListOfAbsentUsers extends Mailable
 //            ->attachData($this->leaveAttachment, 'Absent Users.pdf', [
 //                'mime' => 'application/pdf',
 //            ])
-            ->attachData($this->Attachment->string("xls"), 'Absent Users.xls')
+            ->attachData($this->Attachment, 'Absent Users.xls')
             ->with($data);
     }
 }

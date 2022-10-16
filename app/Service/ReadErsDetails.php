@@ -29,7 +29,9 @@ use Illuminate\Support\Facades\Http;
 use GuzzleHttp;
 use App\Traits\TotalDaysWithoutWeekendsTrait;
 use Illuminate\Support\Facades\Mail;
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use phpDocumentor\Reflection\Types\Integer;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 
 class ReadErsDetails
@@ -51,8 +53,10 @@ class ReadErsDetails
         }
 
 
-        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
-        $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
+        $date_from = '2022-10-14';
+        //Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
+        $date_to = '2022-10-14';
+        //Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
         $todo = 'get_clocks';
 
         $theUrl = 'https://r14.ersbio.co.za/api/data_client.php?'
@@ -134,7 +138,7 @@ class ReadErsDetails
         $Employees = HRPerson::getEmployeeNumber();
 
         $exemptedUsers = ExemptedUsers::getExemptedUsers();
-		$clockinUsers = ManualClockin::getclokinUsers();
+        $clockinUsers = ManualClockin::getclokinUsers();
 
         /**
          * remove duplicate records fromm the api response to get unique employee ids
@@ -147,17 +151,17 @@ class ReadErsDetails
          */
         $CollectionWithExemptedUsers = $Employees->diff($exemptedUsers);
 
-		/**
+        /**
          * We remove users who clocked In on the manual system
          */
-		 
-		$CollectionWithExemptedUsers = $CollectionWithExemptedUsers->diff($clockinUsers); 
-		
+
+        $CollectionWithExemptedUsers = $CollectionWithExemptedUsers->diff($clockinUsers);
+
         /**
          * Compare the employee records with exempted users to the api response
          * to get absent users for the day
          */
-        return  $CollectionWithExemptedUsers->diff($EmployeeId);
+        return $CollectionWithExemptedUsers->diff($EmployeeId);
     }
 
     /**
@@ -340,67 +344,45 @@ class ReadErsDetails
             }
         }
 
-        $credit =  leave_history::getLeaveBalance();
-        //dd($AbsentUsersColl);
-        // Excel Doc
-        //$file = $this->createExcelDoc($AbsentUsersColl);
-        $file = $this->viewBalance($AbsentUsersColl);
+        /**
+         * create an Excel file and store it the application
+         */
+        $header_style = (new StyleBuilder())->setFontBold()->build();
+        $rows_style = (new StyleBuilder())
+            ->setFontSize(10)
+            ->setShouldWrapText()
+            ->build();
 
-//        $file = Excel::create('myexcel', function($excel) use($AbsentUsersColl) {
-//
-//            $excel->sheet('Sheet 1', function($sheet) use($AbsentUsersColl) {
-//
-//                $sheet->fromArray($AbsentUsersColl);
-//            });
-//
-//        })->export('xls');
+
+        $ExcelDoc = (new FastExcel($AbsentUsersColl))
+            ->headerStyle($header_style)
+            ->rowsStyle($rows_style)
+            ->export('storage/app/Absent Users.xls');
+
+        /**
+         * get the file from storage
+         */
+        $file = Storage::get('Absent Users.xls');
+
+        /**
+         * Delete the file from storage
+         */
+        Storage::delete('Absent Users.xls');
+
 
         foreach ($users as $managers) {
-
-            $managersDet = HRPerson::getManagerDetails($managers['hr_id']);
-
+            $managersDet = HRPerson::getManagerDetails($managers->hr_id);
             try {
-//                Mail::to($managersDet['email'])->send(
-//                    new sendManagersListOfAbsentUsers(
-//                        $managersDet['first_name']
-//                        , $file, $date_now
-//                    ));
-                Mail::to($managersDet['email'])->send(new sendManagersListOfAbsentUsersToday($managersDet['first_name'], $file));
+                Mail::to($managersDet['email'])->send(
+                    new sendManagersListOfAbsentUsers(
+                        $managersDet['first_name']
+                        , $file, $date_now
+                    ));
+                echo 'mgs sent';
             } catch (\Exception $e) {
                 echo 'Error - ' . $e;
             }
         }
-
-    }
-
-    /**
-     * @return mixed
-     * @throws \Throwable
-     */
-    public function viewBalance($credit)
-    {
-
-
-        $date_now = Carbon::now()->toDayDateTimeString();
-
-        $companyDetails = CompanyIdentity::systemSettings();
-        $companyName = $companyDetails['company_name'];
-
-        $data['support_email'] = $companyDetails['support_email'];
-        $data['company_name'] = $companyName;
-        $data['full_company_name'] = $companyDetails['full_company_name'];
-        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-
-        $data['date'] = $date_now;
-        $data['credit'] = $credit;
-        $data['file_name'] = 'LeaveApplication';
-//        $view = view('leave.reports.leave_balance', $data)->render();
-       $view = view('Employees.Report.listOfAbsentUsers', $data)->render();
-
-        $pdf = resolve('dompdf.wrapper');
-        $pdf->getDomPDF()->set_option('enable_html5_parser', true);
-        $pdf->loadHTML($view);
-        return $pdf->output();
 
     }
 

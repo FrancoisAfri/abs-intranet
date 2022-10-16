@@ -160,7 +160,7 @@ class EmployeeManagementController extends Controller
 
     private function getLocation($latlong)
     {
-        //$latlong = '-26.38,27.84';
+
         $APIKEY = env('GOOGLE_KEY');
         $googleMapsUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" . $latlong . "&language=ar&key=" . $APIKEY;
         $response = file_get_contents($googleMapsUrl);
