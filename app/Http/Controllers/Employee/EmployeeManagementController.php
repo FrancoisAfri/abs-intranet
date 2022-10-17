@@ -141,7 +141,7 @@ class EmployeeManagementController extends Controller
     {
         // get user details
         $latLong = $request['latitudes'] . ',' . $request['longitudes'];
-
+		//die($latLong);
         $location = $this->getLocation($latLong);
         
         $user = Auth::user()->load('person');
@@ -162,12 +162,22 @@ class EmployeeManagementController extends Controller
     {
 
         $APIKEY = env('GOOGLE_KEY');
+        $APIKEY = 'AIzaSyBfSC6GdEljNfHpJGW8ryGX-Ragq93kfdU';
+		//echo $APIKEY ;
+		//die;
         $googleMapsUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" . $latlong . "&language=ar&key=" . $APIKEY;
         $response = file_get_contents($googleMapsUrl);
         $response = json_decode($response, true);
         $results = $response["results"];
-        $addressComponents = $results[0]["address_components"];
-        $cityName = "";
+
+        $addressComponents = $results[0]["formatted_address"];
+		$arrayAddress = (explode(",",$addressComponents));
+		//$location = $arrayAddress[0].', '.$arrayAddress[1].', '.$arrayAddress[2].', '.$arrayAddress[3];
+		$matches = array();
+		preg_match_all('!\d+!', $arrayAddress[3], $matches);
+		$location = $arrayAddress[0].', '.$arrayAddress[1].', '.$arrayAddress[2].', '.$matches[0][0]; 
+
+        /*$cityName = "";
         foreach ($addressComponents as $component) {
             // echo $component;
             $types = $component["types"];
@@ -175,13 +185,15 @@ class EmployeeManagementController extends Controller
                 $cityName = $component["long_name"];
             }
         }
-        if ($cityName == "") {
+		echo $cityName;
+		die('here');*/
+        if (empty($location)) {
             echo "Failed to get CityName";
         } else {
-            echo $cityName;
+            echo $location;
         }
 
-        return $cityName;
+        return $location;
     }
 
     private function getIp()
