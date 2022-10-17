@@ -143,7 +143,7 @@ class EmployeeManagementController extends Controller
          * get user location
          */
         $latLong = $request['latitudes'] . ',' . $request['longitudes'];
-		//die($latLong);
+
 		if (!empty($request['latitudes']) && !empty($request['longitudes']))
 			$location = $this->getLocation($latLong);
         else $location = 'User did not allowed the location to be shared';
@@ -167,16 +167,12 @@ class EmployeeManagementController extends Controller
 
         $APIKEY = env('GOOGLE_KEY');
         $APIKEY = 'AIzaSyBfSC6GdEljNfHpJGW8ryGX-Ragq93kfdU';
-		//echo $APIKEY ;
-		//die;
+		
         $googleMapsUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" . $latlong . "&language=ar&key=" . $APIKEY;
 
         $response = file_get_contents($googleMapsUrl);
         $response = json_decode($response, true);
         $results = $response["results"];
-		//print_r($results);
-		//die;
-        $addressComponents = $results[0]["formatted_address"];
 		///////
 		foreach ($results as $component) {
 
