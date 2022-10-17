@@ -24,20 +24,20 @@
 										<div class="input-group-addon">
 											<i class="fa fa-unlock-alt"></i>
 										</div>
-										{{$clockin->created_at}}
+										{{$clockin->created_at}} At: <span>{{!empty($clockin->location) ? $clockin->location : '' }}</span>
 									</div>
 								</div>		
 							</div>
 						@endif 
 						@if (!empty($clockout))
 							<div class="form-group">
-								<label for="clockin" class="col-sm-2 control-label">CLOCK OUT</label>
+								<label for="clockout" class="col-sm-2 control-label">CLOCK OUT</label>
 								<div class="col-sm-10">
 									<div class="input-group">
 										<div class="input-group-addon">
 											<i class="fa fa-unlock-alt"></i>
 										</div>
-										{{$clockout->created_at}}
+										{{$clockout->created_at}} At: <span>{{!empty($clockout->location) ? $clockout->location : '' }}</span>
 									</div>
 								</div>		
 							</div>

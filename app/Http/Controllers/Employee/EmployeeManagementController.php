@@ -113,7 +113,7 @@ class EmployeeManagementController extends Controller
         // check if user clockin
         $clockin = ManualClockin::checkClockin($user->person->employee_number);
         $clockout = ManualClockin::checkClockout($user->person->employee_number);
-
+		
         $data = $this->breadCrump(
             "Employee Records",
             "Clockin", "fa fa-lock",
@@ -144,8 +144,10 @@ class EmployeeManagementController extends Controller
          */
         $latLong = $request['latitudes'] . ',' . $request['longitudes'];
 		//die($latLong);
-        $location = $this->getLocation($latLong);
-        
+		if (!empty($request['latitudes']) && !empty($request['longitudes']))
+			$location = $this->getLocation($latLong);
+        else $location = 'User did not allowed the location to be shared';
+		
         $user = Auth::user()->load('person');
         $status = !empty($request['clockin']) ? 1 : 2;
         ManualClockin::create([
@@ -168,27 +170,26 @@ class EmployeeManagementController extends Controller
 		//echo $APIKEY ;
 		//die;
         $googleMapsUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" . $latlong . "&language=ar&key=" . $APIKEY;
+
         $response = file_get_contents($googleMapsUrl);
         $response = json_decode($response, true);
         $results = $response["results"];
-
+		//print_r($results);
+		//die;
         $addressComponents = $results[0]["formatted_address"];
-		$arrayAddress = (explode(",",$addressComponents));
-		//$location = $arrayAddress[0].', '.$arrayAddress[1].', '.$arrayAddress[2].', '.$arrayAddress[3];
-		$matches = array();
-		preg_match_all('!\d+!', $arrayAddress[3], $matches);
-		$location = $arrayAddress[0].', '.$arrayAddress[1].', '.$arrayAddress[2].', '.$matches[0][0]; 
+		///////
+		foreach ($results as $component) {
 
-        /*$cityName = "";
-        foreach ($addressComponents as $component) {
-            // echo $component;
-            $types = $component["types"];
-            if (in_array("locality", $types) && in_array("political", $types)) {
-                $cityName = $component["long_name"];
-            }
+			$arrayAddress = (explode(",",$component["formatted_address"]));
+			if (!empty($arrayAddress[0]) && !empty($arrayAddress[1]) && !empty($arrayAddress[2]) && !empty($arrayAddress[3]))
+			{
+				$matches = array();
+				preg_match_all('!\d+!', $arrayAddress[3], $matches);
+				$location = $arrayAddress[0].', '.$arrayAddress[1].', '.$arrayAddress[2].', '.$matches[0][0]; 
+				break;
+			}
         }
-		echo $cityName;
-		die('here');*/
+
         if (empty($location)) {
             echo "Failed to get CityName";
         } else {
