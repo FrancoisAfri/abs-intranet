@@ -139,7 +139,9 @@ class EmployeeManagementController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        // get user details
+        /**
+         * get user location
+         */
         $latLong = $request['latitudes'] . ',' . $request['longitudes'];
 		//die($latLong);
         $location = $this->getLocation($latLong);
