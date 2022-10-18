@@ -34,7 +34,7 @@ class EmployeeManagementController extends Controller
     use BreadCrumpTrait;
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of the resource.v
      *
      * @return \Illuminate\Http\Response
      */
