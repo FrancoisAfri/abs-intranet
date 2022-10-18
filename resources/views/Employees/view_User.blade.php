@@ -133,7 +133,7 @@
             $('[data-toggle="tooltip"]').tooltip();
             $('#user_profile').click(function () {
                 if ({{$modAccess}} > 3)
-                    location.href = '{{ route('user.edit',$employee->id ) }} ';
+                    location.href = '{{ route('user.edit',$employee->user_id ) }} ';
                 else location.href = '{{ route('profile') }} ';
 
             });

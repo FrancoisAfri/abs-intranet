@@ -111,6 +111,7 @@ class EmployeeManagementController extends Controller
         // get user details
         $user = Auth::user()->load('person');
         // check if user clockin
+
         $clockin = ManualClockin::checkClockin($user->person->employee_number);
         $clockout = ManualClockin::checkClockout($user->person->employee_number);
 		
