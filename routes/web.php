@@ -162,6 +162,22 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
     Route::post('video/assign', 'VideoManagementController@assign')
         ->name('video.assign');
 
+
+    Route::get('/licences_management', 'LicenceManagementController@index')
+        ->name('licences_management.index');
+
+    Route::post('licences_management/store', 'LicenceManagementController@store')
+        ->name('licences_management.store');
+
+    Route::get('licences/show/{licence}', 'LicenceManagementController@show')
+        ->name('licences_management.show');
+
+    Route::get('licence_man/{licence}', 'LicenceManagementController@activate')
+        ->name('LicenceMan.activate');
+
+    Route::post('licences_management/allocate', 'LicenceManagementController@allocate')
+        ->name('licences_management.allocate');
+
 });
 
 

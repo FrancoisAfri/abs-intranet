@@ -95,11 +95,13 @@
 
             @section('page_script')
                 <!-- DataTables -->
-                <script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
-                <script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
-                <script src="/custom_components/js/modal_ajax_submit.js"></script>
-                <script src="/custom_components/js/deleteAlert.js"></script>
-                <script src="/custom_components/js/dataTable.js"></script>
+                <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+                <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js') }}"></script>
+                <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+                <script src="{{ asset('custom_components/js/modal_ajax_submit.js') }}"></script>
+                <script src="{{ asset('custom_components/js/deleteAlert.js') }}"></script>
+                <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>
+
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
                 <!-- End Bootstrap File input -->
                 <script type="text/javascript">

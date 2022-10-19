@@ -13,14 +13,14 @@ class CreateEmailTrackingTable extends Migration
      */
     public function up()
     {
-        Schema::create('email_tracking', function($table) {
-            $table->increments('id');
-            $table->string('name')->index()->nullable();
-            $table->unsignedBigInteger('hr_id')->nullable();
-            $table->smallInteger('is_sent')->nullable()->default(0);
-            $table->bigInteger('date_sent')->nullable();
-            $table->timestamps();
-        });
+//        Schema::create('email_tracking', function($table) {
+//            $table->increments('id');
+//            $table->string('name')->index()->nullable();
+//            $table->unsignedBigInteger('hr_id')->nullable();
+//            $table->smallInteger('is_sent')->nullable()->default(0);
+//            $table->bigInteger('date_sent')->nullable();
+//            $table->timestamps();
+//        });
     }
 
     /**

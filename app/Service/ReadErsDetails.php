@@ -52,7 +52,6 @@ class ReadErsDetails
             throw new ErrorException('Ers Token Not Found');
         }
 
-
         $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
         $date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
         $todo = 'get_clocks';
@@ -152,6 +151,7 @@ class ReadErsDetails
         /**
          * We remove users who clocked In on the manual system
          */
+
 
         $CollectionWithExemptedUsers = $CollectionWithExemptedUsers->diff($clockinUsers);
 

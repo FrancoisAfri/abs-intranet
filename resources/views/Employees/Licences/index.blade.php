@@ -2,8 +2,15 @@
 @section('page_dependencies')
 
     <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/iCheck/square/green.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/fine-uploader/fine-uploader-gallery.css') }}">
+    <script src="/custom_components/js/deleteAlert.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 
@@ -46,88 +53,71 @@
 
                             </form>
                         </div>
-
                         <br>
-
+                        <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
+                                data-target="#add-licence-modal">Add new Licence
+                        </button>
                     </div>
                     <div style="overflow-X:auto;">
                         <table id=" " class="asset table table-bordered data-table my-2">
                             <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
-                                <th style="width: 5px; text-align: center;">Employee Number</th>
                                 <th style="width: 5px; text-align: center;">Name</th>
-                                <th style="width: 5px; text-align: center;">Email</th>
-                                <th style="width: 5px; text-align: center;">Phone Number</th>
-                                <th style="width: 5px; text-align: center;">Position</th>
-                                <th style="width: 5px; text-align: center;">Manager</th>
-                                <th style="width: 5px; text-align: center;">Division</th>
-                                <th style="width: 5px; text-align: center;">Department</th>
+                                <th style="width: 5px; text-align: center;">Details</th>
+                                <th style="width: 5px; text-align: center;">order_number</th>
+                                <th style="width: 5px; text-align: center;">Serial Number</th>
+                                <th style="width: 5px; text-align: center;">Purchase Date</th>
+                                <th style="width: 5px; text-align: center;">Purchase Cost</th>
+                                <th style="width: 5px; text-align: center;">Total Number</th>
+                                <th style="width: 5px; text-align: center;">Expiration Date</th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
                             </thead>
                             <tbody>
-                            @if (count($employee) > 0)
+                            @if (count($licences) > 0)
                                 <ul class="products-list product-list-in-box">
-                                    @foreach ($employee as $key => $person)
+                                    @foreach ($licences as $key => $licence)
                                         <tr id="categories-list">
-                                            <td nowrap>
-                                                <div class="product-img">
-                                                    <img src="{{ (!empty($person->profile_pic)) ? asset('storage/avatars/'.$person->profile_pic)  :
-                                                            (($person->gender === 2) ? $f_silhouette : $m_silhouette)}} "
-                                                         width="50" height="50" alt="Profile Picture">
-                                                </div>
-                                                <div class="modal fade" id="enlargeImageModal" tabindex="-1"
-                                                     role="dialog" align="center"
-                                                     aria-labelledby="enlargeImageModal" aria-hidden="true">
-                                                    <!--  <div class="modal-dialog modal" role="document"> -->
-                                                    <div class="modal-dialog modal-sm">
-                                                        {{--<div class="modal-content">--}}
-                                                        {{--<div class="modal-header">--}}
-                                                        {{--<button type="button" class="close"--}}
-                                                        {{--data-dismiss="modal"--}}
-                                                        {{--aria-label="Close"><span aria-hidden="true">x</span>--}}
-                                                        {{--</button>--}}
-                                                        {{--</div>--}}
-                                                        <div class="modal-body" align="center">
-                                                            <img src="" class="enlargeImageModalSource"
-                                                                 style="width: 200%;">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td style="text-align:center;">
-                                                <span data-toggle="tooltip" title="" class="badge bg-grey"
-                                                      data-original-title="">{{ (!empty($person->employee_number)) ? $person->employee_number : '' }}</span>
-                                            </td>
                                             <td>
-                                                <a data-toggle="tooltip" title="Click to View User"
-                                                   {
-                                                   href="/employee/show/{{str_replace(' ', '_', strtolower($person->first_name) )}}-{{$person->id}}-{{str_replace(' ', '_', strtolower($person->surname))}}">
-                                                    {{ (!empty( $person->first_name . ' ' . $person->surname)) ?  $person->first_name . ' ' . $person->surname : ''}}
+
+                                            </td>
+
+                                            <td>
+                                                <a data-toggle="tooltip" title="Click to View Licence Details"
+                                                   href="{{ route('licences_management.show',['licence' => $licence->uuid]) }}">
+                                                    {{ (!empty( $licence->name)) ?  $licence->name : ''}}
                                                 </a>
                                             </td>
 
                                             <td>
-                                                <i class="fa fa-envelope-o"></i> {{ (!empty($person->email)) ? $person->email : ' ' }}
+                                                </i> {{ (!empty($licence->details)) ? $licence->details : ' ' }}
                                             </td>
 
                                             <td>
-                                                <i class="fa fa-mobile"></i> {{ (!empty($person->cell_number)) ? $person->cell_number : ' ' }}
+                                           </i> {{ (!empty($licence->order_number)) ? $licence->order_number : ' ' }}
                                             </td>
 
-                                            <td>{{ (!empty($person->jobTitle->name)) ? $person->jobTitle->name : ' ' }}</td>
-
-                                            <td>{{ (!empty($person->manager_first_name . ' ' . $person->manager_surname)) ? $person->manager_first_name . ' ' . $person->manager_surname : ' ' }}</td>
-
-                                            <td>{{ (!empty($person->division)) ? $person->division : ' ' }}</td>
-
-                                            <td>{{ (!empty($person->department)) ? $person->department : ' ' }}</td>
+                                            <td>
+                                                </i> {{ (!empty($licence->serial)) ? $licence->serial : ' ' }}
+                                            </td>
 
                                             <td>
-                                                <button vehice="button" id="view_ribbons" class="btn {{ (!empty($person->status) && $person->status == 1) ? " btn-danger " : "btn-success " }}
-                                                      btn-xs" onclick="postData({{$person->id}}, 'actdeac');"><i class="fa {{ (!empty($person->status) && $person->status == 1) ?
-                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($person->status) && $person->status == 1) ? "De-Activate" : "Activate"}}
+                                                {{ (!empty($licence->purchase_date)) ? $licence->purchase_date : ' ' }}
+                                            </td>
+
+                                            <td>
+                                                {{ (!empty($licence->purchase_cost)) ? $licence->purchase_cost : ' ' }}
+                                            </td>
+
+                                            <td>{{ (!empty($licence->total)) ? $licence->total : ' ' }}</td>
+
+                                            <td>{{ (!empty($licence->expiration_date)) ? $licence->expiration_date : ' ' }}</td>
+
+                                            <td>
+                                                <button vehice="button" id="view_ribbons" class="btn {{ (!empty($licence->status) && $licence->status == 1) ? " btn-danger " : "btn-success " }}
+                                                      btn-xs" onclick="postData({{$licence->id}}, 'actdeac');"><i class="fa {{ (!empty($licence->status) && $licence->status == 1) ?
+                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($licence->status) && $licence->status == 1) ? "De-Activate" : "Activate"}}
                                                 </button>
                                             </td>
 
@@ -139,7 +129,7 @@
                         <!-- /.box-body -->
                     </div>
                 </div>
-
+                @include('Employees.Licences.partials.create_license')
             </div>
         </div>
     </div>
@@ -156,7 +146,13 @@
 
     <script src="{{ asset('plugins/axios/dist/axios.min.js') }}"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
+    <!-- Select2 -->
+    <script src="{{ asset('plugins/select2/select2.full.min.js') }}"></script>
+    <!-- bootstrap datepicker -->
+    <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('plugins/fine-uploader/fine-uploader.js') }}"></script>
+    <script src="/custom_components/js/deleteAlert.js"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
@@ -164,28 +160,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     {{--    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>--}}
 
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
 
-        function sendStatus() {
-
-            let select = document.getElementById("status_id");
-            console.log(select)
-
-        }
-
-
         function postData(id, data) {
-            if (data === 'actdeac') location.href = "{{route('employee.activate', '')}}" + "/" + id;
+            if (data === 'actdeac') location.href = "{{route('LicenceMan.activate', '')}}" + "/" + id;
         }
 
-        $('.popup-thumbnail').click(function () {
-            $('.modal-body').empty();
-            $($(this).parents('div').html()).appendTo('.modal-body');
-            $('#modal').modal({show: true});
-        });
+        // Initialize date picker Elements
+        $('.datepicker').datepicker({
+            format: 'yyyy/mm/dd',
+            autoclose: true,
+            todayHighlight: true
+        }).datepicker("setDate", 'now');
 
 
         //TODO WILL CREATE A SIGLE GLOBAL FILE
@@ -223,12 +213,19 @@
                 $('.modal:visible').each(reposition);
             });
 
-            $(function () {
-                $('img').on('click', function () {
-                    $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
-                    $('#enlargeImageModal').modal('show');
-                });
+            $('#add-licence').on('click', function () {
+                let strUrl = '{{route('licences_management.store')}}';
+                let modalID = 'add-licence-modal';
+                let formName = 'add-licence-form';
+                let files = 'file';
+                let submitBtnID = 'add-licence';
+                let redirectUrl = '{{ route('licences_management.index') }}';
+                let successMsgTitle = 'Uploaded Successfully!';
+                let successMsg = 'The Asset Licence  has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
+
+
 
         });
     </script>
