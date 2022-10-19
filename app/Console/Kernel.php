@@ -58,7 +58,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('schedule:RemindManager')->weekdays()->dailyAt("22:00");
         $schedule->command('schedule:leaveEscalation')->weekdays()->dailyAt("21:00");
         $schedule->command('schedule:LeaveBalanceReport')->monthlyOn(1, '01:00');
-        $schedule->command('schedule:absentLeaveApplication')->weekdays()->dailyAt("23:00");
+        //$schedule->command('schedule:absentLeaveApplication')->weekdays()->dailyAt("23:00");
         $schedule->command('schedule:sendAbsentUsersToManager')->weekdays()->dailyAt("10:00");
 
     }

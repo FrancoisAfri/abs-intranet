@@ -69,15 +69,14 @@ class LeaveApplicationController extends Controller
             $reportsTo = HRPerson::where('status', 1)
                 ->where(
                     [
-                        'manager_id' => $currentUser,
-                        'id' => $currentUser
+                        'manager_id' => $currentUser
                     ])
                 ->orderBy('first_name', 'asc')
                 ->orderBy('surname', 'asc')
                 ->get();
 
 
-            if ($reportsTo->count() > 0)
+            if (!empty($reportsTo))
                 $employees = $reportsTo;
             else
                 $employees = HRPerson::where(['status' => 1, 'id' => $currentUser])

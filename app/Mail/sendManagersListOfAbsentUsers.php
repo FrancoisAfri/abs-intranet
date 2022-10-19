@@ -37,7 +37,7 @@ class sendManagersListOfAbsentUsers extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "List of Absent Employees   for $companyName online system.";
+        $subject = "List of Absent Employees for $companyName online system.";
 
         $data['date'] = $this->date;
         $data['attachment'] = $this->Attachment;

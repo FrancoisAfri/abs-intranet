@@ -113,6 +113,7 @@ class EmployeeManagementController extends Controller
         // get user details
         $user = Auth::user()->load('person');
         // check if user clockin
+
         $clockin = ManualClockin::checkClockin($user->person->employee_number);
         $clockout = ManualClockin::checkClockout($user->person->employee_number);
 
@@ -146,8 +147,10 @@ class EmployeeManagementController extends Controller
          */
         $latLong = $request['latitudes'] . ',' . $request['longitudes'];
 
-        $location = $this->getLocation($latLong);
-        
+		if (!empty($request['latitudes']) && !empty($request['longitudes']))
+			$location = $this->getLocation($latLong);
+        else $location = 'User did not allowed the location to be shared';
+
         $user = Auth::user()->load('person');
         $status = !empty($request['clockin']) ? 1 : 2;
         ManualClockin::create([
@@ -171,25 +174,31 @@ class EmployeeManagementController extends Controller
 
         $APIKEY = env('GOOGLE_KEY');
         $googleMapsUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" . $latlong . "&language=ar&key=" . $APIKEY;
+
         $response = file_get_contents($googleMapsUrl);
         $response = json_decode($response, true);
         $results = $response["results"];
-        $addressComponents = $results[0]["address_components"];
-        $cityName = "";
-        foreach ($addressComponents as $component) {
-            // echo $component;
-            $types = $component["types"];
-            if (in_array("locality", $types) && in_array("political", $types)) {
-                $cityName = $component["long_name"];
-            }
-        }
-        if ($cityName == "") {
-            echo "Failed to get CityName";
-        } else {
-            echo $cityName;
+		$location = '';
+		///////
+		foreach ($results as $component) {
+
+			$arrayAddress = (explode(",",$component["formatted_address"]));
+			if (!empty($arrayAddress[0]) && !empty($arrayAddress[1]) && !empty($arrayAddress[2]) && !empty($arrayAddress[3]))
+			{
+				$matches = array();
+				preg_match_all('!\d+!', $arrayAddress[3], $matches);
+				$location = $arrayAddress[0].', '.$arrayAddress[1].', '.$arrayAddress[2].', '.$matches[0][0];
+				break;
+			}
         }
 
-        return $cityName;
+        if (empty($location)) {
+            echo "Failed to get CityName";
+        } else {
+            echo $location;
+        }
+
+        return $location;
     }
 
     /**
@@ -229,7 +238,7 @@ class EmployeeManagementController extends Controller
         $videos = Video::all();
         $slugs = explode("-", str_replace('_', ' ', $id));
 
-        $employee = HRPerson::getAllEmployeesByStatus($status = 1, $slugs[1], 'first');
+        $employee = HRPerson::getEmployee($slugs[1]);
         //chexk user right
         $userLog = Auth::user()->load('person');
         $objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();
