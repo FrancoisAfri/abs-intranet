@@ -46,8 +46,10 @@
                                                                             data-toggle="tab">Leave</a>
                         </li>
                         <li class="" data-toggle="tooltip" title="assets"><a href="#assets"
-                                                                             data-toggle="tab">My
-                                assets</a>
+                                                                             data-toggle="tab">My assets</a>
+                        </li>
+                        <li class="" data-toggle="tooltip" title="licence"><a href="#licence"
+                                                                              data-toggle="tab">My Licences</a>
                         </li>
 
                         <li class=" pull-right">
@@ -74,6 +76,10 @@
                         <div class="tab-pane" id="leave">
                             @include('Employees.Tabs.leave-tab')
                         </div>
+                        <div class="tab-pane" id="licence">
+                            @include('Employees.Tabs.licences-tab')
+                        </div>
+{{--                        licences-tab.blade--}}
 
                         <div class="tab-pane" id="assets">
                             @include('Employees.Tabs.asets-tab')
@@ -82,6 +88,8 @@
                         <div class="tab-pane" id="drive">
                             @include('Employees.Tabs.documents-tab')
                         </div>
+
+
 
                     </div>
                     <!-- /.tab-content -->

@@ -8,6 +8,7 @@ use App\EmployeeTasks;
 use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Controllers\LeaveApplicationController;
+use App\Models\LicencesAllocation;
 use App\Models\StoreRoom;
 use App\Models\Video;
 use App\modules;
@@ -45,6 +46,7 @@ class EmployeeManagementController extends Controller
             $status = 1;
         } else
             $status = $request['status_id'];
+
 
         $employee = HRPerson::getAllEmployeesByStatus($status, 0, 'get');
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
@@ -160,6 +162,10 @@ class EmployeeManagementController extends Controller
         return redirect()->route('employee.clockin')->with('status', 'Clockin Saved!');
     }
 
+    /**
+     * @param $latlong
+     * @return mixed|string
+     */
     private function getLocation($latlong)
     {
 
@@ -186,6 +192,9 @@ class EmployeeManagementController extends Controller
         return $cityName;
     }
 
+    /**
+     * @return string|void
+     */
     private function getIp()
     {
         foreach (array('HTTP_CLIENT_IP',
@@ -238,6 +247,7 @@ class EmployeeManagementController extends Controller
         $userID = User::where('id', $slugs[1])->first();
         $user = $userID->load('person');
 
+        $license_allocation = LicencesAllocation::getLicenceAllocation($slugs[1]);
 
         $divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
         $divLevel2 = (!empty($employee['division_level_2'])) ? $employee['division_level_2'] : 0;
@@ -369,6 +379,7 @@ class EmployeeManagementController extends Controller
         $types = doc_type::where('active', 1)->orderBy('name', 'asc')->get();
 
         $data['leaveStatusNames'] = LeaveApplicationController::status();
+        $data['license_allocation'] = $license_allocation;
         $data['documents'] = $documents;
         $data['activeModules'] = $activeModules;
         $data['surbs'] = $surbs;

@@ -40,5 +40,15 @@ class LicencesAllocation extends Model
         return $this->belongsTo(HRPerson::class, 'user_id')->orderBy('id');
     }
 
+    public static function getLicenceAllocation($id)
+    {
+        return LicencesAllocation::with(
+            'Licenses', 'Hrpersons'
+        )->where(
+            'user_id',
+            $id
+        )->get();
+    }
+
 
 }
