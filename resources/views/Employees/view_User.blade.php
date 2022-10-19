@@ -48,9 +48,9 @@
                         <li class="" data-toggle="tooltip" title="assets"><a href="#assets"
                                                                              data-toggle="tab">My assets</a>
                         </li>
-                        <li class="" data-toggle="tooltip" title="licence"><a href="#licence"
-                                                                              data-toggle="tab">My Licences</a>
-                        </li>
+{{--                        <li class="" data-toggle="tooltip" title="licence"><a href="#licence"--}}
+{{--                                                                              data-toggle="tab">My Licences</a>--}}
+{{--                        </li>--}}
 
                         <li class=" pull-right">
                             <button type="button" class="btn btn-default pull-right" id="back_button"><i
@@ -76,9 +76,9 @@
                         <div class="tab-pane" id="leave">
                             @include('Employees.Tabs.leave-tab')
                         </div>
-                        <div class="tab-pane" id="licence">
-                            @include('Employees.Tabs.licences-tab')
-                        </div>
+{{--                        <div class="tab-pane" id="licence">--}}
+{{--                            @include('Employees.Tabs.licences-tab')--}}
+{{--                        </div>--}}
 {{--                        licences-tab.blade--}}
 
                         <div class="tab-pane" id="assets">
