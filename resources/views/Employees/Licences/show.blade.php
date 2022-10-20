@@ -182,7 +182,7 @@
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <i class="fa fa-user-times pull-right"></i>
-                    <h3 class="box-title"> Manage Users </h3>
+                    <h3 class="box-title"> Manage Licences </h3>
                 </div>
                 <div class="box-body">
                     <div class="box-header">
@@ -254,8 +254,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-    {{--    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>--}}
 
+    <!-- Ajax form submit -->
+    <!-- Ajax dropdown options load -->
+    <script src="{{ asset('custom_components/js/load_dropdown_options.js') }}"></script>
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
 
@@ -276,6 +278,22 @@
             $($(this).parents('div').html()).appendTo('.modal-body');
             $('#modal').modal({show: true});
         });
+
+        //Load divisions drop down
+        var parentDDID = '';
+        var loadAllDivs = 1;
+        @foreach($division_levels as $division_level)
+        //Populate drop down on page load
+        var ddID = '{{ 'division_level_' . $division_level->level }}';
+        var postTo = '{!! route('divisionsdropdown') !!}';
+        var selectedOption = '';
+        var divLevel = parseInt('{{ $division_level->level }}');
+        var incInactive = -1;
+        var loadAll = loadAllDivs;
+        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+        parentDDID = ddID;
+        loadAllDivs = -1;
+        @endforeach
 
 
         //TODO WILL CREATE A SIGLE GLOBAL FILE
