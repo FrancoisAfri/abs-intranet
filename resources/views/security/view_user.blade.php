@@ -124,7 +124,7 @@
 										<i class="fa fa-user-circle"></i>
 									</div>
 									<select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;">
-										<option selected="selected" value="" >*** Select a Manager ***</option>
+										<option selected="selected" value="0" >*** Select a Manager ***</option>
 											@foreach($employees as $employee)
 											<option value="{{ $employee->id }}" {{ ($user->person->manager_id == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
 											@endforeach
@@ -141,7 +141,7 @@
                                                 <i class="fa fa-user-circle"></i>
                                             </div>
                                             <select id="second_manager_id" name="second_manager_id" class="form-control select2"  style="width: 100%;">
-                                                <option selected="selected" value="" >*** Select a Manager ***</option>
+                                                <option selected="selected" value="0" >*** Select a Manager ***</option>
                                                 @foreach($employees as $employee)
                                                     <option value="{{ $employee->id }}" {{ ($user->person->second_manager_id == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                                 @endforeach
