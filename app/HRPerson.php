@@ -191,9 +191,11 @@ class HRPerson extends Model
 
     public static function getEmployeeNumber()
     {
-        return HRPerson::where(
+        $users =  HRPerson::where(
             'status', 1
         )->pluck('employee_number');
+
+        return  $filteredCollection = $users->filter();
     }
 
     /**

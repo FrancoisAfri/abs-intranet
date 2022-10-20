@@ -320,11 +320,8 @@ class ReadErsDetails
         $date_now = Carbon::now()->toDayDateTimeString();
         $users = ManagerReport::getListOfManagers();
 
-        try {
-            $absentUsers = $this->getAbsentUsers();
-        } catch (ErrorException $e) {
-            echo $e;
-        }
+
+        $absentUsers = $this->getAbsentUsers();
 
 
         //create a new collection with name, surname, and employee  number
@@ -342,6 +339,7 @@ class ReadErsDetails
             }
         }
 
+        
         /**
          * create an Excel file and store it the application
          */
