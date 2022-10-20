@@ -34,7 +34,7 @@ class LicenceManagementController extends Controller
 
         $data = $this->breadCrump(
             "Employee Records",
-            "Search", "fa fa-lock",
+            "Licence Management", "fa fa-lock",
             "Licences Management",
             "Licences Management",
             "/hr",
@@ -99,7 +99,7 @@ class LicenceManagementController extends Controller
 //        dd($LicenceDetails);
         $data = $this->breadCrump(
             "Employee Records",
-            "Search", "fa fa-lock",
+            "Licence Management", "fa fa-lock",
             "Licences Management",
             "Licences Management",
             "/hr",
