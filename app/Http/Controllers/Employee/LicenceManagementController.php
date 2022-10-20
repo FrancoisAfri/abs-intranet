@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Employee;
 
+use App\DivisionLevel;
 use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
 use App\Models\Licences;
@@ -93,7 +94,7 @@ class LicenceManagementController extends Controller
         $LicenceDetails = Licences::findByUuid($id);
         $users = HRPerson::where('status', 1)->get();
         $license_allocation = LicencesAllocation::with('Licenses', 'Hrpersons')->where('licence_id', $LicenceDetails->id)->get();
-
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
 //        dd($LicenceDetails);
         $data = $this->breadCrump(
@@ -106,6 +107,7 @@ class LicenceManagementController extends Controller
             "Licences Management"
         );
 
+        $data['division_levels'] = $divisionLevels;
         $data['license_allocation'] = $license_allocation;
         $data['users'] = $users;
         $data['LicenceDetails'] = $LicenceDetails;

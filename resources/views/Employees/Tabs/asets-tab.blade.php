@@ -1,4 +1,3 @@
-
 <div class="row">
     <div class="col-md-6 col-md-offset-0">
         <div class="box box-primary">
@@ -103,22 +102,13 @@
                             </tbody>
                         </table>
                         <!-- /.box-body -->
-                        <div class="box-footer">
-                            {{--						<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>--}}
-                            <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                    data-target="#add-document-modal">Add Document
-                            </button>
-                        </div>
                     </div>
+
                 </div>
-
             </div>
+
         </div>
-
     </div>
-
-
-
 
 </div>
 

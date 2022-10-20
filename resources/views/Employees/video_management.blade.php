@@ -20,33 +20,7 @@
                 <div class="box-body">
                     <div class="box-header">
 
-{{--                        <div class="form-group container-sm">--}}
-{{--                            <form class="form-horizontal" method="get" action="{{ route('employee.index') }}">--}}
-{{--                                {{ csrf_field() }}--}}
-{{--                                <div class="col-md-6">--}}
-{{--                                    <div class="form-group">--}}
-{{--                                        <div class="col-sm-4">--}}
-{{--                                            <label>Asset Status</label>--}}
-{{--                                            <select class="form-control select2 " style="width: 100%;"--}}
-{{--                                                    id="status_id" name="status_id" data-select2-id="1" tabindex="-1"--}}
-{{--                                                    aria-hidden="true">--}}
-{{--                                                <option value="0">** Select Status **</option>--}}
-{{--                                                @foreach ( \App\HRPerson::STATUS_SELECT() as $key =>$values)--}}
-{{--                                                    <option value="{{ $key }}">{{ $values }}</option>--}}
-{{--                                                @endforeach--}}
-{{--                                            </select>--}}
-{{--                                        </div>--}}
 
-{{--                                    </div>--}}
-{{--                                    <div class="box-footer">--}}
-{{--                                        <button type="submit" class="btn btn-primary pull-left">Submit</button>--}}
-{{--                                        <br>--}}
-{{--                                    </div>--}}
-
-{{--                                </div>--}}
-
-{{--                            </form>--}}
-{{--                        </div>--}}
                         <br>
                         <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
                                 data-target="#add-video-modal">Add Video
