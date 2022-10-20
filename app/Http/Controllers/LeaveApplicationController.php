@@ -65,7 +65,8 @@ class LeaveApplicationController extends Controller
                 ->orderBy('first_name', 'asc')
                 ->orderBy('surname', 'asc')
                 ->get();
-        else {
+        else 
+		{
             $reportsTo = HRPerson::where('status', 1)
                 ->where(
                     [
@@ -76,13 +77,10 @@ class LeaveApplicationController extends Controller
                 ->get();
 
 
-            if (!empty($reportsTo))
+            if (count($reportsTo)> 0)
                 $employees = $reportsTo;
             else
-                $employees = HRPerson::where(['status' => 1, 'id' => $currentUser])
-                    ->orderBy('first_name', 'asc')
-                    ->orderBy('surname', 'asc')
-                    ->get();
+                $employees = HRPerson::where(['status' => 1, 'id' => $currentUser])->get();
 
         }
         $leaveTypes = LeaveType::where('status', 1)
