@@ -72,6 +72,7 @@ class LeaveApplicationController extends Controller
                     [
                         'manager_id' => $currentUser
                     ])
+				->orwhere('id', $currentUser)
                 ->orderBy('first_name', 'asc')
                 ->orderBy('surname', 'asc')
                 ->get();
