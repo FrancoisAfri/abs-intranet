@@ -403,6 +403,7 @@ class UsersController extends Controller
     }
 
     public function edit(User $user) {
+        dd('die');
         $user->load('person');
 
         $avatar = $user->person->profile_pic;

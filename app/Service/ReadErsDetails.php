@@ -339,7 +339,7 @@ class ReadErsDetails
             }
         }
 
-        
+
         /**
          * create an Excel file and store it the application
          */

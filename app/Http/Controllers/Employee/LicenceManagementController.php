@@ -7,6 +7,7 @@ use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
 use App\Models\Licences;
 use App\Models\LicencesAllocation;
+use App\Models\LicencesDates;
 use App\Models\LicensesType;
 use App\Models\Video;
 use App\Traits\BreadCrumpTrait;
@@ -66,7 +67,7 @@ class LicenceManagementController extends Controller
      */
     public function store(Request $request)
     {
-        Licences::create([
+        $licences = Licences::create([
             'name' => $request['name'],
             'details' => $request['details'],
             'serial' => $request['serial'],
@@ -77,6 +78,12 @@ class LicenceManagementController extends Controller
             'purchase_cost' => $request['purchase_cost'],
             'expiration_date' => $request['expiration_date'],
             'licence_status' => 'un_allocated',
+        ]);
+
+        LicencesDates::create([
+            'purchase_date' => $request['purchase_date'],
+            'expiration_date' => $request['expiration_date'],
+            'license_id' => $licences->id,
         ]);
 
         AuditReportsController::store('Employee  Records', 'Video Management Page Accessed', "Accessed By User", 0);;
@@ -95,8 +102,9 @@ class LicenceManagementController extends Controller
         $users = HRPerson::where('status', 1)->get();
         $license_allocation = LicencesAllocation::with('Licenses', 'Hrpersons')->where('licence_id', $LicenceDetails->id)->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $licenseHistory = LicencesDates::where('license_id',$LicenceDetails->id )->orderBy('purchase_date')->get();
 
-//        dd($LicenceDetails);
+
         $data = $this->breadCrump(
             "Employee Records",
             "Licence Management", "fa fa-lock",
@@ -107,6 +115,7 @@ class LicenceManagementController extends Controller
             "Licences Management"
         );
 
+        $data['licenseHistory'] = $licenseHistory;
         $data['division_levels'] = $divisionLevels;
         $data['license_allocation'] = $license_allocation;
         $data['users'] = $users;
@@ -114,6 +123,7 @@ class LicenceManagementController extends Controller
         return view('Employees.Licences.show')->with($data);
 
     }
+
 
     /**
      * Show the form for editing the specified resource.
@@ -125,6 +135,7 @@ class LicenceManagementController extends Controller
     {
         //
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -138,6 +149,7 @@ class LicenceManagementController extends Controller
         //
     }
 
+
     /**
      * Remove the specified resource from storage.
      *
@@ -148,6 +160,7 @@ class LicenceManagementController extends Controller
     {
         //
     }
+
 
     /**
      * @param Licences $licence
@@ -195,5 +208,51 @@ class LicenceManagementController extends Controller
 
         return response()->json();
 
+    }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function renewal(Request $request)
+    {
+
+        LicencesDates::create([
+            'renewal_date' => $request['renewal_date'],
+            'license_id' => $request['license_id'],
+            'expiration_date' => $request['expiration_date']
+        ]);
+
+        return response()->json();
+    }
+
+
+    /**
+     * @param LicencesAllocation $licence
+     * @return RedirectResponse
+     */
+    public function Useractivate(LicencesAllocation $licence): RedirectResponse
+    {
+        $licence->status == 1 ? $stastus = 0 : $stastus = 1;
+        $licence->status = $stastus;
+        $licence->update();
+
+        $totalSum = Licences::where('id', $licence->licence_id)->first();
+        if ($licence->status == 1) {
+            $sum = $totalSum->total - 1;
+        } else {
+            $sum = $totalSum->total + 1;
+        }
+
+        //go into licence and minus 1
+        $licences = Licences::where([
+            'id' => $licence->licence_id
+        ])->update(['total' => $sum]);
+
+        Alert::success('Status changed', 'Status changed Successfully');
+
+        AuditReportsController::store('licence Management', 'licence  Status Changed', "licence  Changed", 0);
+        return back();
     }
 }

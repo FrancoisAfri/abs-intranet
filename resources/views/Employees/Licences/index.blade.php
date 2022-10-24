@@ -145,7 +145,6 @@
     <script src="{{ asset('bower_components/bootstrap_fileinput/js/fileinput.min.js') }}"></script>
 
     <script src="{{ asset('plugins/axios/dist/axios.min.js') }}"></script>
-
     <!-- Select2 -->
     <script src="{{ asset('plugins/select2/select2.full.min.js') }}"></script>
     <!-- bootstrap datepicker -->

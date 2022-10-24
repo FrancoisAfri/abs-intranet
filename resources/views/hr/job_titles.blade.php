@@ -171,6 +171,7 @@
             $('#update-job_title').on('click', function() {
                 postRibbonForm('PATCH', '/job_title/' + jobId, 'edit-job_title-form');
             });
+
         });
     </script>
 @endsection

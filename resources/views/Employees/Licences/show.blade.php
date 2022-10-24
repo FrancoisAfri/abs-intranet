@@ -1,23 +1,35 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
 
+    <!-- iCheck -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+
     <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
-    <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
-          type="text/css"') }}">
+
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
-
-@stop
+@endsection
 @section('content')
+
     <div class="row">
-        <div class="col-lg-6 col-sm-6 pull-left">
-            <br>
-            <br>
+        <div class="col-md-6">
+            <!-- AREA CHART -->
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">
                         {{ $LicenceDetails->name }} - Details
                     </h3>
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
                 </div>
                 <!-- /.box-header -->
                 <div class="box-body">
@@ -104,7 +116,7 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <strong>Total number of Licences </strong>
+                                    <strong>Total Available of Licences </strong>
                                 </div>
                             </td>
                             <td>
@@ -130,7 +142,7 @@
                         <tr>
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <strong>Licence Expiration Date  </strong>
+                                    <strong>Licence Expiration Date </strong>
                                 </div>
                             </td>
                             <td>
@@ -170,19 +182,30 @@
                         </tbody>
                     </table>
                 </div>
-
+                <div class="box-footer">
+                    <button type="button" id="cat_module" class="btn btn-danger pull-right" data-toggle="modal"
+                            data-target="#add-licence-renewal"><i class="fa fa-repeat" aria-hidden="true"></i> Renew
+                        License
+                    </button>
+                </div>
             </div>
-
+            <!-- /.box-body -->
         </div>
-
-        <br>
-        <br>
-
-        <div class="col-md-6 col-md-offset-0">
-            <div class="box box-primary">
+        <!-- /.box -->
+        <!-- /.col (LEFT) -->
+        <div class="col-md-6">
+            <!-- LINE CHART -->
+            <div class="box box-info">
                 <div class="box-header with-border">
-                    <i class="fa fa-user-times pull-right"></i>
                     <h3 class="box-title"> Manage Licences </h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
                 </div>
                 <div class="box-body">
                     <div class="box-header">
@@ -192,24 +215,26 @@
                         <table id=" " class="asset table table-bordered data-table my-2">
                             <thead>
                             <tr>
-                                <th style="width: 10px; text-align: center;"></th>
-                                <th style="width: 5px; text-align: center;">Employee Number</th>
+                                <th></th>
                                 <th style="width: 5px; text-align: center;">Employee Name</th>
-                                <th style="width: 5px; text-align: center;">Licence Name</th>
-                                <th style="width: 5px; text-align: center;">Total</th>
+                                <th></th>
+
                             </tr>
                             </thead>
                             <tbody>
                             @if (count($license_allocation) > 0)
                                 <ul class="products-list product-list-in-box">
-                                    @foreach ($license_allocation as $key => $person)
+                                    @foreach ($license_allocation as $key => $licence)
                                         <tr id="categories-list">
-                                           <td></td>
+                                            <td></td>
 
-                                            <td>{{ (!empty($person->Hrpersons->employee_number)) ? $person->Hrpersons->employee_number : ' ' }}</td>
-                                            <td>{{ (!empty($person->Hrpersons->first_name . ' ' . $person->Hrpersons->surname )) ? $person->Hrpersons->first_name . ' ' . $person->Hrpersons->surname   : ' ' }}</td>
-                                            <td>{{ (!empty($person->Licenses->name)) ? $person->Licenses->name : ' ' }}</td>
-                                            <td>{{ (!empty($person->Licenses->total)) ? $person->Licenses->total : ' ' }}</td>
+                                            <td style="width: 5px; text-align: center;">{{ (!empty($licence->Hrpersons->first_name . ' ' . $licence->Hrpersons->surname )) ? $licence->Hrpersons->first_name . ' ' . $licence->Hrpersons->surname   : ' ' }}</td>
+                                            <td style="width: 5px; text-align: center;">
+                                                <button vehice="button" id="view_ribbons" class="btn {{ (!empty($licence->status) && $licence->status == 1) ? " btn-danger " : "btn-success " }}
+                                                      btn-xs" onclick="postData({{$licence->id}}, 'actdeac');"><i class="fa {{ (!empty($licence->status) && $licence->status == 1) ?
+                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($licence->status) && $licence->status == 1) ? "De-Activate" : "Activate"}}
+                                                </button>
+                                            </td>
                                         </tr>
                                 @endforeach
                             @endif
@@ -219,18 +244,85 @@
                     </div>
                 </div>
                 <div class="box-footer">
-                    {{--            <button type="button" id="cat_module" class="btn btn-default pull-right" href="">Edit My Details</button>--}}
 
                     <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
-                            data-target="#add-licence-allocation"><i class="fa fa-linode" aria-hidden="true"></i>   Allocate License
+                            data-target="#add-licence-allocation"><i class="fa fa-linode" aria-hidden="true"></i>
+                        Allocate License
                     </button>
 
-                    {{--            {{ route('users/profile') }}--}}
                 </div>
-                @include('Employees.Licences.partials.licence_allocation')
+                @include('Employees.Licences.partials.renew_licence')
+
             </div>
+            @include('Employees.Licences.partials.licence_test')
         </div>
     </div>
+    <!-- /.box-body -->
+    </div>
+    <div class="col-md-12">
+        <!-- LINE CHART -->
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title"> Licence History </h3>
+
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="box-body">
+                <div class="box-header">
+
+                </div>
+                <div style="overflow-X:auto;">
+                    <table id=" " class="asset table table-bordered data-table my-2">
+                        <thead>
+                        <tr>
+                            <th style="width: 5px; text-align: center;">Purchase Date</th>
+                            <th style="width: 5px; text-align: center;">Renewal Date</th>
+                            <th style="width: 5px; text-align: center;">Expiration Date</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if (count($licenseHistory) > 0)
+                            <ul class="products-list product-list-in-box">
+                                @foreach ($licenseHistory as $key => $licence)
+                                    <tr id="categories-list">
+                                        <td>{{ (!empty($licence->purchase_date )) ? $licence->purchase_date   : ' ' }}</td>
+                                        <td>{{ (!empty($licence->renewal_date )) ? $licence->renewal_date   : ' ' }}</td>
+                                        <td>{{ (!empty($licence->expiration_date )) ? $licence->expiration_date   : ' ' }}</td>
+
+                                    </tr>
+                            @endforeach
+                        @endif
+                        </tbody>
+                    </table>
+                    <!-- /.box-body -->
+                </div>
+            </div>
+            <div class="box-footer">
+
+                <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
+                        data-target="#add-licence-allocation"><i class="fa fa-linode" aria-hidden="true"></i>
+                    Allocate License
+                </button>
+
+            </div>
+            @include('Employees.Licences.partials.renew_licence')
+
+        </div>
+
+    </div>
+
+
+
+    <!-- /.box -->
+
+    <!-- /.col (RIGHT) -->
+
 @stop
 @section('page_script')
     <!-- DataTables -->
@@ -246,6 +338,8 @@
 
     <script src="{{ asset('bower_components/AdminLTE/plugins/select2/select2.full.min.js') }}"></script>
 
+    <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.js') }}"></script>
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
@@ -254,10 +348,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-
+    <!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
     <!-- Ajax form submit -->
     <!-- Ajax dropdown options load -->
-    <script src="{{ asset('custom_components/js/load_dropdown_options.js') }}"></script>
+    {{--    <script src="{{ asset('custom_components/js/load_dropdown_options.js') }}"></script>--}}
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
 
@@ -270,7 +365,7 @@
 
 
         function postData(id, data) {
-            if (data === 'actdeac') location.href = "{{route('employee.activate', '')}}" + "/" + id;
+            if (data === 'actdeac') location.href = "{{route('LicenceUser.activate', '')}}" + "/" + id;
         }
 
         $('.popup-thumbnail').click(function () {
@@ -278,6 +373,14 @@
             $($(this).parents('div').html()).appendTo('.modal-body');
             $('#modal').modal({show: true});
         });
+
+        // Initialize date picker Elements
+        $('.datepicker').datepicker({
+            format: 'yyyy/mm/dd',
+            autoclose: true,
+            todayHighlight: true
+        }).datepicker("setDate", 'now');
+
 
         //Load divisions drop down
         var parentDDID = '';
@@ -350,6 +453,19 @@
                 let redirectUrl = '{{ route('licences_management.show',$LicenceDetails->uuid) }}';
                 let successMsgTitle = 'Allocation Successfully!';
                 let successMsg = 'The Asset Licence Allocation has been updated successfully.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
+            //renewal
+            $('#add-licence-renewal').on('click', function () {
+                let strUrl = '{{route('licences_management.renewal')}}';
+                let modalID = 'add-licence-renewal';
+                let formName = 'add-licence_renewal-form';
+                //let files = 'file';
+                let submitBtnID = 'add-licence_renewal';
+                let redirectUrl = '{{ route('licences_management.show',$LicenceDetails->uuid) }}';
+                let successMsgTitle = 'Renewal Successfully!';
+                let successMsg = 'The Asset Licence renewal has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 

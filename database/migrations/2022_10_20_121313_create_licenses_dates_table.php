@@ -13,7 +13,18 @@ class CreateLicensesDatesTable extends Migration
      */
     public function up()
     {
-        //
+        Schema::create('asset_license_dates', function ($table) {
+            $table->increments('id');
+            $table->uuid('uuid')->index();
+            $table->date('purchase_date')->nullable();
+            $table->date('expiration_date')->nullable();
+            $table->date('renewal_date')->nullable();
+            $table->unsignedInteger('license_id')->nullable();
+            $table->unsignedInteger('user_id')->nullable();
+            $table->smallInteger('status')->default(1)->nullable();
+            $table->timestamps();
+
+        });
     }
 
     /**

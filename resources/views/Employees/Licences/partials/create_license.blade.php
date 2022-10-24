@@ -101,49 +101,15 @@
                         </div>
                     </div>
 
-{{--                    <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">--}}
-{{--                        <label for="hr_person_id" class="col-sm-2 control-label">Users</label>--}}
-{{--                        <div class="col-sm-8">--}}
-{{--                            <div class="input-group">--}}
-{{--                                <div class="input-group-addon">--}}
-{{--                                    <i class="fa fa-user-circle"></i>--}}
-{{--                                </div>--}}
-{{--                                <select class="form-control select2" multiple="multiple" style="width: 100%;"--}}
-{{--                                        id="hr_person_id" name="hr_person_id[]">--}}
-{{--                                    <option value="">*** Select an Users ***</option>--}}
-{{--                                    @foreach($users as $employee)--}}
-{{--                                        <option value="{{ $employee->id }} ">{{$employee->first_name . ' ' . $employee->surname }}</option>--}}
-{{--                                    @endforeach--}}
-{{--                                </select>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
 {{--                    <div class="form-group">--}}
-{{--                        <label for="path" class="col-sm-2 control-label">Name</label>--}}
+{{--                        <label for="path" class="col-sm-2 control-label">File</label>--}}
 {{--                        <div class="col-sm-8">--}}
-{{--                            <input type="text" class="form-control" id="name" name="name" value=""--}}
-{{--                                   placeholder="Enter name" required>--}}
+
+{{--                            <input type="file" id="path" name="path" class="file file-loading"--}}
+{{--                                   data-allowed-file-extensions='["mp4"]' data-show-upload="false">--}}
+{{--                            <strong> Allowed filetypes are mp4. Max upload size allowed is 50M."</strong>--}}
 {{--                        </div>--}}
 {{--                    </div>--}}
-
-{{--                    <div class="form-group">--}}
-{{--                        <label for="path" class="col-sm-2 control-label">Name</label>--}}
-{{--                        <div class="col-sm-8">--}}
-{{--                            <input type="text" class="form-control" id="name" name="name" value=""--}}
-{{--                                   placeholder="Enter name" required>--}}
-{{--                        </div>--}}
-{{--                    </div>--}}
-
-                    <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">File</label>
-                        <div class="col-sm-8">
-
-                            <input type="file" id="path" name="path" class="file file-loading"
-                                   data-allowed-file-extensions='["mp4"]' data-show-upload="false">
-                            <strong> Allowed filetypes are mp4. Max upload size allowed is 50M."</strong>
-                        </div>
-                    </div>
 
 
                 </div>

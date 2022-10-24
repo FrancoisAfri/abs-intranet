@@ -80,8 +80,8 @@
                             <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
-                                <th>Employee Number</th>
-                                <th>Employee Name</th>
+{{--                                <th>Employee Number</th>--}}
+{{--                                <th>Employee Name</th>--}}
                                 <th>Licence Name</th>
 
                             </tr>
@@ -92,8 +92,8 @@
                                     @foreach ($license_allocation as $key => $license)
                                         <tr id="categories-list">
                                             <td></td>
-                                            <td>{{ (!empty($license->Hrpersons->employee_number)) ? $license->Hrpersons->employee_number : ' ' }}</td>
-                                            <td>{{ (!empty($license->Hrpersons->first_name . ' ' . $license->Hrpersons->surname )) ? $license->Hrpersons->first_name . ' ' . $license->Hrpersons->surname   : ' ' }}</td>
+{{--                                            <td>{{ (!empty($license->Hrpersons->employee_number)) ? $license->Hrpersons->employee_number : ' ' }}</td>--}}
+{{--                                            <td>{{ (!empty($license->Hrpersons->first_name . ' ' . $license->Hrpersons->surname )) ? $license->Hrpersons->first_name . ' ' . $license->Hrpersons->surname   : ' ' }}</td>--}}
                                             <td>{{ (!empty($license->Licenses->name)) ? $license->Licenses->name : ' ' }}</td>
 
                                         </tr>

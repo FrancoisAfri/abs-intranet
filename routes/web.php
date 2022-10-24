@@ -178,6 +178,12 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
     Route::post('licences_management/allocate', 'LicenceManagementController@allocate')
         ->name('licences_management.allocate');
 
+    Route::post('licences_management/renewal', 'LicenceManagementController@renewal')
+        ->name('licences_management.renewal');
+
+    Route::get('licence_user/{licence}', 'LicenceManagementController@Useractivate')
+        ->name('LicenceUser.activate');
+
 });
 
 
