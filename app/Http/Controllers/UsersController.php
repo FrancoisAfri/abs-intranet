@@ -592,24 +592,22 @@ class UsersController extends Controller
         if (!empty($dateLeft)) {
             // dd('ge');
             //check if user has assets
-            $Itmanager = ItManager::where('status', 1)->first();
+            $manager = ItManager::where('status', 1)->get();
 
-            if (!empty($Itmanager)) {
-                $manager  = $Itmanager ;
-            } else {
-                throw new ErrorException('no manager choosen');
+            foreach ($manager as $managers){
+               
+                $ItManager = HRPerson::getManagerDetails($managers->user_id);
+                $userDetails = HRPerson::getManagerDetails($user);
+                $attachment = $this->viewAssets($user);
+
+                if (!empty($ItManager->email))
+                    Mail::to($ItManager->email)->send(new sendManagersListOfAssets($userDetails['first_name'], $userDetails['employee_number'], $person['date_left'], $attachment));
+
+                // disable the user
             }
-            
-            $ItManager = HRPerson::getManagerDetails($manager->user_id);
-            $userDetails = HRPerson::getManagerDetails($user);
 
-            $attachment = $this->viewAssets($user);
-
-            if (!empty($ItManager->email))
-                Mail::to($ItManager->email)->send(new sendManagersListOfAssets($userDetails['first_name'], $userDetails['employee_number'], $person['date_left'], $attachment));
-
-            // disable the user
             HRPerson::where('user_id', $user)->update(['status' => 0]);
+
 
         }
     }
