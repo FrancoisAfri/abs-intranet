@@ -592,7 +592,14 @@ class UsersController extends Controller
         if (!empty($dateLeft)) {
             // dd('ge');
             //check if user has assets
-            $manager = ItManager::where('status', 1)->first();
+            $Itmanager = ItManager::where('status', 1)->first();
+
+            if (!empty($Itmanager)) {
+                $manager  = $Itmanager ;
+            } else {
+                throw new ErrorException('no manager choosen');
+            }
+            
             $ItManager = HRPerson::getManagerDetails($manager->user_id);
             $userDetails = HRPerson::getManagerDetails($user);
 
