@@ -15,13 +15,14 @@ class AssetTransfers extends Model
     use Uuids;
 
     public $table = 'asset_transfer';
+
     public $timestamps = true;
 
     protected $fillable = [
         'name', 'description', 'user_id',
         'asset_id', 'transfer_to', 'store_id',
         'picture_before', 'picture_after', 'document', 'asset_image_transfer_id',
-        'transaction_date', 'transfer_date', 'asset_status'
+        'transaction_date', 'transfer_date', 'asset_status', 'current_value'
     ];
 
 
@@ -139,6 +140,17 @@ class AssetTransfers extends Model
                 ]
             )
             ->first();
+    }
+
+    public static function getAssetByUser($user)
+    {
+        return AssetTransfers::with(
+            'AssetTransfers'
+        )->where([
+                'user_id' => $user,
+                'current_value' => 1
+            ]
+        )->get();
     }
 
 }

@@ -51,9 +51,6 @@ class AssetManagementController extends Controller
      */
     public function index(Request $request)
     {
-
-
-
         unset($request['_token']);
 
         $status = !empty($request['status_id']) ? $request['status_id'] : 'In Use';
@@ -195,7 +192,18 @@ class AssetManagementController extends Controller
             ($request['transfer_to'] == 1) ? ($status = 'In Use') : ($status = 'In Store');
 
             ($request['transfer_to'] == 1) ? ($user = $request['user_id']) : ($user = 0);
+
+            ($request['transfer_to'] == 1) ? ($value = 1) : ($value = 0);
+
             ($request['transfer_to'] == 2) ? ($store = $request['store_id']) : ($store = 0);
+
+
+            // get the last record and update it with 0
+            $lastRecord = AssetTransfers::latest('id')->first();
+            AssetTransfers::where([
+                'id' => $lastRecord['id'],
+                'asset_id' => $request['asset_id']
+                ])->update(['current_value' => 0]);
 
 
             AssetTransfers::create([
@@ -207,7 +215,8 @@ class AssetManagementController extends Controller
                 'store_id' => $store,
                 'transaction_date' => date('Y-m-d H:i:s'),
                 'transfer_date' => $request['transfer_date'],
-                'asset_image_transfer_id' => $AssetImagesTransfers->id
+                'asset_image_transfer_id' => $AssetImagesTransfers->id,
+                'current_value' => $value
             ]);
 
             $assets = Assets::find($request['asset_id']);
@@ -347,8 +356,6 @@ class AssetManagementController extends Controller
     {
         $Assets = Assets::find($asset);
         $Assets->update($request->all());
-
-        //TODO FIX THE UPLOAD
 
         $this->verifyAndStoreImage('assets/images', 'picture', $Assets, $request);
 

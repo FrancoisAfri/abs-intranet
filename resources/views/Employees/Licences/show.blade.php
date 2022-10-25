@@ -398,7 +398,6 @@
         loadAllDivs = -1;
         @endforeach
 
-
         //TODO WILL CREATE A SIGLE GLOBAL FILE
 
         $(function () {

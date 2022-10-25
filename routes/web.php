@@ -1217,6 +1217,9 @@ Route::patch('/survey/question_update/{question}', 'SurveysController@updateQues
 Route::get('/hr/setup', 'HrController@showSetup');
 Route::patch('/hr/grouplevel/{groupLevel}', 'HrController@updateGroupLevel');
 Route::get('/hr/grouplevel/activate/{groupLevel}', 'HrController@activateGroupLevel');
+
+Route::post('/hr/manager', 'HrController@addManager')->name('hr.manager');
+Route::get('/hr/manager/{manager}', 'HrController@activateMan')->name('hr.activate');
 //
 Route::post('hr/addqultype', 'HrController@addqualType');
 Route::get('/hr/addqul/{sta}', 'HrController@QualAct');

@@ -1,18 +1,27 @@
 @extends('layouts.main_layout')
+@section('page_dependencies')
 
+    <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
+
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
+@endsection
 @section('content')
+
     <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Employees Group Levels</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
+                        </button>
                     </div>
                 </div>
                 <form class="form-horizontal" method="POST" action="/hr/grouplevel">
-                  <!--   {{ csrf_field() }}
+                    <!--   {{ csrf_field() }}
                     {{ method_field('PATCH') }} -->
                     <!-- /.box-header -->
                     <div class="box-body">
@@ -27,13 +36,26 @@
 
                             @foreach ($division_types as $division_type)
                                 <tr>
-                                    <td style="width: 5px; text-align: center;"><button type="button" id="edit_grouplevel" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-grouplevel-modal" data-id="{{ $division_type->id }}" data-name="{{ $division_type->name }}" data-plural_name="{{ $division_type->plural_name }}" data-level="{{ $division_type->level }}"><i class="fa fa-pencil-square-o"></i> Edit</button></td>
+                                    <td style="width: 5px; text-align: center;">
+                                        <button type="button" id="edit_grouplevel" class="btn btn-primary  btn-xs"
+                                                data-toggle="modal" data-target="#edit-grouplevel-modal"
+                                                data-id="{{ $division_type->id }}"
+                                                data-name="{{ $division_type->name }}"
+                                                data-plural_name="{{ $division_type->plural_name }}"
+                                                data-level="{{ $division_type->level }}"><i
+                                                    class="fa fa-pencil-square-o"></i> Edit
+                                        </button>
+                                    </td>
                                     <td>Employee Group Level {{ $division_type->level }}</td>
                                     <td>{{ $division_type->name }}</td>
                                     <td>{{ $division_type->plural_name }}</td>
                                     <td style="width: 5px; text-align: center;">
                                         @if ($division_type->name!='')
-                                            <button type="button" id="view_ribbons" class="btn {{ (!empty($division_type->active) && $division_type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$division_type->id}}, 'activateGroupLevel');"><i class="fa {{ (!empty($division_type->active) && $division_type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($division_type->active) && $division_type->active == 1) ? "De-Activate" : "Activate"}}</button>
+                                            <button type="button" id="view_ribbons"
+                                                    class="btn {{ (!empty($division_type->active) && $division_type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs"
+                                                    onclick="postData({{$division_type->id}}, 'activateGroupLevel');"><i
+                                                        class="fa {{ (!empty($division_type->active) && $division_type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($division_type->active) && $division_type->active == 1) ? "De-Activate" : "Activate"}}
+                                            </button>
                                         @endif
                                     </td>
                                 </tr>
@@ -41,108 +63,211 @@
                         </table>
                     </div>
 
-                        <!-- /.box-body -->
+                    <!-- /.box-body -->
 
                 </form>
-			</div>
-			<!-- Include add new prime rate modal -->
-			@include('hr.partials.edit_group_level')
-		</div>
+            </div>
+            <!-- Include add new prime rate modal -->
+            @include('hr.partials.edit_group_level')
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <!-- LINE CHART -->
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title"> It Manager </h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="box-header">
+
+                    </div>
+                    <div style="overflow-X:auto;">
+                        <table id=" " class="asset table table-bordered data-table my-2">
+                            <thead>
+                            <tr>
+                                <th style="width: 5px; text-align: center;">Name</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @if (count($manager) > 0)
+                                <ul class="products-list product-list-in-box">
+                                    @foreach ($manager as $key => $licence)
+                                        <tr id="categories-list">
+{{--                                            <td>{{ (!empty($licence->purchase_date )) ? $licence->purchase_date   : ' ' }}</td>--}}
+                                            <td style="width: 5px; text-align: center;">{{ (!empty($licence->manager->first_name . ' ' . $licence->manager->surname  )) ? $licence->manager->first_name . ' ' . $licence->manager->surname   : ' ' }}</td>
+
+                                            <td style="width: 5px; text-align: center;">
+                                                <button vehice="button" id="view_ribbons" class="btn {{ (!empty($licence->status) && $licence->status == 1) ? " btn-danger " : "btn-success " }}
+                                                      btn-xs" onclick="postData({{$licence->id}}, 'actdeac');"><i class="fa {{ (!empty($licence->status) && $licence->status == 1) ?
+                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($licence->status) && $licence->status == 1) ? "De-Activate" : "Activate"}}
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                                @endforeach
+                            @endif
+                            </tbody>
+                        </table>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+                <div class="box-footer">
+
+                    <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
+                            data-target="#add-it-manager"><i class="fa fa-linode" aria-hidden="true"></i>
+                        Add Manager
+                    </button>
+
+                </div>
+                @include('hr.partials.add_it_manager_modal')
+
+            </div>
+
+        </div>
     </div>
     <!--  -->
-	<div class="row">
+    <div class="row">
         <div class="col-md-12">
             <div class="box box-primary">
                 <div class="box-header with-border">
                     <h3 class="box-title">Document Type</h3>
                     <div class="box-tools pull-right">
-                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
-                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i></button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
+                        </button>
                     </div>
                 </div>
-				<div class="box-body">
-					<table class="table table-bordered">
-						<tr>
-							<th style="width: 10px; text-align: center;"></th>
-							<th>Name</th>
-							<th style="width: 5px; text-align: center;"></th>
-						</tr>
-						@if (count($doc_type) > 0)
-							@foreach ($doc_type as $doc)
-								<tr id="categories-list">
-									<td nowrap>
-										<button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-document-type-modal" data-id="{{ $doc->id }}" data-name="{{$doc->name}}"data-description="{{$doc->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
-									</td>
-									<td>{{ $doc->name }}</td>
-									<td>{{ $doc->description }}</td>
-									<td style="text-align: right;">
-										<button type="button" id="view_ribbons" class="btn {{ (!empty($doc->active) && $doc->active == 1) ? " btn-danger " : "btn-success " }}
+                <div class="box-body">
+                    <table class="table table-bordered">
+                        <tr>
+                            <th style="width: 10px; text-align: center;"></th>
+                            <th>Name</th>
+                            <th style="width: 5px; text-align: center;"></th>
+                        </tr>
+                        @if (count($doc_type) > 0)
+                            @foreach ($doc_type as $doc)
+                                <tr id="categories-list">
+                                    <td nowrap>
+                                        <button type="button" id="edit_compan" class="btn btn-primary  btn-xs"
+                                                data-toggle="modal" data-target="#edit-document-type-modal"
+                                                data-id="{{ $doc->id }}" data-name="{{$doc->name}}"
+                                                data-description="{{$doc->description}}"><i
+                                                    class="fa fa-pencil-square-o"></i> Edit
+                                        </button>
+                                    </td>
+                                    <td>{{ $doc->name }}</td>
+                                    <td>{{ $doc->description }}</td>
+                                    <td style="text-align: right;">
+                                        <button type="button" id="view_ribbons" class="btn {{ (!empty($doc->active) && $doc->active == 1) ? " btn-danger " : "btn-success " }}
 									  btn-xs" onclick="postData({{$doc->id}}, 'ractive');"><i class="fa {{ (!empty($doc->active) && $doc->active == 1) ?
-									  " fa-times " : "fa-check " }}"></i> {{(!empty($doc->active) && $doc->active == 1) ? "De-Activate" : "Activate"}}</button>
-									</td>
-								</tr>
-							@endforeach
-						@else
-							<tr id="categories-list">
-								<td colspan="4">
-									<div class="alert alert-danger alert-dismissable">
-										<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-										No document type to display, please start by adding a new role.
-									</div>
-								</td>
-							</tr>
-						@endif
-					</table>
-				</div>
-				<!-- /.box-body -->
-				<div class="box-footer">
-					<button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-document-modal">Add new Role </button>
-				</div>
+									  " fa-times " : "fa-check " }}"></i> {{(!empty($doc->active) && $doc->active == 1) ? "De-Activate" : "Activate"}}
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr id="categories-list">
+                                <td colspan="4">
+                                    <div class="alert alert-danger alert-dismissable">
+                                        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
+                                            &times;
+                                        </button>
+                                        No document type to display, please start by adding a new role.
+                                    </div>
+                                </td>
+                            </tr>
+                        @endif
+                    </table>
+                </div>
+                <!-- /.box-body -->
+                <div class="box-footer">
+                    <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal"
+                            data-target="#add-document-modal">Add new Role
+                    </button>
+                </div>
             </div>
         </div>
-		<!-- Include add new prime rate modal -->
+        <!-- Include add new prime rate modal -->
         @include('hr.partials.add_document_type_modal')
         @include('hr.partials.edit_document_type_modal')
-	</div>
+    </div>
 
-	
-@endsection
+@stop
 
 @section('page_script')
-<!-- Ajax form submit -->
-<script src="/custom_components/js/modal_ajax_submit.js"></script>
-    <script>
-		function postData(id , data ){
+    <!-- Ajax form submit -->
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
+    <script src="/custom_components/js/modal_ajax_submit.js"></script>
+    <script type="text/javascript">
+        function postData(id, data) {
             if (data == 'qual') location.href = "/hr/addqul/" + id;
             else if (data == 'doc') location.href = "/hr/adddoc/" + id;
             else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
             else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
             else if (data == 'ractive') location.href = '/hr/document_act/' + id;
-		}
+        }
+
+        function postData(id, data) {
+            if (data === 'actdeac') location.href = "{{route('hr.activate', '')}}" + "/" + id;
+        }
+
+
         $(function () {
             var moduleId;
             //Tooltip
             $('[data-toggle="tooltip"]').tooltip();
+
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
+                    dialog = modal.find('.modal-dialog');
                 modal.css('display', 'block');
 
                 // Dividing by two centers the modal exactly, but dividing by three
                 // or four works better for larger screens.
                 dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
             }
+
             // Reposition when a modal is shown
             $('.modal').on('show.bs.modal', reposition);
             // Reposition when the window is resized
-            $(window).on('resize', function() {
+            $(window).on('resize', function () {
                 $('.modal:visible').each(reposition);
             });
 
+
+            $('table.asset').DataTable({
+
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+
             //Add Qualification Type
-             //pass module data to the edit module modal
-             var qualificationID;
+            //pass module data to the edit module modal
+            var qualificationID;
             $('#add-qualificationType-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
                 qualificationID = btnEdit.data('id');
@@ -151,16 +276,16 @@
                 var modal = $(this);
                 modal.find('#name').val(name);
                 modal.find('#description').val(description);
-             });
+            });
 
-             //Post module form to server using ajax (ADD)
-            $('#add_qualification').on('click', function() {
-                var strUrl = '/hr/addqultype/' ;
+            //Post module form to server using ajax (ADD)
+            $('#add_qualification').on('click', function () {
+                var strUrl = '/hr/addqultype/';
                 var modalID = 'add-qualificationType-modal';
                 var objData = {
-                     name: $('#'+modalID).find('#name').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
+                    name: $('#' + modalID).find('#name').val(),
+                    description: $('#' + modalID).find('#description').val(),
+                    _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'add-qualification';
                 var redirectUrl = '/hr/setup';
@@ -170,36 +295,36 @@
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
             // Edit
-              var edit_QualID;
-        $('#edit-qualificationType-modal').on('show.bs.modal', function (e) {
-            //console.log('kjhsjs');
-            var btnEdit = $(e.relatedTarget);
-            edit_QualID = btnEdit.data('id');
-            var name = btnEdit.data('name');
-            var description = btnEdit.data('description');
-            // var moduleFontAwesome = btnEdit.data('font_awesome');
-            var modal = $(this);
-            modal.find('#name').val(name);
-            modal.find('#description').val(description);
+            var edit_QualID;
+            $('#edit-qualificationType-modal').on('show.bs.modal', function (e) {
+                //console.log('kjhsjs');
+                var btnEdit = $(e.relatedTarget);
+                edit_QualID = btnEdit.data('id');
+                var name = btnEdit.data('name');
+                var description = btnEdit.data('description');
+                // var moduleFontAwesome = btnEdit.data('font_awesome');
+                var modal = $(this);
+                modal.find('#name').val(name);
+                modal.find('#description').val(description);
 
-        });
+            });
 
-         $('#edit_qualification').on('click', function () {
-            var strUrl = '/hr/qul_type_edit/' + edit_QualID;
-            var objData = {
-                 name: $('#edit-qualificationType-modal').find('#name').val()
-                ,description: $('#edit-qualificationType-modal').find('#description').val()
-                , _token: $('#edit-qualificationType-modal').find('input[name=_token]').val()
-            };
-            var modalID = 'edit-qualificationType-modal';
-            var submitBtnID = 'edit_qualification';
-            var redirectUrl = '/hr/setup';
-            var successMsgTitle = 'Changes Saved!';
-            var successMsg = 'The Qualification Type has been changed successfully.';
-            // var method = 'PATCH';
-           modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        //modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, method);
-        });
+            $('#edit_qualification').on('click', function () {
+                var strUrl = '/hr/qul_type_edit/' + edit_QualID;
+                var objData = {
+                    name: $('#edit-qualificationType-modal').find('#name').val()
+                    , description: $('#edit-qualificationType-modal').find('#description').val()
+                    , _token: $('#edit-qualificationType-modal').find('input[name=_token]').val()
+                };
+                var modalID = 'edit-qualificationType-modal';
+                var submitBtnID = 'edit_qualification';
+                var redirectUrl = '/hr/setup';
+                var successMsgTitle = 'Changes Saved!';
+                var successMsg = 'The Qualification Type has been changed successfully.';
+                // var method = 'PATCH';
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+                //modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, method);
+            });
 
             //pass module data to the edit module modal
             var grouplevelID;
@@ -210,7 +335,7 @@
                 var grouplevelnamepluralname = btnEdit.data('plural_name');
                 var level = btnEdit.data('level');
                 var modal = $(this);
-                modal.find('#group_level_title').html('Edit Employee Group Level '+ level);
+                modal.find('#group_level_title').html('Edit Employee Group Level ' + level);
                 modal.find('#name').val(grouplevelname);
                 modal.find('#plural_name').val(grouplevelnamepluralname);//
                 //if(primeRate != null && primeRate != '' && primeRate > 0) {
@@ -220,13 +345,13 @@
 
 
             //Post module form to server using ajax (ADD)
-            $('#save_grouplevel').on('click', function() {
-                var strUrl = '/hr/grouplevel/'+grouplevelID;
+            $('#save_grouplevel').on('click', function () {
+                var strUrl = '/hr/grouplevel/' + grouplevelID;
                 var modalID = 'edit-grouplevel-modal';
                 var objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    plural_name: $('#'+modalID).find('#plural_name').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
+                    name: $('#' + modalID).find('#name').val(),
+                    plural_name: $('#' + modalID).find('#plural_name').val(),
+                    _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'save_grouplevel';
                 var redirectUrl = '/hr/setup';
@@ -236,16 +361,29 @@
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, formMethod);
             });
 
+            //save manager details
+            $('#add-manager').on('click', function () {
+                let strUrl = '{{route('hr.manager')}}';
+                let modalID = 'add-it-manager';
+                let formName = 'add-manager-form';
+                //let files = 'file';
+                let submitBtnID = 'add-manager';
+                let redirectUrl = '/hr/setup';
+                let successMsgTitle = 'Manager Successfully!';
+                let successMsg = 'Manager been updated successfully added.';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
+
             //
 
             //Post module form to server using ajax (ADD)
-            $('#save_role').on('click', function() {
+            $('#save_role').on('click', function () {
                 //console.log('strUrl');
                 var strUrl = '/hr/role/add/';
                 var modalID = 'add-role-modal';
                 var objData = {
-                    description: $('#'+modalID).find('#description').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
+                    description: $('#' + modalID).find('#description').val(),
+                    _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'save_role';
                 var redirectUrl = '/hr/setup';
@@ -255,9 +393,9 @@
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
 
-              var roleID;
+            var roleID;
             $('#edit-role-modal').on('show.bs.modal', function (e) {
-                    //console.log('kjhsjs');
+                //console.log('kjhsjs');
                 var btnEdit = $(e.relatedTarget);
                 roleID = btnEdit.data('id');
                 var name = btnEdit.data('name');
@@ -266,32 +404,32 @@
                 var modal = $(this);
                 modal.find('#description').val(Description);
 
-             });
+            });
             $('#edit_role').on('click', function () {
                 var strUrl = '/hr/role/edit/' + roleID;
                 var modalID = 'edit-role-modal';
                 var objData = {
-                    description: $('#'+modalID).find('#description').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
+                    description: $('#' + modalID).find('#description').val(),
+                    _token: $('#' + modalID).find('input[name=_token]').val()
                 };
                 var submitBtnID = 'edit_role';
                 var redirectUrl = '/hr/setup';
                 var successMsgTitle = 'Changes Saved!';
                 var successMsg = 'Role modal has been updated successfully.';
                 var Method = 'PATCH';
-         modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
+                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-			var typeID;			
-			$('#add-document-type').on('click', function() {
-				var strUrl = '/hr/add_document_type';
-				var formName = 'add-document-form';
-				var modalID = 'add-document-modal';
-				var submitBtnID = 'add-document-type';
-				var redirectUrl = '/hr/setup';
-				var successMsgTitle = 'Document Type Added!';
-				var successMsg = 'The Document Type has been updated successfully!';
-				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-			});
+            var typeID;
+            $('#add-document-type').on('click', function () {
+                var strUrl = '/hr/add_document_type';
+                var formName = 'add-document-form';
+                var modalID = 'add-document-modal';
+                var submitBtnID = 'add-document-type';
+                var redirectUrl = '/hr/setup';
+                var successMsgTitle = 'Document Type Added!';
+                var successMsg = 'The Document Type has been updated successfully!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
 
             $('#edit-document-type-modal').on('show.bs.modal', function (e) {
                 //console.log('kjhsjs');
@@ -302,18 +440,18 @@
                 var modal = $(this);
                 modal.find('#name').val(Name);
                 modal.find('#description').val(Description);
-             });
-			// update note
-			$('#update_document').on('click', function() {
-				var strUrl = '/hr/document_type/update/'+ typeID;
-				var formName = 'edit-document-type-form';
-				var modalID = 'edit-document-type-modal';
-				var submitBtnID = 'update_document';
-				var redirectUrl = '/hr/setup';
-				var successMsgTitle = 'Record Updated!';
-				var successMsg = 'Document Type have been updated successfully!';
-				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-			});
+            });
+            // update note
+            $('#update_document').on('click', function () {
+                var strUrl = '/hr/document_type/update/' + typeID;
+                var formName = 'edit-document-type-form';
+                var modalID = 'edit-document-type-modal';
+                var submitBtnID = 'update_document';
+                var redirectUrl = '/hr/setup';
+                var successMsgTitle = 'Record Updated!';
+                var successMsg = 'Document Type have been updated successfully!';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+            });
         });
     </script>
 @endsection
