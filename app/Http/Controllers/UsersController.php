@@ -595,7 +595,7 @@ class UsersController extends Controller
             $manager = ItManager::where('status', 1)->get();
 
             foreach ($manager as $managers){
-               
+
                 $ItManager = HRPerson::getManagerDetails($managers->user_id);
                 $userDetails = HRPerson::getManagerDetails($user);
                 $attachment = $this->viewAssets($user);

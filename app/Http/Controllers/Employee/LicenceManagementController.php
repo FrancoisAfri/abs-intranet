@@ -192,7 +192,8 @@ class LicenceManagementController extends Controller
         foreach ($users as $key => $user) {
             $allocate = LicencesAllocation::create([
                 'licence_id' => $request['licence_id'],
-                'user_id' => $user
+                'user_id' => $user,
+                'status' => 1
             ]);
         }
 

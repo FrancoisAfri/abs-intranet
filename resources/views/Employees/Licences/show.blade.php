@@ -215,7 +215,6 @@
                         <table id=" " class="asset table table-bordered data-table my-2">
                             <thead>
                             <tr>
-                                <th></th>
                                 <th style="width: 5px; text-align: center;">Employee Name</th>
                                 <th></th>
 
@@ -226,7 +225,6 @@
                                 <ul class="products-list product-list-in-box">
                                     @foreach ($license_allocation as $key => $licence)
                                         <tr id="categories-list">
-                                            <td></td>
 
                                             <td style="width: 5px; text-align: center;">{{ (!empty($licence->Hrpersons->first_name . ' ' . $licence->Hrpersons->surname )) ? $licence->Hrpersons->first_name . ' ' . $licence->Hrpersons->surname   : ' ' }}</td>
                                             <td style="width: 5px; text-align: center;">
