@@ -34,6 +34,6 @@ class CreateLicensesDatesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('asset_license_dates');
     }
 }

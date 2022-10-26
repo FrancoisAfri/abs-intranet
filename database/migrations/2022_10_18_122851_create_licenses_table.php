@@ -42,6 +42,6 @@ class CreateLicensesTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('asset_license');
     }
 }
