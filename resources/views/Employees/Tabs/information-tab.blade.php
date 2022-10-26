@@ -31,7 +31,7 @@
                         </div>
                     </td>
                     <td>
-                        <div class="col-md-12">
+                        <div class="col-md-6">
                             {{ (!empty( $employee->surname)) ? $employee->surname : ''}}
                         </div>
 

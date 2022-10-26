@@ -241,6 +241,7 @@ class EmployeeManagementController extends Controller
         $slugs = explode("-", str_replace('_', ' ', $id));
 
         $employee = HRPerson::getEmployee($slugs[1]);
+       // dd($employee);
         //chexk user right
         $userLog = Auth::user()->load('person');
         $objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();

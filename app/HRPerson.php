@@ -288,6 +288,8 @@ class HRPerson extends Model
             'hr_people.*',
             'hp.first_name as manager_first_name',
             'hp.surname as manager_surname',
+            'secondManager.first_name as second_manager_first_name',
+            'secondManager.surname as second_manager_surname',
             'd4.name as department',
             'd5.name as division',
             'provinces.name as province'
@@ -298,6 +300,12 @@ class HRPerson extends Model
                 'hr_people.manager_id',
                 '=',
                 'hp.id'
+            )
+            ->rightJoin(
+                'hr_people as secondManager',
+                'hr_people.second_manager_id',
+                '=',
+                'secondManager.id'
             )
             ->leftJoin(
                 'provinces',

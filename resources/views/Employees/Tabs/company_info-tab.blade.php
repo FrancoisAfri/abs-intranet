@@ -111,7 +111,7 @@
                         </div>
                     </td>
                     <td>
-                        <span class="label label-success">
+                        <span class="label label-success  col-md-6">
                              {{ (!empty( $employee->date_joined)) ?  date(' d M Y', $employee->date_joined) : ''}}
                         </span>
                     </td>
