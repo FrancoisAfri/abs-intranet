@@ -14,29 +14,26 @@
                             <th style="width: 5px; text-align: center;">Asset Image</th>
                             <th style="width: 5px; text-align: center;">Transaction Date</th>
                             <th style="width: 5px; text-align: center;">Transfer Date</th>
-                            <th style="width: 5px; text-align: center;">User Name</th>
-                            <th style="width: 5px; text-align: center;">Store</th>
                             <th style="width: 5px; text-align: center;">Status</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if (!empty($assetTransfer))
+                        @if (!empty($assets))
                             <ul class="products-list product-list-in-box">
-                                @foreach ($assetTransfer as $key => $assets)
+                                @foreach ($assets as $key => $assets)
                                     <tr id="categories-list">
 
                                         <td>{{ (!empty( $assets->name)) ?  $assets->name : ''}}</td>
 
                                         <td>
                                             <div class="popup-thumbnail img-responsive">
-                                                <img src="{{ asset('storage/assets/images/'.$assets->picture) }} "
+                                                <img src="{{ asset('storage/assets/images/'.$assets->AssetTransfers->picture) }} "
                                                      height="35px" width="40px" alt="device image">
                                             </div>
                                         </td>
                                         <td>{{ (!empty( $assets->transaction_date)) ?  $assets->transaction_date : '' }}</td>
                                         <td>{{ (!empty( $assets->transfer_date)) ?  $assets->transfer_date : $assets->created_at->toDateString() }}</td>
-                                        <td> {{ (!empty( $assets->HrPeople->first_name )) ?  $assets->HrPeople->first_name. ' ' . $assets->HrPeople->surname : ' ' }}</td>
-                                        <td> {{ (!empty( $assets->store->name )) ?  $assets->store->name : ' ' }}</td>
+
                                         <td>
                                             @if($assets->asset_status == 'Sold')
                                                 <span class="label label-warning">{{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>

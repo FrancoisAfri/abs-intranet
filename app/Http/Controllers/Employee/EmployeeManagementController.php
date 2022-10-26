@@ -8,6 +8,7 @@ use App\EmployeeTasks;
 use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Controllers\LeaveApplicationController;
+use App\Models\AssetTransfers;
 use App\Models\LicencesAllocation;
 use App\Models\StoreRoom;
 use App\Models\Video;
@@ -147,12 +148,13 @@ class EmployeeManagementController extends Controller
          */
         $latLong = $request['latitudes'] . ',' . $request['longitudes'];
 
-		if (!empty($request['latitudes']) && !empty($request['longitudes']))
-			$location = $this->getLocation($latLong);
+        if (!empty($request['latitudes']) && !empty($request['longitudes']))
+            $location = $this->getLocation($latLong);
         else $location = 'User did not allowed the location to be shared';
 
         $user = Auth::user()->load('person');
         $status = !empty($request['clockin']) ? 1 : 2;
+
         ManualClockin::create([
             'ip_addresss' => $request->ip(),
             'hr_id' => $user->person->id,
@@ -178,18 +180,17 @@ class EmployeeManagementController extends Controller
         $response = file_get_contents($googleMapsUrl);
         $response = json_decode($response, true);
         $results = $response["results"];
-		$location = '';
-		///////
-		foreach ($results as $component) {
+        $location = '';
+        ///////
+        foreach ($results as $component) {
 
-			$arrayAddress = (explode(",",$component["formatted_address"]));
-			if (!empty($arrayAddress[0]) && !empty($arrayAddress[1]) && !empty($arrayAddress[2]) && !empty($arrayAddress[3]))
-			{
-				$matches = array();
-				preg_match_all('!\d+!', $arrayAddress[3], $matches);
-				$location = $arrayAddress[0].', '.$arrayAddress[1].', '.$arrayAddress[2].', '.$matches[0][0];
-				break;
-			}
+            $arrayAddress = (explode(",", $component["formatted_address"]));
+            if (!empty($arrayAddress[0]) && !empty($arrayAddress[1]) && !empty($arrayAddress[2]) && !empty($arrayAddress[3])) {
+                $matches = array();
+                preg_match_all('!\d+!', $arrayAddress[3], $matches);
+                $location = $arrayAddress[0] . ', ' . $arrayAddress[1] . ', ' . $arrayAddress[2] . ', ' . $matches[0][0];
+                break;
+            }
         }
 
         if (empty($location)) {
@@ -236,9 +237,11 @@ class EmployeeManagementController extends Controller
     public function show($id)
     {
         $videos = Video::all();
+
         $slugs = explode("-", str_replace('_', ' ', $id));
 
         $employee = HRPerson::getEmployee($slugs[1]);
+       // dd($employee);
         //chexk user right
         $userLog = Auth::user()->load('person');
         $objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();
@@ -256,7 +259,19 @@ class EmployeeManagementController extends Controller
         $userID = User::where('id', $slugs[1])->first();
         $user = $userID->load('person');
 
+        $assets = AssetTransfers::getAssetByUser($slugs[1]);
+       // dd($assets);
+
         $license_allocation = LicencesAllocation::getLicenceAllocation($slugs[1]);
+
+//         LicencesAllocation::with('Licenses')
+//            ->where(
+//                [
+//                    'user_id' => $slugs[1],
+//                    'status' => 1
+//                ])->get();
+
+        //
 
         $divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
         $divLevel2 = (!empty($employee['division_level_2'])) ? $employee['division_level_2'] : 0;
@@ -407,6 +422,7 @@ class EmployeeManagementController extends Controller
         $data['general'] = $generalVids;
         $data['specific'] = $specificVids;
         $data['general'] = $generalVids;
+        $data['assets'] = $assets;
         $data['user'] = $user;
         $data['employees'] = $employees;
         $data['positions'] = $positions;

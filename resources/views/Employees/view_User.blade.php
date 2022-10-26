@@ -1,6 +1,8 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
 
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+{{--    <link rel="stylesheet" href="{{ asset('css/style2.css') }}">--}}
     <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
@@ -33,6 +35,11 @@
                                                                                    data-toggle="tab">Work
                                 Details</a>
                         </li>
+                        
+                        <li class="" data-toggle="tooltip" title="organogram"><a href="#organogram"
+                                                                                 data-toggle="tab">Company Organogram</a>
+                        </li>
+
                         <li class="" data-toggle="tooltip" title="Tasks"><a href="#Tasks"
                                                                             data-toggle="tab">Tasks</a>
                         </li>
@@ -48,9 +55,7 @@
                         <li class="" data-toggle="tooltip" title="assets"><a href="#assets"
                                                                              data-toggle="tab">My assets</a>
                         </li>
-{{--                        <li class="" data-toggle="tooltip" title="licence"><a href="#licence"--}}
-{{--                                                                              data-toggle="tab">My Licences</a>--}}
-{{--                        </li>--}}
+
 
                         <li class=" pull-right">
                             <button type="button" class="btn btn-default pull-right" id="back_button"><i
@@ -76,10 +81,9 @@
                         <div class="tab-pane" id="leave">
                             @include('Employees.Tabs.leave-tab')
                         </div>
-{{--                        <div class="tab-pane" id="licence">--}}
-{{--                            @include('Employees.Tabs.licences-tab')--}}
-{{--                        </div>--}}
-{{--                        licences-tab.blade--}}
+                        <div class="tab-pane" id="organogram">
+                            @include('Employees.Tabs.organogram-tab')
+                        </div>
 
                         <div class="tab-pane" id="assets">
                             @include('Employees.Tabs.asets-tab')
