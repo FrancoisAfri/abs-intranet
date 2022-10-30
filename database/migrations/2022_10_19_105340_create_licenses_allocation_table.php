@@ -35,6 +35,6 @@ class CreateLicensesAllocationTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('license_allocation');
     }
 }

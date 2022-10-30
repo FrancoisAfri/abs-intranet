@@ -102,7 +102,8 @@ class LicenceManagementController extends Controller
         $users = HRPerson::where('status', 1)->get();
         $license_allocation = LicencesAllocation::with('Licenses', 'Hrpersons')->where('licence_id', $LicenceDetails->id)->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        $licenseHistory = LicencesDates::where('license_id',$LicenceDetails->id )->orderBy('purchase_date')->get();
+        
+		$licenseHistory = LicencesDates::where('license_id',$LicenceDetails->id )->orderBy('purchase_date')->get();
 
 
         $data = $this->breadCrump(
