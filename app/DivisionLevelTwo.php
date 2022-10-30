@@ -48,7 +48,7 @@ class DivisionLevelTwo extends Model
 
     //function ro get lvl 2 divs that belong to a specific lvl 3 div
     public static function divsFromParent($parentID, $incInactive) {
-        $divisions = DivisionLevelTwo::where('parent_id', $parentID)
+        return DivisionLevelTwo::where('parent_id', $parentID)
             ->where(function ($query) use($incInactive) {
                 if ($incInactive == -1) {
                     $query->where('active', 1);
@@ -56,6 +56,12 @@ class DivisionLevelTwo extends Model
             })->get()
             ->sortBy('name')
             ->pluck('id', 'name');
-        return $divisions;
+    }
+
+    public static function getSectionDetails($id)
+    {
+        return  DivisionLevelTwo::with('manager')
+            ->where('parent_id', $id)
+            ->get();
     }
 }

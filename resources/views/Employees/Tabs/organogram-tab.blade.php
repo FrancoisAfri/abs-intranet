@@ -1,47 +1,91 @@
-<div class="row">
-    <br><br><br>
-    <div class="container">
+
+<div class="container">
         <h1 class="level-1 rectangle">CEO</h1>
         <ol class="level-2-wrapper">
-            <li>
-                <h2 class="level-2 rectangle">Director A</h2>
-                <ol class="level-3-wrapper">
-                    <li>
-                        <h3 class="level-3 rectangle"> Reports to -
-                            {{ (!empty($employee->manager_first_name . ' ' . $employee->manager_surname))  ?
-                                $employee->manager_first_name . ' ' . $employee->manager_surname : '' }}</h3>
-                        <ol class="level-4-wrapper">
-                            <li>
-                                <h4 class="level-4 rectangle">
-                                    {{ (!empty($employee->first_name . ''. $employee->surname)) ?
-                               $employee->first_name . ''. $employee->surname : '' }}
-                                </h4>
-                            </li>
-
-                        </ol>
-                    </li>
-                    <li>
-                        <h3 class="level-3 rectangle"> Second Manager -
-                            {{ (!empty($employee->second_manager_first_name . ''. $employee->second_manager_surname)) ?
-                                $employee->second_manager_first_name . ''. $employee->second_manager_surname : '' }}
-                        </h3>
-                        <ol class="level-4-wrapper">
-                            <li>
-                                <h4 class="level-4 rectangle">
-                                    {{ (!empty($employee->first_name . ''. $employee->surname)) ?
-                               $employee->first_name . ''. $employee->surname : '' }}
-                                </h4>
-                            </li>
-
-                        </ol>
-                    </li>
+          <li>
+            <h2 class="level-2 rectangle">Director A</h2>
+            <ol class="level-3-wrapper">
+              <li>
+                <h3 class="level-3 rectangle">Manager A</h3>
+                <ol class="level-4-wrapper">
+                  <li>
+                    <h4 class="level-4 rectangle">Person A</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person B</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person C</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person D</h4>
+                  </li>
                 </ol>
-            </li>
-
+              </li>
+              <li>
+                <h3 class="level-3 rectangle">Manager B</h3>
+                <ol class="level-4-wrapper">
+                  <li>
+                    <h4 class="level-4 rectangle">Person A</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person B</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person C</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person D</h4>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <h2 class="level-2 rectangle">Director B</h2>
+            <ol class="level-3-wrapper">
+              <li>
+                <h3 class="level-3 rectangle">Manager C</h3>
+                <ol class="level-4-wrapper">
+                  <li>
+                    <h4 class="level-4 rectangle">Person A</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person B</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person C</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person D</h4>
+                  </li>
+                </ol>
+              </li>
+              <li>
+                <h3 class="level-3 rectangle">Manager D</h3>
+                <ol class="level-4-wrapper">
+                  <li>
+                    <h4 class="level-4 rectangle">Person A</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person B</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person C</h4>
+                  </li>
+                  <li>
+                    <h4 class="level-4 rectangle">Person D</h4>
+                  </li>
+                </ol>
+              </li>
+            </ol>
+          </li>
         </ol>
-    </div>
-</div>
+      </div>
 
-
-
-
+      <footer class="page-footer">
+        <span>made by </span>
+        <a href="https://georgemartsoukos.com/" target="_blank">
+          <img width="24" height="24" src="https://assets.codepen.io/162656/george-martsoukos-small-logo.svg" alt="George Martsoukos logo">
+        </a>
+      </footer>
