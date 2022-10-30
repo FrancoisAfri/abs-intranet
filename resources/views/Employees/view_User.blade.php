@@ -1,7 +1,7 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
 
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
 {{--    <link rel="stylesheet" href="{{ asset('css/style2.css') }}">--}}
     <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css') }}">
@@ -35,10 +35,7 @@
                                                                                    data-toggle="tab">Work
                                 Details</a>
                         </li>
-                        
-                        <li class="" data-toggle="tooltip" title="organogram"><a href="#organogram"
-                                                                                 data-toggle="tab">Company Organogram</a>
-                        </li>
+
 
                         <li class="" data-toggle="tooltip" title="Tasks"><a href="#Tasks"
                                                                             data-toggle="tab">Tasks</a>
@@ -81,9 +78,7 @@
                         <div class="tab-pane" id="leave">
                             @include('Employees.Tabs.leave-tab')
                         </div>
-                        <div class="tab-pane" id="organogram">
-                            @include('Employees.Tabs.organogram-tab')
-                        </div>
+
 
                         <div class="tab-pane" id="assets">
                             @include('Employees.Tabs.asets-tab')

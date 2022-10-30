@@ -250,7 +250,6 @@
                  class="card-img-top" alt="Wild Landscape"
                  style='height: 400%; width: 100%; object-fit: contain'/>
 
-
         </div>
         <!-- /.box-body -->
 

@@ -58,4 +58,11 @@ class DivisionLevelThree extends Model
             ->pluck('id', 'name');
         return $divisions;
     }
+
+    public static function getSectionDetails($id)
+    {
+      return  DivisionLevelThree::with('manager')
+            ->where('parent_id', $id)
+            ->first();
+    }
 }

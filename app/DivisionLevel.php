@@ -11,15 +11,15 @@ class DivisionLevel extends Model
 
     // Mass assignable fields
     protected $fillable = [
-        'name', 'plural_name', 'active'
+        'name', 'plural_name', 'active', 'level'
     ];
 
     //relationship division level details and each specific division level(one to many)
-    public function divisionLevelGroup() {
+    public function divisionLevelGroup()
+    {
         if ($this->level === 5) {
             return $this->hasMany(DivisionLevelFive::class, 'division_level_id')->orderBy('name');
-        }
-        elseif ($this->level === 4) {
+        } elseif ($this->level === 4) {
             return $this->hasMany(DivisionLevelFour::class, 'division_level_id')->orderBy('name');
         }
         if ($this->level === 3) {
@@ -32,9 +32,45 @@ class DivisionLevel extends Model
             return $this->hasMany(DivisionLevelOne::class, 'division_level_id')->orderBy('name');
         }
     }
-    
-    //Function to any Division Level regardless it parent/child div 
-    public function addDivisionLevelGroup($divLvlGroup) {
+
+
+
+    public function Div5()
+    {
+        return $this->hasMany(DivisionLevelFive::class, 'division_level_id')->orderBy('id');
+    }
+
+    public function Div4()
+    {
+        return $this->hasMany(DivisionLevelFour::class, 'division_level_id')->orderBy('id');
+    }
+
+    public function Div3()
+    {
+        return $this->hasMany(DivisionLevelThree::class, 'division_level_id')->orderBy('id');
+    }
+
+    public function Div2()
+    {
+        return $this->hasMany(DivisionLevelTwo::class, 'division_level_id')->orderBy('id');
+    }
+
+    public function Div1()
+    {
+        return $this->hasMany(DivisionLevelOne::class, 'division_level_id')->orderBy('id');
+    }
+
+    public function Persons()
+    {
+        return $this->belongsTo(HRPerson::class, 'manager_id');
+    }
+
+
+    //Function to any Division Level regardless it parent/child div
+    public function addDivisionLevelGroup($divLvlGroup)
+    {
         return $this->divisionLevelGroup()->save($divLvlGroup);
     }
+
+
 }

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Employee;
 
+use App\DivisionLevelFour;
+use App\DivisionLevelThree;
+use App\DivisionLevelTwo;
 use App\ManualClockin;
 use App\DivisionLevel;
 use App\EmployeeTasks;
@@ -241,7 +244,7 @@ class EmployeeManagementController extends Controller
         $slugs = explode("-", str_replace('_', ' ', $id));
 
         $employee = HRPerson::getEmployee($slugs[1]);
-       // dd($employee);
+
         //chexk user right
         $userLog = Auth::user()->load('person');
         $objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();
@@ -260,7 +263,7 @@ class EmployeeManagementController extends Controller
         $user = $userID->load('person');
 
         $assets = AssetTransfers::getAssetByUser($slugs[1]);
-       // dd($assets);
+        // dd($assets);
 
         $license_allocation = LicencesAllocation::getLicenceAllocation($slugs[1]);
 
@@ -574,6 +577,50 @@ class EmployeeManagementController extends Controller
 
         AuditReportsController::store('User Management', 'User Status Changed', "User status Changed", 0);
         return back();
+    }
+
+    public function organogramView()
+    {
+
+
+        $division_levels = DivisionLevel::with(
+            'Div5.manager',
+            'Div4',
+            'Div3',
+            'Div2',
+            'Div1',
+        )->where('active', 1)->orderBy('id', 'desc')->get();
+
+        $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
+        $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
+
+
+        $section = DivisionLevelThree::getSectionDetails(2);
+        //dd($section);
+        $teams = DivisionLevelTwo::getSectionDetails(1);
+
+        $peopleUnder = HRPerson::getUsersFromTeam(2);
+        //dd($peopleUnder);
+
+
+        //  dd($division_levels->filter());
+
+        $data = $this->breadCrump(
+            "Employee Records",
+            "Search", "fa fa-lock",
+            "Employee Management",
+            "Employee Management",
+            "/hr",
+            "Employee Management",
+            "Employee Management"
+        );
+
+        $data['section'] = $section;
+        $data['teams'] = $teams;
+        $data['m_silhouette'] = $m_silhouette;
+        $data['f_silhouette'] = $f_silhouette;
+        $data['division_levels'] = $division_levels;
+        return view('Employees.organisation_chart')->with($data);
     }
 
 

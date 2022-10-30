@@ -54,7 +54,8 @@
                                             <button type="button" id="view_ribbons"
                                                     class="btn {{ (!empty($division_type->active) && $division_type->active == 1) ? "btn-danger" : "btn-success" }} btn-xs"
                                                     onclick="postData({{$division_type->id}}, 'activateGroupLevel');"><i
-                                                        class="fa {{ (!empty($division_type->active) && $division_type->active == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($division_type->active) && $division_type->active == 1) ? "De-Activate" : "Activate"}}
+                                                        class="fa {{ (!empty($division_type->active) && $division_type->active == 1) ? "fa-times" : "fa-check" }}">
+                                                </i> {{(!empty($division_type->active) && $division_type->active == 1) ? "De-Activate" : "Activate"}}
                                             </button>
                                         @endif
                                     </td>
@@ -104,7 +105,7 @@
                                 <ul class="products-list product-list-in-box">
                                     @foreach ($manager as $key => $licence)
                                         <tr id="categories-list">
-{{--                                            <td>{{ (!empty($licence->purchase_date )) ? $licence->purchase_date   : ' ' }}</td>--}}
+                                            {{--                                            <td>{{ (!empty($licence->purchase_date )) ? $licence->purchase_date   : ' ' }}</td>--}}
                                             <td style="width: 5px; text-align: center;">{{ (!empty($licence->manager->first_name . ' ' . $licence->manager->surname  )) ? $licence->manager->first_name . ' ' . $licence->manager->surname   : ' ' }}</td>
 
                                             <td style="width: 5px; text-align: center;">
@@ -220,12 +221,8 @@
             else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
             else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
             else if (data == 'ractive') location.href = '/hr/document_act/' + id;
+            else if (data === 'actdeac') location.href = "{{route('hr.activate', '')}}" + "/" + id;
         }
-
-        function postData(id, data) {
-            if (data === 'actdeac') location.href = "{{route('hr.activate', '')}}" + "/" + id;
-        }
-
 
         $(function () {
             var moduleId;

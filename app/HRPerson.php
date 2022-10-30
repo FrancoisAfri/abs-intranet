@@ -97,19 +97,26 @@ class HRPerson extends Model
     {
         return $this->belongsTo(HRRoles::class, 'role_id');
     }
-		//Relationship hr person and province
+
+
+    public function HrPositions()
+    {
+        return $this->belongsTo(HRRoles::class, 'position');
+    }
+
+    //Relationship hr person and province
     public function province()
     {
         return $this->belongsTo(Province::class, 'res_province_id');
     }
-	
-		//Relationship hr person and province
+
+    //Relationship hr person and province
     public function division()
     {
         return $this->belongsTo(DivisionLevelFive::class, 'division_level_5');
-    }	
-	
-	//Relationship hr person and province
+    }
+
+    //Relationship hr person and province
     public function department()
     {
         return $this->belongsTo(DivisionLevelFour::class, 'division_level_4');
@@ -191,11 +198,11 @@ class HRPerson extends Model
 
     public static function getEmployeeNumber()
     {
-        $users =  HRPerson::where(
+        $users = HRPerson::where(
             'status', 1
         )->pluck('employee_number');
 
-        return  $filteredCollection = $users->filter();
+        return $filteredCollection = $users->filter();
     }
 
     /**
@@ -279,17 +286,18 @@ class HRPerson extends Model
 
         return $query;
     }
-	// get employee details
-	
-	public static function getEmployee($user)
+
+    // get employee details
+
+    public static function getEmployee($user)
     {
 
         $query = HRPerson::select(
             'hr_people.*',
             'hp.first_name as manager_first_name',
             'hp.surname as manager_surname',
-            'secondManager.first_name as second_manager_first_name',
-            'secondManager.surname as second_manager_surname',
+//            'secondManager.first_name as second_manager_first_name',
+//            'secondManager.surname as second_manager_surname',
             'd4.name as department',
             'd5.name as division',
             'provinces.name as province'
@@ -301,12 +309,12 @@ class HRPerson extends Model
                 '=',
                 'hp.id'
             )
-            ->rightJoin(
-                'hr_people as secondManager',
-                'hr_people.second_manager_id',
-                '=',
-                'secondManager.id'
-            )
+//            ->rightJoin(
+//                'hr_people as secondManager',
+//                'hr_people.second_manager_id',
+//                '=',
+//                'secondManager.id'
+//            )
             ->leftJoin(
                 'provinces',
                 'hr_people.res_province_id',
@@ -327,7 +335,28 @@ class HRPerson extends Model
             )
             ->with('jobTitle')
             ->first();
-
         return $query;
     }
+
+
+    public static function getDirectorDetails($id)
+    {
+        return HRPerson::with('HrPositions')
+            ->where('user_id', $id)
+            ->first();
+    }
+
+
+    public static function getUsersFromTeam($dv2)
+    {
+        return HRPerson::with('HrPositions')
+            ->where(
+                [
+                    'division_level_2' => $dv2,
+                ]
+            )
+                ->get();
+    }
+
+
 }
