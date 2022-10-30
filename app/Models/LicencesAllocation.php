@@ -25,7 +25,7 @@ class LicencesAllocation extends Model
      * @var string[]
      */
     protected $fillable = [
-        'name', 'name', 'user_id', 'licence_id',
+        'name', 'status', 'user_id', 'licence_id',
         'division_level_1', 'division_level_2', 'division_level_3', 'division_level_4',
         'division_level_5',
     ];

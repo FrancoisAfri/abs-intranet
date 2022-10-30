@@ -136,7 +136,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{ (!empty($employee->province)) ? $employee->province : '' }}
+                           {{ (!empty($employee->province->name)) ? $employee->province->name : '' }}
                         </div>
 
                     </td>
@@ -201,7 +201,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{ (!empty($employee->province)) ? $employee->province : '' }}
+						
                         </div>
 
                     </td>

@@ -28,7 +28,7 @@ class HRPerson extends Model
         'phone_number', 'id_number', 'date_of_birth', 'passport_number', 'drivers_licence_number', 'drivers_licence_code',
         'proof_drive_permit', 'proof_drive_permit_exp_date', 'drivers_licence_exp_date', 'gender', 'own_transport', 'marital_status',
         'ethnicity', 'profile_pic', 'status', 'division_level_1', 'division_level_2', 'division_level_3', 'employee_number',
-        'division_level_4', 'division_level_5', 'leave_profile', 'manager_id', 'date_joined', 'date_left', 'role_id', 'position',
+        'division_level_4', 'division_level_5', 'leave_profile', 'manager_id', 'second_manager_id', 'date_joined', 'date_left', 'role_id', 'position',
 
     ];
 
@@ -180,6 +180,20 @@ class HRPerson extends Model
         return HRPerson::where(['id' => $hrDetails, 'status' => 1])
             ->select('first_name', 'surname', 'email', 'manager_id')
             ->first();
+    } 
+	// get manager names
+	public static function getManagername($id)
+    {
+        return HRPerson::where(['id' => $id, 'status' => 1])
+            ->select('first_name', 'surname', 'email')
+            ->first();
+    } 
+	// get second manager names
+	public static function getSecondManagername($id)
+    {
+        return HRPerson::where(['id' => $id, 'status' => 1])
+            ->select('first_name', 'surname', 'email')
+            ->first();
     }
 
     public static function getUserDetails($employeeNumber)
@@ -285,49 +299,11 @@ class HRPerson extends Model
     {
 
         $query = HRPerson::select(
-            'hr_people.*',
-            'hp.first_name as manager_first_name',
-            'hp.surname as manager_surname',
-            'secondManager.first_name as second_manager_first_name',
-            'secondManager.surname as second_manager_surname',
-            'd4.name as department',
-            'd5.name as division',
-            'provinces.name as province'
+            'hr_people.*'
         )
-            ->where('hr_people.id', $user)
-            ->leftJoin(
-                'hr_people as hp',
-                'hr_people.manager_id',
-                '=',
-                'hp.id'
-            )
-            ->rightJoin(
-                'hr_people as secondManager',
-                'hr_people.second_manager_id',
-                '=',
-                'secondManager.id'
-            )
-            ->leftJoin(
-                'provinces',
-                'hr_people.res_province_id',
-                '=',
-                'provinces.id'
-            )
-            ->leftJoin(
-                'division_level_fives as d5',
-                'hr_people.division_level_5',
-                '=',
-                'd5.id'
-            )
-            ->leftJoin(
-                'division_level_fours as d4',
-                'hr_people.division_level_4',
-                '=',
-                'd4.id'
-            )
-            ->with('jobTitle')
-            ->first();
-
+        ->where('hr_people.id', $user)
+        ->with('jobTitle','province','division','department')
+        ->first();
         return $query;
     }
 }
