@@ -16,7 +16,7 @@
                          class="rounded-corners" alt="Profile" height="30" width="30">
                     <br>
                     <br>
-                    <div>{{ \App\HRPerson::getDirectorDetails(1)->first_name . ' ' . \App\HRPerson::getDirectorDetails(1)->surname }} </div>
+                    <div>{{ \App\HRPerson::getDirectorDetails(1)->first_name . ' ' . \App\HRPerson::getDirectorDetails(2)->surname }} </div>
                     <br>
                     <br>
                 </h4>
@@ -26,12 +26,12 @@
                         <h4 class="level-2 rectangle pfoto">
                             {{ \App\DivisionLevelFour::getDepartmentDetails(1)->name }}
                             <br><br>
-                            {{ \App\DivisionLevelFour::getDepartmentDetails(1)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(1)->manager->surname}}
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(2)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(3)->manager->surname}}
                             <br><br>
-                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(1)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(1)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelFour::getDepartmentDetails(1)->manager->gender === 0) ?
+                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(4)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(4)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelFour::getDepartmentDetails(4)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
@@ -41,13 +41,13 @@
                         <h4 class="level-2 rectangle pfoto">
                             Section
                             <br>
-                            {{ \App\DivisionLevelThree::getSectionDetails(3)->name }}
+                            {{ \App\DivisionLevelThree::getSectionDetails(2)->name }}
                             <br><br>
-                            {{ \App\DivisionLevelThree::getSectionDetails(3)->manager->first_name .  ' ' .
-                             \App\DivisionLevelThree::getSectionDetails(3)->manager->surname}}
+                            {{ \App\DivisionLevelThree::getSectionDetails(2)->manager->first_name .  ' ' .
+                             \App\DivisionLevelThree::getSectionDetails(2)->manager->surname}}
                             <br><br>
-                            <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic)  :
+                            <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic)  :
                                    ((\App\DivisionLevelThree::getSectionDetails(1)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"

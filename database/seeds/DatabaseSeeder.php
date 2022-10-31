@@ -709,6 +709,24 @@ class DatabaseSeeder extends Seeder
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'hr/setup';
         $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 11;
+        $ribbon->ribbon_name = 'Licence Management';
+        $ribbon->description = 'Licence Management';
+        $ribbon->ribbon_path = 'employee/licences_management';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon); 
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 12;
+        $ribbon->ribbon_name = 'Organogram';
+        $ribbon->description = 'Organogram';
+        $ribbon->ribbon_path = 'employee/organogram';
+        $ribbon->access_level = 4;
         $module->addRibbon($ribbon);   
 
         $module = new modules(); //Leave Management
