@@ -58,10 +58,10 @@ class DivisionLevelTwo extends Model
             ->pluck('id', 'name');
     }
 
-    public static function getSectionDetails($id)
+    public static function getTeamDetails($id)
     {
         return  DivisionLevelTwo::with('manager')
             ->where('parent_id', $id)
-            ->get();
+            ->first();
     }
 }

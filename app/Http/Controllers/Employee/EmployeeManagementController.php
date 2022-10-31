@@ -596,9 +596,9 @@ class EmployeeManagementController extends Controller
 
 
         $section = DivisionLevelThree::getSectionDetails(2);
-        //dd($section);
-        $teams = DivisionLevelTwo::getSectionDetails(1);
 
+        $teams = DivisionLevelTwo::getTeamDetails(1);
+       //== dd($teams);
         $peopleUnder = HRPerson::getUsersFromTeam(2);
         //dd($peopleUnder);
 
