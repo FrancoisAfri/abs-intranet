@@ -14,6 +14,18 @@ class DivisionLevelFour extends Model
         'name', 'active', 'manager_id'
     ];
 
+    //Relationship hr person and Roles
+    public function hrRoles()
+    {
+        return $this->belongsTo(HRRoles::class, 'manager_id');
+    }
+
+
+    public function HrPositions()
+    {
+        return $this->belongsTo(HRRoles::class, 'position');
+    }
+
     //Relationship Division level 4 and hr_person (manager)
     public function manager()
     {
@@ -69,7 +81,7 @@ class DivisionLevelFour extends Model
     public static function getDepartmentDetails($id)
     {
         return $Divison = DivisionLevelFour::
-        with('manager')
+        with('manager', 'hrRoles')
             ->where('id', $id)
             ->first();
     }
