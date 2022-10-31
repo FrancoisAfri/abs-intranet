@@ -16,63 +16,70 @@
                          class="rounded-corners" alt="Profile" height="30" width="30">
                     <br>
                     <br>
-                    <div>{{ \App\HRPerson::getDirectorDetails(1)->first_name . ' ' . \App\HRPerson::getDirectorDetails(2)->surname }} </div>
+                    <div>{{ \App\HRPerson::getDirectorDetails(1)->first_name . ' ' . \App\HRPerson::getDirectorDetails(1)->surname }} </div>
                     <br>
                     <br>
                 </h4>
                 <ol class="level-3-wrapper">
+                        {{--  department--}}
                     <li>
                         <!-- <h3 class="level-3 rectangle">Manager A</h3> -->
                         <h4 class="level-2 rectangle pfoto">
                             {{ \App\DivisionLevelFour::getDepartmentDetails(1)->name }}
                             <br><br>
-                            {{ \App\DivisionLevelFour::getDepartmentDetails(2)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(3)->manager->surname}}
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(1)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(1)->manager->surname}}
                             <br><br>
-                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(4)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(4)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelFour::getDepartmentDetails(4)->manager->gender === 0) ?
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(1)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(1)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(1)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelFour::getDepartmentDetails(1)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-
+                        {{-- Section--}}
                         <h4 class="level-2 rectangle pfoto">
                             Section
                             <br>
-                            {{ \App\DivisionLevelThree::getSectionDetails(2)->name }}
+                            {{ \App\DivisionLevelThree::getSectionDetails(1)->name }}
                             <br><br>
-                            {{ \App\DivisionLevelThree::getSectionDetails(2)->manager->first_name .  ' ' .
-                             \App\DivisionLevelThree::getSectionDetails(2)->manager->surname}}
+                            {{ \App\DivisionLevelThree::getSectionDetails(1)->manager->first_name .  ' ' .
+                             \App\DivisionLevelThree::getSectionDetails(1)->manager->surname}}
+
                             <br><br>
-                            <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic)  :
+                            {{ \App\DivisionLevelThree::getSectionDetails(1)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(1)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(1)->manager->profile_pic)  :
                                    ((\App\DivisionLevelThree::getSectionDetails(1)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-                        @foreach(\App\DivisionLevelTwo::getSectionDetails(1) as $team)
+                        {{-- Team--}}
                             <h4 class="level-2 rectangle">Team
                                 <br>
-                                {{$team->name }}
+                                {{ \App\DivisionLevelTwo::getTeamDetails(1)->name }}
                                 <br><br>
-                                {{ $team->manager->first_name .  ' ' .
-                                 $team->manager->surname}}
+                                {{ \App\DivisionLevelTwo::getTeamDetails(1)->manager->first_name .  ' ' .
+                                 \App\DivisionLevelTwo::getTeamDetails(1)->manager->surname}}
                                 <br><br>
-                                <img src="{{ (!empty($team->manager->profile_pic))
-                                  ? asset('storage/avatars/'.$team->manager->profile_pic)  :
-                                   (($team->manager->gender === 0) ?
+                                {{ \App\DivisionLevelTwo::getTeamDetails(1)->hrRoles->description }}
+                                <br><br>
+                                <img src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(1)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(1)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelTwo::getTeamDetails(1)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                      class="card-img-top" alt="Profile"
                                      style='height: 40%; width: 40%; object-fit: contain'/>
                                 <br>
                             </h4>
 
-                        @endforeach
-
+                        {{-- users--}}
                         @foreach(\App\HRPerson::getUsersFromTeam(1) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
@@ -90,6 +97,8 @@
                             {{ \App\DivisionLevelFour::getDepartmentDetails(2)->manager->first_name .  ' ' .
                              \App\DivisionLevelFour::getDepartmentDetails(2)->manager->surname}}
                             <br><br>
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(2)->hrRoles->description }}
+                            <br><br>
                             <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic))
                                   ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic)  :
                                    ((\App\DivisionLevelFour::getDepartmentDetails(2)->manager->gender === 0) ?
@@ -98,7 +107,7 @@
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-
+                        {{-- Section--}}
                         <h4 class="level-2 rectangle pfoto">
                             Section
                             <br>
@@ -106,8 +115,10 @@
                             <br><br>
                             {{ \App\DivisionLevelThree::getSectionDetails(2)->manager->first_name .  ' ' .
                              \App\DivisionLevelThree::getSectionDetails(2)->manager->surname}}
-                            <br><br>
 
+                            <br><br>
+                            {{ \App\DivisionLevelThree::getSectionDetails(2)->hrRoles->description }}
+                            <br><br>
                             <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic))
                                   ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic)  :
                                    ((\App\DivisionLevelThree::getSectionDetails(2)->manager->gender === 0) ?
@@ -115,35 +126,34 @@
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
+                        </h4>
+                        {{-- Team--}}
+                        <h4 class="level-2 rectangle">Team
+                            <br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(2)->manager->first_name .  ' ' .
+                             \App\DivisionLevelTwo::getTeamDetails(2)->manager->surname}}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(2)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelTwo::getTeamDetails(2)->manager->gender === 0) ?
+                                    $f_silhouette : $m_silhouette)}} "
+                                 class="card-img-top" alt="Profile"
+                                 style='height: 40%; width: 40%; object-fit: contain'/>
                             <br>
                         </h4>
-                        @foreach(\App\DivisionLevelTwo::getSectionDetails(3) as $team)
-                            <h4 class="level-2 rectangle">Team
-                                <br>
-                                {{$team->name }}
-                                <br><br>
-                                {{ $team->manager->first_name .  ' ' .
-                                 $team->manager->surname}}
-                                <br><br>
-                                <img src="{{ (!empty($team->manager->profile_pic))
-                                  ? asset('storage/avatars/'.$team->manager->profile_pic)  :
-                                   (($team->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                     class="card-img-top" alt="Profile"
-                                     style='height: 40%; width: 40%; object-fit: contain'/>
-                                <br>
-                            </h4>
-                        @endforeach
 
-
+                        {{-- users--}}
                         @foreach(\App\HRPerson::getUsersFromTeam(2) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
-                                    <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }} </h4>
+                                    <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }}</h4>
                                 </li>
                             </ol>
                         @endforeach
-
                     </li>
 
                     <li>
@@ -154,6 +164,8 @@
                             {{ \App\DivisionLevelFour::getDepartmentDetails(3)->manager->first_name .  ' ' .
                              \App\DivisionLevelFour::getDepartmentDetails(3)->manager->surname}}
                             <br><br>
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(3)->hrRoles->description }}
+                            <br><br>
                             <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(3)->manager->profile_pic))
                                   ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(3)->manager->profile_pic)  :
                                    ((\App\DivisionLevelFour::getDepartmentDetails(3)->manager->gender === 0) ?
@@ -162,7 +174,7 @@
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-
+                        {{-- Section--}}
                         <h4 class="level-2 rectangle pfoto">
                             Section
                             <br>
@@ -170,42 +182,45 @@
                             <br><br>
                             {{ \App\DivisionLevelThree::getSectionDetails(3)->manager->first_name .  ' ' .
                              \App\DivisionLevelThree::getSectionDetails(3)->manager->surname}}
+
+                            <br><br>
+                            {{ \App\DivisionLevelThree::getSectionDetails(3)->hrRoles->description }}
                             <br><br>
                             <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic))
                                   ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelThree::getSectionDetails(1)->manager->gender === 0) ?
+                                   ((\App\DivisionLevelThree::getSectionDetails(3)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-                        @foreach($teams as $team)
-                            <h4 class="level-2 rectangle">Team
-                                <br>
-                                {{$team->name }}
-                                <br><br>
-                                {{ $team->manager->first_name .  ' ' .
-                                 $team->manager->surname}}
-                                <br><br>
-                                <img src="{{ (!empty($team->manager->profile_pic))
-                                  ? asset('storage/avatars/'.$team->manager->profile_pic)  :
-                                   (($team->manager->gender === 0) ?
+                        {{-- Team--}}
+                        <h4 class="level-2 rectangle">Team
+                            <br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(3)->name }}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(3)->manager->first_name .  ' ' .
+                             \App\DivisionLevelTwo::getTeamDetails(3)->manager->surname}}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(3)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(3)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(3)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelTwo::getTeamDetails(3)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
-                                     class="card-img-top" alt="Profile"
-                                     style='height: 40%; width: 40%; object-fit: contain'/>
-                                <br>
-                            </h4>
+                                 class="card-img-top" alt="Profile"
+                                 style='height: 40%; width: 40%; object-fit: contain'/>
+                            <br>
+                        </h4>
 
-                        @endforeach
-                        @foreach(\App\HRPerson::getUsersFromTeam(3) as $users)
+                        {{-- users--}}
+                        @foreach(\App\HRPerson::getUsersFromTeam(1) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
                                     <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }}</h4>
                                 </li>
                             </ol>
                         @endforeach
-
-
                     </li>
 
                 </ol>
@@ -224,58 +239,65 @@
                     <br>
                 </h4>
                 <ol class="level-3-wrapper">
+
                     <li>
                         <!-- <h3 class="level-3 rectangle">Manager A</h3> -->
                         <h4 class="level-2 rectangle pfoto">
-                            {{ \App\DivisionLevelFour::getDepartmentDetails(4)->name }}
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(1)->name }}
                             <br><br>
-                            {{ \App\DivisionLevelFour::getDepartmentDetails(4)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(4)->manager->surname}}
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(1)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(1)->manager->surname}}
                             <br><br>
-                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(4)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(4)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelFour::getDepartmentDetails(4)->manager->gender === 0) ?
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(1)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(1)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(1)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelFour::getDepartmentDetails(1)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-
+                        {{-- Section--}}
                         <h4 class="level-2 rectangle pfoto">
                             Section
                             <br>
-                            {{ \App\DivisionLevelThree::getSectionDetails(3)->name }}
+                            {{ \App\DivisionLevelThree::getSectionDetails(1)->name }}
                             <br><br>
-                            {{ \App\DivisionLevelThree::getSectionDetails(3)->manager->first_name .  ' ' .
-                             \App\DivisionLevelThree::getSectionDetails(3)->manager->surname}}
+                            {{ \App\DivisionLevelThree::getSectionDetails(1)->manager->first_name .  ' ' .
+                             \App\DivisionLevelThree::getSectionDetails(1)->manager->surname}}
+
                             <br><br>
-                            <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic)  :
+                            {{ \App\DivisionLevelThree::getSectionDetails(1)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(1)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(1)->manager->profile_pic)  :
                                    ((\App\DivisionLevelThree::getSectionDetails(1)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-                        @foreach($teams as $team)
-                            <h4 class="level-2 rectangle">Team
-                                <br>
-                                {{$team->name }}
-                                <br><br>
-                                {{ $team->manager->first_name .  ' ' .
-                                 $team->manager->surname}}
-                                <br><br>
-                                <img src="{{ (!empty($team->manager->profile_pic))
-                                  ? asset('storage/avatars/'.$team->manager->profile_pic)  :
-                                   (($team->manager->gender === 0) ?
+                        {{-- Team--}}
+                        <h4 class="level-2 rectangle">Team
+                            <br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(1)->name }}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(1)->manager->first_name .  ' ' .
+                             \App\DivisionLevelTwo::getTeamDetails(1)->manager->surname}}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(1)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(1)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(1)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelTwo::getTeamDetails(1)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
-                                     class="card-img-top" alt="Profile"
-                                     style='height: 40%; width: 40%; object-fit: contain'/>
-                                <br>
-                            </h4>
+                                 class="card-img-top" alt="Profile"
+                                 style='height: 40%; width: 40%; object-fit: contain'/>
+                            <br>
+                        </h4>
 
-                        @endforeach
-
+                        {{-- users--}}
                         @foreach(\App\HRPerson::getUsersFromTeam(1) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
@@ -288,20 +310,22 @@
                     <li>
                         <!-- <h3 class="level-3 rectangle">Manager A</h3> -->
                         <h4 class="level-2 rectangle pfoto">
-                            {{ \App\DivisionLevelFour::getDepartmentDetails(5)->name }}
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}
                             <br><br>
-                            {{ \App\DivisionLevelFour::getDepartmentDetails(5)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(5)->manager->surname}}
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(2)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(2)->manager->surname}}
                             <br><br>
-                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(5)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(5)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelFour::getDepartmentDetails(5)->manager->gender === 0) ?
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(2)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelFour::getDepartmentDetails(2)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-
+                        {{-- Section--}}
                         <h4 class="level-2 rectangle pfoto">
                             Section
                             <br>
@@ -309,8 +333,10 @@
                             <br><br>
                             {{ \App\DivisionLevelThree::getSectionDetails(2)->manager->first_name .  ' ' .
                              \App\DivisionLevelThree::getSectionDetails(2)->manager->surname}}
-                            <br><br>
 
+                            <br><br>
+                            {{ \App\DivisionLevelThree::getSectionDetails(2)->hrRoles->description }}
+                            <br><br>
                             <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic))
                                   ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic)  :
                                    ((\App\DivisionLevelThree::getSectionDetails(2)->manager->gender === 0) ?
@@ -318,27 +344,27 @@
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
+                        </h4>
+                        {{-- Team--}}
+                        <h4 class="level-2 rectangle">Team
+                            <br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(2)->manager->first_name .  ' ' .
+                             \App\DivisionLevelTwo::getTeamDetails(2)->manager->surname}}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(2)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelTwo::getTeamDetails(2)->manager->gender === 0) ?
+                                    $f_silhouette : $m_silhouette)}} "
+                                 class="card-img-top" alt="Profile"
+                                 style='height: 40%; width: 40%; object-fit: contain'/>
                             <br>
                         </h4>
-                        @foreach(\App\DivisionLevelTwo::getSectionDetails(2) as $team)
-                            <h4 class="level-2 rectangle">Team
-                                <br>
-                                {{$team->name }}
-                                <br><br>
-                                {{ $team->manager->first_name .  ' ' .
-                                 $team->manager->surname}}
-                                <br><br>
-                                <img src="{{ (!empty($team->manager->profile_pic))
-                                  ? asset('storage/avatars/'.$team->manager->profile_pic)  :
-                                   (($team->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                     class="card-img-top" alt="Profile"
-                                     style='height: 40%; width: 40%; object-fit: contain'/>
-                                <br>
-                            </h4>
-                        @endforeach
 
-
+                        {{-- users--}}
                         @foreach(\App\HRPerson::getUsersFromTeam(2) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
@@ -346,26 +372,27 @@
                                 </li>
                             </ol>
                         @endforeach
-
                     </li>
 
                     <li>
                         <!-- <h3 class="level-3 rectangle">Manager A</h3> -->
                         <h4 class="level-2 rectangle pfoto">
-                            {{ \App\DivisionLevelFour::getDepartmentDetails(6)->name }}
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(3)->name }}
                             <br><br>
-                            {{ \App\DivisionLevelFour::getDepartmentDetails(6)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(6)->manager->surname}}
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(3)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(3)->manager->surname}}
                             <br><br>
-                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(6)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(6)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelFour::getDepartmentDetails(6)->manager->gender === 0) ?
+                            {{ \App\DivisionLevelFour::getDepartmentDetails(3)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(3)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(3)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelFour::getDepartmentDetails(3)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-
+                        {{-- Section--}}
                         <h4 class="level-2 rectangle pfoto">
                             Section
                             <br>
@@ -373,42 +400,45 @@
                             <br><br>
                             {{ \App\DivisionLevelThree::getSectionDetails(3)->manager->first_name .  ' ' .
                              \App\DivisionLevelThree::getSectionDetails(3)->manager->surname}}
+
+                            <br><br>
+                            {{ \App\DivisionLevelThree::getSectionDetails(3)->hrRoles->description }}
                             <br><br>
                             <img src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic))
                                   ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelThree::getSectionDetails(1)->manager->gender === 0) ?
+                                   ((\App\DivisionLevelThree::getSectionDetails(3)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  class="card-img-top" alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
                             <br>
                         </h4>
-                        @foreach($teams as $team)
-                            <h4 class="level-2 rectangle">Team
-                                <br>
-                                {{$team->name }}
-                                <br><br>
-                                {{ $team->manager->first_name .  ' ' .
-                                 $team->manager->surname}}
-                                <br><br>
-                                <img src="{{ (!empty($team->manager->profile_pic))
-                                  ? asset('storage/avatars/'.$team->manager->profile_pic)  :
-                                   (($team->manager->gender === 0) ?
+                        {{-- Team--}}
+                        <h4 class="level-2 rectangle">Team
+                            <br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(3)->name }}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(3)->manager->first_name .  ' ' .
+                             \App\DivisionLevelTwo::getTeamDetails(3)->manager->surname}}
+                            <br><br>
+                            {{ \App\DivisionLevelTwo::getTeamDetails(3)->hrRoles->description }}
+                            <br><br>
+                            <img src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(3)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(3)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelTwo::getTeamDetails(3)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
-                                     class="card-img-top" alt="Profile"
-                                     style='height: 40%; width: 40%; object-fit: contain'/>
-                                <br>
-                            </h4>
+                                 class="card-img-top" alt="Profile"
+                                 style='height: 40%; width: 40%; object-fit: contain'/>
+                            <br>
+                        </h4>
 
-                        @endforeach
-                        @foreach(\App\HRPerson::getUsersFromTeam(3) as $users)
+                        {{-- users--}}
+                        @foreach(\App\HRPerson::getUsersFromTeam(1) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
-                                    <h4 class="level-4 rectangle"> {{ $users->first_name . '' . $users->surname }}</h4>
+                                    <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }}</h4>
                                 </li>
                             </ol>
                         @endforeach
-
-
                     </li>
 
                 </ol>
