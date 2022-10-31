@@ -3,11 +3,8 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @stop
 @section('content')
-    <br>
-    <br>
-    <br>
-    <br>
-    <div class="container overflow-auto text-nowrap overflow-auto ">
+    <br><br><br><br>
+    <div class="container vertical-scrollable">
         <ol class="level-2-wrapper" id="columns">
             <li class="sublevel">
                 <h4 class="level-2 rectangle">
@@ -259,7 +256,6 @@
                     </li>
                 </ol>
             </li>
-
 
             <li class="sublevel">
                 <h4 class="level-2 rectangle">
