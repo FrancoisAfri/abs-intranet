@@ -16,8 +16,20 @@
                     <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
                         <strong class="lead">Report Parameters</strong><br>
                         <strong>Employee Name:</strong> <em>{{ $empFullName }}</em> &nbsp; &nbsp;
-                        @if(!empty($strDateFrom) || !empty($strDateTo))
-                            | &nbsp; &nbsp; <strong>Report Period:</strong> <em>{{ ($strDateFrom) ? $strDateFrom : '[first entry]' . ' - ' . ($strDateTo) ? $strDateTo : '[last entry]' }}</em> &nbsp; &nbsp;
+                        @if(empty($strDateFrom) || !empty($strDateTo))
+							| &nbsp; &nbsp; <strong>Report Period:</strong> <em>
+							@if (!empty($strDateFrom))
+								{{$strDateFrom}}
+							@else
+								{{'[first entry]' . ' - ' }}
+							@endif
+							
+							@if (!empty($strDateTo))
+								{{$strDateTo}}
+							@else
+								{{'[last entry]'}}
+							@endif
+                            </em> &nbsp; &nbsp;
                         @endif
                     </p>
                     <table class="table table-striped table-bordered">
