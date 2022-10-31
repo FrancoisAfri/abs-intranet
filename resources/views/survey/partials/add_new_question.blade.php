@@ -13,7 +13,7 @@
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 					@foreach($division_levels as $division_level)
-						<div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+						<div class="form-group {{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
 							<label for="{{ 'division_level_' . $division_level->level }}"
 								   class="col-sm-2 control-label">{{ $division_level->name }}</label>
 

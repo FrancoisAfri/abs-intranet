@@ -245,6 +245,14 @@ class EmployeeManagementController extends Controller
 
         $employee = HRPerson::getEmployee($slugs[1]);
 
+	   //get manager details
+			if (!empty($employee->manager_id))
+		   $managerDetails = HRPerson::getManagername($employee->manager_id);
+		else $managerDetails = '';
+	    //get second manager details
+		if (!empty($employee->second_manager_id))
+		   $secondmanagerDetails = HRPerson::getSecondManagername($employee->second_manager_id);
+		else $secondmanagerDetails = '';
         //chexk user right
         $userLog = Auth::user()->load('person');
         $objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();
@@ -253,12 +261,6 @@ class EmployeeManagementController extends Controller
         else
             $modAccess = 0;
 
-        $divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
-        $divLevel2 = (!empty($employee['division_level_2'])) ? $employee['division_level_2'] : 0;
-        $divLevel3 = (!empty($employee['division_level_3'])) ? $employee['division_level_3'] : 0;
-        $divLevel4 = (!empty($employee['division_level_4'])) ? $employee['division_level_4'] : 0;
-        $divLevel5 = (!empty($employee['division_level_5'])) ? $employee['division_level_5'] : 0;
-
         $userID = User::where('id', $slugs[1])->first();
         $user = $userID->load('person');
 
@@ -266,15 +268,6 @@ class EmployeeManagementController extends Controller
         // dd($assets);
 
         $license_allocation = LicencesAllocation::getLicenceAllocation($slugs[1]);
-
-//         LicencesAllocation::with('Licenses')
-//            ->where(
-//                [
-//                    'user_id' => $slugs[1],
-//                    'status' => 1
-//                ])->get();
-
-        //
 
         $divLevel1 = (!empty($employee['division_level_1'])) ? $employee['division_level_1'] : 0;
         $divLevel2 = (!empty($employee['division_level_2'])) ? $employee['division_level_2'] : 0;
@@ -423,8 +416,8 @@ class EmployeeManagementController extends Controller
         $data['ethnicities'] = $ethnicities;
         $data['specific'] = $specificVids;
         $data['general'] = $generalVids;
-        $data['specific'] = $specificVids;
-        $data['general'] = $generalVids;
+        $data['secondmanagerDetails'] = $secondmanagerDetails;
+        $data['managerDetails'] = $managerDetails;
         $data['assets'] = $assets;
         $data['user'] = $user;
         $data['employees'] = $employees;

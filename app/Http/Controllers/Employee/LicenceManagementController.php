@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Employee;
 
 use App\DivisionLevel;
 use App\HRPerson;
+use App\DivisionLevelFive;
 use App\Http\Controllers\AuditReportsController;
 use App\Models\Licences;
 use App\Models\LicencesAllocation;
@@ -29,6 +30,11 @@ class LicenceManagementController extends Controller
     public function index()
     {
 
+		//$div = DivisionLevel::divisionLevelGroup();
+		$div =DivisionLevel::where('active',1)->get();  // correct
+		$div5 =DivisionLevelFive::where('active',1)->get();  // correct
+		//$div->divisionLevelGroup();
+		//return $div5;
         $licences = Licences::all();
         $licence_type = LicensesType::where('status', 1)->get();
         $users = HRPerson::where('status', 1)->get();
@@ -102,9 +108,8 @@ class LicenceManagementController extends Controller
         $users = HRPerson::where('status', 1)->get();
         $license_allocation = LicencesAllocation::with('Licenses', 'Hrpersons')->where('licence_id', $LicenceDetails->id)->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-        
+        //return $license_allocation;
 		$licenseHistory = LicencesDates::where('license_id',$LicenceDetails->id )->orderBy('purchase_date')->get();
-
 
         $data = $this->breadCrump(
             "Employee Records",
@@ -122,7 +127,6 @@ class LicenceManagementController extends Controller
         $data['users'] = $users;
         $data['LicenceDetails'] = $LicenceDetails;
         return view('Employees.Licences.show')->with($data);
-
     }
 
 
@@ -173,7 +177,6 @@ class LicenceManagementController extends Controller
         $licence->status = $stastus;
         $licence->update();
 
-
         Alert::success('Status changed', 'Status changed Successfully');
 
         AuditReportsController::store('licence Management', 'licence  Status Changed', "licence  Changed", 0);
@@ -189,17 +192,37 @@ class LicenceManagementController extends Controller
     {
 
         $users = $request['hr_person_id'];
-
-        foreach ($users as $key => $user) {
-            $allocate = LicencesAllocation::create([
-                'licence_id' => $request['licence_id'],
-                'user_id' => $user,
-                'status' => 1
-            ]);
+		$division_level_5 = !empty($request->input('division_level_5')) ? $request->input('division_level_5'): 0;
+		$division_level_4 = !empty($request->input('division_level_4')) ? $request->input('division_level_4'): 0;
+		$division_level_3 = !empty($request->input('division_level_3')) ? $request->input('division_level_3'): 0;
+		$division_level_2 = !empty($request->input('division_level_2')) ? $request->input('division_level_2'): 0;
+		$division_level_1 = !empty($request->input('division_level_1')) ? $request->input('division_level_1'): 0;
+		
+		// get users according 
+		if (!empty($users))
+            $employees = $users;
+        elseif (!empty($division_level_1))
+            $employees = HRPerson::where('division_level_1', $division_level_1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($division_level_2))
+            $employees = HRPerson::where('division_level_2', $division_level_2)->where('status', 1)->pluck('id');
+        elseif (!empty($division_level_3))
+            $employees = HRPerson::where('division_level_3', $division_level_3)->where('status', 1)->pluck('id');
+        elseif (!empty($division_level_4))
+            $employees = HRPerson::where('division_level_4', $division_level_4)->where('status', 1)->pluck('id');
+        elseif (!empty($division_level_5))
+            $employees = HRPerson::where('division_level_5', $division_level_5)->where('status', 1)->pluck('id');
+			
+        foreach ($employees as $key => $user) {
+			
+			$allocate = new LicencesAllocation();
+			$allocate->status = 1;
+			$allocate->licence_id =$request['licence_id'];
+			$allocate->user_id = $user;
+			$allocate->save();
         }
 
         $licence = Licences::where('id', $request['licence_id'])->first();
-        $total_sum = $licence['total'] - count($users);
+        $total_sum = $licence['total'] - count($employees);
 
         Licences::where('id', $request['licence_id'])->update(
             [

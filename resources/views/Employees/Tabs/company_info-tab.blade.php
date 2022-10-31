@@ -58,7 +58,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{ (!empty($employee->division)) ? $employee->division : '' }}
+							{{ (!empty($employee->division->name)) ? $employee->division->name : '' }}
                         </div>
 
                     </td>
@@ -71,7 +71,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{ (!empty($employee->department)) ? $employee->department : '' }}
+							{{ (!empty($employee->department->name)) ? $employee->department->name : '' }}
                         </div>
 
                     </td>
@@ -84,8 +84,10 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{ (!empty($employee->manager_first_name . ' ' . $employee->manager_surname)) ? $employee->manager_first_name . ' ' . $employee->manager_surname : '' }}
-                        </div>
+							@if (!empty($managerDetails))
+								{{ (!empty($managerDetails->first_name . ' ' . $managerDetails->surname)) ? $managerDetails->first_name . ' ' . $managerDetails->surname : '' }}
+							@endif
+					   </div>
 
                     </td>
                 </tr>
@@ -97,8 +99,10 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{ (!empty($employee->second_manager_first_name . ''. $employee->second_manager_surname)) ? $employee->second_manager_first_name . ''. $employee->second_manager_surname : '' }}
-                        </div>
+							@if (!empty($secondmanagerDetails))
+								{{ (!empty($secondmanagerDetails->first_name . ''. $secondmanagerDetails->surname)) ? $secondmanagerDetails->first_name . ''. $secondmanagerDetails->surname : '' }}
+							@endif
+						</div>
 
                     </td>
                 </tr>
