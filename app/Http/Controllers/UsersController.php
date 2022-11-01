@@ -131,7 +131,6 @@ class UsersController extends Controller
         AuditReportsController::store('Security', 'Public Holidays Page Accessed', "Accessed By User", 0);
         return view('security.public_holiday')->with($data);
     }
-
     //
     public function saveHoliday(Request $request)
     {
@@ -594,7 +593,7 @@ class UsersController extends Controller
             //check if user has assets
             $manager = ItManager::where('status', 1)->get();
 
-            foreach ($manager as $managers){
+            foreach ($manager as $managers) {
 
                 $ItManager = HRPerson::getManagerDetails($managers->user_id);
                 $userDetails = HRPerson::getManagerDetails($user);

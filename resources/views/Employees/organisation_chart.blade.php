@@ -10,7 +10,8 @@
                 <h4 class="level-2 rectangle">
                     <br>
                     <img class="img-circle img-bordered-sm"
-                         src="{{ (!empty(\App\HRPerson::getDirectorDetails(1)->profile_pic)) ? asset('storage/avatars/'.\App\HRPerson::getDirectorDetails(1)->profile_pic)  : ((\App\HRPerson::getDirectorDetails(1)->gender === 0) ? $f_silhouette : $m_silhouette)}} "
+                         src="{{ (!empty(\App\HRPerson::getDirectorDetails(1)->profile_pic)) ? asset('storage/avatars/'.\App\HRPerson::getDirectorDetails(1)->profile_pic)
+: ((\App\HRPerson::getDirectorDetails(1)->gender === 0) ? $f_silhouette : $m_silhouette)}} "
                          class="rounded-corners" alt="Profile" height="30" width="30">
                     <br>
                     <strong><i class="fa fa-pencil margin-r-5"></i> Directors</strong>
@@ -21,6 +22,8 @@
                 </h4>
                 <ol class="level-3-wrapper">
                     {{--  department--}}
+
+
                     <li>
                         <!-- <h3 class="level-3 rectangle">Manager A</h3> -->
                         <h4 class="level-2 rectangle pfoto">
@@ -36,64 +39,60 @@
                                     $f_silhouette : $m_silhouette)}} "
                                  alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
+                            <br><br>
+                            <span style="color: white">{{ \App\DivisionLevelFour::getDepartmentDetails(1)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(1)->manager->surname}}</span>
                             <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelFour::getDepartmentDetails(1)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(1)->manager->surname}}
-                            </a>
                             <br>
                             <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(1)->hrRoles->description }}</span>
-                        </h4>
-                        {{-- Section--}}
-                        <h4 class="level-2 rectangle pfoto">
-
-                            <a data-toggle="tooltip"
-                               title="Section - {{ \App\DivisionLevelFour::getDepartmentDetails(1)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelThree::getSectionDetails(1)->name }}</a>
-
-
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(1)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(1)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelThree::getSectionDetails(1)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 60%; width: 60%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelThree::getSectionDetails(1)->manager->first_name .  ' ' .
-                                 \App\DivisionLevelThree::getSectionDetails(1)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelThree::getSectionDetails(1)->hrRoles->description  }}</span>
-                        </h4>
-                        {{-- Team--}}
-                        <h4 class="level-2 rectangle">Team
-                            <a data-toggle="tooltip"
-                               title="Team - {{ \App\DivisionLevelTwo::getTeamDetails(1)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelTwo::getTeamDetails(1)->name }}</a>
-                            <br>
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(1)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(1)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelTwo::getTeamDetails(1)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 40%; width: 40%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelTwo::getTeamDetails(1)->manager->first_name .  ' ' .
-                            \App\DivisionLevelTwo::getTeamDetails(1)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelTwo::getTeamDetails(1)->hrRoles->description }}</span>
                         </h4>
 
                         {{-- users--}}
                         @foreach(\App\HRPerson::getUsersFromTeam(1) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
-                                    <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }}</h4>
+
+                                    <h4 class="level-4 rectangle">
+                                        <img class="img-circle img-bordered-sm" src="{{ (!empty($users->profile_pic))
+                                  ? asset('storage/avatars/'.$users->profile_pic)  :
+                                   (($users->gender === 0) ?
+                                    $f_silhouette : $m_silhouette)}} "
+                                             alt="Profile"
+                                             style='height: 60%; width: 60%; object-fit: contain'/>
+
+
+                                        {{ $users->first_name . '' . $users->surname }}
+                                        <br><br>
+                                        <span class="label label-success ">{{ $users->jobTitle->name }}</span>
+{{--                                        @if( $users->id  == $users->section->manager_id)--}}
+                                        <br><br>
+                                        @if( $users->id  == $users->section->manager_id)
+                                        <span class="badge label-warning" data-toggle="tooltip"
+                                           title="Section - {{$users->section->name }}"
+                                           class="users-list-name">{{ $users->section->name }}
+                                            <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                        </span>
+                                        @endif
+                                        <br><br>
+                                        @if( $users->id  == $users->team->manager_id)
+                                        <span class="badge label-warning" data-toggle="tooltip"
+                                              title="Team - {{$users->team->name }}"
+                                              class="users-list-name"> {{ $users->team->name }}
+                                             <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                        </span>
+                                        @endif
+
+                                    </h4>
                                 </li>
                             </ol>
                         @endforeach
@@ -114,64 +113,60 @@
                                     $f_silhouette : $m_silhouette)}} "
                                  alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
+                            <br><br>
+                            <span style="color: white">{{ \App\DivisionLevelFour::getDepartmentDetails(2)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(2)->manager->surname}}</span>
                             <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelFour::getDepartmentDetails(2)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(2)->manager->surname}}
-                            </a>
                             <br>
                             <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(2)->hrRoles->description }}</span>
-                        </h4>
-                        {{-- Section--}}
-                        <h4 class="level-2 rectangle pfoto">
-
-                            <a data-toggle="tooltip"
-                               title="Section - {{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelThree::getSectionDetails(2)->name }}</a>
-
-
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelThree::getSectionDetails(2)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 60%; width: 60%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelThree::getSectionDetails(2)->manager->first_name .  ' ' .
-                                 \App\DivisionLevelThree::getSectionDetails(2)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelThree::getSectionDetails(2)->hrRoles->description  }}</span>
-                        </h4>
-                        {{-- Team--}}
-                        <h4 class="level-2 rectangle">Team
-                            <a data-toggle="tooltip"
-                               title="Team - {{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}</a>
-                            <br>
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelTwo::getTeamDetails(2)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 40%; width: 40%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelTwo::getTeamDetails(2)->manager->first_name .  ' ' .
-                            \App\DivisionLevelTwo::getTeamDetails(2)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelTwo::getTeamDetails(2)->hrRoles->description }}</span>
                         </h4>
 
                         {{-- users--}}
                         @foreach(\App\HRPerson::getUsersFromTeam(2) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
-                                    <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }}</h4>
+
+                                    <h4 class="level-4 rectangle">
+                                        <img class="img-circle img-bordered-sm" src="{{ (!empty($users->profile_pic))
+                                  ? asset('storage/avatars/'.$users->profile_pic)  :
+                                   (($users->gender === 0) ?
+                                    $f_silhouette : $m_silhouette)}} "
+                                             alt="Profile"
+                                             style='height: 60%; width: 60%; object-fit: contain'/>
+
+
+                                        {{ $users->first_name . '' . $users->surname }}
+                                        <br><br>
+                                        <span class="label label-success ">{{ $users->jobTitle->name }}</span>
+                                        {{--                                        @if( $users->id  == $users->section->manager_id)--}}
+                                        <br><br>
+                                        @if( $users->id  == $users->section->manager_id)
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                            <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                        </span>
+                                        @endif
+                                        <br><br>
+                                        @if( $users->id  == $users->team->manager_id)
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                             <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                        </span>
+                                        @endif
+
+                                    </h4>
                                 </li>
                             </ol>
                         @endforeach
@@ -188,72 +183,69 @@
                             <br>
                             <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(3)->manager->profile_pic))
                                   ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(3)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelFour::getDepartmentDetails(3)->manager->gender === 0) ?
+                                   ((\App\DivisionLevelFour::getDepartmentDetails(1)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
+                            <br><br>
+                            <span style="color: white">{{ \App\DivisionLevelFour::getDepartmentDetails(3)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(3)->manager->surname}}</span>
                             <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelFour::getDepartmentDetails(3)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(3)->manager->surname}}
-                            </a>
                             <br>
                             <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(3)->hrRoles->description }}</span>
-                        </h4>
-                        {{-- Section--}}
-                        <h4 class="level-2 rectangle pfoto">
-
-                            <a data-toggle="tooltip"
-                               title="Section - {{ \App\DivisionLevelFour::getDepartmentDetails(3)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelThree::getSectionDetails(3)->name }}</a>
-
-
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(3)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelThree::getSectionDetails(3)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 60%; width: 60%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelThree::getSectionDetails(3)->manager->first_name .  ' ' .
-                                 \App\DivisionLevelThree::getSectionDetails(3)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelThree::getSectionDetails(3)->hrRoles->description  }}</span>
-                        </h4>
-                        {{-- Team--}}
-                        <h4 class="level-2 rectangle">Team
-                            <a data-toggle="tooltip"
-                               title="Team - {{ \App\DivisionLevelTwo::getTeamDetails(3)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelTwo::getTeamDetails(3)->name }}</a>
-                            <br>
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(3)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(3)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelTwo::getTeamDetails(3)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 40%; width: 40%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelTwo::getTeamDetails(3)->manager->first_name .  ' ' .
-                            \App\DivisionLevelTwo::getTeamDetails(3)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelTwo::getTeamDetails(3)->hrRoles->description }}</span>
                         </h4>
 
                         {{-- users--}}
                         @foreach(\App\HRPerson::getUsersFromTeam(3) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
-                                    <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }}</h4>
+
+                                    <h4 class="level-4 rectangle">
+                                        <img class="img-circle img-bordered-sm" src="{{ (!empty($users->profile_pic))
+                                  ? asset('storage/avatars/'.$users->profile_pic)  :
+                                   (($users->gender === 0) ?
+                                    $f_silhouette : $m_silhouette)}} "
+                                             alt="Profile"
+                                             style='height: 60%; width: 60%; object-fit: contain'/>
+
+
+                                        {{ $users->first_name . '' . $users->surname }}
+                                        <br><br>
+                                        <span class="label label-success ">{{ $users->jobTitle->name }}</span>
+                                        {{--                                        @if( $users->id  == $users->section->manager_id)--}}
+                                        <br><br>
+                                        @if( $users->id  == $users->section->manager_id)
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                            <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                        </span>
+                                        @endif
+                                        <br><br>
+                                        @if( $users->id  == $users->team->manager_id)
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                             <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                        </span>
+                                        @endif
+
+                                    </h4>
                                 </li>
                             </ol>
                         @endforeach
                     </li>
+
                 </ol>
             </li>
 
@@ -261,89 +253,89 @@
                 <h4 class="level-2 rectangle">
                     <br>
                     <img class="img-circle img-bordered-sm"
-                         src="{{ (!empty(\App\HRPerson::getDirectorDetails(1)->profile_pic)) ? asset('storage/avatars/'.\App\HRPerson::getDirectorDetails(1)->profile_pic)  : ((\App\HRPerson::getDirectorDetails(1)->gender === 0) ? $f_silhouette : $m_silhouette)}} "
+                         src="{{ (!empty(\App\HRPerson::getDirectorDetails(4)->profile_pic)) ? asset('storage/avatars/'.\App\HRPerson::getDirectorDetails(4)->profile_pic)
+: ((\App\HRPerson::getDirectorDetails(1)->gender === 0) ? $f_silhouette : $m_silhouette)}} "
                          class="rounded-corners" alt="Profile" height="30" width="30">
                     <br>
-                    <strong><i class="fa fa-pencil margin-r-5"></i> Ceo</strong>
+                    <strong><i class="fa fa-pencil margin-r-5"></i> Directors</strong>
                     <br>
-                    <div>{{ \App\HRPerson::getDirectorDetails(1)->first_name . ' ' . \App\HRPerson::getDirectorDetails(1)->surname }} </div>
+                    <div>{{ \App\HRPerson::getDirectorDetails(4)->first_name . ' ' . \App\HRPerson::getDirectorDetails(4)->surname }} </div>
+                    <br>
                     <br>
                 </h4>
                 <ol class="level-3-wrapper">
+                    {{--  department--}}
+
 
                     <li>
                         <!-- <h3 class="level-3 rectangle">Manager A</h3> -->
                         <h4 class="level-2 rectangle pfoto">
 
                             <a data-toggle="tooltip"
-                               title="Department - {{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}"
+                               title="Department - {{ \App\DivisionLevelFour::getDepartmentDetails(4)->name }}"
                                class="users-list-name"
-                               href="#">{{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}</a>
+                               href="#">{{ \App\DivisionLevelFour::getDepartmentDetails(4)->name }}</a>
                             <br>
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelFour::getDepartmentDetails(2)->manager->gender === 0) ?
+                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(4)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(4)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelFour::getDepartmentDetails(4)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
+                            <br><br>
+                            <span style="color: white">{{ \App\DivisionLevelFour::getDepartmentDetails(4)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(4)->manager->surname}}</span>
                             <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelFour::getDepartmentDetails(2)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(2)->manager->surname}}
-                            </a>
                             <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(2)->hrRoles->description }}</span>
-                        </h4>
-                        {{-- Section--}}
-                        <h4 class="level-2 rectangle pfoto">
-
-                            <a data-toggle="tooltip"
-                               title="Section - {{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelThree::getSectionDetails(2)->name }}</a>
-
-
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelThree::getSectionDetails(2)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 60%; width: 60%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelThree::getSectionDetails(2)->manager->first_name .  ' ' .
-                                 \App\DivisionLevelThree::getSectionDetails(2)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelThree::getSectionDetails(2)->hrRoles->description  }}</span>
-                        </h4>
-                        {{-- Team--}}
-                        <h4 class="level-2 rectangle">Team
-                            <a data-toggle="tooltip"
-                               title="Team - {{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}</a>
-                            <br>
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelTwo::getTeamDetails(2)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 40%; width: 40%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelTwo::getTeamDetails(2)->manager->first_name .  ' ' .
-                            \App\DivisionLevelTwo::getTeamDetails(2)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelTwo::getTeamDetails(2)->hrRoles->description }}</span>
+                            <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(4)->hrRoles->description }}</span>
                         </h4>
 
                         {{-- users--}}
-                        @foreach(\App\HRPerson::getUsersFromTeam(2) as $users)
+                        @foreach(\App\HRPerson::getUsersFromTeam(4) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
-                                    <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }}</h4>
+
+                                    <h4 class="level-4 rectangle">
+                                        <img class="img-circle img-bordered-sm" src="{{ (!empty($users->profile_pic))
+                                  ? asset('storage/avatars/'.$users->profile_pic)  :
+                                   (($users->gender === 0) ?
+                                    $f_silhouette : $m_silhouette)}} "
+                                             alt="Profile"
+                                             style='height: 60%; width: 60%; object-fit: contain'/>
+
+
+                                        {{ $users->first_name . '' . $users->surname }}
+                                        <br><br>
+                                        <span class="label label-success ">{{ $users->jobTitle->name }}</span>
+                                        {{--                                        @if( $users->id  == $users->section->manager_id)--}}
+                                        <br><br>
+                                        @if( $users->id  == $users->section->manager_id)
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                            <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                        </span>
+                                        @endif
+                                        <br><br>
+                                        @if( $users->id  == $users->team->manager_id)
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                             <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                        </span>
+                                        @endif
+
+                                    </h4>
                                 </li>
                             </ol>
                         @endforeach
@@ -354,74 +346,70 @@
                         <h4 class="level-2 rectangle pfoto">
 
                             <a data-toggle="tooltip"
-                               title="Department - {{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}"
+                               title="Department - {{ \App\DivisionLevelFour::getDepartmentDetails(5)->name }}"
                                class="users-list-name"
-                               href="#">{{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}</a>
+                               href="#">{{ \App\DivisionLevelFour::getDepartmentDetails(5)->name }}</a>
                             <br>
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelFour::getDepartmentDetails(2)->manager->gender === 0) ?
+                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(5)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(5)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelFour::getDepartmentDetails(5)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
+                            <br><br>
+                            <span style="color: white">{{ \App\DivisionLevelFour::getDepartmentDetails(5)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(5)->manager->surname}}</span>
                             <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelFour::getDepartmentDetails(2)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(2)->manager->surname}}
-                            </a>
                             <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(2)->hrRoles->description }}</span>
-                        </h4>
-                        {{-- Section--}}
-                        <h4 class="level-2 rectangle pfoto">
-
-                            <a data-toggle="tooltip"
-                               title="Section - {{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelThree::getSectionDetails(2)->name }}</a>
-
-
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelThree::getSectionDetails(2)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 60%; width: 60%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelThree::getSectionDetails(2)->manager->first_name .  ' ' .
-                                 \App\DivisionLevelThree::getSectionDetails(2)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelThree::getSectionDetails(2)->hrRoles->description  }}</span>
-                        </h4>
-                        {{-- Team--}}
-                        <h4 class="level-2 rectangle">Team
-                            <a data-toggle="tooltip"
-                               title="Team - {{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}</a>
-                            <br>
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelTwo::getTeamDetails(2)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 40%; width: 40%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelTwo::getTeamDetails(2)->manager->first_name .  ' ' .
-                            \App\DivisionLevelTwo::getTeamDetails(2)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelTwo::getTeamDetails(2)->hrRoles->description }}</span>
+                            <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(5)->hrRoles->description }}</span>
                         </h4>
 
                         {{-- users--}}
-                        @foreach(\App\HRPerson::getUsersFromTeam(2) as $users)
+                        @foreach(\App\HRPerson::getUsersFromTeam(5) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
-                                    <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }}</h4>
+
+                                    <h4 class="level-4 rectangle">
+                                        <img class="img-circle img-bordered-sm" src="{{ (!empty($users->profile_pic))
+                                  ? asset('storage/avatars/'.$users->profile_pic)  :
+                                   (($users->gender === 0) ?
+                                    $f_silhouette : $m_silhouette)}} "
+                                             alt="Profile"
+                                             style='height: 60%; width: 60%; object-fit: contain'/>
+
+
+                                        {{ $users->first_name . '' . $users->surname }}
+                                        <br><br>
+                                        <span class="label label-success ">{{ $users->jobTitle->name }}</span>
+                                        {{--                                        @if( $users->id  == $users->section->manager_id)--}}
+                                        <br><br>
+                                        @if( $users->id  == $users->section->manager_id)
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                            <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                        </span>
+                                        @endif
+                                        <br><br>
+                                        @if( $users->id  == $users->team->manager_id)
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                             <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                        </span>
+                                        @endif
+
+                                    </h4>
                                 </li>
                             </ol>
                         @endforeach
@@ -432,74 +420,73 @@
                         <h4 class="level-2 rectangle pfoto">
 
                             <a data-toggle="tooltip"
-                               title="Department - {{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}"
+                               title="Department - {{ \App\DivisionLevelFour::getDepartmentDetails(6)->name }}"
                                class="users-list-name"
-                               href="#">{{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}</a>
+                               href="#">{{ \App\DivisionLevelFour::getDepartmentDetails(6)->name }}</a>
                             <br>
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelFour::getDepartmentDetails(2)->manager->gender === 0) ?
+                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelFour::getDepartmentDetails(6)->manager->profile_pic))
+                                  ? asset('storage/avatars/'.\App\DivisionLevelFour::getDepartmentDetails(6)->manager->profile_pic)  :
+                                   ((\App\DivisionLevelFour::getDepartmentDetails(6)->manager->gender === 0) ?
                                     $f_silhouette : $m_silhouette)}} "
                                  alt="Profile"
                                  style='height: 60%; width: 60%; object-fit: contain'/>
+                            <br><br>
+                            <span style="color: white">{{ \App\DivisionLevelFour::getDepartmentDetails(6)->manager->first_name .  ' ' .
+                             \App\DivisionLevelFour::getDepartmentDetails(6)->manager->surname}}</span>
                             <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelFour::getDepartmentDetails(2)->manager->first_name .  ' ' .
-                             \App\DivisionLevelFour::getDepartmentDetails(2)->manager->surname}}
-                            </a>
                             <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(2)->hrRoles->description }}</span>
-                        </h4>
-                        {{-- Section--}}
-                        <h4 class="level-2 rectangle pfoto">
-
-                            <a data-toggle="tooltip"
-                               title="Section - {{ \App\DivisionLevelFour::getDepartmentDetails(2)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelThree::getSectionDetails(2)->name }}</a>
-
-
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelThree::getSectionDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelThree::getSectionDetails(2)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 60%; width: 60%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelThree::getSectionDetails(2)->manager->first_name .  ' ' .
-                                 \App\DivisionLevelThree::getSectionDetails(2)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelThree::getSectionDetails(2)->hrRoles->description  }}</span>
-                        </h4>
-                        {{-- Team--}}
-                        <h4 class="level-2 rectangle">Team
-                            <a data-toggle="tooltip"
-                               title="Team - {{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}"
-                               class="users-list-name"
-                               href="#">{{ \App\DivisionLevelTwo::getTeamDetails(2)->name }}</a>
-                            <br>
-                            <img class="img-circle img-bordered-sm" src="{{ (!empty(\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic))
-                                  ? asset('storage/avatars/'.\App\DivisionLevelTwo::getTeamDetails(2)->manager->profile_pic)  :
-                                   ((\App\DivisionLevelTwo::getTeamDetails(2)->manager->gender === 0) ?
-                                    $f_silhouette : $m_silhouette)}} "
-                                 class="card-img-top" alt="Profile"
-                                 style='height: 40%; width: 40%; object-fit: contain'/>
-                            <br>
-                            <a class="users-list-name" href="#">
-                                {{ \App\DivisionLevelTwo::getTeamDetails(2)->manager->first_name .  ' ' .
-                            \App\DivisionLevelTwo::getTeamDetails(2)->manager->surname}}
-                            </a>
-                            <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelTwo::getTeamDetails(2)->hrRoles->description }}</span>
+                            <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(6)->hrRoles->description }}</span>
                         </h4>
 
                         {{-- users--}}
-                        @foreach(\App\HRPerson::getUsersFromTeam(2) as $users)
+                        @foreach(\App\HRPerson::getUsersFromTeam(6) as $users)
                             <ol class="level-4-wrapper">
                                 <li>
-                                    <h4 class="level-4 rectangle">{{ $users->first_name . '' . $users->surname }}</h4>
+
+                                    <h4 class="level-4 rectangle">
+                                        <img class="img-circle img-bordered-sm" src="{{ (!empty($users->profile_pic))
+                                  ? asset('storage/avatars/'.$users->profile_pic)  :
+                                   (($users->gender === 0) ?
+                                    $f_silhouette : $m_silhouette)}} "
+                                             alt="Profile"
+                                             style='height: 60%; width: 60%; object-fit: contain'/>
+
+
+                                        {{ $users->first_name . '' . $users->surname }}
+                                        <br><br>
+                                        <span class="label label-success ">{{ $users->jobTitle->name }}</span>
+                                        {{--                                        @if( $users->id  == $users->section->manager_id)--}}
+                                        <br><br>
+                                        @if( $users->id  == $users->section->manager_id)
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                            <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span class="badge label-warning" data-toggle="tooltip"
+                                                  title="Section - {{$users->section->name }}"
+                                                  class="users-list-name">{{ $users->section->name }}
+                                        </span>
+                                        @endif
+                                        <br><br>
+                                        @if( $users->id  == $users->team->manager_id)
+                                            <span  style="line-height: 33px !important"
+                                                    class="badge label-warning" data-toggle="tooltip"
+                                                  title="Team - {{$users->team->name }}"
+                                                  class="users-list-name"> {{ $users->team->name }}
+                                             <i class="fa fa-star margin-r-5"></i>
+                                        </span>
+                                        @else
+                                            <span  style="line-height: 2px !important"
+                                                   class="badge label-warning" data-toggle="tooltip"
+                                                   title="Team - {{$users->team->name }}"
+                                                   class="users-list-name"> {{ $users->team->name }}
+
+                                        </span>
+                                        @endif
+
+                                    </h4>
                                 </li>
                             </ol>
                         @endforeach

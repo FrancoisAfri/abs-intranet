@@ -122,6 +122,16 @@ class HRPerson extends Model
         return $this->belongsTo(DivisionLevelFour::class, 'division_level_4');
     }
 
+    public function section()
+    {
+        return $this->belongsTo(DivisionLevelThree::class, 'division_level_3');
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(DivisionLevelTwo::class, 'division_level_2');
+    }
+
     //Relationship hr person and 360 person
     public function threeSixtyPeople()
     {
@@ -327,13 +337,15 @@ class HRPerson extends Model
 
     public static function getUsersFromTeam($dv2)
     {
-        return HRPerson::with('HrPositions')
-            ->where(
-                [
-                    'division_level_2' => $dv2,
-                ]
-            )
-                ->get();
+        return HRPerson::select(
+            'hr_people.*'
+        )
+            ->where('hr_people.division_level_4', $dv2)
+            ->with('jobTitle','section', 'team')
+            ->get();
+//        section
+//team
+
     }
 
 

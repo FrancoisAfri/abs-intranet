@@ -6,9 +6,9 @@ THIS PROJECT USES SCSS Preprocessor
 /* RESET STYLES & HELPER CLASSES ------------------------------------------------------------------------------------- */
 :root {
     --level-1: #8dccad;
-    --level-2: #f5cc7f;
+    --level-4: #ec9c05;
     --level-3: #7b9fe0;
-    --level-4: #f27c8d;
+    --level-2: #960606;
     --black: black;
 
     --red: #ff1111;
@@ -279,5 +279,5 @@ body {
 }
 
 .col-sm-8:nth-child(2n+2) {
-    background: black;
+    background: #ffffff;
 }

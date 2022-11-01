@@ -519,6 +519,7 @@ class EmployeeManagementController extends Controller
                 $doc->update();
             }
         }
+
         $employee = HRPerson::find($doc->hr_person_id);
 
         AuditReportsController::store('Contacts', 'Document Updated', "Company Document Updated,, 
@@ -548,7 +549,6 @@ class EmployeeManagementController extends Controller
     {
         //
     }
-
     /**
      * Remove the specified resource from storage.
      *
@@ -594,13 +594,8 @@ class EmployeeManagementController extends Controller
         $teams = DivisionLevelTwo::getTeamDetails(2);
 //        dd($teams);
 
-     //   dd(DivisionLevelFour::getDepartmentDetails(3));
-       //== dd($teams);
-        $peopleUnder = HRPerson::getUsersFromTeam(2);
-        //dd($peopleUnder);
-
-
-        //  dd($division_levels->filter());
+        $peopleUnder = HRPerson::getUsersFromTeam(3);
+       // dd($peopleUnder);
 
         $data = $this->breadCrump(
             "Employee Records",

@@ -198,14 +198,19 @@ class AssetManagementController extends Controller
             ($request['transfer_to'] == 2) ? ($store = $request['store_id']) : ($store = 0);
 
             // get the last record and update it with 0
-            $lastRecord = AssetTransfers::where(['asset_id' => $request['asset_id'],'current_value' => 1])->first();
-            if (!empty($lastRecord->id))
-			{
-				AssetTransfers::where([
-					'id' => $lastRecord->id,
-					'asset_id' => $request['asset_id']
-					])->update(['current_value' => 0]);
-			}
+            $lastRecord = AssetTransfers::where(
+                [
+                    'asset_id' => $request['asset_id'],
+                    'current_value' => 1
+                ]
+            )->first();
+
+            if (!empty($lastRecord->id)) {
+                AssetTransfers::where([
+                    'id' => $lastRecord->id,
+                    'asset_id' => $request['asset_id']
+                ])->update(['current_value' => 0]);
+            }
             AssetTransfers::create([
                 $request->all(),
                 'name' => $request['name'],
@@ -263,6 +268,7 @@ class AssetManagementController extends Controller
         );
 
         return view('assets.manageAssets.transfer-images')->with($data);
+
     }
 
     /**
