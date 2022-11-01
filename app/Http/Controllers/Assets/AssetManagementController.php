@@ -200,6 +200,7 @@ class AssetManagementController extends Controller
 
             // get the last record and update it with 0
             $lastRecord = AssetTransfers::latest('id')->first();
+            
             AssetTransfers::where([
                 'id' => $lastRecord['id'],
                 'asset_id' => $request['asset_id']

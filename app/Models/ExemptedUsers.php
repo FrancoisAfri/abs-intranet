@@ -14,6 +14,8 @@ class ExemptedUsers extends Model
     ];
 
 
+
+
     /**
      * @param $id
      * @return \Illuminate\Support\Collection
@@ -29,6 +31,7 @@ class ExemptedUsers extends Model
      */
     public static function getListOfExemptedUsers()
     {
+
 
         //ManagerReport::
         return DB::table('exempted_users', 'hr')
