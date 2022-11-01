@@ -3,7 +3,12 @@
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
 @stop
 @section('content')
-    <br><br><br><br>
+    <br><br>
+    <div class="callout callout-warning">
+        <h4>Reminder!</h4>
+       Users with a   <i class="fa fa-star margin-r-5"></i> are Either head of Team or Team
+    </div>
+    <br><br>
     <div class="container vertical-scrollable">
         <ol class="level-2-wrapper" id="columns">
             <li class="sublevel">
@@ -24,7 +29,6 @@
                 </h4>
                 <ol class="level-3-wrapper">
                     {{--  department--}}
-
 
                     <li>
                         <!-- <h3 class="level-3 rectangle">Manager A</h3> -->
