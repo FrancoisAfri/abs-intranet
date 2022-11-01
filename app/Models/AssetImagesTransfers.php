@@ -16,7 +16,7 @@ class AssetImagesTransfers extends Model
     public $timestamps = true;
 
     protected $fillable = [
-        'picture', 'asset_id', 'status'
+        'picture', 'asset_id', 'status', 'transfer_id'
     ];
 
     public static function getImagesById($asset_id, $date)

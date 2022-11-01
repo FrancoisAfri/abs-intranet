@@ -24,7 +24,7 @@
                                         id="hr_person_id" name="hr_person_id[]">
                                     <option value="">*** Select Employee ***</option>
                                     @foreach($users as $employee)
-                                        <option value="{{ $employee->employee_number }} ">{{$employee->first_name . ' ' . $employee->surname }}</option>
+                                        <option value="{{ $employee->id }} ">{{$employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach
                                 </select>
                             </div>

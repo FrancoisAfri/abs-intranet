@@ -12,7 +12,7 @@
                     <div class="col-md-4">
                         <div class="card mb-4 shadow-sm">
                             <img class="bd-placeholder-img card-img-top" width="80%" height="200"
-                                 src="{{ asset('storage/files/images/'.$images->picture) }} " alt="Photo">
+                                 src="{{ asset('storage/assets/images/'.$images->picture) }} " alt="Photo">
                             <div class="card-body">
                                 <p class="card-text"></p>
                                 <div class="d-flex justify-content-between align-items-center"></div>

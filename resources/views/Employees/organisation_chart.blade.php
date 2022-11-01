@@ -16,7 +16,7 @@
                          src="{{ (!empty(\App\HRPerson::getDirectorDetails(1)->profile_pic)) ? asset('storage/avatars/'.\App\HRPerson::getDirectorDetails(1)->profile_pic)  : ((\App\HRPerson::getDirectorDetails(1)->gender === 0) ? $f_silhouette : $m_silhouette)}} "
                          class="rounded-corners" alt="Profile" height="30" width="30">
                     <br>
-                    <strong><i class="fa fa-pencil margin-r-5"></i> Ceo</strong>
+                    <strong><i class="fa fa-pencil margin-r-5"></i> Directors</strong>
                     <br>
                     <div>{{ \App\HRPerson::getDirectorDetails(1)->first_name . ' ' . \App\HRPerson::getDirectorDetails(1)->surname }} </div>
                     <br>

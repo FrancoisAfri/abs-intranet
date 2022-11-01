@@ -117,10 +117,8 @@
                                     <tr id="categories-list">
                                         <td></td>
                                         <td style="width: 5px; text-align: left;">{{ $manager->first_name . ' ' . $manager->surname ?? ''}} </td>
-                                        {{--                                        <td>{{ $manager->description ?? ''}} </td>--}}
-
                                         <td style="width: 5px; text-align: right;">
-                                            <form action="{{ route('manager.destroy', $manager->id) }}"
+                                            <form action="{{ route('manager.destroy', $manager->managerID) }}"
                                                   method="POST"
                                                   style="display: inline-block;">
                                                 <input type="hidden" name="_method" value="DELETE">
@@ -187,10 +185,8 @@
                                     <tr id="categories-list">
                                         <td></td>
                                         <td style="width: 5px; text-align: left;">{{ $exempted->first_name . ' ' . $exempted->surname ?? ''}} </td>
-                                        {{--                                        <td>{{ $manager->description ?? ''}} </td>--}}
-
                                         <td style="width: 5px; text-align: right;">
-                                            <form action="{{ route('exempted.destroy', $exempted->hr_id) }}"
+                                            <form action="{{ route('exempted.destroy', $exempted->exemp_id) }}"
                                                   method="POST"
                                                   style="display: inline-block;">
                                                 <input type="hidden" name="_method" value="DELETE">

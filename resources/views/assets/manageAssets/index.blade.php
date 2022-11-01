@@ -59,7 +59,6 @@
                                         {{--  taranferes  tab  --}}
                                         <div class="tab-pane" id="transfares">
                                             @include('assets.manageAssets.Tabs.asset-transfares-tab')
-                                            Transfare
                                         </div>
                                         <!-- /.tab-pane -->
 

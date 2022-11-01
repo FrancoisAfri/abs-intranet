@@ -176,7 +176,7 @@ class AssetManagementController extends Controller
                 $extension = $image->getClientOriginalExtension();
                 if (in_array($extension, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
                     $fileName = md5(microtime()) . "hardware." . $extension;
-                    $image->storeAs('public' . '/' . 'files/images', $fileName);
+                    $image->storeAs('assets/images', $fileName);
                     $AssetImagesTransfers = AssetImagesTransfers::create(
                         [
                             'asset_id' => $request['asset_id'],
@@ -197,15 +197,15 @@ class AssetManagementController extends Controller
 
             ($request['transfer_to'] == 2) ? ($store = $request['store_id']) : ($store = 0);
 
-
             // get the last record and update it with 0
-            $lastRecord = AssetTransfers::latest('id')->first();
-            AssetTransfers::where([
-                'id' => $lastRecord['id'],
-                'asset_id' => $request['asset_id']
-                ])->update(['current_value' => 0]);
-
-
+            $lastRecord = AssetTransfers::where(['asset_id' => $request['asset_id'],'current_value' => 1])->first();
+            if (!empty($lastRecord->id))
+			{
+				AssetTransfers::where([
+					'id' => $lastRecord->id,
+					'asset_id' => $request['asset_id']
+					])->update(['current_value' => 0]);
+			}
             AssetTransfers::create([
                 $request->all(),
                 'name' => $request['name'],
@@ -226,7 +226,7 @@ class AssetManagementController extends Controller
 
         }
 
-        AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
+        AuditReportsController::store('Asset Management', 'New asset Transferred', "Transferred By User", 0);;
         return response()->json();
     }
 
@@ -263,7 +263,6 @@ class AssetManagementController extends Controller
         );
 
         return view('assets.manageAssets.transfer-images')->with($data);
-
     }
 
     /**

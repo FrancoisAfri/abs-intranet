@@ -32,20 +32,18 @@ class ExemptedUsers extends Model
 
         //ManagerReport::
         return DB::table('exempted_users', 'hr')
-            ->select('hr_id',
+            ->select('exempted_users.id as exemp_id',
                 'hr_people.status',
-                'hr_people.id',
                 'hr_people.first_name',
                 'hr_people.surname'
             )
             ->leftJoin('hr_people',
-                'exempted_users.employee_number',
+                'exempted_users.hr_id',
                 '=',
-                'hr_people.employee_number'
+                'hr_people.id'
             )
-            ->orderBy(
-                'exempted_users.id'
-            )
+            ->orderBy('hr_people.first_name')
+            ->orderBy('hr_people.surname')
 			->get();
 
     }

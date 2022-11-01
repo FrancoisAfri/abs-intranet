@@ -230,7 +230,7 @@
                                             <td style="width: 5px; text-align: center;">
                                                 <button type="button" id="view_ribbons" class="btn {{ (!empty($allocation->status) && $allocation->status == 1) ? " btn-danger " : "btn-success " }}
                                                       btn-xs" onclick="postData({{$allocation->id}}, 'actdeac');"><i class="fa {{ (!empty($allocation->status) && $allocation->status == 1) ?
-                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($allocation->status) && $allocation->status == 1) ? "De-Activate" :  $allocation->status }}
+                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($allocation->status) && $allocation->status == 1) ? "De-Activate" : "Activate"}}
                                                 </button>
                                             </td>
                                         </tr>
@@ -352,17 +352,16 @@
     {{--    <script src="{{ asset('custom_components/js/load_dropdown_options.js') }}"></script>--}}
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
-
+	
+			function postData(id, data) {
+				if (data === 'actdeac') location.href = "{{route('LicenceUser.activate', '')}}" + "/" + id;
+			}
         $(function () {
 			
 			$('#back_button').click(function () {
                 location.href = '{{route('licences_management.index')}}';
             });
 			
-			function postData(id, data) {
-				if (data === 'actdeac') location.href = "{{route('LicenceUser.activate', '')}}" + "/" + id;
-			}
-
 			$('.popup-thumbnail').click(function () {
 				$('.modal-body').empty();
 				$($(this).parents('div').html()).appendTo('.modal-body');
