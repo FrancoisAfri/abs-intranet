@@ -14,7 +14,9 @@
 : ((\App\HRPerson::getDirectorDetails(1)->gender === 0) ? $f_silhouette : $m_silhouette)}} "
                          class="rounded-corners" alt="Profile" height="30" width="30">
                     <br>
+                    <br>
                     <strong><i class="fa fa-pencil margin-r-5"></i> Directors</strong>
+                    <br>
                     <br>
                     <div>{{ \App\HRPerson::getDirectorDetails(1)->first_name . ' ' . \App\HRPerson::getDirectorDetails(1)->surname }} </div>
                     <br>
@@ -257,7 +259,9 @@
 : ((\App\HRPerson::getDirectorDetails(1)->gender === 0) ? $f_silhouette : $m_silhouette)}} "
                          class="rounded-corners" alt="Profile" height="30" width="30">
                     <br>
+                    <br>
                     <strong><i class="fa fa-pencil margin-r-5"></i> Directors</strong>
+                    <br>
                     <br>
                     <div>{{ \App\HRPerson::getDirectorDetails(4)->first_name . ' ' . \App\HRPerson::getDirectorDetails(4)->surname }} </div>
                     <br>

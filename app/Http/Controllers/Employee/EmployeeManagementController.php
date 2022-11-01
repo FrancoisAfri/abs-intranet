@@ -589,13 +589,6 @@ class EmployeeManagementController extends Controller
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
 
 
-        $section = DivisionLevelThree::getSectionDetails(1);
-        //dd($section);
-        $teams = DivisionLevelTwo::getTeamDetails(2);
-//        dd($teams);
-
-        $peopleUnder = HRPerson::getUsersFromTeam(3);
-       // dd($peopleUnder);
 
         $data = $this->breadCrump(
             "Employee Records",
@@ -607,8 +600,6 @@ class EmployeeManagementController extends Controller
             "Employee Management"
         );
 
-        $data['section'] = $section;
-        $data['teams'] = $teams;
         $data['m_silhouette'] = $m_silhouette;
         $data['f_silhouette'] = $f_silhouette;
         $data['division_levels'] = $division_levels;

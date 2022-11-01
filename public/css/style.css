@@ -32,8 +32,8 @@ body {
 
 .container {
     max-width: 100%;
-    padding: 20px;
-    margin: 0 20px;
+    padding: 30px;
+    margin: 0 50px;
 }
 
 .rectangle {
@@ -87,7 +87,7 @@ body {
     position: absolute;
     left: -20px;
     bottom: -20px;
-    width: calc(100% + 20px);
+    width: calc(150% + 20px);
     height: 4px;
     background: var(--black);
 }
@@ -103,7 +103,7 @@ body {
     left: 50%;
     transform: translateX(-50%);
     width: 4px;
-    height: 20px;
+    height: 27px;
     background: var(--black)
 }
 
