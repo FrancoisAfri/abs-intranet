@@ -127,10 +127,11 @@ class  LeaveSetupController extends Controller
         $users = HRPerson::getAllUsers();
         $managerList = ManagerReport::getListOfManagers();
         $exemptedUsers = ExemptedUsers::getListOfExemptedUsers();
+		//$exemptedUsers = $exemptedUsers->load('user');;
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
             $query->orderBy('id', 'asc');
         }]);
-
+		//return $exemptedUsers;
         $type_profile = DB::table('type_profile')->orderBy('min', 'asc')->get();
         $leave_configuration = DB::table('leave_configuration')->where("id", 1)->get()->first();
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
@@ -1061,12 +1062,16 @@ class  LeaveSetupController extends Controller
         $managers = $request['hr_person_id'];
 
         foreach ($managers as $manager) {
-
-            ExemptedUsers::create([
-                'hr_id' => $manager,
-                'employee_number' => $manager,
-                'status' => 1
-            ]);
+			// get user employee_number
+			$details = HRPerson::where('id', $manager)->first();
+			if (!empty($details->employee_number))
+			{
+				ExemptedUsers::create([
+					'hr_id' => $manager,
+					'employee_number' => $details->employee_number,
+					'status' => 1
+				]);
+			}
         }
         Alert::toast('Settings  Successfully Changed', 'success');
         return response()->json();
@@ -1089,8 +1094,8 @@ class  LeaveSetupController extends Controller
 
     public function deleteExempted($exempted): RedirectResponse
     {
-        $manage = ExemptedUsers::where('hr_id', $exempted)->first();
-        $manage->delete();
+		$Exempt = ExemptedUsers::find($exempted);
+        $Exempt->delete();
 
         return back();
     }

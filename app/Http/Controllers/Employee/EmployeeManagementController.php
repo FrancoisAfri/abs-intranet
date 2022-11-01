@@ -178,6 +178,7 @@ class EmployeeManagementController extends Controller
     {
 
         $APIKEY = env('GOOGLE_KEY');
+		$APIKEY = 'AIzaSyBfSC6GdEljNfHpJGW8ryGX-Ragq93kfdU';
         $googleMapsUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" . $latlong . "&language=ar&key=" . $APIKEY;
 
         $response = file_get_contents($googleMapsUrl);

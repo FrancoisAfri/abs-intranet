@@ -27,7 +27,7 @@ class ManagerReport extends Model
 
         //ManagerReport::
         return DB::table('manager_report', 'hr')
-            ->select('hr_id',
+            ->select('hr_id','manager_report.id as managerID',
                 'is_active',
                 'hr_people.id',
                 'hr_people.first_name',
