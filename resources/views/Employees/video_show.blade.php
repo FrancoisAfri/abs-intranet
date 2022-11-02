@@ -14,7 +14,6 @@
                     <div class="box-header with-border">
                         <i class="fa fa-anchor pull-right"></i>
                         <h3 class="box-title">Video Assign</h3>
-                        {{--                    <p id="box-subtitle">leave allocation</p>--}}
                     </div>
                     <!-- /.box-header -->
                     <!-- form start -->
@@ -22,7 +21,6 @@
                     <form  class="form-horizontal" method="POST"
                            action="{{ route('video.assign') }}">
                         {{ csrf_field() }}
-
                         <div class="box-body" id="view_users">
                             @if (count($errors) > 0)
                                 <div class="alert alert-danger alert-dismissible fade in">
@@ -50,7 +48,7 @@
                                 </div>
                             </div>
 
-                            <!--                        <div class="form-group ">-->
+                            <!--  <div class="form-group ">-->
                             @foreach($division_levels as $division_level)
                                 <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
                                     <label for="{{ 'division_level_' . $division_level->level }}"

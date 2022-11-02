@@ -98,11 +98,11 @@ class VideoManagementController extends Controller
         $video_name = $request->file('path');
         $File_ex = $video_name->extension();
         $filePath = 'emp_vid' . ' ' . str_random(16) . '.' . $File_ex;
-        $isFileUploaded = Storage::disk('public')->put('videos/' . $filePath,
+        $isFileUploaded = Storage::disk('videos')->put('/' . $filePath,
             file_get_contents($request->file('path')));
 
         // File URL to access the video in frontend
-        $url = Storage::disk('public')->url($filePath);
+        $url = Storage::disk('videos')->url($filePath);
 
         if ($isFileUploaded) {
 
@@ -115,12 +115,11 @@ class VideoManagementController extends Controller
                 ]
             );
 
-            AuditReportsController::store('Employee  Records', 'Video Management Page Accessed', "Accessed By User", 0);;
+            AuditReportsController::store('Employee Records', 'New Video Added', "Added By User", 0);;
             return response()->json();
         }
 
-
-        AuditReportsController::store('Employee  Records', 'Video Management Page Accessed', "Accessed By User", 0);;
+        AuditReportsController::store('Employee Records', 'New Video Added', "Added By User", 0);;
         return response()->json();
     }
 

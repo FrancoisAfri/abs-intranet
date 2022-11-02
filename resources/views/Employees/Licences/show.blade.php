@@ -230,7 +230,7 @@
                                             <td style="width: 5px; text-align: center;">
                                                 <button type="button" id="view_ribbons" class="btn {{ (!empty($allocation->status) && $allocation->status == 1) ? " btn-danger " : "btn-success " }}
                                                       btn-xs" onclick="postData({{$allocation->id}}, 'actdeac');"><i class="fa {{ (!empty($allocation->status) && $allocation->status == 1) ?
-                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($allocation->status) && $allocation->status == 1) ? "De-Activate" :  $allocation->status }}
+                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($allocation->status) && $allocation->status == 1) ? "De-Activate" :  "Activate" }}
                                                 </button>
                                             </td>
                                         </tr>
@@ -309,17 +309,10 @@
 				</button>
             </div>
             @include('Employees.Licences.partials.renew_licence')
-
         </div>
-
     </div>
-
-
-
     <!-- /.box -->
-
     <!-- /.col (RIGHT) -->
-
 @stop
 @section('page_script')
     <!-- DataTables -->
@@ -328,15 +321,10 @@
     <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('custom_components/js/modal_ajax_submit.js') }}"></script>
     <script src="{{ asset('custom_components/js/deleteAlert.js') }}"></script>
-
     <script src="{{ asset('bower_components/bootstrap_fileinput/js/fileinput.min.js') }}"></script>
-
     <script src="{{ asset('plugins/axios/dist/axios.min.js') }}"></script>
-
     <script src="{{ asset('bower_components/AdminLTE/plugins/select2/select2.full.min.js') }}"></script>
-
     <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.js') }}"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
@@ -352,16 +340,16 @@
     {{--    <script src="{{ asset('custom_components/js/load_dropdown_options.js') }}"></script>--}}
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
-
+			
+		function postData(id, data) {
+			if (data === 'actdeac') location.href = "{{route('LicenceUser.activate', '')}}" + "/" + id;
+		}
         $(function () {
 			
 			$('#back_button').click(function () {
                 location.href = '{{route('licences_management.index')}}';
             });
-			
-			function postData(id, data) {
-				if (data === 'actdeac') location.href = "{{route('LicenceUser.activate', '')}}" + "/" + id;
-			}
+
 
 			$('.popup-thumbnail').click(function () {
 				$('.modal-body').empty();
