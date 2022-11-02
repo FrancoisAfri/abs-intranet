@@ -73,6 +73,141 @@
 				</div>
 			</div>
 		@endif
+		@if($activeModules->whereIn('code_name', 'security')->first())
+			<div class="col-md-6 box box-default collapsed-box">
+				<div class="box-header">
+					<h3 class="box-title"><i class="fa fa-hourglass"></i> Birthdays This Month</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body no-padding" style="max-height: 180px; overflow-y: scroll;">
+					<div class="table-responsive">
+						<table class="table table-striped table-hover">
+							<thead>
+								<tr>
+									<th>Employee</th>
+									<th class="text-center">Date Of Birth</th>
+								</tr>
+							</thead>
+							<tbody>
+							@foreach($birthdays as $birthday)
+								<tr>									
+									<td style="vertical-align: middle;"
+										class="{{ !empty($birthday['is_birthday_today']) ? 'bg-primary' : '' }}">
+										<img src="{{ !empty($birthday['profile_pic_ur']) ? $birthday['profile_pic_ur'] : '' }}" class="img-circle"
+										 alt="Employee's Photo"
+										 style="width: 25px; height: 25px; border-radius: 50%; margin-right: 10px; margin-top: -2px;">
+										<span>{{ $birthday['names'] }}</span>
+									</td>
+									<td style="vertical-align: middle;"
+										class="text-center {{ !empty($birthday['is_birthday_today']) ? 'bg-primary' : '' }}">{{ !empty($birthday['birthday_month']) ? $birthday['birthday_month'] : ''}}</td>
+								</tr>
+							@endforeach
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<div class="box-footer clearfix">
+				</div>
+				<!-- /.box-body -->
+            </div>
+            <div class="col-md-6 box box-default collapsed-box">
+				<div class="box-header">
+					<h3 class="box-title"><i class="fa fa-hourglass"></i> Staff Anniversary</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body" style="max-height: 274px; overflow-y: scroll;">
+					<div class="table-responsive">
+						<table class="table no-margin">
+							<thead>
+								<tr>
+									<th>Employee</th>
+									<th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave
+										Anniversary Date
+									</th>
+									<th></th>
+								</tr>
+							</thead>
+							<tbody>
+								@foreach($staffAnniversaries as $staff)
+									<tr>									
+										<td style="vertical-align: middle;"
+											class="{{ !empty($staff['is_birthday_today']) ? 'bg-primary' : '' }}">
+											<img src="{{ !empty($staff['profile_pic_ur']) ? $staff['profile_pic_ur'] : '' }}" class="img-circle"
+											 alt="Employee's Photo"
+											 style="width: 25px; height: 25px; border-radius: 50%; margin-right: 10px; margin-top: -2px;">
+											<span>{{ $staff['names'] }}</span>
+										</td>
+										<td style="vertical-align: middle;"
+											class="text-center {{ !empty($staff['is_birthday_today']) ? 'bg-primary' : '' }}">{{ !empty($staff['birthday_month']) ? $staff['birthday_month'] : ''}}</td>
+									</tr>
+							@endforeach 
+							</tbody>
+						</table>
+					</div>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer clearfix">
+				</div>
+				<!-- /.box-footer -->
+                <!-- /Tasks List End -->
+            </div>
+		@endif
+		@if($activeModules->where('code_name', 'leave')->first())
+			<div class="col-md-6 box box-default">
+				<div class="box-header">
+					<h3 class="box-title"><i class="fa fa-hourglass"></i> People On Leave This Month</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
+						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
+					</div>
+				</div>
+				<!-- /.box-header -->
+				<div class="box-body no-padding" style="max-height: 180px; overflow-y: scroll;">
+					<table class="table table-striped table-hover">
+						<thead>
+						<tr>
+							<th style="width: 10px">#</th>
+							<th>Employee</th>
+							<th class="text-center">From</th>
+							<th class="text-center">To</th>
+						</tr>
+						</thead>
+						<tbody>
+						@foreach($onLeaveThisMonth as $employee)
+							<tr>
+								<td style="vertical-align: middle;"
+									class="{{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}"
+									nowrap>{{ $loop->iteration }}.
+								</td>
+								<td style="vertical-align: middle;"
+									class="{{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">
+									<img src="{{ $employee->profile_pic_url }}" class="img-circle"
+										 alt="Employee's Photo"
+										 style="width: 25px; height: 25px; border-radius: 50%; margin-right: 10px; margin-top: -2px;">
+									<span>{{ $employee->full_name }}</span>
+								</td>
+								<td style="vertical-align: middle;"
+									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->start_time) ? date('d M Y H:i', $employee->start_time) : (($employee->start_date) ? date('d M Y', $employee->start_date) : '') }}</td>
+								<td style="vertical-align: middle;"
+									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->end_time) ? date('d M Y H:i', $employee->end_time) : (($employee->end_date) ? date('d M Y', $employee->end_date) : '') }}</td>
+							</tr>
+						@endforeach
+						</tbody>
+					</table>
+				</div>
+				<!-- /.box-body -->
+				<div class="box-footer clearfix">
+				</div>
+            </div>
+		@endif
 		@if($activeModules->where('code_name', 'appraisal')->first())
             <div class="col-md-12">
 				<div class="box box-primary">
@@ -189,141 +324,6 @@
             </div>
 			<!-- /.box company performance Widget -->
             @endif
-		@endif
-		@if($activeModules->where('code_name', 'leave')->first())
-			<div class="col-md-6 box box-default">
-				<div class="box-header">
-					<h3 class="box-title"><i class="fa fa-hourglass"></i> People On Leave This Month</h3>
-					<div class="box-tools pull-right">
-						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-					</div>
-				</div>
-				<!-- /.box-header -->
-				<div class="box-body no-padding" style="max-height: 180px; overflow-y: scroll;">
-					<table class="table table-striped table-hover">
-						<thead>
-						<tr>
-							<th style="width: 10px">#</th>
-							<th>Employee</th>
-							<th class="text-center">From</th>
-							<th class="text-center">To</th>
-						</tr>
-						</thead>
-						<tbody>
-						@foreach($onLeaveThisMonth as $employee)
-							<tr>
-								<td style="vertical-align: middle;"
-									class="{{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}"
-									nowrap>{{ $loop->iteration }}.
-								</td>
-								<td style="vertical-align: middle;"
-									class="{{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">
-									<img src="{{ $employee->profile_pic_url }}" class="img-circle"
-										 alt="Employee's Photo"
-										 style="width: 25px; height: 25px; border-radius: 50%; margin-right: 10px; margin-top: -2px;">
-									<span>{{ $employee->full_name }}</span>
-								</td>
-								<td style="vertical-align: middle;"
-									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->start_time) ? date('d M Y H:i', $employee->start_time) : (($employee->start_date) ? date('d M Y', $employee->start_date) : '') }}</td>
-								<td style="vertical-align: middle;"
-									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->end_time) ? date('d M Y H:i', $employee->end_time) : (($employee->end_date) ? date('d M Y', $employee->end_date) : '') }}</td>
-							</tr>
-						@endforeach
-						</tbody>
-					</table>
-				</div>
-				<!-- /.box-body -->
-				<div class="box-footer clearfix">
-				</div>
-            </div>
-		@endif
-		@if($activeModules->whereIn('code_name', 'security')->first())
-            <div class="col-md-6 box box-default collapsed-box">
-				<div class="box-header">
-					<h3 class="box-title"><i class="fa fa-hourglass"></i> Staff Anniversary</h3>
-					<div class="box-tools pull-right">
-						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-					</div>
-				</div>
-				<!-- /.box-header -->
-				<div class="box-body" style="max-height: 274px; overflow-y: scroll;">
-					<div class="table-responsive">
-						<table class="table no-margin">
-							<thead>
-								<tr>
-									<th>Employee</th>
-									<th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave
-										Anniversary Date
-									</th>
-									<th></th>
-								</tr>
-							</thead>
-							<tbody>
-								@foreach($staffAnniversaries as $staff)
-									<tr>									
-										<td style="vertical-align: middle;"
-											class="{{ !empty($staff['is_birthday_today']) ? 'bg-primary' : '' }}">
-											<img src="{{ !empty($staff['profile_pic_ur']) ? $staff['profile_pic_ur'] : '' }}" class="img-circle"
-											 alt="Employee's Photo"
-											 style="width: 25px; height: 25px; border-radius: 50%; margin-right: 10px; margin-top: -2px;">
-											<span>{{ $staff['names'] }}</span>
-										</td>
-										<td style="vertical-align: middle;"
-											class="text-center {{ !empty($staff['is_birthday_today']) ? 'bg-primary' : '' }}">{{ !empty($staff['birthday_month']) ? $staff['birthday_month'] : ''}}</td>
-									</tr>
-							@endforeach 
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<!-- /.box-body -->
-				<div class="box-footer clearfix">
-				</div>
-				<!-- /.box-footer -->
-                <!-- /Tasks List End -->
-            </div>
-			<div class="col-md-6 box box-default collapsed-box">
-				<div class="box-header">
-					<h3 class="box-title"><i class="fa fa-hourglass"></i> Birthdays This Month</h3>
-					<div class="box-tools pull-right">
-						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i></button>
-						<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i></button>
-					</div>
-				</div>
-				<!-- /.box-header -->
-				<div class="box-body no-padding" style="max-height: 180px; overflow-y: scroll;">
-					<div class="table-responsive">
-						<table class="table table-striped table-hover">
-							<thead>
-								<tr>
-									<th>Employee</th>
-									<th class="text-center">Date Of Birth</th>
-								</tr>
-							</thead>
-							<tbody>
-							@foreach($birthdays as $birthday)
-								<tr>									
-									<td style="vertical-align: middle;"
-										class="{{ !empty($birthday['is_birthday_today']) ? 'bg-primary' : '' }}">
-										<img src="{{ !empty($birthday['profile_pic_ur']) ? $birthday['profile_pic_ur'] : '' }}" class="img-circle"
-										 alt="Employee's Photo"
-										 style="width: 25px; height: 25px; border-radius: 50%; margin-right: 10px; margin-top: -2px;">
-										<span>{{ $birthday['names'] }}</span>
-									</td>
-									<td style="vertical-align: middle;"
-										class="text-center {{ !empty($birthday['is_birthday_today']) ? 'bg-primary' : '' }}">{{ !empty($birthday['birthday_month']) ? $birthday['birthday_month'] : ''}}</td>
-								</tr>
-							@endforeach
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="box-footer clearfix">
-				</div>
-				<!-- /.box-body -->
-            </div>
 		@endif
 		@if($activeModules->where('code_name', 'appraisal')->first())
 			@if($canViewEmpRankWidget)
