@@ -239,12 +239,6 @@ class HRPerson extends Model
         return $first_name . ' ' . $surname;
     }
 
-//     $STATUS_SELECT = [
-//        '1' => 'Active',
-//        '0' => 'De-Activated',
-//    ];
-//
-
     public static function STATUS_SELECT(): \Illuminate\Support\Collection
     {
         $status = [
@@ -315,14 +309,13 @@ class HRPerson extends Model
     public static function getEmployee($user)
     {
 
-        $query = HRPerson::select(
+       return HRPerson::select(
             'hr_people.*'
         )
         ->where('hr_people.id', $user)
         ->with('jobTitle','province','division','department')
         ->first();
 
-        return $query;
     }
 
 

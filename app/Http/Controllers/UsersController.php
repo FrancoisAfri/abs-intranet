@@ -492,7 +492,6 @@ class UsersController extends Controller
     public function update(Request $request, User $user)
     {
 
-        // dd($user->id);
         $person = $request->all();
         unset($person['_token'], $person['_method'], $person['command']);
 
@@ -590,6 +589,7 @@ class UsersController extends Controller
     private function userMoved($user, $person)
     {
         $manager = ItManager::where('status', 1)->get();
+
         foreach ($manager as $managers) {
 
             $ItManager = HRPerson::getManagerDetails($managers->user_id);

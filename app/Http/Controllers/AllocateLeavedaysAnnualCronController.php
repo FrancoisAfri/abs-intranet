@@ -24,106 +24,140 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
-class AllocateLeavedaysAnnualCronController extends Controller {
+class AllocateLeavedaysAnnualCronController extends Controller
+{
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function execute() {
-        //$lev = new LeaveType();
+    public function execute()
+    {
+
+
         $users = HRPerson::where('status', 1)->pluck('id');
         foreach ($users as $empID) {
-			
-			$AnnualLeaveTypeID = 1;
-			// check if this leave have already been allocated for this month
-			$allocation = LeaveAllocation::where('hr_id', $empID)
-				->where('leave_type_id', $AnnualLeaveTypeID)
-				->where('month_allocated', date('n'))
-				->first();
-			if (empty($allocation))
-			{
-				$customDays = $days = $maximum = 0;
-				// get Custom leave if there is any
-				$custLeave = leave_custom::where('hr_id', $empID)->first();
-				if (!empty($custLeave->id) && $custLeave->number_of_days > 0) {
-					$customDays = $custLeave->number_of_days;
-					$customDays = ($customDays / 12) * 8;
-				}
-				// return leave profile id based on an user id;
-				// get min value from pivot
-				#get leaveprofile ID
-				$LevProfID = HRPerson::where('id', $empID)->first();
-				if (!empty($LevProfID))
-				{
-					$proId = $LevProfID->leave_profile;
-					$minimum = type_profile::where('leave_type_id', $AnnualLeaveTypeID)
-							->where('leave_profile_id', $proId)
-							->first();
-		
-					if (!empty($minimum)) {
-						if (!empty($minimum->min))
-							$days = ($minimum->min / 12) * 8;
-						if (!empty($minimum->max))
-							$maximum = $minimum->max * 8;
-					}
-				}
 
-				if (!empty($customDays)) $days = $customDays;
-				if (!empty($days))
-				{
-					$credits = leave_credit::where('hr_id', $empID)
-						->where('leave_type_id', $AnnualLeaveTypeID)
-						->first();
-					
+            $AnnualLeaveTypeID = 1;
+            // check if this leave have already been allocated for this month
+            $allocation = LeaveAllocation::where(
+                [
+                    'hr_id' => $empID,
+                    'leave_type_id' => $AnnualLeaveTypeID,
+                    'month_allocated' => date('n')
+                ]
+            )
+                ->first();
 
-					if (!empty($credits))
-					{
-						$previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
-						$currentBalance =  $previousBalance + $days;
-						$currentBalance =  $currentBalance;
-						$previousBalance =  $previousBalance;
-						if ($maximum > $currentBalance)
-						{
-							$credits->leave_balance = $currentBalance;
-							$credits->update();
-							LeaveHistoryAuditController::store('leave days allocation','leave days allocation', $previousBalance ,$days,$currentBalance,$AnnualLeaveTypeID,$empID);
-							//insert into allocation table
-							$leaveAllocation = new LeaveAllocation();
-							$leaveAllocation->hr_id = $empID;
-							$leaveAllocation->month_allocated = date('n');
-							$leaveAllocation->leave_type_id = $AnnualLeaveTypeID;
-							$leaveAllocation->allocated_by = $user->person->id;;
-							$leaveAllocation->date_allocated = time();
-							$leaveAllocation->balance_before = $previousBalance;
-							$leaveAllocation->current_balance = $currentBalance;
-							$leaveAllocation->save();
-						}
-					}
-					else
-					{
-						$previousBalance = 0;
-						$currentBalance = $days;
-						$credit = new leave_credit();
-						$credit->leave_balance = $days;
-						$credit->hr_id = $empID;
-						$credit->leave_type_id = $AnnualLeaveTypeID;
-						$credit->save();
-						LeaveHistoryAuditController::store('leave days allocation','leave days allocation', 0 ,$days,$currentBalance,$AnnualLeaveTypeID,$empID);
-						//insert into allocation table
-						$leaveAllocation = new LeaveAllocation();
-						$leaveAllocation->hr_id = $empID;
-						$leaveAllocation->month_allocated = date('n');
-						$leaveAllocation->leave_type_id = $AnnualLeaveTypeID;
-						$leaveAllocation->allocated_by = $user->person->id;;
-						$leaveAllocation->date_allocated = time();
-						$leaveAllocation->balance_before = $previousBalance;
-						$leaveAllocation->current_balance = $currentBalance;
-						$leaveAllocation->save();
-					}
-				}
-			}
+
+            if (empty($allocation)) {
+
+                $customDays = $days = $maximum = 0;
+                // get Custom leave if there is any
+
+                $custLeave = leave_custom::where('hr_id', $empID)->first();
+
+                if (!empty($custLeave['id']) && $custLeave['number_of_days'] > 0) {
+                    $customDays = $custLeave['number_of_days'];
+                    $customDays = ($customDays / 12) * 8;
+                }
+                // return leave profile id based on an user id;
+                // get min value from pivot
+                #get leaveprofile ID
+                $LevProfID = HRPerson::getDirectorDetails($empID);
+
+                if (!empty($LevProfID)) {
+
+                    $minimum = type_profile::where(
+                        [
+                            'leave_type_id' => $AnnualLeaveTypeID,
+                            'leave_profile_id' => $LevProfID['leave_profile']
+                        ]
+                    )->first();
+
+                    if (!empty($minimum)) {
+                        if (!empty($minimum['min']))
+                            $days = ($minimum['min'] / 12) * 8;
+                        if (!empty($minimum['max']))
+                            $maximum = $minimum['max'] * 8;
+                    }
+
+                }
+
+
+                if (!empty($customDays)) $days = $customDays;
+                if (!empty($days)) {
+                    $credits = leave_credit::where(
+                        [
+                            'hr_id' => $empID,
+                            'leave_type_id' => $AnnualLeaveTypeID
+                        ]
+                    )->first();
+
+
+                    if (!empty($credits)) {
+                        $previousBalance = !empty($credits['leave_balance']) ? $credits['leave_balance'] : 0;
+                        $currentBalance = $previousBalance + $days;
+                        $currentBalance = $currentBalance;
+                        if ($maximum > $currentBalance) {
+                            $credits->leave_balance = $currentBalance;
+                            $credits->update();
+
+                            LeaveHistoryAuditController::store('leave days allocation', 'leave days allocation', $previousBalance, $days, $currentBalance, $AnnualLeaveTypeID, $empID);
+                            //insert into allocation table
+
+                            $leaveAllocation = LeaveAllocation::create(
+                                [
+                                    'hr_id' => $empID,
+                                    'month_allocated' => date('n'),
+                                    'leave_type_id' => $AnnualLeaveTypeID,
+                                    'allocated_by' => 1, // change this
+                                    'date_allocated' => time(),
+                                    'balance_before' => $previousBalance,
+                                    'current_balance' => $currentBalance,
+                                ]
+                            );
+
+                        }
+                    } else {
+                        $previousBalance = 0;
+                        $currentBalance = $days;
+
+                        $credit = leave_credit::create(
+                            [
+                                'leave_balance' => $days,
+                                'hr_id' => $empID,
+                                'leave_type_id' => $AnnualLeaveTypeID,
+                            ]
+                        );
+
+                        LeaveHistoryAuditController::store('leave days allocation', 'leave days allocation', 0, $days, $currentBalance, $AnnualLeaveTypeID, $empID);
+                        //insert into allocation table
+//                        $leaveAllocation = new LeaveAllocation();
+//                        $leaveAllocation->hr_id = $empID;
+//                        $leaveAllocation->month_allocated = date('n');
+//                        $leaveAllocation->leave_type_id = $AnnualLeaveTypeID;
+//                        $leaveAllocation->allocated_by = $user->person->id;;
+//                        $leaveAllocation->date_allocated = time();
+//                        $leaveAllocation->balance_before = $previousBalance;
+//                        $leaveAllocation->current_balance = $currentBalance;
+//                        $leaveAllocation->save();
+
+                        $leaveAllocation = LeaveAllocation::create(
+                            [
+                                'hr_id' => $empID,
+                                'month_allocated' => date('n'),
+                                'leave_type_id' => $AnnualLeaveTypeID,
+                                'allocated_by' => 1, // change this
+                                'date_allocated' => time(),
+                                'balance_before' => $previousBalance,
+                                'current_balance' => $currentBalance,
+                            ]
+                        );
+                    }
+                }
+            }
         }
         AuditReportsController::store('Leave Annual Management', "Cron leaveAllocationAnnual Ran", "Automatic Ran by Server", 0);
     }
