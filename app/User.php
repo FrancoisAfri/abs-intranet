@@ -15,7 +15,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'email', 'password', 'password_changed_at'
+        'email', 'password', 'password_changed_at', 'status'
     ];
 
     /**
@@ -52,5 +52,9 @@ class User extends Authenticatable
     public function addPerson($person)
     {
         return $this->person()->save($person);
+    }
+
+    public function updateUser($person){
+        return $this->person()->update($person);
     }
 }

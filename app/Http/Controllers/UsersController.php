@@ -131,6 +131,7 @@ class UsersController extends Controller
         AuditReportsController::store('Security', 'Public Holidays Page Accessed', "Accessed By User", 0);
         return view('security.public_holiday')->with($data);
     }
+
     //
     public function saveHoliday(Request $request)
     {
@@ -544,10 +545,12 @@ class UsersController extends Controller
         if (isset($person['date_left'])) {
             $person['date_left'] = str_replace('/', '-', $person['date_left']);
             $person['date_left'] = strtotime($person['date_left']);
-            //
+            //check if user Already left the company
+            $dateLeft = HRPerson::where('user_id', $user->id)->pluck('status')->first();
 
-            $this->userMoved($user->id, $person);
-
+            if ($dateLeft == 1){
+                $this->userMoved($user->id, $person);
+            }
         }
 
         if (empty($person['position'])) $person['position'] = 0;
@@ -586,30 +589,33 @@ class UsersController extends Controller
 
     private function userMoved($user, $person)
     {
-        $dateLeft = HRPerson::where('user_id', $user)->pluck('date_left');
-        // dd(empty($dateLeft));
-        if (!empty($dateLeft)) {
-            // dd('ge');
-            //check if user has assets
-            $manager = ItManager::where('status', 1)->get();
+        $manager = ItManager::where('status', 1)->get();
+        foreach ($manager as $managers) {
 
-            foreach ($manager as $managers) {
+            $ItManager = HRPerson::getManagerDetails($managers->user_id);
+            $userDetails = HRPerson::getManagerDetails($user);
 
-                $ItManager = HRPerson::getManagerDetails($managers->user_id);
-                $userDetails = HRPerson::getManagerDetails($user);
-                $attachment = $this->viewAssets($user);
+            $attachment = $this->viewAssets($user);
 
-                if (!empty($ItManager->email))
-                    Mail::to($ItManager->email)->send(new sendManagersListOfAssets($userDetails['first_name'], $userDetails['employee_number'], $person['date_left'], $attachment));
-
-                // disable the user
+            if (!isset($userDetails['first_name'])) {
+                $name = '';
+                $employeenumber = '';
+            } else {
+                $name = $userDetails['first_name'];
+                $employeenumber = $userDetails['employee_number'];
             }
 
-            HRPerson::where('user_id', $user)->update(['status' => 0]);
+            if (!empty($ItManager->email))
+                Mail::to($ItManager->email)->send(new sendManagersListOfAssets($name, $employeenumber, $person['date_left'], $attachment));
 
-
+            // disable the user
         }
+
+        HRPerson::where('user_id', $user)->update(['status' => 0]);
+        User::where('id', $user)->update(['status' => 0]);
+
     }
+
 
     public function viewAssets($user)
     {
@@ -633,7 +639,14 @@ class UsersController extends Controller
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
 
-        $data['name'] = $userDetails['first_name'] . ' ' . $userDetails['surname'];
+
+        if (!isset($userDetails['first_name'])) {
+            $name = '';
+        } else {
+            $name = $userDetails['first_name'] . ' ' . $userDetails['surname'];
+        }
+
+        $data['name'] = $name;
         $data['date'] = $date_now;
         $data['licences'] = $licences;
         $data['assets'] = $assets;

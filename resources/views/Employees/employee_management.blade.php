@@ -29,7 +29,7 @@
                                             <select class="form-control select2 " style="width: 100%;"
                                                     id="status_id" name="status_id" data-select2-id="1" tabindex="-1"
                                                     aria-hidden="true">
-                                                <option value="0">** Select Status **</option>
+                                                <option value="1">** Select Status **</option>
                                                 @foreach ( \App\HRPerson::STATUS_SELECT() as $key =>$values)
                                                     <option value="{{ $key }}">{{ $values }}</option>
                                                 @endforeach

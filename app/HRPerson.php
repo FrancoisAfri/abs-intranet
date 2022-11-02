@@ -258,7 +258,6 @@ class HRPerson extends Model
 
     public static function getAllEmployeesByStatus($status = 1, $user, $collector)
     {
-
         $query = HRPerson::select(
             'hr_people.*',
             'hp.first_name as manager_first_name',

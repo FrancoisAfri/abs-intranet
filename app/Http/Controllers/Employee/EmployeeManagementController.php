@@ -51,8 +51,9 @@ class EmployeeManagementController extends Controller
         } else
             $status = $request['status_id'];
 
-
         $employee = HRPerson::getAllEmployeesByStatus($status, 0, 'get');
+        //dd($employee);
+
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
         $data = $this->breadCrump(
             "Employee Records",
@@ -178,7 +179,7 @@ class EmployeeManagementController extends Controller
     {
 
         $APIKEY = env('GOOGLE_KEY');
-		$APIKEY = 'AIzaSyBfSC6GdEljNfHpJGW8ryGX-Ragq93kfdU';
+        $APIKEY = 'AIzaSyBfSC6GdEljNfHpJGW8ryGX-Ragq93kfdU';
         $googleMapsUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" . $latlong . "&language=ar&key=" . $APIKEY;
 
         $response = file_get_contents($googleMapsUrl);
@@ -246,14 +247,14 @@ class EmployeeManagementController extends Controller
 
         $employee = HRPerson::getEmployee($slugs[1]);
 
-	   //get manager details
-			if (!empty($employee->manager_id))
-		   $managerDetails = HRPerson::getManagername($employee->manager_id);
-		else $managerDetails = '';
-	    //get second manager details
-		if (!empty($employee->second_manager_id))
-		   $secondmanagerDetails = HRPerson::getSecondManagername($employee->second_manager_id);
-		else $secondmanagerDetails = '';
+        //get manager details
+        if (!empty($employee->manager_id))
+            $managerDetails = HRPerson::getManagername($employee->manager_id);
+        else $managerDetails = '';
+        //get second manager details
+        if (!empty($employee->second_manager_id))
+            $secondmanagerDetails = HRPerson::getSecondManagername($employee->second_manager_id);
+        else $secondmanagerDetails = '';
         //chexk user right
         $userLog = Auth::user()->load('person');
         $objModAccess = module_access::where('module_id', 6)->where('user_id', $userLog->id)->get();
@@ -549,6 +550,7 @@ class EmployeeManagementController extends Controller
     {
         //
     }
+
     /**
      * Remove the specified resource from storage.
      *
@@ -560,12 +562,18 @@ class EmployeeManagementController extends Controller
         //
     }
 
-    public function activate(User $user): RedirectResponse
+    public function activate(User $user ): RedirectResponse
     {
 
         $user->status == 1 ? $stastus = 0 : $stastus = 1;
         $user->status = $stastus;
         $user->update();
+
+        // update the hr_people
+        $hrPerson = HRPerson::where('user_id', $user->id)->first();
+        $hrPerson->status == 1 ? $stastus = 0 : $stastus = 1;
+        $hrPerson->status = $stastus;
+        $hrPerson->update();
 
         Alert::success('Status changed', 'Status changed Successfully');
 
@@ -587,7 +595,6 @@ class EmployeeManagementController extends Controller
 
         $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
-
 
 
         $data = $this->breadCrump(
