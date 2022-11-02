@@ -114,13 +114,10 @@ class VideoManagementController extends Controller
                     'video_type' => 1,
                 ]
             );
-
-            AuditReportsController::store('Employee  Records', 'Video Management Page Accessed', "Accessed By User", 0);;
+            AuditReportsController::store('Employee  Records', 'New Video Added', "Added By User", 0);
             return response()->json();
         }
-
-
-        AuditReportsController::store('Employee  Records', 'Video Management Page Accessed', "Accessed By User", 0);;
+        AuditReportsController::store('Employee  Records', 'New Video Added', "Added By User", 0);
         return response()->json();
     }
 

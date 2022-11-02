@@ -599,7 +599,7 @@ class EmployeeManagementController extends Controller
 
         $data = $this->breadCrump(
             "Employee Records",
-            "Search", "fa fa-lock",
+            "Organogram", "fa fa-lock",
             "Employee Management",
             "Employee Management",
             "/hr",

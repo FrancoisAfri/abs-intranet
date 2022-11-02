@@ -71,8 +71,6 @@ class Video extends Model
 
     public static function getVideosByUser($division_level_1, $division_level_2, $division_level_3, $division_level_4, $division_level_5)
     {
-
-
        return Video::where(
             [
                 'status' => 1,

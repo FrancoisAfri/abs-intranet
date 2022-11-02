@@ -19,8 +19,6 @@
                 </div>
                 <div class="box-body">
                     <div class="box-header">
-
-
                         <br>
                         <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
                                 data-target="#add-video-modal">Add Video
@@ -44,10 +42,10 @@
                                         <tr id="categories-list">
 
                                             <td>
-                                                <video width="150" height="40" controls>
-                                                    <source src="{{URL::asset("storage/videos/$video->path")}}" type="video/mp4">
-                                                    Your browser does not support the video tag.
-                                                </video>
+                                                <video  height="60" width="150" controls>
+                                                <source src="{{URL::asset("storage/public/videos/$video->path")}}" type="video/mp4">
+                                                Your browser does not support the video tag.
+                                            </video>
                                             </td>
 
 
@@ -211,7 +209,7 @@
                 let modalID = 'add-video-modal';
                 let formName = 'add-videos-form';
 
-                console.log(formName)
+                //console.log(formName)
                 let submitBtnID = 'add-video';
                 let redirectUrl = '{{ route('video.index') }}';
                 let successMsgTitle = 'Video Added!';

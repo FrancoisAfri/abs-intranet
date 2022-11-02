@@ -457,7 +457,6 @@ class UsersController extends Controller
 
     public function profile()
     {
-
         $user = Auth::user()->load('person');
         $avatar = $user->person->profile_pic;
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
@@ -491,7 +490,8 @@ class UsersController extends Controller
 
     public function update(Request $request, User $user)
     {
-
+        // dd($user->id);
+		//$user = $user->load('person');
         $person = $request->all();
         unset($person['_token'], $person['_method'], $person['command']);
 
@@ -545,10 +545,10 @@ class UsersController extends Controller
             $person['date_left'] = str_replace('/', '-', $person['date_left']);
             $person['date_left'] = strtotime($person['date_left']);
             //check if user Already left the company
-            $dateLeft = HRPerson::where('user_id', $user->id)->pluck('status')->first();
+            $dateLeft = HRPerson::where('user_id', $user->id)->where('status', 1)->first();
 
-            if ($dateLeft == 1){
-                $this->userMoved($user->id, $person);
+            if (!empty($dateLeft->id)){
+                $this->userMoved($dateLeft->id, $person);
             }
         }
 
@@ -589,7 +589,6 @@ class UsersController extends Controller
     private function userMoved($user, $person)
     {
         $manager = ItManager::where('status', 1)->get();
-
         foreach ($manager as $managers) {
 
             $ItManager = HRPerson::getManagerDetails($managers->user_id);
