@@ -26,7 +26,7 @@
 
                                         <td>
                                             <video  height="60" width="150" controls>
-                                                <source src="{{URL::asset("storage/videos/$video->path")}}" type="video/mp4">
+                                                <source src="{{URL::asset("storage/public/videos/$video->path")}}" type="video/mp4">
                                                 Your browser does not support the video tag.
                                             </video>
                                         </td>
@@ -73,7 +73,7 @@
                                     <tr id="categories-list">
                                         <td>
                                             <video  height="60" width="150" controls>
-                                                <source src="{{URL::asset("storage/videos/$video->path")}}" type="video/mp4">
+                                                <source src="{{URL::asset("storage/public/videos/$video->path")}}" type="video/mp4">
                                                 Your browser does not support the video tag.
                                             </video>
                                         </td>
