@@ -80,8 +80,8 @@ class DivisionLevelFour extends Model
 
     public static function getDepartmentDetails($id)
     {
-        return $Divison = DivisionLevelFour::
-        with('manager', 'hrRoles')
+		return $Divison = DivisionLevelFour::
+        with('manager.jobTitle')
             ->where('id', $id)
             ->first();
     }

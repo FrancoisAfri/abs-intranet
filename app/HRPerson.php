@@ -330,7 +330,7 @@ class HRPerson extends Model
     public static function getDirectorDetails($id)
     {
         return HRPerson::with('HrPositions')
-            ->where('user_id', $id)
+            ->where('id', $id)
             ->first();
     }
 
@@ -340,7 +340,10 @@ class HRPerson extends Model
         return HRPerson::select(
             'hr_people.*'
         )
+			->where('hr_people.status', 1)
             ->where('hr_people.division_level_4', $dv2)
+			->orderBy('hr_people.first_name', 'asc')
+			->orderBy('hr_people.surname', 'asc')
             ->with('jobTitle','section', 'team')
             ->get();
 //        section
