@@ -39,17 +39,18 @@ class AllocateLeavedaysFamilyCronController extends Controller {
         $employees = HRPerson::where('status', 1)->get();
         foreach ($employees as $employee) {
             if (!empty($employee->date_joined) && $employee->date_joined > 0) {
-				$dateJoined = date('Y-m-d',$employee->date_joined);
-				// get today
-				$today = date("Y-m-d");
-				$otoday = new DateTime($today);
-				// convert date joined
-				$odateJoined = new DateTime($dateJoined);
-				$diff = $odateJoined->diff($otoday);
+				
+				$dateJoined = date("Y-m-d 00:00:00",$employee->date_joined);
+				//$dateJoined = date("2016-07-03 00:00:00");
+				$date = Carbon::parse($dateJoined);
+				$now = Carbon::now();
+				// convert date joined/
+				$diff = $date->diff($now);
 				$years = $diff->y;
 				$months = $diff->m;
 				$days = $diff->d;
-				if ($years == 0 && $months == 4)
+				// if its user fourth month give familly leave
+				if ($years == 0 && $months == 4 && $days == 0)
 				{
                     //set family leave to 3 days
                     $leaveCredit = $this->getLeaveCredit($employee->id, $familyLeaveTypeID);
@@ -76,14 +77,13 @@ class AllocateLeavedaysFamilyCronController extends Controller {
         define('TOTAL_SICK_LEAVE_DAYS', 30);
         $employees = HRPerson::where('status', 1)->get();
         foreach ($employees as $employee) {
-            if ($employee->date_joined && $employee->date_joined > 0) {
+            if (!empty($employee->date_joined) && $employee->date_joined > 0) {
                 $dateJoined = Carbon::createFromTimestamp($employee->date_joined);
                 $todayDate = Carbon::now();
                 //return $dateJoined . ' --- ' . $todayDate . ' --- ' . $dateJoined->diffInMonths($todayDate);
-                if ($dateJoined->diffInMonths($todayDate) < 6) {
+                if ($dateJoined->diffInMonths($todayDate) > 6) {
                     //give one day sick leave for every 26 weekdays
                     if (($dateJoined->diffInWeekdays($todayDate) >= 26) && ($dateJoined->diffInWeekdays($todayDate) % 26 == 0)) {
-                        //dd($employee->full_name);
                         $leaveCredit = $this->getLeaveCredit($employee->id, SICK_LEAVE_ID);
                         if ($leaveCredit) {
                             $leaveCredit->leave_balance += 8;
@@ -98,12 +98,12 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                         }
                     }
                 }
-                elseif ($dateJoined->diffInMonths($todayDate) >= 6 && $dateJoined->diffInYears($todayDate) < 3) {
+                elseif ($dateJoined->diffInMonths($todayDate) < 6 && $dateJoined->diffInYears($todayDate) < 3) {
                     //give them the rest of the leave days from the initial total of 30
                     $sixMonthsLater = $dateJoined->copy()->addMonths(6);
                     $yesterday = $todayDate->copy()->subDay();
+
                     if ($sixMonthsLater->isToday()) {
-                        //dd($employee->full_name);
                         $remLeaveDaysInCycle = TOTAL_SICK_LEAVE_DAYS - (intdiv($dateJoined->diffInWeekdays($yesterday), 26));
                         $leaveCredit = $this->getLeaveCredit($employee->id, SICK_LEAVE_ID);
                         if ($leaveCredit) {
@@ -152,11 +152,11 @@ class AllocateLeavedaysFamilyCronController extends Controller {
          }
     }*/
 	public function paternity() {
+
 	### BEGIN: Sick paternity ACCRUAL (Leave Type = 9)
 
-         $employees = HRPerson::where('status', 1)->where('gender', 1)->get();
+        $employees = HRPerson::where('status', 1)->where('gender', 1)->get();
         foreach ($employees as $employee) {
-
 			$leaveCredit = $this->getLeaveCredit($employee->id, 9);
 			if ($leaveCredit) {
 				

@@ -94,7 +94,6 @@ class LeaveHistoryAuditController extends Controller
         $user = 0
     )
     {
-
         if ($isCron == 0)
             $user = Auth::user()->load('person');
 

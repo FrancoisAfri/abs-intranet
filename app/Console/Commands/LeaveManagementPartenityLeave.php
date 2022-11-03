@@ -37,7 +37,7 @@ class LeaveManagementPartenityLeave extends Command
      */
     public function handle()
     {
-        app('App\Http\Controllers\AllocateLeavedaysFamilyCronController')->resetPaternityLeaves();
-        \Log::info('Cron - LeaveManagementPartenityLeave, artisan command schedule:leaveResetPartenity ran successfully @ ' . \Carbon\Carbon::now());
+        app('App\Http\Controllers\AllocateLeavedaysFamilyCronController')->paternity();
+        \Log::info('Cron - LeaveManagementPartenityLeave, artisan command schedule:leaveAllocationPartenity ran successfully @ ' . \Carbon\Carbon::now());
     }
 }
