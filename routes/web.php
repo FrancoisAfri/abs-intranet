@@ -182,7 +182,10 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
         ->name('licences_management.renewal');
 
     Route::get('licence_user/{licence}', 'LicenceManagementController@Useractivate')
-        ->name('LicenceUser.activate');
+        ->name('LicenceUser.activate'); 
+	
+	Route::get('license_report', 'LicenceManagementController@licenseReport')
+        ->name('licence.report');
 
     Route::get('organogram', 'EmployeeManagementController@organogramView')
         ->name('organogram.view');

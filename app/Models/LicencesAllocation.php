@@ -49,6 +49,34 @@ class LicencesAllocation extends Model
             $id
         )->get();
     }
-
-
+	// get all license allocation
+	
+	public static function getAlllicenses($status ,$type, $licenseID)
+    {
+        $query = LicencesAllocation::select('license_allocation.*')
+			->leftJoin('asset_license', 'license_allocation.licence_id', '=', 'asset_license.id')
+			->where(function ($q) use ($status) {
+                if (!empty($status)) {
+					if ($status == 1)
+						$q->where('asset_license.status', '=', $status); // '=' is optional
+					elseif ($status == 2)
+						$q->where('asset_license.status', '=', 0);
+						//die('dddd');//$q->whereNull('asset_license.status'); // '=' is optional
+				}
+            })
+			->where(function ($q) use ($licenseID) {
+                if (!empty($licenseID)) {
+					$q->where('asset_license.id', '=', $licenseID); // '=' is optional
+				}
+            })
+			->where(function ($q) use ($type) {
+                if (!empty($type)) {
+					$q->where('asset_license.asset_type_id', '=', $type); // '=' is optional
+				}
+            })
+			->with('Hrpersons','Licenses.LicensesType')
+            ->orderBy('license_allocation.licence_id', 'asc')
+            ->orderBy('license_allocation.user_id', 'asc');
+        return $query->get();
+    }
 }

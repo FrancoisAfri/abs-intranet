@@ -41,12 +41,12 @@ class LicenceManagementController extends Controller
 
         $data = $this->breadCrump(
             "Employee Records",
-            "Licence Management", "fa fa-lock",
-            "Licences Management",
-            "Licences Management",
+            "License Management", "fa fa-lock",
+            "Licenses  Management",
+            "Licenses  Management",
             "/hr",
-            "Licences Management",
-            "Licences Management"
+            "License Management",
+            "License Management"
         );
 
         $data['licences'] = $licences;
@@ -113,12 +113,12 @@ class LicenceManagementController extends Controller
 
         $data = $this->breadCrump(
             "Employee Records",
-            "Licence Management", "fa fa-lock",
-            "Licences Management",
-            "Licences Management",
+            "License Management", "fa fa-lock",
+            "Licenses Management",
+            "Licenses Management",
             "/hr",
-            "Licences Management",
-            "Licences Management"
+            "Licenses Management",
+            "Licenses Management"
         );
 
         $data['licenseHistory'] = $licenseHistory;
@@ -279,5 +279,34 @@ class LicenceManagementController extends Controller
 
         AuditReportsController::store('licence Management', 'licence  Status Changed', "licence  Changed", 0);
         return back();
+    }
+	// license report
+	public function licenseReport(Request $request)
+    {
+        $status = !empty($request['status_id']) ? $request['status_id'] : 1;
+        $type = !empty($request['license_type']) ? $request['license_type'] : '';
+        $licenseID = !empty($request['license_id']) ? $request['license_id'] : '';
+
+        $LicenceAllocations = LicencesAllocation::getAlllicenses($status, $type, $licenseID);
+		//return $LicenceAllocations;
+		
+        $licenseTypes = LicensesType::all();
+        $licenses = Licences::all();
+
+        $data = $this->breadCrump(
+            "Employee Records",
+            "License Report", "fa fa-lock",
+            "Licenses  Management Report",
+            "Licenses  Management",
+            "/",
+            "Licenses  Management",
+            "Licenses  Management"
+        );
+
+        $data['licenseTypes'] = $licenseTypes;
+        $data['licenses'] = $licenses;
+        $data['LicenceAllocations'] = $LicenceAllocations;
+
+        return view('Employees.report.license_report')->with($data);
     }
 }

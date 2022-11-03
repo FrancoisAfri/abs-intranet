@@ -75,53 +75,49 @@
                             </tr>
                             </thead>
                             <tbody>
-                            @if (count($licences) > 0)
-                                <ul class="products-list product-list-in-box">
-                                    @foreach ($licences as $key => $licence)
-                                        <tr id="categories-list">
-                                            <td>
+                            @if (count(array($licences)) > 0)
+								@foreach ($licences as $key => $licence)
+									<tr>
+										<td>
+										</td>
+										<td style="width: 5px; text-align: center;">
+											<a data-toggle="tooltip" title="Click to View Licence Details"
+											   href="{{ route('licences_management.show',['licence' => $licence->uuid]) }}">
+												{{ (!empty( $licence->name)) ?  $licence->name : ''}}
+											</a>
+										</td>
 
-                                            </td>
+										<td style="width: 5px; text-align: center;">
+											</i> {{ (!empty($licence->details)) ? $licence->details : ' ' }}
+										</td>
 
-                                            <td>
-                                                <a data-toggle="tooltip" title="Click to View Licence Details"
-                                                   href="{{ route('licences_management.show',['licence' => $licence->uuid]) }}">
-                                                    {{ (!empty( $licence->name)) ?  $licence->name : ''}}
-                                                </a>
-                                            </td>
+										<td style="width: 5px; text-align: center;">
+									   </i> {{ (!empty($licence->order_number)) ? $licence->order_number : ' ' }}
+										</td>
 
-                                            <td>
-                                                </i> {{ (!empty($licence->details)) ? $licence->details : ' ' }}
-                                            </td>
+										<td style="width: 5px; text-align: center;">
+											</i> {{ (!empty($licence->serial)) ? $licence->serial : ' ' }}
+										</td>
 
-                                            <td>
-                                           </i> {{ (!empty($licence->order_number)) ? $licence->order_number : ' ' }}
-                                            </td>
+										<td style="width: 5px; text-align: center;">
+											{{ (!empty($licence->purchase_date)) ? $licence->purchase_date : ' ' }}
+										</td>
 
-                                            <td>
-                                                </i> {{ (!empty($licence->serial)) ? $licence->serial : ' ' }}
-                                            </td>
+										<td style="width: 5px; text-align: center;">
+											{{ (!empty($licence->purchase_cost)) ? $licence->purchase_cost : ' ' }}
+										</td>
 
-                                            <td>
-                                                {{ (!empty($licence->purchase_date)) ? $licence->purchase_date : ' ' }}
-                                            </td>
+										<td style="width: 5px; text-align: center;">{{ (!empty($licence->total)) ? $licence->total : ' ' }}</td>
 
-                                            <td>
-                                                {{ (!empty($licence->purchase_cost)) ? $licence->purchase_cost : ' ' }}
-                                            </td>
+										<td style="width: 5px; text-align: center;">{{ (!empty($licence->expiration_date)) ? $licence->expiration_date : ' ' }}</td>
 
-                                            <td>{{ (!empty($licence->total)) ? $licence->total : ' ' }}</td>
-
-                                            <td>{{ (!empty($licence->expiration_date)) ? $licence->expiration_date : ' ' }}</td>
-
-                                            <td>
-                                                <button vehice="button" id="view_ribbons" class="btn {{ (!empty($licence->status) && $licence->status == 1) ? " btn-danger " : "btn-success " }}
-                                                      btn-xs" onclick="postData({{$licence->id}}, 'actdeac');"><i class="fa {{ (!empty($licence->status) && $licence->status == 1) ?
-                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($licence->status) && $licence->status == 1) ? "De-Activate" : "Activate"}}
-                                                </button>
-                                            </td>
-
-                                        </tr>
+										<td style="width: 5px; text-align: center;">
+											<button vehice="button" id="view_ribbons" class="btn {{ (!empty($licence->status) && $licence->status == 1) ? " btn-danger " : "btn-success " }}
+												  btn-xs" onclick="postData({{$licence->id}}, 'actdeac');"><i class="fa {{ (!empty($licence->status) && $licence->status == 1) ?
+												  " fa-times " : "fa-check " }}"></i> {{(!empty($licence->status) && $licence->status == 1) ? "De-Activate" : "Activate"}}
+											</button>
+										</td>
+									</tr>
                                 @endforeach
                             @endif
                             </tbody>
