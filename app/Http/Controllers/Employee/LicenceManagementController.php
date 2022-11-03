@@ -307,6 +307,6 @@ class LicenceManagementController extends Controller
         $data['licenses'] = $licenses;
         $data['LicenceAllocations'] = $LicenceAllocations;
 
-        return view('Employees.report.license_report')->with($data);
+        return view('Employees.Report.license_report')->with($data);
     }
 }
