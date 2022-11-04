@@ -59,6 +59,7 @@ class AssetManagementController extends Controller
         $assetType = AssetType::all();
         $asserts = Assets::getAssetsByStatus($status, $asset_type);
 
+
         $data = $this->breadCrump(
             "Asset Management",
             "Manage Assets", "fa fa-lock",
@@ -408,16 +409,16 @@ class AssetManagementController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function destroy(Assets $assets): RedirectResponse
+    public function destroy($assets): RedirectResponse
     {
-        //dd($assets);
-        $assets->delete();
+        $varAssets = Assets::getAssetById($assets);
+        $varAssets->delete();
 
         return redirect()->route('index')->with('status', 'Asset Deleted!');
     }
 
     /**
-     * @param AssetFiles $files
+     * @param AssetFiles $assets
      * @return RedirectResponse
      * @throws Exception
      */
@@ -429,7 +430,7 @@ class AssetManagementController extends Controller
     }
 
     /**
-     * @param AssetFiles $files
+     * @param AssetComponents $assets
      * @return RedirectResponse
      * @throws Exception
      */

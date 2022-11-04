@@ -44,7 +44,7 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
         'settings', 'AssetManagementController@setUp')
         ->name('assets.settings');
     Route::delete(
-        'assets/{assets}', 'AssetManagementController@destroy')
+        '{assets}', 'AssetManagementController@destroy')
         ->name('assets.destroy');
 
     Route::get('show/{assets}', 'AssetManagementController@show')
