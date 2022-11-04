@@ -34,7 +34,7 @@ class LicenceManagementController extends Controller
         if ($request['status_id'] == null) {
             $status = 'All';
         } else $status = $request['status_id'];
-        
+
         $licences = Licences::getLicencesByStatus($status);
 
         //$div = DivisionLevel::divisionLevelGroup();

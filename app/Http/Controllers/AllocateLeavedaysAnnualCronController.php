@@ -129,17 +129,7 @@ class AllocateLeavedaysAnnualCronController extends Controller
                         );
 
                         LeaveHistoryAuditController::store('leave days allocation', 'leave days allocation', 0, $days, $currentBalance, $AnnualLeaveTypeID, $empID);
-                        //insert into allocation table
-//                        $leaveAllocation = new LeaveAllocation();
-//                        $leaveAllocation->hr_id = $empID;
-//                        $leaveAllocation->month_allocated = date('n');
-//                        $leaveAllocation->leave_type_id = $AnnualLeaveTypeID;
-//                        $leaveAllocation->allocated_by = $user->person->id;;
-//                        $leaveAllocation->date_allocated = time();
-//                        $leaveAllocation->balance_before = $previousBalance;
-//                        $leaveAllocation->current_balance = $currentBalance;
-//                        $leaveAllocation->save();
-
+                        
                         $leaveAllocation = LeaveAllocation::create(
                             [
                                 'hr_id' => $empID,
