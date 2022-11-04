@@ -33,11 +33,13 @@ class SendLeaveBalanceToUsers extends Controller
      */
     public function execute()
     {
+
         $users = HRPerson::where('status', 1)->pluck('id');
 
         foreach ($users as $empID) {
 
-            $leaveBalance = leave_credit::where('hr_id', $empID)->pluck('leave_balance')->get();
+            $leaveBalance = leave_credit::where('hr_id', $empID)->pluck('leave_balance');
+
             $hrDetails =  HRPerson::getManagerDetails($empID);
             $fullnane = $hrDetails->first_name . ' ' . $hrDetails->surname;
             $datanow = Carbon::now()->toDayDateTimeString();
@@ -114,11 +116,13 @@ class SendLeaveBalanceToUsers extends Controller
 
         $daysToEscalation = leave_configuration::pluck('mumber_of_days_until_escalation')->first();
 
+
         $date = Carbon::today()->subDays($daysToEscalation);
 
         $user = leave_application::where('status', '>=', 2)
             ->where('created_at', '>=', $date)
             ->pluck('hr_id');
+
 
         $users = $user->unique();
 
@@ -140,9 +144,11 @@ class SendLeaveBalanceToUsers extends Controller
         foreach ($hrDetails as $hrDetail) {
 
             $Dept = DivisionLevelFour::where('id', $hrDetail->division_level_4)->first();
+
             $deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
             ->select('first_name', 'surname', 'email')
             ->first();
+         
 
             $unapproved = leave_application::getUnapprovedApplications($date , $hrDetail->id);
 
