@@ -186,6 +186,9 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 	
 	Route::get('license_report', 'LicenceManagementController@licenseReport')
         ->name('licence.report');
+	
+	Route::post('license_print', 'LicenceManagementController@licenseReportPrint')
+        ->name('license.print');
 
     Route::get('organogram', 'EmployeeManagementController@organogramView')
         ->name('organogram.view');

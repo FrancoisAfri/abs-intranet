@@ -116,6 +116,23 @@
                             </tfoot>
                         </table>
                         <!-- /.box-body -->
+						<div class="box-footer">					
+							<div class="form-group">
+								<form action="{{ route('license.print') }}"
+									  method="POST"
+									  >
+									<input type="hidden" name="_token" value="{{ csrf_token() }}">
+									<input type="hidden" name="status_id" value="{{!empty($status_id) ? $status_id : 0}}">
+									<input type="hidden" name="license_type" value="{{!empty($license_type) ? $license_type : 0}}">
+									<input type="hidden" name="license_id" value="{{!empty($license_id) ? $license_id : 0}}">
+									<button type="submit"
+											class="btn btn-primary pull-right"
+											 title='Print'>
+										<i class="fa fa-print"> Print With Total </i>
+									</button>
+								</form>
+							</div>
+						</div>
                     </div>
                 </div>
             </div>

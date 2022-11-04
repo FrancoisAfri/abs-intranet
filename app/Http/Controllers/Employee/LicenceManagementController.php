@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Employee;
 
+use App\CompanyIdentity;
 use App\DivisionLevel;
 use App\HRPerson;
 use App\DivisionLevelFive;
@@ -17,7 +18,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use RealRashid\SweetAlert\Facades\Alert;
-
+use Illuminate\Support\Facades\Auth;
 class LicenceManagementController extends Controller
 {
     use BreadCrumpTrait;
@@ -318,7 +319,66 @@ class LicenceManagementController extends Controller
         $data['licenses'] = $licenses;
         $data['LicenceAllocations'] = $LicenceAllocations;
 		$data['totalCost'] = $totalCost;
+		$data['status_id'] = $status;
+		$data['license_type'] = $type;
+		$data['license_id'] = $licenseID;
 		
         return view('Employees.Report.license_report')->with($data);
+    }
+	
+	// license report
+	public function licenseReportPrint(Request $request)
+    {
+        $status = !empty($request['status_id']) ? $request['status_id'] : 1;
+        $type = !empty($request['license_type']) ? $request['license_type'] : '';
+        $licenseID = !empty($request['license_id']) ? $request['license_id'] : '';
+		$totalCost = 0;
+		 $LicenceAllocations = LicencesAllocation::getAlllicenses($status, $type, $licenseID);
+
+		// calculate total cost
+		if (!empty($LicenceAllocations))
+		{			
+			foreach ($LicenceAllocations as $allocation) {
+				
+				//echo $allocation->Licenses->name ." plus".$allocation->Licenses->purchase_cost."</br>";
+				$totalCost = $totalCost + $allocation->Licenses->purchase_cost;
+            }
+		}
+        $LicenceAllocations = LicencesAllocation::getAlllicenses($status, $type, $licenseID);
+		//return $LicenceAllocations;
+		
+        $licenseTypes = LicensesType::all();
+        $licenses = Licences::all();
+
+        $data = $this->breadCrump(
+            "Employee Records",
+            "License Report", "fa fa-lock",
+            "Licenses  Management Report",
+            "Licenses  Management",
+            "/",
+            "Licenses  Management",
+            "Licenses  Management"
+        );
+
+        $data['licenseTypes'] = $licenseTypes;
+        $data['licenses'] = $licenses;
+        $data['LicenceAllocations'] = $LicenceAllocations;
+		$data['totalCost'] = $totalCost;
+		$data['status_id'] = $status;
+		$data['license_type'] = $type;
+		$data['license_id'] = $licenseID;
+		// printing 
+		$companyDetails = CompanyIdentity::systemSettings();
+        $companyName = $companyDetails['company_name'];
+        $user = Auth::user()->load('person');
+
+        $data['support_email'] = $companyDetails['support_email'];
+        $data['company_name'] = $companyName;
+        $data['full_company_name'] = $companyDetails['full_company_name'];
+        $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
+        $data['date'] = date("d-m-Y");
+        $data['user'] = $user;
+		
+        return view('Employees.Report.license_report_print')->with($data);
     }
 }
