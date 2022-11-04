@@ -147,6 +147,7 @@ class EmployeeManagementController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
+        dd($request);
         /**
          * get user location
          */
@@ -187,6 +188,7 @@ class EmployeeManagementController extends Controller
         $results = $response["results"];
         $location = '';
         ///////
+        ///
         foreach ($results as $component) {
 
             $arrayAddress = (explode(",", $component["formatted_address"]));

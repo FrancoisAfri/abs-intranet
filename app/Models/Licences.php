@@ -53,4 +53,16 @@ class Licences extends Model
             )
             ->first();
     }
+
+    public static function getLicencesByStatus($status){
+
+        $query = Licences::with('LicensesType');
+
+        if ($status !== 'All' && $status !== null){
+
+            $query->where('status', $status);
+        }
+
+        return $query->get();
+    }
 }

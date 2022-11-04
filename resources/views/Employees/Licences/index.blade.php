@@ -27,7 +27,7 @@
                     <div class="box-header">
 
                         <div class="form-group container-sm">
-                            <form class="form-horizontal" method="get" action="{{ route('employee.index') }}">
+                            <form class="form-horizontal" method="get" action="{{ route('licences_management.index') }}">
                                 {{ csrf_field() }}
                                 <div class="col-md-6">
                                     <div class="form-group">
@@ -36,7 +36,7 @@
                                             <select class="form-control select2 " style="width: 100%;"
                                                     id="status_id" name="status_id" data-select2-id="1" tabindex="-1"
                                                     aria-hidden="true">
-                                                <option value="0">** Select Status **</option>
+                                                <option value="All">** Select Status **</option>
                                                 @foreach ( \App\HRPerson::STATUS_SELECT() as $key =>$values)
                                                     <option value="{{ $key }}">{{ $values }}</option>
                                                 @endforeach

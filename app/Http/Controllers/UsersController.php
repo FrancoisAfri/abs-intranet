@@ -588,7 +588,9 @@ class UsersController extends Controller
 
     private function userMoved($user, $person)
     {
+
         $manager = ItManager::where('status', 1)->get();
+
         foreach ($manager as $managers) {
 
             $ItManager = HRPerson::getManagerDetails($managers->user_id);
