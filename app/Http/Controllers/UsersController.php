@@ -408,7 +408,7 @@ class UsersController extends Controller
 
             foreach ($admins as $admin) {
                 $user = HRPerson::where('user_id', $admin->user_id)->first();
-                Mail::to("$user->email")->send(new NewUsers($user->email));
+                Mail::to("$user->email")->send(new NewUsers($user->first_name));
             }
         }
         //Redirect to all usr view

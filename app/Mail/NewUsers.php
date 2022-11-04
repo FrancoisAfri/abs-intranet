@@ -40,7 +40,7 @@ class NewUsers extends Mailable
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['dashboard_url'] = url('/leave/approval');
+        $data['dashboard_url'] = url('/users/approval');
 
         return $this->view('mails.new_user')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])

@@ -159,7 +159,13 @@ class ReadErsDetails
          * Compare the employee records with exempted users to the api response
          * to get absent users for the day
          */
-        return $CollectionWithExemptedUsers->diff($EmployeeId);
+		// return $CollectionWithExemptedUsers->diff($EmployeeId);
+		
+		$collection =  $CollectionWithExemptedUsers->diff($EmployeeId);
+		// remove duplicate
+		$collection = $collection->unique();
+
+        return $collection;
     }
 
     /**
@@ -339,9 +345,6 @@ class ReadErsDetails
 					]);
             }
         }
-		// remove duplicate
-		$AbsentUsersColl = array_unique($AbsentUsersColl); 
-
         /**
          * create an Excel file and store it the application
          */
