@@ -72,12 +72,12 @@
 									<th style="width: 5px; text-align: center;">License Name</th>
 									<th style="width: 5px; text-align: center;">License Type</th>
 									<th style="width: 5px; text-align: center;">Serial Number</th>
-									<th style="width: 5px; text-align: center;">Cost</th>
 									<th style="width: 5px; text-align: center;">Purchase Date</th>
 									<th style="width: 5px; text-align: center;">Expiration Date</th>
 									<th style="width: 5px; text-align: center;">Employee</th>
 									<th style="width: 5px; text-align: center;">Email</th>
 									<th style="width: 5px; text-align: center;">Licence Status</th>
+									<th style="width: 5px; text-align: center;">Cost</th>
 								</tr>
                             </thead>
                             <tbody>
@@ -87,12 +87,12 @@
 											<td style="width: 5px; text-align: center;">{{ (!empty($allocations->Licenses->name)) ?  $allocations->Licenses->name : ''}}</td>
 											<td style="width: 5px; text-align: center;">{{ (!empty($allocations->Licenses->LicensesType->name)) ?  $allocations->Licenses->LicensesType->name : ''}}</td>
 											<td style="width: 5px; text-align: center;">{{ (!empty($allocations->Licenses->serial)) ?  $allocations->Licenses->serial : ''}} </td>
-											<td style="width: 5px; text-align: center;">{{ (!empty($allocations->Licenses->purchase_cost)) ?  $allocations->Licenses->purchase_cost : ''}} </td>
 											<td style="width: 5px; text-align: center;">{{ (!empty($allocations->Licenses->purchase_date)) ?  $allocations->Licenses->purchase_date : ''}} </td>
 											<td style="width: 5px; text-align: center;">{{ (!empty($allocations->Licenses->expiration_date)) ?  $allocations->Licenses->expiration_date : ''}} </td>
 											<td style="width: 5px; text-align: center;">{{ (!empty($allocations->Hrpersons->first_name)) ?  $allocations->Hrpersons->first_name.' '.$allocations->Hrpersons->surname : ''}} </td>
 											<td style="width: 5px; text-align: center;">{{ (!empty($allocations->Hrpersons->email)) ?  $allocations->Hrpersons->email : ''}} </td>
 											<td style="width: 5px; text-align: center;">{{ (!empty($allocations->Licenses->status)) && ($allocations->Licenses->status == 1)  ? 'Active': 'De Activated' }}											</td>
+											<td style="width: 5px; text-align: center;">R {{ (!empty($allocations->Licenses->purchase_cost)) ?  number_format($allocations->Licenses->purchase_cost, 2) : ''}} </td>
 										</tr>
 									@endforeach
 								@endif
@@ -102,12 +102,16 @@
 									<th style="width: 5px; text-align: center;">License Name</th>
 									<th style="width: 5px; text-align: center;">License Type</th>
 									<th style="width: 5px; text-align: center;">Serial Number</th>
-									<th style="width: 5px; text-align: center;">Cost</th>
 									<th style="width: 5px; text-align: center;">Purchase Date</th>
 									<th style="width: 5px; text-align: center;">Expiration Date</th>
 									<th style="width: 5px; text-align: center;">Employee</th>
 									<th style="width: 5px; text-align: center;">Email</th>
 									<th style="width: 5px; text-align: center;">Licence Status</th>
+									<th style="width: 5px; text-align: center;">Cost</th>
+								</tr>
+								<tr>
+									<th colspan="8" style="text-align:right;"> Total Cost</th> 
+									<th style="width: 5px; text-align: center;">R {{!empty($totalCost) ? number_format($totalCost, 2) : 0}} </th>
 								</tr>
                             </tfoot>
                         </table>

@@ -286,7 +286,18 @@ class LicenceManagementController extends Controller
         $status = !empty($request['status_id']) ? $request['status_id'] : 1;
         $type = !empty($request['license_type']) ? $request['license_type'] : '';
         $licenseID = !empty($request['license_id']) ? $request['license_id'] : '';
-
+		$totalCost = 0;
+		 $LicenceAllocations = LicencesAllocation::getAlllicenses($status, $type, $licenseID);
+		//return $LicenceAllocations;
+		// calculate total cost
+		if (!empty($LicenceAllocations))
+		{			
+			foreach ($LicenceAllocations as $allocation) {
+				
+				//echo $allocation->Licenses->name ." plus".$allocation->Licenses->purchase_cost."</br>";
+				$totalCost = $totalCost + $allocation->Licenses->purchase_cost;
+            }
+		}
         $LicenceAllocations = LicencesAllocation::getAlllicenses($status, $type, $licenseID);
 		//return $LicenceAllocations;
 		
@@ -306,7 +317,8 @@ class LicenceManagementController extends Controller
         $data['licenseTypes'] = $licenseTypes;
         $data['licenses'] = $licenses;
         $data['LicenceAllocations'] = $LicenceAllocations;
-
+		$data['totalCost'] = $totalCost;
+		
         return view('Employees.Report.license_report')->with($data);
     }
 }
