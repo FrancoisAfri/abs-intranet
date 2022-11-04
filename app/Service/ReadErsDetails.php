@@ -326,22 +326,21 @@ class ReadErsDetails
 
         //create a new collection with name, surname, and employee  number
         $AbsentUsersColl = array();
-		$userCheck = '';
+
         if (count($absentUsers) > 0) {
             foreach ($absentUsers as $absentUser) {
                 $details = HRPerson::getUserDetails($absentUser);
-				// check if user is already in the array
-				if ($userCheck != $details['employee_number'])
+
 					$AbsentUsersColl[] = ([
 						'employee_number' => $details['employee_number'],
 						'name' => $details['first_name'],
 						'surname' => $details['surname'],
 						'email' => $details['email'],
 					]);
-				$userCheck = $details['employee_number'];
             }
         }
-
+		// remove duplicate
+		$AbsentUsersColl = array_unique($AbsentUsersColl); 
 
         /**
          * create an Excel file and store it the application
