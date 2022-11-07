@@ -7,6 +7,7 @@ use App\DivisionLevelFour;
 use App\DivisionLevelTwo;
 use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
+use App\Http\Controllers\LeaveApplicationController;
 use App\leave_application;
 use App\leave_configuration;
 use App\leave_credit;
@@ -23,7 +24,9 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use phpDocumentor\Reflection\Types\Array_;
+use Rap2hpoutre\FastExcel\FastExcel;
 
 
 class SendLeaveBalanceToUsers extends Controller
@@ -57,6 +60,53 @@ class SendLeaveBalanceToUsers extends Controller
     /**
      * @return void
      */
+//    public function managerReminder()
+//    {
+//
+//        #check who is the manager
+//        #send a reminder
+//        #runs everyday
+//        $date_now = Carbon::now()->toDayDateTimeString();
+//
+//        $days = leave_configuration::pluck('number_of_days_to_remind_manager')->first();
+//
+//        $date = Carbon::today()->subDays($days);
+//        dd($date);
+//
+//        $user = leave_application::where('status', '>=', 2)
+//            ->where('created_at', '>=', $date)
+//            ->pluck('hr_id');
+//
+//        $users = $user->unique();
+//
+//        $outputArray = array();
+//        foreach ($users as $empID) {
+//            $leaveApplications = leave_application::where(
+//                'hr_id', $empID
+//            )->get();
+//            if (isset($leaveApplications->manager_id))
+//                $managerId = $leaveApplications->manager_id;
+//
+//
+//            $hrDetails = HRPerson::getManagerDetails($managerId);
+//
+//            $outputArray[] = $hrDetails;
+//        }
+//        // remeove duplicates so that we only send 1 email to diffrent managers
+//        $hrDetails = collect($outputArray)->unique();
+//
+//        //needs improvement
+//        foreach ($hrDetails as $hrDetail) {
+//            $unapproved = leave_application::getUnapprovedApplications($date, $hrDetail->id);
+//
+//            $fullnane = $hrDetail->first_name . ' ' . $hrDetail->surname;
+//            if (!empty($hrDetail->email))
+//                Mail::to($hrDetail->email)->send(new managerReminder($fullnane, $hrDetail->email, $date_now, $unapproved));
+//
+//        }
+//
+//    }
+
     public function managerReminder()
     {
 
@@ -67,39 +117,35 @@ class SendLeaveBalanceToUsers extends Controller
 
         $days = leave_configuration::pluck('number_of_days_to_remind_manager')->first();
 
-        $date = Carbon::today()->subDays($days);
+        //
+        $daysToEscalation = leave_configuration::pluck('mumber_of_days_until_escalation')->first();
+        $date_now = Carbon::today();
+        $date = Carbon::today()->subDays($daysToEscalation);
 
-        $user = leave_application::where('status', '>=', 2)
-            ->where('created_at', '>=', $date)
-            ->pluck('hr_id');
+        $applications = leave_application::where('status', '>=', 2)
+            ->whereBetween('created_at', [$date, $date_now])
+            //->where('created_at', '>=', $date)
+            ->get();
+        dd($applications);
 
-        $users = $user->unique();
 
-        $outputArray = array();
-        foreach ($users as $empID) {
-            $leaveApplications = leave_application::where(
-                'hr_id', $empID
-            )->first();
-            if (isset($leaveApplications->manager_id))
-                $managerId = $leaveApplications->manager_id;
+        $applications = leave_application::where('status', '>=', 2)
+            ->where('created_at', '=', $date)
+            ->get();
 
-            $hrDetails = HRPerson::getManagerDetails($managerId);
+        foreach ($applications as $application) {
 
-            $outputArray[] = $hrDetails;
+            if (!empty($application->manager_id) && !empty($application->hr_id)) {
+                // get manager details
+                $hrDetail = HRPerson::getManagerDetails($application->manager_id);
+                $empDetails = HRPerson::getManagerDetails($application->hr_id);
+                $fullnane = $hrDetail->first_name . ' ' . $hrDetail->surname;
+                $fullnaneEmp = $empDetails->first_name . ' ' . $empDetails->surname;
+                // emails manager
+                if (!empty($hrDetail->email))
+                    Mail::to($hrDetail->email)->send(new managerReminder($fullnane, $fullnaneEmp));
+            }
         }
-        // remeove duplicates so that we only send 1 email to diffrent managers
-        $hrDetails = collect($outputArray)->unique();
-
-        //needs improvement
-        foreach ($hrDetails as $hrDetail) {
-            $unapproved = leave_application::getUnapprovedApplications($date, $hrDetail->id);
-
-            $fullnane = $hrDetail->first_name . ' ' . $hrDetail->surname;
-            if (!empty($hrDetail->email))
-                Mail::to($hrDetail->email)->send(new managerReminder($fullnane, $hrDetail->email, $date_now, $unapproved));
-
-        }
-
     }
 
     /**
@@ -108,7 +154,6 @@ class SendLeaveBalanceToUsers extends Controller
      */
     public function leaveEscallation()
     {
-
         #check who is the manager
         #send a reminder
         #runs everyday
@@ -149,9 +194,7 @@ class SendLeaveBalanceToUsers extends Controller
                 ->select('first_name', 'surname', 'email')
                 ->first();
 
-
             $unapproved = leave_application::getUnapprovedApplications($date, $hrDetail->id);
-            dd($unapproved);
 
             $fullnane = $hrDetail->first_name . ' ' . $hrDetail->surname;
 
@@ -160,12 +203,11 @@ class SendLeaveBalanceToUsers extends Controller
                     Mail::to($hrDetail->email)->send(new managerReminder($fullnane, $hrDetail->email, $date_now, $unapproved));
             }
 
-
             $headName = $deptDetails->first_name . ' ' . $deptDetails->surname;
 
         }
 
-        if ($unapproved > 1){
+        if ($unapproved > 1) {
             if (!empty($deptDetails->email))
                 Mail::to($deptDetails->email)->send(new escalateleaveApplication($headName, $hrDetail->email, $date_now, $unapproved, $fullnane));
         }
@@ -180,6 +222,7 @@ class SendLeaveBalanceToUsers extends Controller
     public function viewBalance()
     {
         $credit = leave_history::getLeaveBalance();
+        $this->createExcel();
 
         $date_now = Carbon::now()->toDayDateTimeString();
 
@@ -203,18 +246,48 @@ class SendLeaveBalanceToUsers extends Controller
 
     }
 
+    public function createExcel(){
+        $credits = leave_history::getLeaveBalance();
+        $credit = $credits->unique('employee_number');
 
-    /**
-     * @return \Illuminate\Http\Response
-     * function to send reports to the head
-     * @return void
-     * @throws \Throwable
-     */
-    public function sendReport(): \Illuminate\Http\Response
+        $AbsentUsersColl = array();
+
+        if (count($credit) > 0) {
+            foreach ($credit as $absentUser) {
+                $details = HRPerson::getUserDetails($absentUser['employee_number']);
+
+                $AbsentUsersColl[] = ([
+                    'Employee number' => $details['employee_number'],
+                    'First Name' => $details['first_name'],
+                    'surname' => $details['surname'],
+                    'Leave Type' => $absentUser['leaveType'],
+                    'Balance' => $absentUser['Balance'],
+                ]);
+            }
+        }
+        /**
+         * create an Excel file and store it the application
+         */
+        $header_style = (new StyleBuilder())->setFontBold()->build();
+        $rows_style = (new StyleBuilder())
+            ->setFontSize(12)
+            ->setShouldWrapText()
+            ->build();
+
+
+        $ExcelDoc = (new FastExcel($AbsentUsersColl))
+            ->headerStyle($header_style)
+            ->rowsStyle($rows_style)
+            ->export('storage/app/Leave balance.xls');
+    }
+
+
+    public function sendReport()
     {
         //get the user selected on the settings
         $userId = leave_configuration::pluck('hr_person_id')->first();
         $userDetails = HRPerson::getManagerDetails($userId);
+
         $fullname = $userDetails->firstname . ' ' . $userDetails->surname;
 
         $leaveAttachment = $this->viewBalance();

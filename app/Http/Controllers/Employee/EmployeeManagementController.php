@@ -55,6 +55,7 @@ class EmployeeManagementController extends Controller
         //dd($employee);
 
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
+
         $data = $this->breadCrump(
             "Employee Records",
             "Search", "fa fa-lock",
