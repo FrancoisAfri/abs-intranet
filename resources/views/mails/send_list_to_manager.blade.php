@@ -216,10 +216,10 @@
                                                 <td valign="top" style="/*padding-bottom:20px; */background-color:#ffffff;">
                                                     Good day,
                                                     <br><br><br>
-                                                    {{ $first_name }} has resign and will be leaving on the {{ $date_left}}.
+                                                    {{ $first_name }} {{ $surname }}  has resign and will be leaving on the {{ $date_left}}.
                                                     <br>
                                                     <br>
-                                                    Please find attached the List of Assets and licensees used by  {{ $first_name }},
+                                                    Please find attached the List of Assets and licensees used by  {{ $first_name }} {{ $surname }},
                                                     <br>
                                                     Please Cancel all licensees linked to him/her
                                                     <br>

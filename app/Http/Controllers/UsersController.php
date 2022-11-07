@@ -608,14 +608,16 @@ class UsersController extends Controller
 
             if (!isset($userDetails['first_name'])) {
                 $name = '';
+                $surname = '';
                 $employeenumber = '';
             } else {
-                $name = $userDetails['first_name'].' '.$userDetails['surname'];
+                $name = $userDetails['first_name'];
+                $surname =  = $userDetails['surname'];
                 $employeenumber = $userDetails['employee_number'];
             }
 
             if (!empty($ItManager->email))
-                Mail::to($ItManager->email)->send(new sendManagersListOfAssets($name, $employeenumber, date('Y-m-d',$person['date_left']), $attachment));
+                Mail::to($ItManager->email)->send(new sendManagersListOfAssets($name, $surname, $employeenumber, date('Y-m-d',$person['date_left']), $attachment));
 
             // disable the user
         }

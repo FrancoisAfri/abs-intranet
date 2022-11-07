@@ -13,15 +13,17 @@ class sendManagersListOfAssets extends Mailable
     use Queueable, SerializesModels;
 
     public $first_name;
+    public $surname;
     public $date_left;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($first_name, $employee_number , $date_left ,$Attachment)
+    public function __construct($first_name, $surname,  $employee_number , $date_left ,$Attachment)
     {
         $this->first_name = $first_name;
+        $this->surname = $surname;
         $this->employee_number  = $employee_number;
         $this->date_left  = $date_left;
         $this->Attachment  = $Attachment;
@@ -40,6 +42,7 @@ class sendManagersListOfAssets extends Mailable
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['first_name'] = $this->first_name;
+        $data['surname'] = $this->surname;
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
