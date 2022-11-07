@@ -304,7 +304,6 @@ class LeaveApplicationController extends Controller
         $startDate = strtotime($start);
         $endDate = strtotime($end);
 
-
         // $startDate =
         // query the leave congif table and bring back the values
         $approvals = DB::table('leave_configuration')
@@ -319,7 +318,6 @@ class LeaveApplicationController extends Controller
             'id' => $hrID,
             'status' => 1
         ])->first();
-
 
         if ($approvals->require_managers_approval == 1) {
 
