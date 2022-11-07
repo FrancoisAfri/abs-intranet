@@ -602,9 +602,9 @@ class UsersController extends Controller
         foreach ($manager as $managers) {
 
             $ItManager = HRPerson::getManagerDetails($managers->user_id);
-            $userDetails = HRPerson::getManagerDetails($user);
+            $userDetails = HRPerson::getManagerDetails($$employee->id);
 
-            $attachment = $this->viewAssets($user);
+            $attachment = $this->viewAssets($$employee->id);
 
             if (!isset($userDetails['first_name'])) {
                 $name = '';
