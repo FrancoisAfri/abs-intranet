@@ -440,7 +440,7 @@
             //Date picker
             $('.datepicker').datepicker({
                 format: 'dd/mm/yyyy',
-                endDate: '-1d',
+                //endDate: '-1d',
                 autoclose: true
             });
 
