@@ -588,9 +588,15 @@ class UsersController extends Controller
 
     private function userMoved($user, $person)
     {
-		// disable user 
-		HRPerson::where('user_id', $user)->update(['status' => 0]);
-        User::where('id', $user)->update(['status' => 0]);
+		// disable user
+		$employee = HRPerson::find($user);
+		$employee->status = 0;
+        $employee->update();
+		// user
+		$user = User::find($employee->user_id);
+		$user->status = 0;
+        $user->update();
+        
 		// send emails
 		$manager = ItManager::where('status', 1)->get();
         foreach ($manager as $managers) {
@@ -609,7 +615,7 @@ class UsersController extends Controller
             }
 
             if (!empty($ItManager->email))
-                Mail::to($ItManager->email)->send(new sendManagersListOfAssets($name, $employeenumber, $person['date_left'], $attachment));
+                Mail::to($ItManager->email)->send(new sendManagersListOfAssets($name, $employeenumber, date('Y-m-d',$person['date_left']), $attachment));
 
             // disable the user
         }
