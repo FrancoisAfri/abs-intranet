@@ -137,23 +137,23 @@ class Assets extends Model
                 'asset_status' => $status
             ]);
         // return only from asset type table if  selection from asset type
-            if ($asset_type > 0){
+        if ($asset_type > 0) {
             $query->where('asset_type_id', $asset_type);
         }
 
         return $query->get();
     }
 
-    public static function getAllAssetsByStatus($status , $type)
+    public static function getAllAssetsByStatus($status, $type)
     {
         $query = Assets::with('AssetType')
             ->orderBy('id', 'asc');
 
-        if ($status !== 'all'){
+        if ($status !== 'all') {
             $query->where('asset_status', $status);
         }
 
-        if ($type !== 'All'){
+        if ($type !== 'All') {
             $query->where('asset_type_id', $type);
         }
 
@@ -174,6 +174,16 @@ class Assets extends Model
                 ]
             )
             ->first();
+    }
+
+
+    /**
+     * @param $id
+     * @return Assets|Model|Builder|null
+     */
+    public static function getAssetById($id)
+    {
+        return (new Assets)->where('id', $id)->first();
     }
 
 }

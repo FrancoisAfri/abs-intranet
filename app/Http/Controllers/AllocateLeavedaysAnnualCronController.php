@@ -129,7 +129,7 @@ class AllocateLeavedaysAnnualCronController extends Controller
                         );
 
                         LeaveHistoryAuditController::store('leave days allocation', 'leave days allocation', 0, $days, $currentBalance, $AnnualLeaveTypeID, $empID);
-                        
+
                         $leaveAllocation = LeaveAllocation::create(
                             [
                                 'hr_id' => $empID,

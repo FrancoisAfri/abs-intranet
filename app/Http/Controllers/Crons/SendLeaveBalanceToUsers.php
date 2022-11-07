@@ -33,12 +33,14 @@ class SendLeaveBalanceToUsers extends Controller
      */
     public function execute()
     {
+
         $users = HRPerson::where('status', 1)->pluck('id');
 
         foreach ($users as $empID) {
 
-            $leaveBalance = leave_credit::where('hr_id', $empID)->pluck('leave_balance')->get();
-            $hrDetails =  HRPerson::getManagerDetails($empID);
+            $leaveBalance = leave_credit::where('hr_id', $empID)->pluck('leave_balance');
+
+            $hrDetails = HRPerson::getManagerDetails($empID);
             $fullnane = $hrDetails->first_name . ' ' . $hrDetails->surname;
             $datanow = Carbon::now()->toDayDateTimeString();
 
@@ -90,7 +92,7 @@ class SendLeaveBalanceToUsers extends Controller
 
         //needs improvement
         foreach ($hrDetails as $hrDetail) {
-            $unapproved = leave_application::getUnapprovedApplications($date , $hrDetail->id);
+            $unapproved = leave_application::getUnapprovedApplications($date, $hrDetail->id);
 
             $fullnane = $hrDetail->first_name . ' ' . $hrDetail->surname;
             if (!empty($hrDetail->email))
@@ -114,11 +116,13 @@ class SendLeaveBalanceToUsers extends Controller
 
         $daysToEscalation = leave_configuration::pluck('mumber_of_days_until_escalation')->first();
 
+
         $date = Carbon::today()->subDays($daysToEscalation);
 
         $user = leave_application::where('status', '>=', 2)
             ->where('created_at', '>=', $date)
             ->pluck('hr_id');
+
 
         $users = $user->unique();
 
@@ -140,22 +144,32 @@ class SendLeaveBalanceToUsers extends Controller
         foreach ($hrDetails as $hrDetail) {
 
             $Dept = DivisionLevelFour::where('id', $hrDetail->division_level_4)->first();
-            $deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
-            ->select('first_name', 'surname', 'email')
-            ->first();
 
-            $unapproved = leave_application::getUnapprovedApplications($date , $hrDetail->id);
+            $deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first();
+
+
+            $unapproved = leave_application::getUnapprovedApplications($date, $hrDetail->id);
+            dd($unapproved);
 
             $fullnane = $hrDetail->first_name . ' ' . $hrDetail->surname;
 
-            if (!empty($hrDetail->email))
-                Mail::to($hrDetail->email)->send(new managerReminder($fullnane, $hrDetail->email, $date_now, $unapproved));
+            if ($unapproved > 1) {
+                if (!empty($hrDetail->email))
+                    Mail::to($hrDetail->email)->send(new managerReminder($fullnane, $hrDetail->email, $date_now, $unapproved));
+            }
+
 
             $headName = $deptDetails->first_name . ' ' . $deptDetails->surname;
 
         }
-        if (!empty($deptDetails->email))
-            Mail::to($deptDetails->email)->send(new escalateleaveApplication($headName, $hrDetail->email, $date_now, $unapproved , $fullnane));
+
+        if ($unapproved > 1){
+            if (!empty($deptDetails->email))
+                Mail::to($deptDetails->email)->send(new escalateleaveApplication($headName, $hrDetail->email, $date_now, $unapproved, $fullnane));
+        }
+
     }
 
 
@@ -165,7 +179,7 @@ class SendLeaveBalanceToUsers extends Controller
      */
     public function viewBalance()
     {
-        $credit =  leave_history::getLeaveBalance();
+        $credit = leave_history::getLeaveBalance();
 
         $date_now = Carbon::now()->toDayDateTimeString();
 
