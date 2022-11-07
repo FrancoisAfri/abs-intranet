@@ -102,7 +102,7 @@ class AssetReportsController extends Controller
         $stores =  StoreRoom::all();
 
         $assetTransfer =  AssetTransfers::getAssetTransfer($person, $assetType , $location);
-
+		//return $assetTransfer;
 
         $data = $this->breadCrump(
             "Asset Management",

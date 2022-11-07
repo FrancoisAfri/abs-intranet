@@ -30,8 +30,8 @@
                                                     id="asset_id" name="asset_id" data-select2-id="1"
                                                     tabindex="-1" aria-hidden="true">
                                                 <option value="0">** Select Asset Type **</option>
-                                                @foreach( $assets as $types)
-                                                    <option value="{{ $types->id }}">{{ $types->name }}</option>
+                                                @foreach( $assets as $asset)
+                                                    <option value="{{ $asset->id }}">{{ $asset->name }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -88,34 +88,36 @@
                             <tbody>
                             @if (count($assetTransfer) > 0)
                                 <ul class="products-list product-list-in-box">
-                                    @foreach ($assetTransfer as $key => $assets)
+                                    @foreach ($assetTransfer as $key => $transfer)
                                         <tr id="categories-list">
 
-                                            <td>{{ (!empty( $assets->name)) ?  $assets->name : ''}}</td>
+                                            <td>{{ (!empty( $transfer->name)) ?  $transfer->name : ''}}</td>
 
                                             <td>
-                                                <div class="popup-thumbnail img-responsive">
-                                                    <img src="{{ asset('storage/assets/images/'.$assets->picture) }} "
-                                                         height="35px" width="40px" alt="device image">
-                                                </div>
+												@if (!empty($transfer->AssetImages->picture))
+													<div class="popup-thumbnail img-responsive">
+														<img src="{{ asset('storage/assets/images/'.$transfer->AssetImages->picture) }} "
+															 height="100px" width="150px" alt="device image">
+													</div>
+												@endif
                                             </td>
-                                            <td>{{ (!empty( $assets->transaction_date)) ?  $assets->transaction_date : '' }}</td>
-                                            <td>{{ (!empty( $assets->transfer_date)) ?  $assets->transfer_date : $assets->created_at->toDateString() }}</td>
-                                            <td> {{ (!empty( $assets->HrPeople->first_name )) ?  $assets->HrPeople->first_name. ' ' . $assets->HrPeople->surname : ' ' }}</td>
-                                            <td> {{ (!empty( $assets->store->name )) ?  $assets->store->name : ' ' }}</td>
+                                            <td>{{ (!empty( $transfer->transaction_date)) ?  $transfer->transaction_date : '' }}</td>
+                                            <td>{{ (!empty( $transfer->transfer_date)) ?  $transfer->transfer_date : $transfer->created_at->toDateString() }}</td>
+                                            <td> {{ (!empty( $transfer->HrPeople->first_name )) ?  $transfer->HrPeople->first_name. ' ' . $transfer->HrPeople->surname : ' ' }}</td>
+                                            <td> {{ (!empty( $transfer->store->name )) ?  $transfer->store->name : ' ' }}</td>
                                             <td>
-                                                @if($assets->asset_status == 'Sold')
-                                                    <span class="label label-warning">{{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
-                                                @elseif($assets->asset_status == 'Missing')
-                                                    <span class="label label-danger"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
-                                                @elseif($assets->asset_status == 'In Use')
-                                                    <span class="label label-success"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
-                                                @elseif($assets->asset_status == 'Discarded')
-                                                    <span class="label label-primary"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
-                                                @elseif($assets->asset_status == 'In Store')
-                                                    <span class="label label-default"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
-                                                @elseif($assets->asset_status == 'Un Allocated')
-                                                    <span class="label label-info"> {{ (!empty( $assets->asset_status)) ?  $assets->asset_status : ''}}</span>
+                                                @if($transfer->asset_status == 'Sold')
+                                                    <span class="label label-warning">{{ (!empty( $transfer->asset_status)) ?  $transfer->asset_status : ''}}</span>
+                                                @elseif($transfer->asset_status == 'Missing')
+                                                    <span class="label label-danger"> {{ (!empty( $transfer->asset_status)) ?  $transfer->asset_status : ''}}</span>
+                                                @elseif($transfer->asset_status == 'In Use')
+                                                    <span class="label label-success"> {{ (!empty( $transfer->asset_status)) ?  $transfer->asset_status : ''}}</span>
+                                                @elseif($transfer->asset_status == 'Discarded')
+                                                    <span class="label label-primary"> {{ (!empty( $transfer->asset_status)) ?  $transfer->asset_status : ''}}</span>
+                                                @elseif($transfer->asset_status == 'In Store')
+                                                    <span class="label label-default"> {{ (!empty( $transfer->asset_status)) ?  $transfer->asset_status : ''}}</span>
+                                                @elseif($transfer->asset_status == 'Un Allocated')
+                                                    <span class="label label-info"> {{ (!empty( $transfer->asset_status)) ?  $transfer->asset_status : ''}}</span>
                                                 @endif
                                             </td>
                                         </tr>
