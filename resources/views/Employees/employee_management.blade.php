@@ -82,13 +82,6 @@
                                                      aria-labelledby="enlargeImageModal" aria-hidden="true">
                                                     <!--  <div class="modal-dialog modal" role="document"> -->
                                                     <div class="modal-dialog modal-sm">
-                                                        {{--<div class="modal-content">--}}
-                                                        {{--<div class="modal-header">--}}
-                                                        {{--<button type="button" class="close"--}}
-                                                        {{--data-dismiss="modal"--}}
-                                                        {{--aria-label="Close"><span aria-hidden="true">x</span>--}}
-                                                        {{--</button>--}}
-                                                        {{--</div>--}}
                                                         <div class="modal-body" align="center">
                                                             <img src="" class="enlargeImageModalSource"
                                                                  style="width: 200%;">
@@ -126,7 +119,7 @@
 
                                             <td>
                                                 <button vehice="button" id="view_ribbons" class="btn {{ (!empty($person->status) && $person->status == 1) ? " btn-danger " : "btn-success " }}
-                                                      btn-xs" onclick="postData({{$person->id}}, 'actdeac');"><i class="fa {{ (!empty($person->status) && $person->status == 1) ?
+                                                      btn-xs" onclick="postData({{$person->user_id}}, 'actdeac');"><i class="fa {{ (!empty($person->status) && $person->status == 1) ?
                                                       " fa-times " : "fa-check " }}"></i> {{(!empty($person->status) && $person->status == 1) ? "De-Activate" : "Activate"}}
                                                 </button>
                                             </td>
