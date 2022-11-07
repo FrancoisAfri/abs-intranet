@@ -612,7 +612,7 @@ class UsersController extends Controller
                 $employeenumber = '';
             } else {
                 $name = $userDetails['first_name'];
-                $surname =  = $userDetails['surname'];
+                $surname = $userDetails['surname'];
                 $employeenumber = $userDetails['employee_number'];
             }
 
