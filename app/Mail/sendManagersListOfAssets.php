@@ -13,7 +13,7 @@ class sendManagersListOfAssets extends Mailable
     use Queueable, SerializesModels;
 
     public $first_name;
-    public $request_no;
+    public $date_left;
     /**
      * Create a new message instance.
      *
