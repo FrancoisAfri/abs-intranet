@@ -13,23 +13,19 @@ class escalateleaveApplication extends Mailable
     use Queueable, SerializesModels;
 
     public $name;
-    public $email;
-    public $date;
-    public $fullnane;
-    public $unapproved;
+    public $employee;
+    public $oldmanager;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($name, $email , $date , $unapproved , $fullnane)
+    public function __construct($name, $employee, $oldmanager)
     {
         $this->name = $name;
-        $this->email = $email;
-        $this->date = $date;
-        $this->fullnane = $fullnane;
-        $this->unapproved = $unapproved;
+        $this->employee = $employee;
+        $this->oldmanager = $oldmanager;
 
 
     }
@@ -48,14 +44,13 @@ class escalateleaveApplication extends Mailable
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['name'] = $this->name;
-        $data['fullname'] = $this->fullnane;
-        $data['unapproved'] = $this->unapproved;
-        $data['date'] = $this->date;
+        $data['employee'] = $this->employee;
+        $data['oldmanager'] = $this->oldmanager;
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['profile_url'] = url('/users/profile');
-        $data['dashboard_url'] = url('/');
+        $data['dashboard_url'] = url('/leave/approval');
 
         return $this->view('mails.escalate_leave_applications')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])

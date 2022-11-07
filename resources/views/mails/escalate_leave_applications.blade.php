@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title> Leave Escalation Email</title>
+    <title> Leave Escalation</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -216,19 +216,14 @@
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Good Day {{ $name }},<br><br>
 
-                                                    This email is to inform you that as of {{ $date }} , They are  {{ $unapproved }} leave applications.
+                                                    You are receiving this email, because {{$oldmanager}} did not approve {{$employee}} leave application.
                                                     <p>
-                                                    The manager responsible for approving these leave application has not taken any action and therefor
-                                                    the application has been escalated to you as the Head of the Department.
+													As per escalation it has been moved to you.
+													</p>
                                                     <br>
                                                     <p>
-                                                    The name of the manager is {{$fullname}}
-                                                    <p>
-                                                        Please can you Attend to the Applications as soon as possible
-                                                    </p>
-                                                    <br>
-                                                    <p>
-                                                        For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
+                                                        Please <a href="{{ $dashboard_url }}">Click Here</a> to Approve it.
+													</p>
                                                 </td>
                                             </tr>
                                             <tr>

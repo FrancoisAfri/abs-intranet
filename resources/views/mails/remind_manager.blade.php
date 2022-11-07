@@ -216,13 +216,13 @@
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Good Day {{ $fullname }},<br><br>
 
-                                                    This email is to inform you that as of {{ $date }} , you have {{ $unapproved }} leave applications.
+                                                    This email is to inform you that , you have not approved {{ $employee }} leave applications.
 
                                                     <p>
-                                                        Please can you Attend to the Applications as soon as possible
+                                                        Please attend to this leave application as soon as possible
                                                     </p>
                                                     <p>
-                                                        For more details, please check your <a href="{{ $dashboard_url }}">Dashboard</a>.
+                                                        Please <a href="{{ $dashboard_url }}">Click Here</a> to approve.
                                                 </td>
                                             </tr>
                                             <tr>

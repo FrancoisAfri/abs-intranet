@@ -13,9 +13,7 @@ class managerReminder extends Mailable
     use Queueable, SerializesModels;
 
     public $name;
-    public $email;
-    public $date;
-    public $unapproved;
+    public $employee;
 
 
     /**
@@ -23,14 +21,10 @@ class managerReminder extends Mailable
      *
      * @return void
      */
-    public function __construct($name, $email , $date , $unapproved)
+    public function __construct($name, $employee)
     {
         $this->name = $name;
-        $this->email = $email;
-        $this->date = $date;
-        $this->unapproved = $unapproved;
-
-
+        $this->employee = $employee;
     }
 
     /**
@@ -42,17 +36,16 @@ class managerReminder extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "Leave Approval Manager Reminder $this->name ";
+        $subject = "Leave Approval Reminder";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['fullname'] = $this->name;
-        $data['unapproved'] = $this->unapproved;
-        $data['date'] = $this->date;
+        $data['employee'] = $this->employee;
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['profile_url'] = url('/users/profile');
-        $data['dashboard_url'] = url('/');
+        $data['dashboard_url'] = url('/leave/approval');
 
         return $this->view('mails.remind_manager')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
