@@ -36,7 +36,7 @@ class sendManagersListOfAssets extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "$companyName - Quotation.";
+        $subject = "$companyName - New Employee Resignation.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['first_name'] = $this->first_name;

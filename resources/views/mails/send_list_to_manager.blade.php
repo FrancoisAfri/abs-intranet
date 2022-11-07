@@ -216,12 +216,14 @@
                                                 <td valign="top" style="/*padding-bottom:20px; */background-color:#ffffff;">
                                                     Good day,
                                                     <br><br><br>
-                                                    {{ $first_name }} has as of today left the Organisation.
+                                                    {{ $first_name }} has resign and will be leaving on the {{ $date_left}}.
                                                     <br>
                                                     <br>
-                                                    Please find attached the List of Assets owned by  {{ $first_name }},
+                                                    Please find attached the List of Assets and licensees used by  {{ $first_name }},
                                                     <br>
-                                                    and can you Cancel all Asserts and licensees linked to  him/her
+                                                    Please Cancel all licensees linked to him/her
+                                                    <br>
+													Ps All licensees have already been cancelled on the intranet.
                                                     <br>
                                                     <br>
                                                     Thank you
