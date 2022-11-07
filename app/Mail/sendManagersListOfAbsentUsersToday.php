@@ -35,7 +35,7 @@ class sendManagersListOfAbsentUsersToday extends Mailable
     {
         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "List of Absent Employees for $companyName online system.";
+        $subject = "Monthly Leave Balance Report for $companyName online system.";
 
         $data['attachment'] = $this->leaveAttachment;
         $data['support_email'] = $companyDetails['support_email'];
@@ -46,7 +46,7 @@ class sendManagersListOfAbsentUsersToday extends Mailable
         return $this->view('mails.leave_balance_report')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
-            ->attachData($this->leaveAttachment, 'Absent Users.pdf', [
+            ->attachData($this->leaveAttachment, 'Leave Report.pdf', [
                 'mime' => 'application/pdf',
 
             ])
