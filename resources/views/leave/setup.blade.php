@@ -275,7 +275,7 @@
                         <div class="form-group">
                             <tr>
                                 <td style="width: 10px"></td>
-                                <td>Numbe of Sick negative leave Days</td>
+                                <td>Number of Sick negative leave Days</td>
                                 <td>
                                     <label for="path" class="control-label"></label>
                                     <input type="number" class="form-control" id="allow_sick_negative_days"
@@ -288,7 +288,7 @@
                         <div class="form-group">
                             <tr>
                                 <td style="width: 10px"></td>
-                                <td>Numbe of Annual negative leave Days</td>
+                                <td>Number of Annual negative leave Days</td>
                                 <td>
                                     <label for="path" class="control-label"></label>
                                     <input type="number" class="form-control" id="allow_annual_negative_days"
