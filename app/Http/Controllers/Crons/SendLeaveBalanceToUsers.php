@@ -259,19 +259,19 @@ class SendLeaveBalanceToUsers extends Controller
      */
     public function createExcel(){
         $credits = leave_history::getLeaveBalance();
-        
+
         $AbsentUsersColl = array();
 
-        if (count($credit) > 0) {
-            foreach ($credit as $absentUser) {
-                $details = HRPerson::getUserDetails($absentUser['employee_number']);
+        if (count($credits) > 0) {
+            foreach ($credits as $balances) {
+                $details = HRPerson::getUserDetails($balances['employee_number']);
 
                 $AbsentUsersColl[] = ([
                     'Employee number' => $details['employee_number'],
                     'First Name' => $details['first_name'],
                     'surname' => $details['surname'],
-                    'Leave Type' => $absentUser['leaveType'],
-                    'Balance' => $absentUser['Balance'],
+                    'Leave Type' => $balances['leaveType'],
+                    'Balance' => $balances['Balance'],
                 ]);
             }
         }
