@@ -49,9 +49,6 @@ class sendManagersListOfAbsentUsers extends Mailable
         return $this->view('mails.list_of_absent_users')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
-//            ->attachData($this->leaveAttachment, 'Absent Users.pdf', [
-//                'mime' => 'application/pdf',
-//            ])
             ->attachData($this->Attachment, 'Absent Users.xls')
             ->with($data);
     }

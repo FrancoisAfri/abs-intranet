@@ -24,7 +24,12 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Storage;
+use OpenSpout\Common\Exception\InvalidArgumentException;
+use OpenSpout\Common\Exception\IOException;
+use OpenSpout\Common\Exception\UnsupportedTypeException;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
+use OpenSpout\Writer\Exception\WriterNotOpenedException;
 use phpDocumentor\Reflection\Types\Array_;
 use Rap2hpoutre\FastExcel\FastExcel;
 
@@ -246,10 +251,15 @@ class SendLeaveBalanceToUsers extends Controller
 
     }
 
+    /**
+     * @throws IOException
+     * @throws InvalidArgumentException
+     * @throws UnsupportedTypeException
+     * @throws WriterNotOpenedException
+     */
     public function createExcel(){
         $credits = leave_history::getLeaveBalance();
-        $credit = $credits->unique('employee_number');
-
+        
         $AbsentUsersColl = array();
 
         if (count($credit) > 0) {
@@ -275,10 +285,12 @@ class SendLeaveBalanceToUsers extends Controller
             ->build();
 
 
-        $ExcelDoc = (new FastExcel($AbsentUsersColl))
+        return (new FastExcel($AbsentUsersColl))
             ->headerStyle($header_style)
             ->rowsStyle($rows_style)
             ->export('storage/app/Leave balance.xls');
+
+
     }
 
 
@@ -290,10 +302,28 @@ class SendLeaveBalanceToUsers extends Controller
 
         $fullname = $userDetails->firstname . ' ' . $userDetails->surname;
 
+        /**
+         * pdf attachment
+         */
         $leaveAttachment = $this->viewBalance();
 
+        /**
+         * excel attachment
+         */
+        $Attachment = $this->createExcel();
+
+        /**
+         * get the file from storage
+         */
+        $file = Storage::get('Leave balance.xls');
+
+        /**
+         * Delete the file from storage
+         */
+        Storage::delete('Leave balance.xls');
+
         try {
-            Mail::to($userDetails->email)->send(new sendManagersListOfAbsentUsersToday($userDetails->email, $leaveAttachment));
+            Mail::to($userDetails->email)->send(new sendManagersListOfAbsentUsersToday($userDetails->email, $leaveAttachment ,$file ));
             echo 'Mail send successfully';
         } catch (\Exception $e) {
             echo 'Error - ' . $e;

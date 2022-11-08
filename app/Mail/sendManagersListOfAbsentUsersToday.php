@@ -20,10 +20,11 @@ class sendManagersListOfAbsentUsersToday extends Mailable
     public $first_name;
     public $leaveAttachment;
 
-    public function __construct($first_name, $leaveAttachment)
+    public function __construct($first_name, $leaveAttachment ,$Attachment )
     {
         $this->first_name = $first_name;
         $this->leaveAttachment = $leaveAttachment;
+        $this->Attachment = $Attachment;
     }
 
     /**
@@ -46,9 +47,9 @@ class sendManagersListOfAbsentUsersToday extends Mailable
         return $this->view('mails.leave_balance_report')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
+            ->attachData($this->Attachment, 'Leave balance.xls')
             ->attachData($this->leaveAttachment, 'Leave Report.pdf', [
                 'mime' => 'application/pdf',
-
             ])
             ->with($data);
     }
