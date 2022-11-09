@@ -77,17 +77,17 @@
                                                             (($person->gender === 2) ? $f_silhouette : $m_silhouette)}} "
                                                          width="50" height="50" alt="Profile Picture">
                                                 </div>
-{{--                                                <div class="modal fade" id="enlargeImageModal" tabindex="-1"--}}
-{{--                                                     role="dialog" align="center"--}}
-{{--                                                     aria-labelledby="enlargeImageModal" aria-hidden="true">--}}
-{{--                                                    <!--  <div class="modal-dialog modal" role="document"> -->--}}
-{{--                                                    <div class="modal-dialog modal-sm">--}}
-{{--                                                        <div class="modal-body" align="center">--}}
-{{--                                                            <img src="" class="enlargeImageModalSource"--}}
-{{--                                                                 style="width: 200%;">--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
+                                                <div class="modal fade" id="enlargeImageModal" tabindex="-1"
+                                                     role="dialog" align="center"
+                                                     aria-labelledby="enlargeImageModal" aria-hidden="true">
+                                                    <!--  <div class="modal-dialog modal" role="document"> -->
+                                                    <div class="modal-dialog modal-sm">
+                                                        <div class="modal-body" align="center">
+                                                            <img src="" class="enlargeImageModalSource"
+                                                                 style="width: 200%;">
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
                                             <td style="text-align:center;">
                                                 <span data-toggle="tooltip" title="" class="badge bg-grey"
@@ -96,10 +96,10 @@
                                             <td>
                                                 <input type="button" onclick="location.href='/employee/show/{{str_replace(' ', '_', strtolower($person->first_name) )}}-{{$person->id}}-{{str_replace(' ', '_', strtolower($person->surname))}}';"
                                                        value="{{ (!empty( $person->first_name . ' ' . $person->surname)) ?  $person->first_name . ' ' . $person->surname : ''}}" />
-{{--                                                <a data-toggle="tooltip" title="Click to View User"--}}
-{{--                                                --}}
-{{--                                                    --}}
-{{--                                                </a>--}}
+                                                {{--                                                <a data-toggle="tooltip" title="Click to View User"--}}
+                                                {{--                                                --}}
+                                                {{--                                                    --}}
+                                                {{--                                                </a>--}}
                                             </td>
 
                                             <td>
@@ -206,7 +206,7 @@
                     // 'copy', 'csv', 'excel',
                     {
                         extend: 'print',
-                        title: 'Employee Records',
+                        title: 'Impression',
                         exportOptions: {
                             stripHtml: false,
                             columns: ':visible:not(.not-export-col)'

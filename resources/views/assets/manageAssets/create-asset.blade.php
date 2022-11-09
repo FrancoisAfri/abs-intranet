@@ -100,16 +100,20 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <a data-toggle="tooltip" title="Click to View Asset"
-                                                   href="{{ route('assets.show',['assets' => $assets->uuid]) }}">
-                                                    {{ (!empty( $assets->name)) ?  $assets->name : ''}}
-                                                </a>
+
+                                                <input data-toggle="tooltip" title="Click to View Asset" type="button" onclick="location.href='{{ route('assets.show',['assets' => $assets->uuid]) }}';"
+                                                       value=" {{ (!empty( $assets->name)) ?  $assets->name : ''}}" />
+
                                             </td>
                                             <td>
-                                                <a data-toggle="tooltip" title="Click to View Asset"
-                                                   href="{{ route('assets.show',['assets' => $assets->uuid]) }}">
-                                                    {{ (!empty( $assets->description)) ?  $assets->description : ''}}
-                                                </a>
+{{--                                                <a data-toggle="tooltip" title="Click to View Asset"--}}
+{{--                                                   href="{{ route('assets.show',['assets' => $assets->uuid]) }}">--}}
+{{--                                                    {{ (!empty( $assets->description)) ?  $assets->description : ''}}--}}
+{{--                                                </a>--}}
+
+                                                <input data-toggle="tooltip" title="Click to View Asset" type="button" onclick="location.href='{{ route('assets.show',['assets' => $assets->uuid]) }}';"
+                                                       value=" {{ (!empty( $assets->description)) ?  $assets->description : ''}}" />
+
                                             </td>
                                             <td>
                                                 <div class="popup-thumbnail img-responsive">

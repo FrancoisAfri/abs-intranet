@@ -152,7 +152,7 @@
             function postData(id, data) {
                 if (data === 'actdeac') location.href = "{{route('assets.activate', '')}}" + "/" + id;
             }
-            
+
             $('.user_datatable').DataTable({
 
                 paging: true,
