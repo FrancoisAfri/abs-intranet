@@ -125,6 +125,9 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 
     Route::get('/', 'EmployeeManagementController@index')
         ->name('employee.index');
+
+    Route::get('show/{employee}', 'EmployeeManagementController@show')
+        ->name('employee.show');
 	
 	Route::get('clockin_report', 'EmployeeManagementController@clockinReports')
         ->name('employee.clockin_report');
@@ -134,9 +137,6 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 	
 	Route::post('clockin/assign', 'EmployeeManagementController@store')
         ->name('clockin.assign');
-
-    Route::get('show/{employee}', 'EmployeeManagementController@show')
-        ->name('employee.show');
 
     Route::get('act/{user}', 'EmployeeManagementController@activate')
         ->name('employee.activate');

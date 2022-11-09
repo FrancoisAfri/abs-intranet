@@ -257,7 +257,8 @@ class SendLeaveBalanceToUsers extends Controller
      * @throws UnsupportedTypeException
      * @throws WriterNotOpenedException
      */
-    public function createExcel(){
+    public function createExcel()
+    {
         $credits = leave_history::getLeaveBalance();
 
         $AbsentUsersColl = array();
@@ -323,7 +324,12 @@ class SendLeaveBalanceToUsers extends Controller
         Storage::delete('Leave balance.xls');
 
         try {
-            Mail::to($userDetails->email)->send(new sendManagersListOfAbsentUsersToday($userDetails->email, $leaveAttachment ,$file ));
+            Mail::to($userDetails->email)->send(
+                new sendManagersListOfAbsentUsersToday(
+                    $userDetails->email,
+                    $leaveAttachment,
+                    $file
+                ));
             echo 'Mail send successfully';
         } catch (\Exception $e) {
             echo 'Error - ' . $e;

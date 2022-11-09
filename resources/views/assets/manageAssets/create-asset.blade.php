@@ -172,11 +172,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 {{--    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>--}}
@@ -237,8 +239,39 @@
                 autoWidth: true,
                 dom: 'Bfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    // 'copy', 'csv', 'excel',
+                    {
+                        extend: 'print',
+                        title: 'Employee Records',
+                        exportOptions: {
+                            stripHtml: false,
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Employee Records',
+                        //download: 'open',
+                        exportOptions: {
+                            stripHtml: true,
+                            columns: ':visible:not(.not-export-col)'
+                        },
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    },
+                    {extend: 'copyHtml5', exportOptions: {columns: ':visible'}},
+                    {extend: 'csvHtml5', title: 'CSV', exportOptions: {columns: ':visible'}},
+                    // { extend: 'excelHtml5', title: 'Excel', exportOptions: { columns: ':visible' } },
+                    {
+                        text: 'excel',
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+                    'colvis'
                 ]
+
             });
 
             $('#add-asset').on('click', function () {
