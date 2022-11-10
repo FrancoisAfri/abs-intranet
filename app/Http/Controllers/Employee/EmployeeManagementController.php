@@ -148,7 +148,7 @@ class EmployeeManagementController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        dd($request);
+        //dd($request);
         /**
          * get user location
          */

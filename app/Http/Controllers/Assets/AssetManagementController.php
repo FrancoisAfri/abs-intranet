@@ -58,7 +58,8 @@ class AssetManagementController extends Controller
         $asset_type = $request['asset_type_id'];
         $assetType = AssetType::all();
         $asserts = Assets::getAssetsByStatus($status, $asset_type);
-
+		$users = HRPerson::where('status', 1)->get();
+        $stores = StoreRoom::all();
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -73,7 +74,9 @@ class AssetManagementController extends Controller
         $data['assetType'] = $assetType;
         $data['asserts'] = $asserts;
         $data['info'] = 'info';
-
+		$data['stores'] = $stores;
+        $data['users'] = $users;
+		
         AuditReportsController::store(
             'Asset Management',
             'Asset Management Page Accessed',
@@ -132,7 +135,69 @@ class AssetManagementController extends Controller
         $this->verifyAndStoreImage('assets/images', 'picture', $asset, $request);
 
         $this->verifyAndStoreImage('files/images', 'picture', $imageTransfare, $request);
+		/// asset transfer code
+		
+		if ($request->hasFile('picture_transfer')) {
 
+            foreach ($request->file('picture_transfer') as $image) {
+                $extension = $image->getClientOriginalExtension();
+                if (in_array($extension, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
+                    $fileName = md5(microtime()) . "hardware." . $extension;
+                    $image->storeAs('assets/images', $fileName);
+                    $AssetImagesTransfers = AssetImagesTransfers::create(
+                        [
+                            'asset_id' => $asset->id,
+                            'status' => 1,
+                            'picture' => $fileName,
+                        ]
+                    );
+                }
+            }
+            //AssetTransfers
+
+            //check
+            ($request['transfer_to'] == 1) ? ($status = 'In Use') : ($status = 'In Store');
+
+            ($request['transfer_to'] == 1) ? ($user = $request['user_id']) : ($user = 0);
+
+            ($request['transfer_to'] == 1) ? ($value = 1) : ($value = 0);
+
+            ($request['transfer_to'] == 2) ? ($store = $request['store_id']) : ($store = 0);
+
+            // get the last record and update it with 0
+            $lastRecord = AssetTransfers::where(
+                [
+                    'asset_id' => $asset->id,
+                    'current_value' => 1
+                ]
+            )->first();
+
+            if (!empty($lastRecord->id)) {
+                AssetTransfers::where([
+                    'id' => $lastRecord->id,
+                    'asset_id' => $asset->id
+                ])->update(['current_value' => 0]);
+            }
+            AssetTransfers::create([
+                $request->all(),
+                'name' => $request['name'],
+                'asset_id' => $asset->id,
+                'asset_status' => $status,
+                'user_id' => $user,
+                'store_id' => $store,
+                'transaction_date' => date('Y-m-d H:i:s'),
+                'transfer_date' => $request['transfer_date'],
+                'asset_image_transfer_id' => $AssetImagesTransfers->id,
+                'current_value' => $value
+            ]);
+
+            $assets = Assets::find($asset->id);
+            $assets->asset_status = $status;
+            $assets->user_id = $user;
+            $assets->update();
+
+        }
+		
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;
         return response()->json();
     }
@@ -171,9 +236,9 @@ class AssetManagementController extends Controller
     public function storeTransfer(AssetTransferRequest $request): JsonResponse
     {
 
-        if ($request->hasFile('picture')) {
+        if ($request->hasFile('picture_transfer')) {
 
-            foreach ($request->file('picture') as $image) {
+            foreach ($request->file('picture_transfer') as $image) {
                 $extension = $image->getClientOriginalExtension();
                 if (in_array($extension, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
                     $fileName = md5(microtime()) . "hardware." . $extension;

@@ -1,12 +1,14 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-
+	<link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
           type="text/css"') }}">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
-
+	<link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/iCheck/square/green.css') }}">
 @stop
 @section('content')
     <div class="row">
@@ -161,14 +163,14 @@
 @stop
 @section('page_script')
     <!-- DataTables -->
-    {{--    <script src="{{ asset('plugins/datatables/jquery.dataTables.min.js"') }}"></script>--}}
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('custom_components/js/modal_ajax_submit.js') }}"></script>
     <script src="{{ asset('custom_components/js/deleteAlert.js') }}"></script>
-
+	<!-- bootstrap datepicker -->
+    <script src="{{ asset('plugins/datepicker/bootstrap-datepicker.js') }}"></script>
     <script src="{{ asset('bower_components/bootstrap_fileinput/js/fileinput.min.js') }}"></script>
-
+	 <script src="{{ asset('bower_components/AdminLTE/plugins/iCheck/icheck.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
 
 
@@ -179,7 +181,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-{{--    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>--}}
 
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
@@ -226,9 +227,49 @@
         });
 
         $(function () {
+			
+			//Initialize iCheck/iRadio Elements
+            $('input').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+                increaseArea: '10%' // optional
+            });
+			// Initialize date picker Elements
+            $('.datepicker').datepicker({
+                format: 'yyyy/mm/dd',
+                autoclose: true,
+                todayHighlight: true
+            }).datepicker("setDate", 'now');
+			// auto hide field elements
+            hideFields();
+            $('#rdo_store, #rdo_user').on('ifChecked', function () {
+                hideFields();
+            });
+			$(document).ready(function () {
+                $('input[type="radio"]').click(function () {
+                    var inputValue = $(this).attr("value");
+                    var targetBox = $("." + inputValue);
+                    $(".box").not(targetBox).hide();
+                    $(targetBox).show();
+                });
+            });
+			
+			//function to hide/show fields depending on the registration type
+            function hideFields() {
 
+                let store = $('.store-field');
+                let user = $('.user-field');
+                let choicetype = $("input[name='transfer_to']:checked").val();
+                if (choicetype == 1) { //show user
+                    store.hide();
+                    user.show();
+                } else if (choicetype == 2) { //
+                    user.hide();
+                    store.show();
+                }
+            }
+			
             $('table.asset').DataTable({
-
                 paging: true,
                 lengthChange: true,
                 searching: true,
