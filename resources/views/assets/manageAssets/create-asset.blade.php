@@ -185,7 +185,7 @@
     <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
-{{--    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>--}}
+    <script src="{{ asset('custom_components/js/deleteModal.js') }}"></script>
 
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
@@ -201,35 +201,6 @@
             $('#modal').modal({show:true});
         });
 
-
-        //TODO WILL CREATE A SIGLE GLOBAL FILE
-        $('.delete_confirm').click(function (event) {
-
-            var form = $(this).closest("form");
-
-            var name = $(this).data("name");
-
-            event.preventDefault();
-
-            swal({
-
-                title: `Are you sure you want to delete this record?`,
-                text: "If you delete this, it will be gone forever.",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        form.submit();
-                        swal("Poof! Your Record has been deleted!", {
-                            icon: "success",
-                        });
-                    }
-
-                });
-
-        });
 
         $(function () {
 

@@ -224,7 +224,7 @@
                     },
                     {extend: 'copyHtml5', exportOptions: {columns: ':visible'}},
                     {extend: 'csvHtml5', title: 'CSV', exportOptions: {columns: ':visible'}},
-                    // { extend: 'excelHtml5', title: 'Excel', exportOptions: { columns: ':visible' } },
+                   
                     {
                         text: 'excel',
                         extend: 'excelHtml5',

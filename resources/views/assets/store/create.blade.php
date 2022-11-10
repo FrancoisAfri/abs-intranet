@@ -101,7 +101,7 @@
                 <script src="{{ asset('custom_components/js/modal_ajax_submit.js') }}"></script>
                 <script src="{{ asset('custom_components/js/deleteAlert.js') }}"></script>
                 <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>
-
+                <script src="{{ asset('custom_components/js/deleteModal.js') }}"></script>
                 <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
                 <!-- End Bootstrap File input -->
                 <script type="text/javascript">
@@ -112,34 +112,6 @@
 
                     $('#back_button').click(function () {
                         location.href = '{{route('assets.settings')}}';
-                    });
-
-                    $('.delete_confirm').click(function (event) {
-
-                        var form = $(this).closest("form");
-
-                        var name = $(this).data("name");
-
-                        event.preventDefault();
-
-                        swal({
-
-                            title: `Are you sure you want to delete this record?`,
-                            text: "If you delete this, it will be gone forever.",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        })
-                            .then((willDelete) => {
-                                if (willDelete) {
-                                    form.submit();
-                                    swal("Poof! Your Record has been deleted!", {
-                                        icon: "success",
-                                    });
-                                }
-
-                            });
-
                     });
 
                 </script>
