@@ -94,11 +94,12 @@
                                                       data-original-title="">{{ (!empty($person->employee_number)) ? $person->employee_number : '' }}</span>
                                             </td>
                                             <td>
-                                                <a data-toggle="tooltip" title="Click to View User"
-                                                   {
-                                                   href="/employee/show/{{str_replace(' ', '_', strtolower($person->first_name) )}}-{{$person->id}}-{{str_replace(' ', '_', strtolower($person->surname))}}">
-                                                    {{ (!empty( $person->first_name . ' ' . $person->surname)) ?  $person->first_name . ' ' . $person->surname : ''}}
-                                                </a>
+                                                <input type="button" onclick="location.href='/employee/show/{{str_replace(' ', '_', strtolower($person->first_name) )}}-{{$person->id}}-{{str_replace(' ', '_', strtolower($person->surname))}}';"
+                                                       value="{{ (!empty( $person->first_name . ' ' . $person->surname)) ?  $person->first_name . ' ' . $person->surname : ''}}" />
+                                                {{--                                                <a data-toggle="tooltip" title="Click to View User"--}}
+                                                {{--                                                --}}
+                                                {{--                                                    --}}
+                                                {{--                                                </a>--}}
                                             </td>
 
                                             <td>
@@ -119,7 +120,8 @@
 
                                             <td>
                                                 <button vehice="button" id="view_ribbons" class="btn {{ (!empty($person->status) && $person->status == 1) ? " btn-danger " : "btn-success " }}
-                                                      btn-xs" onclick="postData({{$person->user_id}}, 'actdeac');"><i class="fa {{ (!empty($person->status) && $person->status == 1) ?
+                                                      btn-xs" onclick="postData({{$person->user_id}}, 'actdeac');"><i
+                                                            class="fa {{ (!empty($person->status) && $person->status == 1) ?
                                                       " fa-times " : "fa-check " }}"></i> {{(!empty($person->status) && $person->status == 1) ? "De-Activate" : "Activate"}}
                                                 </button>
                                             </td>
@@ -155,6 +157,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
     {{--    <script src="{{ asset('custom_components/js/dataTable.js') }}"></script>--}}
@@ -171,6 +174,11 @@
 
 
         function postData(id, data) {
+            if (data === 'actdeac') location.href = "{{route('employee.activate', '')}}" + "/" + id;
+        }
+
+
+        function redirectData(id, data) {
             if (data === 'actdeac') location.href = "{{route('employee.activate', '')}}" + "/" + id;
         }
 
@@ -195,8 +203,38 @@
                 autoWidth: true,
                 dom: 'Bfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    // 'copy', 'csv', 'excel',
+                    {
+                        extend: 'print',
+                        title: 'Impression',
+                        exportOptions: {
+                            stripHtml: false,
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Employee Records',
+                        //download: 'open',
+                        exportOptions: {
+                            columns: ':visible'
+                        },
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    },
+                    {extend: 'copyHtml5', exportOptions: {columns: ':visible'}},
+                    {extend: 'csvHtml5', title: 'CSV', exportOptions: {columns: ':visible'}},
+                   
+                    {
+                        text: 'excel',
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+                    'colvis'
                 ]
+
             });
 
             function reposition() {

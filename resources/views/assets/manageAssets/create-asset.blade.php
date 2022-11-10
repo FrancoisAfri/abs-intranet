@@ -102,16 +102,15 @@
                                                 </button>
                                             </td>
                                             <td>
-                                                <a data-toggle="tooltip" title="Click to View Asset"
-                                                   href="{{ route('assets.show',['assets' => $assets->uuid]) }}">
-                                                    {{ (!empty( $assets->name)) ?  $assets->name : ''}}
-                                                </a>
+
+                                                <input data-toggle="tooltip" title="Click to View Asset" type="button" onclick="location.href='{{ route('assets.show',['assets' => $assets->uuid]) }}';"
+                                                       value=" {{ (!empty( $assets->name)) ?  $assets->name : ''}}" />
+
                                             </td>
                                             <td>
-                                                <a data-toggle="tooltip" title="Click to View Asset"
-                                                   href="{{ route('assets.show',['assets' => $assets->uuid]) }}">
-                                                    {{ (!empty( $assets->description)) ?  $assets->description : ''}}
-                                                </a>
+                                                <input data-toggle="tooltip" title="Click to View Asset" type="button" onclick="location.href='{{ route('assets.show',['assets' => $assets->uuid]) }}';"
+                                                       value=" {{ (!empty( $assets->description)) ?  $assets->description : ''}}" />
+
                                             </td>
                                             <td>
                                                 <div class="popup-thumbnail img-responsive">
@@ -172,15 +171,17 @@
     <script src="{{ asset('bower_components/bootstrap_fileinput/js/fileinput.min.js') }}"></script>
 	 <script src="{{ asset('bower_components/AdminLTE/plugins/iCheck/icheck.min.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
-
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.0/sweetalert.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.flash.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/pdfmake.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.colVis.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.html5.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
+
+    <script src="{{ asset('custom_components/js/deleteModal.js') }}"></script>
 
     <!-- End Bootstrap File input -->
     <script type="text/javascript">
@@ -195,37 +196,6 @@
             $($(this).parents('div').html()).appendTo('.modal-body');
             $('#modal').modal({show:true});
         });
-
-
-        //TODO WILL CREATE A SIGLE GLOBAL FILE
-        $('.delete_confirm').click(function (event) {
-
-            var form = $(this).closest("form");
-
-            var name = $(this).data("name");
-
-            event.preventDefault();
-
-            swal({
-
-                title: `Are you sure you want to delete this record?`,
-                text: "If you delete this, it will be gone forever.",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
-                .then((willDelete) => {
-                    if (willDelete) {
-                        form.submit();
-                        swal("Poof! Your Record has been deleted!", {
-                            icon: "success",
-                        });
-                    }
-
-                });
-
-        });
-
         $(function () {
 			
 			//Initialize iCheck/iRadio Elements
@@ -278,8 +248,39 @@
                 autoWidth: true,
                 dom: 'Bfrtip',
                 buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
+                    // 'copy', 'csv', 'excel',
+                    {
+                        extend: 'print',
+                        title: 'Employee Records',
+                        exportOptions: {
+                            stripHtml: false,
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+                    {
+                        extend: 'pdfHtml5',
+                        title: 'Employee Records',
+                        //download: 'open',
+                        exportOptions: {
+                            stripHtml: true,
+                            columns: ':visible:not(.not-export-col)'
+                        },
+                        orientation: 'landscape',
+                        pageSize: 'LEGAL'
+                    },
+                    {extend: 'copyHtml5', exportOptions: {columns: ':visible'}},
+                    {extend: 'csvHtml5', title: 'CSV', exportOptions: {columns: ':visible'}},
+                    // { extend: 'excelHtml5', title: 'Excel', exportOptions: { columns: ':visible' } },
+                    {
+                        text: 'excel',
+                        extend: 'excelHtml5',
+                        exportOptions: {
+                            columns: ':visible:not(.not-export-col)'
+                        }
+                    },
+                    'colvis'
                 ]
+
             });
 
             $('#add-asset').on('click', function () {
