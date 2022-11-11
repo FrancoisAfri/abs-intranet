@@ -179,7 +179,7 @@
                     // 'copy', 'csv', 'excel',
                     {
                         extend: 'print',
-                        title: 'Employee Records',
+                        title: 'Asset Location Report',
                         exportOptions: {
                             stripHtml: false,
                             columns: ':visible:not(.not-export-col)'
@@ -187,7 +187,7 @@
                     },
                     {
                         extend: 'pdfHtml5',
-                        title: 'Employee Records',
+                        title: 'Asset Location Report',
                         //download: 'open',
                         exportOptions: {
                             stripHtml: true,

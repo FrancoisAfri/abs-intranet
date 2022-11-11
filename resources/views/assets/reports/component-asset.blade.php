@@ -166,7 +166,7 @@
                     // 'copy', 'csv', 'excel',
                     {
                         extend: 'print',
-                        title: 'Employee Records',
+                        title: 'Asset Components Report',
                         exportOptions: {
                             stripHtml: false,
                             columns: ':visible:not(.not-export-col)'
@@ -174,7 +174,7 @@
                     },
                     {
                         extend: 'pdfHtml5',
-                        title: 'Employee Records',
+                        title: 'Asset Components Report',
                         //download: 'open',
                         exportOptions: {
                             stripHtml: true,

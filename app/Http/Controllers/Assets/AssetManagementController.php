@@ -236,9 +236,9 @@ class AssetManagementController extends Controller
     public function storeTransfer(AssetTransferRequest $request): JsonResponse
     {
 
-        if ($request->hasFile('picture_transfer')) {
+        if ($request->hasFile('picture')) {
 
-            foreach ($request->file('picture_transfer') as $image) {
+            foreach ($request->file('picture') as $image) {
                 $extension = $image->getClientOriginalExtension();
                 if (in_array($extension, ['jpg', 'jpeg', 'png']) && $image->isValid()) {
                     $fileName = md5(microtime()) . "hardware." . $extension;
@@ -429,7 +429,6 @@ class AssetManagementController extends Controller
         $Assets->update($request->all());
 
         $this->verifyAndStoreImage('assets/images', 'picture', $Assets, $request);
-
         Alert::toast('Record Updated Successfully ', 'success');
 
         AuditReportsController::store('Asset Management', 'Asset Management Page Accessed', "Accessed By User", 0);;

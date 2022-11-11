@@ -251,7 +251,7 @@
                     // 'copy', 'csv', 'excel',
                     {
                         extend: 'print',
-                        title: 'Employee Records',
+                        title: 'Asset list',
                         exportOptions: {
                             stripHtml: false,
                             columns: ':visible:not(.not-export-col)'
@@ -259,7 +259,7 @@
                     },
                     {
                         extend: 'pdfHtml5',
-                        title: 'Employee Records',
+                        title: 'Asset list',
                         //download: 'open',
                         exportOptions: {
                             stripHtml: true,
@@ -288,7 +288,7 @@
                 let modalID = 'add-asset-modal';
                 let formName = 'add-asset-form';
 
-                console.log(formName)
+                //console.log(formName)
                 let submitBtnID = 'add-asset';
                 let redirectUrl = '{{ route('index') }}';
                 let successMsgTitle = 'Asset Added!';
@@ -326,28 +326,18 @@
 
                 let strUrl = '/assets/update/' + assetId;
                 let modalID = 'edit-asset-modal';
-                let objData = {
-                    name: $('#'+modalID).find('#name').val(),
-                    description: $('#'+modalID).find('#description').val(),
-                    serial_number: $('#'+modalID).find('#serial_number').val(),
-                    asset_tag: $('#'+modalID).find('#asset_tag').val(),
-                    model_number: $('#'+modalID).find('#model_number').val(),
-                    make_number: $('#'+modalID).find('#make_number').val(),
-                    asset_type_id: $('#'+modalID).find('#asset_type_id').val(),
-                    price: $('#'+modalID).find('#price').val(),
-                    asset_status: $('#'+modalID).find('#asset_status').val(),
-                    picture: $('#'+modalID).find('#picture').val(),
-                    _token: $('#'+modalID).find('input[name=_token]').val()
-                };
+                let formName = 'edit-asset-form';
 
+
+               // console.log(objData);
                 let submitBtnID = 'edit-asset';
                 let redirectUrl = '{{ route('index') }}';
                 let successMsgTitle = 'Changes Saved!';
                 let successMsg = 'Record has been updated successfully.';
                 let Method = 'PATCH';
+                modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
-
         });
     </script>
 @stop

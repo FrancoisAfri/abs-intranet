@@ -1,14 +1,14 @@
 <div id="edit-asset-modal" class="modal modal-default fade">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form class="form-horizontal" method="POST" name="edit-asset-form">
+            <form class="form-horizontal" method="POST" enctype="multipart/form-data" name="edit-asset-form">
                 {{ csrf_field() }}
                 {{ method_field('PATCH') }}
 
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">Edt Asset Type </h4>
+                    <h4 class="modal-title">Modify Asset </h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -106,4 +106,3 @@
         </div>
     </div>
 </div>
-

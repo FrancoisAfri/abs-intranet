@@ -190,7 +190,7 @@
                     // 'copy', 'csv', 'excel',
                     {
                         extend: 'print',
-                        title: 'Employee Records',
+                        title: 'Asset list Report',
                         exportOptions: {
                             stripHtml: false,
                             columns: ':visible:not(.not-export-col)'
@@ -198,7 +198,7 @@
                     },
                     {
                         extend: 'pdfHtml5',
-                        title: 'Employee Records',
+                        title: 'Asset list Report',
                         //download: 'open',
                         exportOptions: {
                             stripHtml: true,
