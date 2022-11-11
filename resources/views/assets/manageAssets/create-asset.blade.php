@@ -102,15 +102,16 @@
                                                 </button>
                                             </td>
                                             <td>
-
-                                                <input data-toggle="tooltip" title="Click to View Asset" type="button" onclick="location.href='{{ route('assets.show',['assets' => $assets->uuid]) }}';"
-                                                       value=" {{ (!empty( $assets->name)) ?  $assets->name : ''}}" />
-
+                                                <a data-toggle="tooltip" title="Click to View Asset"
+                                                   href="{{ route('assets.show',['assets' => $assets->uuid]) }}">
+                                                    {{ (!empty( $assets->name)) ?  $assets->name : ''}}
+                                                </a>
                                             </td>
                                             <td>
-                                                <input data-toggle="tooltip" title="Click to View Asset" type="button" onclick="location.href='{{ route('assets.show',['assets' => $assets->uuid]) }}';"
-                                                       value=" {{ (!empty( $assets->description)) ?  $assets->description : ''}}" />
-
+                                                <a data-toggle="tooltip" title="Click to View Asset"
+                                                   href="{{ route('assets.show',['assets' => $assets->uuid]) }}">
+                                                    {{ (!empty( $assets->description)) ?  $assets->description : ''}}
+                                                </a>
                                             </td>
                                             <td>
                                                 <div class="popup-thumbnail img-responsive">
