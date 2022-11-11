@@ -52,7 +52,6 @@
                             <tr>
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th style="width: 5px; text-align: center;">Device Image</th>
                                 <th style="width: 5px; text-align: center;">size</th>
                                 <th style="width: 5px; text-align: center;">Asset Name</th>
                                 <th>Status</th>
@@ -72,13 +71,7 @@
                                             <td>
                                                 {{ (!empty( $asset->description)) ?  $asset->description : ''}}
                                             </td>
-                                            <td>
-                                                <div class="popup-thumbnail img-responsive">
-                                                    <img src="{{ asset('storage/assets/images/'.$asset->picture) }} "
-                                                         height="35px" width="40px" alt="device image">
-                                                </div>
-                                            </td>
-                                            <td>{{ (!empty( $asset->size)) ?  $asset->size : ''}} </td>
+											<td>{{ (!empty( $asset->size)) ?  $asset->size : ''}} </td>
                                             <td>{{ (!empty( $asset->AssetsList->name)) ?  $asset->AssetsList->name : ''}} </td>
 {{--                                            <td>{{ (!empty( $asset->AssetsList->name)) ?  $asset->AssetsList->name : ''}} </td>--}}
                                             <td>
@@ -105,7 +98,6 @@
 
                                 <th>Name</th>
                                 <th>Description</th>
-                                <th style="width: 5px; text-align: center;">Device Image</th>
                                 <th style="width: 5px; text-align: center;">size</th>
                                 <th style="width: 5px; text-align: center;">Asset Name</th>
                                 <th>Status</th>
