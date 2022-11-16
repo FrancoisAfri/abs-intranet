@@ -27,8 +27,12 @@
 
                                         <td>
                                             <div class="popup-thumbnail img-responsive">
-                                                <img src="{{ asset('storage/assets/images/'.$assets->AssetTransfers->picture) }} "
-                                                     height="35px" width="40px" alt="device image">
+                                                @if(!empty($asset->AssetTransfers->picture))
+                                                    <img src="{{ asset('storage/assets/images/'.$assets->AssetTransfers->picture) }} "
+                                                        height="35px" width="40px" alt="device image">
+                                                @else
+                                                    {{   (!empty( $assets->AssetTransfers->picture)) ?  $assets->AssetTransfers->picture : '' }}
+                                                @endif
                                             </div>
                                         </td>
                                         <td>{{ (!empty( $assets->transaction_date)) ?  $assets->transaction_date : '' }}</td>
