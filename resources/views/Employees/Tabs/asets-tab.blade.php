@@ -27,11 +27,11 @@
 
                                         <td>
                                             <div class="popup-thumbnail img-responsive">
-                                                @if(!empty($asset->AssetTransfers->picture))
+                                                @if(!empty($assets->AssetTransfers->picture))
                                                     <img src="{{ asset('storage/assets/images/'.$assets->AssetTransfers->picture) }} "
                                                         height="35px" width="40px" alt="device image">
                                                 @else
-                                                    {{   (!empty( $assets->AssetTransfers->picture)) ?  $assets->AssetTransfers->picture : '' }}
+                                                    {{   (!empty($assets->AssetTransfers->picture)) ?  $assets->AssetTransfers->picture : '' }}
                                                 @endif
                                             </div>
                                         </td>
