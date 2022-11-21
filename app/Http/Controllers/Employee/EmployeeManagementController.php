@@ -266,7 +266,7 @@ class EmployeeManagementController extends Controller
         else
             $modAccess = 0;
 
-        $userID = User::where('id', $slugs[1])->first();
+        $userID = User::where('id', $employee->user_id)->first();
         $user = $userID->load('person');
 
         $assets = AssetTransfers::getAssetByUser($slugs[1]);
