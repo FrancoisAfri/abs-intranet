@@ -268,10 +268,6 @@
                     $('#box-subtitle').html('Hours');
             });
 
-            $('#hours').timepicker({
-                format: 'HH:mm:ss'
-            });
-
             //Vertically center modals on page
             function reposition() {
                 var modal = $(this),
