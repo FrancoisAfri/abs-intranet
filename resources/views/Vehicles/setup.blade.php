@@ -111,11 +111,6 @@
 
             //Show success action modal
             $('#success-action-modal').modal('show');
-
-           
-
-
-           
         });
     </script>
 @endsection
