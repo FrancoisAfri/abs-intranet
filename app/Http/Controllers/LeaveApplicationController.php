@@ -515,8 +515,9 @@ class LeaveApplicationController extends Controller
                 ->select('manager_id')->first();
             if (empty($managerDetails['manager_id']))
                 $validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a manager. please go to the employee profile and assign one.");
-
-            if (empty($managerDetails['second_manager_id']))
+			$secondManagerDetails = HRPerson::where('id', $hrPersonId)
+                ->select('second_manager_id')->first();
+            if (empty($secondManagerDetails['second_manager_id']))
                 $validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a second manager. please go to the employee profile and assign one.");
 
             // check there is document if leave is family, sick and study leave.
