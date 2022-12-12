@@ -364,6 +364,7 @@ class  LeaveSetupController extends Controller
             $allocation = LeaveAllocation::where('hr_id', $empID)
                 ->where('leave_type_id', $LevID)
                 ->where('month_allocated', date('n'))
+                ->where('year_allocated', date('Y'))
                 ->first();
 
             if (empty($allocation)) {
