@@ -88,6 +88,7 @@ class leave_history extends Model
             ->orderBy('hr_people.first_name')
             ->orderBy('hr_people.surname')
             ->orderBy('leave_types.name')
+            ->orderBy('leave_types.action_date')
             ->get();
 
     }

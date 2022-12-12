@@ -361,12 +361,12 @@ class  LeaveSetupController extends Controller
         //return $employees;
         foreach ($employees as $empID) {
             // check if this leave have already been allocated for this month
-            $allocation = LeaveAllocation::where('hr_id', $empID)
+           /* $allocation = LeaveAllocation::where('hr_id', $empID)
                 ->where('leave_type_id', $LevID)
                 ->where('month_allocated', date('n'))
                 ->where('year_allocated', date('Y'))
                 ->first();
-
+*/
             if (empty($allocation)) {
                 $customDays = $days = $maximum = 0;
                 $custLeave = leave_custom::where('hr_id', $empID)->first();
