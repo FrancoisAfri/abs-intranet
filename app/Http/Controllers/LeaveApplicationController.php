@@ -337,12 +337,12 @@ class LeaveApplicationController extends Controller
 
             } else
                 # code...
-//                dd($hrDetails['manager_id']);
+//                dd();
                 // query the hrperson  model and bring back the values of the manager
-                $managerDetails = HRPerson::getManagerDetails(1);
+                $managerDetails = HRPerson::getManagerDetails($hrDetails['manager_id']);
 
             if ($managerDetails == null) {
-                $managerDetails = HRPerson::getManagerDetails($hrDetails['second_manager_id']);
+                $managerDetails = HRPerson::getManagerDetails($hrDetails['manager_id']);
             }
 
 
@@ -516,11 +516,8 @@ class LeaveApplicationController extends Controller
             if (empty($managerDetails['manager_id']))
                 $validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a manager. please go to the employee profile and assign one.");
 
-//            $secondManagerDetails = HRPerson::where('id', $hrPersonId)
-//                ->first();
-//            if (empty($managerDetails['second_manager_id']))
-//                $validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a second manager. please go to the employee profile and assign one.");
-//            // dd($secondManagerDetails);
+            if (empty($managerDetails['second_manager_id']))
+                $validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a second manager. please go to the employee profile and assign one.");
 
             // check there is document if leave is family, sick and study leave.
             if ($leaveType == 2 || $leaveType == 5 || $leaveType == 6) {
