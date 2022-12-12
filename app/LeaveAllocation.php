@@ -10,7 +10,7 @@ class LeaveAllocation extends Model
 
     protected $fillable = [
        'hr_id','month_allocated','leave_type_id','allocated_by'
-	   ,'date_allocated','balance_before','current_balance'
+	   ,'date_allocated','balance_before','current_balance','year_allocated'
     ];
     //
     public function employees() {

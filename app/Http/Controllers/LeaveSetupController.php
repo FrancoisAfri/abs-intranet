@@ -407,7 +407,8 @@ class  LeaveSetupController extends Controller
                             //insert into allocation table
                             $leaveAllocation = new LeaveAllocation();
                             $leaveAllocation->hr_id = $empID;
-                            $leaveAllocation->month_allocated = date('n');
+                            $leaveAllocation->year_allocated = date('n');
+                            $leaveAllocation->month_allocated = date('Y');
                             $leaveAllocation->leave_type_id = $LevID;
                             $leaveAllocation->allocated_by = $user->person->id;;
                             $leaveAllocation->date_allocated = time();
@@ -428,6 +429,7 @@ class  LeaveSetupController extends Controller
                         $leaveAllocation = new LeaveAllocation();
                         $leaveAllocation->hr_id = $empID;
                         $leaveAllocation->month_allocated = date('n');
+                        $leaveAllocation->year_allocated = date('Y');
                         $leaveAllocation->leave_type_id = $LevID;
                         $leaveAllocation->allocated_by = $user->person->id;;
                         $leaveAllocation->date_allocated = time();
