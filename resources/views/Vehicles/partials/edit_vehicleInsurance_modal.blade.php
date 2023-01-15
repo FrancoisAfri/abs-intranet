@@ -23,7 +23,6 @@
                     </div>
                    <div class="form-group{{ $errors->has('company_id') ? ' has-error' : '' }}">
                             <label for="{{ 'company_id' }}" class="col-sm-2 control-label">Service Provider</label>
-
                             <div class="col-sm-8">
                                 <select id="company_id" name="company_id" class="form-control select2" style="width: 100%;" onchange="contactCompanyDDOnChange(this)">
                                     <option value="">*** Please Select a Company ***</option>
@@ -34,7 +33,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="form-group{{ $errors->has('contact_person_id') ? ' has-error' : '' }}">
                             <label for="{{ 'contact_person_id' }}" class="col-sm-2 control-label">Contact Person</label>
 
@@ -61,10 +59,8 @@
                      <div class="form-group ">
                         <label for="address" class="col-sm-2 control-label">Address</label>
                         <div class="col-sm-8">
-
                             <textarea class="form-control" id="address" name="address"
                                       placeholder="Enter address..." rows="3">{{ old('description') }}</textarea>
-
                         </div>
                     </div>
                     <div class="form-group">
@@ -74,7 +70,6 @@
                                    placeholder="Enter Policy/Document Number" required>
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Inception  Date </label>
                         <div class="col-sm-8">
@@ -96,9 +91,7 @@
                                    placeholder="Enter Maximum Kilometres Covered" required>
                         </div>
                     </div>
-                     
-
-                     <div class="form-group{{ $errors->has('policy_type') ? ' has-error' : '' }}">
+                    <div class="form-group{{ $errors->has('policy_type') ? ' has-error' : '' }}">
                             <label for="policy_type" class="col-sm-2 control-label"> Monthly/Annual/Once-off Cost</label>
                              <div class="col-sm-8">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
@@ -109,20 +102,15 @@
                                             </label>
                                     <label class="radio-inline"><input type="radio" id="rdo_products"
                                         name="policy_type" value="3"> 24 Months 
-                                            </label>       
-
+                                            </label>
                             </div>
                     </div>
-
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Premium  Amount </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="premium_amount" name="premium_amount" value="" placeholder="Enter Warranty Amount" required>
-                                  
+                            <input type="text" class="form-control" id="premium_amount" name="premium_amount" value="" placeholder="Enter Warranty Amount" required>    
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-8">

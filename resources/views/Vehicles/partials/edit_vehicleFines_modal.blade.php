@@ -13,7 +13,6 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
                   <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Capture Date</label>
                         <div class="col-sm-8">
@@ -21,7 +20,6 @@
                                    placeholder="Enter Capture Date" required readonly="">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Registration</label>
                         <div class="col-sm-8">
@@ -29,7 +27,6 @@
                                    placeholder="Enter Registration " required readonly="">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="Status" class="col-sm-2 control-label">Type of Fine </label>
                         <div class="col-sm-8">
@@ -46,7 +43,6 @@
 
                         </div>
                     </div>
-                     
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Fine Ref</label>
                         <div class="col-sm-8">
@@ -54,7 +50,6 @@
                                    placeholder="Enter Fine Ref" required>
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Date Of Fine </label>
                         <div class="col-sm-8">
@@ -62,14 +57,12 @@
                                    value="{{ old('date') }}" placeholder="Select date of fine  ...">
                         </div>
                     </div>
-
                      <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Time of Fine</label>
                         <div class="col-sm-8">
                            <input type="text" class="form-control" id="timeoffine" name="time_of_fine" value="{{ old('time_of_fine') }}" placeholder="Select Time of Fine...">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Amount</label>
                         <div class="col-sm-8">
@@ -102,8 +95,7 @@
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Speed </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="speed" name="speed" value="" placeholder="Enter speed " required>
-                                  
+                            <input type="text" class="form-control" id="speed" name="speed" value="" placeholder="Enter speed " required>          
                         </div>
                     </div>
                       <div class="form-group">
@@ -113,7 +105,6 @@
                                   
                         </div>
                     </div>
-
                         <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Driver </label>
                         <div class="col-sm-8">
@@ -126,8 +117,6 @@
                             </select>
                         </div>
                     </div>
-
-
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Magistrate Office </label>
                         <div class="col-sm-8">
@@ -135,40 +124,33 @@
                                   
                         </div>
                     </div>
-
                     <div class="form-group ">
-                        <label for="date" class="col-sm-2 control-label">Court Date</label>
+                        <label for="court_date" class="col-sm-2 control-label">Court Date</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="courtdate" name="court_date"
-                                   value="{{ old('date') }}" placeholder="Select  court date   ...">
+                                   value="{{ old('courtdate') }}" placeholder="Select  court date   ...">
                         </div>
                     </div>
-
                     <div class="form-group ">
-                        <label for="date" class="col-sm-2 control-label">Paid Date</label>
+                        <label for="paid_date" class="col-sm-2 control-label">Paid Date</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="paiddate" name="paid_date"
-                                   value="{{ old('date') }}" placeholder="Select paid date   ...">
+                                   value="{{ old('paiddate') }}" placeholder="Select paid date   ...">
                         </div>
                     </div>
-
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Amount Paid </label>
                         <div class="col-sm-8">
-                            <input type="text" class="form-control" id="amount_paid" name="amount_paid" value="" placeholder="Enter amount paid  " required>
-                                  
+                            <input type="text" class="form-control" id="amount_paid" name="amount_paid" value="" placeholder="Enter amount paid  " required>      
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-8">
-
                             <textarea class="form-control" id="description" name="description"
                                       placeholder="Enter description..." rows="3">{{ old('description') }}</textarea>
                         </div>
                     </div>
-
                        <div class="form-group">
                         <label for="Status" class="col-sm-2 control-label">Fine Status </label>
                         <div class="col-sm-8">
@@ -180,11 +162,8 @@
                                 <option value="3"> Fine Revoked</option>
                                 <option value="4">  Fine Paid</option>
                             </select>
-
                         </div>
                     </div>
-
-                 
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -193,9 +172,7 @@
                                    class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
                                    data-show-upload="false">
                         </div>
-
                     </div>
-
                        <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -204,14 +181,9 @@
                                    class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
                                    data-show-upload="false">
                         </div>
-
                     </div>
-
-                    
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

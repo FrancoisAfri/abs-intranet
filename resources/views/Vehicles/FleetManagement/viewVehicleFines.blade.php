@@ -30,8 +30,6 @@
                         </button>
                     </div>
                 </div>
-                <!-- <form class="form-horizontal" method="POST" action="/hr/document"> -->
-       
                 <div class="box-body">
                     <div class="row">
                         <div class="col-sm-12">
@@ -191,221 +189,204 @@
 
         @endsection
 
-        @section('page_script')
-            <script src="/custom_components/js/modal_ajax_submit.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
-            <!-- iCheck -->
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
-                    type="text/javascript"></script>
-            <!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
-            <script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
-                    type="text/javascript"></script>
-            <!-- the main fileinput plugin file -->
-            <script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
-            <!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
-            <script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+@section('page_script')
+	<script src="/custom_components/js/modal_ajax_submit.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
+	<!-- iCheck -->
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/sortable.min.js"
+			type="text/javascript"></script>
+	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+			type="text/javascript"></script>
+	<!-- the main fileinput plugin file -->
+	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
 
-            <!-- InputMask -->
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
-            <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
-            <!-- time picker -->
-            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
-            <script>
-                function postData(id, data) {
-                    if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
+	<!-- InputMask -->
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.extensions.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+	<!-- time picker -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
+	<script>
+		function postData(id, data) {
+			if (data == 'actdeac') location.href = "/vehicle_management/policy_act/" + id;
 
-                }
+		}
 
-                $('#back_button').click(function () {
-                    location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
-                });
+		$('#back_button').click(function () {
+			location.href = '/vehicle_management/viewdetails/{{ $maintenance->id }}';
+		});
 
+		var moduleId;
+		//Initialize Select2 Elements
+		$(".select2").select2();
+		$('.zip-field').hide();
+		//Tooltip
+		$('[data-toggle="tooltip"]').tooltip();
+		//Vertically center modals on page
+		function reposition() {
+			var modal = $(this),
+				dialog = modal.find('.modal-dialog');
+			modal.css('display', 'block');
 
-                var moduleId;
-                //Initialize Select2 Elements
-                $(".select2").select2();
-                $('.zip-field').hide();
+			// Dividing by two centers the modal exactly, but dividing by three
+			// or four works better for larger screens.
+			dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
+		}
 
+		// Reposition when a modal is shown
+		$('.modal').on('show.bs.modal', reposition);
+		// Reposition when the window is resized
+		$(window).on('resize', function () {
+			$('.modal:visible').each(reposition);
+		});
 
-                //Tooltip
+		//Show success action modal
+		$('#success-action-modal').modal('show');
+		$(".js-example-basic-multiple").select2();
+		$(document).ready(function () {
 
-                $('[data-toggle="tooltip"]').tooltip();
+			// $('#date_captured').datepicker({
+			//     format: 'dd/mm/yyyy',
+			//     autoclose: true,
+			//     todayHighlight: true
+			// });
 
-                //Vertically center modals on page
-                function reposition() {
-                    var modal = $(this),
-                        dialog = modal.find('.modal-dialog');
-                    modal.css('display', 'block');
+			$('#time_of_fine').datetimepicker({
+					 format: 'HH:mm:ss'
+				});
 
-                    // Dividing by two centers the modal exactly, but dividing by three
-                    // or four works better for larger screens.
-                    dialog.css("margin-top", Math.max(0, ($(window).height() - dialog.height()) / 2));
-                }
-
-                // Reposition when a modal is shown
-                $('.modal').on('show.bs.modal', reposition);
-                // Reposition when the window is resized
-                $(window).on('resize', function () {
-                    $('.modal:visible').each(reposition);
-                });
-
-                //Show success action modal
-                $('#success-action-modal').modal('show');
-
-                //
-
-                $(".js-example-basic-multiple").select2();
-
-
-
-                $(document).ready(function () {
-
-                    // $('#date_captured').datepicker({
-                    //     format: 'dd/mm/yyyy',
-                    //     autoclose: true,
-                    //     todayHighlight: true
-                    // });
-
-                    $('#time_of_fine').datetimepicker({
-                             format: 'HH:mm:ss'
-                        });
-
-                     $('#date_of_fine').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-                     
-                     // 
-                      $('#court_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
+			 $('#date_of_fine').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			 
+			 // 
+			  $('#court_date').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
 
 
-                     $('#paid_date').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
+			 $('#paid_date').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
 
-                     // 
-                     $('#timeoffine').datetimepicker({
-                             format: 'HH:mm:ss'
-                        });
+			 // 
+			 $('#timeoffine').datetimepicker({
+					 format: 'HH:mm:ss'
+				});
 
-                     $('#dateoffine').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-                     
-                     // 
-                      $('#courtdate').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-
-                     $('#paiddate').datepicker({
-                        format: 'dd/mm/yyyy',
-                        autoclose: true,
-                        todayHighlight: true
-                    });
-
-                });
+			 $('#dateoffine').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
+			 
+			 // 
+			  $('#courtdate').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
 
 
+			 $('#paiddate').datepicker({
+				format: 'dd/mm/yyyy',
+				autoclose: true,
+				todayHighlight: true
+			});
 
-               
-                //Post perk form to server using ajax (add)
-                $('#add_fines').on('click', function () {
-                    var strUrl = '/vehicle_management/addvehiclefines';
-                    var formName = 'add-fines-form';
-                    var modalID = 'add-fines-modal';
-                    var submitBtnID = 'add_fines';
-                    var redirectUrl = '/vehicle_management/fines/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-                });
+		});
 
+		//Post perk form to server using ajax (add)
+		$('#add_fines').on('click', function () {
+			var strUrl = '/vehicle_management/addvehiclefines';
+			var formName = 'add-fines-form';
+			var modalID = 'add-fines-modal';
+			var submitBtnID = 'add_fines';
+			var redirectUrl = '/vehicle_management/fines/{{ $maintenance->id }}';
+			var successMsgTitle = 'New Record Added!';
+			var successMsg = 'The Record  has been updated successfully.';
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+		});
 
-                var fineID;
-                $('#edit-fines-modal').on('show.bs.modal', function (e) {
-                    var btnEdit = $(e.relatedTarget);
-                     if (parseInt(btnEdit.data('id')) > 0) {
-                       fineID = btnEdit.data('id');
-                    }
-                   
-                    var date_captured = btnEdit.data('date_captured');
-                   // var contact_number = btnEdit.data('contact_number');
-                    var fine_ref = btnEdit.data('fine_ref');
-                    var date_of_fine = btnEdit.data('dateoffine');
-                    var time_of_fine = btnEdit.data('timeoffine');
-                    var amount = btnEdit.data('amount');
-                    var reduced = btnEdit.data('reduced');
-                    var additional_fee = btnEdit.data('additional_fee');
-                    var location = btnEdit.data('location');
-                    var speed = btnEdit.data('speed');
-                    var zone_speed = btnEdit.data('zone_speed');
-                    var driver = btnEdit.data('driver');
-                    var magistrate_office = btnEdit.data('magistrate_office');
-                    var court_date = btnEdit.data('courtdate');
-                    var paid_date = btnEdit.data('paiddate');
-                    var amount_paid = btnEdit.data('amount_paid');
-                    var description = btnEdit.data('description');
-                    var fine_status = btnEdit.data('fine_status');
-                    var documents = btnEdit.data('documents');
-                    var documents1 = btnEdit.data('documents1');
-                    var valueID = btnEdit.data('valueID');
-                    var modal = $(this);
-                    modal.find('#date_captured').val(date_captured);
-                    modal.find('#fine_ref').val(fine_ref);
-                    modal.find('#fine_ref').val(fine_ref);
-                    modal.find('#date_of_fine').val(date_of_fine);
-                    modal.find('#time_of_fine').val(time_of_fine);
-                    modal.find('#amount').val(amount);
-                    modal.find('#reduced').val(reduced);
-                    modal.find('#additional_fee').val(additional_fee);
-                    modal.find('#location').val(location);
-                    modal.find('#speed').val(speed);
-                    modal.find('#zone_speed').val(zone_speed);
-                    modal.find('#driver').val(driver);
-                    modal.find('#magistrate_office').val(magistrate_office);
-                    modal.find('#court_date').val(court_date);
-                    modal.find('#paid_date').val(paid_date);
-                    modal.find('#amount_paid').val(amount_paid);
-                    modal.find('#description').val(description);
-                    modal.find('#fine_status').val(fine_status)
-                    modal.find('#documents').val(documents);
-                    modal.find('#documents1').val(documents1);
-                    modal.find('#valueID').val(valueID);
-                });
+		var fineID;
+		$('#edit-fines-modal').on('show.bs.modal', function (e) {
+			var btnEdit = $(e.relatedTarget);
+			 if (parseInt(btnEdit.data('id')) > 0) {
+			   fineID = btnEdit.data('id');
+			}
+		   
+			var date_captured = btnEdit.data('date_captured');
+		    // var contact_number = btnEdit.data('contact_number');
+			var fine_ref = btnEdit.data('fine_ref');
+			var date_of_fine = btnEdit.data('dateoffine');
+			var time_of_fine = btnEdit.data('timeoffine');
+			var amount = btnEdit.data('amount');
+			var reduced = btnEdit.data('reduced');
+			var additional_fee = btnEdit.data('additional_fee');
+			var location = btnEdit.data('location');
+			var speed = btnEdit.data('speed');
+			var zone_speed = btnEdit.data('zone_speed');
+			var driver = btnEdit.data('driver');
+			var magistrate_office = btnEdit.data('magistrate_office');
+			var court_date = btnEdit.data('courtdate');
+			var paid_date = btnEdit.data('paiddate');
+			var amount_paid = btnEdit.data('amount_paid');
+			var description = btnEdit.data('description');
+			var fine_status = btnEdit.data('fine_status');
+			var documents = btnEdit.data('documents');
+			var documents1 = btnEdit.data('documents1');
+			var valueID = btnEdit.data('valueID');
+			var modal = $(this);
+			modal.find('#date_captured').val(date_captured);
+			modal.find('#fine_ref').val(fine_ref);
+			modal.find('#fine_ref').val(fine_ref);
+			modal.find('#date_of_fine').val(date_of_fine);
+			modal.find('#time_of_fine').val(time_of_fine);
+			modal.find('#amount').val(amount);
+			modal.find('#reduced').val(reduced);
+			modal.find('#additional_fee').val(additional_fee);
+			modal.find('#location').val(location);
+			modal.find('#speed').val(speed);
+			modal.find('#zone_speed').val(zone_speed);
+			modal.find('#driver').val(driver);
+			modal.find('#magistrate_office').val(magistrate_office);
+			modal.find('#court_date').val(court_date);
+			modal.find('#paid_date').val(paid_date);
+			modal.find('#amount_paid').val(amount_paid);
+			modal.find('#description').val(description);
+			modal.find('#fine_status').val(fine_status)
+			modal.find('#documents').val(documents);
+			modal.find('#documents1').val(documents1);
+			modal.find('#valueID').val(valueID);
+		});
 
-                 $('#edit_fines').on('click', function () {
-                    var strUrl = '/vehicle_management/edit_fines/'+ fineID ;
-                    var formName = 'edit-fines-form';
-                    var modalID = 'edit-fines-modal';
-                    var submitBtnID = 'edit_fines';
-                    var redirectUrl = '/vehicle_management/fines/{{ $maintenance->id }}';
-                    var successMsgTitle = 'New Record Added!';
-                    var successMsg = 'The Record  has been updated successfully.';
-                     var Method = 'PATCH'
-                    modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
-                });
-
-
-            </script>
+		$('#edit_fines').on('click', function () {
+			var strUrl = '/vehicle_management/edit_fines/'+ fineID ;
+			var formName = 'edit-fines-form';
+			var modalID = 'edit-fines-modal';
+			var submitBtnID = 'edit_fines';
+			var redirectUrl = '/vehicle_management/fines/{{ $maintenance->id }}';
+			var successMsgTitle = 'New Record Added!';
+			var successMsg = 'The Record  has been updated successfully.';
+			 var Method = 'PATCH'
+			modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg,Method);
+		});
+	</script>
 @endsection
