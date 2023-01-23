@@ -128,8 +128,12 @@ class SurveyGuestsController extends Controller
                     if ($result > 0) $clientFeedback->surveyQuestions()->attach($questionID, ['result' => $result]);
                 }
             }
+			//update score
+			$score = ($clientFeedback->surveyQuestions->sum('result') / $clientFeedback->surveyQuestions->count())	
+			$clientFeedback->score = $score;
+			$clientFeedback->update();
         });
-
+		
         //Redirect the client feedback page with a success message
         AuditReportsController::store('Performance Appraisal', 'New Customer Feedbacked', "Customer feedback added successfully", 0);
         return back()->with('success_add', "Your feedback has been successfully submitted, we value your feedback and appreciate your comments. Thank you");

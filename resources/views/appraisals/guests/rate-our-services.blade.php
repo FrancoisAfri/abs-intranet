@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group {{ $errors->has('booking_number') ? ' has-error' : '' }}">
+                            <!--<div class="form-group {{ $errors->has('booking_number') ? ' has-error' : '' }}">
                                 <label for="booking_number" class="col-sm-2 control-label">Quote / Booking No.</label>
                                 <div class="col-sm-10">
                                     <div class="input-group">
@@ -87,7 +87,7 @@
                                     <input type="text" class="form-control" id="booking_number" name="booking_number" value="{{ old('booking_number') }}" placeholder="enter booking number">
                                     </div>
                                 </div>
-                            </div>
+                            </div>-->
 
                             <hr class="hr-text" data-content="TELL US ABOUT YOUR EXPERIENCE">
 
