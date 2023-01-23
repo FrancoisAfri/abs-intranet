@@ -14,7 +14,7 @@ class AddScoreToAppraisalSurveysTable extends Migration
     public function up()
     {
         Schema::table('appraisal_surveys', function ($table) {
-            $table->integer('score')->nullable();
+            $table->string('score')->nullable();
         });
     }
 

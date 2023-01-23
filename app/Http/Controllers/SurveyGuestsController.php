@@ -122,14 +122,16 @@ class SurveyGuestsController extends Controller
             $clientFeedback->save();
 
             //Save survey result for each question
+			$results = 0;
             $questionIDs = $feedbackData['questions'];
             if (count($questionIDs) > 0){
                 foreach ($questionIDs as $questionID => $result) {
+					$results = $results + $result;
                     if ($result > 0) $clientFeedback->surveyQuestions()->attach($questionID, ['result' => $result]);
                 }
             }
 			//update score
-			$score = ($clientFeedback->surveyQuestions->sum('result') / $clientFeedback->surveyQuestions->count())	
+			$score = ($results / $clientFeedback->surveyQuestions->count());
 			$clientFeedback->score = $score;
 			$clientFeedback->update();
         });
