@@ -78,6 +78,7 @@ class leave_application extends Model
 		
 		#check if the manager is on leave or not
 		return leave_application::where('hr_id', $userID)
+			->where('status', 1)
 			->where(function ($query) use ($startDate, $endDate) {
 				$query->wherebetween('start_date', [$startDate, $endDate])
 					->orwherebetween('end_date', [$startDate, $endDate]);

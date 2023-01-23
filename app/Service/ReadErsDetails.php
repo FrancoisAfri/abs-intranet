@@ -338,15 +338,10 @@ class ReadErsDetails
 
         if (count($absentUsers) > 0) {
             foreach ($absentUsers as $absentUser) {
+				
                 $details = HRPerson::getUserDetails($absentUser);
-				// check if user applied for leave
-                $today = Carbon::now();
-				$start = $today->copy()->startOfDay();
-				$end = $today->copy()->endOfDay();
-
-				$startDate = strtotime($start);
-				$endDate = strtotime($end);
-                $checkStatus = leave_application::checkIfUserApplied($details->id, $startDate, $endDate);
+				// check leave status
+                $checkStatus = $this->userOnLeave($details->id);
 				if (!empty($checkStatus)) $leave = 'Yes';
 				else $leave = '';
 					$AbsentUsersColl[] = ([
@@ -398,6 +393,44 @@ class ReadErsDetails
             }
         }
 
+    }
+	/**
+     * @return void
+     * @throws GuzzleException
+     * @throws \Throwable
+     */
+    public function userOnLeave($hr_id)
+    {
+        $monthStart = new Carbon('first day of this month');
+		$monthStart->startOfDay();
+		$monthStart = $monthStart->timestamp;
+		$monthEnd = new Carbon('last day of this month');
+		$monthEnd->endOfDay();
+		$monthEnd = $monthEnd->timestamp;
+		$today = Carbon::now();
+		$todayStart = $today->copy()->startOfDay()->timestamp;
+		$todayEnd = $today->copy()->endOfDay()->timestamp;
+		$onLeaveThisMonth = HRPerson::select('hr_people.id', 'hr_people.first_name', 'hr_people.surname', 'hr_people.profile_pic',
+			'leave_application.start_date', 'leave_application.start_time', 'leave_application.end_date', 'leave_application.end_time')
+			->join('leave_application', 'hr_people.id', '=', 'leave_application.hr_id')
+			->where('hr_people.id', $hr_id)
+			->where('leave_application.status', 1)
+			->where(function ($query) use ($todayStart) {
+				$query->whereRaw('leave_application.start_date >= ' . $todayStart);
+				$query->orWhereRaw('leave_application.end_date >= ' . $todayStart);
+			})
+			->where(function ($query) use ($monthEnd) {
+				$query->whereRaw('leave_application.start_date <= ' . $monthEnd);
+				$query->orWhereRaw('leave_application.end_date <= ' . $monthEnd);
+			})
+			->orderBy('leave_application.start_date')
+			->get();
+		//Flag employees that are on leave today
+		foreach ($onLeaveThisMonth as $employee) {
+			$isOnLeaveToday = false;
+			if (($employee->start_date <= $todayStart && $employee->end_date >= $todayStart) || ($employee->start_date >= $todayStart && $employee->start_date <= $todayEnd)) $isOnLeaveToday = 1;
+				return $isOnLeaveToday;
+		}
     }
 
 }
