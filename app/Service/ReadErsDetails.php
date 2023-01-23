@@ -339,12 +339,22 @@ class ReadErsDetails
         if (count($absentUsers) > 0) {
             foreach ($absentUsers as $absentUser) {
                 $details = HRPerson::getUserDetails($absentUser);
+				// check if user applied for leave
+                $today = Carbon::now();
+				$start = $today->copy()->startOfDay();
+				$end = $today->copy()->endOfDay();
 
+				$startDate = strtotime($start);
+				$endDate = strtotime($end);
+                $checkStatus = leave_application::checkIfUserApplied($details->id, $startDate, $endDate);
+				if (!empty($checkStatus)) $leave = 'Yes';
+				else $leave = '';
 					$AbsentUsersColl[] = ([
 						'employee_number' => $details['employee_number'],
 						'name' => $details['first_name'],
 						'surname' => $details['surname'],
 						'email' => $details['email'],
+						'On Leave' => $leave,
 					]);
             }
         }
