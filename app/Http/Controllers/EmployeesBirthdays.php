@@ -7,6 +7,7 @@ use App\programme;
 use App\projects;
 use App\User;
 use App\AuditTrail;
+use App\Mail\EmplyeesBirthdays;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Requests;
@@ -38,7 +39,7 @@ class EmployeesBirthdays extends Controller
 			{
 				// send employee email
 				if (!empty($employee->email))
-					Mail::to($employee->email)->send(new InductionCronEscalationEmail($employee));
+					Mail::to($employee->email)->send(new EmplyeesBirthdays($employee));
 			}
 		}
 	}
