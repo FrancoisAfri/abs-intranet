@@ -23,7 +23,6 @@
                                 <td>{{ $loop->iteration }}</td>
                                 <td nowrap>{{ ($empRating->feedback_date) ? date('d F Y', $empRating->feedback_date) : '' }}</td>
                                 <td nowrap>{{ $empRating->client_name }}</td>
-                                <td nowrap>{{ $empRating->booking_number }}</td>
                                 <td style="width: 244px;">
                                     @foreach($empRating->surveyQuestions as $surveyQuestion)
                                         <div class="form-group" style="margin-bottom: 0;">
