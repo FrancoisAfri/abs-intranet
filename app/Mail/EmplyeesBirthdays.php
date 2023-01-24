@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+namespace App\Mail;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -9,7 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\HRPerson;
 use App\CompanyIdentity;
 use Illuminate\Support\Facades\Storage;
-class EmployeesInductionTaskMail extends Mailable
+
+class EmplyeesBirthdays extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -18,12 +20,7 @@ class EmployeesInductionTaskMail extends Mailable
      *
      * @return void
      */
-	 
-	public $person;
-	public $task;
-	public $sender;
-	public $urls = '/';
-    public function __construct(HRPerson $person, $task, HRPerson $sender)
+    public function __construct(HRPerson $person)
     {
         $this->person = $person;
     }
@@ -39,13 +36,13 @@ class EmployeesInductionTaskMail extends Mailable
         $companyName = $companyDetails['company_name'];
 
 		//Should get these details from setup
-        $subject = "New Task on $companyName online system.";
+        $subject = "Happy Birthday from $companyName.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyDetails['full_company_name'] ;
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
 
-        return $this->view('mails.employeeTasksMeetings')
+        return $this->view('mails.employee_birthdays')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])
             ->subject($subject)
             ->with($data);

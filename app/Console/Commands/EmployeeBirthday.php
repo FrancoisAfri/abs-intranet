@@ -37,7 +37,7 @@ class EmployeeBirthday extends Command
      */
     public function handle()
     {
-        app('App\Http\Controllers\InductionCronController')->execute();
-        \Log::info('Cron - EmployeeTasksOverdue, artisan command emptask:overdue ran successfully @ ' . \Carbon\Carbon::now());
+        app('App\Http\Controllers\EmployeesBirthdays')->execute();
+        \Log::info('Cron - EmployeesBirthdays, artisan command schedule:employeeBirthday ran successfully @ ' . \Carbon\Carbon::now());
     }
 }
