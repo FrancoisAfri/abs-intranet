@@ -23,6 +23,7 @@ class EmployeesBirthdays extends Controller
     {
 		$birthdays = HRPerson::select('hr_people.id'
 					, 'hr_people.first_name', 'hr_people.surname'
+					, 'hr_people.email'
 					, 'hr_people.profile_pic'
 					, 'hr_people.gender'
 					,'hr_people.date_of_birth')
@@ -37,9 +38,8 @@ class EmployeesBirthdays extends Controller
 			
 			if ((date('j',$employee->date_of_birth) === date('j')) && (date('n',$employee->date_of_birth) == date('n')))
 			{
-				// send employee email
 				if (!empty($employee->email))
-					Mail::to($employee->email)->send(new EmplyeesBirthdays($employee));
+					Mail::to($employee->email)->send(new EmplyeesBirthdays($employee->first_name));
 			}
 		}
 	}

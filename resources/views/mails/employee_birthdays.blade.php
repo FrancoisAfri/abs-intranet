@@ -214,7 +214,7 @@
                                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Good morning {{ $person->first_name }},<br><br>
+                                                    Good morning {{ $first_name }},<br><br>
                                                     As a very valuable member of our team, We would like to wish the best birthday ever</b><br>
                                                     We hope you are a having an amazing day, thank you for choosing to be part of this amazing family.</b><br>
 													We love you {{ $company_name }} family.</b><br>

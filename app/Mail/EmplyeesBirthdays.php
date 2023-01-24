@@ -14,15 +14,15 @@ use Illuminate\Support\Facades\Storage;
 class EmplyeesBirthdays extends Mailable
 {
     use Queueable, SerializesModels;
-
+	public $first_name;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(HRPerson $person)
+    public function __construct($first_name)
     {
-        $this->person = $person;
+        $this->first_name = $first_name;
     }
 
     /**
@@ -38,6 +38,7 @@ class EmplyeesBirthdays extends Mailable
 		//Should get these details from setup
         $subject = "Happy Birthday from $companyName.";
 
+        //$data['first_name'] = $first_name;
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyDetails['full_company_name'] ;
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
