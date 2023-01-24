@@ -237,4 +237,67 @@ class SurveysController extends Controller
 
         return view('survey.reports.view_survey_report')->with($data);
     }
+	
+	 /**
+     * Generates the employee report.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param boolean $print
+     * @return \Illuminate\Http\Response
+     */
+    public function getReports(Request $request, $print = false)
+    {
+        $this->validate($request, [
+            'date_from' => 'date_format:"d F Y"',
+            'date_to' => 'date_format:"d F Y"',
+        ]);
+
+        $empID = $request->input('hr_person_id');
+        $strDateFrom = trim($request->input('date_from'));
+        $strDateTo = trim($request->input('date_to'));
+        $dateFrom = ($strDateFrom) ? strtotime($strDateFrom) : null;
+        $dateTo = ($strDateTo) ? strtotime($strDateTo) : null;
+
+        $empRatings = AppraisalSurvey::
+                        where(function ($query) use ($dateFrom, $dateTo) {
+                            if ($dateFrom) $query->whereRaw('feedback_date >= ' . $dateFrom);
+                            if ($dateTo) $query->whereRaw('feedback_date <= ' . $dateTo);
+                        })
+						->where(function ($query) use ($empID) {
+                            if ($empID) $query->where('hr_person_id', $empID);
+                        })
+                        ->orderBy('score', 'desc')
+                        ->get()->load('person');
+		//return $empRatings ;
+        $data['empRatings'] = $empRatings;
+        $data['page_title'] = "Survey Report";
+        $data['page_description'] = "Employees Rating Report";
+        $data['breadcrumb'] = [
+            ['title' => 'Survey', 'path' => '/survey/reports', 'icon' => 'fa fa-list-alt', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Survey';
+        $data['active_rib'] = 'Reports';
+
+        return view('survey.reports.view_survey_reports')->with($data);
+    }
+	// view survey
+	public function viewsurvey($survey)
+    {
+        
+        $empRatings = AppraisalSurvey::where('id', $survey)
+                        ->get()->load('surveyQuestions');
+        //return $empRatings;
+        $data['empRatings'] = $empRatings;
+        $data['page_title'] = "Survey Report";
+        $data['page_description'] = "Employees Rating Report";
+        $data['breadcrumb'] = [
+            ['title' => 'Survey', 'path' => '/survey/reports', 'icon' => 'fa fa-list-alt', 'active' => 0, 'is_module' => 1],
+            ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
+        ];
+        $data['active_mod'] = 'Survey';
+        $data['active_rib'] = 'Reports';
+
+        return view('survey.reports.view_survey_report')->with($data);
+    }
 }

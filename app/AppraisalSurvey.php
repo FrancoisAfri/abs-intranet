@@ -15,6 +15,12 @@ class AppraisalSurvey extends Model
         'efficiency', 'attentive_listening', 'general_overall_assistance', 'additional_comments', 'score'
     ];
 
+	//Relationship leave_application and hr people
+    public function person()
+    {
+        return $this->belongsTo(HRPerson::class, 'hr_person_id');
+    }
+	
     /**
      * Accessor function to return a survey's average rating.
      *

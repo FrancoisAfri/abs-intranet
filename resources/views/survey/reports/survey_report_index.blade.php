@@ -19,7 +19,7 @@
                 <!-- /.box-header -->
 
                 <!-- Form Start -->
-                <form name="survey-report-form" class="form-horizontal" method="POST" action="/survey/reports" >
+                <form name="survey-report-form" class="form-horizontal" method="POST" action="/survey/reports-all" >
                     {{ csrf_field() }}
 
                     <div class="box-body"  id="survey_report">

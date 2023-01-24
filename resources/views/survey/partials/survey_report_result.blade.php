@@ -9,35 +9,12 @@
             <!-- /.box-header -->
             <form method="POST" action="/survey/reports/print" target="_blank">
                 {{ csrf_field() }}
-                <input type="hidden" name="hr_person_id" value="{{ $empID }}">
-                <input type="hidden" name="date_from" value="{{ $dateFrom }}">
-                <input type="hidden" name="date_to" value="{{ $dateTo }}">
                 <div class="box-body">
-                    <p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
-                        <strong class="lead">Report Parameters</strong><br>
-                        <strong>Employee Name:</strong> <em>{{ $empFullName }}</em> &nbsp; &nbsp;
-                        @if(empty($strDateFrom) || !empty($strDateTo))
-							| &nbsp; &nbsp; <strong>Report Period:</strong> <em>
-							@if (!empty($strDateFrom))
-								{{$strDateFrom}}
-							@else
-								{{'[first entry]' . ' - ' }}
-							@endif
-							
-							@if (!empty($strDateTo))
-								{{$strDateTo}}
-							@else
-								{{'[last entry]'}}
-							@endif
-                            </em> &nbsp; &nbsp;
-                        @endif
-                    </p>
                     <table class="table table-striped table-bordered">
                         <tr>
                             <th style="width: 5px">#</th>
                             <th nowrap>Feedback Date</th>
                             <th nowrap>Client Name</th>
-                            <th nowrap>Quote / Booking No.</th>
                             <th>Ratings</th>
                             <th>Client's Comment</th>
                         </tr>
@@ -68,7 +45,6 @@
                 </div>
                 <div class="box-footer no-print">
                     <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
-                    <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print Report</button>
                 </div>
             </form>
         </div>

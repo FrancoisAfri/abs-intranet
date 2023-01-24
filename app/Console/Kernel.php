@@ -31,6 +31,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\leaveBalanceReport::class,
         \App\Console\Commands\AutomateAbsentLeaveApplication::class,
         \App\Console\Commands\SendListOfAbesntUsersToManager::class,
+        \App\Console\Commands\EmployeeBirthday::class,
     ];
 
     /**
@@ -60,6 +61,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('schedule:LeaveBalanceReport')->monthlyOn(1, '01:00');
         //$schedule->command('schedule:absentLeaveApplication')->weekdays()->dailyAt("23:00");
         $schedule->command('schedule:sendAbsentUsersToManager')->weekdays()->dailyAt("10:00");
+		$schedule->command('schedule:employeeBirthday')->dailyAt('08:00');
 
     }
 

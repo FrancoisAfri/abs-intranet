@@ -1221,6 +1221,10 @@ Route::post('survey/add_question', 'SurveysController@saveQuestions');
 Route::post('survey/reports', 'SurveysController@getReport');
 Route::post('survey/reports/print', 'SurveysController@printReport');
 Route::patch('/survey/question_update/{question}', 'SurveysController@updateQuestions');
+Route::post('survey/reports-all', 'SurveysController@getReports');
+
+Route::get('/survey/show/{survey}', 'SurveysController@viewsurvey')
+        ->name('survey.show');
 
 // Company setup Module
 Route::get('/hr/setup', 'HrController@showSetup');
