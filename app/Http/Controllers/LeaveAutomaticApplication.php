@@ -113,7 +113,7 @@ class LeaveAutomaticApplication extends Controller
 		
 		// get user list
         if (!empty($empl))
-            $employees = $empl;
+            $employees = HRPerson::where('id', $empl)->where('status', 1)->pluck('id');
         elseif (!empty($div1))
             $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('id');
         elseif (!empty($div2))
