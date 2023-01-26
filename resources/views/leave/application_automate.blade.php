@@ -183,7 +183,7 @@
             });
 
             //Load divisions drop down
-			var parentDDID = '';
+			/*var parentDDID = '';
 			var loadAllDivs = 1;
 			var firstDivDDID = null;
 			var parentContainer = $('#view_users');
@@ -206,6 +206,22 @@
 				//parentDDID
 				parentDDID = ddID;
 				loadAllDivs = -1;
+			@endforeach*/
+			
+			//Load divisions drop down
+			var parentDDID = '';
+			var loadAllDivs = 1;
+			@foreach($division_levels as $division_level)
+			//Populate drop down on page load
+			var ddID = '{{ 'division_level_' . $division_level->level }}';
+			var postTo = '{!! route('divisionsdropdown') !!}';
+			var selectedOption = '';
+			var divLevel = parseInt('{{ $division_level->level }}');
+			var incInactive = -1;
+			var loadAll = loadAllDivs;
+			loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+			parentDDID = ddID;
+			loadAllDivs = -1;
 			@endforeach
         });
         
