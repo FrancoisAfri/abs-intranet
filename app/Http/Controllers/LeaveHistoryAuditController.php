@@ -437,8 +437,6 @@ class LeaveHistoryAuditController extends Controller
      */
     public function leaveAllowancePrint(Request $request)
     {
-
-
         $userID = $request['hr_person_id'];
         $LevTypID = $request['leave_types_id'];
 

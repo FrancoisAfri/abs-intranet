@@ -137,6 +137,9 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 	
 	Route::post('clockin/assign', 'EmployeeManagementController@store')
         ->name('clockin.assign');
+	
+	Route::post('add-training-docs', 'VideoManagementController@storeDocs')
+        ->name('docs.save');
 
     Route::get('act/{user}', 'EmployeeManagementController@activate')
         ->name('employee.activate');
@@ -158,6 +161,8 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 
     Route::get('video/{videos}', 'VideoManagementController@activate')
         ->name('video.activate');
+	Route::get('docs-training/{docs}', 'VideoManagementController@activateDocs')
+        ->name('docs-training.activate');
 
     Route::post('video/assign', 'VideoManagementController@assign')
         ->name('video.assign');
@@ -340,6 +345,8 @@ Route::get('System/policy/viewuserdetails/{policydetails}', 'PolicyEnforcementCo
 Route::get('leave/application', 'LeaveApplicationController@index');
 Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
+Route::get('leave/bulk-appliction', 'LeaveAutomaticApplication@index');
+Route::post('leave/bulk-leave-application', 'LeaveAutomaticApplication@store');
 
 //# leavesetup Controller
 Route::get('leave/types', 'LeaveSetupController@setuptypes');

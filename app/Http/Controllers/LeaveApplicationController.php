@@ -302,7 +302,7 @@ class LeaveApplicationController extends Controller
 
         $startDate = strtotime($start);
         $endDate = strtotime($end);
-
+		$details = array();
         // $startDate =
         // query the leave congif table and bring back the values
         $approvals = DB::table('leave_configuration')

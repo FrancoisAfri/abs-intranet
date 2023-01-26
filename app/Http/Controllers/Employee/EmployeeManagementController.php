@@ -6,6 +6,7 @@ use App\DivisionLevelFour;
 use App\DivisionLevelThree;
 use App\DivisionLevelTwo;
 use App\ManualClockin;
+use App\TrainingDocuments;
 use App\DivisionLevel;
 use App\EmployeeTasks;
 use App\HRPerson;
@@ -284,6 +285,8 @@ class EmployeeManagementController extends Controller
         $moduleID = 1;
         $status = 1;
 
+        $trainingDocs = TrainingDocuments::getDocuments($divLevel3, $divLevel4, $divLevel5);
+
         $specificVids = Video::getVideosByUser($divLevel1, $divLevel2, $divLevel3, $divLevel4, $divLevel5);
 
         $generalVids = Video::getAllGeneralVideos();
@@ -323,7 +326,6 @@ class EmployeeManagementController extends Controller
         $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
         $f_silhouette = Storage::disk('local')->url('avatars/f-silhouette.jpg');
 
-
         $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
 
         // task list
@@ -341,10 +343,7 @@ class EmployeeManagementController extends Controller
             ->orderBy('employee_tasks.order_no')
             ->get();
 
-
         $taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
-
-
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
         $marital_statuses = DB::table('marital_statuses')->where('status', 1)->orderBy('value', 'asc')->get();
@@ -424,6 +423,7 @@ class EmployeeManagementController extends Controller
         $data['secondmanagerDetails'] = $secondmanagerDetails;
         $data['managerDetails'] = $managerDetails;
         $data['assets'] = $assets;
+        $data['trainingDocs'] = $trainingDocs;
         $data['user'] = $user;
         $data['employees'] = $employees;
         $data['positions'] = $positions;
@@ -586,7 +586,6 @@ class EmployeeManagementController extends Controller
 
     public function organogramView()
     {
-
 
         $division_levels = DivisionLevel::with(
             'Div5.manager',

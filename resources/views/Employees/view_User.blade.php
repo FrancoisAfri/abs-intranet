@@ -40,8 +40,8 @@
                         <li class="" data-toggle="tooltip" title="Tasks"><a href="#Tasks"
                                                                             data-toggle="tab">Tasks</a>
                         </li>
-                        <li class="" data-toggle="tooltip" title="Video"><a href="#Video"
-                                                                            data-toggle="tab">Video</a>
+                        <li class="" data-toggle="tooltip" title="Training and Videos"><a href="#Video"
+                                                                            data-toggle="tab">Training and Videos</a>
                         </li>
                         <li class="" data-toggle="tooltip" title="drive"><a href="#drive"
                                                                             data-toggle="tab">Drive</a>
@@ -171,7 +171,19 @@
                 info: true,
                 autoWidth: true,
             });
+			$('table.document').DataTable({
 
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
             $('.datepicker').datepicker({
                 format: 'dd/mm/yyyy',
                 autoclose: true,

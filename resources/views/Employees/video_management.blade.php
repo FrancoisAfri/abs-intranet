@@ -85,6 +85,87 @@
             </div>
         </div>
     </div>
+	<br></br>
+	<div class="row">
+        <div class="col-md-12 col-md-offset-0">
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <i class="fa fa-user-times pull-right"></i>
+                    <h3 class="box-title"> Training Documents </h3>
+                </div>
+                <div class="box-body">
+                    <div class="box-header">
+                        <br>
+                        <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
+                                data-target="#add-training-docs-modal">Add New Document
+                        </button>
+                    </div>
+                    <div style="overflow-X:auto;">
+                        <table id=" " class="document table table-bordered data-table my-2">
+                            <thead>
+                            <tr>
+                                <th style="width: 5px; text-align: center;">Document</th>
+                                <th style="width: 5px; text-align: center;">Name</th>
+                                <th style="width: 5px; text-align: center;">Description</th>
+                                <th style="width: 5px; text-align: center;">Division</th>
+                                <th style="width: 5px; text-align: center;">Department</th>
+                                <th style="width: 5px; text-align: center;">Section</th>
+                                <th style="width: 5px; text-align: center;"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @if (count($documents) > 0)
+                                <ul class="products-list product-list-in-box">
+                                    @foreach ($documents as $key => $document)
+                                        <tr>
+                                            <td>
+												<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+													<label for="document" class="control-label"></label>
+													@if(!empty($document->document))
+														<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+														   href="{{ Storage::disk('local')->url("Employee/training/$document->document") }}"
+														   target="_blank"><i class="fa fa-file-pdf-o"></i> View Document</a>
+													@else
+														<a class="btn btn-default pull-centre btn-xs"><i
+																	class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+													@endif
+												</div>
+                                            </td>
+                                            <td style="text-align:center;">
+                                                    {{ (!empty( $document->name)) ?  $document->name : ''}}
+                                            </td>
+                                            <td style="text-align:center;">
+                                                    {{ (!empty($document->description)) ? $document->description : '' }}
+                                            </td>
+                                            <td>
+                                                {{ (!empty($document->division->name)) ?  $document->division->name : ' ' }}
+                                            </td>
+											<td>
+                                                {{ (!empty($document->department->name)) ?  $document->department->name : ' ' }}
+                                            </td>
+											<td>
+                                                {{ (!empty($document->section->name)) ?  $document->section->name : ' ' }}
+                                            </td>
+
+                                            <td>
+                                                <button vehice="button" id="view_ribbons" class="btn {{ (!empty($document->status) && $document->status == 1) ? " btn-danger " : "btn-success " }}
+                                                      btn-xs" onclick="postData({{$document->id}}, 'actdeacdoc');"><i class="fa {{ (!empty($document->status) && $document->status == 1) ?
+                                                      " fa-times " : "fa-check " }}"></i> {{(!empty($document->status) && $document->status == 1) ? "De-Activate" : "Activate"}}
+                                                </button>
+                                            </td>
+
+                                        </tr>
+                                    @endforeach
+                                    @endif
+                                </ul></tbody>
+                        </table>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+                @include('Employees.partials.add_training_document_modal')
+            </div>
+        </div>
+    </div>
 @stop
 @section('page_script')
     <!-- DataTables -->
@@ -137,6 +218,7 @@
         function postData(id, data) {
             console.log(id)
             if (data === 'actdeac') location.href = "{{ route('video.activate', '')}}" + "/" + id;
+            if (data === 'actdeacdoc') location.href = "{{ route('docs-training.activate', '')}}" + "/" + id;
         }
 
         $('.popup-thumbnail').click(function () {
@@ -151,6 +233,19 @@
         $(function () {
 
             $('table.asset').DataTable({
+
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: true,
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf', 'print'
+                ]
+            });
+			$('table.document').DataTable({
 
                 paging: true,
                 lengthChange: true,
@@ -216,8 +311,17 @@
                 let successMsg = 'Record has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });
-
-
+			//add doc-player
+			$('#add-training-doc').on('click', function () {
+				var strUrl = '/employee/add-training-docs';
+				var formName = 'add-training-docs-form';
+				var modalID = 'add-training-docs-modal';
+				var submitBtnID = 'add-training-doc';
+				var redirectUrl = '/employee/video_management';
+				var successMsgTitle = 'New Document  Added!';
+				var successMsg = 'The document has been updated successfully.';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
         });
     </script>
 @stop

@@ -7,6 +7,7 @@ use App\HRPerson;
 use App\Http\Controllers\AuditReportsController;
 use App\Models\AssetTransfers;
 use App\Models\Video;
+use App\TrainingDocuments;
 use App\Traits\BreadCrumpTrait;
 use App\Traits\uploadFilesTrait;
 use Illuminate\Contracts\View\Factory;
@@ -31,7 +32,9 @@ class VideoManagementController extends Controller
 
         $videos = Video::all();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-
+		$documents = TrainingDocuments::get();
+		$documents = $documents->load('division','department','section');
+		//return $documents;
         $videoType = [
             1 => 'General',
             2 => 'Specific_dept'
@@ -39,17 +42,18 @@ class VideoManagementController extends Controller
 
         $data = $this->breadCrump(
             "Employee Records",
-            "Video Management", "fa fa-lock",
-            "Video Management",
-            "Video Management",
+            "Training and Videos", "fa fa-lock",
+            "Training and Videos",
+            "Training and Videos",
             "/hr",
-            "Video Management",
-            "Video Management"
+            "Training and Videos",
+            "Training and Videos"
         );
 
         $data['videos'] = $videos;
         $data['videoType'] = $videoType;
         $data['division_levels'] = $divisionLevels;
+        $data['documents'] = $documents;
 
         return view('Employees.video_management')->with($data);
     }
@@ -60,7 +64,6 @@ class VideoManagementController extends Controller
      */
     public function assign(Request $request)
     {
-
 
         $video =  Video::where('id', $request['video_id'])->update(
             [
@@ -117,8 +120,46 @@ class VideoManagementController extends Controller
             AuditReportsController::store('Employee  Records', 'New Video Added', "Added By User", 0);
             return response()->json();
         }
-        AuditReportsController::store('Employee  Records', 'New Video Added', "Added By User", 0);
+        AuditReportsController::store('Employee Records', 'New Video Added', "Added By User", 0);
         return response()->json();
+    }
+	// store documents 
+	public function storeDocs(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'document' => 'required|max:50000',
+            'division_level_5' => 'required',
+        ]);
+		$div5 = !empty($request['division_level_5']) ? $request['division_level_5'] : 0;
+		$div4 = !empty($request['division_level_4']) ? $request['division_level_4'] : 0;
+		$div3 = !empty($request['division_level_3']) ? $request['division_level_3'] : 0;
+		
+        $training = TrainingDocuments::create(
+			[
+				'name' => $request['name'],
+				'description' => $request['description'],
+				'division_level_5' => $div5 ,
+				'division_level_4' => $div4,
+				'division_level_3' => $div3,
+				'status' => 1,
+			]
+		);
+		//Upload supporting Documents
+        if ($request->hasFile('document')) {
+            $fileExt = $request->file('document')->extension();
+            if (in_array($fileExt, ['doc', 'docx', 'pdf']) && $request->file('document')->isValid()) {
+                $fileName = time() . "_supporting_docs." . $fileExt;
+                $request->file('document')->storeAs('Employee/training', $fileName);
+                //Update 
+                $training->document = $fileName;
+                $training->update();
+            }
+        }
+		
+		AuditReportsController::store('Employee  Records', 'New Training Documents Added', "Added By User", 0);
+		return response()->json();
     }
 
     /**
@@ -140,12 +181,12 @@ class VideoManagementController extends Controller
 
         $data = $this->breadCrump(
             "Employee Records",
-            "Video Management", "fa fa-lock",
-            "Video Management",
-            "Video Management",
+            "Training and Videos", "fa fa-lock",
+            "Training and Videos",
+            "Training and Videos",
             "/hr",
-            "Video Management",
-            "Video Management"
+            "Training and Videos",
+            "Training and Videos"
         );
 
 
@@ -204,7 +245,21 @@ class VideoManagementController extends Controller
 
         Alert::success('Status changed', 'Status changed Successfully');
 
-        AuditReportsController::store('Video Management', 'Video  Status Changed', "Video  Changed", 0);
+        AuditReportsController::store('Employee Records', 'Video  Status Changed', "Video  Changed", 0);
+        return back();
+    }
+	
+	public function activateDocs(TrainingDocuments $docs)
+    {
+
+        $docs->status == 1 ? $stastus = 0 : $stastus = 1;
+        $docs->status = $stastus;
+        $docs->update();
+
+
+        Alert::success('Status changed', 'Status changed Successfully');
+
+        AuditReportsController::store('Employee Records', 'Video  Status Changed', "Video  Changed", 0);
         return back();
     }
 }

@@ -71,19 +71,15 @@ class Video extends Model
 
     public static function getVideosByUser($division_level_1, $division_level_2, $division_level_3, $division_level_4, $division_level_5)
     {
-       return Video::where(
-            [
-                'status' => 1,
-                'video_type' => 2,
-                'division_level_1' => $division_level_1,
-                'division_level_2' => $division_level_2,
-                'division_level_3' => $division_level_3,
-                'division_level_4' => $division_level_4,
-                'division_level_5' => $division_level_5,
-            ]
-        )->get();
-
+       
+	   return Video::where('status',1)
+				   ->where(function ($query)  use ($division_level_3,$division_level_4,$division_level_5,$division_level_2,$division_level_1)  {
+						$query->where('division_level_3', '=', $division_level_3)
+							  ->orWhere('division_level_1', '=', $division_level_1)
+							  ->orWhere('division_level_2', '=', $division_level_2)
+							  ->orWhere('division_level_4', '=', $division_level_4)
+							  ->orWhere('division_level_5', '=', $division_level_5);
+					})
+					->get();
     }
-
-
 }
