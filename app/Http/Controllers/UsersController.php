@@ -84,7 +84,7 @@ class UsersController extends Controller
         $name = $user->person->first_name . ' ' . $user->person->surname;
         AuditReportsController::store('Security', 'User Deleted', "Del: $name ", 0);
         DB::table('users')->where('id', '=', $user->id)->delete();
-        DB::table('hr_people')->where('user_id', '=', $user->id)->delete();
+        DB::table('hr_people')->where('id', '=', $user->person->id)->delete();
         return redirect('/employee')->with('success_delete', "User Successfully Deleted.");
     }
 
