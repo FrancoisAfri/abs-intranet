@@ -197,7 +197,7 @@ class EmployeeManagementController extends Controller
             if (!empty($arrayAddress[0]) && !empty($arrayAddress[1]) && !empty($arrayAddress[2]) && !empty($arrayAddress[3])) {
                 $matches = array();
                 preg_match_all('!\d+!', $arrayAddress[3], $matches);
-				if !empty($matches[0][0]) $match = $matches[0][0];
+				if (!empty($matches[0][0])) $match = $matches[0][0];
 				else $match = '';
                 $location = $arrayAddress[0] . ', ' . $arrayAddress[1] . ', ' . $arrayAddress[2] . ', ' . $match;
                 break;
