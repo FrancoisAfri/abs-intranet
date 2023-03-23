@@ -81,7 +81,7 @@
                                             <td nowrap>
                                                 <div class="product-img">
                                                     <img src="{{ (!empty($clockin->user->profile_pic)) ? asset('storage/avatars/'.$clockin->user->profile_pic)  :
-                                                            (($clockin->user->gender === 2) ? $f_silhouette : $m_silhouette)}} "
+                                                            (!empty($clockin->user->gender) && ($clockin->user->gender === 2) ? $f_silhouette : $m_silhouette)}} "
                                                          width="50" height="50" alt="Profile Picture">
                                                 </div>
                                                 <div class="modal fade" id="enlargeImageModal" tabindex="-1"
@@ -101,7 +101,7 @@
                                                       data-original-title="">{{ (!empty($clockin->user->employee_number)) ? $clockin->user->employee_number : '' }}</span>
                                             </td>
                                             <td style="text-align:center;">
-                                                {{ (!empty($clockin->user->first_name . ' ' . $clockin->user->surname)) ?  $clockin->user->first_name . ' ' . $clockin->user->surname : ''}}
+                                                {{ (!empty($clockin->user->first_name) && !empty($clockin->user->surname)) ?  $clockin->user->first_name . ' ' . $clockin->user->surname : ''}}
                                             </td>
                                             <td style="text-align:center;">
                                                 <i class="fa fa-envelope-o"></i> {{ (!empty($clockin->user->email)) ? $clockin->user->email : ' ' }}
