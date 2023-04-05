@@ -451,12 +451,13 @@ class LeaveApplicationController extends Controller
         //Validation
 
         $validator = Validator::make($request->all(), [
-            'hr_person_id' => 'required',
-            'leave_type' => 'required',
-            'day_requested' => 'required',
-            'application_type' => 'required',
+            'hr_person_id' => 'numeric|min:1',
+            'leave_type' => 'numeric|min:1',
+            'day_requested' => 'numeric|min:1',
+            'application_type' => 'numeric|min:1',
             'day' => 'required',
         ]);
+		
         $validator->after(function ($validator) use ($request) {
             $hrPersonId = $request->input('hr_person_id');
             $leaveType = $request->input('leave_type');
@@ -464,69 +465,75 @@ class LeaveApplicationController extends Controller
             $applicationType = $request->input('application_type');
             $availableBalance = 0;
             $extraDays = 0;
-            //make sure application doesnot overlaps
-            $day = $request->input('day');
-            $dates = explode(' - ', $day);
-            $startDate = str_replace('/', '-', $dates[0]);
-            $startDate = strtotime($startDate);
-            $endDate = str_replace('/', '-', $dates[1]);
-            $endDate = strtotime($endDate);
-            $previousApplication = leave_application::select('id')
-                ->where('hr_id', $hrPersonId)
-                //->where('leave_type_id', $leaveType)
-                ->whereIn('status', [1, 2, 3, 4, 5])
-                ->where(function ($query) use ($startDate, $endDate) {
-                    $query->wherebetween('start_date', [$startDate, $endDate])
-                        ->orwherebetween('end_date', [$startDate, $endDate]);
-                })
-                ->first();
-            if (!empty($previousApplication))
-                $validator->errors()->add('day_requested', "Sorry!!! Your application cannot be processed you already have an application overlaping.");
-            if (!empty($hrPersonId) && !empty($leaveType)) {
-                $balance = DB::table('leave_credit')
-                    ->select('leave_balance')
-                    ->where('hr_id', $hrPersonId)
-                    ->where('leave_type_id', $leaveType)
-                    ->first();
-                $row = leave_configuration::first();
-                $numberAnnual = !empty($row->allow_annual_negative_days) ? $row->allow_annual_negative_days : 0;
-                $numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
-                if ($leaveType == 1) $extraDays = $numberAnnual;
-                elseif ($leaveType == 5) $extraDays = $numberSick;
-                $availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8 : 0;
-                $availableBalance = $availableBalance + $extraDays;
-                if (!empty($availableBalance)) {
-                    if ($applicationType == 1) {
-                        if ($dayRequested > $availableBalance)
-                            $validator->errors()->add('day_requested', "Sorry!!! Your Application cannot be processed, you only have $availableBalance day(s), and applied for $dayRequested day(s).");
-                    } else
-                        $validator->errors()->add('day_requested', "Sorry!!! You cannot make an hour application here.");
-                } else
-                    $validator->errors()->add('day_requested', "Sorry!!! you do not have leave days available to perform this action.");
-            } else {
-                $validator->errors()->add('hr_person_id', "Please Select an employee.");
-                $validator->errors()->add('leave_type', "Please Select a leave type.");
-            }
-            #will do changes here
-//            check if manager is on leave
-            // check if the employee report to someone.
+			if (!empty($hrPersonId) && !empty($leaveType)  && !empty($dayRequested))
+			{
+				//make sure application doesnot overlaps
+				$day = $request->input('day');
+				$dates = explode(' - ', $day);
+				$startDate = str_replace('/', '-', $dates[0]);
+				$startDate = strtotime($startDate);
+				$endDate = str_replace('/', '-', $dates[1]);
+				$endDate = strtotime($endDate);
+				$previousApplication = leave_application::select('id')
+					->where('hr_id', $hrPersonId)
+					//->where('leave_type_id', $leaveType)
+					->whereIn('status', [1, 2, 3, 4, 5])
+					->where(function ($query) use ($startDate, $endDate) {
+						$query->wherebetween('start_date', [$startDate, $endDate])
+							->orwherebetween('end_date', [$startDate, $endDate]);
+					})
+					->first();
+				if (!empty($previousApplication))
+					$validator->errors()->add('day_requested', "Sorry!!! Your application cannot be processed you already have an application overlaping.");
+					// check user have available days
+					$balance = DB::table('leave_credit')
+						->select('leave_balance')
+						->where('hr_id', $hrPersonId)
+						->where('leave_type_id', $leaveType)
+						->first();
+					$row = leave_configuration::first();
+					$numberAnnual = !empty($row->allow_annual_negative_days) ? $row->allow_annual_negative_days : 0;
+					$numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
+					if ($leaveType == 1) $extraDays = $numberAnnual;
+					elseif ($leaveType == 5) $extraDays = $numberSick;
+					$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8 : 0;
+					$availableBalance = $availableBalance + $extraDays;
+					if (!empty($availableBalance)) {
+						if ($applicationType == 1) {
+							if ($dayRequested > $availableBalance)
+								$validator->errors()->add('day_requested', "Sorry!!! Your Application cannot be processed, you only have $availableBalance day(s), and applied for $dayRequested day(s).");
+						} else
+							$validator->errors()->add('day_requested', "Sorry!!! You cannot make an hour application here.");
+					} else
+						$validator->errors()->add('day_requested', "Sorry!!! you do not have leave days available to perform this action.");
 
-            $managerDetails = HRPerson::where('id', $hrPersonId)
-                ->select('manager_id')->first();
-            if (empty($managerDetails['manager_id']))
-                $validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a manager. please go to the employee profile and assign one.");
-			$secondManagerDetails = HRPerson::where('id', $hrPersonId)
-                ->select('second_manager_id')->first();
-            if (empty($secondManagerDetails['second_manager_id']))
-                $validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a second manager. please go to the employee profile and assign one.");
+				#will do changes here
+	//            check if manager is on leave
+				// check if the employee report to someone.
 
-            // check there is document if leave is family, sick and study leave.
-            if ($leaveType == 2 || $leaveType == 5 || $leaveType == 6) {
-                if ($leaveType == 2) $leaveName = 'family leave';
-                elseif ($leaveType == 5) $leaveName = 'sick leave';
-                else $leaveName = 'study leave';
-                if (!$request->hasFile('supporting_docs'))
-                    $validator->errors()->add('supporting_docs', "Sorry!!! Your application cannot be completed, this $leaveName applicatiion required a supporting document to be uploaded.");
+				$managerDetails = HRPerson::where('id', $hrPersonId)
+					->select('manager_id')->first();
+				if (empty($managerDetails['manager_id']))
+					$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a manager. please go to the employee profile and assign one.");
+				$secondManagerDetails = HRPerson::where('id', $hrPersonId)
+					->select('second_manager_id')->first();
+				if (empty($secondManagerDetails['second_manager_id']))
+					$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a second manager. please go to the employee profile and assign one.");
+
+				// check there is document if leave is family, sick and study leave.
+				if ($leaveType == 2 || $leaveType == 5 || $leaveType == 6) {
+					if ($leaveType == 2) $leaveName = 'family leave';
+					elseif ($leaveType == 5) $leaveName = 'sick leave';
+					else $leaveName = 'study leave';
+					if (!$request->hasFile('supporting_docs'))
+						$validator->errors()->add('supporting_docs', "Sorry!!! Your application cannot be completed, this $leaveName applicatiion required a supporting document to be uploaded.");
+				}
+			}
+			else 
+			{
+                $validator->errors()->add('hr_person_id', "Please make sure an employee is selected.");
+                $validator->errors()->add('leave_type', "Please make sure a leave type is selected.");
+                $validator->errors()->add('day_requested', "Please make sure days requested is showing.");
             }
         });
         if ($validator->fails()) {
@@ -668,14 +675,13 @@ class LeaveApplicationController extends Controller
      */
     public function hours(Request $request)
     {
-
         //Validation
         $validator = Validator::make($request->all(), [
-            'hr_person_id' => 'required',
-            'leave_type' => 'required',
+            'hr_person_id' => 'numeric|min:1',
+            'leave_type' => 'numeric|min:1',
             'date' => 'required',
-            'application_type' => 'required',
-            'hours' => 'required',
+            'application_type' => 'numeric|min:1',
+            'hours' => 'numeric|min:1',
         ]);
 
         $validator->after(function ($validator) use ($request) {
@@ -683,11 +689,11 @@ class LeaveApplicationController extends Controller
             $leaveType = $request['leave_type'];
             $hours = $request['hours'];
             $applicationType = $request['application_type'];
-            // $dayRequested = $request['day_requested'];
             $availableBalance = 0;
             $extraDays = 0;
 
             if (!empty($hrPersonId) && !empty($leaveType)) {
+				
                 $balance = DB::table('leave_credit')
                     ->select('leave_balance')
                     ->where(
@@ -695,7 +701,6 @@ class LeaveApplicationController extends Controller
                             'hr_id' => $hrPersonId,
                             'leave_type_id' => $leaveType
                         ])->first();
-
 
                 $row = leave_configuration::first();
 
@@ -708,20 +713,25 @@ class LeaveApplicationController extends Controller
                 if (!empty($availableBalance)) {
                     if ($applicationType == 2) {
                         if ($hours > $availableBalance)
-                            $validator->errors()->add('hours', "Sorry!!! Your Application cannot be processed, you only have $availableBalance hr(s), and applied for $dayRequested hr(s).");
+                            $validator->errors()->add('hours', "Sorry!!! Your Application cannot be processed, you only have $availableBalance hr(s), and applied for $hours hr(s).");
                     } else
                         $validator->errors()->add('hours', "Sorry!!! You cannot make an hour aplication here.");
                 } else
                     $validator->errors()->add('hours', "Sorry you do not have leave days available to perform this action.");
-            } else {
-                $validator->errors()->add('hr_person_id', "Please Select an employee.");
-                $validator->errors()->add('leave_type', "Please Select a leave type.");
+				// check if the user have a manager and second manager assigned
+				$managerDetails = HRPerson::where('id', $hrPersonId)
+					->select('manager_id')->first();
+				if (empty($managerDetails['manager_id']))
+					$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee you Selected does not have a manager. please go to the employee profile and assign one.");
+				$secondManagerDetails = HRPerson::where('id', $hrPersonId)
+					->select('second_manager_id')->first();
+					
+			}
+			else 
+			{
+				$validator->errors()->add('hr_person_id', "Please make sure an employee is selected.");
+                $validator->errors()->add('leave_type', "Please make sure a leave type is selected.");
             }
-            $managerDetails = HRPerson::where('id', $hrPersonId)
-                ->select('manager_id')->first();
-            if (empty($managerDetails['manager_id']))
-                $validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee you Selected does not have a manager. please go to the employee profile and assign one.");
-
         });
         if ($validator->fails()) {
             return redirect("/leave/application")
