@@ -24,10 +24,8 @@
             <div class=" tab-content">
                 <div class="activetab-pane" id="info">
                     <section class="content">
-
                         <div class="row">
                             <div class="col-md-12">
-
                                 <h1>
                                     View Asset - {{ $asset->name}}</h1>
                                 <div class="nav-tabs-custom">
@@ -42,12 +40,13 @@
                                         </li>
                                         <li class="" data-toggle="tooltip" title="Files"><a href="#files"
                                                                                    data-toggle="tab">Files</a></li>
+										<li class="" data-toggle="tooltip" title="Depreciation"><a href="#depreciation"
+                                                                                   data-toggle="tab">Depreciation Trails</a></li>
                                         <li class=" pull-right">
                                             <button type="button" class="btn btn-default pull-right" id="back_button"><i
                                                         class="fa fa-arrow-left"></i> Back
                                             </button>
                                         </li>
-
                                     </ul>
                                     <div class="tab-content">
                                         {{--  taranferes  tab  --}}
@@ -71,6 +70,10 @@
                                         {{--  Files  tab  --}}
                                         <div class="tab-pane" id="files">
                                             @include('assets.manageAssets.Tabs.asset-files-tab')
+                                        </div> 
+										{{--  Depreciation  tab  --}}
+                                        <div class="tab-pane" id="depreciation">
+                                            @include('assets.manageAssets.Tabs.asset-depreciation-tab')
                                         </div>
                                         <!-- /.tab-pane -->
 

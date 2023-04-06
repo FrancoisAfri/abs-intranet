@@ -109,7 +109,7 @@
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{ (!empty( $asset->price)) ? $asset->price : ''}}
+                            {{ (!empty( $asset->price)) ? 'R ' .number_format($asset->price, 2) : ''}}
                         </div>
                     </td>
 

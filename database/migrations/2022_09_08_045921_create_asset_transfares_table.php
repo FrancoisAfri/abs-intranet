@@ -39,6 +39,6 @@ class CreateAssetTransfaresTable extends Migration
      */
     public function down()
     {
-        Schema::drop('asset_files');
+        Schema::drop('asset_transfer');
     }
 }

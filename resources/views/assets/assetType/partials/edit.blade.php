@@ -27,6 +27,13 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
+					<div class="form-group">
+                        <label for="depreciation_year" class="col-sm-2 control-label"> Depreciation Years</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="depreciation_year" name="depreciation_year" value=""
+                                   placeholder="Enter Depreciation Years" required>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

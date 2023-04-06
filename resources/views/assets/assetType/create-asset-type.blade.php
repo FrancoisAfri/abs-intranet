@@ -22,6 +22,7 @@
                                 <th style="width: 10px; text-align: center;">#</th>
                                 <th>Name</th>
                                 <th>Description</th>
+                                <th>Depreciation Years</th>
                                 <th style="width: 5px; text-align: center;">.</th>
                                 <th style="width: 5px; text-align: center;">.</th>
                                 {{--                                <th style="width: 5px; text-align: center;">.</th>--}}
@@ -43,6 +44,7 @@
                                             </td>
                                             <td>{{ $assetTypes->name ?? ''}} </td>
                                             <td>{{ $assetTypes->description ?? ''}} </td>
+                                            <td>{{ $assetTypes->depreciation_year ?? ''}} </td>
                                             <td>
                                                 <!--   leave here  -->
                                                 <button vehice="button" id="view_ribbons" class="btn {{ (!empty($assetTypes->status) && $assetTypes->status == 1) ? " btn-danger " : "btn-success " }}
@@ -75,6 +77,7 @@
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Name</th>
                                 <th>Description</th>
+                                <th>Depreciation Years</th>
                                 <th style="width: 5px; text-align: center;"></th>
                                 <th style="width: 5px; text-align: center;"></th>
                                 {{--                                <th style="width: 5px; text-align: center;"></th>--}}
@@ -157,6 +160,7 @@
                             let objData = {
                                 name: $('#'+modalID).find('#name').val(),
                                 description: $('#'+modalID).find('#description').val(),
+                                depreciation_year: $('#'+modalID).find('#depreciation_year').val(),
                                 _token: $('#'+modalID).find('input[name=_token]').val()
                             };
 
@@ -189,6 +193,7 @@
                             let objData = {
                                 name: $('#'+modalID).find('#name').val(),
                                 description: $('#'+modalID).find('#description').val(),
+                                depreciation_year: $('#'+modalID).find('#depreciation_year').val(),
                                 _token: $('#'+modalID).find('input[name=_token]').val()
                             };
                             let submitBtnID = 'edit-storeroom';

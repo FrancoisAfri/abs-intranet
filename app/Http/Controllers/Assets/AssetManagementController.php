@@ -9,6 +9,7 @@ use App\Http\Requests\AssetFilesRequest;
 use App\Http\Requests\AssetTransferRequest;
 use App\leave_application;
 use App\leave_configuration;
+use App\AssetDepreciation;
 use App\Mail\LeaveBalanceReminder;
 use App\Mail\managerReminder;
 use App\Models\Assets;
@@ -371,6 +372,8 @@ class AssetManagementController extends Controller
         $assetComponents = AssetComponents::getAssetComponents($asset->id);
 
         $Transfers = AssetTransfers::getAssetsTransfares($asset->id);
+		
+        $depreciations = AssetDepreciation::getAssetsDepreciations($asset->id);
 
         $data = $this->breadCrump(
             "Asset Management",
@@ -389,6 +392,7 @@ class AssetManagementController extends Controller
         $data['assetTransfare'] = $assetTransfare;
         $data['asset'] = $asset;
         $data['assetComponents'] = $assetComponents;
+        $data['depreciations'] = $depreciations;
         $data['assetFiles'] = $assetFiles;
         $data['licenceType'] = $licenceType;
         $data['stores'] = $stores;

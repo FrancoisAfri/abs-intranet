@@ -13,7 +13,7 @@ class AssetType extends Model
     protected $fillable = [
         'name',
         'description',
-        'status','licenceType_id'
+        'status','licenceType_id','depreciation_year'
     ];
 
 
