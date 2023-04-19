@@ -185,5 +185,13 @@ class Assets extends Model
     {
         return (new Assets)->where('id', $id)->first();
     }
+	
+	public static function getAssets()
+    {
+        $query = Assets::with('AssetType')
+            ->whereIn('asset_status', array('In Use', 'Un Allocated', 'In Store'));
+
+        return $query->get();
+    }
 
 }

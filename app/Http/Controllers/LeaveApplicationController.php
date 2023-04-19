@@ -337,7 +337,6 @@ class LeaveApplicationController extends Controller
 
             } else
                 # code...
-//                dd();
                 // query the hrperson  model and bring back the values of the manager
                 $managerDetails = HRPerson::getManagerDetails($hrDetails['manager_id']);
 
@@ -508,7 +507,7 @@ class LeaveApplicationController extends Controller
 						$validator->errors()->add('day_requested', "Sorry!!! you do not have leave days available to perform this action.");
 
 				#will do changes here
-	//            check if manager is on leave
+				// check if manager is on leave
 				// check if the employee report to someone.
 
 				$managerDetails = HRPerson::where('id', $hrPersonId)
@@ -982,7 +981,6 @@ class LeaveApplicationController extends Controller
         $levReject->status = 6;
         $levReject->update();
 
-
         #send rejection email
         Mail::to($usedetails['email'])->send(
             new LeaveRejection
@@ -992,14 +990,12 @@ class LeaveApplicationController extends Controller
                 , $usedetails['email'])
         );
 
-
         AuditReportsController::store(
             'Leave Management: ',
             'leave rejected',
             "By User",
             0
         );
-
 
         LeaveHistoryAuditController::store(
             "leave application Rejected",
@@ -1025,11 +1021,9 @@ class LeaveApplicationController extends Controller
             ->orderBy('surname', 'asc')
             ->get();
 
-
         $leaveTypes = LeaveType::where('status', 1)
             ->orderBy('name', 'asc')
             ->get();
-
 
         $data['leaveTypes'] = $leaveTypes;
         $data['employees'] = $employees;
@@ -1084,7 +1078,6 @@ class LeaveApplicationController extends Controller
             10 => 'Cancelled'
         );
 
-
         $actionDate = $request['date_applied'];
 
         if (!empty($actionDate)) {
@@ -1137,15 +1130,15 @@ class LeaveApplicationController extends Controller
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Search';
         $data['page_title'] = "leave Management";
-        $data['page_description'] = "Leave Cancellation";
+        $data['page_description'] = "Leave Search";
         $data['breadcrumb'] = [
             ['title' => 'Leave Management', 'path' => 'leave/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'leave Approval', 'active' => 1, 'is_module' => 0]
+            ['title' => 'Leave Search', 'active' => 1, 'is_module' => 0]
         ];
 
         AuditReportsController::store(
             'Leave Management',
-            'Leave Approval Page Accessed',
+            'Leave Search Page Accessed',
             "Accessed By User",
             0
         );
@@ -1198,7 +1191,7 @@ class LeaveApplicationController extends Controller
         $data['page_description'] = "View Application";
         $data['breadcrumb'] = [
             ['title' => 'Leave Management', 'path' => 'leave/search', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
-            ['title' => 'leave Approval', 'active' => 1, 'is_module' => 0]
+            ['title' => 'leave view', 'active' => 1, 'is_module' => 0]
         ];
         return view('leave.view_application')->with($data);
     }
@@ -1233,7 +1226,7 @@ class LeaveApplicationController extends Controller
                 leave_history::create([
                     'hr_id' => $user->person->id,
                     'action_date' => time(),
-                    'description_action' => "Leave application canceled and credit been updated",
+                    'description' => $request->input('reason'),
                     'previous_balance' => $leaveBalance,
                     'leave_type_id' => $leave->leave_type_id,
                     'transcation' => $leave->leave_taken,

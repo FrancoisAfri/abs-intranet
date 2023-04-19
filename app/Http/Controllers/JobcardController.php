@@ -677,7 +677,7 @@ HTML;
         $sCellNo = str_replace($cleanup_chr, '', $sCellNo);
 
         #Internationalise  the number
-        if ($sCellNo{0} == "0") $sCellNo = "27" . substr($sCellNo, 1);
+        if ($sCellNo[0] == "0") $sCellNo = "27" . substr($sCellNo, 1);
 
         return $sCellNo;
     }
