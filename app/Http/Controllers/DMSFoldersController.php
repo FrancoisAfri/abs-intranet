@@ -46,7 +46,7 @@ class DMSFoldersController extends Controller
         $data['folder_image'] = $folder_image;
         $data['division_levels'] = $divisionLevels;
         $data['employees'] = $employees;
-		//return $folders;
+
         AuditReportsController::store('Document Management', 'Folders Page Accessed', "Actioned By User", 0);
         return view('dms.folders')->with($data);
     }
@@ -95,6 +95,37 @@ class DMSFoldersController extends Controller
 		//return $folders;
         AuditReportsController::store('Document Management', 'Folders Page Accessed', "Actioned By User", 0);
         return view('dms.view_folder')->with($data);
+    }
+	
+	public function accessFolder(DmsFolders $folder)
+    {
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        $folders = DmsFolders::where('parent_id',$folder->id)->where('status',1)->whereNull('deleted')->get();
+		if (!empty($folders)) 
+			$folders = $folders->load('employee','division','parentDetails');
+		
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
+        $folder_image = Storage::disk('local')->url('DMS Image/folder_image.png');
+		// get files
+		$files = DmsFiles::where('folder_id',$folder->id)->where('status',1)->whereNull('deleted')->get();
+		if (!empty($files)) 
+			$files = $files->load('employee');
+		//return $files;
+		$data['page_title'] = "Document Management";
+        $data['page_description'] = "Folder Access";
+        $data['breadcrumb'] = [
+                ['title' => 'Document Management', 'path' => '/dms/my_folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'My Folder(s)', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Folders';
+        $data['folder'] = $folder;
+        $data['folders'] = $folders;
+        $data['files'] = $files;
+        $data['folder_image'] = $folder_image;
+		//return $folders;
+        AuditReportsController::store('Document Management', 'Folders Page Accessed', "Actioned By User", 0);
+        return view('dms.folder_access')->with($data);
     }
 	/////
 	public function myFolders()
@@ -148,6 +179,7 @@ class DMSFoldersController extends Controller
 		$DmsFolders->division_3 = !empty($folderData['division_level_3']) ? $folderData['division_level_3']: 0;
 		$DmsFolders->division_2 = !empty($folderData['division_level_2']) ? $folderData['division_level_2']: 0;
 		$DmsFolders->division_1 = !empty($folderData['division_level_1']) ? $folderData['division_level_1']: 0;
+		$DmsFolders->visibility = !empty($folderData['visibility']) ? $folderData['visibility']: 0;
 		$DmsFolders->status = 1;
 		$DmsFolders->path = "DMS Master File/$folderName";
 		$DmsFolders->save();
@@ -176,6 +208,7 @@ class DMSFoldersController extends Controller
 		$DmsFolder->division_3 = !empty($folderData['division_level_3']) ? $folderData['division_level_3']: 0;
 		$DmsFolder->division_2 = !empty($folderData['division_level_2']) ? $folderData['division_level_2']: 0;
 		$DmsFolder->division_1 = !empty($folderData['division_level_1']) ? $folderData['division_level_1']: 0;
+		$DmsFolder->visibility = !empty($folderData['visibility']) ? $folderData['visibility']: 0;
 		$DmsFolder->status = 1;
 		$DmsFolder->path = $folderName;
 		$DmsFolder->save();
@@ -189,7 +222,8 @@ class DMSFoldersController extends Controller
 	public function storeFile(Request $request, DmsFolders $folder)
     {
         $this->validate($request, [
-            'document_name' => 'required',      
+            'document_name' => 'required',
+			'visibility' => 'required',			
         ]);
         $fileData = $request->all();
         unset($fileData['_token']);
@@ -212,9 +246,10 @@ class DMSFoldersController extends Controller
 				$DmsFile->file_name = $fileName;
 				$DmsFile->path = $filePath;
 				$DmsFile->file_extension = $fileExt;
-				$DmsFile->current_version = "Version 1";
+				$DmsFile->current_version = "Version ".!empty($fileData['visibility']) ? $fileData['visibility'] : 1;
 				$DmsFile->status = 1;
 				$DmsFile->description = !empty($fileData['description']) ? $fileData['description'] : '';
+				$DmsFile->visibility = !empty($fileData['visibility']) ? $fileData['visibility'] : '';
                 $DmsFile->save();
 				// Save file version
 				$DmsFileVersion  = new DmsFilesVersions();
@@ -222,7 +257,7 @@ class DMSFoldersController extends Controller
 				$DmsFileVersion->file_name = $fileName;
 				$DmsFileVersion->path = $filePath;
 				$DmsFileVersion->status = 1;
-				$DmsFileVersion->version_number = 1;
+				$DmsFileVersion->version_number = !empty($fileData['visibility']) ? $fileData['visibility'] : 1;;
             }
         }
 		

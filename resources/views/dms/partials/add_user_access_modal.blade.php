@@ -20,7 +20,7 @@
 							</div>
 						</div>
                     </div>
-					<div class="form-group folder-field{{ $errors->has('folder_id_usr') ? ' has-error' : '' }}">
+					<div class="form-group folder-field-usr{{ $errors->has('folder_id_usr') ? ' has-error' : '' }}">
                         <label for="folder_id_usr" class="col-sm-2 control-label">Folders</label>
                         <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
@@ -32,7 +32,7 @@
                                 </select>
                         </div>
                     </div>
-					<div class="form-group file-field{{ $errors->has('file_id_usr') ? ' has-error' : '' }}">
+					<div class="form-group file-field-usr{{ $errors->has('file_id_usr') ? ' has-error' : '' }}">
                         <label for="file_id_usr" class="col-sm-2 control-label">Files</label>
                         <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
@@ -61,18 +61,6 @@
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="expiry_usr_date" name="expiry_usr_date"
                                    value="{{ old('expiry_usr_date') }}" placeholder="Select  Expiry Date  ...">
-                        </div>
-                    </div>
-					<div class="form-group {{ $errors->has('adminusr_id') ? ' has-error' : '' }}">
-                        <label for="adminusr_id" class="col-sm-2 control-label">Administrator</label>
-                        <div class="col-sm-8">
-                                <select class="form-control select2" style="width: 100%;"
-                                        id="adminusr_id" name="adminusr_id">
-                                    <option value="">*** Select an Employee ***</option>
-                                    @foreach($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
-                                    @endforeach
-                                </select>
                         </div>
                     </div>
                 </div>

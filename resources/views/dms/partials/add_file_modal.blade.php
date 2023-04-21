@@ -16,14 +16,32 @@
                         <label for="document_name" class="col-sm-2 control-label">Name</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="document_name" name="document_name" value=""
-                                   placeholder="Enter Name">
+                                   placeholder="Enter Name" required>
                         </div>
                     </div>
 					<div class="form-group ">
-                        <label for="path" class="col-sm-2 control-label">Description </label>
+                        <label for="description" class="col-sm-2 control-label">Description </label>
                         <div class="col-sm-8">
 							<input type="text" class="form-control" id="description" name="description" value=""
                                    placeholder="Enter Description">
+                        </div>
+                    </div>
+					<div class="form-group {{ $errors->has('visibility') ? ' has-error' : '' }}">
+                        <label for="visibility" class="col-sm-2 control-label">Visibility</label>
+                        <div class="col-sm-8">
+							<select class="form-control select2" style="width: 100%;"
+									id="visibility" name="visibility">
+								<option value="">*** Select a Visibility ***</option>
+								<option value="1">Private</option>
+								<option value="2">All Employees</option>
+							</select>
+                        </div>
+                    </div>
+					<div class="form-group ">
+                        <label for="current_version" class="col-sm-2 control-label">Version </label>
+                        <div class="col-sm-8">
+							<input type="number" class="form-control" id="current_version" name="current_version" value=""
+                                   placeholder="Enter Version" required>
                         </div>
                     </div>
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">

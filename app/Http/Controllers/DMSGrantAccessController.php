@@ -10,6 +10,7 @@ use App\DMSCompanyAccess;
 use App\DMSGroupAccess;
 use App\DMSUserAccess;
 use App\DmsFiles;
+use App\Mail\DmsUserAccessRequest;
 use App\DmsFilesVersions;
 use App\DivisionLevel;
 use Carbon\Carbon;
@@ -17,8 +18,10 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 
 class DMSGrantAccessController extends Controller
 {
@@ -34,9 +37,19 @@ class DMSGrantAccessController extends Controller
     public function index()
     {
 		$today = strtotime(date('Y-m-d'));
-		$folders = DmsFolders::where('status',1)->whereNull('deleted')->orderBy('folder_name', 'asc')->get();
-		$files = DmsFiles::where('status',1)->whereNull('deleted')->orderBy('document_name', 'asc')->get();
-		$groups = DMSGoupAdmin::where('status',1)->orderBy('group_name', 'asc')->get();
+		$folders = DmsFolders::where('status',1)
+				->whereNull('deleted')
+				->where('visibility',1)
+				->orderBy('folder_name', 'asc')
+				->get();
+		$files = DmsFiles::where('status',1)
+				->whereNull('deleted')
+				->where('visibility',1)
+				->orderBy('document_name', 'asc')
+				->get();
+		$groups = DMSGoupAdmin::where('status',1)
+				->orderBy('group_name', 'asc')
+				->get();
         // company folder
 		$companyAccessFolders = DMSCompanyAccess::where('expiry_date', '>=', $today)->where('file_id', '<', 1)->orderBy('expiry_date', 'asc')->get();
         if (!empty($companyAccessFolders)) 
@@ -69,7 +82,7 @@ class DMSGrantAccessController extends Controller
 		$data['page_title'] = "Document Management";
         $data['page_description'] = "Access Management";
         $data['breadcrumb'] = [
-                ['title' => 'Document Management', 'path' => '/dms/grant_access', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Document Management', 'path' => '/dms/grant_access', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Access Management', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Document Management';
         $data['active_rib'] = 'Grant Access';
@@ -107,13 +120,51 @@ class DMSGrantAccessController extends Controller
      */
     public function storeCompanyAccess(Request $request)
     {
-        $this->validate($request, [
+		$validator = Validator::make($request->all(), [
             'division_level_5' => 'required',       
-            'expiry_date' => 'required',       
-            'admin_id' => 'required', 
+            'expiry_date' => 'required', 
 			'folder_id' => 'required_if:access_com_type,1',			
-			'file_id' => 'required_if:access_com_type,2',			
+			'file_id' => 'required_if:access_com_type,2',	
         ]);
+		
+        $validator->after(function ($validator) use ($request) {
+            $division_level_5 = $request->input('division_level_5');
+            $folder_id = $request->input('folder_id');
+            $file_id = $request->input('file_id');
+			$today = strtotime(date('Y-m-d'));
+			if (!empty($folder_id))
+			{
+				$folderexist = DMSCompanyAccess::select('id')
+					->where('division_level_5', $division_level_5)
+					->where('folder_id', $folder_id)
+					->where('expiry_date', '>=', $today)
+					->where('status', 1)
+					->first();
+				if (!empty($folderexist))
+					$validator->errors()->add('folder_id', "Sorry!!! You can not grant access to this division, it already has access to this folder.");
+			}
+			elseif (!empty($file_id))
+			{
+				$folderexist = DMSCompanyAccess::select('id')
+					->where('division_level_5', $division_level_5)
+					->where('file_id', $file_id)
+					->where('expiry_date', '>=', $today)
+					->where('status', 1)
+					->first();
+				if (!empty($folderexist))
+					$validator->errors()->add('folder_id', "Sorry!!! You can not grant access to this division, it already has access to this file.");
+			}
+			else 
+			{
+                $validator->errors()->add('division_level_5', "Please make sure a division is selected.");
+                $validator->errors()->add('expiry_date', "Please make sure an expiring date is selected.");
+            }
+        });
+        if ($validator->fails()) {
+            return redirect("/leave/application")
+                ->withErrors($validator)
+                ->withInput();
+        }
         $comData = $request->all();
         unset($comData['_token']);
 		
@@ -128,7 +179,6 @@ class DMSGrantAccessController extends Controller
 		$companyAccess->division_level_1 = !empty($comData['division_level_1']) ? $comData['division_level_1']: 0;
 		$companyAccess->folder_id = !empty($comData['folder_id']) ? $comData['folder_id']: 0;
 		$companyAccess->file_id = !empty($comData['file_id']) ? $comData['file_id']: 0;
-		$companyAccess->admin_id = !empty($comData['admin_id']) ? $comData['admin_id']: 0;
 		$companyAccess->expiry_date = !empty($comData['expiry_date']) ? $comData['expiry_date']: 0;
 		$companyAccess->status = 1;
 		$companyAccess->save();
@@ -141,8 +191,7 @@ class DMSGrantAccessController extends Controller
     {
         $this->validate($request, [
             'group_id' => 'required',       
-            'expiry_gr_date' => 'required',       
-            'admini_id' => 'required', 
+            'expiry_gr_date' => 'required',
 			'folder_id_gr' => 'required_if:access_gr_type,1',			
 			'file_id_gr' => 'required_if:access_gr_type,2',			
         ]);
@@ -156,7 +205,6 @@ class DMSGrantAccessController extends Controller
 		$groupAccess->group_id = !empty($groupData['group_id']) ? $groupData['group_id']: 0;
 		$groupAccess->folder_id = !empty($groupData['folder_id_gr']) ? $groupData['folder_id_gr']: 0;
 		$groupAccess->file_id = !empty($groupData['file_id_gr']) ? $groupData['file_id_gr']: 0;
-		$groupAccess->admin_id = !empty($groupData['admini_id']) ? $groupData['admini_id']: 0;
 		$groupAccess->expiry_date = !empty($groupData['expiry_gr_date']) ? $groupData['expiry_gr_date']: 0;
 		$groupAccess->status = 1;
 		$groupAccess->save();
@@ -169,8 +217,7 @@ class DMSGrantAccessController extends Controller
     {
         $this->validate($request, [
             'employee_id' => 'required',       
-            'expiry_usr_date' => 'required',       
-            'adminusr_id' => 'required', 
+            'expiry_usr_date' => 'required', 
 			'folder_id_usr' => 'required_if:access_usr_type,1',			
 			'file_id_usr' => 'required_if:access_usr_type,2',			
         ]);
@@ -184,12 +231,55 @@ class DMSGrantAccessController extends Controller
 		$userAccess->hr_id = !empty($userData['employee_id']) ? $userData['employee_id']: 0;
 		$userAccess->folder_id = !empty($userData['folder_id_usr']) ? $userData['folder_id_usr']: 0;
 		$userAccess->file_id = !empty($userData['file_id_usr']) ? $userData['file_id_usr']: 0;
-		$userAccess->admin_id = !empty($userData['adminusr_id']) ? $userData['adminusr_id']: 0;
 		$userAccess->expiry_date = !empty($userData['expiry_usr_date']) ? $userData['expiry_usr_date']: 0;
 		$userAccess->status = 1;
 		$userAccess->save();
 
 		AuditReportsController::store('Document Management', 'User Granted Access', "Granted By User", 0);
+        return response()->json();
+    }
+	// user request access
+	public function userRequestAccess(Request $request)
+    {
+        $this->validate($request, [      
+            'expiry_usr_date' => 'required', 
+			'folder_id_usr' => 'required_if:access_usr_type,1',			
+			'file_id_usr' => 'required_if:access_usr_type,2',			
+        ]);
+        $userData = $request->all();
+        unset($userData['_token']);
+		$loggedInEmpl = Auth::user()->person;
+		$employeeID = $loggedInEmpl->id;
+		
+		$userData['expiry_usr_date'] = str_replace('/', '-', $userData['expiry_usr_date']);
+        $userData['expiry_usr_date'] = strtotime($userData['expiry_usr_date']);
+			
+		$userAccess = new DMSUserAccess();
+		$userAccess->hr_id = $employeeID;
+		$userAccess->folder_id = !empty($userData['folder_id_usr']) ? $userData['folder_id_usr']: 0;
+		$userAccess->file_id = !empty($userData['file_id_usr']) ? $userData['file_id_usr']: 0;
+		$userAccess->expiry_date = !empty($userData['expiry_usr_date']) ? $userData['expiry_usr_date']: 0;
+		$userAccess->status = 2;
+		$userAccess->save();
+		
+		/// send email to admin for aproval
+
+		// get admin details
+		if (!empty($userAccess->folder_id))
+		{
+			$admin = DmsFolders::find($userAccess->folder_id);
+			$admin = $admin->load('employee');
+		}
+		else 
+		{	
+			$admin = DmsFiles::find($userAccess->file_id); 
+			$admin = $admin->load('employee');
+		}
+		
+		if (!empty($admin->employee->id))
+			Mail::to("$admin->employee->email")->send(new DmsUserAccessRequest($admin->employee->first_name));
+		
+		AuditReportsController::store('Document Management', 'User Requested Access', "Granted By User", 0);
         return response()->json();
     }
 	// company active

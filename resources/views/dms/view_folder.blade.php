@@ -95,6 +95,7 @@
 								<th>Responsible Person</th>
 								<th>Current Version</th>
 								<th>Date Uploaded</th>
+								<th>Visibility</th>
 								<th style="width: 5px; text-align: center;">#</th>
 								
 							</tr>
@@ -117,13 +118,14 @@
 										<td>{{ (!empty($file->employee->first_name)) ?  $file->employee->first_name." ".$file->employee->surname : ''}} </td>
 										<td>{{ (!empty($file->current_version)) ?  $file->current_version : ''}} </td>
 										<td>{{ (!empty($file->created_at)) ?  $file->created_at : ''}} </td>
+										<td>{{ (!empty($file->visibility)) && $file->visibility == 1 ?  'Private' : 'All Employees'}} </td>
 										<td style="text-align: center"><button vehice="button" id="view_ribbons" class="btn btn-success" 
 												onclick="postData({{$file->id}}, 'manage_file');"><i class="fa fa-check"></i> Manage</button></td>
 									</tr>
 								@endforeach
 							@else
 								<tr id="categories-list">
-									<td colspan="6">
+									<td colspan="7">
 										<div class="alert alert-danger alert-dismissable">
 											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
 												&times;

@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{{ $company_name }} - Vehicle Approval Required</title>
+    <title>{{ $company_name }} - DMS Access Request</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -214,8 +214,8 @@
                                         <table cellpadding="0" cellspacing="0" width="100%" bgcolor="#ffffff">
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
-                                                    Hi {{ $manager->first_name }},<br><br>
-                                                    We would like to inform you that a new Vehicle has been Added and requires your approval. To view  and approve the new Vehicle please <a target="_blank" href="{{ $dashboard_url }}">click here.</a>
+                                                    Hi {{ $employee }},<br><br>
+                                                    We would like to inform you that there is a new DMS access request that requires your approval. To view  and approve the new request please <a target="_blank" href="{{ $dashboard_url }}">click here.</a>
                                                 </td>
                                             </tr>
 

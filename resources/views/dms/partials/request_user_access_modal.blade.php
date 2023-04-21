@@ -6,7 +6,7 @@
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title">User Access Information</h4>
+                    <h4 class="modal-title">Request Access Form</h4>
                 </div>
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
@@ -44,35 +44,11 @@
                                 </select>
                         </div>
                     </div>
-					<div class="form-group {{ $errors->has('employee_id') ? ' has-error' : '' }}">
-                        <label for="employee_id" class="col-sm-2 control-label">Employee</label>
-                        <div class="col-sm-8">
-                                <select class="form-control select2" style="width: 100%;"
-                                        id="employee_id" name="employee_id">
-                                    <option value="">*** Select an Employee ***</option>
-                                    @foreach($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
-                                    @endforeach
-                                </select>
-                        </div>
-                    </div>
 					<div class="form-group">
                         <label for="expiry_usr_date" class="col-sm-2 control-label">Expiry date</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="expiry_usr_date" name="expiry_usr_date"
                                    value="{{ old('expiry_usr_date') }}" placeholder="Select  Expiry Date  ...">
-                        </div>
-                    </div>
-					<div class="form-group {{ $errors->has('adminusr_id') ? ' has-error' : '' }}">
-                        <label for="adminusr_id" class="col-sm-2 control-label">Administrator</label>
-                        <div class="col-sm-8">
-                                <select class="form-control select2" style="width: 100%;"
-                                        id="adminusr_id" name="adminusr_id">
-                                    <option value="">*** Select an Employee ***</option>
-                                    @foreach($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
-                                    @endforeach
-                                </select>
                         </div>
                     </div>
                 </div>

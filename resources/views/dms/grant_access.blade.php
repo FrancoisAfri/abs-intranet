@@ -41,7 +41,6 @@
 								<th>Department</th>
 								<th>Section</th>
 								<th>Folder</th>
-								<th>Administrator</th>
 								<th>Expiry Date</th>
 								<th>#</th>
 							</tr>
@@ -52,7 +51,6 @@
 										<td>{{ (!empty($companyAccessFolder->department->name)) ?  $companyAccessFolder->department->name : ''}} </td>
 										<td>{{ (!empty($companyAccessFolder->section->name)) ?  $companyAccessFolder->section->name : ''}} </td>
 										<td>{{ (!empty($companyAccessFolder->companyFolder->folder_name)) ?  $companyAccessFolder->companyFolder->folder_name : ''}} </td>
-										<td>{{ !empty($companyAccessFolder->companyAdmin->first_name) && !empty($companyAccessFolder->companyAdmin->surname) ?  $companyAccessFolder->companyAdmin->first_name." ".$companyAccessFolder->companyAdmin->surname : '' }}</td>
 										<td>{{ !empty($companyAccessFolder->expiry_date) ? date('d M Y ', $companyAccessFolder->expiry_date) : '' }}</td>
 										<td nowrap>
 											<button type="button" id="view_users" class="btn {{ (!empty($companyAccessFolder->status) && $companyAccessFolder->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$companyAccessFolder->id}}, 'actdeac');"><i class="fa {{ (!empty($companyAccessFolder->status) && $companyAccessFolder->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($companyAccessFolder->status) && $companyAccessFolder->status == 1) ? "Revoke Access" : ""}}</button>
@@ -70,7 +68,6 @@
 								<th>Department</th>
 								<th>Section</th>
 								<th>File</th>
-								<th>Administrator</th>
 								<th>Expiry Date</th>
 								<th>#</th>
 							</tr>
@@ -81,7 +78,6 @@
 										<td>{{ (!empty($companyAccessFile->department->name)) ?  $companyAccessFile->department->name : ''}} </td>
 										<td>{{ (!empty($companyAccessFile->section->name)) ?  $companyAccessFile->section->name : ''}} </td>
 										<td>{{ (!empty($companyAccessFile->companyFile->document_name)) ?  $companyAccessFile->companyFile->document_name : ''}} </td>
-										<td>{{ !empty($companyAccessFile->companyAdmin->first_name) && !empty($companyAccessFile->companyAdmin->surname) ?  $companyAccessFile->companyAdmin->first_name." ".$companyAccessFile->companyAdmin->surname : '' }}</td>
 										<td>{{ !empty($companyAccessFile->expiry_date) ? date('d M Y ', $companyAccessFile->expiry_date) : '' }}</td>
 										<td nowrap>
 											<button type="button" id="view_users" class="btn {{ (!empty($companyAccessFile->status) && $companyAccessFile->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$companyAccessFile->id}}, 'actdeac');"><i class="fa {{ (!empty($companyAccessFile->status) && $companyAccessFile->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($companyAccessFile->status) && $companyAccessFile->status == 1) ? "Revoke Access" : ""}}</button>
@@ -120,7 +116,6 @@
 							<tr>
 								<th>Group</th>
 								<th>Folder</th>
-								<th>Administrator</th>
 								<th>Expiry Date</th>
 								<th>#</th>
 							</tr>
@@ -129,7 +124,6 @@
 								   <tr>
 										<td>{{ (!empty($groupAccessFolder->groupName->group_name)) ?  $groupAccessFolder->groupName->group_name : ''}} </td>
 										<td>{{ (!empty($groupAccessFolder->groupFolder->folder_name)) ?  $groupAccessFolder->groupFolder->folder_name : ''}} </td>
-										<td>{{ !empty($groupAccessFolder->groupAdmin->first_name) && !empty($groupAccessFolder->groupAdmin->surname) ? $groupAccessFolder->groupAdmin->first_name." ".$groupAccessFolder->groupAdmin->surname : '' }}</td>
 										<td>{{ !empty($groupAccessFolder->expiry_date) ? date('d M Y ', $groupAccessFolder->expiry_date) : '' }}</td>
 										<td nowrap>
 											<button type="button" id="view_users" class="btn {{ (!empty($groupAccessFolder->status) && $groupAccessFolder->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$groupAccessFolder->id}}, 'actdeac');"><i class="fa {{ (!empty($groupAccessFolder->status) && $groupAccessFolder->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($groupAccessFolder->status) && $groupAccessFolder->status == 1) ? "Revoke Access" : ""}}</button>
@@ -145,7 +139,6 @@
 							<tr>
 								<th>Group</th>
 								<th>File</th>
-								<th>Administrator</th>
 								<th>Expiry Date</th>
 								<th>#</th>
 							</tr>
@@ -154,7 +147,6 @@
 									<tr>
 										<td>{{ (!empty($groupAccessFile->groupName->group_name)) ?  $groupAccessFile->groupName->group_name : ''}} </td>
 										<td>{{ (!empty($groupAccessFile->groupFile->document_name)) ?  $groupAccessFile->groupFile->document_name : ''}} </td>
-										<td>{{ !empty($groupAccessFile->groupAdmin->first_name) && !empty($groupAccessFile->groupAdmin->surname) ? $groupAccessFolder->groupAdmin->first_name." ".$groupAccessFolder->groupAdmin->surname : '' }}</td>
 										<td>{{ !empty($groupAccessFile->expiry_date) ? date('d M Y ', $groupAccessFile->expiry_date) : '' }}</td>
 										<td nowrap>
 											<button type="button" id="view_users" class="btn {{ (!empty($groupAccessFile->status) && $groupAccessFile->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$groupAccessFile->id}}, 'actdeac');"><i class="fa {{ (!empty($groupAccessFile->status) && $groupAccessFile->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($groupAccessFile->status) && $groupAccessFile->status == 1) ? "Revoke Access" : ""}}</button>
@@ -193,7 +185,6 @@
 							<tr>
 								<th>Employee</th>
 								<th>Folder</th>
-								<th>Administrator</th>
 								<th>Expiry Date</th>
 								<th>#</th>
 							</tr>
@@ -203,7 +194,6 @@
 										<td>{{ !empty($userAccessFolder->employee->first_name) && !empty($userAccessFolder->employee->surname) ?  $userAccessFolder->employee->first_name." ".$userAccessFolder->employee->surname : '' }}</td>
 										<td>{{ !empty($userAccessFolder->userFolder->folder_name) ? $userAccessFolder->userFolder->folder_name : '' }}</td>
 										<td>{{ !empty($userAccessFolder->expiry_date) ? date('d M Y ', $userAccessFolder->expiry_date) : '' }}</td>
-										<td>{{ (!empty($userAccessFolder->userAdmin->first_name) && !empty($userAccessFolder->userAdmin->surname)) ?  $userAccessFolder->userAdmin->first_name." ".$userAccessFolder->userAdmin->surname : ''}} </td>
 										<td nowrap>
 											<button type="button" id="view_users" class="btn {{ (!empty($userAccessFolder->status) && $userAccessFolder->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$userAccessFolder->id}}, 'actdeac');"><i class="fa {{ (!empty($userAccessFolder->status) && $userAccessFolder->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($userAccessFolder->status) && $userAccessFolder->status == 1) ? "Revoke Access" : ""}}</button>
 										</td>
@@ -218,7 +208,6 @@
 							<tr>
 								<th>Employee</th>
 								<th>File</th>
-								<th>Administrator</th>
 								<th>Expiry Date</th>
 								<th>#</th>
 							</tr>
@@ -228,9 +217,8 @@
 										<td>{{ !empty($userAccessFile->employee->first_name) && !empty($userAccessFile->employee->surname) ?  $userAccessFile->employee->first_name." ".$userAccessFile->employee->surname : '' }}</td>
 										<td>{{ !empty($userAccessFile->userFile->document_name) ? $userAccessFile->userFile->document_name : '' }}</td>
 										<td>{{ !empty($userAccessFile->expiry_date) ? date('d M Y ', $userAccessFile->expiry_date) : '' }}</td>
-										<td>{{ (!empty($userAccessFile->userAdmin->first_name) && !empty($userAccessFile->userAdmin->surname)) ?  $userAccessFile->userAdmin->first_name." ".$userAccessFile->userAdmin->surname : ''}} </td>
 										<td nowrap>
-											<button type="button" id="view_users" class="btn {{ (!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$userAccessFile->id}}, 'actdeac');"><i class="fa {{ (!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "Revoke Access" : ""}}</button>
+											<button type="button" id="revoke_users_access" class="btn {{ (!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "btn-danger" : "btn-success" }} btn-xs" onclick="postData({{$userAccessFile->id}}, 'actdeac');"><i class="fa {{ (!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "fa-times" : "fa-check" }}"></i> {{(!empty($userAccessFile->status) && $userAccessFile->status == 1) ? "Revoke Access" : ""}}</button>
 										</td>
 									</tr>
 								@endforeach
@@ -278,11 +266,7 @@
 	<script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script type="text/javascript">
-		function postData(id, data)
-		{
-			if (data == 'actdeac')
-				location.href = "/dms/group/"  + id + "/actdect";
-		}
+
         $(function () {
             //Phone mask
             $("[data-mask]").inputmask();
@@ -343,7 +327,7 @@
 			$('#rdo_fol_com, #rdo_fil_com, #rdo_fol_gr, #rdo_fil_gr, #rdo_fol_usr, #rdo_fil_usr').on('ifChecked', function(){
 				   hideFields();
 			});
-
+			
 			// save company access
 			var noteID;			
 			$('#add_company_access').on('click', function() {
@@ -445,34 +429,35 @@
         });
 		//function to hide/show fields depending on the registration type
 		function hideFields() {
+			
 			var accessComType = $("input[name='access_com_type']:checked").val();
 			if (accessComType == 1) { //folder
-				$('.folder-field').show();
-				$('.file-field ').hide();
+				$('.folder-field-comp').show();
+				$('.file-field-comp').hide();
 			}
 			else if (accessComType == 2) { //file
-				$('.file-field').show();
-				$('.folder-field').hide();
+				$('.file-field-comp').show();
+				$('.folder-field-comp').hide();
 			}
 			//dd
 			var accessGrType = $("input[name='access_gr_type']:checked").val();
 			if (accessGrType == 1) { //folder
-				$('.folder-field').show();
-				$('.file-field ').hide();
+				$('.folder-field-group').show();
+				$('.file-field-group').hide();
 			}
 			else if (accessGrType == 2) { //file
-				$('.file-field').show();
-				$('.folder-field').hide();
+				$('.file-field-group').show();
+				$('.folder-field-group').hide();
 			}
 			//dd
 			var accessUsrType = $("input[name='access_usr_type']:checked").val();
 			if (accessUsrType == 1) { //folder
-				$('.folder-field').show();
-				$('.file-field ').hide();
+				$('.folder-field-usr').show();
+				$('.file-field-usr').hide();
 			}
 			else if (accessUsrType == 2) { //file
-				$('.file-field').show();
-				$('.folder-field').hide();
+				$('.file-field-usr').show();
+				$('.folder-field-usr').hide();
 			}
 		}
     </script>

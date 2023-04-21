@@ -9,6 +9,17 @@
                     <h4 class="modal-title">Company Access Information</h4>
                 </div>
                 <div class="modal-body">
+					@if (count($errors) > 0)
+						<div class="alert alert-danger alert-dismissible fade in">
+							<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+							<h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+							<ul>
+								@foreach ($errors->all() as $error)
+									<li>{{ $error }}</li>
+								@endforeach
+							</ul>
+						</div>
+					@endif
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
 					<div class="form-group{{ $errors->has('access_com_type') ? ' has-error' : '' }}">
@@ -33,7 +44,7 @@
 							</div>
 						</div>
                     @endforeach
-					<div class="form-group folder-field{{ $errors->has('folder_id') ? ' has-error' : '' }}">
+					<div class="form-group folder-field-comp{{ $errors->has('folder_id') ? ' has-error' : '' }}">
                         <label for="folder_id" class="col-sm-2 control-label">Folders</label>
                         <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
@@ -45,7 +56,7 @@
                                 </select>
                         </div>
                     </div>
-					<div class="form-group file-field{{ $errors->has('file_id') ? ' has-error' : '' }}">
+					<div class="form-group file-field-comp{{ $errors->has('file_id') ? ' has-error' : '' }}">
                         <label for="file_id" class="col-sm-2 control-label">Files</label>
                         <div class="col-sm-8">
                                 <select class="form-control select2" style="width: 100%;"
@@ -62,18 +73,6 @@
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="expiry_date" name="expiry_date"
                                    value="{{ old('expiry_date') }}" placeholder="Select  Expiry Date  ...">
-                        </div>
-                    </div>
-					<div class="form-group {{ $errors->has('admin_id') ? ' has-error' : '' }}">
-                        <label for="admin_id" class="col-sm-2 control-label">Administrator</label>
-                        <div class="col-sm-8">
-                                <select class="form-control select2" style="width: 100%;"
-                                        id="admin_id" name="admin_id">
-                                    <option value="">*** Select an Employee ***</option>
-                                    @foreach($employees as $employee)
-                                        <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
-                                    @endforeach
-                                </select>
                         </div>
                     </div>
                 </div>
