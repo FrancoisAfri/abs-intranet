@@ -56,6 +56,12 @@
                                     <td class="caption"><b>Current Size</b></td>
                                     <td>{{ (!empty($folder->total_size)) ?  $folder->total_size : ''}}</td>
                                 </tr>
+								<tr>
+                                    <td class="caption"><b>Deleted</b></td>
+                                    <td>{{ (!empty($folder->deleted)) ?  'Yes' : 'No'}}</td>
+                                    <td class="caption"><b></b></td>
+                                    <td></td>
+                                </tr>
                         </table>
 					</div>
                     <!--   </div> -->
@@ -75,7 +81,7 @@
                             data-responsable_person="{{ $folder->responsable_person}}">Edit Details
                         </button>
 						&nbsp; 
-						<button type="button" id="cat_module" class="btn btn-primary pull-left" data-toggle="modal"
+						<!-- <button type="button" id="cat_module" class="btn btn-primary pull-left" data-toggle="modal"
                                 onclick="postData({{$folder->id}}, 'group_access');">Group Access
                         </button>&nbsp;  
 						<button type="button" id="cat_module" class="btn btn-primary pull-left" data-toggle="modal"
@@ -83,10 +89,12 @@
                         </button>&nbsp; 
 						<button type="button" id="cat_module" class="btn btn-primary pull-left" data-toggle="modal"
                                 onclick="postData({{$folder->id}}, 'user_access');">User Access
-                        </button>&nbsp;
-						<button type="button" id="cat_module" class="btn btn-danger pull-right" data-toggle="modal"
-                                data-target="#delete-folder-warning-modal">Delete
-                        </button>
+                        </button>&nbsp; -->
+						@if (empty($folder->deleted)) 
+							<button type="button" id="cat_module" class="btn btn-danger pull-right" data-toggle="modal"
+									data-target="#delete-folder-warning-modal">Delete
+							</button>
+						@endif
                     </div>
                 </div>
             </div>

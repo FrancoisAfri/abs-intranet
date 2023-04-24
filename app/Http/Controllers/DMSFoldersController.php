@@ -38,7 +38,7 @@ class DMSFoldersController extends Controller
 		$data['page_title'] = "Document Management";
         $data['page_description'] = "Folder Directory";
         $data['breadcrumb'] = [
-                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Folders', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Document Management';
         $data['active_rib'] = 'Folders';
@@ -52,7 +52,6 @@ class DMSFoldersController extends Controller
     }
 	public function subfolders(DmsFolders $folder)
     {
-		//return $folder;
 		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $folders = DmsFolders::where('parent_id',$folder->id)->where('status',1)->whereNull('deleted')->get();
 		if (!empty($folders)) 
@@ -81,7 +80,7 @@ class DMSFoldersController extends Controller
 		$data['page_title'] = "Document Management";
         $data['page_description'] = "Folder Directory";
         $data['breadcrumb'] = [
-                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Folders', 'active' => 1, 'is_module' => 0]
         ];
 		//return $folder;
         $data['active_mod'] = 'Document Management';
@@ -110,7 +109,7 @@ class DMSFoldersController extends Controller
 		$files = DmsFiles::where('folder_id',$folder->id)->where('status',1)->whereNull('deleted')->get();
 		if (!empty($files)) 
 			$files = $files->load('employee');
-		//return $files;
+
 		$data['page_title'] = "Document Management";
         $data['page_description'] = "Folder Access";
         $data['breadcrumb'] = [
@@ -135,7 +134,7 @@ class DMSFoldersController extends Controller
         $data['page_title'] = "Document Management";
         $data['page_description'] = "DMS Set Up ";
         $data['breadcrumb'] = [
-                ['title' => 'Document Management', 'path' => '/dms/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Document Management', 'path' => '/dms/setup', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Folders', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Document Management';
         $data['active_rib'] = 'setup';
@@ -274,6 +273,7 @@ class DMSFoldersController extends Controller
 		// get folder size
 		$file_size = 0;
 		$folder_path = storage_path('app')."/".$folder->path."/";
+		
 		foreach( File::allFiles("$folder_path") as $file)
 		{
 			$file_size += $file->getSize();
@@ -283,13 +283,13 @@ class DMSFoldersController extends Controller
 			$totalSize = number_format($file_size / 1048576,2)." MB";
 			$folder->total_size = $totalSize;
 		}
-		
+		//return $folder;
 		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
 
 		$data['page_title'] = "Document Management";
         $data['page_description'] = "Folder Management";
         $data['breadcrumb'] = [
-                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Folders', 'active' => 1, 'is_module' => 0]
         ];
 		//return $folder;
         $data['active_mod'] = 'Document Management';
@@ -305,25 +305,17 @@ class DMSFoldersController extends Controller
 	public function manageFile(DmsFiles $file)
     {
 		$file_size = 0;
-		/*
-			$folder_path = storage_path('app')."/".$file->path."/";
-			$file_size += $file->getSize();
-			if (!empty($file_size))
-			{
-				$totalSize = number_format($file_size / 1048576,2)." MB";
-				$directory->total_size = $totalSize;
-			}
-		}*/
+
 		// get folder details 
 		$folder = DmsFolders::where('id',$file->folder_id)->first();
 		// get files
 		if (!empty($file)) 
 			$file = $file->load('employee','folderList','fileVersions');
-		return $file;
+
 		$data['page_title'] = "Document Management";
         $data['page_description'] = "File Management";
         $data['breadcrumb'] = [
-                ['title' => 'Document Management', 'path' => '/dms/folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+                ['title' => 'Document Management', 'path' => '/dms/my_folders', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Folders', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Document Management';
         $data['active_rib'] = 'Folders';

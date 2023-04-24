@@ -18,7 +18,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Validator;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
@@ -120,51 +120,12 @@ class DMSGrantAccessController extends Controller
      */
     public function storeCompanyAccess(Request $request)
     {
-		$validator = Validator::make($request->all(), [
+        $this->validate($request, [
             'division_level_5' => 'required',       
             'expiry_date' => 'required', 
 			'folder_id' => 'required_if:access_com_type,1',			
-			'file_id' => 'required_if:access_com_type,2',	
+			'file_id' => 'required_if:access_com_type,2',			
         ]);
-		
-        $validator->after(function ($validator) use ($request) {
-            $division_level_5 = $request->input('division_level_5');
-            $folder_id = $request->input('folder_id');
-            $file_id = $request->input('file_id');
-			$today = strtotime(date('Y-m-d'));
-			if (!empty($folder_id))
-			{
-				$folderexist = DMSCompanyAccess::select('id')
-					->where('division_level_5', $division_level_5)
-					->where('folder_id', $folder_id)
-					->where('expiry_date', '>=', $today)
-					->where('status', 1)
-					->first();
-				if (!empty($folderexist))
-					$validator->errors()->add('folder_id', "Sorry!!! You can not grant access to this division, it already has access to this folder.");
-			}
-			elseif (!empty($file_id))
-			{
-				$folderexist = DMSCompanyAccess::select('id')
-					->where('division_level_5', $division_level_5)
-					->where('file_id', $file_id)
-					->where('expiry_date', '>=', $today)
-					->where('status', 1)
-					->first();
-				if (!empty($folderexist))
-					$validator->errors()->add('folder_id', "Sorry!!! You can not grant access to this division, it already has access to this file.");
-			}
-			else 
-			{
-                $validator->errors()->add('division_level_5', "Please make sure a division is selected.");
-                $validator->errors()->add('expiry_date', "Please make sure an expiring date is selected.");
-            }
-        });
-        if ($validator->fails()) {
-            return redirect("/leave/application")
-                ->withErrors($validator)
-                ->withInput();
-        }
         $comData = $request->all();
         unset($comData['_token']);
 		

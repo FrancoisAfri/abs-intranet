@@ -1459,3 +1459,6 @@ Route::get('dms/group_access/{group}/actdect', 'DMSGrantAccessController@groupAc
 Route::get('dms/user_access/{user}/actdect', 'DMSGrantAccessController@userAct');
 Route::get('dms/my_folders', 'DMSMyfolderController@index');
 Route::get('dms/read-view-document/{file}', 'DMSMyfolderController@viewFile');
+Route::get('dms/recycle', 'DMSRecyle@index');
+Route::get('dms/folder_restore/{folder}', 'DMSRecyle@restoredFolder');
+Route::get('dms/file_restore/{file}', 'DMSRecyle@restoreFile');
