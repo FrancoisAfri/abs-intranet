@@ -261,6 +261,8 @@ class DMSGrantAccessController extends Controller
 		
 		$data['userAccessFolders'] = $userAccessFolders;
 		$data['userAccessFiles'] = $userAccessFiles;
+		$data['active_mod'] = 'Document Management';
+        $data['active_rib'] = 'Request Approval';
 		AuditReportsController::store('Document Management', "user Request Access", "Accessed by User", 0);
 		return view('dms.grant_access_request')->with($data);
     }
