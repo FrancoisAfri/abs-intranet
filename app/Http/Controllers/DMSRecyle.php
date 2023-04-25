@@ -87,35 +87,40 @@ class DMSRecyle extends Controller
         return back();
     }
 	// delete folder
-	public function destroyFoler(DmsFolders $older)
+	public function destroyFoler(DmsFolders $folder)
     {
-        $file->status = 1;
-        $file->deleted = null;
-        $file->update();
+		// delete folder
+        $response = Storage::deleteDirectory($folder->path);
+		// delete record in the database.
+        $folder->delete();
 		
-		AuditReportsController::store('Document Management', 'File Restored', "File has been Restored", 0);
+		AuditReportsController::store('Document Management', 'Folder Deleted', "Folder has been Restored", 0);
         return back();
     }
 	// delete folder
 	public function destroyFile(DmsFiles $file)
     {
-        $file->status = 1;
-        $file->deleted = null;
-        $file->update();
+		
+        // delete file
+		$filename = $file->path.$file->file_name;
+        $response = Storage::delete($file);
+		// delete record in the database.
+        $file->delete();
 		
 		AuditReportsController::store('Document Management', 'File Restored', "File has been Restored", 0);
         return back();
     }
 	// empty recycle bin
-	public function destroyFile(DmsFiles $file)
-    {
-        $file->status = 1;
-        $file->deleted = null;
-        $file->update();
+	//public function destroyFile(DmsFiles $file)
+   // {
+		///return $file;
+       // $file->status = 1;
+       // $file->deleted = null;
+       //$file->delete();
 		
-		AuditReportsController::store('Document Management', 'File Restored', "File has been Restored", 0);
-        return back();
-    }
+		//AuditReportsController::store('Document Management', 'File Restored', "File has been Restored", 0);
+       // return back();
+    //}
 	// delte folder and file
 	function deleteAll($dir, $remove = false) 
 	{

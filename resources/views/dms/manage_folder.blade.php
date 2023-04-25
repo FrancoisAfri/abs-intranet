@@ -39,7 +39,7 @@
                                     <td></td>
                                 </tr>
 								<tr>
-                                    <td class="caption">Status</td>
+                                    <td class="caption"><b>Status</b></td>
                                     <td>{{ (!empty($folder->status)) && $folder->status == 1 ?  'Active' : 'Inactive'}}</td>
 									<td class="caption"><b>Division</b></td>
                                     <td>{{ (!empty($folder->division->name)) ?  $folder->division->name : ''}}</td>
@@ -99,8 +99,8 @@
                 </div>
             </div>
 			@include('dms.partials.edit_folder_modal')
-			@if (!empty($folder))
-                @include('dms.warnings.delete_folder_action', ['modal_title' => 'Delete Folder', 'modal_content' => 'Are you sure you want to delete this folder ? This action cannot be undone.'])
+			@if (empty($folder->deleted))
+                @include('dms.warnings.delete_folder_action', ['modal_title' => 'Delete Folder', 'modal_content' => 'Are you sure you want to delete this folder ? The folder will be moved to the recycle bin.'])
             @endif
         </div>
     </div>

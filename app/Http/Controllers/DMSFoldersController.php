@@ -283,7 +283,7 @@ class DMSFoldersController extends Controller
 			$totalSize = number_format($file_size / 1048576,2)." MB";
 			$folder->total_size = $totalSize;
 		}
-		//return $folder;
+
 		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
 
 		$data['page_title'] = "Document Management";
@@ -311,6 +311,10 @@ class DMSFoldersController extends Controller
 		// get files
 		if (!empty($file)) 
 			$file = $file->load('employee','folderList','fileVersions');
+		
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+        
+		$employees = HRPerson::where('status', 1)->orderBy('first_name')->orderBy('surname')->get();
 
 		$data['page_title'] = "Document Management";
         $data['page_description'] = "File Management";
@@ -321,6 +325,8 @@ class DMSFoldersController extends Controller
         $data['active_rib'] = 'Folders';
         $data['folder'] = $folder;
         $data['file'] = $file;
+		$data['division_levels'] = $divisionLevels;
+        $data['employees'] = $employees;
 		//return $folders;
         AuditReportsController::store('Document Management', 'Folders Page Accessed', "Actioned By User", 0);
         return view('dms.manage_file')->with($data);
@@ -342,9 +348,25 @@ class DMSFoldersController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, DmsFiles $file)
     {
-        //
+        $this->validate($request, [
+            'document_name' => 'required',       
+            'description' => 'required',       
+            'visibility' => 'required',       
+            'current_version' => 'required',       
+        ]);
+        $fileData = $request->all();
+        unset($fileData['_token']);
+		
+		$file->document_name = !empty($fileData['document_name']) ? $fileData['document_name']: '';
+		$file->description = !empty($fileData['description']) ? $fileData['description']: '';
+		$file->visibility = !empty($fileData['visibility']) ? $fileData['visibility']: 0;
+		$file->current_version = !empty($fileData['current_version']) ? $fileData['current_version']: 0;
+		$file->update();
+		
+		AuditReportsController::store('Document Management', 'File Details Updated', "Updated By User", 0);
+        return response()->json();
     }
 
     /**
@@ -365,8 +387,6 @@ class DMSFoldersController extends Controller
         $folderData = $request->all();
         unset($folderData['_token']);
 		
-		$folderName = $folderData['folder_name'];
-		$DmsFolders = new DmsFolders($folderData);
 		$folder->division_5 = !empty($folderData['division_level_5']) ? $folderData['division_level_5']: 0;
 		$folder->division_4 = !empty($folderData['division_level_4']) ? $folderData['division_level_4']: 0;
 		$folder->division_3 = !empty($folderData['division_level_3']) ? $folderData['division_level_3']: 0;
@@ -397,6 +417,17 @@ class DMSFoldersController extends Controller
 		AuditReportsController::store('Document Management', 'Folder Deleted', "Folder has been deleted", 0);
         return back();
     }
+	public function destroyFile(DmsFiles $file)
+    {
+		$parentID = $file->folder_id;
+        $file->status = 2;
+        $file->deleted = 1;
+        $file->update();
+		
+		AuditReportsController::store('Document Management', 'File Deleted', "File has been deleted", 0);
+        return redirect("dms/folder/view/$parentID");
+    }
+	//redirect("/hr/active_card"); dms/folder/view/{{$folder->parent_id}}
 	// company folder access
 	public function companyFolderAccess(DmsFolders $folder)
     {

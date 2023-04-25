@@ -8,7 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\CompanyIdentity;
 
-class DmsUserAccessRequest extends Mailable
+class DMSApprovalRequest extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -17,13 +17,12 @@ class DmsUserAccessRequest extends Mailable
      *
      * @return void
      */
-	
-    public $employee;
-	
-    public function __construct($employee)
+	public $employee;
+	public $note;
+    public function __construct($employee, $note)
     {
-        //
-		 $this->employee = $employee;
+       $this->employee = $employee;
+       $this->note = $note;
     }
 
     /**
@@ -33,15 +32,15 @@ class DmsUserAccessRequest extends Mailable
      */
     public function build()
     {
-        $companyDetails = CompanyIdentity::systemSettings();
+         $companyDetails = CompanyIdentity::systemSettings();
         $companyName = $companyDetails['company_name'];
-        $subject = "New DMS Access Request on $companyName online system.";
+        $subject = "DMS Request On $companyName online system.";
 
         $data['support_email'] = $companyDetails['support_email'];
         $data['company_name'] = $companyName;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
-        $data['dashboard_url'] = url('/dms/my_folders');
+        $data['dashboard_url'] = url('/');
 
         return $this->view('mails.dms_access_request_response')
             ->from($companyDetails['mailing_address'], $companyDetails['mailing_name'])

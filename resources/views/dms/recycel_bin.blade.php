@@ -33,6 +33,7 @@
 								<th>Division</th>
 								<th>Size</th>
 								<th style="width: 5px; text-align: center;">#</th>
+								<th style="width: 5px; text-align: center;">#</th>
 							</tr>
 							@if (count($folders) > 0)
 								@foreach ($folders as $folderView)
@@ -42,13 +43,15 @@
 										<td>{{ (!empty($folderView->visibility)) && $folderView->visibility == 1 ?  'Private' : 'All Employees'}} </td>
 										<td>{{ (!empty($folderView->division->name)) ?  $folderView->division->name : ''}} </td>
 										<td>{{ (!empty($folderView->total_size)) ?  $folderView->total_size : ''}} </td>
-										<td style="text-align: center"><button vehice="button" id="view_ribbons" class="btn btn-success" 
+										<td style="text-align: center"><button type="button" id="restore_folder" class="btn btn-danger" 
 												onclick="postData({{$folderView->id}}, 'restore_folder');"><i class="fa fa-check"></i> Restore Folder</button></td>
+										<td style="text-align: center"><button type="button" id="delete_folder" class="btn btn-danger" 
+												onclick="postData({{$folderView->id}}, 'delete_folder');"><i class="fa fa-check"></i> Delete Folder</button></td>
 									</tr>
 								@endforeach
 							@else
-								<tr id="categories-list">
-									<td colspan="6">
+								<tr>
+									<td colspan="7">
 										<div class="alert alert-danger alert-dismissable">
 											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
 												&times;
@@ -84,6 +87,7 @@
 								<th>Date Uploaded</th>
 								<th>Visibility</th>
 								<th style="width: 5px; text-align: center;">#</th>
+								<th style="width: 5px; text-align: center;">#</th>
 								
 							</tr>
 							@if (count($files) > 0)
@@ -94,13 +98,15 @@
 										<td>{{ (!empty($file->current_version)) ?  $file->current_version : ''}} </td>
 										<td>{{ (!empty($file->created_at)) ?  $file->created_at : ''}} </td>
 										<td>{{ (!empty($file->visibility)) && $file->visibility == 1 ?  'Private' : 'All Employees'}} </td>
-										<td style="text-align: center"><button vehice="button" id="view_ribbons" class="btn btn-success" 
-												onclick="postData({{$file->id}}, 'restore_file');"><i class="fa fa-check"></i> Restore Folder</button></td>
+										<td style="text-align: center"><button type="button" id="restore_file" class="btn btn-danger" 
+												onclick="postData({{$file->id}}, 'restore_file');"><i class="fa fa-check"></i> Restore File</button></td>
+										<td style="text-align: center"><button type="button" id="delete_file" class="btn btn-danger" 
+												onclick="postData({{$file->id}}, 'delete_file');"><i class="fa fa-check"></i> Delete File</button></td>
 									</tr>
 								@endforeach
 							@else
-								<tr id="categories-list">
-									<td colspan="6">
+								<tr>
+									<td colspan="7">
 										<div class="alert alert-danger alert-dismissable">
 											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
 												&times;
@@ -144,6 +150,8 @@
 		function postData(id, data) {
 			if (data == 'restore_file') location.href = "/dms/file_restore/" + id;
 			else if (data == 'restore_folder') location.href = "/dms/folder_restore/" + id;
+			else if (data == 'delete_folder') location.href = "/dms/folder_delete/" + id;
+			else if (data == 'delete_file') location.href = "/dms/file_delete/" + id;
 		}
 		$(function () {
 			//Tooltip

@@ -26,42 +26,36 @@
                 <div class="box-body">
 					<div style="max-height: 400px; overflow-y: scroll;">
 						<table class="table table-striped table-bordered">
-                                <tr>
-                                    <td class="caption"><b>Name</b></td>
-                                    <td>{{ (!empty($folder->folder_name)) ?  $folder->folder_name : ''}}</td>
-                                    <td class="caption"><b>Responsible Person</b></td>
-                                    <td>{{ (!empty($folder->employee->first_name)) ?  $folder->employee->first_name." ".$folder->employee->surname : ''}}</td>
-                                </tr>
-								<tr>
-                                    <td class="caption"><b>Visibility</b></td>
-                                    <td>{{ (!empty($folder->visibility)) && $folder->visibility == 1 ?  'Private' : 'All Employees'}}</td>
-                                    <td class="caption"><b></b></td>
-                                    <td></td>
-                                </tr>
-								<tr>
-                                    <td class="caption">Status</td>
-                                    <td>{{ (!empty($folder->status)) && $folder->status == 1 ?  'Active' : 'Inactive'}}</td>
-									<td class="caption"><b>Division</b></td>
-                                    <td>{{ (!empty($folder->division->name)) ?  $folder->division->name : ''}}</td>
-                                </tr>
-								<tr>
-                                    <td class="caption"><b>Department</b></td>
-                                    <td>{{ (!empty($folder->department->name)) ?  $folder->department->name : ''}}</td>
-                                    <td class="caption"><b>Section</b></td>
-                                    <td>{{ (!empty($folder->section->name)) ?  $folder->section->name : ''}}</td>
-                                </tr>
-								<tr>
-                                    <td class="caption"><b>Max Size</b></td>
-                                    <td>{{ (!empty($folder->size)) ?  $folder->size : ''}} MB</td>
-                                    <td class="caption"><b>Current Size</b></td>
-                                    <td>{{ (!empty($folder->total_size)) ?  $folder->total_size : ''}}</td>
-                                </tr>
-								<tr>
-                                    <td class="caption"><b>Deleted</b></td>
-                                    <td>{{ (!empty($folder->deleted)) ?  'Yes' : 'No'}}</td>
-                                    <td class="caption"><b></b></td>
-                                    <td></td>
-                                </tr>
+							<tr>
+								<td class="caption"><b>Name</b></td>
+								<td>{{ (!empty($file->document_name)) ?  $file->document_name : ''}}</td>
+								<td class="caption"><b>Responsible Person</b></td>
+								<td>{{ (!empty($file->employee->first_name)) ?  $file->employee->first_name." ".$file->employee->surname : ''}}</td>
+							</tr>
+							<tr>
+								<td class="caption"><b>Visibility</b></td>
+								<td>{{ (!empty($file->visibility)) && $file->visibility == 1 ?  'Private' : 'All Employees'}}</td>
+								<td class="caption"><b>Description</b></td>
+								<td>{{ (!empty($file->description)) ?  $file->description : ''}}</td>
+							</tr>
+							<tr>
+								<td class="caption"><b>Status</b></td>
+								<td>{{ (!empty($file->status)) && $file->status == 1 ?  'Active' : 'Inactive'}}</td>
+								<td class="caption"><b>Division</b></td>
+								<td>{{ (!empty($folder->division->name)) ?  $folder->division->name : ''}}</td>
+							</tr>
+							<tr>
+								<td class="caption"><b>Department</b></td>
+								<td>{{ (!empty($folder->department->name)) ?  $folder->department->name : ''}}</td>
+								<td class="caption"><b>Section</b></td>
+								<td>{{ (!empty($folder->section->name)) ?  $folder->section->name : ''}}</td>
+							</tr>
+							<tr>
+								<td class="caption"><b>Version</b></td>
+								<td>{{ (!empty($file->current_version)) ?  $file->current_version : ''}} MB</td>
+								<td class="caption"><b>Deleted</b></td>
+								<td>{{ (!empty($file->deleted)) ?  'Yes' : 'No'}}</td>
+							</tr>
                         </table>
 					</div>
                     <!--   </div> -->
@@ -69,16 +63,11 @@
                     <div class="box-footer">
 						 <button type="button" class="btn btn-default pull-left" id="back_button"><i class="fa fa-arrow-left"></i> Back</button>
                         <button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
-                                data-target="#edit-folder-modal"data-id="{{ $folder->id }}"
-                            data-division_level_5="{{$folder->division_5 }}"
-                            data-division_level_4="{{ $folder->division_4 }}"
-                            data-division_level_3="{{ $folder->division_3 }}"
-                            data-division_level_2="{{ $folder->division_2 }}"
-                            data-division_level_1="{{ $folder->division_1 }}"
-                            data-size="{{ $folder->size }}"
-                            data-visibility="{{ $folder->visibility }}"
-                            data-folder_name="{{ $folder->folder_name }}"
-                            data-responsable_person="{{ $folder->responsable_person}}">Edit Details
+                                data-target="#edit-file-modal"data-id="{{ $file->id }}"
+                            data-document_name="{{ $file->document_name }}"
+                            data-visibility="{{ $file->visibility }}"
+                            data-description="{{ $file->description }}"
+                            data-current_version="{{ $file->current_version}}">Edit Details
                         </button>
 						&nbsp; 
 						<!-- <button type="button" id="cat_module" class="btn btn-primary pull-left" data-toggle="modal"
@@ -90,7 +79,7 @@
 						<button type="button" id="cat_module" class="btn btn-primary pull-left" data-toggle="modal"
                                 onclick="postData({{$folder->id}}, 'user_access');">User Access
                         </button>&nbsp; -->
-						@if (empty($folder->deleted)) 
+						@if (empty($file->deleted)) 
 							<button type="button" id="cat_module" class="btn btn-danger pull-right" data-toggle="modal"
 									data-target="#delete-folder-warning-modal">Delete
 							</button>
@@ -98,9 +87,9 @@
                     </div>
                 </div>
             </div>
-			@include('dms.partials.edit_folder_modal')
-			@if (!empty($folder))
-                @include('dms.warnings.delete_folder_action', ['modal_title' => 'Delete Folder', 'modal_content' => 'Are you sure you want to delete this folder ? This action cannot be undone.'])
+			@include('dms.partials.edit_file_modal')
+			@if (empty($file->deleted))
+                @include('dms.warnings.delete_file_action', ['modal_title' => 'Delete File', 'modal_content' => 'Are you sure you want to delete this file ? The file will be moved to the recycle bin.'])
             @endif
         </div>
     </div>
@@ -135,16 +124,11 @@
 		$(function () {
 			//Cancel button click event
 			document.getElementById("back_button").onclick = function () {
-				location.href = "/dms/folder/view/{{$folder->parent_id}}" 
+				location.href = "/dms/folder/view/{{$file->folder_id}}" 
 			};
 			//Tooltip
 			$('[data-toggle="tooltip"]').tooltip();
-			//Cancel button click event
-			document.getElementById("back_button").onclick = function () {
-				if ("{{$folder->parent_id}}" === "")
-					location.href = "/dms/folders";
-				else if ("{{$folder->parent_id}}" !== "") location.href = "/dms/folder/view/{{$folder->parent_id}}" 
-			};
+			
 			$('[data-toggle="tooltip"]').tooltip();
 
 			//Vertically center modals on page
@@ -174,43 +158,31 @@
 			//Post perk form to server using ajax (add)
 			
 			var folderID;
-            $('#edit-folder-modal').on('show.bs.modal', function (e) {
+            $('#edit-file-modal').on('show.bs.modal', function (e) {
                 var btnEdit = $(e.relatedTarget);
                 if (parseInt(btnEdit.data('id')) > 0) {
-                    folderID = btnEdit.data('id');
+                    fileID = btnEdit.data('id');
                 }
-                var division_level_5 = btnEdit.data('division_level_5');
-				//console.log('gets here: ' + division_level_5);
-                var division_level_4 = btnEdit.data('division_level_4');
-                var division_level_3 = btnEdit.data('division_level_3');
-                var division_level_2 = btnEdit.data('division_level_2');
-                var division_level_1 = btnEdit.data('division_level_1');
                 var visibility = btnEdit.data('visibility');
-                var responsable_person = btnEdit.data('responsable_person');
-                var folder_name = btnEdit.data('folder_name');
-                var size = btnEdit.data('size');
-
+                var document_name = btnEdit.data('document_name');
+                var description = btnEdit.data('description');
+                var current_version = btnEdit.data('current_version');
+				console.log(description);
                 var modal = $(this);
-                modal.find('#status').val(status);
-                modal.find('#division_level_5').val(division_level_5);
-                modal.find('#division_level_4').val(division_level_4);
-                modal.find('#division_level_3').val(division_level_3);
-                modal.find('#division_level_2').val(division_level_2);
-                modal.find('#division_level_1').val(division_level_1);
-                modal.find('#responsable_person').val(responsable_person);
+                modal.find('#document_name').val(document_name);
+                modal.find('#description').val(description);
+                modal.find('#current_version').val(current_version);
                 modal.find('#visibility').val(visibility);
-                modal.find('#folder_name').val(folder_name);
-                modal.find('#size').val(size);
             });
 
-            $('#edit_folder').on('click', function () {
-                var strUrl = '/dms/edit_folder_details/' + folderID;
-                var formName = 'edit-folder-form';
-                var modalID = 'edit-folder-modal';
+            $('#edit_file').on('click', function () {
+                var strUrl = '/dms/edit_file_details/' + fileID;
+                var formName = 'edit-file-form';
+                var modalID = 'edit-file-modal';
                 var submitBtnID = 'edit_folder';
-                var redirectUrl = '/dms/folder_management/{{ $folder->id }}';
+                var redirectUrl = '/dms/file_management/{{ $file->id }}';
                 var successMsgTitle = 'Changes Saved!';
-                var successMsg = 'The Folder details has been updated successfully.';
+                var successMsg = 'File details has been updated successfully.';
                 var Method = 'PATCH';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
             });

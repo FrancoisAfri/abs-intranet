@@ -11,6 +11,7 @@ use App\DMSGroupAccess;
 use App\DMSUserAccess;
 use App\DmsFiles;
 use App\Mail\DmsUserAccessRequest;
+use App\Mail\DMSApprovalRequest;
 use App\DmsFilesVersions;
 use App\DivisionLevel;
 use Carbon\Carbon;
@@ -220,6 +221,7 @@ class DMSGrantAccessController extends Controller
 		$userAccess->folder_id = !empty($userData['folder_id_usr']) ? $userData['folder_id_usr']: 0;
 		$userAccess->file_id = !empty($userData['file_id_usr']) ? $userData['file_id_usr']: 0;
 		$userAccess->expiry_date = !empty($userData['expiry_usr_date']) ? $userData['expiry_usr_date']: 0;
+		$userAccess->date_requested = time();
 		$userAccess->status = 2;
 		$userAccess->save();
 		
@@ -242,6 +244,25 @@ class DMSGrantAccessController extends Controller
 		
 		AuditReportsController::store('Document Management', 'User Requested Access', "Granted By User", 0);
         return response()->json();
+    }
+	// get request approval
+	public function dmsRequest() 
+	{
+		$requests = DMSUserAccess::where('status', 2)->get();
+		//return $requests;
+		// user folder
+		$userAccessFolders = DMSUserAccess::where('status', 2)->where('file_id', '<', 1)->orderBy('expiry_date', 'asc')->get();
+        if (!empty($userAccessFolders)) 
+			$userAccessFolders = $userAccessFolders->load('employee','userAdmin','userFolder');
+		// user file
+		$userAccessFiles = DMSUserAccess::where('status', 2)->where('folder_id', '<', 1)->orderBy('expiry_date', 'asc')->get();
+		if (!empty($userAccessFiles)) 
+			$userAccessFiles = $userAccessFiles->load('employee','userAdmin','userFile');
+		
+		$data['userAccessFolders'] = $userAccessFolders;
+		$data['userAccessFiles'] = $userAccessFiles;
+		AuditReportsController::store('Document Management', "user Request Access", "Accessed by User", 0);
+		return view('dms.grant_access_request')->with($data);
     }
 	// company active
 	public function companyAct(DMSGoupAdmin $group) 
@@ -319,5 +340,47 @@ class DMSGrantAccessController extends Controller
     public function destroy($id)
     {
         //
+    }
+	
+	// user request access 
+	public function rejectRequest(Request $request, DMSUserAccess $requests)
+    {
+        $this->validate($request, [      
+            'description' => 'required',			
+        ]);
+        $userData = $request->all();
+        unset($userData['_token']);
+		
+		$description = $userData['description'];
+		
+		$requests->date_rejected = time();
+		$requests->status = 1;
+		$requests->update();
+		
+		/// send email to admin for aproval
+		$admin = $requests->load('employee');
+		if (!empty($admin->employee->id))
+			Mail::to("$admin->employee->email")->send(new DMSApprovalRequest($admin->employee->first_name, $description));
+		
+		AuditReportsController::store('Document Management', 'User Requested Access Rejected', "Rejected By User", 0);
+        return response()->json();
+    }
+	// user request access 
+	public function approveRequest(DMSUserAccess $requests)
+    {
+		$requests->date_approved = time();
+		$requests->status = 1;
+		$requests->update();
+		
+		/// send email to admin for aproval
+
+		// get admin details
+		$admin = $requests->load('employee');
+
+		if (!empty($admin->employee->id))
+			Mail::to("$admin->employee->email")->send(new DMSApprovalRequest($admin->employee->first_name, ''));
+		
+		AuditReportsController::store('Document Management', 'User Requested Access Approved', "Granted By User", 0);
+        return response()->json();
     }
 }
