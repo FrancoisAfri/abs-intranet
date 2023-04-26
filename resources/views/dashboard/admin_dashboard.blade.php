@@ -129,8 +129,7 @@
 							<thead>
 								<tr>
 									<th>Employee</th>
-									<th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Leave
-										Anniversary Date
+									<th style="text-align: right;"><i class="material-icons">account_balance_wallet</i>Anniversary Date
 									</th>
 									<th></th>
 								</tr>
