@@ -218,12 +218,39 @@ class  LeaveSetupController extends Controller
      */
     public function Adjust(Request $request, HRPerson $person, LeaveType $lev)
     {
-        $this->validate($request, [
+		/// Validator
+		$validator = Validator::make($request->all(), [
             'division_level_5' => 'required',
             'leave_types_id' => 'required',
             'adjust_days' => 'required',
+            'password_update' => 'required',
         ]);
-
+		$validator->after(function ($validator) use ($request) {
+            
+            $password_update = $request->input('password_update');
+			if (!empty($password_update))
+			{
+				//// get password
+				$leave_configuration = leave_configuration::first();
+				if (!empty($leave_configuration->password_update))
+				{
+					if ($leave_configuration->password_update != $password_update)
+						$validator->errors()->add('password_update', "This action is password protected. please enter the correct password");
+				}
+				else
+					$validator->errors()->add('password_update', "This action is password protected. please ask your administrator to setup a password");
+			}	
+			else 
+			{
+                $validator->errors()->add('password_update', "This action is password protected. please enter the password");
+            }
+        });
+        if ($validator->fails()) {
+            return redirect("/leave/Allocate_leave_types")
+                ->withErrors($validator)
+                ->withInput();
+        }
+		
         $allData = $request->all();
         unset($allData['_token']);
         $leveTyp = $allData['leave_types_id'];
@@ -278,12 +305,38 @@ class  LeaveSetupController extends Controller
      */
     public function resetLeave(Request $request, LeaveType $lev)
     {
-
-        $this->validate($request, [
+		/// Validator
+		$validator = Validator::make($request->all(), [
             'division_level_5' => 'required',
             'leave_types_id' => 'required',
             'resert_days' => 'required',
+            'password_update' => 'required',
         ]);
+		$validator->after(function ($validator) use ($request) {
+            
+            $password_update = $request->input('password_update');
+			if (!empty($password_update))
+			{
+				//// get password
+				$leave_configuration = leave_configuration::first();
+				if (!empty($leave_configuration->password_update))
+				{
+					if ($leave_configuration->password_update != $password_update)
+						$validator->errors()->add('password_update', "This action is password protected. please enter the correct password");
+				}
+				else
+					$validator->errors()->add('password_update', "This action is password protected. please ask your administrator to setup a password");
+			}	
+			else 
+			{
+                $validator->errors()->add('password_update', "This action is password protected. please enter the password");
+            }
+        });
+        if ($validator->fails()) {
+            return redirect("/leave/Allocate_leave_types")
+                ->withErrors($validator)
+                ->withInput();
+        }
         $resertData = $request->all();
         unset($resertData['_token']);
         //return $resertData;
@@ -329,11 +382,37 @@ class  LeaveSetupController extends Controller
      */
     public function allocate(Request $request, LeaveType $lev)
     {
-
-        $this->validate($request, [
+		/// Validator
+		$validator = Validator::make($request->all(), [
             'division_level_5' => 'required',
             'leave_types_id' => 'required',
+            'password_update' => 'required',
         ]);
+		$validator->after(function ($validator) use ($request) {
+            
+            $password_update = $request->input('password_update');
+			if (!empty($password_update))
+			{
+				//// get password
+				$leave_configuration = leave_configuration::first();
+				if (!empty($leave_configuration->password_update))
+				{
+					if ($leave_configuration->password_update != $password_update)
+						$validator->errors()->add('password_update', "This action is password protected. please enter the correct password");
+				}
+				else
+					$validator->errors()->add('password_update', "This action is password protected. please ask your administrator to setup a password");
+			}	
+			else 
+			{
+                $validator->errors()->add('password_update', "This action is password protected. please enter the password");
+            }
+        });
+        if ($validator->fails()) {
+            return redirect("/leave/Allocate_leave_types")
+                ->withErrors($validator)
+                ->withInput();
+        }
         //hr_person_id
         $allData = $request->all();
         unset($allData['_token']);

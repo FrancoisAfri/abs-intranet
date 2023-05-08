@@ -18,6 +18,6 @@ class leave_configuration extends Model
         'notify_employee_about_applications_submitted_on_their_behalf', 'annual_negative_days',
         'sick_negative_days', 'number_of_days_annual', 'number_of_days_sick', 'allow_sick_negative_days',
         'allow_annual_negative_days', 'mumber_of_days_until_escalation', 'number_of_days_to_remind_manager',
-        'hr_person_id' ,'ers_token_number' ,'number_of_days_before_automate_application'
+        'hr_person_id' ,'ers_token_number' ,'password_update' ,'number_of_days_before_automate_application'
     ];
 }

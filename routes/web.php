@@ -347,6 +347,8 @@ Route::post('leave/application/hours', 'LeaveApplicationController@hours');
 Route::post('leave/application/day', 'LeaveApplicationController@day');
 Route::get('leave/bulk-appliction', 'LeaveAutomaticApplication@index');
 Route::post('leave/bulk-leave-application', 'LeaveAutomaticApplication@store');
+Route::get('leave/bulk-appliction-delete', 'LeaveAutomaticApplication@deleteApp');
+Route::post('leave/bulk-delete-application', 'LeaveAutomaticApplication@delete');
 
 //# leavesetup Controller
 Route::get('leave/types', 'LeaveSetupController@setuptypes');

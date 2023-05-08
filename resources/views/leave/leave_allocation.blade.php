@@ -26,8 +26,7 @@
                     <div class="box-body" id="view_users">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
-                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;
-                                </button>
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                                 <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
                                 <ul>
                                     @foreach ($errors->all() as $error)
@@ -130,6 +129,19 @@
                                     </div>
                                     <input type="text" class="form-control" id="resert_days" name="resert_days"
                                            value="{{ old('resert_days') }}" placeholder="Enter number of days">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group {{ $errors->has('password_update') ? ' has-error' : '' }}">
+                            <label for="days" class="col-sm-2 control-label">Transaction Passport</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user-circle"></i>
+                                    </div>
+
+                                    <input type="text" class="form-control" id="password_update" name="password_update"
+                                           value="{{ old('password_update') }}" placeholder="Enter Password">
                                 </div>
                             </div>
                         </div>

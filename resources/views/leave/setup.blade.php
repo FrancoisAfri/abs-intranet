@@ -565,6 +565,23 @@
                                 </td>
                             </tr>
                         </div>
+						<div class="form-group">
+                            <tr>
+                                <td>Update Transaction Password</td>
+                                <td>
+                                    <label for="path" class="control-label"></label>
+                                    <div>
+                                        <input type="password" class="form-control" id="password_update"
+                                               name="password_update"
+                                               value="{{ !empty($leave_configuration->password_update) ?
+                                            $leave_configuration->password_update : '' }}"
+                                               placeholder="Password">
+
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </div>
                     </table>
                 </div>
                 <div class="modal-footer">
