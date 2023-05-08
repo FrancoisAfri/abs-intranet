@@ -372,7 +372,7 @@ class LeaveAutomaticApplication extends Controller
 
         Alert::toast('Bulk applications were successfully added ', 'success');
 		 
-        return back()->with('success_application', "Bulk applications were successfully added.");
+        return back()->with('success_application', "The transaction were successful.");
 
     }
 }

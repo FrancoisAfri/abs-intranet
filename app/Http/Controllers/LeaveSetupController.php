@@ -223,27 +223,30 @@ class  LeaveSetupController extends Controller
             'division_level_5' => 'required',
             'leave_types_id' => 'required',
             'adjust_days' => 'required',
-            'password_update' => 'required',
         ]);
 		$validator->after(function ($validator) use ($request) {
-            
+           
             $password_update = $request->input('password_update');
-			if (!empty($password_update))
+            $hr_person_id = !empty($request->input('hr_person_id')) ? $request->input('hr_person_id') : '';
+			if (empty($hr_person_id ))
 			{
-				//// get password
-				$leave_configuration = leave_configuration::first();
-				if (!empty($leave_configuration->password_update))
+				if (!empty($password_update))
 				{
-					if ($leave_configuration->password_update != $password_update)
-						$validator->errors()->add('password_update', "This action is password protected. please enter the correct password");
+					//// get password
+					$leave_configuration = leave_configuration::first();
+					if (!empty($leave_configuration->password_update))
+					{
+						if ($leave_configuration->password_update != $password_update)
+							$validator->errors()->add('password_update', "This action is password protected. please enter the correct password");
+					}
+					else
+						$validator->errors()->add('password_update', "This action is password protected. please ask your administrator to setup a password");
+				}	
+				else 
+				{
+					$validator->errors()->add('password_update', "This action is password protected. please enter the password");
 				}
-				else
-					$validator->errors()->add('password_update', "This action is password protected. please ask your administrator to setup a password");
-			}	
-			else 
-			{
-                $validator->errors()->add('password_update', "This action is password protected. please enter the password");
-            }
+			}
         });
         if ($validator->fails()) {
             return redirect("/leave/Allocate_leave_types")
@@ -310,27 +313,30 @@ class  LeaveSetupController extends Controller
             'division_level_5' => 'required',
             'leave_types_id' => 'required',
             'resert_days' => 'required',
-            'password_update' => 'required',
         ]);
 		$validator->after(function ($validator) use ($request) {
             
             $password_update = $request->input('password_update');
-			if (!empty($password_update))
+			$hr_person_id = !empty($request->input('hr_person_id')) ? $request->input('hr_person_id') : '';
+			if (empty($hr_person_id))
 			{
-				//// get password
-				$leave_configuration = leave_configuration::first();
-				if (!empty($leave_configuration->password_update))
+				if (!empty($password_update))
 				{
-					if ($leave_configuration->password_update != $password_update)
-						$validator->errors()->add('password_update', "This action is password protected. please enter the correct password");
+					//// get password
+					$leave_configuration = leave_configuration::first();
+					if (!empty($leave_configuration->password_update))
+					{
+						if ($leave_configuration->password_update != $password_update)
+							$validator->errors()->add('password_update', "This action is password protected. please enter the correct password");
+					}
+					else
+						$validator->errors()->add('password_update', "This action is password protected. please ask your administrator to setup a password");
+				}	
+				else 
+				{
+					$validator->errors()->add('password_update', "This action is password protected. please enter the password");
 				}
-				else
-					$validator->errors()->add('password_update', "This action is password protected. please ask your administrator to setup a password");
-			}	
-			else 
-			{
-                $validator->errors()->add('password_update', "This action is password protected. please enter the password");
-            }
+			}
         });
         if ($validator->fails()) {
             return redirect("/leave/Allocate_leave_types")
@@ -386,27 +392,30 @@ class  LeaveSetupController extends Controller
 		$validator = Validator::make($request->all(), [
             'division_level_5' => 'required',
             'leave_types_id' => 'required',
-            'password_update' => 'required',
         ]);
 		$validator->after(function ($validator) use ($request) {
             
             $password_update = $request->input('password_update');
-			if (!empty($password_update))
+			$hr_person_id = !empty($request->input('hr_person_id')) ? $request->input('hr_person_id') : '';
+			if (empty($hr_person_id ))
 			{
-				//// get password
-				$leave_configuration = leave_configuration::first();
-				if (!empty($leave_configuration->password_update))
+				if (!empty($password_update))
 				{
-					if ($leave_configuration->password_update != $password_update)
-						$validator->errors()->add('password_update', "This action is password protected. please enter the correct password");
+					//// get password
+					$leave_configuration = leave_configuration::first();
+					if (!empty($leave_configuration->password_update))
+					{
+						if ($leave_configuration->password_update != $password_update)
+							$validator->errors()->add('password_update', "This action is password protected. please enter the correct password");
+					}
+					else
+						$validator->errors()->add('password_update', "This action is password protected. please ask your administrator to setup a password");
+				}	
+				else 
+				{
+					$validator->errors()->add('password_update', "This action is password protected. please enter the password");
 				}
-				else
-					$validator->errors()->add('password_update', "This action is password protected. please ask your administrator to setup a password");
-			}	
-			else 
-			{
-                $validator->errors()->add('password_update', "This action is password protected. please enter the password");
-            }
+			}
         });
         if ($validator->fails()) {
             return redirect("/leave/Allocate_leave_types")
