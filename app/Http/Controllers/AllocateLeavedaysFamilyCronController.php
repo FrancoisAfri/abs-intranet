@@ -38,8 +38,9 @@ class AllocateLeavedaysFamilyCronController extends Controller {
         $familyLeaveTypeID = 2;
         $employees = HRPerson::where('status', 1)->get();
         foreach ($employees as $employee) {
+			
             if (!empty($employee->date_joined) && $employee->date_joined > 0) {
-				
+
 				$dateJoined = date("Y-m-d 00:00:00",$employee->date_joined);
 				//$dateJoined = date("2016-07-03 00:00:00");
 				$date = Carbon::parse($dateJoined);
@@ -55,7 +56,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                     //set family leave to 3 days
                     $leaveCredit = $this->getLeaveCredit($employee->id, $familyLeaveTypeID);
                     if ($leaveCredit) {
-                        $leaveCredit->leave_balance = 3 * 8;
+                        $leaveCredit->leave_balance = 24;
                         $leaveCredit->update();
                     }
                     else 
@@ -63,9 +64,10 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                         $leaveCredit = new leave_credit();
                         $leaveCredit->hr_id = $employee->id;
                         $leaveCredit->leave_type_id = $familyLeaveTypeID;
-                        $leaveCredit->leave_balance = 3 * 8;
+                        $leaveCredit->leave_balance = 24;
                         $leaveCredit->save();
                     }
+					LeaveHistoryAuditController::store('familly leave days allocation', 'familly leave days allocation', 0, 24, 24, $familyLeaveTypeID, $employee->id,1,0);
                 }
             }
         }
@@ -80,14 +82,17 @@ class AllocateLeavedaysFamilyCronController extends Controller {
             if (!empty($employee->date_joined) && $employee->date_joined > 0) {
                 $dateJoined = Carbon::createFromTimestamp($employee->date_joined);
                 $todayDate = Carbon::now();
-                //return $dateJoined . ' --- ' . $todayDate . ' --- ' . $dateJoined->diffInMonths($todayDate);
-                if ($dateJoined->diffInMonths($todayDate) > 6) {
+
+				if ($dateJoined->diffInMonths($todayDate) > 6) {
                     //give one day sick leave for every 26 weekdays
                     if (($dateJoined->diffInWeekdays($todayDate) >= 26) && ($dateJoined->diffInWeekdays($todayDate) % 26 == 0)) {
                         $leaveCredit = $this->getLeaveCredit($employee->id, SICK_LEAVE_ID);
                         if ($leaveCredit) {
-                            $leaveCredit->leave_balance += 8;
+							$prev = !empty($leaveCredit->leave_balance) ? $leaveCredit->leave_balance: 0;
+                            $leaveCredit->leave_balance = $prev + 8;
                             $leaveCredit->update();
+							// update leave audit
+							LeaveHistoryAuditController::store('Sick leave days allocation', 'Sick leave days allocation', $prev, 8, $prev + 8, SICK_LEAVE_ID, $employee->id,1,0);
                         }
                         else {
                             $leaveCredit = new leave_credit();
@@ -95,7 +100,9 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                             $leaveCredit->leave_type_id = SICK_LEAVE_ID;
                             $leaveCredit->leave_balance = 8;
                             $leaveCredit->save();
+							LeaveHistoryAuditController::store('Sick leave days allocation', 'Sick leave days allocation', 0, 8, 8, SICK_LEAVE_ID, $employee->id,1,0);
                         }
+						
                     }
                 }
                 elseif ($dateJoined->diffInMonths($todayDate) < 6 && $dateJoined->diffInYears($todayDate) < 3) {
@@ -107,15 +114,19 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                         $remLeaveDaysInCycle = TOTAL_SICK_LEAVE_DAYS - (intdiv($dateJoined->diffInWeekdays($yesterday), 26));
                         $leaveCredit = $this->getLeaveCredit($employee->id, SICK_LEAVE_ID);
                         if ($leaveCredit) {
+							$previous = $leaveCredit->leave_balance;
                             $leaveCredit->leave_balance += ($remLeaveDaysInCycle * 8);
                             $leaveCredit->update();
+							$current = $previous + ($remLeaveDaysInCycle * 8);
+							LeaveHistoryAuditController::store('Sick leave days allocation', 'Sick leave days allocation', $previous, ($remLeaveDaysInCycle * 8), $current, SICK_LEAVE_ID, $employee->id,1,0);
                         }
                         else {
                             $leaveCredit = new leave_credit();
                             $leaveCredit->hr_id = $employee->id;
                             $leaveCredit->leave_type_id = SICK_LEAVE_ID;
-                            $leaveCredit->leave_balance = ($remLeaveDaysInCycle * 8);
+                            $leaveCredit->leave_balance = 30;
                             $leaveCredit->save();
+							LeaveHistoryAuditController::store('Sick leave days allocation', 'Sick leave days allocation', 0, 30, 30, SICK_LEAVE_ID, $employee->id,1,0);
                         }
                     }
                 }
@@ -167,6 +178,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 				$leaveCredit->leave_type_id = 9;
 				$leaveCredit->leave_balance = (3 * 8);
 				$leaveCredit->save();
+				LeaveHistoryAuditController::store('Paternity leave days allocation', 'Paternity leave days allocation', 0, 24, 24, 9, $employee->id,1,0);
 			}
         }
     }
@@ -192,7 +204,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 					$leaveCredit->leave_balance = (3 * 8);
 					$leaveCredit->save();
 				}
-
+				LeaveHistoryAuditController::store('Family leave days allocation', 'Family leave days allocation', 0, 24, 24, 2, $employee->id,1,0);
             }
         }
     }
@@ -221,6 +233,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 						$leaveCredit->leave_balance = (30 * 8);
 						$leaveCredit->save();
 					}
+					LeaveHistoryAuditController::store('Sick leave days allocation', 'Sick leave days allocation', 0, 24, 24, 5, $employee->id,1,0);
 				}
 			}
         }
@@ -247,7 +260,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 					$leaveCredit->leave_balance = (3 * 8);
 					$leaveCredit->save();
 				}
-
+				LeaveHistoryAuditController::store('Paternity leave days allocation', 'Paternity leave days allocation', 0, 24, 24, 9, $employee->id,1,0);
             }
         }
     }

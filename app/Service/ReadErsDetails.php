@@ -285,7 +285,7 @@ class ReadErsDetails
                         1,
                         $credit['leave_balance'],
                         1,
-                        0,
+                        $absent->hr_id,
                         1,
                         0
                     );

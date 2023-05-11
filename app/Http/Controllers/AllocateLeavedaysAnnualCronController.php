@@ -34,7 +34,9 @@ class AllocateLeavedaysAnnualCronController extends Controller
      */
     public function execute()
     {
+		
         $users = HRPerson::where('status', 1)->pluck('id');
+		
         foreach ($users as $empID) {
 
             $AnnualLeaveTypeID = 1;
@@ -47,7 +49,9 @@ class AllocateLeavedaysAnnualCronController extends Controller
                 ]
             )
                 ->first();
-            if (empty($allocation)) {
+				
+            if (empty($allocation)) 
+			{
 
                 $customDays = $days = $maximum = 0;
                 // get Custom leave if there is any
@@ -81,7 +85,6 @@ class AllocateLeavedaysAnnualCronController extends Controller
 
                 }
 
-
                 if (!empty($customDays)) $days = $customDays;
                 if (!empty($days)) {
                     $credits = leave_credit::where(
@@ -91,16 +94,15 @@ class AllocateLeavedaysAnnualCronController extends Controller
                         ]
                     )->first();
 
-
                     if (!empty($credits)) {
-                        $previousBalance = !empty($credits['leave_balance']) ? $credits['leave_balance'] : 0;
-                        $currentBalance = $previousBalance + $days;
+						
+                        $previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
+						$currentBalance = $previousBalance + $days;
                         $currentBalance = $currentBalance;
                         if ($maximum > $currentBalance) {
                             $credits->leave_balance = $currentBalance;
                             $credits->update();
-
-                            LeaveHistoryAuditController::store('leave days allocation', 'leave days allocation', $previousBalance, $days, $currentBalance, $AnnualLeaveTypeID, $empID);
+                            LeaveHistoryAuditController::store('leave days allocation', 'leave days allocation', $previousBalance, $days, $currentBalance, $AnnualLeaveTypeID, $empID,1,0);
                             //insert into allocation table
 
                             $leaveAllocation = LeaveAllocation::create(
@@ -116,7 +118,8 @@ class AllocateLeavedaysAnnualCronController extends Controller
                             );
 
                         }
-                    } else {
+                    } 
+					else {
                         $previousBalance = 0;
                         $currentBalance = $days;
 
@@ -128,7 +131,7 @@ class AllocateLeavedaysAnnualCronController extends Controller
                             ]
                         );
 
-                        LeaveHistoryAuditController::store('leave days allocation', 'leave days allocation', 0, $days, $currentBalance, $AnnualLeaveTypeID, $empID);
+                        LeaveHistoryAuditController::store('leave days allocation', 'leave days allocation', 0, $days, $currentBalance, $AnnualLeaveTypeID, $empID,1,0);
 
                         $leaveAllocation = LeaveAllocation::create(
                             [
