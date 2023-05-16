@@ -184,7 +184,7 @@ class DMSFoldersController extends Controller
 		$DmsFolders->save();
 		/// create folder
 		$response = Storage::makeDirectory("DMS Master File/$folderName");
-		AuditReportsController::store('Document Management', 'New Folder Created', "Accessed By User", 0);
+		AuditReportsController::store('Document Management', "New Folder Created: $folderName", "Accessed By User", 0);
         return response()->json();
     }
 	// this function will store sub folders
@@ -245,7 +245,7 @@ class DMSFoldersController extends Controller
 				$DmsFile->file_name = $fileName;
 				$DmsFile->path = $filePath;
 				$DmsFile->file_extension = $fileExt;
-				$DmsFile->current_version = "Version ".!empty($fileData['visibility']) ? $fileData['visibility'] : 1;
+				$DmsFile->current_version = "Version ".!empty($fileData['current_version']) ? $fileData['current_version'] : 1;
 				$DmsFile->status = 1;
 				$DmsFile->description = !empty($fileData['description']) ? $fileData['description'] : '';
 				$DmsFile->visibility = !empty($fileData['visibility']) ? $fileData['visibility'] : '';
@@ -256,11 +256,56 @@ class DMSFoldersController extends Controller
 				$DmsFileVersion->file_name = $fileName;
 				$DmsFileVersion->path = $filePath;
 				$DmsFileVersion->status = 1;
-				$DmsFileVersion->version_number = !empty($fileData['visibility']) ? $fileData['visibility'] : 1;;
+				$DmsFileVersion->version_number = !empty($fileData['current_version']) ? $fileData['current_version'] : 1;
             }
         }
 		
-		AuditReportsController::store('Document Management', "New File: $DmsFile->document_name Added to $folder->id", "Accessed By User", 0);
+		AuditReportsController::store('Document Management', "New File: $DmsFile->document_name Added to $folder->folder_name", "Accessed By User", 0);
+        return response()->json();
+    }
+	// this function will store files into a folder
+	public function storeFileAccess(Request $request, DmsFolders $folder)
+    {
+        $this->validate($request, [
+            'document_name' => 'required',		
+        ]);
+        $fileData = $request->all();
+        unset($fileData['_token']);
+		
+		$filePath = $folder->path."/";
+		$docName =  $fileData['document_name'];
+		$docName =  str_replace(" ","_",$docName);
+		
+		//Upload supporting document
+        if ($request->hasFile('documents')) {
+            $fileExt = $request->file('documents')->extension();
+            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'xlsx']) && $request->file('documents')->isValid()) {
+                $fileName = time()."_".$docName.".". $fileExt;
+                $request->file('documents')->storeAs($folder->path, $fileName);
+                //Add file name in the table
+                $DmsFile = new DmsFiles();
+				$DmsFile->folder_id = $folder->id;
+				$DmsFile->document_name = $fileData['document_name'];
+				$DmsFile->responsable_person = $folder->responsable_person;
+				$DmsFile->file_name = $fileName;
+				$DmsFile->path = $filePath;
+				$DmsFile->file_extension = $fileExt;
+				$DmsFile->current_version = "Version ".!empty($fileData['current_version']) ? $fileData['current_version'] : 1;
+				$DmsFile->status = 1;
+				$DmsFile->description = !empty($fileData['description']) ? $fileData['description'] : '';
+				$DmsFile->visibility = $folder->visibility;
+                $DmsFile->save();
+				// Save file version
+				$DmsFileVersion  = new DmsFilesVersions();
+				$DmsFileVersion->file_id = $DmsFile->id;
+				$DmsFileVersion->file_name = $fileName;
+				$DmsFileVersion->path = $filePath;
+				$DmsFileVersion->status = 1;
+				$DmsFileVersion->version_number = !empty($fileData['current_version']) ? $fileData['current_version'] : 1;
+            }
+        }
+		
+		AuditReportsController::store('Document Management', "New File: $DmsFile->document_name Added to $folder->folder_name", "Accessed By User", 0);
         return response()->json();
     }
 	// manage folders

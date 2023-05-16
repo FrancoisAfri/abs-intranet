@@ -41,7 +41,7 @@
 								<th>Division</th>
 								<th>Administrator</th>
 							</tr>
-							@if (count($generalFolders) > 0)
+							@if (!empty($generalFolders))
 								@foreach($generalFolders as $folder)
 								   <tr>
 										<td style="text-align: center"><a href="{{ '/dms/folder/access/' . $folder->id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
@@ -64,7 +64,7 @@
 								<th>Division</th>
 								<th>Administrator</th>
 							</tr>
-							@if (count($generalFiles) > 0)
+							@if (!empty($generalFiles))
 								@foreach($generalFiles as $file)
 									<tr>
 										<td style="text-align: center">
@@ -120,10 +120,10 @@
 								<th>Administrator</th>
 								<th>Expiry Date</th>
 							</tr>
-							@if (count($companyAccessFolders) > 0)
+							@if (!empty($companyAccessFolders))
 								@foreach($companyAccessFolders as $companyAccessFolder)
 								   <tr>
-										<td style="text-align: center"><a href="{{ '/dms/folder/access/' . $companyAccessFolder->id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
+										<td style="text-align: center"><a href="{{ '/dms/folder/access/' . $companyAccessFolder->folder_id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
 												 alt="Doc Image"
 												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a></td>
 										<td>{{ (!empty($companyAccessFolder->companyFolder->folder_name)) ?  $companyAccessFolder->companyFolder->folder_name : ''}} </td>
@@ -145,7 +145,7 @@
 								<th>Administrator</th>
 								<th>Expiry Date</th>
 							</tr>
-							@if (count($companyAccessFiles) > 0)
+							@if (!empty($companyAccessFiles))
 								@foreach($companyAccessFiles as $companyAccessFile)
 									<tr>
 										<td style="text-align: center">
@@ -199,10 +199,10 @@
 								<th>Administrator</th>
 								<th>Expiry Date</th>
 							</tr>
-							@if (count($groupAccessFolders) > 0)
+							@if (!empty($groupAccessFolders))
 								@foreach($groupAccessFolders as $groupAccessFolder)
 								   <tr>
-										<td style="text-align: center"><a href="{{ '/dms/folder/access/' . $groupAccessFolder->id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
+										<td style="text-align: center"><a href="{{ '/dms/folder/access/' . $groupAccessFolder->folder_id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
 												 alt="Doc Image"
 												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a></td>
 										<td>{{ (!empty($groupAccessFolder->groupFolder->folder_name)) ?  $groupAccessFolder->groupFolder->folder_name : ''}} </td>
@@ -223,7 +223,7 @@
 								<th>Administrator</th>
 								<th>Expiry Date</th>
 							</tr>
-							@if (count($groupAccessFiles) > 0)
+							@if (!empty($groupAccessFiles))
 								@foreach($groupAccessFiles as $groupAccessFile)
 									<tr>
 										<td style="text-align: center">
@@ -279,7 +279,7 @@
 							@if (!empty($userAccessFolders))
 								@foreach($userAccessFolders as $userAccessFolder)
 									<tr>
-										<td style="text-align: center"><a href="{{ '/dms/folder/access/' . $userAccessFolder->id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
+										<td style="text-align: center"><a href="{{ '/dms/folder/access/' . $userAccessFolder->folder_id}}" class="product-title"><img src="{{ !empty($folder_image) ? $folder_image : '' }}" class="img-circle"
 												 alt="Doc Image"
 												 style="width: 35px; height: 35px; border-radius: 50%; margin-right: 10px; margin-top: -2px;"></a></td>
 										<td>{{ !empty($userAccessFolder->userFolder->folder_name) ? $userAccessFolder->userFolder->folder_name : '' }}</td>
@@ -299,7 +299,7 @@
 								<th>Administrator</th>
 								<th>Expiry Date</th>
 							</tr>
-							@if (count($userAccessFiles) > 0)
+							@if (!empty($userAccessFiles))
 								@foreach($userAccessFiles as $userAccessFile)
 									<tr>
 										<td style="text-align: center">

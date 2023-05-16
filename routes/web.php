@@ -1434,6 +1434,7 @@ Route::post('dms/add_sub_folder/{folder}', 'DMSFoldersController@storeSubfolders
 Route::get('dms/folder/view/{folder}', 'DMSFoldersController@subfolders');
 Route::get('dms/folder/access/{folder}', 'DMSFoldersController@accessFolder');
 Route::post('dms/add_files/{folder}', 'DMSFoldersController@storeFile');
+Route::post('dms/add_files_folder/{folder}', 'DMSFoldersController@storeFileAccess');
 Route::get('dms/folder_management/{folder}', 'DMSFoldersController@manageFolder');
 Route::get('dms/file_management/{file}', 'DMSFoldersController@manageFile');
 Route::get('dms/folder/{folder}/delete', 'DMSFoldersController@destroy');

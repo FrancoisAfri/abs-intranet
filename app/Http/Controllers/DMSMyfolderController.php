@@ -80,7 +80,6 @@ class DMSMyfolderController extends Controller
 		// get group file id
 		$groupFileArray = array();
 		$groupFileArray = $this->getGroupFoldersID($employeeID,$today,2);
-		
 		// get user file id
 		$userFileArray = array();
 		$userFileArray = $this->getUserFoldersID($employeeID,$today,2);
@@ -107,9 +106,7 @@ class DMSMyfolderController extends Controller
 				->orderBy('document_name', 'asc')
 				->get();
 		$groups = DMSGoupAdmin::where('status',1)->orderBy('group_name', 'asc')->get();
-       
-		
-		//return $this->getCompanyFoldersID($employeeID,$today,1,$division_level_5);;
+       		
 		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->orderBy('surname', 'asc')->get();
 		$folder_image = Storage::disk('local')->url('DMS Image/folder_image.png');
@@ -119,6 +116,8 @@ class DMSMyfolderController extends Controller
         $data['breadcrumb'] = [
                 ['title' => 'Document Management', 'path' => '/dms/grant_access', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
         ];
+		//return $this->getGroupFolders($employeeID,$today,1);
+		//die('djdndjn');
         $data['active_mod'] = 'Document Management';
         $data['active_rib'] = 'My Folders';
         $data['division_levels'] = $divisionLevels;
@@ -227,42 +226,44 @@ class DMSMyfolderController extends Controller
 		{
 			$groupArray[] = $group;
 		}
-		
-		if ($type == 1)
+		if (count($groupArray) > 0)
 		{
-			// group folder
-			$groupAccessFolders = DMSGroupAccess::
+			if ($type == 1)
+			{
+				// group folder
+				$groupAccessFolders = DMSGroupAccess::
+										where('expiry_date', '>=', $today)
+										->where('file_id','<',1)
+										->Where(function ($query) use ($groupArray) {
+											if (!empty($groupArray)) {
+												$query->whereIn('group_id', $groupArray);
+											}
+										})
+										->orderBy('expiry_date', 'asc')
+										->get();
+				if ($groupAccessFolders) 
+					$groupAccessFolders = $groupAccessFolders->load('groupName','groupFolder');	
+				
+				return $groupAccessFolders;
+			}
+			else
+			{
+				// group file
+				$groupAccessFiles = DMSGroupAccess::
 									where('expiry_date', '>=', $today)
-									->where('file_id','<',1)
+									->where('folder_id','<',1)
 									->Where(function ($query) use ($groupArray) {
-										if (!empty($groupArray)) {
-											$query->whereIn('group_id', $groupArray);
-										}
-									})
+											if (!empty($groupArray)) {
+												$query->whereIn('group_id', $groupArray);
+											}
+										})
 									->orderBy('expiry_date', 'asc')
 									->get();
-			if ($groupAccessFolders) 
-				$groupAccessFolders = $groupAccessFolders->load('groupName','groupFolder');	
-			
-			return $groupAccessFolders;
-		}
-		else
-		{
-			// group file
-			$groupAccessFiles = DMSGroupAccess::
-								where('expiry_date', '>=', $today)
-								->where('folder_id','<',1)
-								->Where(function ($query) use ($groupArray) {
-										if (!empty($groupArray)) {
-											$query->whereIn('group_id', $groupArray);
-										}
-									})
-								->orderBy('expiry_date', 'asc')
-								->get();
-			if (!empty($groupAccessFiles))
-				$groupAccessFiles = $groupAccessFiles->load('groupName','groupAdmin','groupFile');
-			
-			return $groupAccessFiles;
+				if (!empty($groupAccessFiles))
+					$groupAccessFiles = $groupAccessFiles->load('groupName','groupAdmin','groupFile');
+				
+				return $groupAccessFiles;
+			}
 		}
 		
     }
@@ -359,9 +360,12 @@ class DMSMyfolderController extends Controller
 		}
 		
 		// company folder
-		if($type == 1)
+		if (count($groupArray) > 0)
 		{
-			$companyAccessFolders = DMSGroupAccess::
+			if($type == 1)
+			{
+				
+				$companyAccessFolders = DMSGroupAccess::
 									where('expiry_date', '>=', $today)
 									->where('file_id','<',1)
 									->Where(function ($query) use ($groupArray) {
@@ -370,24 +374,24 @@ class DMSMyfolderController extends Controller
 										}
 									})
 								->pluck('folder_id');
-								
-			return $companyAccessFolders;
+				return $companyAccessFolders;
+				
+			}
+			else
+			{
+				// company file
+				$companyAccessFiles = DMSGroupAccess::
+										where('expiry_date', '>=', $today)
+										->where('folder_id','<',1)
+										->Where(function ($query) use ($groupArray) {
+												if (!empty($groupArray)) {
+													$query->whereIn('group_id', $groupArray);
+												}
+											})
+										->pluck('file_id');
+				return $companyAccessFiles;
+			}
 		}
-		else
-		{
-			// company file
-			$companyAccessFiles = DMSGroupAccess::
-									where('expiry_date', '>=', $today)
-									->where('folder_id','<',1)
-									->Where(function ($query) use ($groupArray) {
-											if (!empty($groupArray)) {
-												$query->whereIn('group_id', $groupArray);
-											}
-										})
-									->pluck('file_id');
-			return $companyAccessFiles;
-		}
-		
     }
 	// get id folder/file in user access
 	public function getUserFoldersID($employeeID,$today,$type)

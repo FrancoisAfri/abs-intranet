@@ -71,9 +71,13 @@
 						</table>
 					</div>
                     <div class="box-footer">
-					<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+						<button type="button" class="btn btn-default pull-left" id="back_button">Back</button>
+						<button type="button" id="cat_module" class="btn btn-warning pull-right" data-toggle="modal"
+                                data-target="#add-file-modal">Add New File
+                        </button>
                     </div>
                 </div>
+				@include('dms.partials.add_file_access_modal')
             </div>
         </div>
     </div>
@@ -109,6 +113,17 @@
 				location.href = "/dms/my_folders" 
 			};
 			$('[data-toggle="tooltip"]').tooltip();
+			//Post perk form to server using ajax (add)
+			$('#add_file').on('click', function () {
+				var strUrl = '/dms/add_files_folder/' + {{$folder->id}};
+				var formName = 'add-file-form';
+				var modalID = 'add-file-modal';
+				var submitBtnID = 'add_folder';
+				var redirectUrl = '/dms/folder/access/' + {{$folder->id}};
+				var successMsgTitle = 'New Record Added!';
+				var successMsg = 'New File has been Added successfully.';
+				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+			});
 		});
 	</script>
 @endsection
