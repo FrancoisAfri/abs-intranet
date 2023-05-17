@@ -67,7 +67,7 @@ class AllocateLeavedaysAnnualCronController extends Controller
                 #get leaveprofile ID
                 $LevProfID = HRPerson::getDirectorDetails($empID);
 
-                if (!empty($LevProfID)) {
+                if (!empty($LevProfID['leave_profile'])) {
 
                     $minimum = type_profile::where(
                         [
@@ -148,6 +148,6 @@ class AllocateLeavedaysAnnualCronController extends Controller
                 }
             }
         }
-        AuditReportsController::store('Leave Annual Management', "Cron leaveAllocationAnnual Ran", "Automatic Ran by Server", 0);
+        AuditReportsController::store('Leave Management', "Cron leave Allocation Annual Ran", "Automatic Ran by Server", 0);
     }
 }

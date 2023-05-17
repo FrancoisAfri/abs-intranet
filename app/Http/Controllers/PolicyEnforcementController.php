@@ -689,7 +689,7 @@ class PolicyEnforcementController extends Controller
         $data['page_title'] = "Policy Enforcement Report";
         $data['page_description'] = "Policy Enforcement Report";
         $data['breadcrumb'] = [
-            ['title' => 'Policy Enforcement', 'path' => '/System/policy/create', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Policy Enforcement', 'path' => '/System/policy/create', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1],
             ['title' => 'Policy Users', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Policy Enforcement';

@@ -71,6 +71,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                 }
             }
         }
+		AuditReportsController::store('Leave Management', "Cron leave Allocation Family Ran", "Automatic Ran by Server", 0);
     }
 
     public function sickDays() {
@@ -132,6 +133,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                 }
             }
         }
+		AuditReportsController::store('Leave Management', "Cron leave Allocation Sick Ran", "Automatic Ran by Server", 0);
     }
 
     /**
@@ -181,6 +183,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 				LeaveHistoryAuditController::store('Paternity leave days allocation', 'Paternity leave days allocation', 0, 24, 24, 9, $employee->id,1,0);
 			}
         }
+		AuditReportsController::store('Leave Management', "Cron leave Allocation Paternity Ran", "Automatic Ran by Server", 0);
     }
 
         # Reset family leave after a year.
@@ -207,6 +210,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 				LeaveHistoryAuditController::store('Family leave days allocation', 'Family leave days allocation', 0, 24, 24, 2, $employee->id,1,0);
             }
         }
+		AuditReportsController::store('Leave Management', "Cron leave Annual Family Reset Ran", "Automatic Ran by Server", 0);
     }
 	
 	    # Reset sick leave after a year.
@@ -237,6 +241,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 				}
 			}
         }
+		AuditReportsController::store('Leave Management', "Cron Sicl Leave Annual Reset Ran", "Automatic Ran by Server", 0);
     }
 	
 	    # Reset paternity leave after a year.
@@ -263,5 +268,6 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 				LeaveHistoryAuditController::store('Paternity leave days allocation', 'Paternity leave days allocation', 0, 24, 24, 9, $employee->id,1,0);
             }
         }
+		AuditReportsController::store('Leave Management', "Cron Paternity Leave Annual Reset Ran", "Automatic Ran by Server", 0);
     }
 }
