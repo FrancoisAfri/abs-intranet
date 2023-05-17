@@ -55,7 +55,7 @@ class VehicleDocSearchController extends Controller
         $data['vehiclemodeler'] = $vehiclemodeler;
         $data['vehicleTypes'] = $vehicleTypes;
         $data['vehicle'] = $vehicle;
-        AuditReportsController::store('Leave History Audit', 'Reports page accessed', "Accessed by User", 0);
+        AuditReportsController::store('Fleet Management', 'Reports page accessed', "Accessed by User", 0);
         return view('Vehicles.document_search')->with($data);
     }
 

@@ -159,7 +159,7 @@ class LeaveHistoryAuditController extends Controller
         $data['breadcrumb'] = [
             ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], ['title' => 'Leave Reports', 'active' => 1, 'is_module' => 0]
         ];
-        AuditReportsController::store('Leave History Audit', 'Reports page accessed', "Accessed by User", 0);
+        AuditReportsController::store('Leave Management', 'Reports page accessed', "Accessed by User", 0);
         return view('leave.reports.leave_report_index')->with($data);
     }
     #draw history report according to search critea
