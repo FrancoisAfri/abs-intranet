@@ -216,10 +216,15 @@ class HRPerson extends Model
     public static function getUserDetails($employeeNumber)
     {
         return HRPerson::where(['employee_number' => $employeeNumber, 'status' => 1])
-            ->select('id', 'first_name', 'surname', 'email', 'employee_number')
+            ->select('id', 'first_name', 'surname', 'email', 'employee_number', 'manager_id', 'division_level_4')
             ->first();
     }
-
+	// get employee department
+	public static function getUserDepartment($deptID)
+    {
+        return DivisionLevelFour::where(['id' => $deptID, 'active' => 1])
+            ->select('id', 'name')->first();
+    }
     public static function getEmployeeNumber()
     {
         $users = HRPerson::where(

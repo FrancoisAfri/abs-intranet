@@ -340,6 +340,20 @@ class ReadErsDetails
             foreach ($absentUsers as $absentUser) {
 				
                 $details = HRPerson::getUserDetails($absentUser);
+                // if manager and second manager are set on the on employee profile
+				if (!empty($details['manager_id']))
+				{
+					$managerDetails = HRPerson::getManagername($details['manager_id']);
+					$managerName = $managerDetails['first_name']." ".$managerDetails['surname'];
+				}
+				else $managerName;
+				// if department id are set on the on employee profile
+				if (!empty($details['division_level_4']))
+				{
+					$departDetails = HRPerson::getUserDepartment($details['division_level_4']);
+					$deptName = $departDetails['name'];
+				}
+				else $deptName;
 				// check leave status
                 $checkStatus = $this->userOnLeave($details->id);
 				if (!empty($checkStatus)) $leave = 'Yes';
@@ -350,6 +364,8 @@ class ReadErsDetails
 						'surname' => $details['surname'],
 						'email' => $details['email'],
 						'On Leave' => $leave,
+						'Department' => $deptName,
+						'Manager' => $managerName,
 					]);
             }
         }
