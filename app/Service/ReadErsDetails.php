@@ -330,14 +330,28 @@ class ReadErsDetails
         $users = ManagerReport::getListOfManagers();
 
         $absentUsers = $this->getAbsentUsers();
+		// add all 
+		$arrayEmpNum = array();
+		if (count($absentUsers) > 0) {
+            foreach ($absentUsers as $emploNumb) {
+				
+				if (in_array($emploNumb, $arrayEmpNum)) {
+					//echo "Got Irix";
+				}
+				else
+					array_push($arrayEmpNum,$emploNumb);
+			}
+		}
+
+		$results = HRPerson::select('employee_number')->whereIn('employee_number', $arrayEmpNum)->where('status',1)->orderBy('manager_id')->get();
 
         //create a new collection with name, surname, and employee  number
         $AbsentUsersColl = array();
 
-        if (count($absentUsers) > 0) {
-            foreach ($absentUsers as $absentUser) {
+        if (count($results) > 0) {
+            foreach ($results as $absentUser) {
 				
-                $details = HRPerson::getUserDetails($absentUser);
+                $details = HRPerson::getUserDetails($absentUser->employee_number);
                 // if manager and second manager are set on the on employee profile
 				if (!empty($details['manager_id']))
 				{
@@ -367,8 +381,6 @@ class ReadErsDetails
 					'Manager' => $managerName,
 				]);
             }
-			print_r($AbsentUsersColl);
-			die('want to see array structure');
         }
         /**
          * create an Excel file and store it the application

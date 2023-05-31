@@ -105,7 +105,7 @@
                         <tr>
                             <th style="width: 10px; text-align: center;">#</th>
                             <th style="width: 10px; text-align: center;">Name</th>
-                            <th style="width: 5px; text-align: center;">Action</th>
+                            <th style="width: 5px; text-align: right;">Action</th>
 
                             {{--                                <th style="width: 5px; text-align: center;">.</th>--}}
                         </tr>
@@ -115,8 +115,8 @@
                             <ul class="products-list product-list-in-box">
                                 @foreach ($managerList as $key => $manager)
                                     <tr id="categories-list">
-                                        <td></td>
-                                        <td style="width: 5px; text-align: left;">{{ $manager->first_name . ' ' . $manager->surname ?? ''}} </td>
+                                        <td style="width: 5px; text-align: center;">{{ $loop->iteration }}</td>
+                                        <td style="width: 5px; text-align: center;">{{ $manager->first_name . ' ' . $manager->surname ?? ''}} </td>
                                         <td style="width: 5px; text-align: right;">
                                             <form action="{{ route('manager.destroy', $manager->managerID) }}"
                                                   method="POST"
