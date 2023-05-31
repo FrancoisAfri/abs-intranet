@@ -329,9 +329,7 @@ class ReadErsDetails
         $date_now = Carbon::now()->toDayDateTimeString();
         $users = ManagerReport::getListOfManagers();
 
-
         $absentUsers = $this->getAbsentUsers();
-
 
         //create a new collection with name, surname, and employee  number
         $AbsentUsersColl = array();
@@ -358,16 +356,19 @@ class ReadErsDetails
                 $checkStatus = $this->userOnLeave($details->id);
 				if (!empty($checkStatus)) $leave = 'Yes';
 				else $leave = '';
-					$AbsentUsersColl[] = ([
-						'employee_number' => $details['employee_number'],
-						'name' => $details['first_name'],
-						'surname' => $details['surname'],
-						'email' => $details['email'],
-						'On Leave' => $leave,
-						'Department' => $deptName,
-						'Manager' => $managerName,
-					]);
+				
+				$AbsentUsersColl[] = ([
+					'employee_number' => $details['employee_number'],
+					'name' => $details['first_name'],
+					'surname' => $details['surname'],
+					'email' => $details['email'],
+					'On Leave' => $leave,
+					'Department' => $deptName,
+					'Manager' => $managerName,
+				]);
             }
+			print_r($AbsentUsersColl);
+			die('want to see array structure');
         }
         /**
          * create an Excel file and store it the application
