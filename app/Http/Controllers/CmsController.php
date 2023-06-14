@@ -219,7 +219,7 @@ class CmsController extends Controller
 			$File_ex = $video_name->extension();
 			$filePath = 'com_vid' . ' ' . str_random(16) . '.' . $File_ex;
 			$size = $request->file('video_content')->getSize();
-			if ($size > 50000000)
+			if ($size < 50000000)
 			{
 				$isFileUploaded = Storage::disk('public')->put('videos/' . $filePath,
 					file_get_contents($request->file('video_content')));
@@ -333,7 +333,7 @@ class CmsController extends Controller
 			$File_ex = $video_name->extension();
 			$filePath = 'com_vid' . ' ' . str_random(16) . '.' . $File_ex;
 			$size = $request->file('video_content')->getSize();
-			if ($size > 50000000)
+			if ($size < 50000000)
 			{
 				$isFileUploaded = Storage::disk('public')->put('videos/' . $filePath,
 					file_get_contents($request->file('video_content')));
