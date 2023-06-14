@@ -45,14 +45,14 @@ class AllocateLeavedaysAnnualCronController extends Controller
                 [
                     'hr_id' => $empID,
                     'leave_type_id' => $AnnualLeaveTypeID,
-                    'month_allocated' => date('n')
+                    'month_allocated' => date('n'),
+                    'year_allocated' => date('Y')
                 ]
             )
                 ->first();
 				
             if (empty($allocation)) 
 			{
-
                 $customDays = $days = $maximum = 0;
                 // get Custom leave if there is any
 
@@ -109,6 +109,7 @@ class AllocateLeavedaysAnnualCronController extends Controller
                                 [
                                     'hr_id' => $empID,
                                     'month_allocated' => date('n'),
+									'year_allocated' => date('Y'),
                                     'leave_type_id' => $AnnualLeaveTypeID,
                                     'allocated_by' => 1, // change this
                                     'date_allocated' => time(),
@@ -137,6 +138,7 @@ class AllocateLeavedaysAnnualCronController extends Controller
                             [
                                 'hr_id' => $empID,
                                 'month_allocated' => date('n'),
+                                'year_allocated' => date('Y'),
                                 'leave_type_id' => $AnnualLeaveTypeID,
                                 'allocated_by' => 1, // change this
                                 'date_allocated' => time(),
