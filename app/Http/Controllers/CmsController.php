@@ -14,6 +14,7 @@ use App\Http\Requests;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Stmt\Return_;
 
@@ -199,11 +200,11 @@ class CmsController extends Controller
         $this->validate($request, [
 //            'name' => 'required',
 //            'description' => 'required',
-
+			'video_content' => 'required|max:51200',
         ]);
+		
         $NewsData = $request->all();
         unset($NewsData['_token']);
-
 
         $crmNews = new ceoNews();
         $crmNews->name = $NewsData['name'];
@@ -212,6 +213,25 @@ class CmsController extends Controller
         $crmNews->date = time();
         $crmNews->status = 1;
         $crmNews->save();
+		// save video
+		if ($request->hasFile('video_content')) {
+			$video_name = $request->file('video_content');
+			$File_ex = $video_name->extension();
+			$filePath = 'com_vid' . ' ' . str_random(16) . '.' . $File_ex;
+			$size = $request->file('video_content')->getSize();
+			if ($size > 50000000)
+			{
+				$isFileUploaded = Storage::disk('public')->put('videos/' . $filePath,
+					file_get_contents($request->file('video_content')));
+
+				// File URL to access the video in frontend
+				$url = Storage::disk('public')->url($filePath);
+
+				// save vidoe details into the database
+				$crmNews->video_content = $filePath;
+				$crmNews->update();
+			}
+		}
 		//Upload Image picture
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();
@@ -274,10 +294,29 @@ class CmsController extends Controller
 
     public function updatCeonewsContent(Request $request, ceoNews $news)
     {
-
-        $this->validate($request, [
-
+		
+       // $this->validate($request, [
+			//'video_content' => 'required|max:50000',
+       // ]);
+	   $validator = Validator::make($request->all(), [
+            'name' => 'required',
         ]);
+		$validator->after(function ($validator) use ($request) {
+            $video_content = $request->input('video_content');
+            
+			if (!empty($video_content))
+			{
+				$size = $request->file('video_content')->getSize();
+				if ( $size > 50000000)
+					$validator->errors()->add('video_content', "Sorry !!! Video size must be less than 50MB.");
+			}
+        });
+        if ($validator->fails()) {
+            return redirect("/cms/editCeonews/$news->id")
+                ->withErrors($validator)
+                ->withInput();
+        }
+		//return $news;
         $NewsData = $request->all();
         unset($NewsData['_token']);
 
@@ -286,6 +325,27 @@ class CmsController extends Controller
         $news->summary = html_entity_decode($NewsData['summary']);
         $news->date = time();
         $news->update();
+		
+		// save video
+		if ($request->hasFile('video_content')) {
+			
+			$video_name = $request->file('video_content');
+			$File_ex = $video_name->extension();
+			$filePath = 'com_vid' . ' ' . str_random(16) . '.' . $File_ex;
+			$size = $request->file('video_content')->getSize();
+			if ($size > 50000000)
+			{
+				$isFileUploaded = Storage::disk('public')->put('videos/' . $filePath,
+					file_get_contents($request->file('video_content')));
+
+				// File URL to access the video in frontend
+				$url = Storage::disk('public')->url($filePath);
+
+				// save vidoe details into the database
+				$news->video_content = $filePath;
+				$news->update();
+			}
+		}
 		//Upload Image picture
         if ($request->hasFile('image')) {
             $fileExt = $request->file('image')->extension();

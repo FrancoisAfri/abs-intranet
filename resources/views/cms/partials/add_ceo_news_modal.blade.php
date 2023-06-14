@@ -3,7 +3,6 @@
         <div class="modal-content">
             <form class="form-horizontal" method="POST" name="add-news-form">
                 {{ csrf_field() }}
-
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span></button>
@@ -27,16 +26,15 @@
                                    placeholder="Enter Description" required>
                         </div>
                     </div>
-					<div class="form-group zip-field">
-                        <label for="image" class="col-sm-2 control-label">Upload a Picture</label>
-
+					<div class="form-group">
+                        <label for="path" class="col-sm-2 control-label">Upload a Video</label>
                         <div class="col-sm-8">
 
-                            <input type="file" id="image" name="image" class="file file-loading"
-                                   data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            <input type="file" id="path" name="path" class="file file-loading"
+                                   data-allowed-file-extensions='["mp4"]' data-show-upload="false">
+                            <strong> Allowed filetypes are mp4. Max upload size allowed is 50M."</strong>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="term_name" class="col-sm-2 control-label">Summary</label>
                         <div class="col-sm-9">
@@ -46,7 +44,6 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>

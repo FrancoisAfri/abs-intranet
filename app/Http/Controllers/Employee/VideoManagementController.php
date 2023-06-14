@@ -95,7 +95,7 @@ class VideoManagementController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'path' => 'required|max:50000',
+            'path' => 'required|max:51200',
         ]);
 
         $video_name = $request->file('path');
@@ -129,7 +129,7 @@ class VideoManagementController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'document' => 'required|max:50000',
+            'document' => 'required|max:51200',
             'division_level_5' => 'required',
         ]);
 		$div5 = !empty($request['division_level_5']) ? $request['division_level_5'] : 0;

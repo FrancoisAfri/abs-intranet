@@ -25,8 +25,13 @@
                     <div class="media-body">
                         <h4 class="media-heading">{{$Cmsnews->name }}</h4>
                         <p class="text-right"></p>
-                        <p>
-                            {!!$Cmsnews->summary!!}.</p>
+						<div class="box-body" style="max-height: 400px; overflow-y: scroll;">
+							<video  height="320" width="290" style="padding:0 15 px;  float: left" controls>
+								<source src="{{URL::asset("storage/public/videos/$Cmsnews->video_content")}}" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<p><font size="3">{!!$Cmsnews->summary!!}</font></p>
+						</div>
                         <ul class="list-inline list-unstyled">
                             <li><span><i class="glyphicon glyphicon-calendar"></i>  {{$Cmsnews->created_at}} </span></li>
                             <li>|</li>

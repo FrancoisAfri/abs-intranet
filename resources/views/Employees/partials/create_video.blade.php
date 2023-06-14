@@ -32,10 +32,10 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="path" class="col-sm-2 control-label">File</label>
+                        <label for="video_content" class="col-sm-2 control-label">File</label>
                         <div class="col-sm-8">
 
-                            <input type="file" id="path" name="path" class="file file-loading"
+                            <input type="file" id="video_content" name="video_content" class="file file-loading"
                                    data-allowed-file-extensions='["mp4"]' data-show-upload="false">
                             <strong> Allowed filetypes are mp4. Max upload size allowed is 50M."</strong>
                         </div>

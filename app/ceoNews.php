@@ -10,6 +10,6 @@ class ceoNews extends Model
 
     //Mass assignable fields
     protected $fillable = [
-        'name', 'description', 'date','supporting_docs', 'summary', 'image','user_id','status'
+        'name', 'description', 'date','supporting_docs', 'summary', 'image','user_id','status','video_content'
     ];
 }

@@ -40,28 +40,23 @@
                                 <ul class="products-list product-list-in-box">
                                     @foreach ($videos as $key => $video)
                                         <tr id="categories-list">
-
                                             <td>
                                                 <video  height="60" width="150" controls>
-                                                <source src="{{URL::asset("storage/public/videos/$video->path")}}" type="video/mp4">
-                                                Your browser does not support the video tag.
-                                            </video>
+													<source src="{{URL::asset("storage/public/videos/$video->path")}}" type="video/mp4">
+													Your browser does not support the video tag.
+												</video>
                                             </td>
-
-
                                             <td style="text-align:center;">
                                                 <a data-toggle="tooltip" title="Click to View Asset"
                                                    href="{{ route('videos.show',['videos' => $video->uuid]) }}">
                                                     {{ (!empty( $video->name)) ?  $video->name : ''}}
                                                 </a>
                                             </td>
-
                                             <td style="text-align:center;">
                                                 <span data-toggle="tooltip" title="description"
                                                       href="{{ route('videos.show',['videos' => $video->uuid]) }} ">
                                                     {{ (!empty($video->description)) ? $video->description : '' }}</span>
                                             </td>
-
                                             <td>
                                                 {{ (!empty($video->video_type)) ?  $videoType[$video->video_type] : ' ' }}
                                             </td>
@@ -72,7 +67,6 @@
                                                       " fa-times " : "fa-check " }}"></i> {{(!empty($video->status) && $video->status == 1) ? "De-Activate" : "Activate"}}
                                                 </button>
                                             </td>
-
                                         </tr>
                                     @endforeach
                                     @endif

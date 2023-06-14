@@ -25,12 +25,23 @@
                 <!-- /.box-header -->
                 <!-- form start -->
                 <form class="form-horizontal" method="POST" action="/cms/ceonews/{{$Cmsnews->id }}/update"
-                      enctype="multipart/form-data">
+                       enctype="multipart/form-data">
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
 
                     <div class="box-body" id="view_users">
-
+					
+						@if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <hr class="hr-text" data-content="Edit Ceo News for - {{ $Cmsnews->name }} ">
 
                         <div class="form-group">
@@ -51,15 +62,26 @@
                             </div>
                         </div>
 						<div class="form-group zip-field">
-							<label for="image" class="col-sm-2 control-label">Upload a Picture</label>
-							<div class="col-sm-8">
-								@if(!empty($Cmsnews->image))
-									<img src="{{ Storage::disk('local')->url("CMS/images/$Cmsnews->image") }}" width="200" height="170">
-								@endif
-								<input type="file" id="image" name="image" class="file file-loading"
-									   data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
-							</div>
-						</div>
+                        <label for="image" class="col-sm-2 control-label">Upload a Picture</label>
+
+                        <div class="col-sm-8">
+
+                            <input type="file" id="image" name="image" class="file file-loading"
+                                   data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                        </div>
+                    </div>
+						<div class="form-group">
+                        <label for="video_content" class="col-sm-2 control-label">Upload a Video</label>
+                        <div class="col-sm-8">
+							<video  height="60" width="150" controls>
+								<source src="{{URL::asset("storage/public/videos/$Cmsnews->video_content")}}" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+                            <input type="file" id="video_content" name="video_content" class="file file-loading"
+                                   data-allowed-file-extensions='["mp4"]' data-show-upload="false">
+                            <strong> Allowed filetypes are mp4. Max upload size allowed is 50M."</strong>
+                        </div>
+                    </div>
                         <div class="box-body">
                             <textarea id="send_invoice_message" name="summary" rows="10"
                                       cols="60">{{$Cmsnews->summary}}</textarea>
