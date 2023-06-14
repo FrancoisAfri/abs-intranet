@@ -66,11 +66,10 @@
 					</div>
 					@if (!empty($ceonews))
 						<div class="box-body" style="max-height: 400px; overflow-y: scroll;">
-							<video  height="320" width="290" style="padding:0 15 px;  float: left" controls>
+							<video  height="320" width="450"  controls autoplay controlsList="nodownload" oncontextmenu="return false;">
 								<source src="{{URL::asset("storage/public/videos/$ceonews->video_content")}}" type="video/mp4">
 								Your browser does not support the video tag.
 							</video>
-							<!--<img class="img-responsive pad" style="padding:0 15 px;  float: left" width="250" height="220" alt="{{!empty($ceonews->name) ? $ceonews->name : ''}}" src="{{ Storage::disk('local')->url("CMS/images/$ceonews->image") }}">-->
 							<p><font size="3">{!!$ceonews->summary!!}</font></p>
 						</div>
 					@endif
