@@ -53,18 +53,19 @@
             </div>
             <div class="col-md-6">
 				<div class="box box-widget">
-					<div class="box-header with-border">
-						<div class="user-block">
-							<span class="username">Communication</span>
-							<span class="description">Posted - {{!empty($ceonews->date) ? date(' d M Y', $ceonews->date) : ''}}</span>
-						</div>
-						<div class="box-tools">
-							<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-							</button>
-							<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
-						</div>
-					</div>
 					@if (!empty($ceonews))
+						<div class="box-header with-border">
+							<div class="user-block">
+								<span class="username">Communication</span>
+								<span class="description">Posted - {{!empty($ceonews->date) ? date(' d M Y', $ceonews->date) : ''}}</span>
+							</div>
+							<div class="box-tools">
+								<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+								</button>
+								<button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+							</div>
+						</div>
+					
 						<div class="box-body" style="max-height: 400px; overflow-y: scroll;">
 							<video  height="320" width="290" style="padding:0 15 px;  float: left" controls>
 								<source src="{{URL::asset("storage/public/videos/$ceonews->video_content")}}" type="video/mp4">
