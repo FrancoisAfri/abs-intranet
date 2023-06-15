@@ -85,8 +85,8 @@
                                                     <span class="label label-primary"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
                                                 @elseif($asset->asset_status == 'In Store')
                                                     <span class="label label-default"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
-                                                @elseif($asset->AssetsList->asset_status == 'Un Allocated')
-                                                    <span class="label label-info"> {{ (!empty( $asset->AssetsList->asset_status)) ?  $asset->AssetsList->asset_status : ''}}</span>
+                                                @elseif($asset->asset_status == 'Un Allocated')
+                                                    <span class="label label-info"> {{ (!empty( $asset->asset_status)) ?  $asset->asset_status : ''}}</span>
                                                 @endif
                                             </td>
                                         </tr>
