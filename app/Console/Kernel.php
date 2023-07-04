@@ -49,7 +49,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('emptask:overdue')->daily();
         $schedule->command('schedule:leaveAllocationAnnual')->monthlyOn(1, '01:00');
         $schedule->command('schedule:leaveAllocationFamily')->dailyAt('02:00');
-        $schedule->command('schedule:leaveAllocationSick')->dailyAt('03:00');
+        //$schedule->command('schedule:leaveAllocationSick')->dailyAt('03:00');
         $schedule->command('schedule:leaveAllocationPartenity')->dailyAt('04:00');
         $schedule->command('schedule:leaveResetSick')->dailyAt('06:00');
         $schedule->command('schedule:leaveResetPartenity')->cron('0 0 1 1 * *');
