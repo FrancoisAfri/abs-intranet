@@ -368,6 +368,8 @@ Route::delete('exempted/{person}/delete', 'LeaveSetupController@deleteExempted')
 Route::post('leave/type/add_leave', 'LeaveController@addleave');
 Route::patch('/leave/leave_type_edit/{lev}', 'LeaveController@editLeaveType');
 Route::get('/leave/leave_active/{lev}', 'LeaveController@leaveAct');
+//Route::get('/leave/balance-upload', 'LeaveSetupController@upload');
+//Route::post('leave/upload-balance', 'LeaveController@uploadLeave');
 
 // Search
 Route::get('leave/search', 'LeaveApplicationController@leaveSearch');

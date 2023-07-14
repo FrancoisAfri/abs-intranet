@@ -34,6 +34,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx as Writer;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as Reader;
 use phpDocumentor\Reflection\Types\Array_;
 use RealRashid\SweetAlert\Facades\Alert;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver\RequestValueResolver;
@@ -605,25 +608,57 @@ class  LeaveSetupController extends Controller
      */
     public function leaveUpload(Request $request)
     {
+		
         if ($request->hasFile('input_file')) {
             $path = $request->file('input_file')->getRealPath();
-            $data = Excel::load($path, function ($reader) {
-            })->get();
-            if (!empty($data) && $data->count()) {
-                foreach ($data->toArray() as $key => $value) {
+           // $data = Excel::load($path, function ($reader) {})->get();
+           // $excel = $path;
+            $reader = new Reader();
+            $spreadsheet = $reader->load($path);
+            $sheetData = $spreadsheet->getActiveSheet()->toArray();
+            if (!empty($sheetData) && count($sheetData) > 0) {
+                foreach ($sheetData as $key => $value) {
                     if (!empty($value)) {
-                        if (!empty($value['employee_number'])) {
-                            $employees = HRPerson::where('employee_number', $value['employee_number'])->where('status', 1)->first();
+                       // print_r($value);
+                        //die('here');
+                        if (!empty($value[0])) {
+                            $employees = HRPerson::where('employee_number', $value[0])->where('status', 1)->first();
+                          //  return $employees;
                             if (!empty($employees)) {
-                                $days = !empty($value['special']) ? $value['special'] : 0;
-                                if (!empty($days)) {
-                                    $credit = new leave_credit();
-                                    $credit->leave_balance = ($days * 8);
-                                    $credit->hr_id = $employees->id;
-                                    $credit->leave_type_id = 4;
-                                    $credit->save();
-                                    LeaveHistoryAuditController::store('Added annul leave Days', 'Annul leave Days', 0, ($days * 8), ($days * 8), 1, $employees->id);
-                                }
+                                $days = !empty($value[5]) ? $value[5] : 0;
+								// get leave balance
+								$credit = leave_credit::where('hr_id', $employees->id)
+                                        ->where('leave_type_id', 5)
+                                        ->first();
+                                    if (!empty($credit)) {
+                                        //die('do you get to credit');
+                                        $leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
+                                        #subract current balance from the one applied for
+                                        $newBalance = ($days * 8);
+                                        $credit->leave_balance = $newBalance;
+                                        $credit->update();
+										LeaveHistoryAuditController::store('Added Sick leave Days', 'Sick leave Days', $leaveBalance, ($days * 8), $newBalance, 5, $employees->id,0);
+                                    } 
+									else 
+									{
+                                        $leaveBalance = 0;
+                                        #subract current balance from the one applied for
+                                        $newBalance = $leaveBalance + $days;
+                                        $levcre = new leave_credit();
+                                        $levcre->leave_type_id = 5;
+                                        $levcre->leave_balance = $newBalance;
+                                        $levcre->hr_id = $employees->id;
+                                        $levcre->save();
+										LeaveHistoryAuditController::store('Added annul leave Days', 'Annul leave Days', 0, ($days * 8), $newBalance, 5, $employees->id, 0);
+                                    }
+								   /*if (!empty($days)) {
+										$credit = new leave_credit();
+										$credit->leave_balance = ($days * 8);
+										$credit->hr_id = $employees->id;
+										$credit->leave_type_id = 5;
+										$credit->save();
+										LeaveHistoryAuditController::store('Added annul leave Days', 'Annul leave Days', 0, ($days * 8), ($days * 8), 1, $employees->id);
+									}*/
                                 AuditReportsController::store('Leave Management', 'leave days adjusted ', "Edited by User");
                             }
                         }
@@ -640,7 +675,7 @@ class  LeaveSetupController extends Controller
             ['title' => 'Leave Balance', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Appraisals';
+        $data['active_rib'] = 'Leave Upload';
         AuditReportsController::store('Leave Management', "Leave Balance uploaded", "Accessed by User", 0);
     }
 
@@ -939,7 +974,7 @@ class  LeaveSetupController extends Controller
             ['title' => 'Leave Balance', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
-        $data['active_rib'] = 'Appraisals';
+        $data['active_rib'] = 'Leave Upload';
         AuditReportsController::store('Leave Management', "Leave Balance uploaded", "Accessed by User", 0);
     }
 

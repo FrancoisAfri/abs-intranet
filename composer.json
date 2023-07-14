@@ -19,7 +19,7 @@
         "spatie/enum": "^2.3",
         "ramsey/uuid-doctrine": "^1.8",
       "ext-json": "*",
-        "phpoffice/phpspreadsheet": "^1.25",
+        "phpoffice/phpspreadsheet": "^1.29.0",
         "rap2hpoutre/fast-excel": "^4.1"
     },
     "require-dev": {

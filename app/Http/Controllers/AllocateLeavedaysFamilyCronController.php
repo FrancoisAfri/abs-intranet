@@ -84,7 +84,7 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                 $dateJoined = Carbon::createFromTimestamp($employee->date_joined);
                 $todayDate = Carbon::now();
 
-				if ($dateJoined->diffInMonths($todayDate) > 6) {
+				if ($dateJoined->diffInMonths($todayDate) < 6 ) {
                     //give one day sick leave for every 26 weekdays
                     if (($dateJoined->diffInWeekdays($todayDate) >= 26) && ($dateJoined->diffInWeekdays($todayDate) % 26 == 0)) {
                         $leaveCredit = $this->getLeaveCredit($employee->id, SICK_LEAVE_ID);
@@ -95,7 +95,8 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 							// update leave audit
 							LeaveHistoryAuditController::store('Sick leave days allocation', 'Sick leave days allocation', $prev, 8, $prev + 8, SICK_LEAVE_ID, $employee->id,1,0);
                         }
-                        else {
+                        else
+                        {
                             $leaveCredit = new leave_credit();
                             $leaveCredit->hr_id = $employee->id;
                             $leaveCredit->leave_type_id = SICK_LEAVE_ID;
@@ -103,12 +104,11 @@ class AllocateLeavedaysFamilyCronController extends Controller {
                             $leaveCredit->save();
 							LeaveHistoryAuditController::store('Sick leave days allocation', 'Sick leave days allocation', 0, 8, 8, SICK_LEAVE_ID, $employee->id,1,0);
                         }
-						
                     }
                 }
-                elseif ($dateJoined->diffInMonths($todayDate) < 6 && $dateJoined->diffInYears($todayDate) < 3) {
+                elseif ($dateJoined->diffInMonths($todayDate) == 7 && $dateJoined->diffInYears($todayDate) < 1) {
                     //give them the rest of the leave days from the initial total of 30
-                    $sixMonthsLater = $dateJoined->copy()->addMonths(6);
+                    $sixMonthsLater = $dateJoined->copy()->addMonths(7);
                     $yesterday = $todayDate->copy()->subDay();
 
                     if ($sixMonthsLater->isToday()) {
@@ -121,7 +121,8 @@ class AllocateLeavedaysFamilyCronController extends Controller {
 							$current = $previous + ($remLeaveDaysInCycle * 8);
 							LeaveHistoryAuditController::store('Sick leave days allocation', 'Sick leave days allocation', $previous, ($remLeaveDaysInCycle * 8), $current, SICK_LEAVE_ID, $employee->id,1,0);
                         }
-                        else {
+                        else
+                        {
                             $leaveCredit = new leave_credit();
                             $leaveCredit->hr_id = $employee->id;
                             $leaveCredit->leave_type_id = SICK_LEAVE_ID;
