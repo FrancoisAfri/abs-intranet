@@ -234,7 +234,7 @@ class DMSFoldersController extends Controller
 		//Upload supporting document
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'xlsx']) && $request->file('documents')->isValid()) {
+            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'xlsx', 'pps', 'ppt', 'pptx']) && $request->file('documents')->isValid()) {
                 $fileName = time()."_".$docName.".". $fileExt;
                 $request->file('documents')->storeAs($folder->path, $fileName);
                 //Add file name in the table
@@ -279,7 +279,7 @@ class DMSFoldersController extends Controller
 		//Upload supporting document
         if ($request->hasFile('documents')) {
             $fileExt = $request->file('documents')->extension();
-            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'xlsx']) && $request->file('documents')->isValid()) {
+            if (in_array($fileExt, ['pdf', 'docx', 'doc', 'xlsx', 'pps', 'ppt', 'pptx']) && $request->file('documents')->isValid()) {
                 $fileName = time()."_".$docName.".". $fileExt;
                 $request->file('documents')->storeAs($folder->path, $fileName);
                 //Add file name in the table
