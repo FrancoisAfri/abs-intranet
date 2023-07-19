@@ -625,7 +625,7 @@ class  LeaveSetupController extends Controller
                             $employees = HRPerson::where('employee_number', $value[0])->where('status', 1)->first();
                           //  return $employees;
                             if (!empty($employees)) {
-                                $days = !empty($value[3]) ? $value[3] : 0;
+                                $days = !empty($value[1]) ? $value[1] : 0;
 								// get leave balance
 								$credit = leave_credit::where('hr_id', $employees->id)
                                         ->where('leave_type_id', 5)
@@ -649,7 +649,7 @@ class  LeaveSetupController extends Controller
                                         $levcre->leave_balance = $newBalance;
                                         $levcre->hr_id = $employees->id;
                                         $levcre->save();
-										LeaveHistoryAuditController::store('Added annul leave Days', 'Annul leave Days', 0, ($days * 8), $newBalance, 5, $employees->id, 0);
+										LeaveHistoryAuditController::store('Added Sick leave Days', 'Sick leave Days', 0, ($days * 8), $newBalance, 5, $employees->id, 0);
                                     }
 								   /*if (!empty($days)) {
 										$credit = new leave_credit();
