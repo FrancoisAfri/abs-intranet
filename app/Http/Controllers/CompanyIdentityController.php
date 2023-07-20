@@ -44,6 +44,7 @@ class CompanyIdentityController extends Controller
             $this->uploadLogo($request, $compDetails);
             $this->uploadLoginImage($request, $compDetails);
             $this->uploadSystemImage($request, $compDetails);
+			$this->uploadAdvertImage($request, $compDetails);
         } else { //insert
             $compDetails = new CompanyIdentity($request->all());
             $compDetails->save();
@@ -52,6 +53,7 @@ class CompanyIdentityController extends Controller
             $this->uploadLogo($request, $compDetails);
             $this->uploadLoginImage($request, $compDetails);
             $this->uploadSystemImage($request, $compDetails);
+			$this->uploadAdvertImage($request, $compDetails);
         }
 
         return back()->with('changes_saved', 'Your changes have been saved successfully.');
@@ -74,5 +76,17 @@ class CompanyIdentityController extends Controller
 	private function uploadSystemImage(Request $request, CompanyIdentity $compDetails) {
             $formInput = $request->all();
             $formInput['system_background_image_'] = $this->verifyAndStoreImage('logos', 'system_background_image', $compDetails, $request);
+    }
+	private function uploadAdvertImage(Request $request, CompanyIdentity $compDetails) {
+        if ($request->hasFile('brought_to_text_image')) {
+            $fileExt = $request->file('brought_to_text_image')->extension();
+            if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('brought_to_text_image')->isValid()) {
+                $fileName = "system_advert_image_" . time() . '.' . $fileExt;
+                $request->file('brought_to_text_image')->storeAs('logos', $fileName);
+                //Update file name in the database
+                $compDetails->brought_to_text_image = $fileName;
+                $compDetails->update();
+            }
+        }
     }
 }

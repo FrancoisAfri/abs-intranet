@@ -29,57 +29,61 @@
 	login-page-->
 </head>
 <body class="hold-transition">
-<div class="login-box">
-    <div class="login-logo">
-        <img src="{{ \App\CompanyIdentity::systemSettings('company_logo_url') }}" width="100%" class="img-responsive" alt="Company Logo">
-        <!-- <a href="/"><b>NU-LAXMI</b> LEASING</a> -->
+	<div class="login-logo">
+		<h4 align="left" style="color:white"><b>{{ \App\CompanyIdentity::systemSettings('brought_to_text')  }}</b></h4>
+        <img src="{{ \App\CompanyIdentity::systemSettings('brought_to_text_image_url') }}" width="20%" class="img-responsive" alt="Company Logo">
     </div>
-    <!-- /.login-logo -->
-	
-    <div class="login-box-body">
-        <p class="login-box-msg">Please sign in with your email and password</p>
+	<div class="login-box">
+		<div class="login-logo">
+			<img src="{{ \App\CompanyIdentity::systemSettings('company_logo_url') }}" width="100%" class="img-responsive" alt="Company Logo">
+			<!-- <a href="/"><b>NU-LAXMI</b> LEASING</a> -->
+		</div>
+		<!-- /.login-logo -->
+		
+		<div class="login-box-body">
+			<p class="login-box-msg">Please sign in with your email and password</p>
 
-        @if ($errors->has('email') || $errors->has('password'))
-            <div id="failed-login-alert" class="alert alert-danger alert-dismissible fade in">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                <h4><i class="icon fa fa-ban"></i> Invalid Login!</h4>
-                {{ $errors->first('email') }}
-                {{ $errors->first('password') }}
-            </div>
-        @endif
-        <form role="form" method="POST" action="{{ url('/login') }}">
-           {{ csrf_field() }}
-            <div class="form-group has-feedback{{ $errors->has('email') ? ' has-error' : '' }}">
-                <input id="email" type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}" required autofocus>
-                <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
-            </div>
-            <div class="form-group has-feedback{{ $errors->has('password') ? ' has-error' : '' }}">
-                <input id="password" type="password" class="form-control" placeholder="Password" name="password" required>
-                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
-            </div>
-            <div class="row">
-                <div class="col-xs-8">
-                    <div class="checkbox icheck">
-                        <label>
-                            <input type="checkbox"> Remember Me
-                        </label>
-                    </div>
-                </div>
-                <!-- /.col -->
-                <div class="col-xs-4">
-                    <button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
-                </div>
-                <!-- /.col -->
-            </div>
-        </form>
+			@if ($errors->has('email') || $errors->has('password'))
+				<div id="failed-login-alert" class="alert alert-danger alert-dismissible fade in">
+					<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+					<h4><i class="icon fa fa-ban"></i> Invalid Login!</h4>
+					{{ $errors->first('email') }}
+					{{ $errors->first('password') }}
+				</div>
+			@endif
+			<form role="form" method="POST" action="{{ url('/login') }}">
+			   {{ csrf_field() }}
+				<div class="form-group has-feedback{{ $errors->has('email') ? ' has-error' : '' }}">
+					<input id="email" type="email" class="form-control" placeholder="Email" name="email" value="{{ old('email') }}" required autofocus>
+					<span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+				</div>
+				<div class="form-group has-feedback{{ $errors->has('password') ? ' has-error' : '' }}">
+					<input id="password" type="password" class="form-control" placeholder="Password" name="password" required>
+					<span class="glyphicon glyphicon-lock form-control-feedback"></span>
+				</div>
+				<div class="row">
+					<div class="col-xs-8">
+						<div class="checkbox icheck">
+							<label>
+								<input type="checkbox"> Remember Me
+							</label>
+						</div>
+					</div>
+					<!-- /.col -->
+					<div class="col-xs-4">
+						<button type="submit" class="btn btn-primary btn-block btn-flat">Sign In</button>
+					</div>
+					<!-- /.col -->
+				</div>
+			</form>
 
-        <a href="#" data-toggle="modal" data-target="#forgot-password-modal"><font data-toggle="tooltip" title="Click here to reset your password.">I forgot my password</font></a><br>
-        <!-- New Client? Click <a href="/register" class="text-center">here to register</a> -->
-    </div>
-    <!-- /.login-box-body -->
+			<a href="#" data-toggle="modal" data-target="#forgot-password-modal"><font data-toggle="tooltip" title="Click here to reset your password.">I forgot my password</font></a><br>
+			<!-- New Client? Click <a href="/register" class="text-center">here to register</a> -->
+		</div>
+		<!-- /.login-box-body -->
 
-    <!-- Success registration modal-->
-</div>
+		<!-- Success registration modal-->
+	</div>
 <!-- /.login-box -->
 
 <!-- include forgot password modal -->

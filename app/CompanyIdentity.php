@@ -17,6 +17,7 @@ class CompanyIdentity extends Model
 		, 'header_acronym_bold','header_acronym_regular', 'company_logo'
 		, 'sys_theme_color', 'mailing_name', 'mailing_address', 'support_email'
 		,'company_website','password_expiring_month','system_background_image','login_background_image'
+		,'brought_to_text','brought_to_text_image'
     ];
 
     /**
@@ -65,6 +66,8 @@ class CompanyIdentity extends Model
         $settings['company_logo_url'] = ($companyDetails && $companyDetails->company_logo_url) ? $companyDetails->company_logo_url : Storage::disk('local')->url('logos/logo.png');
 		$settings['system_background_image_url'] = ($companyDetails && $companyDetails->system_background_image_url) ? $companyDetails->system_background_image_url : '';
         $settings['login_background_image_url'] = ($companyDetails && $companyDetails->login_background_image_url) ? $companyDetails->login_background_image_url : '';
+		$settings['brought_to_text'] = ($companyDetails && $companyDetails->brought_to_text) ? $companyDetails->brought_to_text : 'NKhaya MK';
+		 $settings['brought_to_text_image_url'] = ($companyDetails && $companyDetails->brought_to_text_image_url) ? $companyDetails->brought_to_text_image_url : '';
         if ($settingName != null) {
             if (array_key_exists($settingName, $settings)) return $settings[$settingName];
             else return null;

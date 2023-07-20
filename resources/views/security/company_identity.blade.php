@@ -145,6 +145,7 @@
                                             <option value="green" {{ ($companyDetails && 'green' == $companyDetails->sys_theme_color) ? ' selected' : '' }}>Green</option>
                                             <option value="red" {{ ($companyDetails && 'red' == $companyDetails->sys_theme_color) ? ' selected' : '' }}>Red</option>
                                             <option value="yellow" {{ ($companyDetails && 'yellow' == $companyDetails->sys_theme_color) ? ' selected' : '' }}>Yellow</option>
+											<option value="bur-berry" {{ ($companyDetails && 'bur-berry' == $companyDetails->sys_theme_color) ? ' selected' : '' }}>Bur-berry</option>																																		  
                                             <option value="blue-light" {{ ($companyDetails && 'blue-light' == $companyDetails->sys_theme_color) ? ' selected' : '' }}>Blue Light</option>
                                             <option value="black-light" {{ ($companyDetails && 'black-light' == $companyDetails->sys_theme_color) ? ' selected' : '' }}>Black Light</option>
                                             <option value="purple-light" {{ ($companyDetails && 'purple-light' == $companyDetails->sys_theme_color) ? ' selected' : '' }}>Purple Light</option>
@@ -192,7 +193,7 @@
                             </div>
                         </div>
 						<div class="form-group{{ $errors->has('company_website') ? ' has-error' : '' }}">
-							<label for="company_website" class="col-sm-2 control-label">Compony Website</label>
+							<label for="company_website" class="col-sm-2 control-label">Company Website</label>
 
 							<div class="col-sm-10">
 								<div class="input-group">
@@ -204,7 +205,7 @@
 							</div>
 						</div>
 						<div class="form-group{{ $errors->has('password_expiring_month') ? ' has-error' : '' }}">
-							<label for="company_website" class="col-sm-2 control-label">Password Duration (Months)</label>
+							<label for="password_expiring_month" class="col-sm-2 control-label">Password Duration (Months)</label>
 
 							<div class="col-sm-10">
 								<div class="input-group">
@@ -212,6 +213,18 @@
 										<i class="fa fa-building-o"></i>
 									</div>
 									<input type="text" class="form-control" id="password_expiring_month" name="password_expiring_month" value="{{ ($companyDetails) ? $companyDetails->password_expiring_month : '' }}" placeholder="Password Duration (Months)... ">
+								</div>
+							</div>
+						</div>
+						<div class="form-group{{ $errors->has('brought_to_text') ? ' has-error' : '' }}">
+							<label for="brought_to_text" class="col-sm-2 control-label">Advert</label>
+
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-paint-brush"></i>
+									</div>
+									<input type="text" class="form-control" id="brought_to_text" name="brought_to_text" value="{{ ($companyDetails) ? $companyDetails->brought_to_text : '' }}" placeholder="Enter Advert Text">
 								</div>
 							</div>
 						</div>
@@ -237,6 +250,18 @@
                             @endif
                             <div class="{{ ($companyDetails && !empty($companyDetails->system_background_image_url)) ? 'col-sm-5' : 'col-sm-10' }}">
                                 <input type="file" id="system_background_image" name="system_background_image" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
+                            </div>
+                        </div>
+						<div class="form-group{{ $errors->has('brought_to_text_image') ? ' has-error' : '' }}">
+                            <label for="brought_to_text_image" class="col-sm-2 control-label">Advert Image</label>
+
+                            @if( $companyDetails && !empty($companyDetails->brought_to_text_image_url) )
+                                <div class="col-sm-5" style="margin-bottom: 10px;">
+                                    <img src="{{ $companyDetails->brought_to_text_image_url }}" class="img-responsive img-thumbnail" style="max-height: 200px;">
+                                </div>
+                            @endif
+                            <div class="{{ ($companyDetails && !empty($companyDetails->brought_to_text_image_url)) ? 'col-sm-5' : 'col-sm-10' }}">
+                                <input type="file" id="brought_to_text_image" name="brought_to_text_image" class="file file-loading" data-allowed-file-extensions='["jpg", "jpeg", "png"]' data-show-upload="false">
                             </div>
                         </div>
                     </div>
