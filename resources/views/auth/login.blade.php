@@ -30,13 +30,12 @@
 </head>
 <body class="hold-transition">
 	<div class="login-logo">
-		<h4 align="left" style="color:white"><b>{{ \App\CompanyIdentity::systemSettings('brought_to_text')  }}</b></h4>
+		<h4 align="left" style="color:white"><b><a href="https://mkhayamk.co.za/" target="_blank">{{ \App\CompanyIdentity::systemSettings('brought_to_text')  }}</a></b></h4>
         <img src="{{ \App\CompanyIdentity::systemSettings('brought_to_text_image_url') }}" width="20%" class="img-responsive" alt="Company Logo">
     </div>
 	<div class="login-box">
 		<div class="login-logo">
 			<img src="{{ \App\CompanyIdentity::systemSettings('company_logo_url') }}" width="100%" class="img-responsive" alt="Company Logo">
-			<!-- <a href="/"><b>NU-LAXMI</b> LEASING</a> -->
 		</div>
 		<!-- /.login-logo -->
 		
