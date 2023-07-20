@@ -40,6 +40,11 @@ class CompanyIdentity extends Model
         if (! empty($this->login_background_image)) return Storage::disk('local')->url("logos/$this->login_background_image");
         else return '';
     }
+	public function getBroughtToTextImageUrlAttribute()
+    {
+        if (! empty($this->brought_to_text_image)) return Storage::disk('local')->url("logos/$this->brought_to_text_image");
+        else return '';
+    }
 
     /**
      * Static helper function that return the company identity data from the setup or the default values.
@@ -67,7 +72,7 @@ class CompanyIdentity extends Model
 		$settings['system_background_image_url'] = ($companyDetails && $companyDetails->system_background_image_url) ? $companyDetails->system_background_image_url : '';
         $settings['login_background_image_url'] = ($companyDetails && $companyDetails->login_background_image_url) ? $companyDetails->login_background_image_url : '';
 		$settings['brought_to_text'] = ($companyDetails && $companyDetails->brought_to_text) ? $companyDetails->brought_to_text : 'NKhaya MK';
-		 $settings['brought_to_text_image_url'] = ($companyDetails && $companyDetails->brought_to_text_image_url) ? $companyDetails->brought_to_text_image_url : '';
+		$settings['brought_to_text_image_url'] = ($companyDetails && $companyDetails->brought_to_text_image_url) ? $companyDetails->brought_to_text_image_url : '';
         if ($settingName != null) {
             if (array_key_exists($settingName, $settings)) return $settings[$settingName];
             else return null;
