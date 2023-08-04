@@ -257,10 +257,10 @@ class DMSFoldersController extends Controller
 				$DmsFileVersion->path = $filePath;
 				$DmsFileVersion->status = 1;
 				$DmsFileVersion->version_number = !empty($fileData['current_version']) ? $fileData['current_version'] : 1;
+				AuditReportsController::store('Document Management', "New File: $DmsFile->document_name Added to $folder->folder_name", "Accessed By User", 0);
             }
         }
 		
-		AuditReportsController::store('Document Management', "New File: $DmsFile->document_name Added to $folder->folder_name", "Accessed By User", 0);
         return response()->json();
     }
 	// this function will store files into a folder
