@@ -52,7 +52,7 @@
                                     <i class="fa fa-file-pdf-o"></i>
                                 </div>
                                 <input type="file" id="documents" name="documents"
-                                       class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc", "xlsx", "pps", "ppt", "pptx"]'
+                                       class="file file-loading" data-allowed-file-extensions='["jpeg","png","webp","pdf", "docx", "doc", "xlsx", "pps", "ppt", "pptx"]'
                                        data-show-upload="false">
                             </div>
                         </div>
