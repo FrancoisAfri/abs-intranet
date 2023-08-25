@@ -13,6 +13,7 @@ use App\leave_credit;
 use App\leave_custom;
 use App\leave_history;
 use App\LeaveType;
+use App\LeaveNotifications;
 use App\Mail\Accept_application;
 use App\Mail\SendLeaveApplicationToManager;
 use App\Mail\SendLeaveApplicationToHrManager;
@@ -893,32 +894,45 @@ class LeaveApplicationController extends Controller
             ->first();
         $ManHed = $approvals->require_managers_approval;
         $DepHead = $approvals->require_department_head_approval;
+		
         //update leave application status
         if ($leaveId->status == 2 && $DepHead == 1) {
             $leaveId->status = 3;
             $leaveId->update();
 
         } elseif ($leaveId->status == 2 && $ManHed == 1) {
+			
             // update leave application status
             $leaveId->status = 1;
-            $leaveId->update();
+            //$leaveId->update();
             // #Query the  leave_config days for value
             $credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
-
-
             $leaveBalance = $credit->leave_balance;
-
             #subract current balance from the one applied for
             $newBalance = $leaveBalance - $daysApplied;
             $credit->leave_balance = $newBalance;
-            $credit->update();
-            $leaveAttachment = $this->viewApplication($leaveId);
+            //$credit->update();
+            //$leaveAttachment = $this->viewApplication($leaveId);
+			die('do you come here and heer and the money');
             #send email to the user informing that the leave has been accepted
             if (!empty($hrDetails->email))
                 Mail::to($hrDetails->email)->send(new Accept_application($hrDetails->first_name, $leaveAttachment));
 
-            // send emal to Hr manager
-            if (!empty($hrDetails->division_level_5)) {
+            // send emal to Hr manager / Hr managers
+			// get user on setup
+			$leaveNotificationsUsers = LeaveNotifications::getListOfUsers();
+			if (!empty($leaveNotificationsUsers)) {
+				foreach ($leaveNotificationsUsers as $user) {
+					if (!empty($user->hr_id)) {
+						$details = HRPerson::where('id', $user->hr_id)->where('status', 1)
+							->select('first_name', 'email')->first();
+						if (!empty($details->email))
+							Mail::to($details->email)->send(new SendLeaveApplicationToHrManager($details->first_name, $leaveAttachment));
+					}
+				}
+                
+            }
+            /*if (!empty($hrDetails->division_level_5)) {
                 $Dept = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
                 if (!empty($Dept->manager_id)) {
                     $deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
@@ -927,7 +941,7 @@ class LeaveApplicationController extends Controller
                     if (!empty($deptDetails->email))
                         Mail::to($deptDetails->email)->send(new SendLeaveApplicationToHrManager($deptDetails->first_name, $leaveAttachment));
                 }
-            }
+            }*/
             // update leave history
             LeaveHistoryAuditController::store(
                 "leave application Approved",

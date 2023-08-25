@@ -360,8 +360,10 @@ Route::patch('/leave/setup/{id}', 'LeaveSetupController@addAnnual');
 Route::patch('/leave/setup/{id}/sick', 'LeaveSetupController@addSick');
 Route::post('leave/manager_report', 'LeaveSetupController@storeMangerReport')->name('manager_report');
 Route::post('leave/exempted_users', 'LeaveSetupController@storeExemptedUsers')->name('exempted_users');
+Route::post('leave/add_leave_notifications_user', 'LeaveSetupController@storeLeaveNotUsers')->name('leave_not_user');
 Route::delete('manager_report/{person}/delete', 'LeaveSetupController@deleteManager')->name('manager.destroy');
 Route::delete('exempted/{person}/delete', 'LeaveSetupController@deleteExempted')->name('exempted.destroy');
+Route::delete('leave/not/user{person}/delete', 'LeaveSetupController@deleteLeaveNotifications')->name('leave_user_notifications.destroy');
 
 
 //#Leave Management

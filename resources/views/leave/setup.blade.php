@@ -85,7 +85,70 @@
         @include('leave.partials.edit_annual_days')
         @include('leave.partials.edit_sick_days')
     </div>
+	<div class="col-md-12">
+        <div class="box box-default">
+            <div class="box-header with-border">
+                <h3 class="box-title">Users to receive leave notifications</h3>
+                <div class="box-tools pull-right">
+                    <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                class="fa fa-minus"></i></button>
+                    <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-remove"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+                <div style="overflow-X:auto;">
+                    <table id=" " class="display table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th style="width: 10px; text-align: center;">#</th>
+                            <th style="width: 10px; text-align: center;">Name</th>
+                            <th style="width: 5px; text-align: right;">Action</th>
 
+                            {{--                                <th style="width: 5px; text-align: center;">.</th>--}}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @if (count($leaveNotificationsUsers) > 0)
+                            <ul class="products-list product-list-in-box">
+                                @foreach ($leaveNotificationsUsers as $key => $user)
+                                    <tr id="categories-list">
+                                        <td style="width: 5px; text-align: center;">{{ $loop->iteration }}</td>
+                                        <td style="width: 5px; text-align: center;">{{ $user->first_name . ' ' . $user->surname ?? ''}} </td>
+                                        <td style="width: 5px; text-align: right;">
+                                            <form action="{{ route('leave_user_notifications.destroy', $user->userID) }}"
+                                                  method="POST"
+                                                  style="display: inline-block;">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <input type="hidden" name="_token" value="{{ csrf_token() }}">
+
+                                                <button type="submit"
+                                                        class="btn btn-xs btn-danger btn-flat delete_confirm"
+                                                        data-toggle="tooltip" title='Delete'>
+                                                    <i class="fa fa-trash"> Delete </i>
+
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                            @endforeach
+                        @endif
+                        </tbody>
+                    </table>
+
+                    <div class="box-footer">
+                        <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
+                                data-target="#add-leave-notification-modal">Add Users
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <!-- /.box-body -->
+        </div>
+        @include('leave.partials.settings.add_leave_notifications_users')
+    </div>
     <div class="col-md-12">
         <div class="box box-default">
             <div class="box-header with-border">
@@ -792,7 +855,23 @@
             modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
 
+		/**
+         * Add leave notification users
+         */
 
+        $('#add-leave-users').on('click', function () {
+
+            let strUrl = '{{ route('leave_not_user') }}';
+            let modalID = 'add-leave-notification-modal';
+            let formName = 'add-leave-notification-form';
+
+            let submitBtnID = 'add-leave-users';
+            let redirectUrl = '/leave/setup';
+            let successMsgTitle = 'User Added to List!';
+            let successMsg = 'Record has been updated successfully.';
+
+            modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
+        });
         //UPDATE
 
         let updateNegativeID;

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\ManagerReport;
+use App\LeaveNotifications;
 use App\Models\StoreRoom;
 use BladeView;
 use Illuminate\Contracts\View\Factory;
@@ -129,6 +130,7 @@ class  LeaveSetupController extends Controller
 
         $users = HRPerson::getAllUsers();
         $managerList = ManagerReport::getListOfManagers();
+        $leaveNotificationsUsers = LeaveNotifications::getListOfUsers();
         $exemptedUsers = ExemptedUsers::getListOfExemptedUsers();
 		//$exemptedUsers = $exemptedUsers->load('user');;
         $leaveTypes = LeaveType::orderBy('name', 'asc')->get()->load(['leave_profle' => function ($query) {
@@ -151,6 +153,7 @@ class  LeaveSetupController extends Controller
         $data['exemptedUsers'] = $exemptedUsers;
         $data['leave_configuration'] = $leave_configuration;
         $data['leaveTypes'] = $leaveTypes;
+        $data['leaveNotificationsUsers'] = $leaveNotificationsUsers;
         $data['type_profile'] = $type_profile;
         $data['employees'] = $employees;
         if (isset($person['leave_profile'])) {
@@ -1203,6 +1206,26 @@ class  LeaveSetupController extends Controller
         return response()->json();
     }
 
+	/**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function storeLeaveNotUsers(Request $request)
+    {
+
+        unset($request['_token']);
+
+        $users = $request['hr_person_id'];
+
+        foreach ($users as $user) {
+            LeaveNotifications::create([
+                'hr_id' => $user,
+                'status' => 1
+            ]);
+        }
+        Alert::toast('Settings  Successfully Changed', 'success');
+        return response()->json();
+    }
 
     /**
      * @param ManagerReport $manager
@@ -1222,6 +1245,13 @@ class  LeaveSetupController extends Controller
     {
 		$Exempt = ExemptedUsers::find($exempted);
         $Exempt->delete();
+
+        return back();
+    }   
+	public function deleteLeaveNotifications($person): RedirectResponse
+    {
+		$leaveUser = LeaveNotifications::find($person);
+        $leaveUser->delete();
 
         return back();
     }
