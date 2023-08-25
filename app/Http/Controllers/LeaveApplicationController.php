@@ -904,16 +904,15 @@ class LeaveApplicationController extends Controller
 			
             // update leave application status
             $leaveId->status = 1;
-            //$leaveId->update();
+            $leaveId->update();
             // #Query the  leave_config days for value
             $credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
             $leaveBalance = $credit->leave_balance;
             #subract current balance from the one applied for
             $newBalance = $leaveBalance - $daysApplied;
             $credit->leave_balance = $newBalance;
-            //$credit->update();
-            //$leaveAttachment = $this->viewApplication($leaveId);
-			die('do you come here and heer and the money');
+            $credit->update();
+            $leaveAttachment = $this->viewApplication($leaveId);
             #send email to the user informing that the leave has been accepted
             if (!empty($hrDetails->email))
                 Mail::to($hrDetails->email)->send(new Accept_application($hrDetails->first_name, $leaveAttachment));
