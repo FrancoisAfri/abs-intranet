@@ -180,6 +180,7 @@
 							<th>Employee</th>
 							<th class="text-center">From</th>
 							<th class="text-center">To</th>
+							<th class="text-center">#</th>
 						</tr>
 						</thead>
 						<tbody>
@@ -200,6 +201,8 @@
 									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->start_time) ? date('d M Y H:i', $employee->start_time) : (($employee->start_date) ? date('d M Y', $employee->start_date) : '') }}</td>
 								<td style="vertical-align: middle;"
 									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->end_time) ? date('d M Y H:i', $employee->end_time) : (($employee->end_date) ? date('d M Y', $employee->end_date) : '') }}</td>
+								<td style="vertical-align: middle;"
+									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->leave_taken) ? $employee->leave_taken : 0 }} Hrs</td>
 							</tr>
 						@endforeach
 						</tbody>

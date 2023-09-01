@@ -138,7 +138,8 @@ class DashboardController extends Controller
             $todayStart = $today->copy()->startOfDay()->timestamp;
             $todayEnd = $today->copy()->endOfDay()->timestamp;
             $onLeaveThisMonth = HRPerson::select('hr_people.id', 'hr_people.first_name', 'hr_people.surname', 'hr_people.profile_pic',
-                'leave_application.start_date', 'leave_application.start_time', 'leave_application.end_date', 'leave_application.end_time')
+                'leave_application.start_date', 'leave_application.start_time', 'leave_application.end_date', 'leave_application.end_time'
+				, 'leave_application.leave_taken')
                 ->join('leave_application', 'hr_people.id', '=', 'leave_application.hr_id')
                 ->where('leave_application.status', 1)
                 ->where(function ($query) use ($todayStart) {

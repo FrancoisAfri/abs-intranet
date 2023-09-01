@@ -217,6 +217,7 @@
                                                     Good morning {{ $first_name }},<br><br>
                                                     As a very valuable member of our team, We would like to wish the best birthday ever</b><br>
                                                     We hope you are a having an amazing day, thank you for choosing to be part of this amazing family.</b><br>
+													We have allocated 0.5 day leave to you.</b>
 													We love you {{ $company_name }} family.</b><br>
 													Hippy Hooray !!!<br>
 													Hippy Hooray !!!<br>
