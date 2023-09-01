@@ -202,7 +202,7 @@
 								<td style="vertical-align: middle;"
 									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->end_time) ? date('d M Y H:i', $employee->end_time) : (($employee->end_date) ? date('d M Y', $employee->end_date) : '') }}</td>
 								<td style="vertical-align: middle;"
-									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->leave_taken) ? $employee->leave_taken : 0 }} Hrs</td>
+									class="text-center {{ ($employee->is_on_leave_today) ? 'bg-primary' : '' }}">{{ ($employee->leave_taken < 8) ? $employee->leave_taken : '' }} </td>
 							</tr>
 						@endforeach
 						</tbody>
