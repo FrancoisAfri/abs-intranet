@@ -7,6 +7,8 @@ use App\programme;
 use App\projects;
 use App\User;
 use App\AuditTrail;
+use App\leave_credit;
+use App\LeaveAllocation;
 use App\Mail\EmplyeesBirthdays;
 use Illuminate\Http\Request;
 use App\Http\Controllers\AuditReportsController;
@@ -38,23 +40,23 @@ class EmployeesBirthdays extends Controller
 		foreach ($birthdays as $employee) {
 			
 			$empID = $employee->id;
-			
+
 			if ((date('j',$employee->date_of_birth) === date('j')) && (date('n',$employee->date_of_birth) == date('n')))
 			{
 				//allocate 0.5 special leave
 				
 				$credits = leave_credit::where(
 					[
-						'hr_id' => ,$empID
+						'hr_id' => $empID,
 						'leave_type_id' => $leaveID
 					]
 				)->first();
-
+				
 				if (!empty($credits)) {
 					
 					$previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
 					$currentBalance = $previousBalance + 4;
-			
+					
 					$credits->leave_balance = $currentBalance;
 					$credits->update();
 					LeaveHistoryAuditController::store('leave days allocation', 'leave birthdays days allocation', $previousBalance, 4, $currentBalance, $leaveID, $empID,1,0);
@@ -73,7 +75,7 @@ class EmployeesBirthdays extends Controller
 						]
 					);
 				}
-				else 
+				else
 				{
 					$previousBalance = 0;
 					$currentBalance = 4;
@@ -105,5 +107,6 @@ class EmployeesBirthdays extends Controller
 					Mail::to($employee->email)->send(new EmplyeesBirthdays($employee->first_name));
 			}
 		}
+		AuditReportsController::store('Employee Records', "Cron birthdays leave Allocation Ran", "Automatic Ran by Server", 0);
 	}
 }
