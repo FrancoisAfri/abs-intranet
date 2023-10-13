@@ -51,6 +51,7 @@
                                     <label class="radio-inline"><input type="radio" id="rdo_all" name="application_type" value="4">  Leave Allowance</label>
                                     <label class="radio-inline"><input type="radio" id="rdo_levH" name="application_type" value="5">  Leave History</label>
                                     <label class="radio-inline"><input type="radio" id="rdo_cancelled_leaves" name="application_type" value="6"> Cancelled Leaves</label>
+                                    <label class="radio-inline"><input type="radio" id="rdo_pending_leaves" name="application_type" value="7"> Pending Leaves</label>
                                 </div>
                             </div>
                           <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
@@ -109,23 +110,29 @@
                                 </div>
                             </div>
                         </div>
-						<!--
-                  @foreach($division_levels as $division_level)
-                            <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                                <label for="{{ 'division_level_' . $division_level->level }}" class="col-sm-2 control-label">{{ $division_level->name }}</label>
-
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select id="{{ 'division_level_' . $division_level->level }}" name="{{ 'division_level_' . $division_level->level }}" class="form-control" onchange="divDDOnChange(this)">
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                          @endforeach   
-                    -->
+						<div class="form-group manual-field">
+							<label for="status" class="col-sm-2 control-label">Status</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-black-tie"></i>
+									</div>
+									<select id="status" name="status" class="form-control">
+									<option value="0">Select Leave Status</option>
+									<option value="1">Approved</option>
+									<option value="2">Require managers approval</option>
+									<option value="3">Require department head approval</option>
+									<option value="4">Require hr approval</option>
+									<option value="5">Require payroll approval</option>
+									<option value="6">Rejected</option>
+									<option value="7">Rejectd by department head</option>
+									<option value="8">Rejectd by hr</option>
+									<option value="9">Rejectd by payroll</option>
+									<option value="10">Cancelled</option>
+									</select>
+								</div>
+							</div>
+                        </div>
                      <div class="box-footer">
                         <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button>
                        <button type="submit" id="gen-report" name="gen-report" class="btn btn-primary pull-right"><i class="fa fa-check"></i> Generate Report</button>
@@ -238,13 +245,14 @@
         });
             //show/hide fields on radio button toggles (depending on registration type)
 
-            $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH, #rdo_cancelled_leaves').on('ifChecked', function(){
+            $('#rdo_levTkn, #rdo_bal ,#rdo_po ,#rdo_all,#rdo_levH, #rdo_cancelled_leaves, #rdo_pending_leaves').on('ifChecked', function(){
                 var allType = hideFields();
                 if (allType == 1) $('#box-subtitle').html('Leave Taken');
                 else if (allType == 2) $('#box-subtitle').html('Leave Balance');
                 else if (allType == 3) $('#box-subtitle').html('Leave Paid Out');
                  else if (allType == 4) $('#box-subtitle').html('Leave Allowance');
                   else if (allType == 5) $('#box-subtitle').html('Leave History');
+                  else if (allType == 7) $('#box-subtitle').html('Pending Leave Applications');
             });
 
             //Vertically center modals on page
@@ -324,6 +332,15 @@
                 $('.levAction-field').hide();
                 $('.date-field').show();
                 $('form[name="leave-application-form"]').attr('action', '/leave/reports/cancelled-leaves');
+                $('#gen-report').val("Submit");
+            }else if (allType == 7) {
+                $('.to-field').show();
+                $('.from-field').show();
+                $('.lev-field-field').hide();
+                $('.manual-field').show();
+                $('.levAction-field').hide();
+                $('.date-field').show();
+                $('form[name="leave-application-form"]').attr('action', '/leave/reports/pending-leaves');
                 $('#gen-report').val("Submit");
             }
             return allType;      

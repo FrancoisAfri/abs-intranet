@@ -396,6 +396,9 @@ Route::get('leave/Leave_History_Audit', 'LeaveHistoryAuditController@show');
 Route::get('leave/reports', 'LeaveHistoryAuditController@reports');
 Route::post('leave/reports/result', 'LeaveHistoryAuditController@getReport');
 Route::post('leave/reports/history', 'LeaveHistoryAuditController@getlevhistoryReport');
+// pending leave application
+Route::post('leave/reports/pending-leaves', 'LeaveHistoryAuditController@pendingLeaves');
+Route::post('leave/reports/pending-leaves/print', 'LeaveHistoryAuditController@pendingLeavesPrint');
 
 //leave history report
 Route::post('appraisal/reports/result', 'AppraisalReportsController@getReport');

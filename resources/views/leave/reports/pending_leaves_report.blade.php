@@ -8,13 +8,14 @@
         <div class="col-sm-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Cancelled Leave Applications Report</h3>
+                    <h3 class="box-title">Leave Status Applications Report</h3>
                 </div>
                 <!-- /.box-header -->
-                <form class="form-horizontal" method="POST" action="/leave/reports/cancelled-leaves/print" target="_blank">
+                <form class="form-horizontal" method="POST" action="/leave/reports/pending-leaves/print" target="_blank">
                     <input type="hidden" name="hr_person_id" value="{{ $employeeID }}">
                     <input type="hidden" name="leave_types_id" value="{{ $leaveTypeID }}">
                     <input type="hidden" name="action_date" value="{{ $action_date }}">
+                    <input type="hidden" name="status" value="{{ $status }}">
                     {{ csrf_field() }}
                     <div class="box-body">
                         <!-- Collapsible section containing the amortization schedule -->
@@ -29,6 +30,7 @@
 										<th>Leave Type</th>
 										<th>Start Date</th>
 										<th>End Date</th>
+										<th>Status</th>
 										<th>Cancelled By</th>
 										<th>Cancellation Reason</th>
 									</tr>
@@ -43,6 +45,7 @@
 											<td>{{ ($leaveApplication->leavetpe) ? $leaveApplication->leavetpe->name : '' }}</td>
 											<td nowrap>{{ ($leaveApplication->start_time) ? date('d M Y H:i', $leaveApplication->start_time) : (($leaveApplication->start_date) ? date('d M Y', $leaveApplication->start_date) : '') }}</td>
 											<td nowrap>{{ ($leaveApplication->end_time) ? date('d M Y H:i', $leaveApplication->end_time) : (($leaveApplication->end_date) ? date('d M Y', $leaveApplication->end_date) : '') }}</td>
+											<td nowrap>{{ ($leaveApplication->status) ? $statusArray[$leaveApplication->status]: '' }}</td>
 											<td nowrap>{{ ($leaveApplication->canceller) ? $leaveApplication->canceller->full_name : '' }}</td>
 											<td>{{ $leaveApplication->cancellation_reason }}</td>
 										</tr>
@@ -57,6 +60,7 @@
 										<th>Leave Type</th>
 										<th>Start Date</th>
 										<th>End Date</th>
+										<th>Status</th>
 										<th>Cancelled By</th>
 										<th>Cancellation Reason</th>
 									</tr>
@@ -109,15 +113,15 @@
 				buttons: [
 					{
 						extend: 'excelHtml5',
-						title: 'Leave Cancelled Report'
+						title: 'Leave Status Report'
 					},
 					{
 						extend: 'csvHtml5',
-						title: 'Leave Cancelled Report'
+						title: 'Leave Status Report'
 					},
 					{
 						extend: 'copyHtml5',
-						title: 'Leave Cancelled Report'
+						title: 'Leave Status Report'
 					}
 				]
 			});

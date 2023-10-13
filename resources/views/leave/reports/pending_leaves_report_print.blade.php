@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Cancelled Leave Applications Report Printed By {{ $printing_person }}</title>
+    <title>Leave Status Report Printed By {{ $printing_person }}</title>
 
     <!-- Tell the browser to be responsive to screen width -->
     <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
@@ -66,6 +66,7 @@
                                         <th>Leave Type</th>
                                         <th>Start Date</th>
                                         <th>End Date</th>
+										<th>Status</th>
                                         <th>Cancelled By</th>
                                         <th>Cancellation Reason</th>
                                     </tr>
@@ -78,6 +79,7 @@
 												<td>{{ ($leaveApplication->leavetpe) ? $leaveApplication->leavetpe->name : '' }}</td>
 												<td nowrap>{{ ($leaveApplication->start_time) ? date('d M Y H:i', $leaveApplication->start_time) : (($leaveApplication->start_date) ? date('d M Y', $leaveApplication->start_date) : '') }}</td>
 												<td nowrap>{{ ($leaveApplication->end_time) ? date('d M Y H:i', $leaveApplication->end_time) : (($leaveApplication->end_date) ? date('d M Y', $leaveApplication->end_date) : '') }}</td>
+												<td nowrap>{{ ($leaveApplication->status) ? $statusArray[$leaveApplication->status]: '' }}</td>
 												<td nowrap>{{ ($leaveApplication->canceller) ? $leaveApplication->canceller->full_name : '' }}</td>
 												<td>{{ $leaveApplication->cancellation_reason }}</td>
 											</tr>

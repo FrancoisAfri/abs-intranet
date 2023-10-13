@@ -122,35 +122,26 @@ class SendLeaveBalanceToUsers extends Controller
 
         $days = leave_configuration::pluck('number_of_days_to_remind_manager')->first();
 
-        //
         $daysToEscalation = leave_configuration::pluck('mumber_of_days_until_escalation')->first();
         $date_now = Carbon::today();
-        $date = Carbon::today()->subDays($daysToEscalation);
+        $date = Carbon::today()->subDays($days);
 
-        $applications = leave_application::where('status', '>=', 2)
-            ->whereBetween('created_at', [$date, $date_now])
-            //->where('created_at', '>=', $date)
-            ->get();
-        dd($applications);
-
-
-        $applications = leave_application::where('status', '>=', 2)
+        $applications = leave_application::where('status',2)
             ->where('created_at', '=', $date)
             ->get();
 
         foreach ($applications as $application) {
 
-            if (!empty($application->manager_id) && !empty($application->hr_id)) {
-                // get manager details
-                $hrDetail = HRPerson::getManagerDetails($application->manager_id);
-                $empDetails = HRPerson::getManagerDetails($application->hr_id);
-                $fullnane = $hrDetail->first_name . ' ' . $hrDetail->surname;
-                $fullnaneEmp = $empDetails->first_name . ' ' . $empDetails->surname;
-                // emails manager
-                if (!empty($hrDetail->email))
-                    Mail::to($hrDetail->email)->send(new managerReminder($fullnane, $fullnaneEmp));
-            }
+			// get manager details
+			$hrDetail = HRPerson::getManagerDetails($application->manager_id);
+			$empDetails = HRPerson::getManagerDetails($application->hr_id);
+			$fullnane = $hrDetail->first_name;
+			$fullnaneEmp = $empDetails->first_name . ' ' . $empDetails->surname;
+			// emails manager
+			if (!empty($hrDetail->email))
+				Mail::to($hrDetail->email)->send(new managerReminder($fullnane, $fullnaneEmp));
         }
+		AuditReportsController::store('Leave Management', "Cron leave manager reminder ran", "Automatic Ran by Server", 0);
     }
 
     /**
@@ -166,6 +157,53 @@ class SendLeaveBalanceToUsers extends Controller
 
         $daysToEscalation = leave_configuration::pluck('mumber_of_days_until_escalation')->first();
 
+        $date = Carbon::today()->subDays($daysToEscalation);
+
+        $applications = leave_application::where('status', '>=', 2)
+            ->where('created_at', '>=', $date)
+            ->get();
+
+        foreach ($applications as $application) {
+            
+			// employee name
+			$employee = HRPerson::getManagername($application->hr_id);
+			$employeeName = $employee->first_name." ".$employee->surname;
+			//get manager details
+			$namager = HRPerson::getManagername($application->manager_id);
+			$namagerName = $namager->first_name." ".$namager->surname;
+			// get escalation manager
+			if (isset($application->manager_id)) $managerId = $application->manager_id;
+			else $managerId = 0;
+            $escalationDetails = HRPerson::getManagerDetails($managerId);
+			
+			//get user division ID
+            $empDetails = HRPerson::where('id', $application->hr_id);
+			// get hr manager
+			$div = DivisionLevelFive::where('id', $empDetails->division_level_5)->first();
+            $hrDetail = HRPerson::where('id', $div->hr_manager_id)->where('status', 1)
+                ->select('first_name', 'surname', 'email')
+                ->first(); 
+				
+			// send email to manager escalation
+			if (!empty($escalationDetails->email))
+				   Mail::to($escalationDetails->email)->send(new escalateleaveApplication($escalationDetails->first_name, $employeeName, $namagerName));
+				
+			// send email to hr manager
+			if (!empty($hrDetail->email))
+                Mail::to($hrDetail->email)->send(new HrLeaveEscalation($hrDetail->first_name, $employeeName, $namagerName));
+
+        }
+
+		AuditReportsController::store('Leave Management', "Cron leave escalation Ran", "Automatic Ran by Server", 0);
+    }
+	/*public function leaveEscallation()
+    {
+        #check who is the manager
+        #send a reminder
+        #runs everyday
+        $date_now = Carbon::now()->toDayDateTimeString();
+
+        $daysToEscalation = leave_configuration::pluck('mumber_of_days_until_escalation')->first();
 
         $date = Carbon::today()->subDays($daysToEscalation);
 
@@ -174,7 +212,7 @@ class SendLeaveBalanceToUsers extends Controller
             ->pluck('hr_id');
 
 
-        $users = $user->unique();
+        //$users = $user->unique();
 
         $outputArray = array();
         foreach ($users as $empID) {
@@ -216,8 +254,9 @@ class SendLeaveBalanceToUsers extends Controller
             if (!empty($deptDetails->email))
                 Mail::to($deptDetails->email)->send(new escalateleaveApplication($headName, $hrDetail->email, $date_now, $unapproved, $fullnane));
         }
+		AuditReportsController::store('Leave Management', "Cron leave escalation Ran", "Automatic Ran by Server", 0);
 
-    }
+    }*/
 
 
     /**
