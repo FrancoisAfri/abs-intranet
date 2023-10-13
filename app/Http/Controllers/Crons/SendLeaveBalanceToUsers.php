@@ -12,6 +12,7 @@ use App\leave_application;
 use App\leave_configuration;
 use App\leave_credit;
 use App\leave_history;
+use App\DivisionLevelFive;
 use App\Mail\escalateleaveApplication;
 use App\Mail\LeaveBalanceReminder;
 use App\Mail\sendManagersListOfAbsentUsersToday;
