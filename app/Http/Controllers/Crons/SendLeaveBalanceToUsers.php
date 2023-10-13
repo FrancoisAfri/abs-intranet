@@ -13,6 +13,7 @@ use App\leave_configuration;
 use App\leave_credit;
 use App\leave_history;
 use App\DivisionLevelFive;
+use App\Mail\HrLeaveEscalation;
 use App\Mail\escalateleaveApplication;
 use App\Mail\LeaveBalanceReminder;
 use App\Mail\sendManagersListOfAbsentUsersToday;
@@ -115,7 +116,6 @@ class SendLeaveBalanceToUsers extends Controller
 
     public function managerReminder()
     {
-
         #check who is the manager
         #send a reminder
         #runs everyday
@@ -178,12 +178,13 @@ class SendLeaveBalanceToUsers extends Controller
             $escalationDetails = HRPerson::getManagerDetails($managerId);
 			
 			//get user division ID
-            $empDetails = HRPerson::where('id', $application->hr_id);
+            $empDetails = HRPerson::where('id', $application->hr_id)->first();
+
 			// get hr manager
 			$div = DivisionLevelFive::where('id', $empDetails->division_level_5)->first();
             $hrDetail = HRPerson::where('id', $div->hr_manager_id)->where('status', 1)
                 ->select('first_name', 'surname', 'email')
-                ->first(); 
+                ->first();
 				
 			// send email to manager escalation
 			if (!empty($escalationDetails->email))

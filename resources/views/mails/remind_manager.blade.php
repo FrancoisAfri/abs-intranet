@@ -216,7 +216,7 @@
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
                                                     Good Day {{ $fullname }},<br><br>
 
-                                                    This email is to inform you that , you have not approved {{ $employee }} leave applications.
+                                                    This email is to inform you that, you have not approved {{ $employee }} leave applications.
 
                                                     <p>
                                                         Please attend to this leave application as soon as possible
