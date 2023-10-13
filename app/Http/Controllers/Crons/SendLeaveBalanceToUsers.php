@@ -176,24 +176,28 @@ class SendLeaveBalanceToUsers extends Controller
 			if (isset($application->manager_id)) $managerId = $application->manager_id;
 			else $managerId = 0;
             $escalationDetails = HRPerson::getManagerDetails($managerId);
-			
-			//get user division ID
-            $empDetails = HRPerson::where('id', $application->hr_id)->first();
-
-			// get hr manager
-			$div = DivisionLevelFive::where('id', $empDetails->division_level_5)->first();
-            $hrDetail = HRPerson::where('id', $div->hr_manager_id)->where('status', 1)
-                ->select('first_name', 'surname', 'email')
-                ->first();
-				
-			// send email to manager escalation
+			//
 			if (!empty($escalationDetails->email))
+			{
+				// send email to manager escalation
+				if (!empty($escalationDetails->email))
 				   Mail::to($escalationDetails->email)->send(new escalateleaveApplication($escalationDetails->first_name, $employeeName, $namagerName));
 				
-			// send email to hr manager
-			if (!empty($hrDetail->email))
-                Mail::to($hrDetail->email)->send(new HrLeaveEscalation($hrDetail->first_name, $employeeName, $namagerName));
-
+			}
+			//get user division ID
+            $empDetails = HRPerson::where('id', $application->hr_id)->first();
+			if (!empty($empDetails->division_level_5))
+			{
+				// get hr manager
+				$div = DivisionLevelFive::where('id', $empDetails->division_level_5)->first();
+				$hrDetail = HRPerson::where('id', $div->hr_manager_id)->where('status', 1)
+					->select('first_name', 'surname', 'email')
+					->first();
+					
+				// send email to hr manager
+				if (!empty($hrDetail->email))
+					Mail::to($hrDetail->email)->send(new HrLeaveEscalation($hrDetail->first_name, $employeeName, $namagerName));
+			}
         }
 
 		AuditReportsController::store('Leave Management', "Cron leave escalation Ran", "Automatic Ran by Server", 0);
