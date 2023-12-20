@@ -41,7 +41,7 @@
                                                     id="asset_type_id" name="asset_type_id" data-select2-id="1"
                                                     tabindex="-1" aria-hidden="true">
                                                 <option value="0">** Select Asset Type **</option>
-                                                @foreach( $assetTypes as $types)
+                                                @foreach($assetTypes as $types)
                                                     <option value="{{ $types->id }}">{{ $types->name }}</option>
                                                 @endforeach
                                             </select>

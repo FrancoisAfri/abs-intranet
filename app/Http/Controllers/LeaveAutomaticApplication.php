@@ -46,7 +46,7 @@ class LeaveAutomaticApplication extends Controller
         //    ->where('created_at', '>=', $date)
          //   ->pluck('hr_id');
 		 
-		 public function __construct()
+	public function __construct()
     {
         $this->middleware('auth');
     }

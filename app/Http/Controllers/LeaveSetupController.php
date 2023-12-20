@@ -156,9 +156,7 @@ class  LeaveSetupController extends Controller
         $data['leaveNotificationsUsers'] = $leaveNotificationsUsers;
         $data['type_profile'] = $type_profile;
         $data['employees'] = $employees;
-        if (isset($person['leave_profile'])) {
-            $person['leave_profile'] = (int)$person['leave_profile'];
-        }
+
         AuditReportsController::store('Leave Management', 'Setup Search Page Accessed', "Actioned By User", 0);
         return view('leave.setup')->with($data);
     }

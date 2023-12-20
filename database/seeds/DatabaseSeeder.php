@@ -12,6 +12,7 @@ use App\LeaveType;
 use App\business_card;
 use App\leave_profile;
 use App\leave_configuration;
+use App\Model\StaffLoanSetup;
 
 class DatabaseSeeder extends Seeder
 {
@@ -234,8 +235,8 @@ class DatabaseSeeder extends Seeder
         $groupLevel->plural_name = 'Divisions';
         $groupLevel->active = 1;
         $groupLevel->save(); 
+		
         $module = new modules(); //polivy
-
         $module->active = 1;
         $module->name = 'Policy Enforcement';
         $module->code_name = 'Policy Enforcement';
@@ -1484,20 +1485,66 @@ class DatabaseSeeder extends Seeder
         $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
-         $ribbon = new module_ribbons();
-         $ribbon->active = 1;
-         $ribbon->sort_order = 3;
-         $ribbon->ribbon_name = 'Reports';
-         $ribbon->description = 'Reports';
-         $ribbon->ribbon_path = 'cms/cms_report';
-         $ribbon->access_level = 4;
-         $module->addRibbon($ribbon);
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'cms/cms_report';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		// Staff loan 
+		$module = new modules(); //polivy
+        $module->active = 1;
+        $module->name = 'Staff Loan Management';
+        $module->code_name = 'staff_loan';
+        $module->path = 'loan/view';
+        $module->font_awesome = 'fa fa-leanpub';
+        $module->save();
 
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'My Request';
+        $ribbon->description = 'My Request';
+        $ribbon->ribbon_path = 'loan/view';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
 
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Search';
+        $ribbon->description = 'Search';
+        $ribbon->ribbon_path = 'loan/search';
+        $ribbon->access_level = 2;
+        $module->addRibbon($ribbon);
+
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Reports';
+        $ribbon->description = 'Reports';
+        $ribbon->ribbon_path = 'loan/reports';
+        $ribbon->access_level = 3;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 4;
+        $ribbon->ribbon_name = 'Setup';
+        $ribbon->description = 'Setup';
+        $ribbon->ribbon_path = 'loan/setup';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 
         $leave_config = new leave_configuration();
         $leave_config->save();
-
+		// loan setup
+		$loan_config = new StaffLoanSetup();
+        $loan_config->save();
+		
         //#leave_types
         $type = new LeaveType();
         $type->name = 'Annual';

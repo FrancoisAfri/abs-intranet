@@ -3,7 +3,7 @@
 
 use Illuminate\Support\Facades\Route;
 
-//use App\Http\Controllers\Assets\AssetManagementController;
+//use App\Http\Controllers\Loan\StaffLoanController;
 
 /*
   |--------------------------------------------------------------------------
@@ -228,6 +228,25 @@ Route::group(['prefix' => 'users', 'middleware' => ['auth']], function () {
     Route::patch('module_edit/{mod}', 'UsersController@editModule');
     Route::get('approval', 'UsersController@usersApproval');
     Route::get('reports', 'UsersController@reports');
+});
+// staff loan.
+Route::group(['prefix' => 'loan', 'namespace' => 'Loans', 'middleware' => ['auth']], function () {
+    Route::resource('/', StaffLoanController::class);
+    /**
+     * custom StaffLoanController routes
+     */
+    Route::get('view', 'StaffLoanController@index')->name('loan.view');
+    Route::get('approval', 'StaffLoanController@approval')->name('loan.setup');
+    Route::get('setup', 'StaffLoanController@setUp')->name('loan.setup');
+	Route::post('/setup/{loan}', 'StaffLoanController@setUpStore')->name('setup.store');
+	Route::post('/add_loan', 'StaffLoanController@store')->name('loan.store');
+    Route::get('/accepted/{loan}', 'StaffLoanController@AcceptLoan')->name('loan.accepted');
+	Route::post('/reject/{loan}', 'StaffLoanController@rejectLoan')->name('loan.reject');
+    Route::get('/reports', 'StaffLoanController@reports')->name('loan.reports');
+    Route::get('/search', 'StaffLoanController@search')->name('loan.search');
+	Route::post('/admin-search', 'StaffLoanController@SearchResults')->name('loan.search-results');
+    Route::get('/view-ind/{loan}', 'StaffLoanController@viewLoanApplication')->name('loan.view-ind');
+
 });
 
 Route::get('view/{id}', 'CmsController@view');
