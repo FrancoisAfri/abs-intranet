@@ -173,7 +173,7 @@
                     // 'copy', 'csv', 'excel',
                     {
                         extend: 'print',
-                        title: 'Asset list Report',
+                        title: 'Staff Loan Management Reports',
                         exportOptions: {
                             stripHtml: false,
                             columns: ':visible:not(.not-export-col)'

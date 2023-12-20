@@ -105,13 +105,13 @@ class StaffLoanController extends Controller
 	public function setUpStore(LoanSetupRequest $request, StaffLoanSetup $loan)
     {
         // update setUp
-		$loan->max_amount = $request['max_amount'];
-		$loan->first_approval = $request['first_approval'];
-		$loan->second_approval = $request['second_approval'];
-		$loan->hr = $request['hr'];
-		$loan->payroll = $request['payroll'];
-		$loan->finance = $request['finance'];
-		$loan->finance_second = $request['finance_second'];
+		$loan->max_amount = !empty($request['max_amount']) ? $request['max_amount'] : 1;
+		$loan->first_approval = !empty($request['first_approval']) ? $request['first_approval'] : 0;
+		$loan->second_approval = !empty($request['second_approval']) ? $request['second_approval'] : 0;
+		$loan->hr = !empty($request['hr']) ? $request['hr'] : 0;
+		$loan->payroll = !empty($request['payroll']) ? $request['payroll'] : 0;
+		$loan->finance = !empty($request['finance']) ? $request['finance'] : 0;
+		$loan->finance_second = !empty($request['finance_second']) ? $request['finance_second'] : 0;
 		$loan->update();
 		
         AuditReportsController::store('Staff Loan Management', 'Setup Page Saved', "Actioned By User", 0);
