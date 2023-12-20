@@ -1495,7 +1495,7 @@ class DatabaseSeeder extends Seeder
         $module->addRibbon($ribbon);
 		
 		// Staff loan 
-		$module = new modules(); //polivy
+		$module = new modules(); 
         $module->active = 1;
         $module->name = 'Staff Loan Management';
         $module->code_name = 'staff_loan';
@@ -1509,21 +1509,30 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_name = 'My Request';
         $ribbon->description = 'My Request';
         $ribbon->ribbon_path = 'loan/view';
-        $ribbon->access_level = 3;
+        $ribbon->access_level = 1;
         $module->addRibbon($ribbon);
 
         $ribbon = new module_ribbons();
         $ribbon->active = 1;
         $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Approval';
+        $ribbon->description = 'Loan Approval Page';
+        $ribbon->ribbon_path = 'loan/approval';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+		
+		$ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
         $ribbon->ribbon_name = 'Search';
         $ribbon->description = 'Search';
         $ribbon->ribbon_path = 'loan/search';
-        $ribbon->access_level = 2;
+        $ribbon->access_level = 3;
         $module->addRibbon($ribbon);
 
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 3;
+        $ribbon->sort_order = 4;
         $ribbon->ribbon_name = 'Reports';
         $ribbon->description = 'Reports';
         $ribbon->ribbon_path = 'loan/reports';
@@ -1532,7 +1541,7 @@ class DatabaseSeeder extends Seeder
 		
 		$ribbon = new module_ribbons();
         $ribbon->active = 1;
-        $ribbon->sort_order = 4;
+        $ribbon->sort_order = 5;
         $ribbon->ribbon_name = 'Setup';
         $ribbon->description = 'Setup';
         $ribbon->ribbon_path = 'loan/setup';
