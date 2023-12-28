@@ -33,6 +33,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\SendListOfAbesntUsersToManager::class,
         \App\Console\Commands\EmployeeBirthday::class,
         \App\Console\Commands\AssetDepreciation::class,
+        \App\Console\Commands\PolicyRefresh::class,
     ];
 
     /**
@@ -64,6 +65,7 @@ class Kernel extends ConsoleKernel
         $schedule->command('schedule:sendAbsentUsersToManager')->weekdays()->dailyAt("10:00");
 		$schedule->command('schedule:employeeBirthday')->dailyAt('08:00');
 		$schedule->command('schedule:montlyAssetDepreciation')->monthlyOn(1, '04:00');
+		$schedule->command('schedule:policyRefresh')->dailyAt('11:30');
 
     }
 

@@ -70,7 +70,9 @@
                         Back
 						</button>
 						@if(empty($user->read_understood) &&  empty($user->read_not_understood)  && empty($user->read_not_sure))
-							 <button type="submit" id="add-new-module" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save</button>
+							<button type="submit" id="save-policy" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Save</button>
+						@else 
+							<button type="button" id="refreshed" class="btn btn-primary pull-right"><i class="fa fa-floppy-o"></i> Refreshed</button>
 						@endif
 						
 					</div>
@@ -114,6 +116,10 @@
 		//Cancel button click event
         document.getElementById("cancel").onclick = function () {
             location.href = "/System/policy/view_policies";
+        };
+		//refreshed button click event
+        document.getElementById("refreshed").onclick = function () {
+            location.href = "/System/policy/refreshed/{{$policy_id}}";
         };
         //Initialize Select2 Elements
         $(".select2").select2();

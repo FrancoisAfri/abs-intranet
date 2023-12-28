@@ -33,6 +33,7 @@
 								<th>Name</th>
 								<th>Description</th>
 								<th>Completion date</th>
+								<th>Refresh Month(s)</th>
 								<th style="width: 5px; text-align: center;"></th>
 								<th style="width: 5px; text-align: center;"></th>
 								<th style="width: 5px; text-align: center;"></th>
@@ -57,6 +58,7 @@
 										<td>{{ (!empty( $policy->name)) ?  $policy->name : ''}} </td>
 										<td>{{ (!empty( $policy->description)) ?  $policy->description : ''}} </td>
 										<td>{{ (!empty( $policy->date)) ?  date(' d M Y', $policy->date) : '' }}</td>
+										<td>{{ (!empty( $policy->refresh_month)) ? 'Yes' : '' }}</td>
 										<td>
 											<!--   leave here  -->
 											<button vehice="button" id="view_ribbons"
@@ -88,7 +90,7 @@
 								@endforeach
 							@else
 								<tr id="categories-list">
-									<td colspan="6">
+									<td colspan="7">
 										<div class="alert alert-danger alert-dismissable">
 											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
 												&times;

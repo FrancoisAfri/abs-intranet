@@ -51,7 +51,7 @@
                         <label for="date" class="col-sm-2 control-label">Completion date</label>
                         <div class="col-sm-8">
                             <input type="text" class="form-control" id="date" name="date"
-                                   value="{{ old('date') }}" placeholder="Select  Inception date  ...">
+                                   value="{{ old('date') }}" placeholder="Select Completion date ...">
                         </div>
                     </div>
                     <hr class="hr-text" data-content="Add Policy Users">
@@ -78,6 +78,14 @@
                                         <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
                                     @endforeach
                                 </select>
+                        </div>
+                    </div>
+					<div class="form-group {{ $errors->has('refresh_month') ? ' has-error' : '' }}">
+                        <label for="refresh_month" class="col-sm-2 control-label">Refresh After 3 Months</label>
+                        <div class="col-sm-8">
+                                <label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
+									<input class="rdo-iCheck" type="checkbox" id="refresh_month" name="refresh_month" value="1">
+								</label>
                         </div>
                     </div>
                 </div>

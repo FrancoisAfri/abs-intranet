@@ -8,6 +8,7 @@ use App\DivisionLevel;
 use App\DivisionLevelFive;
 use App\HRPerson;
 use App\Policy_Category;
+use App\PolicyRefreshed;
 use App\Http\Requests;
 use App\Mail\createPolicy;
 use App\modules;
@@ -19,6 +20,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
+
 class PolicyEnforcementController extends Controller
 {
     public function __construct()
@@ -98,11 +101,13 @@ class PolicyEnforcementController extends Controller
             $dates = $policyData['date'] = str_replace('/', '-', $policyData['date']);
             $dates = $policyData['date'] = strtotime($policyData['date']);
         }
-
+		$refresh_month = !empty($policyData['refresh_month']) ? $policyData['refresh_month'] : 0;
+        
         $policy = new Policy();
         $policy->category_id = $policyData['category_id'];
         $policy->name = $policyData['name'];
         $policy->description = $policyData['description'];
+        $policy->refresh_month = $refresh_month;
         $policy->date = $dates;
         $policy->status = 1;
         $policy->save();
@@ -142,6 +147,20 @@ class PolicyEnforcementController extends Controller
         }
 //
         foreach ($users as $hrID) {
+			
+			/// add the next refresh_ date
+			if ($refresh_month == 1)
+			{
+				$datesUsed = date('Y-m-d', $dates);
+				$refreshDate = strtotime("+3 months", strtotime($datesUsed));
+				# create record in policy refresh
+				$policyUsers = new PolicyRefreshed();
+				$policyUsers->hr_id = $hrID->id;
+				$policyUsers->policy_id = $policyID;
+				$policyUsers->date_refreshed = $refreshDate;
+				$policyUsers->status = 1;
+				$policyUsers->save();
+			}
             # create record in policy users
             $policyUsers = new Policy_users();
             $policyUsers->user_id = $hrID->id;
@@ -297,11 +316,25 @@ class PolicyEnforcementController extends Controller
         } elseif ($DivFive->active == 1 && (!empty($policyData['division_level_5']) && $policyData['division_level_5'] > 0)) {
             $users = HRPerson::where('division_level_5', ($policyData['division_level_5']))->orderBy('id', 'desc')->get();
         }
-
+		$policy = Policy::where('id', $policyData['policyID'])->first();
         foreach ($users as $hrID) {
             $OldUser = Policy_users::where('user_id', $hrID->id)->where('policy_id', $policyData['policyID'])->first();
             # create record in policy users
             if (empty($OldUser->id)) {
+				/// add the next refresh_ date
+				if ($policy->refresh_month == 1)
+				{
+					$datesUsed = date('Y-m-d', $policy->date);
+					$refreshDate = strtotime("+3 months", strtotime($datesUsed));
+					# create record in policy refresh
+					$policyUsers = new PolicyRefreshed();
+					$policyUsers->hr_id = $hrID->id;
+					$policyUsers->policy_id = $policy->id;
+					$policyUsers->date_refreshed = $refreshDate;
+					$policyUsers->status = 1;
+					$policyUsers->save();
+				}
+			
                 $policyUsers = new Policy_users();
                 $policyUsers->user_id = $hrID->id;
                 $policyUsers->policy_id = $policyData['policyID'];
@@ -324,6 +357,7 @@ class PolicyEnforcementController extends Controller
 
     public function viewPolicies()
     {
+		
         $policies = Policy::where('status', 1)->orderBy('name', 'asc')->get();
         if (!empty($policies)) $policies = $policies->load('policyCategory');
         $users = Auth::user()->person->id;
@@ -338,7 +372,7 @@ class PolicyEnforcementController extends Controller
             ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
             ->leftJoin('policy_category', 'policy.category_id', '=', 'policy_category.id')
             //->where('policy.date', '>', $today)
-            ->where('policy_users.user_id', $users)
+            ->where('policy_users.user_id', 3)
             ->orderBy('policy_users.id')
             ->limit(100)
             ->get();
@@ -505,6 +539,7 @@ class PolicyEnforcementController extends Controller
         $data['breadcrumb'] = [['title' => 'Policy Library', 'path' => '/System/policy/create', 'icon' => 'fa fa-lock', 'active' => 0, 'is_module' => 1],
             ['title' => 'Read Policy ', 'active' => 1, 'is_module' => 0]];
 
+        $data['policy_id'] = $user->policy->id;
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'My Policies';
 
@@ -794,5 +829,34 @@ class PolicyEnforcementController extends Controller
 		$newtemplate = $request->input('name');
         AuditReportsController::store('Policy Enforcement', 'Category Informations Edited', "Edited by User", 0);
         return response()->json(['new_category' => $newtemplate], 200);
+    }
+	// refreshed
+	public function refreshed(Policy $policy)
+    {
+		$user = Auth::user()->person->id;
+		
+		$oldRow = PolicyRefreshed::where('status', 1)->where('hr_id', $user)
+							->where('policy_id', $policy->id)->first();
+		
+		// update old record 
+		$oldRow->status = 2;
+		//$oldRow->status = strtotime(date('Y-m-d'));
+		$oldRow->update();
+		
+		// add new row
+		
+		$today = date('Y-m-d');
+		$refreshDate = strtotime("+3 months", strtotime($today));
+		# create record in policy refresh
+		$PolicyRefreshed = new PolicyRefreshed();
+		$PolicyRefreshed->hr_id = $user;
+		$PolicyRefreshed->policy_id = $policy->id;
+		$PolicyRefreshed->date_refreshed = $refreshDate;
+		$PolicyRefreshed->status = 1;
+		$PolicyRefreshed->save();
+		
+		Alert::toast("Policy Successfully refreshed !!! See you in 3 Months", 'success');
+        AuditReportsController::store('Policy Enforcement', "$policy->name Policy Refreshed", "Refreshed By User", 0);
+        return back();
     }
 }

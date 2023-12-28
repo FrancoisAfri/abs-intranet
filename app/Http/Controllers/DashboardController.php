@@ -25,6 +25,8 @@ use App\activity;
 use App\ClientInduction;
 use App\modules;
 use App\programme;
+use App\Policy;
+use App\PolicyRefreshed;
 use App\ContactPerson;
 use App\CRMAccount;
 use App\ceoNews;
@@ -36,6 +38,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class DashboardController extends Controller
 {
@@ -47,6 +50,18 @@ class DashboardController extends Controller
 
     public function index()
     {
+		
+		// check if there is a policy that needs refresh
+		$today =  strtotime(date("Y-m-d"));
+		$policies = PolicyRefreshed::where('status', 1)
+							->where('date_refreshed','<=', $today)->first();
+		if (!empty($policies->id))
+		{
+			// get policy name
+			$policy = Policy::where('id',$policies->policy_id)->first();
+			Alert::toast("You have a policy that need your attention!!! Please go through $policy->name policy", 'warning');
+			return redirect("/policy/read-policy-document/$policy->id");
+		}
         $loggedInEmplID = Auth::user()->person->id;
 
         $data['breadcrumb'] = [

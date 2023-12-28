@@ -336,6 +336,7 @@ Route::post('hr/emial', 'LeaveController@getEmail');
 
 #policy enforcement system
 Route::get('System/policy/create', 'PolicyEnforcementController@create');
+Route::get('System/policy/refreshed/{policy}', 'PolicyEnforcementController@refreshed');
 Route::get('System/policy/add/{policyCat}', 'PolicyEnforcementController@policyCat');
 Route::get('System/policy/view_policies', 'PolicyEnforcementController@viewPolicies');
 Route::post('System/policy/add_policy', 'PolicyEnforcementController@createpolicy');

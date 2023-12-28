@@ -27,4 +27,10 @@ class Policy extends Model
     {
         return $this->belongsTo(Policy_Category::class, 'category_id')->orderBy('id');
     }
+	
+	public function policyRefresh()
+    {
+        return $this->hasMany(PolicyRefreshed::class, 'policy_id')->orderBy('id');
+    }
+	
 }

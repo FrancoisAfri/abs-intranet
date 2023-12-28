@@ -4,7 +4,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>{{ $company_name }} - New Policy</title>
+    <title>{{ $company_name }} - Policy Refesh</title>
     <style type="text/css" media="screen">
 
         /* Force Hotmail to display emails at full width */
@@ -216,12 +216,10 @@
                                             <tr>
                                                 <td valign="top" style="padding-bottom:20px; background-color:#ffffff;">
 
-                                                    Hi {{ $first_name . ' ' . $surname}},<br><br>
-                                                    We would like to inform you that a new Policy has been loaded and
-                                                    requires your Attention.
-                                                    To view the Policy please <a target="_blank"
-                                                                                                href="{{ $mypolicies_url }}">click
-                                                        here.</a>
+                                                    Hi {{ $first_name}},<br><br>
+													As per company policy, you need to go through {{$policy}} policy every 3 months, and mark it as refreshed.
+                                                    To view the policy please 
+													<a target="_blank" href="{{ $mypolicies_url }}">click here.</a>
                                                 </td>
                                             </tr>
                                             <tr>
