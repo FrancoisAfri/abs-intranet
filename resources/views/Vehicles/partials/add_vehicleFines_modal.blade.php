@@ -12,7 +12,6 @@
                 <div class="modal-body">
                     <div id="invalid-input-alert"></div>
                     <div id="success-alert"></div>
-
                      <!-- <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Capture Date</label>
                         <div class="col-sm-8">
@@ -20,7 +19,6 @@
                                    placeholder="Enter Capture Date" required readonly="">
                         </div>
                     </div> -->
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Registration</label>
                         <div class="col-sm-8">
@@ -28,7 +26,6 @@
                                    placeholder="Enter Registration " required readonly="">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="Status" class="col-sm-2 control-label">Type of Fine </label>
                         <div class="col-sm-8">
@@ -45,7 +42,6 @@
 
                         </div>
                     </div>
-                     
                      <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Fine Ref</label>
                         <div class="col-sm-8">
@@ -53,7 +49,6 @@
                                    placeholder="Enter Fine Ref" required>
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Date Of Fine </label>
                         <div class="col-sm-8">
@@ -61,14 +56,12 @@
                                    value="{{ old('date') }}" placeholder="Select date of fine  ...">
                         </div>
                     </div>
-
                      <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Time of Fine</label>
                         <div class="col-sm-8">
                            <input type="text" class="form-control" id="time_of_fine" name="time_of_fine" value="{{ old('time_of_fine') }}" placeholder="Select Time of Fine...">
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Amount</label>
                         <div class="col-sm-8">
@@ -83,7 +76,6 @@
                                    placeholder="Enter reduced" required>
                         </div>
                     </div>
-
                     <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Additional Fee </label>
                         <div class="col-sm-8">
@@ -112,7 +104,6 @@
                                   
                         </div>
                     </div>
-
                         <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Driver </label>
                         <div class="col-sm-8">
@@ -125,8 +116,6 @@
                             </select>
                         </div>
                     </div>
-
-
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Magistrate Office </label>
                         <div class="col-sm-8">
@@ -134,7 +123,6 @@
                                   
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Court Date</label>
                         <div class="col-sm-8">
@@ -142,7 +130,6 @@
                                    value="{{ old('date') }}" placeholder="Select  court date   ...">
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="date" class="col-sm-2 control-label">Paid Date</label>
                         <div class="col-sm-8">
@@ -150,15 +137,12 @@
                                    value="{{ old('date') }}" placeholder="Select paid date   ...">
                         </div>
                     </div>
-
                       <div class="form-group">
                         <label for="path" class="col-sm-2 control-label">Amount Paid </label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="amount_paid" name="amount_paid" value="" placeholder="Enter amount paid  " required>
-                                  
+                            <input type="number" class="form-control" id="amount_paid" name="amount_paid" value="" placeholder="Enter amount paid  " required>  
                         </div>
                     </div>
-
                     <div class="form-group ">
                         <label for="description" class="col-sm-2 control-label">Description</label>
                         <div class="col-sm-8">
@@ -167,7 +151,6 @@
                                       placeholder="Enter description..." rows="3">{{ old('description') }}</textarea>
                         </div>
                     </div>
-
                        <div class="form-group">
                         <label for="Status" class="col-sm-2 control-label">Fine Status </label>
                         <div class="col-sm-8">
@@ -179,11 +162,8 @@
                                 <option value="3"> Fine Revoked</option>
                                 <option value="4">  Fine Paid</option>
                             </select>
-
                         </div>
                     </div>
-
-                 
                     <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -192,9 +172,7 @@
                                    class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
                                    data-show-upload="false">
                         </div>
-
                     </div>
-
                        <div class="form-group supDoc-field{{ $errors->has('documents') ? ' has-error' : '' }}">
                         <label for="documents" class="col-sm-2 control-label">Attachment </label>
                         <div class="col-sm-8">
@@ -203,10 +181,7 @@
                                    class="file file-loading" data-allowed-file-extensions='["pdf", "docx", "doc"]'
                                    data-show-upload="false">
                         </div>
-
                     </div>
-
-                    
                     <input type="hidden" id="valueID" name="valueID"
                            value="{{ !empty($maintenance->id) ? $maintenance->id : ''}}">
 

@@ -23,133 +23,86 @@
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <div class="box-body" id="view_users">
-                        @if (isset($view_by_admin) && $view_by_admin === 1)
-                            @foreach($division_levels as $division_level)
-                                <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
-                                            <label for="{{ 'division_level_' . $division_level->level }}"
-                                                   class="col-sm-2 control-label">{{ $division_level->name }}</label>
-                                            <div class="col-sm-10">
-                                                <div class="input-group">
-                                                    <div class="input-group-addon">
-                                                        <i class="fa fa-black-tie"></i>
-                                                    </div>
-                                                    <select id="{{ 'division_level_' . $division_level->level }}"
-                                                            name="{{ 'division_level_' . $division_level->level }}"
-                                                            class="form-control"
-                                                            onchange="divDDOnChange(this, null, 'view_users')">
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </div>
-                            @endforeach
-                        @endif
-                            <div class="form-group">
-                                <label for="first_name" class="col-sm-2 control-label">First Name </label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-user"></i>
-                                        </div>
-                                        <input type="text" class="form-control" id="first_name" name="first_name"
-                                               value="{{ $user->person->first_name }}" placeholder="First Name"
-                                               required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="surname" class="col-sm-2 control-label">Surname</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-user"></i>
-                                        </div>
-                                        <input type="text" class="form-control" id="surname" name="surname"
-                                               value="{{ $user->person->surname }}" placeholder="Surname" required>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="employee_number" class="col-sm-2 control-label">Employee Number</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-user"></i>
-                                        </div>
-                                        <input type="text" class="form-control" id="employee_number"
-                                               name="employee_number" value="{{ $user->person->employee_number }}"
-                                               placeholder="Employee Number">
-                                    </div>
-                                </div>
-                            </div>
-                            {{--add leave porfile--}}
-							@if (isset($view_by_admin) && $view_by_admin === 1)
-                            <div class="form-group">
-                                <label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select name="leave_profile" class="form-control">
-                                            <option value="">*** Select leave Profile ***</option>
-                                            @foreach($leave_profile as $leave_profiles)
-                                                <option value="{{ $leave_profiles->id }}" {{ ($user->person->leave_profile == $leave_profiles->id) ?
-                                                ' selected' : '' }}>{{ $leave_profiles->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="position" class="col-sm-2 control-label">Position</label>
-                                <div class="col-sm-10">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">
-                                            <i class="fa fa-black-tie"></i>
-                                        </div>
-                                        <select name="position" class="form-control">
-                                            <option value="">*** Select a Position ***</option>
-                                            @foreach($positions as $position)
-                                                <option value="{{ $position->id }}" {{ ($user->person->position == $position->id) ? ' selected' : '' }}>{{ $position->name }}</option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+					<hr class="hr-text" data-content="Personal Information">
 						<div class="form-group">
-						<label for="action" class="col-sm-2 control-label">Reports to</label>
+							<label for="title" class="col-sm-2 control-label">Title </label>
 							<div class="col-sm-10">
 								<div class="input-group">
 									<div class="input-group-addon">
-										<i class="fa fa-user-circle"></i>
+										<i class="fa fa-user"></i>
 									</div>
-									<select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;">
-										<option selected="selected" value="0" >*** Select a Manager ***</option>
-											@foreach($employees as $employee)
-											<option value="{{ $employee->id }}" {{ ($user->person->manager_id == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
-											@endforeach
-									</select>
+									<select name="title" class="form-control">
+									<option value="">*** Select Your Title ***</option>
+									<option value="1" {{ ($user->person->leave_profile === 1) ? ' selected' : '' }}>Mr</option>
+									<option value="2" {{ ($user->person->leave_profile === 2) ? ' selected' : '' }}>Miss</option>
+									<option value="2" {{ ($user->person->leave_profile === 2) ? ' selected' : '' }}>Ms</option>
+									<option value="2" {{ ($user->person->leave_profile === 2) ? ' selected' : '' }}>Dr</option>
+								</select>
 								</div>
 							</div>
 						</div>
-
-                                <div class="form-group">
-                                    <label for="action" class="col-sm-2 control-label">Second manager in charge </label>
-                                    <div class="col-sm-10">
-                                        <div class="input-group">
-                                            <div class="input-group-addon">
-                                                <i class="fa fa-user-circle"></i>
-                                            </div>
-                                            <select id="second_manager_id" name="second_manager_id" class="form-control select2"  style="width: 100%;">
-                                                <option selected="selected" value="0" >*** Select a Manager ***</option>
-                                                @foreach($employees as $employee)
-                                                    <option value="{{ $employee->id }}" {{ ($user->person->second_manager_id == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-						@endif
+						<div class="form-group">
+							<label for="first_name" class="col-sm-2 control-label">First Name </label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input type="text" class="form-control" id="first_name" name="first_name"
+										   value="{{ $user->person->first_name }}" placeholder="First Name"
+										   required>
+								</div>
+							</div>
+						</div>	
+						<div class="form-group">
+							<label for="surname" class="col-sm-2 control-label">Surname</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input type="text" class="form-control" id="surname" name="surname"
+										   value="{{ $user->person->surname }}" placeholder="Surname" required>
+								</div>
+							</div>
+						</div> 
+						<div class="form-group">
+							<label for="known_as" class="col-sm-2 control-label">Known As</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input type="text" class="form-control" id="known_as" name="known_as"
+										   value="{{ $user->person->known_as }}" placeholder="Known As">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="initial" class="col-sm-2 control-label">Initial</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input type="text" class="form-control" id="initial" name="initial"
+										   value="{{ $user->person->initial }}" placeholder="Initial" required>
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="employee_number" class="col-sm-2 control-label">Employee Number</label>
+							<div class="col-sm-10">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input type="text" class="form-control" id="employee_number"
+										   name="employee_number" value="{{ $user->person->employee_number }}"
+										   placeholder="Employee Number">
+								</div>
+							</div>
+						</div>
                         <div class="form-group">
                             <label for="cell_number" class="col-sm-2 control-label">Cell Number</label>
                             <div class="col-sm-10">
@@ -316,30 +269,393 @@
                                 </div>
                             </div>
                         </div>
+						<hr class="hr-text" data-content="Emergency Contact Information">
+						<div class="form-group">
+                            <label for="next_of_kin" class="col-sm-2 control-label">Name & Surname </label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="next_of_kin" name="next_of_kin" value="{{ $user->person->next_of_kin }}" placeholder="Next of Kin">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="next_of_kin_number" class="col-sm-2 control-label">Number </label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="next_of_kin_number" name="next_of_kin_number" value="{{ $user->person->next_of_kin_number }}" placeholder="Next of Kin Number">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="next_of_kin_work_number" class="col-sm-2 control-label">Work Number </label>
+
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="next_of_kin_work_number" name="next_of_kin_work_number" value="{{ $user->person->next_of_kin_work_number }}" placeholder="Work Number">
+                                </div>
+                            </div>
+                        </div>
+						<hr class="hr-text" data-content="Tax Information">
+						<div class="form-group">
+                            <label for="income_tax_number" class="col-sm-2 control-label">Income Tax Number </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="income_tax_number" name="income_tax_number" value="{{ $user->person->income_tax_number }}" placeholder="Income Tax Number">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="tax_office" class="col-sm-2 control-label">Tax Office </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="tax_office" name="tax_office" value="{{ $user->person->tax_office }}" placeholder="Tax office">
+                                </div>
+                            </div>
+                        </div>
+						<hr class="hr-text" data-content="Banking Detail">
+						<div class="form-group">
+                            <label for="account_type" class="col-sm-2 control-label">Account Type </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="account_type" name="account_type" value="{{ $user->person->account_type }}" placeholder="Account Type">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="account_holder_name" class="col-sm-2 control-label">Account Holder Name </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="account_holder_name" name="account_holder_name" value="{{ $user->person->account_holder_name }}" placeholder="Account Holder Name">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="bank_name" class="col-sm-2 control-label">Bank Name </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="bank_name" name="bank_name" value="{{ $user->person->bank_name }}" placeholder="Bank Name">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="branch_name" class="col-sm-2 control-label">Branch Name </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="branch_name" name="branch_name" value="{{ $user->person->branch_name }}" placeholder="Branch Name">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="account_number" class="col-sm-2 control-label">Account Number </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="account_number" name="account_number" value="{{ $user->person->account_number }}" placeholder="Account Number">
+                                </div>
+                            </div>
+                        </div>
+						<hr class="hr-text" data-content="MED AID">
+						<div class="form-group">
+                            <label for="med_start_date" class="col-sm-2 control-label">Account Number </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="med_start_date" name="med_start_date" value="{{ $user->person->med_start_date }}" placeholder="Start Date">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="med_split" class="col-sm-2 control-label">Split </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="med_split" name="med_split" value="{{ $user->person->med_split }}" placeholder="Split">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="med_plan_name" class="col-sm-2 control-label">Plan Name </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="med_plan_name" name="med_plan_name" value="{{ $user->person->med_plan_name }}" placeholder="Plan Name">
+                                </div>
+                            </div>
+                        </div><div class="form-group">
+                            <label for="med_dep_spouse" class="col-sm-2 control-label">Dependants Spouse </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="med_dep_spouse" name="med_dep_spouse" value="{{ $user->person->med_dep_spouse }}" placeholder="Spouse">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="med_dep_adult" class="col-sm-2 control-label">Dependants Adult </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="med_dep_adult" name="med_dep_adult" value="{{ $user->person->med_dep_adult }}" placeholder="Adult">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="med_dep_kids" class="col-sm-2 control-label">Dependants Children </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="med_dep_kids" name="med_dep_kids" value="{{ $user->person->med_dep_kids }}" placeholder="Children">
+                                </div>
+                            </div>
+                        </div>
+						<hr class="hr-text" data-content="Provident Fund ">
+						<div class="form-group">
+                            <label for="provident_start_date" class="col-sm-2 control-label">Start Date </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="provident_start_date" name="provident_start_date" value="{{ $user->person->account_number }}" placeholder="Account Number">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="provident_amount" class="col-sm-2 control-label">Provident Fund </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="provident_amount" name="provident_amount" value="{{ $user->person->provident_amount }}" placeholder="Provident Amount">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="provident_name" class="col-sm-2 control-label">Provident Fund Name </label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="provident_name" name="provident_name" value="{{ $user->person->provident_name }}" placeholder="Provident Name">
+                                </div>
+                            </div>
+                        </div>
+						<hr class="hr-text" data-content="Work Details">
 						@if (isset($view_by_admin) && $view_by_admin === 1)
-						  <div class="form-group">
-                            <label for="date_joined" class="col-sm-2 control-label">Date Joined</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                   <input type="text" class="form-control datepicker" name="date_joined" placeholder="  dd/mm/yyyy" value="{{ ($user->person->date_joined) ? date('d/m/Y',$user->person->date_joined) : '' }}">
-                                </div>
-                            </div>
-                        </div>
-						  <div class="form-group">
-                            <label for="date_left" class="col-sm-2 control-label">Date Left Company</label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-calendar"></i>
-                                    </div>
-                                   <input type="text" class="form-control datepicker" name="date_left" placeholder="  dd/mm/yyyy" value="{{ ($user->person->date_left) ? date('d/m/Y',$user->person->date_left) : '' }}">
-                                </div>
-                            </div>
-                        </div>
-						 @endif
+                            @foreach($division_levels as $division_level)
+                                <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+									<label for="{{ 'division_level_' . $division_level->level }}"
+										   class="col-sm-2 control-label">{{ $division_level->name }}</label>
+									<div class="col-sm-10">
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-black-tie"></i>
+											</div>
+											<select id="{{ 'division_level_' . $division_level->level }}"
+													name="{{ 'division_level_' . $division_level->level }}"
+													class="form-control"
+													onchange="divDDOnChange(this, null, 'view_users')">
+											</select>
+										</div>
+									</div>
+								</div>
+                            @endforeach
+							<div class="form-group">
+								<label for="date_joined" class="col-sm-2 control-label">Date Joined</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</div>
+									   <input type="text" class="form-control datepicker" name="date_joined" placeholder="  dd/mm/yyyy" value="{{ ($user->person->date_joined) ? date('d/m/Y',$user->person->date_joined) : '' }}">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="date_left" class="col-sm-2 control-label">Date Left Company</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</div>
+									   <input type="text" class="form-control datepicker" name="date_left" placeholder="  dd/mm/yyyy" value="{{ ($user->person->date_left) ? date('d/m/Y',$user->person->date_left) : '' }}">
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="leave_profile" class="col-sm-2 control-label">Leave Profile</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-black-tie"></i>
+										</div>
+										<select name="leave_profile" class="form-control">
+											<option value="">*** Select leave Profile ***</option>
+											@foreach($leave_profile as $leave_profiles)
+												<option value="{{ $leave_profiles->id }}" {{ ($user->person->leave_profile == $leave_profiles->id) ?
+												' selected' : '' }}>{{ $leave_profiles->name }}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="position" class="col-sm-2 control-label">Position</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-black-tie"></i>
+										</div>
+										<select name="position" class="form-control">
+											<option value="">*** Select a Position ***</option>
+											@foreach($positions as $position)
+												<option value="{{ $position->id }}" {{ ($user->person->position == $position->id) ? ' selected' : '' }}>{{ $position->name }}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="action" class="col-sm-2 control-label">Reports to</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-user-circle"></i>
+										</div>
+										<select id="manager_id" name="manager_id" class="form-control select2"  style="width: 100%;">
+											<option selected="selected" value="0" >*** Select a Manager ***</option>
+												@foreach($employees as $employee)
+												<option value="{{ $employee->id }}" {{ ($user->person->manager_id == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
+												@endforeach
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="action" class="col-sm-2 control-label">Second manager in charge </label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-user-circle"></i>
+										</div>
+										<select id="second_manager_id" name="second_manager_id" class="form-control select2"  style="width: 100%;">
+											<option selected="selected" value="0" >*** Select a Manager ***</option>
+											@foreach($employees as $employee)
+												<option value="{{ $employee->id }}" {{ ($user->person->second_manager_id == $employee->id) ? ' selected' : '' }}>{{ $employee->first_name . ' ' . $employee->surname }}</option>
+											@endforeach
+										</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="disabled" class="col-sm-2 control-label">Disabled</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-user"></i>
+										</div>
+										<select name="disabled" class="form-control">
+										<option value="">*** Select Disabled ***</option>
+										<option value="1" {{ ($user->person->disabled === 1) ? ' selected' : '' }}>Yes</option>
+										<option value="2" {{ ($user->person->disabled === 2) ? ' selected' : '' }}>No</option>
+									</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="employment_type" class="col-sm-2 control-label">Employment Type  </label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-user"></i>
+										</div>
+										<select name="employment_type" class="form-control">
+										<option value="">*** Select Employment Type ***</option>
+										<option value="1" {{ ($user->person->employment_type === 1) ? ' selected' : '' }}>Permanent </option>
+										<option value="2" {{ ($user->person->employment_type === 2) ? ' selected' : '' }}>Temporary </option>
+									</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="occupational_level" class="col-sm-2 control-label">Occupational Level </label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-user"></i>
+										</div>
+										<select name="occupational_level" class="form-control">
+										<option value="">*** Select Occupational Level ***</option>
+										<option value="1" {{ ($user->person->occupational_level === 1) ? ' selected' : '' }}>Senior Management</option>
+										<option value="2" {{ ($user->person->occupational_level === 2) ? ' selected' : '' }}>Middle Management</option>
+										<option value="2" {{ ($user->person->occupational_level === 3) ? ' selected' : '' }}>Junior Management</option>
+										<option value="2" {{ ($user->person->occupational_level === 4) ? ' selected' : '' }}>Semi Skilled </option>
+										<option value="2" {{ ($user->person->occupational_level === 5) ? ' selected' : '' }}>Unskilled  </option>
+									</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="job_function" class="col-sm-2 control-label">Job Function </label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-user"></i>
+										</div>
+										<select name="job_function" class="form-control">
+										<option value="">*** Select Job Function ***</option>
+										<option value="1" {{ ($user->person->job_function === 1) ? ' selected' : '' }}>Core/Operational  </option>
+										<option value="2" {{ ($user->person->job_function === 2) ? ' selected' : '' }}>Support  </option>
+									</select>
+									</div>
+								</div>
+							</div>
+						@endif
                         <div class="form-group">
                             <label for="profile_pic" class="col-sm-2 control-label">Profile Picture</label>
 
