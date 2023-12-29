@@ -98,7 +98,8 @@ class CreateHrPeopleTempTable extends Migration
             $table->integer('occupational_level')->unsigned()->nullable();
             $table->integer('job_function')->unsigned()->nullable();
             $table->timestamps();
-    }
+		}
+	}
 
     /**
      * Reverse the migrations.

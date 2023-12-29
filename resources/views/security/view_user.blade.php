@@ -393,7 +393,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="med_start_date" name="med_start_date" value="{{ $user->person->med_start_date }}" placeholder="Start Date">
+                                    <input type="text" class="form-control datepicker" id="med_start_date" name="med_start_date" value="{{ $user->person->med_start_date }}" placeholder="dd/mm/yyyy">
                                 </div>
                             </div>
                         </div>
@@ -459,7 +459,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="text" class="form-control" id="provident_start_date" name="provident_start_date" value="{{ $user->person->account_number }}" placeholder="Account Number">
+                                    <input type="text" class="form-control datepicker" id="provident_start_date" name="provident_start_date" value="{{ $user->person->provident_start_date }}" placeholder="dd/mm/yyyy">
                                 </div>
                             </div>
                         </div>
@@ -604,6 +604,17 @@
 										<option value="1" {{ ($user->person->disabled === 1) ? ' selected' : '' }}>Yes</option>
 										<option value="2" {{ ($user->person->disabled === 2) ? ' selected' : '' }}>No</option>
 									</select>
+									</div>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="nature_of_disability" class="col-sm-2 control-label">Nature of Disability </label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-book"></i>
+										</div>
+										<input type="text" class="form-control" id="nature_of_disability" name="nature_of_disability" value="{{ $user->person->nature_of_disability }}" placeholder="Nature of Disability">
 									</div>
 								</div>
 							</div>
