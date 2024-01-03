@@ -418,7 +418,6 @@ class UsersController extends Controller
     public function edit(User $user)
     {
         $user->load('person');
-
         $avatar = $user->person->profile_pic;
         $provinces = Province::where('country_id', 1)->orderBy('name', 'asc')->get();
         $ethnicities = DB::table('ethnicities')->where('status', 1)->orderBy('value', 'asc')->get();
@@ -490,8 +489,7 @@ class UsersController extends Controller
 
     public function update(Request $request, User $user)
     {
-        // dd($user->id);
-		//$user = $user->load('person');
+		
         $person = $request->all();
         unset($person['_token'], $person['_method'], $person['command']);
 
@@ -539,6 +537,16 @@ class UsersController extends Controller
         if (isset($person['date_joined'])) {
             $person['date_joined'] = str_replace('/', '-', $person['date_joined']);
             $person['date_joined'] = strtotime($person['date_joined']);
+        }
+		//convert date med_start_date company to unix time stamp
+        if (isset($person['date_joined'])) {
+            $person['med_start_date'] = str_replace('/', '-', $person['med_start_date']);
+            $person['med_start_date'] = strtotime($person['med_start_date']);
+        }
+		//convert date joined company to unix time stamp
+        if (isset($person['provident_start_date'])) {
+            $person['provident_start_date'] = str_replace('/', '-', $person['provident_start_date']);
+            $person['provident_start_date'] = strtotime($person['provident_start_date']);
         }
         //convert date left company to unix time stamp
         if (isset($person['date_left'])) {

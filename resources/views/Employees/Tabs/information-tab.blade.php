@@ -10,8 +10,21 @@
         <!-- /.box-header -->
         <div class="box-body">
             <table class="table table-striped table-hover">
-                <tbody>
+				<hr class="hr-text" data-content="Personal Information">
                 <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong> Title</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{ (!empty($employee->title)) ? $titles[$employee->title] : '' }}
+                        </div>
+
+                    </td>
+                </tr>
+				<tr>
                     <td>
                         <div class="d-flex align-items-center">
                             <strong> Name</strong>
@@ -37,15 +50,28 @@
 
                     </td>
                 </tr>
-                <tr>
+				<tr>
                     <td>
                         <div class="d-flex align-items-center">
-                            <strong>Employee Number </strong>
+                            <strong>Known As </strong>
                         </div>
                     </td>
                     <td>
                         <div class="col-md-6">
-                            {{ (!empty($employee->employee_number)) ? $employee->employee_number : '' }}
+                            {{ (!empty( $employee->known_as)) ? $employee->known_as : ''}}
+                        </div>
+
+                    </td>
+                </tr>
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Initial </strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{ (!empty( $employee->initial)) ? $employee->initial : ''}}
                         </div>
 
                     </td>
@@ -196,19 +222,6 @@
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
-                            <strong>Province </strong>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="col-md-6">
-						
-                        </div>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div class="d-flex align-items-center">
                             <strong>Ethnicity </strong>
                         </div>
                     </td>
@@ -216,19 +229,123 @@
                         <div class="col-md-6">
                             {{ (!empty($employee->ethnicity)) ? $Ethnicity[$employee->ethnicity] : '' }}
                         </div>
+                    </td>
+                </tr>
+            </table>
+			<table class="table table-striped table-hover">
+				<hr class="hr-text" data-content="Emergency Contact Information">
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong> Name & Surname</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{ (!empty($employee->next_of_kin)) ? $employee->next_of_kin : '' }}
+                        </div>
 
                     </td>
                 </tr>
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong> Contact Number</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{ (!empty( $employee->next_of_kin_number)) ? $employee->next_of_kin_number : ''}}
+                        </div>
 
-                </tbody>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Work Number </strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{ (!empty( $employee->next_of_kin_work_number)) ? $employee->next_of_kin_work_number : ''}}
+                        </div>
+
+                    </td>
+                </tr>
             </table>
+			<table class="table table-striped table-hover">
+				<hr class="hr-text" data-content="Tax Information">
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Income Tax Number</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{ (!empty($employee->income_tax_number)) ? $employee->income_tax_number : '' }}
+                        </div>
+
+                    </td>
+                </tr>
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Tax Office</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+                            {{ (!empty( $employee->tax_office)) ? $employee->tax_office : ''}}
+                        </div>
+                    </td>
+                </tr>
+            </table>
+			<table class="table table-striped table-hover">
+				<hr class="hr-text" data-content="Provident Fund">
+				<tr>
+					<td>
+						<div class="d-flex align-items-center">
+							<strong>Start Date </strong>
+						</div>
+					</td>
+					<td>
+						<div class="col-md-6">
+							{{ (!empty($employee->provident_start_date)) ? date('d M Y', $employee->provident_start_date) : '' }}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="d-flex align-items-center">
+							<strong>Provident Fund</strong>
+						</div>
+					</td>
+					<td>
+						<div class="col-md-6">
+							{{ (!empty( $employee->provident_amount)) ? $employee->provident_amount : ''}}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="d-flex align-items-center">
+							<strong>Provident Fund Name</strong>
+						</div>
+					</td>
+					<td>
+						<div class="col-md-6">
+							{{ (!empty( $employee->provident_name)) ? $employee->provident_name : ''}}
+						</div>
+					</td>
+				</tr>
+			</table>
         </div>
         <div class="box-footer">
-{{--            <button type="button" id="cat_module" class="btn btn-default pull-right" href="">Edit My Details</button>--}}
-            <button type="button" class="btn btn-default pull-right" id="user_profile"><i
+			<button type="button" class="btn btn-default pull-right" id="user_profile"><i
                         class="fa fa-user-secret"></i> Edit My Profile
             </button>
-{{--            {{ route('users/profile') }}--}}
         </div>
     </div>
 
@@ -245,13 +362,148 @@
         </div>
         <!-- /.box-header -->
         <div class="box-body">
-
             <img src="{{ (!empty($employee->profile_pic)) ? asset('storage/avatars/'.$employee->profile_pic)  : (($employee->gender === 0) ? $f_silhouette : $m_silhouette)}} "
                  class="card-img-top" alt="Wild Landscape"
                  style='height: 400%; width: 100%; object-fit: contain'/>
-
         </div>
-        <!-- /.box-body -->
+		<table class="table table-striped table-hover">
+			<hr class="hr-text" data-content="Banking Detail">
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Account Type</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty($employee->account_type)) ? $employee->account_type : '' }}
+					</div>
 
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Account Holder Name</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty( $employee->account_holder_name)) ? $employee->account_holder_name : ''}}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Bank Name</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty( $employee->bank_name)) ? $employee->bank_name : ''}}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Branch Name</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty( $employee->branch_name)) ? $employee->branch_name : ''}}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Account Number</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty( $employee->account_number)) ? $employee->account_number : ''}}
+					</div>
+				</td>
+			</tr>
+		</table>
+		<table class="table table-striped table-hover">
+			<hr class="hr-text" data-content="MEDICAL AID">
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Start Date </strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty($employee->med_start_date)) ? date('d M Y', $employee->med_start_date) : '' }}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Split</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty( $employee->med_split)) ? $employee->med_split : ''}}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Plan Name</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty( $employee->med_plan_name)) ? $employee->med_plan_name : ''}}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Dependants Spouse</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty( $employee->med_dep_spouse)) ? $employee->med_dep_spouse : ''}}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Dependants Adult</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty( $employee->med_dep_adult)) ? $employee->med_dep_adult : ''}}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="d-flex align-items-center">
+						<strong>Dependants Children</strong>
+					</div>
+				</td>
+				<td>
+					<div class="col-md-6">
+						{{ (!empty( $employee->med_dep_kids)) ? $employee->med_dep_kids : ''}}
+					</div>
+				</td>
+			</tr>
+		</table>
     </div>
 </div>

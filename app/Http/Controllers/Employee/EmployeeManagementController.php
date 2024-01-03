@@ -293,27 +293,14 @@ class EmployeeManagementController extends Controller
 
         $generalVids = Video::getAllGeneralVideos();
 
-        $MaritalStatus = [
-            1 => 'Single',
-            2 => 'Married',
-            3 => 'Divorced',
-            4 => 'Widower',
-        ];
-        $Ethnicity = [
-            1 => 'African',
-            2 => 'Asian',
-            3 => 'Caucasian',
-            4 => 'Coloured',
-            5 => 'Indian',
-            6 => 'White',
-        ];
-
-        $leaveProfiles = [
-            1 => 'Employee with no leave',
-            2 => '5 Day Employee',
-            3 => '6 Day Employee',
-            4 => 'Shift Worker',
-        ];
+        $MaritalStatus = [1 => 'Single',2 => 'Married',3 => 'Divorced',4 => 'Widower'];
+        $Ethnicity = [1 => 'African',2 => 'Asian',3 => 'Caucasian',4 => 'Coloured',5 => 'Indian',6 => 'White'];
+        $leaveProfiles = [ 1 => 'Employee with no leave',2 => '5 Day Employee',3 => '6 Day Employee',4 => 'Shift Worker'];
+        $titles = [ 1 => 'Mr',2 => 'Miss',3 => 'Ms',4 => 'Dr'];
+        $disabilities = [ 1 => 'Yes',2 => 'No'];
+        $employmentTypes = [ 1 => 'Permanent',2 => 'Temporary'];
+        $occupationalLevels = [ 1 => 'Senior Management',2 => 'Middle Management',3 => 'Junior Management',4 => 'Semi Skilled',4 => 'Unskilled'];
+        $jobFunctions = [ 1 => 'Mr',2 => 'Miss',3 => 'Ms',4 => 'Dr'];
 
         $data = $this->breadCrump(
             "Employee Records",
@@ -418,6 +405,11 @@ class EmployeeManagementController extends Controller
         $data['routeUser'] = $routeUser;
         $data['modAccess'] = $modAccess;
         $data['taskStatus'] = $taskStatus;
+        $data['titles'] = $titles;
+        $data['disabilities'] = $disabilities;
+        $data['employmentTypes'] = $employmentTypes;
+        $data['occupationalLevels'] = $occupationalLevels;
+        $data['jobFunctions'] = $jobFunctions;
         $data['marital_statuses'] = $marital_statuses;
         $data['ethnicities'] = $ethnicities;
         $data['specific'] = $specificVids;

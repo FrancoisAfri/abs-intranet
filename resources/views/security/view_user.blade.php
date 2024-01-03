@@ -31,12 +31,12 @@
 									<div class="input-group-addon">
 										<i class="fa fa-user"></i>
 									</div>
-									<select name="title" class="form-control">
+									<select name="title"  id="title" class="form-control">
 									<option value="">*** Select Your Title ***</option>
-									<option value="1" {{ ($user->person->leave_profile === 1) ? ' selected' : '' }}>Mr</option>
-									<option value="2" {{ ($user->person->leave_profile === 2) ? ' selected' : '' }}>Miss</option>
-									<option value="2" {{ ($user->person->leave_profile === 2) ? ' selected' : '' }}>Ms</option>
-									<option value="2" {{ ($user->person->leave_profile === 2) ? ' selected' : '' }}>Dr</option>
+									<option value="1" {{ ($user->person->title == 1) ? ' selected' : '' }}>Mr</option>
+									<option value="2" {{ ($user->person->title == 2) ? ' selected' : '' }}>Miss</option>
+									<option value="3" {{ ($user->person->title == 3) ? ' selected' : '' }}>Ms</option>
+									<option value="4" {{ ($user->person->title == 4) ? ' selected' : '' }}>Dr</option>
 								</select>
 								</div>
 							</div>
@@ -87,19 +87,6 @@
 									</div>
 									<input type="text" class="form-control" id="initial" name="initial"
 										   value="{{ $user->person->initial }}" placeholder="Initial" required>
-								</div>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="employee_number" class="col-sm-2 control-label">Employee Number</label>
-							<div class="col-sm-10">
-								<div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-user"></i>
-									</div>
-									<input type="text" class="form-control" id="employee_number"
-										   name="employee_number" value="{{ $user->person->employee_number }}"
-										   placeholder="Employee Number">
 								</div>
 							</div>
 						</div>
@@ -387,13 +374,13 @@
                         </div>
 						<hr class="hr-text" data-content="MED AID">
 						<div class="form-group">
-                            <label for="med_start_date" class="col-sm-2 control-label">Account Number </label>
+                            <label for="med_start_date" class="col-sm-2 control-label">Start Date </label>
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="text" class="form-control datepicker" id="med_start_date" name="med_start_date" value="{{ $user->person->med_start_date }}" placeholder="dd/mm/yyyy">
+                                    <input type="text" class="form-control datepicker" id="med_start_date" name="med_start_date" value="{{ date('d M Y', $user->person->med_start_date )}}" placeholder="dd/mm/yyyy">
                                 </div>
                             </div>
                         </div>
@@ -459,9 +446,9 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="text" class="form-control datepicker" id="provident_start_date" name="provident_start_date" value="{{ $user->person->provident_start_date }}" placeholder="dd/mm/yyyy">
+                                    <input type="text" class="form-control datepicker" id="provident_start_date" name="provident_start_date" value="{{ date('d M Y', $user->person->provident_start_date )}}" placeholder="dd/mm/yyyy">
                                 </div>
-                            </div>
+                            </div> 
                         </div>
 						<div class="form-group">
                             <label for="provident_amount" class="col-sm-2 control-label">Provident Fund </label>
@@ -487,6 +474,19 @@
                         </div>
 						<hr class="hr-text" data-content="Work Details">
 						@if (isset($view_by_admin) && $view_by_admin === 1)
+							<div class="form-group">
+								<label for="employee_number" class="col-sm-2 control-label">Employee Number</label>
+								<div class="col-sm-10">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-user"></i>
+										</div>
+										<input type="text" class="form-control" id="employee_number"
+											   name="employee_number" value="{{ $user->person->employee_number }}"
+											   placeholder="Employee Number">
+									</div>
+								</div>
+							</div>
                             @foreach($division_levels as $division_level)
                                 <div class="form-group manual-field{{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
 									<label for="{{ 'division_level_' . $division_level->level }}"

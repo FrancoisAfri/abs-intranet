@@ -24,6 +24,32 @@
 
                     </td>
                 </tr>
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>
+                                Date Joined
+                            </strong>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="label label-success  col-md-6">
+                             {{ (!empty( $employee->date_joined)) ?  date(' d M Y', $employee->date_joined) : ''}}
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>
+                                Date Left
+                            </strong>
+                        </div>
+                    </td>
+                    <td>
+                        {{ (!empty( $employee->date_left)) ?  date(' d M Y', $employee->date_left) : ''}}
+                    </td>
+                </tr>
                 <tr>
                     <td>
                         <div class="d-flex align-items-center">
@@ -34,7 +60,6 @@
                         <div class="col-md-6">
                             {{ (!empty($employee->leave_profile)) ? $leaveProfiles[$employee->leave_profile] : '' }}
                         </div>
-
                     </td>
                 </tr>
                 <tr>
@@ -47,7 +72,6 @@
                         <div class="col-md-6">
                             {{ (!empty($employee->jobTitle->name)) ? $employee->jobTitle->name : '' }}
                         </div>
-
                     </td>
                 </tr>
                 <tr>
@@ -106,32 +130,70 @@
 
                     </td>
                 </tr>
-                <tr>
+				<tr>
                     <td>
                         <div class="d-flex align-items-center">
-                            <strong>
-                                Date Joined
-                            </strong>
+                            <strong>Disabled </strong>
                         </div>
                     </td>
                     <td>
-                        <span class="label label-success  col-md-6">
-                             {{ (!empty( $employee->date_joined)) ?  date(' d M Y', $employee->date_joined) : ''}}
-                        </span>
+                        <div class="col-md-6">
+							 {{ (!empty($employee->disabled)) ? $disabilities[$employee->disabled] : '' }}
+						</div>
+
                     </td>
                 </tr>
-                <tr>
+				<tr>
                     <td>
                         <div class="d-flex align-items-center">
-                            <strong>
-                                Date Left
-                            </strong>
+                            <strong>Nature of Disability  </strong>
                         </div>
                     </td>
                     <td>
-                        {{ (!empty( $employee->date_left)) ?  date(' d M Y', $employee->date_left) : ''}}
+                        <div class="col-md-6">
+							{{ (!empty($employee->nature_of_disability)) ? $employee->nature_of_disability : '' }}
+						</div>
+
                     </td>
                 </tr>
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Employment Type</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+							{{ (!empty($employee->employment_type)) ? $employmentTypes[$employee->employment_type] : '' }}
+						</div>
+                    </td>
+                </tr>
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Occupational Level </strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+							{{ (!empty($employee->occupational_level)) ? $occupationalLevels[$employee->occupational_level] : '' }}
+						</div>
+                    </td>
+                </tr>
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Job Function </strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+							{{ (!empty($employee->job_function)) ? $jobFunctions[$employee->job_function] : '' }}
+						</div>
+
+                    </td>
+                </tr>
+                
 
                 </tbody>
             </table>

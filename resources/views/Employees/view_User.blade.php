@@ -19,11 +19,9 @@
     <!-- bootstrap file input -->
 @stop
 @section('content')
-
     <section class="content">
         <div class="row">
             <div class="col-md-12">
-
                 <h1>
                 </h1>
                 <div class="nav-tabs-custom">
@@ -35,8 +33,6 @@
                                                                                    data-toggle="tab">Work
                                 Details</a>
                         </li>
-
-
                         <li class="" data-toggle="tooltip" title="Tasks"><a href="#Tasks"
                                                                             data-toggle="tab">Tasks</a>
                         </li>
