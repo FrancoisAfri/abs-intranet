@@ -125,6 +125,8 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 
     Route::get('/', 'EmployeeManagementController@index')
         ->name('employee.index');
+	Route::get('/onboarding', 'OnboardingEmp@index')
+        ->name('employee.index');
 
     Route::get('show/{employee}', 'EmployeeManagementController@show')
         ->name('employee.show');

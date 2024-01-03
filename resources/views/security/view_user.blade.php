@@ -380,7 +380,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="text" class="form-control datepicker" id="med_start_date" name="med_start_date" value="{{ date('d M Y', $user->person->med_start_date )}}" placeholder="dd/mm/yyyy">
+                                    <input type="text" class="form-control datepicker" id="med_start_date" name="med_start_date" value="{{ (!empty($user->person->med_start_date)) ?  date(' d M Y', $user->person->med_start_date) : ''}}" placeholder="dd/mm/yyyy">
                                 </div>
                             </div>
                         </div>
@@ -446,7 +446,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="text" class="form-control datepicker" id="provident_start_date" name="provident_start_date" value="{{ date('d M Y', $user->person->provident_start_date )}}" placeholder="dd/mm/yyyy">
+                                    <input type="text" class="form-control datepicker" id="provident_start_date" name="provident_start_date" value="{{ (!empty($user->person->provident_start_date)) ?  date(' d M Y', $user->person->provident_start_date) : ''}}" placeholder="dd/mm/yyyy">
                                 </div>
                             </div> 
                         </div>
