@@ -25,6 +25,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'DashboardController@index');
 Route::get('test', 'PagesController@testPage');
+Route::get('/guest/emp-form', 'OnboardingGuest@index');
+Route::post('onboarding/save', 'OnboardingGuest@store');
 Route::get('/home', function () {
     return Redirect::action('DashboardController@index');
 });
@@ -126,8 +128,12 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
     Route::get('/', 'EmployeeManagementController@index')
         ->name('employee.index');
 	Route::get('/onboarding', 'OnboardingEmp@index')
-        ->name('employee.index');
-
+        ->name('onboarding.index');
+	Route::post('send-onboarding', 'OnboardingEmp@store')
+        ->name('onboarding.store');
+	Route::get('/onboarding-view/{onboarding}', 'OnboardingEmp@show')
+        ->name('onboarding.view');
+	Route::patch('/onboarding-update/{onboarding}', 'OnboardingEmp@update');
     Route::get('show/{employee}', 'EmployeeManagementController@show')
         ->name('employee.show');
 	
@@ -199,7 +205,6 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 
     Route::get('organogram', 'EmployeeManagementController@organogramView')
         ->name('organogram.view');
-
 });
 
 
@@ -1242,6 +1247,7 @@ Route::post('users/recoverpw', 'ContactsRegisterController@recoverPassword');
 //Survey (Guest)
 Route::get('rate-our-services/{eid}', 'SurveyGuestsController@index');
 Route::post('rate-our-services', 'SurveyGuestsController@store');
+
 //Voucher (Guest)
 Route::get('vouchers/get-voucher', 'VouchersGuestController@index');
 Route::post('vouchers/get-voucher', 'VouchersGuestController@store');

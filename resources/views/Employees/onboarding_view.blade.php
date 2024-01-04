@@ -43,6 +43,18 @@
 												<td>{{ !empty($onboarding->known_as) ? $onboarding->known_as : '' }}</td>
 												<td>{{ !empty($onboarding->date_of_birth) ? date(' d M Y', $onboarding->date_of_birth) : '' }}</td>
 												<td>{{ (!empty($onboarding->status)) ?  $statuses[$onboarding->status] : ''}}</td>
+												<td>
+													<button type="button" id="Accept"
+															class="btn btn-success btn-xs btn-detail open-modal"
+															value="{{$onboarding->id}}"
+															onclick="postData({{$onboarding->id}}, 'approval_id')">Accept
+													</button>
+
+												</td>
+												<td>
+													<button type="button" id="reject-reason" class="btn btn-danger btn-xs"
+														data-toggle="modal" data-target="#reject-leave-modal"
+														data-id="{{ $onboarding->id }}">Decline</button></td>
 											</tr>
 										@endforeach
 									@endif

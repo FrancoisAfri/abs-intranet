@@ -13,7 +13,6 @@ use Illuminate\Database\Query\Builder;
 
 class Onboarding extends Model
 {
-    use Uuids;
 	
     protected $table = 'hr_people_temp';
 	
@@ -37,7 +36,7 @@ class Onboarding extends Model
 		, 'own_transport','first_name', 'surname', 'middle_name', 'maiden_name', 'aka', 'initial', 'email', 'cell_number',
         'phone_number', 'id_number', 'date_of_birth', 'passport_number', 'drivers_licence_number', 'drivers_licence_code',
         'proof_drive_permit', 'proof_drive_permit_exp_date', 'drivers_licence_exp_date', 'gender', 'title', 'position',
-        'res_address', 'res_suburb', 'res_city', 'res_postal_code', 'res_province_id'];
+        'res_address', 'res_suburb', 'res_city', 'res_postal_code', 'res_province_id', 'second_manager_id'];
 	
 	 /**
      * status constants

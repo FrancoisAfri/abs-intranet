@@ -12,19 +12,28 @@
                 <div class="modal-body">
                     <div id="leave-invalid-input-alert"></div>
                     <div id="success-alert"></div>
-        
                     <div class="form-group">
-                           <label for="days" class="col-sm-2 control-label">Enter Email Address</label>
-                            <div class="col-sm-8">
-                               <div class="input-group">
-                                    <div class="input-group-addon">
-                                       <i class="fa fa-comment-o"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="email" name="email" placeholder="Enter Email">
-                                </div>
-                            </div>
-                        </div>
-                                            
+					   <label for="email" class="col-sm-2 control-label">Email</label>
+						<div class="col-sm-8">
+						   <div class="input-group">
+								<div class="input-group-addon">
+								   <i class="fa fa-comment-o"></i>
+								</div>
+								<input type="text" class="form-control" id="email" name="email" placeholder="Enter Email">
+							</div>
+						</div>
+                    </div>
+                    <div class="form-group">
+					   <label for="first_name" class="col-sm-2 control-label">First Name</label>
+						<div class="col-sm-8">
+						   <div class="input-group">
+								<div class="input-group-addon">
+								   <i class="fa fa-comment-o"></i>
+								</div>
+								<input type="text" class="form-control" id="first_name" name="first_name" placeholder="Enter First Name">
+							</div>
+						</div>
+                    </div>                     
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Close</button>
