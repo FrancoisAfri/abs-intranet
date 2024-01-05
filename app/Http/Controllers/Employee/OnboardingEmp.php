@@ -228,6 +228,20 @@ class OnboardingEmp extends Controller
         $user->password_changed_at = $expiredDate;
         $user->save();
 
+		/*'','', '', '', '', 'other'
+		, '', '', '', ''
+		, '', '', '', ''
+		, '', '', '', '', ''
+		, '', '', '', ''
+		, '', '', '', '', ''
+		, '', '', '', '', ''
+		, '', '', '', '', ''
+		, '', '', '', 'division_level_3', 'division_level_2', 'division_level_1'
+		, 'leave_profile', 'manager_id', 'date_joined', 'date_left', 'ethnicity', 'marital_status'
+		, 'own_transport','first_name', 'surname', 'middle_name', 'maiden_name', 'aka', 'initial', 'email', 'cell_number',
+        'phone_number', 'id_number', 'date_of_birth', 'passport_number', 'drivers_licence_number', 'drivers_licence_code',
+        'proof_drive_permit', 'proof_drive_permit_exp_date', 'drivers_licence_exp_date', 'gender', 'title', 'position',
+        'res_address', 'res_suburb', 'res_city', 'res_postal_code', 'res_province_id', 'second_manager_id'*/
 		 //Save HR record
         $person = new HRPerson();
         $person->first_name = $onboarding->first_name;
@@ -236,16 +250,18 @@ class OnboardingEmp extends Controller
         $person->job_function = $onboarding->job_function;
         $person->occupational_level = $onboarding->occupational_level;
         $person->employment_type = $onboarding->employment_type;
-        $person->nature_of_disability = $onboarding->nature_of_disability;
-        $person->provident_amount = $onboarding->provident_amount;
-        $person->provident_name = $onboarding->provident_name;
-        $person->provident_start_date = $onboarding->provident_start_date;
-        $person->med_amount = $onboarding->med_amount;
-        $person->med_dep_adult = $onboarding->med_dep_adult;
-        $person->med_dep_spouse = $onboarding->med_dep_spouse;
-        $person->med_plan_name = $onboarding->med_plan_name;
-        $person->med_split = $onboarding->med_split;
-        $person->med_start_date = $onboarding->med_start_date;
+        $person->disabled = $onboarding->disabled;
+        $person->nature_of_disability = !empty($onboarding->nature_of_disability) ? $onboarding->nature_of_disability : '';
+        $person->provident_amount = !empty($onboarding->provident_amount) ? $onboarding->provident_amount : '';
+        $person->provident_name = !empty($onboarding->provident_name) ? $onboarding->provident_name : '';
+        $person->provident_start_date =  !empty($onboarding->provident_start_date) ? $onboarding->provident_start_date : '';
+        $person->med_amount = !empty($onboarding->med_amount) ? $onboarding->med_amount : '';
+        $person->med_dep_kids = !empty($onboarding->med_dep_kids) ? $onboarding->med_dep_kids : '';
+        $person->med_dep_adult = !empty($onboarding->med_dep_adult) ? $onboarding->med_dep_adult : '';
+        $person->med_dep_spouse = !empty($onboarding->med_dep_spouse) ? $onboarding->med_dep_spouse : '';
+        $person->med_plan_name = !empty($onboarding->med_plan_name) ? $onboarding->med_plan_name : '';
+        $person->med_split = !empty($onboarding->med_split) ? $onboarding->med_split : '';
+        $person->med_start_date = !empty($onboarding->med_start_date) ? $onboarding->med_start_date : '';
         $person->second_manager_id = $onboarding->second_manager_id;
         $person->res_province_id = $onboarding->res_province_id;
         $person->res_postal_code = $onboarding->res_postal_code;
@@ -257,9 +273,8 @@ class OnboardingEmp extends Controller
         $person->position = $onboarding->position;
         $person->id_number = $onboarding->id_number;
         $person->date_of_birth = $onboarding->date_of_birth;
-        $person->passport_number = $onboarding->passport_number;
+        $person->passport_number = !empty($onboarding->passport_number) ? $onboarding->passport_number : '';
         $person->initial = $onboarding->initial;
-        $person->email = $onboarding->passport_number;
         $person->email = $onboarding->email;
         $person->cell_number = $onboarding->cell_number;
         $person->marital_status = $onboarding->marital_status;
@@ -268,21 +283,21 @@ class OnboardingEmp extends Controller
         $person->manager_id = $onboarding->manager_id;
         $person->leave_profile = $onboarding->leave_profile;
         $person->known_as = $onboarding->known_as;
-        $person->division_level_5 = $onboarding->division_level_5;
-        $person->division_level_4 = $onboarding->division_level_4;
-        $person->division_level_3 = $onboarding->division_level_3;
+        $person->division_level_5 = !empty($onboarding->division_level_5) ? $onboarding->division_level_5 : '';
+        $person->division_level_4 = !empty($onboarding->division_level_4) ? $onboarding->division_level_1 : '';
+        $person->division_level_3 = !empty($onboarding->division_level_3) ? $onboarding->division_level_3 : '';
         $person->next_of_kin_work_number = $onboarding->next_of_kin_work_number;
         $person->next_of_kin_number = $onboarding->next_of_kin_number;
-        $person->account_number = $onboarding->account_number;
-        $person->branch_name = $onboarding->branch_name;
-        $person->bank_name = $onboarding->bank_name;
-        $person->account_holder_name = $onboarding->account_holder_name;
-        $person->account_type = $onboarding->account_type;
-        $person->tax_office = $onboarding->tax_office;
-        $person->income_tax_number = $onboarding->income_tax_number;
+        $person->account_number = !empty($onboarding->account_number) ? $onboarding->account_number : '';
+        $person->branch_name = !empty($onboarding->branch_name) ? $onboarding->branch_name : '';
+        $person->bank_name = !empty($onboarding->bank_name) ? $onboarding->bank_name : '';
+        $person->account_holder_name = !empty($onboarding->account_holder_name) ? $onboarding->account_holder_name : '';
+        $person->account_type = !empty($onboarding->account_type) ? $onboarding->account_type : '';
+        $person->tax_office = !empty($onboarding->tax_office) ? $onboarding->tax_office : '';
+        $person->income_tax_number = !empty($onboarding->income_tax_number) ? $onboarding->income_tax_number : '';
         $person->next_of_kin = $onboarding->next_of_kin;
-        $person->division_level_2 = $onboarding->division_level_2;
-        $person->division_level_1 = $onboarding->division_level_1;
+        $person->division_level_2 = !empty($onboarding->division_level_2) ? $onboarding->division_level_2 : '';
+        $person->division_level_1 = !empty($onboarding->division_level_1) ? $onboarding->division_level_1 : '';
         $person->status = 1;
 		$user->addPerson($person);
 

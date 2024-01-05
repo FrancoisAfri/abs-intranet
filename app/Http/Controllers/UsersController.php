@@ -539,7 +539,7 @@ class UsersController extends Controller
             $person['date_joined'] = strtotime($person['date_joined']);
         }
 		//convert date med_start_date company to unix time stamp
-        if (isset($person['date_joined'])) {
+        if (isset($person['med_start_date'])) {
             $person['med_start_date'] = str_replace('/', '-', $person['med_start_date']);
             $person['med_start_date'] = strtotime($person['med_start_date']);
         }
