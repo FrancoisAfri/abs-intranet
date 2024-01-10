@@ -85,6 +85,4 @@ class DivisionLevelFour extends Model
             ->where('id', $id)
             ->first();
     }
-
-
 }

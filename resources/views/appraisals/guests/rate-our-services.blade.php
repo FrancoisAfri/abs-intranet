@@ -48,10 +48,8 @@
                                     {{ session('success_add') }}
                                 </div>
                             @endif
-                            
                             <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                                 <label for="hr_person_id" class="col-sm-2 control-label">Consultant Name <i class="fa fa-asterisk"></i></label>
-
                                 <div class="col-sm-10">
                                     <div class="input-group">
                                         <div class="input-group-addon">
@@ -88,9 +86,7 @@
                                     </div>
                                 </div>
                             </div>-->
-
                             <hr class="hr-text" data-content="TELL US ABOUT YOUR EXPERIENCE">
-
                             <div class="row">
                                 @foreach($surveyQuestions as $surveyQuestion)
                                     <div class="col-sm-6">
@@ -103,7 +99,6 @@
                                     </div>
                                 @endforeach
                             </div>
-                            
                             <div class="form-group {{ $errors->has('additional_comments') ? ' has-error' : '' }}">
                                 <label for="additional_comments" class="col-sm-2 control-label">Additional Comments</label>
                                 <div class="col-sm-10">

@@ -18,11 +18,9 @@
                 </div>
                 <!-- /.box-header -->
                 <!-- form start -->
-
                 <form name="leave-alloccation-form" class="form-horizontal" method="POST" action=""
                       enctype="multipart/form-data">
                     {{ csrf_field() }}
-
                     <div class="box-body" id="view_users">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
@@ -104,8 +102,6 @@
                                 </div>
                             </div>
                         </div>
-
-
                         <div class="form-group adjust-field{{ $errors->has('leave_credit_id') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Adjust Number of Days</label>
                             <div class="col-sm-10">
@@ -119,7 +115,6 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="form-group resert-field {{ $errors->has('resert_days') ? ' has-error' : '' }}">
                             <label for="days" class="col-sm-2 control-label">Reset Number of Days</label>
                             <div class="col-sm-10">
