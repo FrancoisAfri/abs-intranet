@@ -33,6 +33,6 @@ class CreateFleetCommunicationsTable extends Migration
      */
     public function down()
     {
-       Schema::dropIfExists('vehicles_communications');
+       Schema::dropIfExists('fleet_communications');
     }
 }

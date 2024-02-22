@@ -99,6 +99,7 @@
 									<option value="3">Email</option>
 									<option value="4">Fax</option>
 									<option value="5">SMS</option>
+									<option value="5">Meeting Minutes</option>
 								</select>
 							</div>
 						</div>
@@ -120,7 +121,7 @@
 								<div class="input-group-addon">
 								   <i class="fa fa-ticket"></i>
 								</div>
-								<textarea class="form-control" id="notes_update" name="notes_update" placeholder="Enter a Note Description ..." rows="3">{{ old('notes') }}</textarea>
+								<textarea class="form-control" id="notes_update" name="notes_update" placeholder="Enter a Note Description ..." rows="5">{{ old('notes') }}</textarea>
 							</div>
                         </div>
                     </div>

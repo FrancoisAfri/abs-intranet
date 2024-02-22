@@ -23,6 +23,7 @@
 									<thead>
 										<tr>
 											<th>Client Name</th>
+											<th>Contact Person</th>
 											<th>Notes</th>
 											<th>Next Action</th>
 											<th>Follow Up Date</th>
@@ -33,6 +34,7 @@
 										@if(count($notes) > 0)
 											@foreach($notes as $notereport)
 												<tr>
+													<td>{{ !empty($notereport->companyname) ? $notereport->companyname : '' }}</td>
 													<td>{{ !empty($notereport->name) && !empty($notereport->surname) ? $notereport->name.' '.$notereport->surname : '' }}</td>
 													<td>{{ !empty($notereport->notes) ? $notereport->notes : '' }}</td>
 													<td>{{ (!empty($notereport->next_action)) ?  $notesStatus[$notereport->next_action] : ''}} </td>

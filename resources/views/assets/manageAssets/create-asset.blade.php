@@ -20,7 +20,6 @@
                 </div>
                 <div class="box-body">
                     <div class="box-header">
-
                         <div class="form-group container-sm">
                             <form class="form-horizontal" method="get" action="{{ route('index') }}">
                                 {{ csrf_field() }}
@@ -36,7 +35,6 @@
                                                 @endforeach
                                             </select>
                                         </div>
-
                                         <div class="col-sm-4">
                                             <label>Assset Types</label>
                                             <select class="form-control select2 " style="width: 100%;"

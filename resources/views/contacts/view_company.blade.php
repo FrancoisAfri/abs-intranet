@@ -415,6 +415,7 @@
 						<table class="table table-bordered">
 							<tr>
 								<th style="width: 10px"></th>
+								<th style="width: 600px">Notes</th>
 								<th>Originator</th>
 								<th>Company Representative</th>
 								<th>Our Representative</th>
@@ -422,13 +423,13 @@
 								<th>Time</th>
 								<th>Communication Method</th>
 								<th>Follow-up Task</th>
-								<th style="width: 100px">Notes</th>
 								<th style="width: 40px"></th>
 						    </tr>
 							@if (count($contactnotes) > 0)
 								@foreach($contactnotes as $notes)
 									<tr id="notess-list">
 										<td ><img src="{{ (!empty($notes->profile_pic)) ? Storage::disk('local')->url("avatars/$notes->profile_pic") : (($notes->gender === 0) ? $f_silhouette : $m_silhouette) }}" width="30" height="30" alt="" ></td>
+										<td style="width: 600px">{{ (!empty($notes->notes)) ?  $notes->notes : ''}} </td>
 										<td>{{ (!empty($notes->originator_type) && $notes->originator_type == 1) ? "From Us" : 'Client'}} </td>
 										<td>{{ (!empty($notes->con_first_name) && !empty($notes->con_surname)) ? $notes->con_first_name." ".$notes->con_surname : ''}} </td>
 										<td>{{ (!empty($notes->hr_first_name) && !empty($notes->hr_surname)) ? $notes->hr_first_name." ".$notes->hr_surname : ''}} </td>
@@ -436,7 +437,6 @@
 										<td>{{ !empty($notes->time) ? date('H:m:i', $notes->time) : '' }}</td>
 										<td>{{ (!empty($notes->communication_method)) ? $communicationmethod[$notes->communication_method] : ''}} </td>
 										<td>{{ (!empty($notes->next_action)) && $notes->next_action == 1 ?  "Yes" : 'No'}} </td>
-										<td style="width: 100px">{{ (!empty($notes->notes)) ?  $notes->notes : ''}} </td>
 										<td><button type="button" id="edit_compan" class="btn btn-warning  btn-xs" data-toggle="modal" 
 											data-target="#edit-note-modal" data-id="{{ $notes->id }}" 
 											data-originator_type="{{ $notes->originator_type }}" 

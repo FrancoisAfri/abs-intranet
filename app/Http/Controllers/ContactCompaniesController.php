@@ -249,7 +249,7 @@ class ContactCompaniesController extends Controller
 			->get();
 		
         $notesStatus = array(1 => 'Supplier', 2 => 'Operations', 3 => 'Finance', 4 => 'After Hours', 5 => 'Sales', 6 => 'Client');
-        $communicationmethod = array(1 => 'Telephone', 2 => 'Meeting/Interview', 3 => 'Email', 4 => 'Fax', 4 => 'SMS');
+        $communicationmethod = array(1 => 'Telephone', 2 => 'Meeting/Interview', 3 => 'Email', 4 => 'Fax', 5 => 'SMS', 6 => 'Meeting Minutes');
 		$taskStatus = array(1 => 'Not Started', 2 => 'In Progress', 3 => 'Paused', 4 => 'Completed');
         
 		$data['m_silhouette'] = Storage::disk('local')->url('avatars/m-silhouette.jpg');
