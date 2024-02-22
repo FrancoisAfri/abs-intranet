@@ -870,7 +870,8 @@ class ContactCompaniesController extends Controller
         $personID = $notedata['contact_person_id'];
         $notesStatus = array(1 => 'Supplier', 2 => 'Operations', 3 => 'Finance', 4 => 'After Hours', 5 => 'Sales', 6 => 'Client');
         $notes = DB::table('contacts_notes')
-            ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
+            ->select('contacts_notes.*', 'contacts_contacts.first_name as contact_name', 'contacts_contacts.surname as contact_surname', 'contact_companies.name as companyname', 'hr_people.first_name as hr_name', 'hr_people.surname as hr_surname')
+            ->leftJoin('hr_people', 'contacts_notes.employee_id', '=', 'hr_people.id')
             ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
             ->leftJoin('contact_companies', 'contacts_notes.company_id', '=', 'contact_companies.id')
             ->where(function ($query) use ($userID) {
@@ -1313,7 +1314,8 @@ class ContactCompaniesController extends Controller
         $notesStatus = array(1 => 'Supplier', 2 => 'Operations', 3 => 'Finance', 4 => 'After Hours', 5 => 'Sales', 6 => 'Client');
 
         $notes = DB::table('contacts_notes')
-            ->select('contacts_notes.*', 'contacts_contacts.first_name as name ', 'contacts_contacts.surname as surname', 'contact_companies.name as companyname')
+            ->select('contacts_notes.*', 'contacts_contacts.first_name as contact_name', 'contacts_contacts.surname as contact_surname', 'contact_companies.name as companyname', 'hr_people.first_name as hr_name', 'hr_people.surname as hr_surname')
+            ->leftJoin('hr_people', 'contacts_notes.employee_id', '=', 'hr_people.id')
             ->leftJoin('contacts_contacts', 'contacts_notes.hr_person_id', '=', 'contacts_contacts.id')
             ->leftJoin('contact_companies', 'contacts_notes.company_id', '=', 'contact_companies.id')
             ->where(function ($query) use ($userID) {

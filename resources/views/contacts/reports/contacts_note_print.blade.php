@@ -46,18 +46,25 @@
 			<div class="box-body">
 				<table class="table table-striped">
 					<tr>
-					<th>Client name</th>
-          <th>Notes</th>
-          <th>Next Action</th>
-          <th>Follow Up Date</th>
+						<th>Client</th>
+						<th>Client Rep</th>
+						<th>Employee</th>
+						<th>Notes</th>
+						<th>Next Action</th>
+						<th>Follow Up Date</th>
 					</tr>
-					  @foreach($notes as $notereport)
-              <tr>
-             <td>{{ !empty($notereport->name) && !empty($notereport->surname) ? $notereport->name.' '.$notereport->surname : '' }}</td>
-            <td>{{ !empty($notereport->notes) ? $notereport->notes : '' }}</td>
-            <td>{{ (!empty($notereport->next_action)) ?  $notesStatus[$notereport->next_action] : ''}} </td>
-            <td>{{ !empty($notereport->follow_date) ? date('d M Y ', $notereport->follow_date) : '' }}</td>
-            @endforeach
+					@if(count($notes) > 0)
+						@foreach($notes as $note)
+							<tr>
+								<td>{{ !empty($note->companyname) ? $note->companyname : '' }}</td>
+								<td>{{ !empty($note->contact_name) && !empty($note->contact_surname) ? $note->contact_name.' '.$note->contact_surname : '' }}</td>
+								<td>{{ !empty($note->hr_name) && !empty($note->hr_surname) ? $note->hr_name.' '.$note->hr_surname : '' }}</td>
+								<td>{{ !empty($note->notes) ? $note->notes : '' }}</td>
+								<td>{{ (!empty($note->next_action)) ?  $notesStatus[$note->next_action] : ''}} </td>
+								<td>{{ !empty($note->follow_date) ? date('d M Y ', $note->follow_date) : '' }}</td>
+							</tr>
+						@endforeach
+					@endif 
 				</table>
 			</div>
 		</div>
