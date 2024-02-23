@@ -68,7 +68,6 @@
 				</table>
 			</div>
 		</div>
-
     </div>
     <!-- /.row -->
   </section>

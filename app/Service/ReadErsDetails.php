@@ -356,14 +356,18 @@ class ReadErsDetails
 				if (!empty($details['manager_id']))
 				{
 					$managerDetails = HRPerson::getManagername($details['manager_id']);
-					$managerName = $managerDetails['first_name']." ".$managerDetails['surname'];
+					if (!empty($managerDetails['first_name']) && $managerDetails['surname'])
+						$managerName = $managerDetails['first_name']." ".$managerDetails['surname'];
+					else $managerName = '' ;
 				}
 				else $managerName;
 				// if department id are set on the on employee profile
 				if (!empty($details['division_level_4']))
 				{
 					$departDetails = HRPerson::getUserDepartment($details['division_level_4']);
-					$deptName = $departDetails['name'];
+					if (!empty($departDetails['name']))
+						$deptName = $departDetails['name'];
+					else $deptName = '' ;
 				}
 				else $deptName;
 				// check leave status
