@@ -134,7 +134,6 @@ class ReadErsDetails
             }
         }
 
-
         $Employees = HRPerson::getEmployeeNumber();
 
         $exemptedUsers = ExemptedUsers::getExemptedUsers();

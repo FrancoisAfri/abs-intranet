@@ -22,11 +22,9 @@
                     <p>We value your feedback and appreciate your comments.</p>
                 </div>
                 <!-- /.box-header -->
-
                 <!-- Form Start -->
                 <form name="service-rating-form" class="form-horizontal" method="POST" action="/rate-our-services">
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         @if($isEmpFound)
                             @if (count($errors) > 0)
@@ -40,7 +38,6 @@
                                     </ul>
                                 </div>
                             @endif
-
                             @if (session('success_add'))
                                 <div class="alert alert-success alert-dismissible">
                                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>

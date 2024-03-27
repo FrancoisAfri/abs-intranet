@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Carbon;
 
 class ManualClockin extends Model
 {
@@ -83,8 +84,10 @@ class ManualClockin extends Model
 
     public static function getclokinUsers()
     {
-		return ManualClockin::where(['clockin_type' => 1])
-			->where('created_at', '>=', date('Y-m-d').' 00:00:00')
+		$today = Carbon::today();
+		//where('created_at', '>=', date('Y-m-d').' 00:00:00')
+		return ManualClockin::where('clockin_type', 1)
+			->whereDate('created_at', $today)
             ->pluck('employee_number');
     }
 }
