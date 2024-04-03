@@ -190,7 +190,7 @@ class StaffLoanController extends Controller
 		$firstSetup = !empty($setup->first_approval) ? $setup->first_approval : 0;
 		$secondSetup = !empty($setup->second_approval) ? $setup->second_approval : 0;
 		// if logged user is a director allow to see page
-		if($user->id == $firstSetup || $user->id == $secondSetup || $user->id == 1)
+		if($user->person->id == $firstSetup || $user->person->id == $secondSetup || $user->id == 1)
 		{
 			$loans = StaffLoan::whereIn('status', array(1, 2))->orderBy('id', 'asc')->get();
 			$loans = $loans->load('users');
