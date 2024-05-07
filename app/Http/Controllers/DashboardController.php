@@ -28,7 +28,7 @@ use App\programme;
 use App\Policy;
 use App\PolicyRefreshed;
 use App\ContactPerson;
-use App\policy_users; 
+use App\Policy_users; 
 use App\CRMAccount;
 use App\ceoNews;
 use App\Quotation;
@@ -62,7 +62,7 @@ class DashboardController extends Controller
 			// get policy name
 			$policy = Policy::where('id',$policies->policy_id)->first();
 			//get policy users table 
-			$policy_users = policy_users::where('policy_id',$policies->policy_id)->where('user_id',$user->person->id)->first();
+			$policy_users = Policy_users::where('policy_id',$policies->policy_id)->where('user_id',$user->person->id)->first();
 			//return $policy_users;
 			Alert::toast("You have a policy that need your attention!!! Please go through $policy->name policy", 'warning');
 			return redirect("/policy/read-policy-document/$policy_users->id");
