@@ -28,7 +28,7 @@ use App\programme;
 use App\Policy;
 use App\PolicyRefreshed;
 use App\ContactPerson;
-use App\policy_users;
+use App\policy_users; 
 use App\CRMAccount;
 use App\ceoNews;
 use App\Quotation;
