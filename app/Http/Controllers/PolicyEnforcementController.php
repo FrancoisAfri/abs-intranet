@@ -372,11 +372,11 @@ class PolicyEnforcementController extends Controller
             ->leftJoin('policy', 'policy_users.policy_id', '=', 'policy.id')
             ->leftJoin('policy_category', 'policy.category_id', '=', 'policy_category.id')
             //->where('policy.date', '>', $today)
-            ->where('policy_users.user_id', 3)
+            ->where('policy_users.user_id', $users)
             ->orderBy('policy_users.id')
             ->limit(100)
             ->get();
-//return $policyUsers;
+
         $modules = modules::where('active', 1)->orderBy('name', 'asc')->get();
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
 
@@ -389,7 +389,6 @@ class PolicyEnforcementController extends Controller
 
         $data['policyUsers'] = $policyUsers;
         $data['policies'] = $policies;
-       // $data['policy'] = $policy;
         $data['active_mod'] = 'Policy Enforcement';
         $data['active_rib'] = 'My Policies';
         $data['modules'] = $modules;
@@ -833,6 +832,7 @@ class PolicyEnforcementController extends Controller
 	// refreshed
 	public function refreshed(Policy $policy)
     {
+		//return $policy;
 		$user = Auth::user()->person->id;
 		
 		$oldRow = PolicyRefreshed::where('status', 1)->where('hr_id', $user)
@@ -842,7 +842,7 @@ class PolicyEnforcementController extends Controller
 		$oldRow->status = 2;
 		//$oldRow->status = strtotime(date('Y-m-d'));
 		$oldRow->update();
-		
+		//die('ddd');
 		// add new row
 		
 		$today = date('Y-m-d');

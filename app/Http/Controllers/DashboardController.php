@@ -28,6 +28,7 @@ use App\programme;
 use App\Policy;
 use App\PolicyRefreshed;
 use App\ContactPerson;
+use App\policy_users;
 use App\CRMAccount;
 use App\ceoNews;
 use App\Quotation;
@@ -50,30 +51,30 @@ class DashboardController extends Controller
 
     public function index()
     {
-		
+		$user = Auth::user()->load('person');
 		// check if there is a policy that needs refresh
 		$today =  strtotime(date("Y-m-d"));
-		$policies = PolicyRefreshed::where('status', 1)
+		$policies = PolicyRefreshed::where('status', 1)->where('hr_id',$user->person->id)
 							->where('date_refreshed','<=', $today)->first();
+		//return $policies;
 		if (!empty($policies->id))
 		{
 			// get policy name
 			$policy = Policy::where('id',$policies->policy_id)->first();
+			//get policy users table 
+			$policy_users = policy_users::where('policy_id',$policies->policy_id)->where('user_id',$user->person->id)->first();
+			//return $policy_users;
 			Alert::toast("You have a policy that need your attention!!! Please go through $policy->name policy", 'warning');
-			return redirect("/policy/read-policy-document/$policy->id");
+			return redirect("/policy/read-policy-document/$policy_users->id");
 		}
-        $loggedInEmplID = Auth::user()->person->id;
 
         $data['breadcrumb'] = [
             ['title' => 'Dashboard', 'path' => '/', 'icon' => 'fa fa-dashboard', 'active' => 1, 'is_module' => 1]
         ];
         $data['active_mod'] = 'dashboard';
-        $user = Auth::user()->load('person');
 
         //  CRMAccounts
-
-        $clientID = Auth::user()->person->id;
-        $ClientsCompanyId = ContactPerson::where('id', $clientID)->pluck('company_id')->first();
+        $ClientsCompanyId = ContactPerson::where('id', $user->person->id)->pluck('company_id')->first();
         $Accounts = CRMAccount::where('company_id', $ClientsCompanyId)->get();
         $account = $Accounts->load('company', 'client', 'quotations.products.ProductPackages', 'quotations.packages.products_type');
         $purchaseStatus = ['' => '', 5 => 'Client Waiting Invoice', 6 => 'Invoice Sent', 7 => 'Partially Paid', 8 => 'Paid'];
@@ -232,7 +233,7 @@ class DashboardController extends Controller
             $ticketLabels = [1 => "label-danger", 2 => "label-warning", 3 => 'label-success', 4 => 'label-info'];
 
             $tickets = DB::table('ticket')
-                ->where('user_id', $loggedInEmplID)
+                ->where('user_id', $user->person->id)
                 ->orderBy('id', 'asc')
                 ->get();
 
@@ -244,12 +245,8 @@ class DashboardController extends Controller
             if (!empty($helpdeskTickets))
                 $helpdeskTickets->load('ticket');
 
-            $name = HRPerson::where('id', $loggedInEmplID)
-                ->select('first_name', 'surname')
-                ->get()
-                ->first();
-            $names = $name->first_name;
-            $surname = $name->surname;
+            $names = $user->person->first_name;
+            $surname = $user->person->surname;
 			
             #Product_Category-------->
             $ProductCategory = product_category::orderBy('id', 'asc')->get();
@@ -280,13 +277,10 @@ class DashboardController extends Controller
                 $package = $packages->first()->id;
             }
             #cms
-            // return $clientID;
-            $employee = Auth::user()->load('person');
-
-            $Div4 = $employee->division_level_4;
-            $Div3 = $employee->division_level_3;
-            $Div2 = $employee->division_level_2;
-            $Div1 = $employee->division_level_1;
+            $Div4 = $user->person->division_level_4;
+            $Div3 = $user->person->division_level_3;
+            $Div2 = $user->person->division_level_2;
+            $Div1 = $user->person->division_level_1;
 
             $today = time();
 
@@ -365,25 +359,22 @@ class DashboardController extends Controller
             $data['page_description'] = "This is your main Dashboard";
 
             return view('dashboard.admin_dashboard')->with($data); //Admin Dashboard
-        } else {
-            $name = HRPerson::where('id', $clientID)
-                ->select('first_name', 'surname')
-                ->get()
-                ->first();
+        }
+		else {
+           
             $tickets = DB::table('ticket')
-                ->where('client_id', $clientID)
+                ->where('client_id', $user->person->id)
                 ->orderBy('id', 'asc')
                 ->get();
-            $user = Auth::user()->load('person');
+				
             $Helpdesk = HelpDesk::orderBy('name', 'asc')->get();
             //
             $helpdeskTickets = HelpDesk::orderBy('id', 'asc')->distinct()->get();
-            $ticketcount = ticket::where('client_id', $clientID)->count();
+            $ticketcount = ticket::where('client_id', $user->person->id)->count();
             $ticketStatus = array('' => '', 1 => 'Pending Assignment', 2 => 'Assigned to operator', 3 => 'Completed by operator', 4 => 'Submited to Admin for review');
-            //return $account;
-            $email = $user->email;
+
             //getclient names
-            $clientname = ContactPerson::where('id', $clientID)->select('first_name', 'surname')->first();
+            $clientname = ContactPerson::where('id', $user->person->id)->select('first_name', 'surname')->first();
             $names = $clientname->first_name;
             $surname = $clientname->surname;
 
@@ -427,7 +418,7 @@ class DashboardController extends Controller
             $data['Helpdesk'] = $Helpdesk;
             $data['ticketcount'] = $ticketcount;
             $data['names'] = $names;
-            $data['email'] = $email;
+            $data['email'] = $user->email;
             $data['labelColors'] = $labelColors;
             $data['purchaseStatus'] = $purchaseStatus;
             $data['surname'] = $surname;
