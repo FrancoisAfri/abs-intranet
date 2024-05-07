@@ -59,13 +59,15 @@ class DashboardController extends Controller
 		//return $policies;
 		if (!empty($policies->id))
 		{
-			// get policy name
 			$policy = Policy::where('id',$policies->policy_id)->first();
 			//get policy users table 
 			$policy_users = Policy_users::where('policy_id',$policies->policy_id)->where('user_id',$user->person->id)->first();
-			//return $policy_users; 
-			Alert::toast("You have a policy that need your attention!!! Please go through $policy->name policy", 'warning');
-			return redirect("/policy/read-policy-document/$policy_users->id");
+			//return $policy_users;
+			if (!empty($policy_users->id))
+			{
+				Alert::toast("You have a policy that need your attention!!! Please go through $policy->name policy", 'warning');
+				return redirect("/policy/read-policy-document/$policy_users->id");
+			}
 		}
 
         $data['breadcrumb'] = [
