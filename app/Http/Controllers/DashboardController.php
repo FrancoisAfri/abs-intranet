@@ -63,7 +63,7 @@ class DashboardController extends Controller
 			$policy = Policy::where('id',$policies->policy_id)->first();
 			//get policy users table 
 			$policy_users = Policy_users::where('policy_id',$policies->policy_id)->where('user_id',$user->person->id)->first();
-			//return $policy_users;
+			//return $policy_users; 
 			Alert::toast("You have a policy that need your attention!!! Please go through $policy->name policy", 'warning');
 			return redirect("/policy/read-policy-document/$policy_users->id");
 		}
