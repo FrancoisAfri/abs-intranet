@@ -332,27 +332,28 @@ class LeaveApplicationController extends Controller
             /**
              * if the manager is on leave the second in charge will have toa approve the application
              */
-            if (isset($isOnleave)) {
+            if (isset($isOnleave)) 
+			{
                 #get the second in charge
                 $managerDetails = HRPerson::getManagerDetails($hrDetails['second_manager_id']);
-
-            } else
-                # code...
+            } 
+			else
+			{
                 // query the hrperson  model and bring back the values of the manager
                 $managerDetails = HRPerson::getManagerDetails($hrDetails['manager_id']);
-
-            if ($managerDetails == null) {
-                $managerDetails = HRPerson::getManagerDetails($hrDetails['manager_id']);
-            }
-
+			}
+			$firstName = !empty($managerDetails['first_name']) ?$managerDetails['first_name'] : '';
+			$surname = !empty($managerDetails['surname']) ? $managerDetails['surname'] : '';
+			$email = !empty($managerDetails['email']) ? $managerDetails['email'] : '';
+			$manager_id = !empty($managerDetails['manager_id']) ? $managerDetails['manager_id'] : 0;
 
             // array to store manager details
             $details = array(
                 'status' => 2,
-                'first_name' => $managerDetails['first_name'],
-                'surname' => $managerDetails['surname'],
-                'email' => $managerDetails['email'],
-                'manager_id' => $managerDetails['manager_id']
+                'first_name' => $firstName,
+                'surname' => $surname,
+                'email' => $email,
+                'manager_id' => $manager_id
             );
 
         } elseif ($approvals->require_department_head_approval == 1) {
