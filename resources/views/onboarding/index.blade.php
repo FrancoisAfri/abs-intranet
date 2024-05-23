@@ -599,9 +599,9 @@
 									<option value="">*** Select Occupational Level ***</option>
 									<option value="1">Senior Management</option>
 									<option value="2">Middle Management</option>
-									<option value="2">Junior Management</option>
-									<option value="2">Semi Skilled </option>
-									<option value="2">Unskilled  </option>
+									<option value="3">Junior Management</option>
+									<option value="4">Semi Skilled </option>
+									<option value="5">Unskilled  </option>
 								</select>
 								</div>
 							</div>
