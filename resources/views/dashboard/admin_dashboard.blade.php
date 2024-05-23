@@ -66,7 +66,7 @@
 					</div>
 					@if (!empty($ceonews))
 						<div class="box-body" style="max-height: 400px; overflow-y: scroll;">
-							<video  height="320" width="450"  controls autoplay controlsList="nodownload" oncontextmenu="return false;">
+							<video  height="320" width="450" controls controlsList="nodownload" oncontextmenu="return false;">
 								<source src="{{URL::asset("storage/public/videos/$ceonews->video_content")}}" type="video/mp4">
 								Your browser does not support the video tag.
 							</video>

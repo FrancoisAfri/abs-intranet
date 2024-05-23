@@ -105,7 +105,7 @@ class procurementRequestController extends Controller
         //Get products
         $productIDs = $request->input('product_id');
         $products = [];
-        if (count($productIDs) > 0) {
+        if (!empty($productIDs)) {
             $products = product_products::whereIn('id', $productIDs)
                 ->with(['ProductPackages', 'productPrices' => function ($query) {
                     $query->orderBy('id', 'desc');
@@ -955,14 +955,19 @@ class procurementRequestController extends Controller
 		$totalPrice = 0;
 		// get all product attached to this request and calculate total price pluck('product_id')
 		$items = RequestStockItems::where('request_stocks_id',$procurement->id)->get();
-	
+		
 		foreach ($items as $item) {
 			$product = product_products::where('id',$item->product_id)->first();
 			$productPrice = product_price::where('product_product_id',$item->product_id)
 					->orderBy('id', 'desc')
 					->first();
-			$currentPrice = !empty($productPrice->price) 
-				? $productPrice->price : !empty($product->price) ? $product->price : 0;
+			//$currentPrice = !empty($productPrice->price) ? $productPrice->price : !empty($product->price) ? $product->price : 0;
+			$currentPrice = 0;
+			if (!empty($productPrice->price))
+				$currentPrice = $productPrice->price;
+			else
+				$currentPrice = !empty($product->price) ? $product->price : 0;
+			
 			$totalPrice = $totalPrice + $currentPrice;
 		}
 		// get max amount allow for this step

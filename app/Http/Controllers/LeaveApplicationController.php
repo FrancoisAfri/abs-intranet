@@ -1238,7 +1238,7 @@ class LeaveApplicationController extends Controller
                 $credit->update();
 
                 leave_history::create([
-                    'hr_id' => $user->person->id,
+                    'hr_id' => $leave->hr_id,
                     'action_date' => time(),
                     'description' => $request->input('reason'),
                     'previous_balance' => $leaveBalance,
@@ -1247,8 +1247,6 @@ class LeaveApplicationController extends Controller
                     'current_balance' => $credit->leave_balance,
                     'added_by' => $user->person->id
                 ]);
-
-
             }
             // update leave applicatiion
             $leave->status = 10;

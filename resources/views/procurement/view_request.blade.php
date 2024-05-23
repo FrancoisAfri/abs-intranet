@@ -199,7 +199,7 @@
 			@include('procurement.partials.edit_quotation')
 			@include('procurement.partials.quotation_add_modal')
 			@include('procurement.partials.request_rejection')
-			@if (count($procurement) > 0)
+			@if (!empty($procurement))
                 @include('procurement.warnings.items_warning_action', ['modal_title' => 'Remove Item', 'modal_content' => 'Are you sure you want to remove this item? This action cannot be undone.'])
             @endif
 		</div>
