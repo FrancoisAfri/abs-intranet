@@ -95,14 +95,14 @@ class VideoManagementController extends Controller
         $this->validate($request, [
             'name' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'path' => 'required|max:51200',
+            'video_content' => 'required|max:51200',
         ]);
 
-        $video_name = $request->file('path');
+        $video_name = $request->file('video_content');
         $File_ex = $video_name->extension();
         $filePath = 'emp_vid' . ' ' . str_random(16) . '.' . $File_ex;
         $isFileUploaded = Storage::disk('public')->put('videos/' . $filePath,
-            file_get_contents($request->file('path')));
+            file_get_contents($request->file('video_content')));
 
         // File URL to access the video in frontend
         $url = Storage::disk('public')->url($filePath);
