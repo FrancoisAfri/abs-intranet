@@ -40,7 +40,7 @@
                     <div class="form-group {{ $errors->has('repayment_month') ? ' has-error' : '' }}">
                         <label for="repayment_month" class="col-sm-2 control-label">Repayment Month</label>
                         <div class="col-sm-8">
-                                <input type="text" class="form-control" id="repayment_month" name="repayment_month" value=""
+                                <input type="number" class="form-control" id="repayment_month" name="repayment_month" value=""
                                    placeholder="Enter Month(s)" required>
                         </div>
                     </div>
