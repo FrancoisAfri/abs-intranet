@@ -96,7 +96,6 @@ class PolicyEnforcementController extends Controller
         $policyData = $request->all();
         unset($policyData['_token']);
 
-
         if (isset($policyData['date'])) {
             $dates = $policyData['date'] = str_replace('/', '-', $policyData['date']);
             $dates = $policyData['date'] = strtotime($policyData['date']);
@@ -132,18 +131,29 @@ class PolicyEnforcementController extends Controller
         $DivFive = DivisionLevel::where('level', 5)->orderBy('id', 'desc')->first();
 
         $users = 0;
-        if (!empty($policyData['hr_person_id'])) {
-            $users = HRPerson::wherein('id', $policyData['hr_person_id'])->orderBy('id', 'desc')->get();
-        } elseif ($DivOne->active == 1 && (!empty($policyData['division_level_1']) && $policyData['division_level_1'] > 0)) {
-            $users = HRPerson::where('division_level_1', ($policyData['division_level_1']))->orderBy('id', 'desc')->get();
-        } elseif ($DivTwo->active == 1 && (!empty($policyData['division_level_2']) && $policyData['division_level_2'] > 0)) {
-            $users = HRPerson::where('division_level_2', ($policyData['division_level_2']))->orderBy('id', 'desc')->get();
-        } elseif ($DivThree->active == 1 && (!empty($policyData['division_level_3']) && $policyData['division_level_3'] > 0)) {
-            $users = HRPerson::where('division_level_3', ($policyData['division_level_3']))->orderBy('id', 'desc')->get();
-        } elseif ($DivFour->active == 1 && (!empty($policyData['division_level_4']) && $policyData['division_level_4'] > 0)) {
-            $users = HRPerson::where('division_level_4', ($policyData['division_level_4']))->orderBy('id', 'desc')->get();
-        } elseif ($DivFive->active == 1 && (!empty($policyData['division_level_5']) && $policyData['division_level_5'] > 0)) {
-            $users = HRPerson::where('division_level_5', ($policyData['division_level_5']))->orderBy('id', 'desc')->get();
+        if (!empty($policyData['hr_person_id'])) 
+		{
+            $users = HRPerson::wherein('id', $policyData['hr_person_id'])->where('status',1)->orderBy('id', 'desc')->get();
+        } 
+		elseif ($DivOne->active == 1 && (!empty($policyData['division_level_1']) && $policyData['division_level_1'] > 0)) 
+		{
+            $users = HRPerson::where('division_level_1', ($policyData['division_level_1']))->where('status',1)->orderBy('id', 'desc')->get();
+        } 
+		elseif ($DivTwo->active == 1 && (!empty($policyData['division_level_2']) && $policyData['division_level_2'] > 0)) 
+		{
+            $users = HRPerson::where('division_level_2', ($policyData['division_level_2']))->where('status',1)->orderBy('id', 'desc')->get();
+        } 
+		elseif ($DivThree->active == 1 && (!empty($policyData['division_level_3']) && $policyData['division_level_3'] > 0)) 
+		{
+            $users = HRPerson::where('division_level_3', ($policyData['division_level_3']))->where('status',1)->orderBy('id', 'desc')->get();
+        } 
+		elseif ($DivFour->active == 1 && (!empty($policyData['division_level_4']) && $policyData['division_level_4'] > 0)) 
+		{
+            $users = HRPerson::where('division_level_4', ($policyData['division_level_4']))->where('status',1)->orderBy('id', 'desc')->get();
+        } 
+		elseif ($DivFive->active == 1 && (!empty($policyData['division_level_5']) && $policyData['division_level_5'] > 0)) 
+		{
+            $users = HRPerson::where('division_level_5', ($policyData['division_level_5']))->where('status',1)->orderBy('id', 'desc')->get();
         }
 //
         foreach ($users as $hrID) {
