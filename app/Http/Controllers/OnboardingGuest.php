@@ -87,6 +87,7 @@ class OnboardingGuest extends Controller
      */
     public function store(SaveOnboardingRequest $request)
     {
+		die('jndjdnjdnj');
 		if (isset($request['date_joined'])) {
             $request['date_joined'] = str_replace('/', '-', $request['date_joined']);
             $request['date_joined'] = strtotime($request['date_joined']);
