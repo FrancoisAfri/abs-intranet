@@ -41,7 +41,7 @@
                         <label for="repayment_month" class="col-sm-2 control-label">Repayment Month</label>
                         <div class="col-sm-8">
                                 <input type="number" class="form-control" id="repayment_month" name="repayment_month" value=""
-                                   placeholder="Enter Month(s)" required>
+                                   placeholder="Enter the number of month(s) Eg 6." required>
                         </div>
                     </div>
                 </div>
