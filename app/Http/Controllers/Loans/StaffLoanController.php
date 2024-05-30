@@ -130,6 +130,7 @@ class StaffLoanController extends Controller
 		// get logged used details
 		$employee = Auth::user()->load('person');
 		// save application
+
         StaffLoan::create([
 				'amount' => $request['amount'],
 				'type' => $request['type'],

@@ -178,10 +178,15 @@
 			});
 			//save Fleet
 			$('#add-loan').on('click', function () {
+				
+				
+
 				var strUrl = '/loan/add_loan';
 				var formName = 'add-loan-form';
 				var modalID = 'add-loan-modal';
 				var submitBtnID = 'add-loan';
+				var submitButton = $('#' + submitBtnID);
+				submitButton.prop('disabled', true); // Disable the submit button to prevent multiple submissions
 				var redirectUrl = '/loan/view';
 				var successMsgTitle = 'New Application  Added!';
 				var successMsg = 'The Application has been added successfully.';
