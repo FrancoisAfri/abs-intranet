@@ -53,7 +53,7 @@ class StaffLoanController extends Controller
     public function index()
     {
 		$user = Auth::user()->load('person');
-        $loans = StaffLoan::where('hr_id', $user->id)->orderBy('id', 'asc')->get();
+        $loans = StaffLoan::where('hr_id', $user->person->id)->orderBy('id', 'asc')->get();
 
         $data['page_title'] = "Loan Applications";
         $data['page_description'] = "View all Loan Applications";
@@ -133,7 +133,7 @@ class StaffLoanController extends Controller
         StaffLoan::create([
 				'amount' => $request['amount'],
 				'type' => $request['type'],
-				'hr_id' => $employee->id,
+				'hr_id' => $employee->person->id,
 				'reason' => $request['reason'],
 				'repayment_month' => $request['repayment_month'],
 				'status' => 1
@@ -163,10 +163,10 @@ class StaffLoanController extends Controller
             ));
 		// email to employee. LoanStaff
 		
-		if (!empty($employee['email']))
+		if (!empty($employee->person->email))
             Mail::to(
-                $employee['email'])->send(new LoanStaff(
-                $employee['first_name'],
+                $employee->person->email)->send(new LoanStaff(
+                $employee->person->first_name,
                 $type
             ));
 		
@@ -279,7 +279,7 @@ class StaffLoanController extends Controller
 				// update loan status
 				$loan->status = 2;
 				$loan->first_approval_date = strtotime(date('Y-m-d H:i:s'));
-				$loan->first_approval = $user->id;
+				$loan->first_approval = $user->person->id;
 				$loan->update();
 				Alert::toast('Loan application Partially Approved', 'success');
 				AuditReportsController::store('Staff Loan Management', "New $type Application Partially Approved", "Actioned By User", 0);
@@ -321,7 +321,7 @@ class StaffLoanController extends Controller
 				// update loan status
 				$loan->status = 3;
 				$loan->first_approval_date = strtotime(date('Y-m-d H:i:s'));
-				$loan->first_approval = $user->id;
+				$loan->first_approval = $user->person->id;
 				$loan->update();
 				Alert::toast('Loan application Approved', 'success');
 			}
@@ -367,7 +367,7 @@ class StaffLoanController extends Controller
 				// update loan status
 				$loan->status = 3;
 				$loan->second_approval_date = strtotime(date('Y-m-d H:i:s'));
-				$loan->second_approval = $user->id;
+				$loan->second_approval = $user->person->id;
 				$loan->update();
 				// audit
 			AuditReportsController::store('Staff Loan Management', "New $type Application Approved", "Actioned By User", 0);
@@ -401,7 +401,7 @@ class StaffLoanController extends Controller
 		// update loan model
 		$loan->rejection_reason = $request->input('reason');
         $loan->rejected_date = strtotime(date('Y-m-d H:i:s'));
-        $loan->rejected_by = $user->id;
+        $loan->rejected_by = $user->person->id;
         $loan->status = 4;
         $loan->update();
 		
