@@ -8,6 +8,7 @@ use App\Http\Requests\LoanSetupRequest;
 use App\Http\Requests\LoanRequest;
 use App\Models\StaffLoanSetup;
 use App\Models\StaffLoan;
+use App\Models\StaffLoanDocuments;
 use App\Mail\LoanApproval;
 use App\Mail\LoanStaff;
 use App\Mail\LoanApproved;
@@ -54,7 +55,9 @@ class StaffLoanController extends Controller
     {
 		$user = Auth::user()->load('person');
         $loans = StaffLoan::where('hr_id', $user->person->id)->orderBy('id', 'asc')->get();
-
+		$setup = StaffLoanSetup::where('id',1)->first();
+		$directory = !empty($setup->loan_upload_directory) ? $setup->loan_upload_directory : '';
+		
         $data['page_title'] = "Loan Applications";
         $data['page_description'] = "View all Loan Applications";
         $data['breadcrumb'] = [
@@ -65,10 +68,35 @@ class StaffLoanController extends Controller
         $data['active _rib'] = 'My Request';
         $data['loans'] = $loans;
         $data['statuses'] = StaffLoan::STATUS_SELECT;
+        $data['directory'] = $directory;
         $data['user'] = $user;
 
         AuditReportsController::store('Staff Loan Management', 'Loan Applications Accessed', "Actioned By User", 0);
         return view('loan.view_application')->with($data);
+    }
+	
+	public function create()
+    {
+		$user = Auth::user()->load('person');
+        $loans = StaffLoan::where('hr_id', $user->person->id)->orderBy('id', 'asc')->get();
+		$setup = StaffLoanSetup::where('id',1)->first();
+		$directory = !empty($setup->loan_upload_directory) ? $setup->loan_upload_directory : '';
+		
+        $data['page_title'] = "Loan Applications";
+        $data['page_description'] = "View all Loan Applications";
+        $data['breadcrumb'] = [
+            ['title' => 'Staff Loan Management', 'path' => '/loan/view', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+        ];
+		
+        $data['active_mod'] = 'Staff Loan Management';
+        $data['active _rib'] = 'My Request';
+        $data['loans'] = $loans;
+        $data['statuses'] = StaffLoan::STATUS_SELECT;
+        $data['directory'] = $directory;
+        $data['user'] = $user;
+
+        AuditReportsController::store('Staff Loan Management', 'Loan Applications Accessed', "Actioned By User", 0);
+        return view('loan.application')->with($data);
     }
 
     /**
@@ -112,6 +140,7 @@ class StaffLoanController extends Controller
 		$loan->payroll = !empty($request['payroll']) ? $request['payroll'] : 0;
 		$loan->finance = !empty($request['finance']) ? $request['finance'] : 0;
 		$loan->finance_second = !empty($request['finance_second']) ? $request['finance_second'] : 0;
+		$loan->loan_upload_directory = !empty($request['loan_upload_directory']) ? $request['loan_upload_directory'] : 0;
 		$loan->update();
 		
         AuditReportsController::store('Staff Loan Management', 'Setup Page Saved', "Actioned By User", 0);
@@ -129,9 +158,13 @@ class StaffLoanController extends Controller
     {
 		// get logged used details
 		$employee = Auth::user()->load('person');
+		$type = (!empty($request['type']) && $request['type'] == 1) ? 'Advance': 'Loan';
+		$setup = StaffLoanSetup::where('id',1)->first();
+		$hr = !empty($setup->hr) ? $setup->hr : 0;
+		$directory = !empty($setup->loan_upload_directory) ? $setup->loan_upload_directory : '';
 		// save application
-
-        StaffLoan::create([
+		
+        $StaffLoan = StaffLoan::create([
 				'amount' => $request['amount'],
 				'type' => $request['type'],
 				'hr_id' => $employee->person->id,
@@ -139,27 +172,46 @@ class StaffLoanController extends Controller
 				'repayment_month' => $request['repayment_month'],
 				'status' => 1
 			]);
-		$type = (!empty($request['type']) && $request['type'] == 1) ? 'Advance': 'Loan';
-		$setup = StaffLoanSetup::where('id',1)->first();
-		$firstSetup = !empty($setup->first_approval) ? $setup->first_approval : 0;
-		$secondSetup = !empty($setup->second_approval) ? $setup->second_approval : 0;
-		$firstApp = HRPerson::where('id',$firstSetup)->first();
-		$secondApp = HRPerson::where('id',$secondSetup)->first();
+		
+		# document
+        $numFiles = $index = 0;
+        $totalFiles = !empty($request['total_files']) ? $request['total_files'] : 0;
+        $Extensions = array('pdf', 'docx', 'doc');
 
-		// send email to all stakeholders
-		// email to approvers
-		// first approval
-		if (!empty($firstApp['email']))
+        $Files = isset($_FILES['document']) ? $_FILES['document'] : array();
+		//echo $directory;
+		//die('are you com');
+        while ($numFiles != $totalFiles) {
+			//die('ddd');
+            $index++;
+            $Name = $request->name[$index];
+            if (isset($Files['name'][$index]) && $Files['name'][$index] != '') {
+                $fileName = $StaffLoan->id . '_' . $Files['name'][$index];
+                $Explode = array();
+                $Explode = explode('.', $fileName);
+                $ext = end($Explode);
+                $ext = strtolower($ext);
+                if (in_array($ext, $Extensions)) {
+                    if (!is_dir("$directory")) mkdir("$directory", 0775);
+                    move_uploaded_file($Files['tmp_name'][$index], "$directory".'/' . $fileName) or die('Could not move file!');
+
+                    $document = new StaffLoanDocuments();
+                    $document->doc_name = $Name;
+                    $document->supporting_docs = $fileName;
+                    $document->status = 1;
+                    $StaffLoan->addloanDocs($document);
+                }
+            }
+            $numFiles++;
+        }
+		
+		$hrApp = HRPerson::where('id',$hr)->first();
+		
+			// email HR
+		if (!empty($hrApp['email']))
             Mail::to(
-                $firstApp['email'])->send(new LoanApproval(
-                $firstApp['first_name'],
-                $type
-            ));
-		// second approval
-		if (!empty($secondApp['email']))
-            Mail::to(
-                $secondApp['email'])->send(new LoanApproval(
-                $secondApp['first_name'],
+                $hrApp['email'])->send(new LoanApproval(
+                $hrApp['first_name'],
                 $type
             ));
 		// email to employee. LoanStaff
@@ -172,7 +224,7 @@ class StaffLoanController extends Controller
             ));
 		
 		AuditReportsController::store('Staff Loan Management', "New $type Application Saved", "Actioned By User", 0);
-        
+        //return back()->with('success_application', "Loan application was successful.");
         return response()->json();
     }
 
@@ -182,18 +234,40 @@ class StaffLoanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function approval()
     {
 		// check if user login is a director
 		
         $user = Auth::user()->load('person');
 		$setup = StaffLoanSetup::where('id',1)->first();
+		$hr = !empty($setup->hr) ? $setup->hr : 0;
 		$firstSetup = !empty($setup->first_approval) ? $setup->first_approval : 0;
 		$secondSetup = !empty($setup->second_approval) ? $setup->second_approval : 0;
 		// if logged user is a director allow to see page
 		if($user->person->id == $firstSetup || $user->person->id == $secondSetup || $user->id == 1)
 		{
-			$loans = StaffLoan::whereIn('status', array(1, 2))->orderBy('id', 'asc')->get();
+			$loans = StaffLoan::whereIn('status', array(2, 3))->orderBy('id', 'asc')->get();
+			$loans = $loans->load('users');
+			//return $loans;
+			$data['page_title'] = "Loan Approval";
+			$data['page_description'] = "View all Loan Approval";
+			$data['breadcrumb'] = [
+				['title' => 'Staff Loan Management', 'path' => '/loan/view', 'icon' => 'fa fa-users', 'active' => 0, 'is_module' => 1], ['title' => 'Setup', 'active' => 1, 'is_module' => 0]
+			];
+			
+			$data['active_mod'] = 'Staff Loan Management';
+			$data['active _rib'] = 'Approval';
+			$data['loans'] = $loans;
+			$data['statuses'] = StaffLoan::STATUS_SELECT;
+			$data['user'] = $user;
+
+			AuditReportsController::store('Staff Loan Management', 'Loan Approval Accessed', "Actioned By User", 0);
+			return view('loan.approval')->with($data);
+		}
+		else if ($user->person->id == $hr || $user->id == 1)
+		{
+			$loans = StaffLoan::where('status', 1)->orderBy('id', 'asc')->get();
 			$loans = $loans->load('users');
 			//return $loans;
 			$data['page_title'] = "Loan Approval";
@@ -264,7 +338,10 @@ class StaffLoanController extends Controller
 		$finance = !empty($loan_configuration->finance) ? $loan_configuration->finance : 0;
 		$financeSecond = !empty($loan_configuration->finance_second) ? $loan_configuration->finance_second : 0;
 		$payroll = !empty($loan_configuration->payroll) ? $loan_configuration->payroll : 0;
-		
+		$firstSetup = !empty($loan_configuration->first_approval) ? $loan_configuration->first_approval : 0;
+		$secondSetup = !empty($loan_configuration->second_approval) ? $loan_configuration->second_approval : 0;
+		$firstApp = HRPerson::where('id',$firstSetup)->first();
+		$secondApp = HRPerson::where('id',$secondSetup)->first();
 		$hrUser = HRPerson::where('id',$hr)->first();
 		$financeUser = HRPerson::where('id',$finance)->first();
 		$financeSecondUser = HRPerson::where('id',$financeSecond)->first();
@@ -274,11 +351,36 @@ class StaffLoanController extends Controller
         //update leave application status
         if ($loan->status == 1)
 		{
+			// email to approvers
+			// first approval
+			if (!empty($firstApp['email']))
+				Mail::to(
+					$firstApp['email'])->send(new LoanApproval(
+					$firstApp['first_name'],
+					$type
+				));
+			// second approval
+			if (!empty($secondApp['email']))
+				Mail::to(
+					$secondApp['email'])->send(new LoanApproval(
+					$secondApp['first_name'],
+					$type
+				));
+			
+			// update loan status
+			$loan->status = 2;
+			$loan->hr_approval_date = strtotime(date('Y-m-d H:i:s'));
+			$loan->hr_approval = $user->person->id;
+			$loan->update();
+			Alert::toast('Loan application Approved', 'success');
+        }
+		else if ($loan->status == 2) 
+		{
 			// check if amoun is lower than max amount
 			if ($loan->amount >= $loan_configuration->max_amount)
 			{
 				// update loan status
-				$loan->status = 2;
+				$loan->status = 3;
 				$loan->first_approval_date = strtotime(date('Y-m-d H:i:s'));
 				$loan->first_approval = $user->person->id;
 				$loan->update();
@@ -320,7 +422,7 @@ class StaffLoanController extends Controller
 						$payrollUser['first_name'],$type,$loan->id
 					));
 				// update loan status
-				$loan->status = 3;
+				$loan->status = 5;
 				$loan->first_approval_date = strtotime(date('Y-m-d H:i:s'));
 				$loan->first_approval = $user->person->id;
 				$loan->update();
@@ -329,8 +431,8 @@ class StaffLoanController extends Controller
 			
 			// audit
 			AuditReportsController::store('Staff Loan Management', "New $type Application Approved", "Actioned By User", 0);
-        } 
-		elseif ($loan->status == 2) 
+		}
+		elseif ($loan->status == 3) 
 		{
 			//send email communication to employee and other stakeholders
 			//email employee
@@ -366,7 +468,7 @@ class StaffLoanController extends Controller
 				));
 				
 				// update loan status
-				$loan->status = 3;
+				$loan->status = 5;
 				$loan->second_approval_date = strtotime(date('Y-m-d H:i:s'));
 				$loan->second_approval = $user->person->id;
 				$loan->update();
@@ -392,19 +494,39 @@ class StaffLoanController extends Controller
 		
 		$user = Auth::user()->load('person');
 		$type = (!empty($loan->type) && $loan->type == 1) ? 'Advance': 'Loan';
-        $usedetails = HRPerson::where('id',$loan->hr_id)
+		// hr rejectLoan
+		if ($loan->status == 1)
+		{
+			$usedetails = HRPerson::where('id',$loan->hr_id)
             ->select('first_name','surname','email')->first();
 
-        #send rejection email
-		if (!empty($usedetails['email']))
-				Mail::to($usedetails['email'])->send(new LoanRejected(
-					$usedetails['first_name'],$type));
-		// update loan model
-		$loan->rejection_reason = $request->input('reason');
-        $loan->rejected_date = strtotime(date('Y-m-d H:i:s'));
-        $loan->rejected_by = $user->person->id;
-        $loan->status = 4;
-        $loan->update();
+			#send rejection email
+			if (!empty($usedetails['email']))
+					Mail::to($usedetails['email'])->send(new LoanRejected(
+						$usedetails['first_name'],$type));
+			// update loan model
+			$loan->hr_rejecttion_reason = $request->input('reason');
+			$loan->rejected_hr_date = strtotime(date('Y-m-d H:i:s'));
+			$loan->rejected_by = $user->person->id;
+			$loan->status = 6;
+			$loan->update();
+		}
+		else
+		{
+			$usedetails = HRPerson::where('id',$loan->hr_id)
+            ->select('first_name','surname','email')->first();
+
+			#send rejection email
+			if (!empty($usedetails['email']))
+					Mail::to($usedetails['email'])->send(new LoanRejected(
+						$usedetails['first_name'],$type));
+			// update loan model
+			$loan->rejection_reason = $request->input('reason');
+			$loan->rejected_date = strtotime(date('Y-m-d H:i:s'));
+			$loan->rejected_by = $user->person->id;
+			$loan->status = 4;
+			$loan->update();
+		}
 		
 		// audit
 		AuditReportsController::store('Staff Loan Management', "New $type Application Rejected", "Actioned By User", 0);

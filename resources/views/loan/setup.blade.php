@@ -40,6 +40,20 @@
 							</div>
 							<div class="form-group">
 								<tr>
+									<td>Upload Directory</td>
+									<td>
+										<label for="max_amount" class="control-label"></label>
+										<input type="text" class="form-control"
+											   id="loan_upload_directory"
+											   name="loan_upload_directory"
+											   value="{{ !empty($loan_configuration->loan_upload_directory) ?
+													$loan_configuration->loan_upload_directory : '' }}"
+											   placeholder="Enter Upload Directory">
+									</td>
+								</tr>
+							</div>
+							<div class="form-group">
+								<tr>
 									<td>First Approval</td>
 									<td>
 										<label for="first_approval" class="control-label"></label>

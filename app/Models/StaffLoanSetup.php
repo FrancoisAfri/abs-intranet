@@ -26,7 +26,7 @@ class StaffLoanSetup extends Model
 	*/
 	
     protected $fillable = ['max_amount', 'first_approval', 'second_approval', 'hr', 'finance'
-	, 'finance_second', 'payroll'];
+	, 'finance_second', 'payroll', 'loan_upload_directory'];
 	
 	
 	public function firstUsers(): BelongsTo

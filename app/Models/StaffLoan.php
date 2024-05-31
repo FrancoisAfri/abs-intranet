@@ -26,18 +26,21 @@ class StaffLoan extends Model
 	
     protected $fillable = ['hr_id', 'reason', 'amount', 'status', 'repayment_month'
 							, 'type', 'rejection_reason', 'first_approval_date', 'second_approval_date'
-							, 'first_approval', 'second_approval', 'rejected_by', 'rejected_date'];
+							, 'first_approval', 'second_approval', 'rejected_by'
+							, 'rejected_date', 'rejected_hr_date'
+							, 'hr_approval_date', 'hr_approval', 'hr_rejecttion_reason'];
 	
 	 /**
      * status constants
      */
     const STATUS_SELECT = [
-        1 => 'Awaiting Approval',
-        2 => 'partially approved',
-        3 => 'Approved',
+        1 => 'Awaiting HR Approval',
+        2 => 'Awaiting Director(s) Approval',
+        3 => 'partially approved',
         4 => 'Rejected',
+        5 => 'Approved',
+        6 => 'Rejected by HR',
     ];
-	
 	
 	public function users(): BelongsTo
     {
@@ -54,6 +57,16 @@ class StaffLoan extends Model
 	public function rejectedUsers(): BelongsTo
     {
         return $this->belongsTo(HRPerson::class, 'rejected_by')->orderBy('id');
+    }
+	
+	public function loanDocs()
+    {
+        return $this->hasMany(StaffLoanDocuments::class, 'loan_id');
+    }
+	//Function to save Documents
+    public function addloanDocs(StaffLoanDocuments $loan)
+    {
+        return $this->loanDocs()->save($loan);
     }
 	
 	public static function getAllLoanByStatus($status, $employee_id,$type)

@@ -242,6 +242,7 @@ Route::group(['prefix' => 'loan', 'namespace' => 'Loans', 'middleware' => ['auth
     /**
      * custom StaffLoanController routes
      */
+    Route::get('create', 'StaffLoanController@create')->name('loan.create');
     Route::get('view', 'StaffLoanController@index')->name('loan.view');
     Route::get('approval', 'StaffLoanController@approval')->name('loan.setup');
     Route::get('setup', 'StaffLoanController@setUp')->name('loan.setup');

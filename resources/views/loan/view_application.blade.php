@@ -35,6 +35,7 @@
 								<th>Repayment Month</th>
 								<th>Status</th>
 								<th>Rejection Reason</th>
+								<th>Supporting Documents</th>
 							</tr>
 							@if (count($loans) > 0)
 								@foreach ($loans as $loan)
@@ -58,6 +59,20 @@
 										<td style="width: 10px; text-align: center;">{{ (!empty( $loan->repayment_month)) ?  $loan->repayment_month : ''}} </td>
 										<td>{{ (!empty( $loan->status)) ?  $statuses[$loan->status] : ''}} </td>
 										<td>{{ (!empty( $loan->rejection_reason)) ?  $loan->rejection_reason : ''}} </td>
+										<td nowrap>
+											<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+												<label for="document" class="control-label"></label>
+												@if(!empty($loan->loanDocs))
+													@foreach ($loan->loanDocs as $doc)
+													<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+													   href="{{ Storage::disk('local')->url("loan/$doc->supporting_docs") }}"
+													   target="_blank"><i class="fa fa-file-pdf-o"></i> {{$doc->doc_name}}</a>
+													@endforeach
+												@else
+													<a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+												@endif
+											</div>	 
+										</td>
 									</tr>
 								@endforeach
 							@else
@@ -179,8 +194,6 @@
 			//save Fleet
 			$('#add-loan').on('click', function () {
 				
-				
-
 				var strUrl = '/loan/add_loan';
 				var formName = 'add-loan-form';
 				var modalID = 'add-loan-modal';
@@ -224,5 +237,46 @@
 				modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
 			});
 		});
+		// clone
+			function clone(id, file_index, child_id) {
+				var clone = document.getElementById(id).cloneNode(true);
+				clone.setAttribute("id", file_index);
+				clone.setAttribute("name", file_index);
+				clone.style.display = "table-row";
+				clone.querySelector('#' + child_id).setAttribute("name", child_id + '[' + file_index + ']');
+				clone.querySelector('#' + child_id).disabled = false;
+				clone.querySelector('#' + child_id).setAttribute("id", child_id + '[' + file_index + ']');
+				return clone;
+			}
+			function addFile() {
+				var table = document.getElementById("tab_tab");
+				var file_index = document.getElementById("file_index");
+				file_index.value = ++file_index.value;
+				var file_clone = clone("file_row", file_index.value, "document");
+				var name_clone = clone("name_row", file_index.value, "name");
+				var final_row = document.getElementById("final_row").cloneNode(false);
+				table.appendChild(file_clone);
+				table.appendChild(name_clone);
+				table.appendChild(final_row);
+				var total_files = document.getElementById("total_files");
+				total_files.value = ++total_files.value;
+				//change the following using jquery if necessary
+				var remove = document.getElementsByName("remove");
+				for (var i = 0; i < remove.length; i++)
+					remove[i].style.display = "inline";
+			}
+			
+			function removeFile(row_name)
+			{
+				var row=row_name.parentNode.parentNode.id;
+				var rows=document.getElementsByName(row);
+				while(rows.length>0)
+					rows[0].parentNode.removeChild(rows[0]);
+				var total_files = document.getElementById("total_files");
+				total_files.value=--total_files.value;
+				var remove=document.getElementsByName("remove");
+				if(total_files.value == 1)
+					remove[1].style.display='none';
+			}
 	</script>
 @endsection

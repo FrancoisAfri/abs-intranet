@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class AddFieldsHrPeopleTempTable extends Migration
+class AddDirectoryStaffLoanSetupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddFieldsHrPeopleTempTable extends Migration
      */
     public function up()
     {
-        Schema::table('hr_people_temp', function ($table) {
-            $table->integer('second_manager_id')->unsigned()->nullable();
+        Schema::table('staff_loan_setups', function (Blueprint $table) {
+            $table->string('loan_upload_directory')->index()->nullable();
         });
     }
 
@@ -25,8 +25,8 @@ class AddFieldsHrPeopleTempTable extends Migration
      */
     public function down()
     {
-        Schema::table('hr_people_temp', function ($table) {
-            $table->dropColumn('second_manager_id');
+        Schema::table('staff_loan_setups', function (Blueprint $table) {
+            $table->dropColumn('loan_upload_directory');
         });
     }
 }

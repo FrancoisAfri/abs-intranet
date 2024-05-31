@@ -25,6 +25,7 @@
 										<th>Amount</th>
 										<th>Repayment Month(s)</th>
 										<th nowrap>Notes</th>
+										<th nowrap>Supporting Documents</th>
 										<th>Status</th>
 										<th>Approve</th>
 										<th>Reject</th>
@@ -41,6 +42,20 @@
 												<td>{{ !empty($loan->amount) ? 'R ' .number_format($loan->amount, 2) : '' }}</td>
 												<td style="width: 10px; text-align: center;">{{ (!empty( $loan->repayment_month)) ?  $loan->repayment_month : ''}} </td>
 												<td nowrap>{{ !empty($loan->reason) ? $loan->reason : '' }}</td>
+												<td nowrap>
+													<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
+														<label for="document" class="control-label"></label>
+														@if(!empty($loan->loanDocs))
+															@foreach ($loan->loanDocs as $doc)
+															<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
+															   href="{{ Storage::disk('local')->url("$directory/$doc->supporting_docs") }}"
+															   target="_blank"><i class="fa fa-file-pdf-o"></i> {{$doc->doc_name}}</a>
+															@endforeach
+														@else
+															<a class="btn btn-default pull-centre btn-xs"><i class="fa fa-exclamation-triangle"></i> Nothing Uploaded</a>
+														@endif
+													</div>	 
+												</td>
 												<td>{{ (!empty( $loan->status)) ?  $statuses[$loan->status] : ''}} </td>
 												<td>
 													<button type="button" id="Accept"
