@@ -244,6 +244,7 @@ class StaffLoanController extends Controller
 		$hr = !empty($setup->hr) ? $setup->hr : 0;
 		$firstSetup = !empty($setup->first_approval) ? $setup->first_approval : 0;
 		$secondSetup = !empty($setup->second_approval) ? $setup->second_approval : 0;
+		$directory = !empty($setup->loan_upload_directory) ? $setup->loan_upload_directory : '';
 		// if logged user is a director allow to see page
 		if($user->person->id == $firstSetup || $user->person->id == $secondSetup || $user->id == 1)
 		{
@@ -261,7 +262,8 @@ class StaffLoanController extends Controller
 			$data['loans'] = $loans;
 			$data['statuses'] = StaffLoan::STATUS_SELECT;
 			$data['user'] = $user;
-
+			$data['directory'] = $directory;
+			
 			AuditReportsController::store('Staff Loan Management', 'Loan Approval Accessed', "Actioned By User", 0);
 			return view('loan.approval')->with($data);
 		}
@@ -281,7 +283,8 @@ class StaffLoanController extends Controller
 			$data['loans'] = $loans;
 			$data['statuses'] = StaffLoan::STATUS_SELECT;
 			$data['user'] = $user;
-
+			$data['directory'] = $directory;
+			
 			AuditReportsController::store('Staff Loan Management', 'Loan Approval Accessed', "Actioned By User", 0);
 			return view('loan.approval')->with($data);
 		}
