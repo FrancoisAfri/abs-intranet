@@ -10,7 +10,7 @@ class TrainingDocuments extends Model
 
     protected $fillable = [
         'name', 'description', 'document', 'date_added', 'status', 'division_level_1', 'division_level_2'
-		, 'division_level_3', '', 'division_level_5'
+		, 'division_level_3', 'division_level_4', 'division_level_5'
     ];
 
     public static function getDocuments($division_level_3, $division_level_4, $division_level_5)
