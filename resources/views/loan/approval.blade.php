@@ -48,7 +48,7 @@
 														@if(!empty($loan->loanDocs))
 															@foreach ($loan->loanDocs as $doc)
 															<a class="btn btn-default btn-flat btn-block pull-right btn-xs"
-															   href="{{ Storage::disk('local')->url("$directory/$doc->supporting_docs") }}"
+															   href="{{ Storage::disk('local')->url("loan/$doc->supporting_docs") }}"
 															   target="_blank"><i class="fa fa-file-pdf-o"></i> {{$doc->doc_name}}</a>
 															@endforeach
 														@else
