@@ -36,7 +36,7 @@ class StaffLoan extends Model
     const STATUS_SELECT = [
         1 => 'Awaiting HR Approval',
         2 => 'Awaiting Director(s) Approval',
-        3 => 'partially approved',
+        3 => 'Partially Approved',
         4 => 'Rejected',
         5 => 'Approved',
         6 => 'Rejected by HR',
