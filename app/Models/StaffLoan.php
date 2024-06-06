@@ -50,6 +50,10 @@ class StaffLoan extends Model
     {
         return $this->belongsTo(HRPerson::class, 'first_approval')->orderBy('id');
     }
+	public function hrUsers(): BelongsTo
+    {
+        return $this->belongsTo(HRPerson::class, 'hr_approval')->orderBy('id');
+    }
 	public function secondUsers(): BelongsTo
     {
         return $this->belongsTo(HRPerson::class, 'second_approval')->orderBy('id');

@@ -74,13 +74,17 @@
 									<th>Amount</th>
 									<th>Repayment Month(s)</th>
 									<th nowrap>Notes</th>
+									<th nowrap>Hr Approval</th>
+									<th nowrap>Hr Approval Dat</th>
 									<th nowrap>First Approval</th>
 									<th nowrap>First Approval Date</th>
 									<th nowrap>Second Approval</th>
 									<th nowrap>Second Approval Date</th>
-									<th nowrap>Rejection Reason</th>
-									<th nowrap>Rejected BY</th>
+									<th nowrap>Rejected By</th>
+									<th nowrap>Hr Rejection Date</th>
+									<th nowrap>Hr Rejection Reason</th>
 									<th nowrap>Rejection Date</th>
+									<th nowrap>Director Rejection Reason</th>
 									<th>Status</th>
 								</tr>
                             </thead>
@@ -94,13 +98,17 @@
 											<td>{{ !empty($loan->amount) ? 'R ' .number_format($loan->amount, 2) : '' }}</td>
 											<td style="width: 10px; text-align: center;">{{ (!empty( $loan->repayment_month)) ?  $loan->repayment_month : ''}} </td>
 											<td>{{ !empty($loan->reason) ? $loan->reason : '' }}</td>
+											<td>{{!empty($loan->hrUsers->first_name) && !empty($loan->hrUsers->surname) ? $loan->hrUsers->first_name.' '.$loan->hrUsers->surname : '' }}</td>
+											<td>{{ !empty($loan->hr_approval_date) ? date('d M Y ', $loan->hr_approval_date) : '' }}</td>
 											<td>{{!empty($loan->firstUsers->first_name) && !empty($loan->firstUsers->surname) ? $loan->firstUsers->first_name.' '.$loan->firstUsers->surname : '' }}</td>
 											<td>{{ !empty($loan->first_approval_date) ? date('d M Y ', $loan->first_approval_date) : '' }}</td>
 											<td>{{!empty($loan->secondUsers->first_name) && !empty($loan->secondUsers->surname) ? $loan->secondUsers->first_name.' '.$loan->secondUsers->surname : '' }}</td>
 											<td>{{ !empty($loan->second_approval_date) ? date('d M Y ', $loan->second_approval_date) : '' }}</td>
-											<td>{{!empty($loan->rejection_reason) ? $loan->rejection_reason : '' }}</td>
 											<td>{{!empty($loan->rejectedUsers->first_name) && !empty($loan->rejectedUsers->surname) ? $loan->rejectedUsers->first_name.' '.$loan->rejectedUsers->surname : '' }}</td>
+											<td>{{ !empty($loan->rejected_hr_date) ? date('d M Y ', $loan->rejected_hr_date) : '' }}</td>
+											<td>{{!empty($loan->hr_rejecttion_reason) ? $loan->hr_rejecttion_reason : '' }}</td>
 											<td>{{ !empty($loan->rejected_date) ? date('d M Y ', $loan->rejected_date) : '' }}</td>
+											<td>{{!empty($loan->rejection_reason) ? $loan->rejection_reason : '' }}</td>
 											<td>{{ (!empty( $loan->status)) ?  $statuses[$loan->status] : ''}} </td>
 										</tr>
 									@endforeach
@@ -114,13 +122,17 @@
 									<th>Amount</th>
 									<th>Repayment Month(s)</th>
 									<th nowrap>Notes</th>
+									<th nowrap>Hr Approval</th>
+									<th nowrap>Hr Approval Dat</th>
 									<th nowrap>First Approval</th>
 									<th nowrap>First Approval Date</th>
 									<th nowrap>Second Approval</th>
 									<th nowrap>Second Approval Date</th>
-									<th nowrap>Rejection Reason</th>
-									<th nowrap>Rejected BY</th>
+									<th nowrap>Rejected By</th>
+									<th nowrap>Hr Rejection Date</th>
+									<th nowrap>Hr Rejection Reason</th>
 									<th nowrap>Rejection Date</th>
+									<th nowrap>Director Rejection Reason</th>
 									<th>Status</th>
 								</tr>
                             </tfoot>
