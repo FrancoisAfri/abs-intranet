@@ -34,7 +34,8 @@
 								<th>Notes</th>
 								<th>Repayment Month</th>
 								<th>Status</th>
-								<th>Rejection Reason</th>
+								<th>Hr Rejection Reason</th>
+								<th>Director Rejection Reason</th>
 								<th>Supporting Documents</th>
 							</tr>
 							@if (count($loans) > 0)
@@ -58,6 +59,7 @@
 										<td>{{ (!empty( $loan->reason)) ?  $loan->reason : ''}} </td>
 										<td style="width: 10px; text-align: center;">{{ (!empty( $loan->repayment_month)) ?  $loan->repayment_month : ''}} </td>
 										<td>{{ (!empty( $loan->status)) ?  $statuses[$loan->status] : ''}} </td>
+										<td>{{ (!empty( $loan->hr_rejecttion_reason)) ?  $loan->hr_rejecttion_reason : ''}} </td>
 										<td>{{ (!empty( $loan->rejection_reason)) ?  $loan->rejection_reason : ''}} </td>
 										<td nowrap>
 											<div class="form-group{{ $errors->has('document') ? ' has-error' : '' }}">
@@ -77,7 +79,7 @@
 								@endforeach
 							@else
 								<tr id="categories-list">
-									<td colspan="7">
+									<td colspan="9">
 										<div class="alert alert-danger alert-dismissable">
 											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">
 												&times;
