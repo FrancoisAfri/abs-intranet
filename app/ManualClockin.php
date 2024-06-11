@@ -71,7 +71,7 @@ class ManualClockin extends Model
                 }
             });
         if (!empty($employeeNo)){
-            $query->where('employee_number', $employeeNo);
+            $query->where('hr_id', $employeeNo);
         } 
 		if (!empty($clockinType)){
             $query->where('clockin_type', $clockinType);
