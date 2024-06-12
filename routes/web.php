@@ -42,6 +42,10 @@ Route::group(['prefix' => 'assets', 'namespace' => 'Assets', 'middleware' => ['a
     /**
      * custom AssetManagementController routes
      */
+	Route::post('store', 'AssetManagementController@store')
+        ->name('assets.store');
+	Route::get('index', 'AssetManagementController@index')
+        ->name('assets.index');
     Route::get(
         'settings', 'AssetManagementController@setUp')
         ->name('assets.settings');

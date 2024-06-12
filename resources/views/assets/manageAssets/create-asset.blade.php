@@ -283,13 +283,13 @@
             });
 
             $('#add-asset').on('click', function () {
-                let strUrl = '{{route('store')}}';
+                let strUrl = '{{route('assets.store')}}';
                 let modalID = 'add-asset-modal';
                 let formName = 'add-asset-form';
 
                 //console.log(formName)
                 let submitBtnID = 'add-asset';
-                let redirectUrl = '{{ route('index') }}';
+                let redirectUrl = '{{ route('assets.index') }}';
                 let successMsgTitle = 'Asset Added!';
                 let successMsg = 'Record has been updated successfully.';
                 modalFormDataSubmit(strUrl, formName, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
@@ -330,7 +330,7 @@
 
                // console.log(objData);
                 let submitBtnID = 'edit-asset';
-                let redirectUrl = '{{ route('index') }}';
+                let redirectUrl = '{{ route('assets.index') }}';
                 let successMsgTitle = 'Changes Saved!';
                 let successMsg = 'Record has been updated successfully.';
                 let Method = 'PATCH';
