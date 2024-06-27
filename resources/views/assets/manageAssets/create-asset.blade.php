@@ -21,7 +21,7 @@
                 <div class="box-body">
                     <div class="box-header">
                         <div class="form-group container-sm">
-                            <form class="form-horizontal" method="get" action="{{ route('index') }}">
+                            <form class="form-horizontal" method="get" action="{{ route('assets.index') }}">
                                 {{ csrf_field() }}
                                 <div class="col-md-6">
                                     <div class="form-group">
