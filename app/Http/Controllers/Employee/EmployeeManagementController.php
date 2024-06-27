@@ -273,7 +273,6 @@ class EmployeeManagementController extends Controller
         $user = $userID->load('person');
 
         $assets = AssetTransfers::getAssetByUser($slugs[1]);
-        // dd($assets);
 
         $license_allocation = LicencesAllocation::getLicenceAllocation($slugs[1]);
 
