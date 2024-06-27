@@ -50,7 +50,11 @@ class HRPerson extends Model
     {
         return $this->belongsTo(User::class, 'user_id');
     }
-
+	 //Relationship hr_person and user
+    public function managerDetails()
+    {
+        return $this->belongsTo(HRPerson::class, 'manager_id');
+    }
     //Relationship leave_application and hr people
     public function leaveAppmanId()
     {
@@ -263,15 +267,7 @@ class HRPerson extends Model
 
     public static function getAllEmployeesByStatus($status = 1, $user, $collector)
     {
-        $query = HRPerson::select(
-            'hr_people.*',
-            'hp.first_name as manager_first_name',
-            'hp.surname as manager_surname',
-            'd4.name as department',
-            'd5.name as division',
-            'provinces.name as province'
-        )
-            ->whereHas('user', function ($query) use ($user, $status) {
+        $query = HRPerson::whereHas('user', function ($query) use ($user, $status) {
 
                 if ($user > 0) {
                     $query->where('id', $user);
@@ -284,32 +280,7 @@ class HRPerson extends Model
                     $query->whereIn('type', [1, 3]);
                     $query->where('status', $status);
                 }
-            })
-            ->leftJoin(
-                'hr_people as hp',
-                'hr_people.manager_id',
-                '=',
-                'hp.id'
-            )
-            ->leftJoin(
-                'provinces',
-                'hr_people.res_province_id',
-                '=',
-                'provinces.id'
-            )
-            ->leftJoin(
-                'division_level_fives as d5',
-                'hr_people.division_level_5',
-                '=',
-                'd5.id'
-            )
-            ->leftJoin(
-                'division_level_fours as d4',
-                'hr_people.division_level_4',
-                '=',
-                'd4.id'
-            )
-            ->with('jobTitle')
+            })->with('jobTitle','province','division','department','managerDetails')
             ->$collector();
 
         return $query;

@@ -18,7 +18,6 @@
                 </div>
                 <div class="box-body">
                     <div class="box-header">
-
                         <div class="form-group container-sm">
                             <form class="form-horizontal" method="get" action="{{ route('employee.index') }}">
                                 {{ csrf_field() }}
@@ -35,20 +34,15 @@
                                                 @endforeach
                                             </select>
                                         </div>
-
                                     </div>
                                     <div class="box-footer">
                                         <button type="submit" class="btn btn-primary pull-left">Submit</button>
                                         <br>
                                     </div>
-
                                 </div>
-
                             </form>
                         </div>
-
                         <br>
-
                     </div>
                     <div style="overflow-X:auto;">
                         <table id=" " class="asset table table-bordered data-table my-2">
@@ -70,7 +64,7 @@
                             @if (count($employee) > 0)
                                 <ul class="products-list product-list-in-box">
                                     @foreach ($employee as $key => $person)
-                                        <tr id="categories-list">
+                                        <tr>
                                             <td nowrap>
                                                 <div class="product-img">
                                                     <img src="{{ (!empty($person->profile_pic)) ? asset('storage/avatars/'.$person->profile_pic)  :
@@ -80,7 +74,6 @@
                                                 <div class="modal fade" id="enlargeImageModal" tabindex="-1"
                                                      role="dialog" align="center"
                                                      aria-labelledby="enlargeImageModal" aria-hidden="true">
-                                                    <!--  <div class="modal-dialog modal" role="document"> -->
                                                     <div class="modal-dialog modal-sm">
                                                         <div class="modal-body" align="center">
                                                             <img src="" class="enlargeImageModalSource"
@@ -96,10 +89,6 @@
                                             <td>
                                                 <input type="button" onclick="location.href='/employee/show/{{str_replace(' ', '_', strtolower($person->first_name) )}}-{{$person->id}}-{{str_replace(' ', '_', strtolower($person->surname))}}';"
                                                        value="{{ (!empty( $person->first_name . ' ' . $person->surname)) ?  $person->first_name . ' ' . $person->surname : ''}}" />
-                                                {{--                                                <a data-toggle="tooltip" title="Click to View User"--}}
-                                                {{--                                                --}}
-                                                {{--                                                    --}}
-                                                {{--                                                </a>--}}
                                             </td>
 
                                             <td>
@@ -112,11 +101,11 @@
 
                                             <td>{{ (!empty($person->jobTitle->name)) ? $person->jobTitle->name : ' ' }}</td>
 
-                                            <td>{{ (!empty($person->manager_first_name . ' ' . $person->manager_surname)) ? $person->manager_first_name . ' ' . $person->manager_surname : ' ' }}</td>
+                                            <td>{{ (!empty($person->managerDetails->first_name . ' ' . $person->managerDetails->surname)) ? $person->managerDetails->first_name . ' ' . $person->managerDetails->surname : ' ' }}</td>
 
-                                            <td>{{ (!empty($person->division)) ? $person->division : ' ' }}</td>
+                                            <td>{{ (!empty($person->division->name)) ? $person->division->name : ' ' }}</td>
 
-                                            <td>{{ (!empty($person->department)) ? $person->department : ' ' }}</td>
+                                            <td>{{ (!empty($person->department->name)) ? $person->department->name : ' ' }}</td>
 
                                             <td>
                                                 <button vehice="button" id="view_ribbons" class="btn {{ (!empty($person->status) && $person->status == 1) ? " btn-danger " : "btn-success " }}
@@ -168,15 +157,11 @@
         function sendStatus() {
 
             let select = document.getElementById("status_id");
-            console.log(select)
-
         }
-
 
         function postData(id, data) {
             if (data === 'actdeac') location.href = "{{route('employee.activate', '')}}" + "/" + id;
         }
-
 
         function redirectData(id, data) {
             if (data === 'actdeac') location.href = "{{route('employee.activate', '')}}" + "/" + id;
@@ -187,7 +172,6 @@
             $($(this).parents('div').html()).appendTo('.modal-body');
             $('#modal').modal({show: true});
         });
-
 
         //TODO WILL CREATE A SIGLE GLOBAL FILE
 
@@ -234,7 +218,6 @@
                     },
                     'colvis'
                 ]
-
             });
 
             function reposition() {
@@ -260,7 +243,6 @@
                     $('#enlargeImageModal').modal('show');
                 });
             });
-
         });
     </script>
 @stop

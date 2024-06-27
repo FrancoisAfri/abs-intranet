@@ -53,7 +53,7 @@ class EmployeeManagementController extends Controller
             $status = $request['status_id'];
 
         $employee = HRPerson::getAllEmployeesByStatus($status, 0, 'get');
-        //dd($employee);
+        //return $employee;
 
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
 
