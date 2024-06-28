@@ -101,7 +101,7 @@
 
                                             <td>{{ (!empty($person->jobTitle->name)) ? $person->jobTitle->name : ' ' }}</td>
 
-                                            <td>{{ (!empty($person->managerDetails->first_name . ' ' . $person->managerDetails->surname)) ? $person->managerDetails->first_name . ' ' . $person->managerDetails->surname : ' ' }}</td>
+                                            <td>{{ (!empty($person->managerDetails->first_name) && !empty($person->managerDetails->surname)) ? $person->managerDetails->first_name . ' ' . $person->managerDetails->surname : ' ' }}</td>
 
                                             <td>{{ (!empty($person->division->name)) ? $person->division->name : ' ' }}</td>
 
