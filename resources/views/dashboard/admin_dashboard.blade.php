@@ -287,9 +287,9 @@
 							<p class="text-center">
 								<strong>
 									@if($isSuperuser)
-										{{ $topGroupLvl->plural_name }}
+									{{ $topGroupLvl->plural_name ?? '' }}
 									@elseif($isDivHead)
-										{{ $managedDivsLevel->plural_name }}
+										{{ $managedDivsLevel->plural_name ?? '' }}
 									@endif
 									Performance For {{ date('Y') }}
 								</strong>
