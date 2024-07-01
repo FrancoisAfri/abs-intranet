@@ -52,10 +52,10 @@ class ReadErsDetails
             throw new ErrorException('Ers Token Not Found');
         }
 
-        //$date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
-        //$date_to = Carbon::parse('18:00:00')->format('Y/m/d H:i:s');
-        $date_from = Carbon::now()->format('Y/m/d');
-        $date_to = Carbon::now()->format('Y/m/d');
+        $date_from = Carbon::parse('07:00:00')->format('Y/m/d H:i:s');
+        $date_to = Carbon::parse('20:00:00')->format('Y/m/d H:i:s');
+        //$date_from = Carbon::now()->format('Y/m/d');
+        //$date_to = Carbon::now()->format('Y/m/d');
 
         $todo = 'get_clocks';
 
@@ -298,7 +298,9 @@ class ReadErsDetails
                             'date' => $absent->date,
                             'is_applied' => 1
                         ]);
-                } else {
+                }
+				else 
+				{
 
                     //this one is to update the ers table
 
