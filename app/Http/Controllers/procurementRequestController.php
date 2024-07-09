@@ -19,6 +19,8 @@ use App\ProcurementRequestItems;
 use App\ContactCompany;
 use App\ContactPerson;
 use App\Mail\ProcurementNextStep;
+use App\Mail\stockDeliveryNote;
+use App\Mail\StockRequestApproved;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\DB;

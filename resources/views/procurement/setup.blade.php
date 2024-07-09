@@ -51,8 +51,7 @@
 											<option value="0">*** Please Select a Role ***</option>
 											@foreach($roles as $role)
 												<option value="{{ $role->id }}">{{ $role->description}}
-												{{ ($procurementSetup->email_role == $role->id) ?
-                                                ' selected' : '' }}</option>
+												{{ (!empty($procurementSetup->email_role)&& ($procurementSetup->email_role == $role->id)) ? ' selected' : '' }}</option>
 											@endforeach
 										</select>
 									</td>

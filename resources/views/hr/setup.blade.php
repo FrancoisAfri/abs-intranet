@@ -136,7 +136,72 @@
             </div>
 
         </div>
+    </div> 
+<div class="row">
+        <div class="col-md-12">
+            <!-- LINE CHART -->
+            <div class="box box-default">
+                <div class="box-header with-border">
+                    <h3 class="box-title"> Roles </h3>
+
+                    <div class="box-tools pull-right">
+                        <button type="button" class="btn btn-box-tool" data-widget="collapse"><i
+                                    class="fa fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="box-body">
+                    <div class="box-header">
+
+                    </div>
+                    <div style="overflow-X:auto;">
+                        <table id=" " class="asset table table-bordered data-table my-2">
+                            <thead>
+								<tr>
+									<th style="width: 5px; text-align: center;"></th>
+									<th style="width: 5px; text-align: center;">Name</th>
+									<th style="width: 5px; text-align: center;"></th>
+								</tr>
+                            </thead>
+                            <tbody>
+								@if (count($hrRoles) > 0)
+									@foreach ($hrRoles as $hrRole)
+									   <tr id="categories-list">
+											<td nowrap>
+												<button type="button" id="edit_compan" class="btn btn-primary  btn-xs" data-toggle="modal" data-target="#edit-role-modal" data-id="{{ $hrRole->id }}" data-description="{{$hrRole->description}}" ><i class="fa fa-pencil-square-o"></i> Edit</button>
+											</td>
+											<td>{{ $hrRole->description }}</td>
+											<td>
+												<button type="button" id="view_ribbons" class="btn {{ (!empty($hrRole->status) && $hrRole->status == 1) ? " btn-danger " : "btn-success " }}
+												  btn-xs" onclick="postData({{$hrRole->id}}, 'roleactive');"><i class="fa {{ (!empty($hrRole->status) && $hrRole->status == 1) ?
+												  " fa-times " : "fa-check " }}"></i> {{(!empty($hrRole->status) && $hrRole->status == 1) ? "De-Activate" : "Activate"}}</button>
+											</td>
+										</tr>
+									@endforeach
+								@endif
+                            </tbody>
+                        </table>
+                        <!-- /.box-body -->
+                    </div>
+                </div>
+                <div class="box-footer">
+
+                    <button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
+                            data-target="#add-it-manager"><i class="fa fa-linode" aria-hidden="true"></i>
+                        Add Manager
+                    </button>
+
+                </div>
+                @include('hr.partials.add_role_modal')
+				@include('hr.partials.edit_role_modal')
+
+            </div>
+
+        </div>
     </div>
+	
     <!--  -->
     <div class="row">
         <div class="col-md-12">
@@ -155,7 +220,7 @@
                         <tr>
                             <th style="width: 10px; text-align: center;"></th>
                             <th>Name</th>
-                            <th style="width: 5px; text-align: center;"></th>
+                            <th style="width: 5px; text-align: center;">Description</th>
                         </tr>
                         @if (count($doc_type) > 0)
                             @foreach ($doc_type as $doc)
@@ -185,7 +250,7 @@
                                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">
                                             &times;
                                         </button>
-                                        No document type to display, please start by adding a new role.
+                                        No document type to display, please start by adding a new document type.
                                     </div>
                                 </td>
                             </tr>
@@ -195,7 +260,7 @@
                 <!-- /.box-body -->
                 <div class="box-footer">
                     <button type="button" id="cat_module" class="btn btn-primary pull-right" data-toggle="modal"
-                            data-target="#add-document-modal">Add new Role
+                            data-target="#add-document-modal">Add new document type
                     </button>
                 </div>
             </div>
@@ -204,7 +269,7 @@
         @include('hr.partials.add_document_type_modal')
         @include('hr.partials.edit_document_type_modal')
     </div>
-
+	
 @stop
 
 @section('page_script')
@@ -221,6 +286,7 @@
             else if (data == 'dactive') location.href = "/hr/document/" + id + '/activate';
             else if (data == 'activateGroupLevel') location.href = '/hr/grouplevel/activate/' + id;
             else if (data == 'ractive') location.href = '/hr/document_act/' + id;
+            else if (data == 'roleactive') location.href = '/hr/role/activate/' + id;
             else if (data === 'actdeac') location.href = "{{route('hr.activate', '')}}" + "/" + id;
         }
 

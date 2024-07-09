@@ -25,9 +25,7 @@
                     <button type="button" id="save_role" class="btn btn-primary"><i class="fa fa-floppy-o"></i> Save</button>
                 </div>
             </form>
-
-            </div>
-         </div>
-            </div>
-            </div>
+		</div>
+	</div>
+</div>
            

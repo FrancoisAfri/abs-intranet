@@ -420,7 +420,7 @@
                              \App\DivisionLevelFour::getDepartmentDetails(1)->manager->surname}}</span>
                             <br>
                             <br>
-                            <span class="label label-success ">{{ \App\DivisionLevelFour::getDepartmentDetails(1)->manager->jobTitle->name }}</span>
+							<span class="label label-success ">{{!empty(\App\DivisionLevelFour::getDepartmentDetails(1)->manager->jobTitle->name) ? \App\DivisionLevelFour::getDepartmentDetails(1)->manager->jobTitle->name : '' }}</span>
                         </h4>
                         {{-- users--}}
                         @foreach(\App\HRPerson::getUsersFromTeam(1) as $users)
