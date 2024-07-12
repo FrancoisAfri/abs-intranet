@@ -1191,7 +1191,7 @@ class LeaveApplicationController extends Controller
         $currentUserID = Auth::user()->id;
         $userAccess = DB::table('security_modules_access')->select('security_modules_access.user_id')
             ->leftJoin('security_modules', 'security_modules_access.module_id', '=', 'security_modules.id')
-            ->where('security_modules.code_name', 'leave')->where('security_modules_access.access_level', '>', 4)
+            ->where('security_modules.code_name', 'leave')->where('security_modules_access.access_level', '>=', 4)
             ->where('security_modules_access.user_id', $currentUserID)->pluck('user_id')->first();
         if (!empty($userAccess)) $isAdmin = 1;
         else $isAdmin = 0;
