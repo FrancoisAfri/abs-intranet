@@ -25,8 +25,8 @@ class AddYearToVehicleBookingTable extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_booking', function (Blueprint $table) {
-            $table->string('year')->nullable()->index();
+		Schema::table('vehicle_booking', function($table) {
+            $table->dropColumn('year');
         });
     }
 }
