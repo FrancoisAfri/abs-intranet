@@ -12,7 +12,7 @@ use App\LeaveType;
 use App\business_card;
 use App\leave_profile;
 use App\leave_configuration;
-use App\Model\StaffLoanSetup;
+use App\Models\StaffLoanSetup;
 
 class DatabaseSeeder extends Seeder
 {
