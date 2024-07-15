@@ -25,8 +25,8 @@ class AddRegistrationToVehicleInsuranceTable extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_insurance', function (Blueprint $table) {
-            $table->string('registration')->nullable()->index();
+		Schema::table('vehicle_insurance', function($table) {
+            $table->dropColumn('registration');
         });
     }
 }
