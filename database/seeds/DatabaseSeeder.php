@@ -1551,8 +1551,8 @@ class DatabaseSeeder extends Seeder
         $leave_config = new leave_configuration();
         $leave_config->save();
 		// loan setup
-		$loan_config = new StaffLoanSetup();
-        $loan_config->save();
+		$StaffLoanSetup = new StaffLoanSetup();
+        $StaffLoanSetup->save();
 		
         //#leave_types
         $type = new LeaveType();
@@ -1629,7 +1629,5 @@ class DatabaseSeeder extends Seeder
         $profile->name = 'Shift Worker';
         $profile->description = 'Shift Worker Employee leave' ;
         $profile->save();
-
-
     }
 }
