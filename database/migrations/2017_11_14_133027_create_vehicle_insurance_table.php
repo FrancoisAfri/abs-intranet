@@ -15,7 +15,7 @@ class CreateVehicleInsuranceTable extends Migration
     {
         Schema::create('vehicle_insurance', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('registration')->nullable()->unsigned()->index();
+            //$table->string('registration')->nullable()->unsigned()->index();
             $table->integer('service_provider')->nullable()->unsigned()->index();
             $table->string('contact_person')->nullable();
             $table->string('contact_number')->nullable();
