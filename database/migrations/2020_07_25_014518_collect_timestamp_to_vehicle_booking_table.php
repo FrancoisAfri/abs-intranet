@@ -26,9 +26,9 @@ class CollectTimestampToVehicleBookingTable extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_booking', function (Blueprint $table) {
-            // $table->unsignedBigInteger('collect_timestamp')->nullable()->index();
-            $table->unsignedBigInteger('return_timestamp')->nullable()->index();
+		 Schema::table('vehicle_booking', function($table) {
+          //  $table->dropColumn('collect_timestamp');
+            $table->dropColumn('return_timestamp');
         });
     }
 }
