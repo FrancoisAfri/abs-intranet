@@ -25,8 +25,8 @@ class AddFleetNumberToVehicleBookingTable extends Migration
      */
     public function down()
     {
-        Schema::table('vehicle_booking', function (Blueprint $table) {
-            $table->string('fleet_number')->nullable()->index();
+		Schema::table('vehicle_booking', function($table) {
+            $table->dropColumn('fleet_number');
         });
     }
 }
