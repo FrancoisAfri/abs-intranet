@@ -33,6 +33,6 @@ class CreateAssetLogsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('asset_logs');
+        Schema::drop('asset_log');
     }
 }
