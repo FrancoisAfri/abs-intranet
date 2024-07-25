@@ -69,8 +69,8 @@ class ReadErsDetails
             . '&export=0'
             . '&display=2'; // export type
 
-echo $theUrl;
-die('etst');
+//echo $theUrl;
+///die('etst');
         $res = $client->request('GET', $theUrl);
         $body = $res->getBody()->getContents();
         return json_decode($body, true);
