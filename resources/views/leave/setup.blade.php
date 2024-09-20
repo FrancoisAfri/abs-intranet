@@ -335,6 +335,17 @@
                                 </td>
                             </tr>
                         </div>
+						<div class="form-group">
+                            <tr>
+                                <td style="width: 10px"></td>
+                                <td>Apply for  unpaid leave when annual is depleted</td>
+                                <td style="text-align: center; vertical-align: middle;">
+                                    <input type="hidden" name="allow_unpaid_leave_when_annual_done" value="0">
+                                    <input type="checkbox" name="allow_unpaid_leave_when_annual_done"
+                                           value="1" {{ $leave_configuration->allow_unpaid_leave_when_annual_done === 1 ?  'checked ="checked"' : 0 }}>
+                                </td>
+                            </tr>
+                        </div>
                         <div class="form-group">
                             <tr>
                                 <td style="width: 10px"></td>

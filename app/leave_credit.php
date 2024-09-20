@@ -18,4 +18,5 @@ class leave_credit extends Model
             ]
         )->first();
     }
+	
 }

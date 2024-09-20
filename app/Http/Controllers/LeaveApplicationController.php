@@ -7,6 +7,7 @@ use App\HRPerson;
 use App\CompanyIdentity;
 use App\Http\Requests;
 use App\DivisionLevelFive;
+use App\DivisionLevelFour;
 use App\leave_application;
 use App\leave_configuration;
 use App\leave_credit;
@@ -314,13 +315,10 @@ class LeaveApplicationController extends Controller
             )->first();
         // query the hr pesron  model and bring back the values of the managerg
 
-        $hrDetails = HRPerson::where([
-            'id' => $hrID,
-            'status' => 1
-        ])->first();
+        $hrDetails = HRPerson::where(['id' => $hrID,'status' => 1])->first();
 
-        if ($approvals->require_managers_approval == 1) {
-
+        if ($approvals->require_managers_approval == 1)
+		{
             #check if the manager is on leave or not
             $isOnleave = leave_application::where('hr_id', $hrDetails['manager_id'])
                 ->where('status', '<', 2)
@@ -356,17 +354,40 @@ class LeaveApplicationController extends Controller
                 'manager_id' => $manager_id
             );
 
-        } elseif ($approvals->require_department_head_approval == 1) {
-            # code...  division_level_twos
-
+        } 
+		if ($approvals->require_department_head_approval == 1 && empty($approvals->require_managers_approval)) 
+		{
+            # code...  DivisionLevelFour
             // query the hrperon  model and bring back the values of the manager
-            $Dept = DivisionLevelTwo::where('id', $hrDetails->division_level_2)->get()->first();
-            $deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
-                ->select('first_name', 'surname', 'email')
-                ->first();
+            $Dept = DivisionLevelFour::where('id', $hrDetails->division_level_4)->first();
+            $deptDetails = $Dept->load('manager');
 
             // array to store manager details
-            $details = array('status' => 3, 'first_name' => $deptDetails->first_name, 'surname' => $deptDetails->surname, 'email' => $deptDetails->email, 'manager id' => $deptDetails->id);
+            $details = array('status' => 3, 'first_name' => $deptDetails->manager->first_name, 'surname' => $deptDetails->manager->surname, 'email' => $deptDetails->manager->email, 'manager id' => $deptDetails->manager->id);
+
+        }
+		if ($approvals->require_hr_approval == 1 && empty($approvals->require_department_head_approval) && empty($approvals->require_managers_approval)) 
+		{
+            # code...  hr
+
+            // query the hrperon  model and bring back the values of the manager
+            $div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+            $hrDetails = $div->load('hrManager');
+			//echo $hrDetails->hrManager->first_name;
+			//die('heheb');
+            // array to store manager details
+            $details = array('status' => 4, 'first_name' => $hrDetails->hrManager->first_name, 'surname' => $hrDetails->hrManager->surname, 'email' => $hrDetails->hrManager->email, 'manager id' => $hrDetails->hrManager->id);
+
+        } 
+		if ($approvals->require_payroll_approval == 1 && empty($approvals->require_hr_approval) && empty($approvals->require_department_head_approval) && empty($approvals->require_managers_approval)) {
+            # code...  payroll
+
+             // query the hrperon  model and bring back the values of the manager
+            $div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+            $payrollDetails = $div->load('payrollOfficer');
+
+            // array to store manager details
+            $details = array('status' => 5, 'first_name' => $payrollDetails->payrollOfficer->first_name, 'surname' => $payrollDetails->payrollOfficer->surname, 'email' => $payrollDetails->payrollOfficer->email, 'manager id' => $payrollDetails->payrollOfficer->id);
 
         } #code here .. Require Hr
         return $details;
@@ -457,6 +478,7 @@ class LeaveApplicationController extends Controller
             'day_requested' => 'numeric|min:1',
             'application_type' => 'numeric|min:1',
             'day' => 'required',
+			'description' => 'nullable|string|max:255', // applies validation only if 'name' is present and not null
         ]);
 		
         $validator->after(function ($validator) use ($request) {
@@ -492,35 +514,101 @@ class LeaveApplicationController extends Controller
 						->where('hr_id', $hrPersonId)
 						->where('leave_type_id', $leaveType)
 						->first();
+					
 					$row = leave_configuration::first();
+					$require_managers_approval = !empty($row->require_managers_approval) ? (int) $row->require_managers_approval : 0;
+					$require_department_head_approval = !empty($row->require_department_head_approval) ? (int) $row->require_department_head_approval : 0;
+					$require_hr_approval = !empty($row->require_hr_approval) ? (int) $row->require_hr_approval : 0;
+					$require_payroll_approval = !empty($row->require_payroll_approval) ? (int) $row->require_payroll_approval : 0;
 					$numberAnnual = !empty($row->allow_annual_negative_days) ? $row->allow_annual_negative_days : 0;
 					$numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
-					if ($leaveType == 1) $extraDays = $numberAnnual;
-					elseif ($leaveType == 5) $extraDays = $numberSick;
-					$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8 : 0;
-					$availableBalance = $availableBalance + $extraDays;
-					if (!empty($availableBalance)) {
-						if ($applicationType == 1) {
-							if ($dayRequested > $availableBalance)
-								$validator->errors()->add('day_requested', "Sorry!!! Your Application cannot be processed, you only have $availableBalance day(s), and applied for $dayRequested day(s).");
-						} else
-							$validator->errors()->add('day_requested', "Sorry!!! You cannot make an hour application here.");
-					} else
-						$validator->errors()->add('day_requested', "Sorry!!! you do not have leave days available to perform this action.");
+					$allowUnpaid = !empty($row->allow_unpaid_leave_when_annual_done) ? $row->allow_unpaid_leave_when_annual_done : 0;
+					if (!empty($allowUnpaid))
+					{
+						$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8 : 0;
+						if ($leaveType == 1 && $availableBalance < 0)
+							$request->merge(['leave_type' => 7]);
+						
+					}
+					else
+					{
+						if ($leaveType == 1) $extraDays = $numberAnnual;
+						elseif ($leaveType == 5) $extraDays = $numberSick;
+						$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8 : 0;
+						$availableBalance = $availableBalance + $extraDays;
+						if (!empty($availableBalance)) 
+						{
+							if ($applicationType == 1) 
+							{
+								if ($dayRequested > $availableBalance)
+									$validator->errors()->add('day_requested', "Sorry!!! Your Application cannot be processed, you only have $availableBalance day(s), and applied for $dayRequested day(s).");
+							}
+							else
+								$validator->errors()->add('day_requested', "Sorry!!! You cannot make an hour application here.");
+						}
+						else
+							$validator->errors()->add('day_requested', "Sorry!!! you do not have leave days available to perform this action.");
+					}
+					
 
 				#will do changes here
 				// check if manager is on leave
 				// check if the employee report to someone.
-
-				$managerDetails = HRPerson::where('id', $hrPersonId)
-					->select('manager_id')->first();
-				if (empty($managerDetails['manager_id']))
-					$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a manager. please go to the employee profile and assign one.");
-				$secondManagerDetails = HRPerson::where('id', $hrPersonId)
-					->select('second_manager_id')->first();
-				if (empty($secondManagerDetails['second_manager_id']))
-					$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a second manager. please go to the employee profile and assign one.");
-
+				if ($require_managers_approval == 1)
+				{
+					$managerDetails = HRPerson::where('id', $hrPersonId)->select('manager_id')->first();
+					if (empty($managerDetails['manager_id']))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a manager. please go to the employee profile and assign one.");
+					$secondManagerDetails = HRPerson::where('id', $hrPersonId)
+						->select('second_manager_id')->first();
+					if (empty($secondManagerDetails['second_manager_id']))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a second manager. please go to the employee profile and assign one.");
+				}
+				// check department head is set
+				if ($require_department_head_approval == 1)
+				{
+					// check employee have a dept assigned
+					$depDetails = HRPerson::where('id', $hrPersonId)->select('division_level_4')->first();
+					if (empty($depDetails->division_level_4))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a department assigned. please go to the employee profile and assign one.");
+					else
+					{
+						$Dept = DivisionLevelFour::where('id', $depDetails->division_level_4)->first();
+						if (empty($Dept['manager_id']))
+							$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the department the employee belongs to, does not have a manager assigned. please go to the department settings to assign one.");
+					}
+					
+				}
+				// check hr is set
+				if ($require_hr_approval == 1)
+				{
+					// check employee have a dept assigned
+					$hrDetails = HRPerson::where('id', $hrPersonId)->select('division_level_5')->first();
+					if (empty($hrDetails->division_level_5))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a division assigned. please go to the employee profile and assign one.");
+					else
+					{
+						$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+						if (empty($div['hr_manager_id']))
+							$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the division the employee belongs to, does not have an hr manager assigned. please go to the division settings to assign one.");
+					}
+					
+				}
+				// check payroll is set
+				if ($require_payroll_approval == 1)
+				{
+					// check employee have a div assigned
+					$hrDetails = HRPerson::where('id', $hrPersonId)->select('division_level_5')->first();
+					if (empty($hrDetails->division_level_5))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a division assigned. please go to the employee profile and assign one.");
+					else
+					{
+						$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+						if (empty($div['payroll_officer']))
+							$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the division the employee belongs to, does not have an payroll officer assigned. please go to the division settings to assign one.");
+					}
+					
+				}
 				// check there is document if leave is family, sick and study leave.
 				if ($leaveType == 2 || $leaveType == 5 || $leaveType == 6) {
 					if ($leaveType == 2) $leaveName = 'family leave';
@@ -555,7 +643,8 @@ class LeaveApplicationController extends Controller
         $ApplicationDetails = array();
         $status = array();
         $hrID = $leaveApp['hr_person_id'];
-        $typID = $leaveApp['leave_type'];
+		$changeLeave = $this->changeLeaveType($request);
+        $typID = !empty($changeLeave) ? $changeLeave : $leaveApp['leave_type'];
 
         $dayRequested = $leaveApp['day_requested'] * 8;
         //get manager details
@@ -669,6 +758,36 @@ class LeaveApplicationController extends Controller
         }
 
     }
+	 /**
+     * @param $request
+
+     */
+    public static function changeLeaveType($request)
+    {
+		$row = leave_configuration::first();
+		$allowUnpaid = !empty($row->allow_unpaid_leave_when_annual_done) ? $row->allow_unpaid_leave_when_annual_done : 0;
+		$leaveType = (int) $request['leave_type'];
+
+		if (!empty($allowUnpaid) && $leaveType === 1)
+		{
+			$balance = DB::table('leave_credit')
+			->select('leave_balance')
+			->where('hr_id', $request['hr_person_id'])
+			->where('leave_type_id', $leaveType)
+			->first();
+		
+			$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8 : 0;
+
+			if ($availableBalance <=0) 
+			{
+				$request->merge(['leave_type' => 7]);
+				return 7;
+			}
+			else return 0;
+		}
+        
+
+    }
 
     /**
      * @param Request $request
@@ -683,6 +802,7 @@ class LeaveApplicationController extends Controller
             'date' => 'required',
             'application_type' => 'numeric|min:1',
             'hours' => 'numeric|min:1',
+			'description' => 'nullable|string|max:255', // applies validation only if 'name' is present and not null
         ]);
 
         $validator->after(function ($validator) use ($request) {
@@ -704,29 +824,96 @@ class LeaveApplicationController extends Controller
                         ])->first();
 
                 $row = leave_configuration::first();
-
+				$require_managers_approval = !empty($row->require_managers_approval) ? (int) $row->require_managers_approval : 0;
+				$require_department_head_approval = !empty($row->require_department_head_approval) ? (int) $row->require_department_head_approval : 0;
+				$require_hr_approval = !empty($row->require_hr_approval) ? (int) $row->require_hr_approval : 0;
+				$require_payroll_approval = !empty($row->require_payroll_approval) ? (int) $row->require_payroll_approval : 0;
                 $numberAnnual = !empty($row->allow_annual_negative_days) ? $row->allow_annual_negative_days : 0;
                 $numberSick = !empty($row->allow_sick_negative_days) ? $row->allow_sick_negative_days : 0;
-                if ($leaveType == 1) $extraDays = $numberAnnual;
-                elseif ($leaveType == 5) $extraDays = $numberSick;
-                $availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance : 0;
-                $availableBalance = $availableBalance + ($extraDays * 8);
-                if (!empty($availableBalance)) {
-                    if ($applicationType == 2) {
-                        if ($hours > $availableBalance)
-                            $validator->errors()->add('hours', "Sorry!!! Your Application cannot be processed, you only have $availableBalance hr(s), and applied for $hours hr(s).");
-                    } else
-                        $validator->errors()->add('hours', "Sorry!!! You cannot make an hour aplication here.");
-                } else
-                    $validator->errors()->add('hours', "Sorry you do not have leave days available to perform this action.");
-				// check if the user have a manager and second manager assigned
-				$managerDetails = HRPerson::where('id', $hrPersonId)
-					->select('manager_id')->first();
-				if (empty($managerDetails['manager_id']))
-					$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee you Selected does not have a manager. please go to the employee profile and assign one.");
-				$secondManagerDetails = HRPerson::where('id', $hrPersonId)
-					->select('second_manager_id')->first();
+				$allowUnpaid = !empty($row->allow_unpaid_leave_when_annual_done) ? $row->allow_unpaid_leave_when_annual_done : 0;
+				if (!empty($allowUnpaid))
+				{
+					$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance / 8 : 0;
+					if ($leaveType == 1 && $availableBalance < 0)
+						$request->merge(['leave_type' => 7]);
 					
+				}
+				else
+				{
+					if ($leaveType == 1) $extraDays = $numberAnnual;
+					elseif ($leaveType == 5) $extraDays = $numberSick;
+					$availableBalance = !empty($balance->leave_balance) ? $balance->leave_balance : 0;
+					$availableBalance = $availableBalance + ($extraDays * 8);
+					if (!empty($availableBalance)) 
+					{
+						if ($applicationType == 2) 
+						{
+							if ($hours > $availableBalance)
+                            $validator->errors()->add('hours', "Sorry!!! Your Application cannot be processed, you only have $availableBalance hr(s), and applied for $hours hr(s).");
+						}
+						else
+							$validator->errors()->add('hours', "Sorry!!! You cannot make an hour aplication here.");
+					}
+					else
+						$validator->errors()->add('hours', "Sorry you do not have leave days available to perform this action.");
+				}
+				// check if the user have a manager and second manager assigned
+				// check if the employee report to someone.
+				if ($require_managers_approval == 1)
+				{
+					$managerDetails = HRPerson::where('id', $hrPersonId)->select('manager_id')->first();
+					if (empty($managerDetails['manager_id']))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a manager. please go to the employee profile and assign one.");
+					$secondManagerDetails = HRPerson::where('id', $hrPersonId)
+						->select('second_manager_id')->first();
+					if (empty($secondManagerDetails['second_manager_id']))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a second manager. please go to the employee profile and assign one.");
+				}
+				// check department head is set
+				if ($require_department_head_approval == 1)
+				{
+					// check employee have a dept assigned
+					$depDetails = HRPerson::where('id', $hrPersonId)->select('division_level_4')->first();
+					if (empty($depDetails->division_level_4))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a department assigned. please go to the employee profile and assign one.");
+					else
+					{
+						$Dept = DivisionLevelFour::where('id', $depDetails->division_level_4)->first();
+						if (empty($Dept['manager_id']))
+							$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the department the employee belongs to, does not have a manager assigned. please go to the department settings to assign one.");
+					}
+					
+				}
+				// check hr is set
+				if ($require_hr_approval == 1)
+				{
+					// check employee have a dept assigned
+					$hrDetails = HRPerson::where('id', $hrPersonId)->select('division_level_5')->first();
+					if (empty($hrDetails->division_level_5))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a division assigned. please go to the employee profile and assign one.");
+					else
+					{
+						$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+						if (empty($div['hr_manager_id']))
+							$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the division the employee belongs to, does not have an hr manager assigned. please go to the division settings to assign one.");
+					}
+					
+				}
+				// check payroll is set
+				if ($require_payroll_approval == 1)
+				{
+					// check employee have a div assigned
+					$hrDetails = HRPerson::where('id', $hrPersonId)->select('division_level_5')->first();
+					if (empty($hrDetails->division_level_5))
+						$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the employee selected does not have a division assigned. please go to the employee profile and assign one.");
+					else
+					{
+						$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+						if (empty($div['payroll_officer']))
+							$validator->errors()->add('hr_person_id', "Sorry!!! Your application cannot be completed, the division the employee belongs to, does not have an payroll officer assigned. please go to the division settings to assign one.");
+					}
+					
+				}
 			}
 			else 
 			{
@@ -768,8 +955,8 @@ class LeaveApplicationController extends Controller
         $applicatiionStaus = $ApplicationDetails['status'];
 
         $employees = $request->input('hr_person_id');
-
-        $typID = $request->input('leave_type');
+		$changeLeave = $this->changeLeaveType($request);
+        $typID = !empty($changeLeave) ? $changeLeave : $request->input('leave_type');
 
         $HRpeople = HRPerson::find($employees);
 
@@ -779,7 +966,7 @@ class LeaveApplicationController extends Controller
             ->where('leave_type_id', $typID)
             ->first();
 
-        $leave_balance = $Details['leave_balance'];
+        $leave_balance = !empty($Details['leave_balance']) ? $Details['leave_balance'] : 0;
         #
 
         $levApp = leave_application::create([
@@ -890,70 +1077,294 @@ class LeaveApplicationController extends Controller
         $hrDetails = HRPerson::where('id', $leaveId->hr_id)->where('status', 1)->first();
         $daysApplied = $leaveId->leave_taken;
         //check leave approvals setup
-        $approvals = leave_configuration::where('id', 1)
-            ->select('require_managers_approval', 'require_department_head_approval')
-            ->first();
-        $ManHed = $approvals->require_managers_approval;
-        $DepHead = $approvals->require_department_head_approval;
+        $approvals = leave_configuration::first();
+		
+		$require_managers_approval = !empty($approvals->require_managers_approval) ? (int) $approvals->require_managers_approval : 0;
+		$require_department_head_approval = !empty($approvals->require_department_head_approval) ? (int) $approvals->require_department_head_approval : 0;
+		$require_hr_approval = !empty($approvals->require_hr_approval) ? (int) $approvals->require_hr_approval : 0;
+		$require_payroll_approval = !empty($approvals->require_payroll_approval) ? (int) $approvals->require_payroll_approval : 0;
 		
         //update leave application status
-        if ($leaveId->status == 2 && $DepHead == 1) {
-            $leaveId->status = 3;
-            $leaveId->update();
-
-        } elseif ($leaveId->status == 2 && $ManHed == 1) {
-			
+       if ($leaveId->status == 2) // manager approving check if other approval steps are available
+	   {
             // update leave application status
-            $leaveId->status = 1;
-            $leaveId->update();
-            // #Query the  leave_config days for value
-            $credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
-            $leaveBalance = $credit->leave_balance;
-            #subract current balance from the one applied for
-            $newBalance = $leaveBalance - $daysApplied;
-            $credit->leave_balance = $newBalance;
-            $credit->update();
-            $leaveAttachment = $this->viewApplication($leaveId);
-            #send email to the user informing that the leave has been accepted
-            if (!empty($hrDetails->email))
-                Mail::to($hrDetails->email)->send(new Accept_application($hrDetails->first_name, $leaveAttachment));
-
-            // send emal to Hr manager / Hr managers
-			// get user on setup
-			$leaveNotificationsUsers = LeaveNotifications::getListOfUsers();
-			if (!empty($leaveNotificationsUsers)) {
-				foreach ($leaveNotificationsUsers as $user) {
-					if (!empty($user->hr_id)) {
-						$details = HRPerson::where('id', $user->hr_id)->where('status', 1)
-							->select('first_name', 'email')->first();
-						if (!empty($details->email))
-							Mail::to($details->email)->send(new SendLeaveApplicationToHrManager($details->first_name, $leaveAttachment));
-					}
+			$status = 1;
+			if ($require_department_head_approval == 1)
+			{
+				$status = 3;
+				$Dept = DivisionLevelFour::where('id', $hrDetails->division_level_4)->first();
+				$deptDetails = $Dept->load('manager');
+				$auditText = "Leave application moved to department head";
+				// array to store manager details
+				$detailsArray = array('first_name' => $deptDetails->manager->first_name, 'surname' => $deptDetails->manager->surname, 'email' => $deptDetails->manager->email);
+			}
+            if ($require_hr_approval == 1 && empty($require_department_head_approval))
+			{
+				$status = 4;
+				// email department head to approve
+				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+				$hrDetails = $div->load('hrManager');
+				$auditText = "lLeave application moved to HR";
+				// array to store manager details
+				$detailsArray = array('first_name' => $hrDetails->hrManager->first_name, 'surname' => $hrDetails->hrManager->surname, 'email' => $hrDetails->hrManager->email);
+			}
+			if ($require_payroll_approval == 1 && empty($require_hr_approval) && empty($require_department_head_approval))
+			{
+				$status = 5;
+				// query the hrperon  model and bring back the values of the manager
+				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+				$payrollDetails = $div->load('payrollOfficer');
+				$auditText = "Leave application moved to payroll officer";
+				// array to store manager details
+				$detailsArray = array('first_name' => $payrollDetails->payrollOfficer->first_name, 'surname' => $payrollDetails->payrollOfficer->surname, 'email' => $payrollDetails->payrollOfficer->email,);
+			}
+			
+			if ($status == 1)
+			{
+				$auditText = "Leave application approved by manager";
+				// #Query the  leave_config days for value
+				$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
+				if (!empty( $credit))
+				{
+					$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
+					#subract current balance from the one applied for
+					$newBalance = $leaveBalance - $daysApplied;
+					$credit->leave_balance = $newBalance;
+					$credit->update();
 				}
-                
-            }
-            /*if (!empty($hrDetails->division_level_5)) {
-                $Dept = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
-                if (!empty($Dept->manager_id)) {
-                    $deptDetails = HRPerson::where('id', $Dept->manager_id)->where('status', 1)
-                        ->select('first_name', 'email')
-                        ->first();
-                    if (!empty($deptDetails->email))
-                        Mail::to($deptDetails->email)->send(new SendLeaveApplicationToHrManager($deptDetails->first_name, $leaveAttachment));
-                }
-            }*/
-            // update leave history
-            LeaveHistoryAuditController::store(
-                "leave application Approved",
-                '',
-                $leaveBalance,
-                $daysApplied,
-                $newBalance,
-                $leaveId->leave_type_id,
-                $leaveId->hr_id
-            );
-        }
+				$leaveAttachment = $this->viewApplication($leaveId);
+				#send email to the user informing that the leave has been accepted
+				if (!empty($hrDetails->email))
+					Mail::to($hrDetails->email)->send(new Accept_application($hrDetails->first_name, $leaveAttachment));
 
+				// send emal to Hr manager / Hr managers
+				// get user on setup
+				$leaveNotificationsUsers = LeaveNotifications::getListOfUsers();
+				if (!empty($leaveNotificationsUsers)) {
+					foreach ($leaveNotificationsUsers as $user) {
+						if (!empty($user->hr_id)) {
+							$details = HRPerson::where('id', $user->hr_id)->where('status', 1)
+								->select('first_name', 'email')->first();
+							if (!empty($details->email))
+								Mail::to($details->email)->send(new SendLeaveApplicationToHrManager($details->first_name, $leaveAttachment));
+						}
+					}
+					
+				}
+			}
+			else
+			{
+				// get leave type value
+				$leaveTypes = LeaveType::where(
+					[
+						'id' => $leaveId->leave_type,
+						'status' => 1
+					])->first();
+				// send email to manager
+				if (!empty($detailsArray['email']))
+					Mail::to(
+						$detailsArray['email'])->send(
+						new leave_applications(
+							$detailsArray['first_name'],
+							$leaveTypes->name,
+							$detailsArray['email'],
+							$hrDetails->first_name." ".$hrDetails->surname)
+					);
+			}
+            $leaveId->status = $status;
+			$leaveId->update();           
+        }
+		elseif ($leaveId->status == 3)  // dept head approving check if other approval steps are available
+		{
+            $status = 1;
+            if ($require_hr_approval == 1)
+			{
+				$status = 4;
+				// email department head to approve
+				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+				$hrDetails = $div->load('hrManager');
+				$auditText = "lLeave application moved to HR";
+				// array to store manager details
+				$detailsArray = array('first_name' => $hrDetails->hrManager->first_name, 'surname' => $hrDetails->hrManager->surname, 'email' => $hrDetails->hrManager->email);
+			}
+			if ($require_payroll_approval == 1 && empty($require_hr_approval))
+			{
+				$status = 5;
+				// query the hrperon  model and bring back the values of the manager
+				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+				$payrollDetails = $div->load('payrollOfficer');
+				$auditText = "Leave application moved to payroll officer";
+				// array to store manager details
+				$detailsArray = array('first_name' => $payrollDetails->payrollOfficer->first_name, 'surname' => $payrollDetails->payrollOfficer->surname, 'email' => $payrollDetails->payrollOfficer->email,);
+			}
+			
+			if ($status == 1)
+			{
+				$auditText = "Leave application approved by department head";
+				// #Query the  leave_config days for value
+				$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
+				if (!empty($credit))
+				{
+					$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
+					#subract current balance from the one applied for
+					$newBalance = $leaveBalance - $daysApplied;
+					$credit->leave_balance = $newBalance;
+					$credit->update();
+				}
+				$leaveAttachment = $this->viewApplication($leaveId);
+				#send email to the user informing that the leave has been accepted
+				if (!empty($hrDetails->email))
+					Mail::to($hrDetails->email)->send(new Accept_application($hrDetails->first_name, $leaveAttachment));
+
+				// send emal to Hr manager / Hr managers
+				// get user on setup
+				$leaveNotificationsUsers = LeaveNotifications::getListOfUsers();
+				if (!empty($leaveNotificationsUsers)) {
+					foreach ($leaveNotificationsUsers as $user) {
+						if (!empty($user->hr_id)) {
+							$details = HRPerson::where('id', $user->hr_id)->where('status', 1)
+								->select('first_name', 'email')->first();
+							if (!empty($details->email))
+								Mail::to($details->email)->send(new SendLeaveApplicationToHrManager($details->first_name, $leaveAttachment));
+						}
+					}
+					
+				}
+			}
+			else
+			{
+				// get leave type value
+				$leaveTypes = LeaveType::where(
+					[
+						'id' => $leaveId->leave_type,
+						'status' => 1
+					])->first();
+				// send email to manager
+				if (!empty($detailsArray['email']))
+					Mail::to(
+						$detailsArray['email'])->send(
+						new leave_applications(
+							$detailsArray['first_name'],
+							$leaveTypes->name,
+							$detailsArray['email'],
+							$hrDetails->first_name." ".$hrDetails->surname)
+					);
+			}
+
+        }
+		elseif ($leaveId->status == 4)  // hr approving check if other approval steps are available
+		{
+            $status = 1;
+			if ($require_payroll_approval == 1)
+			{
+				$status = 5;
+				// query the hrperon  model and bring back the values of the manager
+				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+				$payrollDetails = $div->load('payrollOfficer');
+				$auditText = "Leave application moved to payroll officer";
+				// array to store manager details
+				$detailsArray = array('first_name' => $payrollDetails->payrollOfficer->first_name, 'surname' => $payrollDetails->payrollOfficer->surname, 'email' => $payrollDetails->payrollOfficer->email,);
+			}
+			
+			if ($status == 1)
+			{
+				$auditText = "Leave application approved by hr";
+				// #Query the  leave_config days for value
+				$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
+				if (!empty( $credit))
+				{
+					$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
+					#subract current balance from the one applied for
+					$newBalance = $leaveBalance - $daysApplied;
+					$credit->leave_balance = $newBalance;
+					$credit->update();
+				}
+				$leaveAttachment = $this->viewApplication($leaveId);
+				#send email to the user informing that the leave has been accepted
+				if (!empty($hrDetails->email))
+					Mail::to($hrDetails->email)->send(new Accept_application($hrDetails->first_name, $leaveAttachment));
+
+				// send emal to Hr manager / Hr managers
+				// get user on setup
+				$leaveNotificationsUsers = LeaveNotifications::getListOfUsers();
+				if (!empty($leaveNotificationsUsers)) {
+					foreach ($leaveNotificationsUsers as $user) {
+						if (!empty($user->hr_id)) {
+							$details = HRPerson::where('id', $user->hr_id)->where('status', 1)
+								->select('first_name', 'email')->first();
+							if (!empty($details->email))
+								Mail::to($details->email)->send(new SendLeaveApplicationToHrManager($details->first_name, $leaveAttachment));
+						}
+					}
+					
+				}
+			}
+			else
+			{
+				// get leave type value
+				$leaveTypes = LeaveType::where(
+					[
+						'id' => $leaveId->leave_type,
+						'status' => 1
+					])->first();
+				// send email to manager
+				if (!empty($detailsArray['email']))
+					Mail::to(
+						$detailsArray['email'])->send(
+						new leave_applications(
+							$detailsArray['first_name'],
+							$leaveTypes->name,
+							$detailsArray['email'],
+							$hrDetails->first_name." ".$hrDetails->surname)
+					);
+			}
+
+        }
+		elseif ($leaveId->status == 5)  // payroll officer approving check if other approval steps are available
+		{
+            $status = 1;
+				$auditText = "Leave application payroll officer";
+				// #Query the  leave_config days for value
+				$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
+				if (!empty( $credit))
+				{
+					$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
+					#subract current balance from the one applied for
+					$newBalance = $leaveBalance - $daysApplied;
+					$credit->leave_balance = $newBalance;
+					$credit->update();
+				}
+				$leaveAttachment = $this->viewApplication($leaveId);
+				#send email to the user informing that the leave has been accepted
+				if (!empty($hrDetails->email))
+					Mail::to($hrDetails->email)->send(new Accept_application($hrDetails->first_name, $leaveAttachment));
+
+				// send emal to Hr manager / Hr managers
+				// get user on setup
+				$leaveNotificationsUsers = LeaveNotifications::getListOfUsers();
+				if (!empty($leaveNotificationsUsers)) {
+					foreach ($leaveNotificationsUsers as $user) {
+						if (!empty($user->hr_id)) {
+							$details = HRPerson::where('id', $user->hr_id)->where('status', 1)
+								->select('first_name', 'email')->first();
+							if (!empty($details->email))
+								Mail::to($details->email)->send(new SendLeaveApplicationToHrManager($details->first_name, $leaveAttachment));
+						}
+					}
+					
+				}
+			
+        }
+		// update leave history
+		LeaveHistoryAuditController::store(
+			$auditText ,
+			'',
+			$leaveBalance,
+			$daysApplied,
+			$newBalance,
+			$leaveId->leave_type_id,
+			$leaveId->hr_id
+		);
         AuditReportsController::store(
             'Leave Management',
             'leave_approval Informations accepted',
@@ -1231,22 +1642,24 @@ class LeaveApplicationController extends Controller
                         'hr_id' => $leave->hr_id,
                         'leave_type_id' => $leave->leave_type_id
                     ])->first();
-
-                $leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
-                // update leave balance
-                $credit->leave_balance = $leaveBalance + $leave->leave_taken;
-                $credit->update();
-
-                leave_history::create([
-                    'hr_id' => $leave->hr_id,
-                    'action_date' => time(),
-                    'description' => $request->input('reason'),
-                    'previous_balance' => $leaveBalance,
-                    'leave_type_id' => $leave->leave_type_id,
-                    'transcation' => $leave->leave_taken,
-                    'current_balance' => $credit->leave_balance,
-                    'added_by' => $user->person->id
-                ]);
+				if (!empty($credit))
+				{
+					$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
+					// update leave balance
+					$credit->leave_balance = $leaveBalance + $leave->leave_taken;
+					$credit->update();
+					
+					    leave_history::create([
+						'hr_id' => $leave->hr_id,
+						'action_date' => time(),
+						'description' => $request->input('reason'),
+						'previous_balance' => $leaveBalance,
+						'leave_type_id' => $leave->leave_type_id,
+						'transcation' => $leave->leave_taken,
+						'current_balance' => $credit->leave_balance,
+						'added_by' => $user->person->id
+					]);
+				}
             }
             // update leave applicatiion
             $leave->status = 10;

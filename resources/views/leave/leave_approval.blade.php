@@ -25,6 +25,7 @@
 										<th>Date To</th>
 										<th>Date Applied</th>
 										<th>Day(s) Requested</th>
+										<th>Day(s) Available</th>
 										<th>Notes</th>
 										<th>Supporting Documents</th>
 										<th>Status</th>
@@ -44,6 +45,7 @@
 												<td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
 												<td>{{ !empty($approval->created_at) ? $approval->created_at : '' }}</td>
 												<td>{{ !empty($approval->leave_taken) ? $approval->leave_taken / 8 : '' }}</td>
+												<td>{{!empty(\App\leave_credit::getLeaveCredit($approval->hr_id,$approval->leave_type_id)->leave_balance) ? number_format((float)\App\leave_credit::getLeaveCredit($approval->hr_id,$approval->leave_type_id)->leave_balance  / 8, 2, '.', '') :'' }}</td>
 												<td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
 												<td>
 													<div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
@@ -85,6 +87,7 @@
 										<th>Date To</th>
 										<th>Date Applied</th>
 										<th>Day(s) Requested</th>
+										<th>Day(s) Available</th>
 										<th>Notes</th>
 										<th>Supporting Documents</th>
 										<th>Status</th>
@@ -115,6 +118,7 @@
 										<th>Date To</th>
 										<th>Date Applied</th>
 										<th>Day(s) Requested</th>
+										<th>Day(s) Available</th>
 										<th>Notes</th>
 										<th>Supporting Documents</th>
 										<th>Status</th>
@@ -134,6 +138,7 @@
 												<td>{{ !empty($approval->end_date) ? date(' d M Y', $approval->end_date) : '' }}</td>
 												<td>{{ !empty($approval->created_at) ? $approval->created_at : '' }}</td>
 												<td>{{ !empty($approval->leave_taken) ? $approval->leave_taken / 8 : '' }}</td>
+																								<td>{{!empty(\App\leave_credit::getLeaveCredit($approval->hr_id,$approval->leave_type_id)->leave_balance) ? number_format((float)\App\leave_credit::getLeaveCredit($approval->hr_id,$approval->leave_type_id)->leave_balance  / 8, 2, '.', '') :'' }}</td>
 												<td>{{ !empty($approval->notes) ? $approval->notes : '' }}</td>
 												<td>
 													<div class="form-group{{ $errors->has('supporting_doc') ? ' has-error' : '' }}">
@@ -175,6 +180,7 @@
 										<th>Date To</th>
 										<th>Date Applied</th>
 										<th>Day(s) Requested</th>
+										<th>Day(s) Available</th>
 										<th>Notes</th>
 										<th>Supporting Documents</th>
 										<th>Status</th>
