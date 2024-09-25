@@ -1,8 +1,5 @@
 @extends('layouts.main_layout')
 @section('page_dependencies')
-
-
-{{--    <link rel="stylesheet" href="{{ asset('css/style2.css') }}">--}}
     <link rel="stylesheet" href="{{ asset('plugins/datatables/dataTables.bootstrap.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/bootstrap_fileinput/css/fileinput.min.css') }}">
     <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/datepicker/datepicker3.css') }}">
@@ -33,23 +30,29 @@
                                                                                    data-toggle="tab">Work
                                 Details</a>
                         </li>
+						@if($activeModules->where('code_name', 'tasks')->first())
                         <li class="" data-toggle="tooltip" title="Tasks"><a href="#Tasks"
                                                                             data-toggle="tab">Tasks</a>
                         </li>
+						@endif
+						@if($activeModules->where('code_name', 'hr')->first())
                         <li class="" data-toggle="tooltip" title="Training and Videos"><a href="#Video"
                                                                             data-toggle="tab">Training and Videos</a>
                         </li>
                         <li class="" data-toggle="tooltip" title="drive"><a href="#drive"
                                                                             data-toggle="tab">Drive</a>
                         </li>
+						@endif
+						@if($activeModules->where('code_name', 'leave')->first())
                         <li class="" data-toggle="tooltip" title="leave"><a href="#leave"
                                                                             data-toggle="tab">Leave</a>
                         </li>
+						@endif
+						@if($activeModules->where('code_name', 'assets')->first())
                         <li class="" data-toggle="tooltip" title="assets"><a href="#assets"
                                                                              data-toggle="tab">My assets</a>
                         </li>
-
-
+						@endif
                         <li class=" pull-right">
                             <button type="button" class="btn btn-default pull-right" id="back_button"><i
                                         class="fa fa-arrow-left"></i> Back
@@ -65,24 +68,32 @@
                             @include('Employees.Tabs.company_info-tab')
                         </div>
                         <!-- /.tab-pane -->
+						@if($activeModules->where('code_name', 'tasks')->first())
                         <div class="tab-pane" id="Tasks">
                             @include('Employees.Tabs.tasks-tab')
                         </div>
+						@endif
+						@if($activeModules->where('code_name', 'hr')->first())
                         <div class="tab-pane" id="Video">
                             @include('Employees.Tabs.videos-tab')
                         </div>
+						@endif
+						@if($activeModules->where('code_name', 'leave')->first())
                         <div class="tab-pane" id="leave">
                             @include('Employees.Tabs.leave-tab')
                         </div>
-
-
+						@endif
+						@if($activeModules->where('code_name', 'assets')->first())
                         <div class="tab-pane" id="assets">
                             @include('Employees.Tabs.asets-tab')
                         </div>
+						@endif
+						@if($activeModules->where('code_name', 'hr')->first())
                         <!-- /.tab-pane -->
                         <div class="tab-pane" id="drive">
                             @include('Employees.Tabs.documents-tab')
                         </div>
+						@endif
 
 
 

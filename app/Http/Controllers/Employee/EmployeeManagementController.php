@@ -248,7 +248,7 @@ class EmployeeManagementController extends Controller
     public function show($id)
     {
         $videos = Video::all();
-
+		$now = time();
         $slugs = explode("-", str_replace('_', ' ', $id));
 
         $employee = HRPerson::getEmployee($slugs[1]);
@@ -352,8 +352,20 @@ class EmployeeManagementController extends Controller
             ->where('leave_credit.hr_id', $employee->id)
             ->orderBy('leave_types.name')
             ->get();
-
-        #leave Application
+		foreach ($balances as $balance)
+		{
+			$availableBalance = DB::table('leave_application')
+			->select(DB::raw('SUM(leave_taken) as total'))
+			->where('hr_id', $employee->id)
+			->where('leave_type_id', $balance->leave_type_id)
+			->where('start_date', '>', $now)  // Replace 'now()' with 'today()' if you're using Carbon for the date.
+			->where('status', '=', 1)  // Replace 'now()' with 'today()' if you're using Carbon for the date.
+			->first();
+			
+			if (!empty($availableBalance->total))
+				$balance->available_balance = $availableBalance->total;
+		}
+		#leave Application
         $application = DB::table('leave_application')
             ->select('leave_application.*', 'leave_types.name as leavetype')
             ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
@@ -432,7 +444,7 @@ class EmployeeManagementController extends Controller
         $data['Ethnicity'] = $Ethnicity;
         $data['employee'] = $employee;
         $data['MaritalStatus'] = $MaritalStatus;
-        return view('Employees.view_User')->with($data);
+        return view('Employees.view_user')->with($data);
     }
 
     public function addDoc(Request $request)

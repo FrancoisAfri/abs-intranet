@@ -13,7 +13,8 @@
 							<th>Employee Number </th>
 							<th>Employee Name </th>
 							<th>Leave Type</th>
-							<th>Balance days(s)</th>
+							<th>Current Balance</th>
+							<th>Actual Balance</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -33,7 +34,8 @@
 							<th>Employee Number </th>
 							<th>Employee Name </th>
 							<th>Leave Type</th>
-							<th>Balance days(s)</th>
+							<th>Current Balance</th>
+							<th>Actual Balance</th>
 						</tr>
 					</tfoot>
 				</table>

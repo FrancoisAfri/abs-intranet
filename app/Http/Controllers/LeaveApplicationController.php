@@ -1083,7 +1083,14 @@ class LeaveApplicationController extends Controller
 		$require_department_head_approval = !empty($approvals->require_department_head_approval) ? (int) $approvals->require_department_head_approval : 0;
 		$require_hr_approval = !empty($approvals->require_hr_approval) ? (int) $approvals->require_hr_approval : 0;
 		$require_payroll_approval = !empty($approvals->require_payroll_approval) ? (int) $approvals->require_payroll_approval : 0;
-		
+		// get leave credit details
+		$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
+		if (!empty( $credit))
+		{
+			$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
+			#subract current balance from the one applied for
+			$newBalance = $leaveBalance - $daysApplied;
+		}
         //update leave application status
        if ($leaveId->status == 2) // manager approving check if other approval steps are available
 	   {
@@ -1094,7 +1101,7 @@ class LeaveApplicationController extends Controller
 				$status = 3;
 				$Dept = DivisionLevelFour::where('id', $hrDetails->division_level_4)->first();
 				$deptDetails = $Dept->load('manager');
-				$auditText = "Leave application moved to department head";
+				$auditText = "Leave application approved by manager, awaiting department head approval";
 				// array to store manager details
 				$detailsArray = array('first_name' => $deptDetails->manager->first_name, 'surname' => $deptDetails->manager->surname, 'email' => $deptDetails->manager->email);
 			}
@@ -1104,7 +1111,7 @@ class LeaveApplicationController extends Controller
 				// email department head to approve
 				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
 				$hrDetails = $div->load('hrManager');
-				$auditText = "lLeave application moved to HR";
+				$auditText = "Leave application approved by manager, awaiting HR approval";
 				// array to store manager details
 				$detailsArray = array('first_name' => $hrDetails->hrManager->first_name, 'surname' => $hrDetails->hrManager->surname, 'email' => $hrDetails->hrManager->email);
 			}
@@ -1114,7 +1121,7 @@ class LeaveApplicationController extends Controller
 				// query the hrperon  model and bring back the values of the manager
 				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
 				$payrollDetails = $div->load('payrollOfficer');
-				$auditText = "Leave application moved to payroll officer";
+				$auditText = "Leave application by manager, awaiting payroll officer approval";
 				// array to store manager details
 				$detailsArray = array('first_name' => $payrollDetails->payrollOfficer->first_name, 'surname' => $payrollDetails->payrollOfficer->surname, 'email' => $payrollDetails->payrollOfficer->email,);
 			}
@@ -1123,12 +1130,8 @@ class LeaveApplicationController extends Controller
 			{
 				$auditText = "Leave application approved by manager";
 				// #Query the  leave_config days for value
-				$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
 				if (!empty( $credit))
 				{
-					$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
-					#subract current balance from the one applied for
-					$newBalance = $leaveBalance - $daysApplied;
 					$credit->leave_balance = $newBalance;
 					$credit->update();
 				}
@@ -1157,25 +1160,19 @@ class LeaveApplicationController extends Controller
 				// get leave type value
 				$leaveTypes = LeaveType::where(
 					[
-						'id' => $leaveId->leave_type,
+						'id' => $leaveId->leave_type_id,
 						'status' => 1
 					])->first();
-				// send email to manager
+					// send email to manager
 				if (!empty($detailsArray['email']))
-					Mail::to(
-						$detailsArray['email'])->send(
-						new leave_applications(
-							$detailsArray['first_name'],
-							$leaveTypes->name,
-							$detailsArray['email'],
-							$hrDetails->first_name." ".$hrDetails->surname)
-					);
-			}
-            $leaveId->status = $status;
-			$leaveId->update();           
+					Mail::to($detailsArray['email'])->send(
+						new leave_applications($detailsArray['first_name'],$leaveTypes->name,
+							$detailsArray['email'],$hrDetails->first_name." ".$hrDetails->surname));
+			}          
         }
 		elseif ($leaveId->status == 3)  // dept head approving check if other approval steps are available
 		{
+			
             $status = 1;
             if ($require_hr_approval == 1)
 			{
@@ -1183,7 +1180,7 @@ class LeaveApplicationController extends Controller
 				// email department head to approve
 				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
 				$hrDetails = $div->load('hrManager');
-				$auditText = "lLeave application moved to HR";
+				$auditText = "Leave application approved by department head awaiting HR approval";
 				// array to store manager details
 				$detailsArray = array('first_name' => $hrDetails->hrManager->first_name, 'surname' => $hrDetails->hrManager->surname, 'email' => $hrDetails->hrManager->email);
 			}
@@ -1193,7 +1190,7 @@ class LeaveApplicationController extends Controller
 				// query the hrperon  model and bring back the values of the manager
 				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
 				$payrollDetails = $div->load('payrollOfficer');
-				$auditText = "Leave application moved to payroll officer";
+				$auditText = "Leave application approved by department head awaiting to payroll officer";
 				// array to store manager details
 				$detailsArray = array('first_name' => $payrollDetails->payrollOfficer->first_name, 'surname' => $payrollDetails->payrollOfficer->surname, 'email' => $payrollDetails->payrollOfficer->email,);
 			}
@@ -1202,12 +1199,8 @@ class LeaveApplicationController extends Controller
 			{
 				$auditText = "Leave application approved by department head";
 				// #Query the  leave_config days for value
-				$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
 				if (!empty($credit))
 				{
-					$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
-					#subract current balance from the one applied for
-					$newBalance = $leaveBalance - $daysApplied;
 					$credit->leave_balance = $newBalance;
 					$credit->update();
 				}
@@ -1236,19 +1229,13 @@ class LeaveApplicationController extends Controller
 				// get leave type value
 				$leaveTypes = LeaveType::where(
 					[
-						'id' => $leaveId->leave_type,
+						'id' => $leaveId->leave_type_id,
 						'status' => 1
 					])->first();
 				// send email to manager
 				if (!empty($detailsArray['email']))
-					Mail::to(
-						$detailsArray['email'])->send(
-						new leave_applications(
-							$detailsArray['first_name'],
-							$leaveTypes->name,
-							$detailsArray['email'],
-							$hrDetails->first_name." ".$hrDetails->surname)
-					);
+					Mail::to($detailsArray['email'])->send(new leave_applications($detailsArray['first_name'],
+							$leaveTypes->name,$detailsArray['email'],	$hrDetails->first_name." ".$hrDetails->surname));
 			}
 
         }
@@ -1261,7 +1248,7 @@ class LeaveApplicationController extends Controller
 				// query the hrperon  model and bring back the values of the manager
 				$div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
 				$payrollDetails = $div->load('payrollOfficer');
-				$auditText = "Leave application moved to payroll officer";
+				$auditText = "Leave application approved by hr awaiting payroll officer approval";
 				// array to store manager details
 				$detailsArray = array('first_name' => $payrollDetails->payrollOfficer->first_name, 'surname' => $payrollDetails->payrollOfficer->surname, 'email' => $payrollDetails->payrollOfficer->email,);
 			}
@@ -1270,15 +1257,12 @@ class LeaveApplicationController extends Controller
 			{
 				$auditText = "Leave application approved by hr";
 				// #Query the  leave_config days for value
-				$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
-				if (!empty( $credit))
+				if (!empty($credit))
 				{
-					$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
-					#subract current balance from the one applied for
-					$newBalance = $leaveBalance - $daysApplied;
 					$credit->leave_balance = $newBalance;
 					$credit->update();
 				}
+				
 				$leaveAttachment = $this->viewApplication($leaveId);
 				#send email to the user informing that the leave has been accepted
 				if (!empty($hrDetails->email))
@@ -1304,7 +1288,7 @@ class LeaveApplicationController extends Controller
 				// get leave type value
 				$leaveTypes = LeaveType::where(
 					[
-						'id' => $leaveId->leave_type,
+						'id' => $leaveId->leave_type_id,
 						'status' => 1
 					])->first();
 				// send email to manager
@@ -1322,39 +1306,38 @@ class LeaveApplicationController extends Controller
         }
 		elseif ($leaveId->status == 5)  // payroll officer approving check if other approval steps are available
 		{
+		
             $status = 1;
-				$auditText = "Leave application payroll officer";
-				// #Query the  leave_config days for value
-				$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
-				if (!empty( $credit))
-				{
-					$leaveBalance = !empty($credit->leave_balance) ? $credit->leave_balance : 0;
-					#subract current balance from the one applied for
-					$newBalance = $leaveBalance - $daysApplied;
-					$credit->leave_balance = $newBalance;
-					$credit->update();
-				}
-				$leaveAttachment = $this->viewApplication($leaveId);
-				#send email to the user informing that the leave has been accepted
-				if (!empty($hrDetails->email))
-					Mail::to($hrDetails->email)->send(new Accept_application($hrDetails->first_name, $leaveAttachment));
+			$auditText = "Leave application approved by payroll officer";
+			// #Query the  leave_config days for value
+			$credit = leave_credit::getLeaveCredit($leaveId->hr_id, $leaveId->leave_type_id);
+			if (!empty( $credit))
+			{
+				$credit->leave_balance = $newBalance;
+				$credit->update();
+			}
+			$leaveAttachment = $this->viewApplication($leaveId);
+			#send email to the user informing that the leave has been accepted
+			if (!empty($hrDetails->email))
+				Mail::to($hrDetails->email)->send(new Accept_application($hrDetails->first_name, $leaveAttachment));
 
-				// send emal to Hr manager / Hr managers
-				// get user on setup
-				$leaveNotificationsUsers = LeaveNotifications::getListOfUsers();
-				if (!empty($leaveNotificationsUsers)) {
-					foreach ($leaveNotificationsUsers as $user) {
-						if (!empty($user->hr_id)) {
-							$details = HRPerson::where('id', $user->hr_id)->where('status', 1)
-								->select('first_name', 'email')->first();
-							if (!empty($details->email))
-								Mail::to($details->email)->send(new SendLeaveApplicationToHrManager($details->first_name, $leaveAttachment));
-						}
+			// send emal to Hr manager / Hr managers
+			// get user on setup
+			$leaveNotificationsUsers = LeaveNotifications::getListOfUsers();
+			if (!empty($leaveNotificationsUsers)) {
+				foreach ($leaveNotificationsUsers as $user) {
+					if (!empty($user->hr_id)) {
+						$details = HRPerson::where('id', $user->hr_id)->where('status', 1)
+							->select('first_name', 'email')->first();
+						if (!empty($details->email))
+							Mail::to($details->email)->send(new SendLeaveApplicationToHrManager($details->first_name, $leaveAttachment));
 					}
-					
 				}
-			
+				
+			}
         }
+		$leaveId->status = $status;
+		$leaveId->update(); 
 		// update leave history
 		LeaveHistoryAuditController::store(
 			$auditText ,
@@ -1387,7 +1370,7 @@ class LeaveApplicationController extends Controller
         ]);
         $leaveData = $request->all();
         unset($leaveData['_token']);
-
+		
         $usedetails = HRPerson::where(
             'id',
             $levReject->hr_id
@@ -1429,7 +1412,7 @@ class LeaveApplicationController extends Controller
             0,
             0,
             $levReject->leave_type_id,
-            $manager_id
+            $levReject->hr_id
         );
         return response()->json();
     }

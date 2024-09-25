@@ -11,7 +11,8 @@
 						<thead>
 							<tr>
 								<th>Leave Type</th>
-								<th style="text-align: right;">Balance</th>
+								<th style="text-align: center;">Current Balance</th>
+								<th style="text-align: center;">Actual Balance</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -19,7 +20,8 @@
 								@foreach($balances as $balance)
 									<tr>
 										<td>{{ (!empty($balance->leavetype)) ?  $balance->leavetype : ''}}</td>
-										<td style="text-align: right;">{{ (!empty($balance->leave_balance)) ?  $balance->leave_balance / 8: 0}}</td>
+										<td style="text-align: center;">{{ (!empty($balance->leave_balance)) ?  $balance->leave_balance / 8: 0}}</td>
+										<td style="text-align: center;">{{ (!empty($balance->available_balance)) ?  $balance->available_balance / 8: 0}}</td>
 									</tr>
 								@endforeach
 							@else
@@ -59,7 +61,7 @@
 					<table class="table no-margin">
 						<thead>
 							<tr>
-								<th><i class="material-icons">shop_two</i> Leave Type</th>
+								<th> Leave Type</th>
 								<th><i class="fa fa-calendar-o"></i> Date From</th>
 								<th><i class="fa fa-calendar-o"></i> Date To</th>
 								<th style="text-align: right;"><i class="fa fa-info-circle"></i> Status</th>
