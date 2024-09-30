@@ -286,7 +286,7 @@ class  LeaveSetupController extends Controller
             $credits = leave_credit::where('hr_id', $empID)
                 ->where('leave_type_id', $leveTyp)
                 ->first();
-            if (!empty($credits->leave_balance)) {
+            if (!empty($credits)) {
                 $prevBalance = $credits->leave_balance;
                 $currentBalance = $credits->leave_balance + ($days * 8);
                 $credits->leave_balance = $currentBalance;
@@ -453,12 +453,11 @@ class  LeaveSetupController extends Controller
         //return $employees;
         foreach ($employees as $empID) {
             // check if this leave have already been allocated for this month
-           /* $allocation = LeaveAllocation::where('hr_id', $empID)
+            $allocation = LeaveAllocation::where('hr_id', $empID)
                 ->where('leave_type_id', $LevID)
                 ->where('month_allocated', date('n'))
                 ->where('year_allocated', date('Y'))
                 ->first();
-*/
             if (empty($allocation)) {
                 $customDays = $days = $maximum = 0;
                 $custLeave = leave_custom::where('hr_id', $empID)->first();
@@ -489,8 +488,7 @@ class  LeaveSetupController extends Controller
                         ->where('leave_type_id', $LevID)
                         ->first();
 
-
-                    if (isset($credits)) {
+                    if (!empty($credits)) {
                         $previousBalance = !empty($credits->leave_balance) ? $credits->leave_balance : 0;
                         $currentBalance = $previousBalance + $days;
                         if ($maximum > $currentBalance) {
