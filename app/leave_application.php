@@ -77,14 +77,26 @@ class leave_application extends Model
     {
 		
 		#check if the manager is on leave or not
-		return leave_application::where('hr_id', $userID)
-			//->where('status', 1)
+		/*return leave_application::where('hr_id', $userID)
+
 			->whereIn('status', [1, 2, 3, 4, 5])
 			->where(function ($query) use ($startDate, $endDate) {
 				$query->wherebetween('start_date', [$startDate, $endDate])
 					->orwherebetween('end_date', [$startDate, $endDate]);
-			})->first();
-    }
+			})->first();*/
 
+        return leave_application::where('hr_id', $userID)
+            ->whereIn('status', [1, 2, 3, 4, 5])
+            ->where(function ($query) use ($startDate, $endDate) {
+                $query->whereBetween('start_date', [$startDate, $endDate])
+                    ->orWhereBetween('end_date', [$startDate, $endDate])
+                // Add the new condition here
+                ->orWhere(function($query) use ($startDate, $endDate) {
+                    $query->where('start_date', '<=', $startDate)
+                        ->where('end_date', '>=', $endDate);
+                });
+            })->first();
+    }
+    // check if the employee is on maternity leave
 
 }

@@ -15,13 +15,14 @@
                     {{ method_field('PATCH') }}
                     <!-- /.box-header -->
                     <div class="box-body">
-                        <table class="table table-bordered"> 
+                        <table class="table table-bordered">
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
                                 <th>Name</th>
                                 <th>Manager</th>
                                 <th>HR</th>
                                 <th>Payroll</th>
+                                <th style="width: 5px; text-align: center;"></th>
                                 <th style="width: 5px; text-align: center;"></th>
                             </tr>
                             @if (count($highestLvl->divisionLevelGroup) > 0)
@@ -43,11 +44,15 @@
 											btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
 											"fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
 										</td>
-									</tr>    
+                                        <td>
+                                            <button type="button" id="view_ribbons" class="btn btn-danger"
+											btn-xs" onclick="if(confirm('Are you sure you want to delete this record ?')){ deleteRecord({{ $type->id }})} else {return false;}"><i class="fa fa-trash"></i> Delete</button>
+                                        </td>
+									</tr>
 								@endforeach
 							@else
 								<tr id="divisionLevelGroup-list">
-									<td colspan="5">
+									<td colspan="6">
 										<div class="alert alert-danger alert-dismissable">
 											<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
 											No {{$highestLvl->name}} to display, please start by adding a new {{$highestLvl->name}}.
@@ -59,7 +64,7 @@
                     </div>
                         <!-- /.box-body -->
                     <div class="box-footer">
-                     <button type="button" id="level_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-division-modal">Add {{$highestLvl->name}}</button>  
+                     <button type="button" id="level_module" class="btn btn-primary pull-right" data-toggle="modal" data-target="#add-division-modal">Add {{$highestLvl->name}}</button>
                     </div>
 				</form>
 			</div>
@@ -106,7 +111,7 @@
                 modal.find('#name').val(name);
                 modal.find('#manager_id').val(managerID);
                 modal.find('#hr_manager_id').val(hrManagerID);
-                modal.find('#payroll_officer').val(payrollOfficer);  
+                modal.find('#payroll_officer').val(payrollOfficer);
              });
 
             //Post module form to server using ajax (ADD)
@@ -145,5 +150,8 @@
                 modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 		});
+        function deleteRecord(id) {
+            location.href = "/employee/delete_comany/" + id;
+        }
     </script>
 @endsection

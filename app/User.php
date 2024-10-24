@@ -32,6 +32,13 @@ class User extends Authenticatable
      *
      * @return array HRPerson|ContactPerson hasOne
      */
+	 
+	// add code to check that the user is active before login
+	public function scopeActive($query)
+    {
+        return $query->where('status', 1); // Assuming `status` column exists
+    }
+	
     public function person()
     {
         if ($this->type === 1 || $this->type === 3) { //dev and hr person

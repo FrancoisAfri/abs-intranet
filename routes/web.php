@@ -209,6 +209,8 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
 
     Route::get('organogram', 'EmployeeManagementController@organogramView')
         ->name('organogram.view');
+    Route::get('delete_comany/{division}', 'EmployeeManagementController@deleteCompany')
+        ->name('delete.company');
 });
 
 

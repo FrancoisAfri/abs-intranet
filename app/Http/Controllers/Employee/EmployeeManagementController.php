@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Employee;
 
+use App\DivisionLevelFive;
 use App\DivisionLevelFour;
 use App\DivisionLevelThree;
 use App\DivisionLevelTwo;
@@ -619,6 +620,35 @@ class EmployeeManagementController extends Controller
         $data['division_levels'] = $division_levels;
         return view('Employees.organisation_chart')->with($data);
     }
+    // delete company
+    public function deleteCompany(DivisionLevelFive $division ): RedirectResponse
+    {
+        // check if the division is been used in either hr_people or division level four
+        $divisionFour = DivisionLevelFour::where('parent_id',$division->id)->first();
+        $userCheck = HRPerson::where('division_level_5',$division->id)->first();
+        if (empty($divisionFour) || !empty($userCheck))
+        {
+            $division->delete();
 
+            Alert::success('Status changed', 'Record Deleted Successfully');
+
+            AuditReportsController::store('User Management', 'User Status Changed', "User status Changed", 0);
+            return back();
+        }
+        else
+        {
+            Alert::success('Warning !!!!', 'This record can not be deleted. it is been used');
+
+            AuditReportsController::store('Employee Management', 'Division deleted', "deleted by user", 0);
+            return back();
+        }
+        // update the hr_people
+        $hrPerson = HRPerson::where('user_id', $user->id)->first();
+        $hrPerson->status == 1 ? $stastus = 0 : $stastus = 1;
+        $hrPerson->status = $stastus;
+        $hrPerson->update();
+
+
+    }
 
 }
