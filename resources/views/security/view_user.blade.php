@@ -86,7 +86,7 @@
 										<i class="fa fa-user"></i>
 									</div>
 									<input type="text" class="form-control" id="initial" name="initial"
-										   value="{{ $user->person->initial }}" placeholder="Initial" required>
+										   value="{{ $user->person->initial }}" placeholder="Initial">
 								</div>
 							</div>
 						</div>
@@ -206,13 +206,13 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-book"></i>
                                     </div>
-                                    <input type="number" class="form-control" id="id_number" name="id_number" value="{{ $user->person->id_number }}" placeholder="ID Number">
+                                    <input type="number" class="form-control" id="id_number" name="id_number"
+                                           value="{{ $user->person->id_number }}" placeholder="ID Number" min="1" max="13">
                                 </div>
                             </div>
                         </div>
                         <div class="form-group">
                             <label for="passport_number" class="col-sm-2 control-label">Passport Number</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -224,7 +224,6 @@
                         </div>
                         <div class="form-group">
                             <label for="marital_status" class="col-sm-2 control-label">Marital Status</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -241,7 +240,6 @@
                         </div>
                         <div class="form-group">
                             <label for="ethnicity" class="col-sm-2 control-label">Ethnicity</label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -259,7 +257,6 @@
 						<hr class="hr-text" data-content="Emergency Contact Information">
 						<div class="form-group">
                             <label for="next_of_kin" class="col-sm-2 control-label">Name & Surname </label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -271,7 +268,6 @@
                         </div>
 						<div class="form-group">
                             <label for="next_of_kin_number" class="col-sm-2 control-label">Number </label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -283,7 +279,6 @@
                         </div>
 						<div class="form-group">
                             <label for="next_of_kin_work_number" class="col-sm-2 control-label">Work Number </label>
-
                             <div class="col-sm-10">
                                 <div class="input-group">
                                     <div class="input-group-addon">

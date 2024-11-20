@@ -22,6 +22,7 @@
                                 <th>Name</th>
                                 <th>Manager's Name</th>
                                 <th style="width: 5px; text-align: center;"></th>
+                                <th style="width: 5px; text-align: center;"></th>
                             </tr>
             
                             @foreach ($childDiv as $type)
@@ -41,6 +42,10 @@
                                       btn-xs" onclick="postData({{$type->id}}, 'dactiv');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
                                       " fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>-->
                                       
+                                    </td>
+                                    <td>
+                                        <button type="button" id="delete_record" class="btn btn-danger btn-xs"
+                                                btn-xs" onclick="if(confirm('Are you sure you want to delete this record ?')){ deleteRecord({{ $type->id }})} else {return false;}"><i class="fa fa-trash"></i> Delete</button>
                                     </td>
                                 </tr>    
                             @endforeach
@@ -157,35 +162,12 @@
                modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg, Method);
             });
 
-                 });
-        
-           
-
-               
-          /*  $('#update-module').on('click', function() {
-                postModuleForm('PATCH', '/users/module_edit/' + moduleId, 'edit-module-form');
-            });
-            */
-
-   /*   updatechildID
-                 $('#add-child-modal').on('show.bs.modal', function (e) {
-                var btnEdit = $(e.relatedTarget);
-                companyID = btnEdit.data('id');
-                var companyIDName = btnEdit.data('name');
-                var companyIDEmployers = btnEdit.data('manager_id');
-                var level = btnEdit.data('level');
-                var modal = $(this);
-                modal.find('#group_level_title').html('Edit Employee Group Level '+ level);
-                modal.find('#name').val(companyIDName);
-                modal.find('#manager_id').val(companyIDEmployers);
-                modal.find('#division_level_id').val(level);
-                if(primeRate != null && primeRate != '' && primeRate > 0) {
-                   modal.find('#prime_rate').val(primeRate.toFixed(2));
-                }
-    });*/
-
-
-
+        });
+        function deleteRecord(id) {
+           // location.href = "/employee/delete_comany_child/{{ $parentLevel - 1 }}/" + id;
+            location.href = "/employee/delete_comany_child/{{ $parentLevel - 1 }}/" + "{{ $parentDiv->id }}/" + id;
+        }
     </script>
+
 @endsection
 

@@ -8,11 +8,10 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 
-class HRPerson extends Model
+class HrPeopleChange extends Model
 {
-    use Uuids;
-
-    /**
+     use Uuids;
+	 /**
      * @var string[]
      */
     protected $hidden = [
@@ -20,9 +19,8 @@ class HRPerson extends Model
     ];
 
     //Specify the table name
-    public $table = 'hr_people';
-
-    // Mass assignable fields
+    public $table = 'hr_people_changes';
+	 // Mass assignable fields
     protected $fillable = [
         'first_name', 'surname', 'middle_name', 'maiden_name', 'aka', 'initial', 'email', 'cell_number',
         'phone_number', 'id_number', 'date_of_birth', 'passport_number', 'drivers_licence_number', 'drivers_licence_code',
@@ -36,10 +34,9 @@ class HRPerson extends Model
 		'med_start_date','med_split','med_plan_name','med_dep_spouse','med_dep_adult','med_dep_kids',
 		'med_amount','provident_start_date','provident_name','provident_amount','disabled',
 		'nature_of_disability','citizenship','other','employment_type','occupational_level','job_function',
-        'res_address', 'res_suburb', 'res_city', 'res_postal_code', 'res_province_id', 'employee_number'];
-
-
-    //Many to many Relationship Between leavetype and Hr person
+        'res_address', 'res_suburb', 'res_city', 'res_postal_code', 'res_province_id', 'hr_main_id'];
+		
+		//Many to many Relationship Between leavetype and Hr person
     public function leave_types()
     {
         return $this->belongsToMany('App\LeaveType', 'leave_credit', 'hr_id', 'leave_type_id')->withPivot('leave_balance');
@@ -324,6 +321,4 @@ class HRPerson extends Model
 //team
 
     }
-
-
 }

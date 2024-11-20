@@ -15,11 +15,20 @@
                 <!-- form start -->
                 <form class="form-horizontal" method="POST" action="/users">
                     {{ csrf_field() }}
-
                     <div class="box-body">
                         <div class="form-group">
+                            <label for="employee_number" class="col-sm-3 control-label">Employee Number</label>
+                            <div class="col-sm-9">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="employee_number" name="employee_number" value="{{ old('employee_number') }}" placeholder="Employee Number" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
                             <label for="first_name" class="col-sm-3 control-label">First Name</label>
-
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -31,7 +40,6 @@
                         </div>
                         <div class="form-group">
                             <label for="surname" class="col-sm-3 control-label">Surname</label>
-
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -43,7 +51,6 @@
                         </div>
                         <div class="form-group">
                             <label for="cell_number" class="col-sm-3 control-label">Cell Number</label>
-
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -55,7 +62,6 @@
                         </div>
                         <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
                             <label for="email" class="col-sm-3 control-label">Email</label>
-
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">
@@ -67,7 +73,6 @@
                         </div>
                         <div class="form-group">
                             <label for="password" class="col-sm-3 control-label">Password</label>
-
                             <div class="col-sm-9">
                                 <div class="input-group">
                                     <div class="input-group-addon">

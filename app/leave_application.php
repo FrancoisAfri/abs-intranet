@@ -21,10 +21,10 @@ class leave_application extends Model
     {
         return [
             1 => 'Approved',
-            2 => 'Require managers approval ',
-            3 => 'Require department head approval',
-            4 => 'Require hr approval',
-            5 => 'Require payroll approval',
+            2 => 'Awaiting managers approval ',
+            3 => 'Awaiting department head approval',
+            4 => 'Awaiting hr approval',
+            5 => 'Awaiting payroll approval',
             6 => 'rejected',
             7 => 'rejectd_by_department_head',
             8 => 'rejectd_by_hr',

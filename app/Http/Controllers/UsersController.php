@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\CompanyIdentity;
 use App\DivisionLevel;
+use App\DivisionLevelFive;
 use App\leave_history;
 use App\Mail\ConfirmRegistration;
 use App\Mail\sendManagersListOfAssets;
+use App\Mail\SendHRChangesApproval;
 use App\Models\Assets;
 use App\Models\AssetTransfers;
 use App\Models\ItManager;
@@ -28,6 +30,7 @@ use App\module_access;
 use App\module_ribbons;
 use App\ribbons_access;
 use App\Province;
+use App\HrPeopleChange;
 use App\Traits\StoreImageTrait;
 
 // use App\business_card;
@@ -362,6 +365,7 @@ class UsersController extends Controller
         $this->validate($request, [
             'email' => 'unique:users,email',
             'email' => 'unique:hr_people,email',
+            'employee_number' => 'unique:hr_people,employee_number',
         ]);
         //Save usr
         $userID = Auth::user()->id;
@@ -489,9 +493,29 @@ class UsersController extends Controller
 
     public function update(Request $request, User $user)
     {
-		
         $person = $request->all();
+        $userLogin = Auth::user()->load('person');
+       // return $userLogin;
         unset($person['_token'], $person['_method'], $person['command']);
+        // check if the user is and admin or superuser save automatically or send it for approval
+        $objModAccess = module_access::where('module_id', 7)->where('user_id', $userLogin->id)->get();
+        if ($objModAccess && count($objModAccess) > 0)
+            $modAccess = $objModAccess->first()->access_level;
+        else
+            $modAccess = 0;
+        //
+        if ($modAccess <= 3)
+        {
+            $change = $this->saveChanges($request, $user);
+            if ($change == 1)
+            {
+                return back()->with('success_edit', "Your changes have been submitted for review by HR.");
+            }
+            else
+            {
+                return back()->with('success_edit', "No changes to save.");
+            }
+        }
 
         //Cell number formatting
         $person['cell_number'] = str_replace(' ', '', $person['cell_number']);
@@ -569,8 +593,6 @@ class UsersController extends Controller
         $user->person()->update($person);
 
         //Upload profile picture
-
-
         if ($request->hasFile('profile_pic')) {
             $fileExt = $request->file('profile_pic')->extension();
             if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('profile_pic')->isValid()) {
@@ -1056,5 +1078,128 @@ class UsersController extends Controller
             }
         }
         return back()->with('changes_saved', "Your changes have been saved successfully.");
+    }
+
+    // save into HrpeopleChanges
+    public function saveChanges($request, $user)
+    {
+        // check if record was changed
+        $originalRecord = HRPerson::find($user->person->id);
+
+        $person = $request->all();
+        //exclude empty fields from query
+        foreach ($person as $key => $value) {
+            if (empty($person[$key])) {
+                unset($person[$key]);
+            }
+        }
+
+        $hasChanges = 0;
+        //Cell number formatting
+        $person['cell_number'] = str_replace(' ', '', $person['cell_number']);
+        $person['cell_number'] = str_replace('-', '', $person['cell_number']);
+        $person['cell_number'] = str_replace('(', '', $person['cell_number']);
+        $person['cell_number'] = str_replace(')', '', $person['cell_number']);
+
+        //convert numeric values to numbers
+        if (isset($person['res_postal_code'])) {
+            $person['res_postal_code'] = (int)$person['res_postal_code'];
+        }
+        if (isset($person['res_province_id'])) {
+            $person['res_province_id'] = (int)$person['res_province_id'];
+        }
+        if (isset($person['gender'])) {
+            $person['gender'] = (int)$person['gender'];
+        }
+        if (isset($person['id_number'])) {
+            $person['id_number'] = (int)$person['id_number'];
+        }
+        if (isset($person['marital_status'])) {
+            $person['marital_status'] = (int)$person['marital_status'];
+        }
+        if (isset($person['ethnicity'])) {
+            $person['ethnicity'] = (int)$person['ethnicity'];
+        }
+        if (isset($person['leave_profile'])) {
+            $person['leave_profile'] = (int)$person['leave_profile'];
+        }
+        //convert date of birth to unix time stamp
+        if (isset($person['date_of_birth'])) {
+            $person['date_of_birth'] = str_replace('/', '-', $person['date_of_birth']);
+            $person['date_of_birth'] = strtotime($person['date_of_birth']);
+        }
+        //convert date joined company to unix time stamp
+        if (isset($person['date_joined'])) {
+            $person['date_joined'] = str_replace('/', '-', $person['date_joined']);
+            $person['date_joined'] = strtotime($person['date_joined']);
+        }
+        //convert date med_start_date company to unix time stamp
+        if (isset($person['med_start_date'])) {
+            $person['med_start_date'] = str_replace('/', '-', $person['med_start_date']);
+            $person['med_start_date'] = strtotime($person['med_start_date']);
+        }
+        //convert date joined company to unix time stamp
+        if (isset($person['provident_start_date'])) {
+            $person['provident_start_date'] = str_replace('/', '-', $person['provident_start_date']);
+            $person['provident_start_date'] = strtotime($person['provident_start_date']);
+        }
+        //convert date left company to unix time stamp
+        if (isset($person['date_left'])) {
+            $person['date_left'] = str_replace('/', '-', $person['date_left']);
+            $person['date_left'] = strtotime($person['date_left']);
+        }
+
+        if (empty($person['position'])) $person['position'] = 0;
+
+        $person['second_manager_id'] = $request['second_manager_id'];
+        $person['is_approved'] = 0;
+        foreach ($person as $key => $value) {
+
+            if ($key  == '_token' || $key == '_method' || $key == 'command') continue;
+            if ($originalRecord->$key != $value) {
+                $hasChanges ++;
+            }
+        }
+
+        if ($hasChanges >= 1)
+        {
+            $personChange = HrPeopleChange::create($person);
+            $personChange->hr_main_id = $user->person->id;
+            $personChange->update();
+
+            //Upload profile picture
+            if ($request->hasFile('profile_pic')) {
+                $fileExt = $request->file('profile_pic')->extension();
+                if (in_array($fileExt, ['jpg', 'jpeg', 'png']) && $request->file('profile_pic')->isValid()) {
+                    $fileName = time() . "_avatar_" . time() . '.' . $fileExt;
+                    $request->file('profile_pic')->storeAs('avatars', $fileName);
+                    //Update file name in hr table
+                    $personChange->profile_pic = $fileName;
+                    $personChange->update();
+                }
+            }
+            // send email to HR
+            // check employee have a dept assigned
+            $hrDetails = HRPerson::where('id', $user->person->id)->select('division_level_5')->first();
+            if (!empty($hrDetails->division_level_5)) {
+                $div = DivisionLevelFive::where('id', $hrDetails->division_level_5)->first();
+                if (empty($div['hr_manager_id']))
+                {
+                    // get hr email
+                    $hrDetail = HRPerson::where('id', $div['hr_manager_id'])->first();
+                    if (!empty($hrDetail->email))
+                    {
+                        Mail::to($hrDetail->email)->send(new SendHRChangesApproval($hrDetail->first_name));
+                    }
+
+                }
+            }
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

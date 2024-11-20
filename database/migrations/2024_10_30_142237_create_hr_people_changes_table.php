@@ -4,18 +4,18 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateHrPeopleTempTable extends Migration
+class CreateHrPeopleChangesTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-	public function up()
+    public function up()
     {
-		
-		Schema::create('hr_people_temp', function (Blueprint $table) {
+        Schema::create('hr_people_changes', function (Blueprint $table) {
 			$table->increments('id');
+			$table->uuid('uuid')->index();
             $table->string('title')->nullable();
             $table->string('first_name')->nullable();
             $table->string('surname')->nullable();
@@ -25,7 +25,7 @@ class CreateHrPeopleTempTable extends Migration
             $table->string('aka')->nullable();
             $table->string('initial')->nullable();
             $table->unsignedInteger('position')->index()->nullable();
-            $table->string('email')->unique()->nullable();
+            $table->string('email')->nullable();
             $table->string('cell_number')->nullable();
             $table->string('phone_number')->nullable();
             $table->string('id_number')->nullable();
@@ -86,10 +86,10 @@ class CreateHrPeopleTempTable extends Migration
             $table->integer('occupational_level')->unsigned()->nullable();
             $table->integer('job_function')->unsigned()->nullable();
 			$table->bigInteger('med_start_date')->nullable();
+			$table->boolean('is_approved')->default(false); 
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
@@ -98,6 +98,6 @@ class CreateHrPeopleTempTable extends Migration
      */
     public function down()
     {
-         Schema::drop('hr_people_temp');
+        Schema::drop('hr_people_changes');
     }
 }

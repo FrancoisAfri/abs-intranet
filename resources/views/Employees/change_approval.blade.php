@@ -12,63 +12,50 @@
                 <div class="box box-primary">
                     <div class="box-header with-border">
                         <i class="fa fa-user pull-right"></i>
-                        <h3 class="box-title">Onboarding</h3>
+                        <h3 class="box-title">Changes</h3>
                     </div>
                     <div class="box-body">
                         <div style="overflow-X:auto;">
                             <table id="example2" class="table table-bordered table-hover">
                                 <thead>
-									<tr>
-										<th>View</th>
-										<th>Title</th>
-										<th>FirstName</th>
-										<th>Surname</th>
-										<th>Known As</th>
-										<th>Date of Birth</th>
-									</tr>
+                                <tr>
+                                    <th></th>
+                                    <th>First Name</th>
+                                    <th>Surname</th>
+                                    <th>Employee Number</th>
+                                    <th>Email</th>
+                                    <th>Cell Phone</th>
+                                </tr>
                                 </thead>
                                 <tbody>
-									<!-- loop through the leave applications   -->
-									@if(count($onboardings) > 0)
-										@foreach($onboardings as $onboarding)
-											<tr>
-												<td><button type="button" id="view"
-															class="btn btn-success btn-xs btn-detail open-modal"
-															value="{{$onboarding->id}}"
-															onclick="postData({{$onboarding->id}}, 'view_id')">View
-													</button>
-												</td>
-												<td>{{ !empty($onboarding->title) ? $titles[$onboarding->title] : '' }}</td>
-												<td>{{ !empty($onboarding->first_name) ? $onboarding->first_name : '' }}</td>
-												<td>{{ !empty($onboarding->surname) ? $onboarding->surname : '' }}</td>
-												<td>{{ !empty($onboarding->known_as) ? $onboarding->known_as : '' }}</td>
-												<td>{{ !empty($onboarding->date_of_birth) ? date(' d M Y', $onboarding->date_of_birth) : '' }}</td>
-												<td>{{ (!empty($onboarding->status)) ?  $statuses[$onboarding->status] : ''}}</td>
-												<td>
-													<button type="button" id="Accept"
-															class="btn btn-success btn-xs btn-detail open-modal"
-															value="{{$onboarding->id}}"
-															onclick="postData({{$onboarding->id}}, 'approval_id')">Accept
-													</button>
-
-												</td>
-												<td>
-													<button type="button" id="reject-reason" class="btn btn-danger btn-xs"
-														data-toggle="modal" data-target="#reject-leave-modal"
-														data-id="{{ $onboarding->id }}">Decline</button></td>
-											</tr>
-										@endforeach
-									@endif
+                                <!-- loop through the leave applications   -->
+                                @if(count($changes) > 0)
+                                    @foreach($changes as $change)
+                                        <tr>
+                                            <td><button type="button" id="view"
+                                                         class="btn btn-success btn-xs btn-detail open-modal"
+                                                         value="{{$change->id}}"
+                                                         onclick="postData({{$change->id}}, 'view_id')">View
+                                                </button></td>
+                                            <td>{{ !empty($change->first_name) ? $change->first_name : '' }}</td>
+                                            <td>{{ !empty($change->surname) ? $change->surname : '' }}</td>
+                                            <td>{{ !empty($change->employee_number) ? $change->employee_number : '' }}</td>
+                                            <td>{{ !empty($change->email) ? $change->email : '' }}</td>
+                                            <td>{{ !empty($change->cell_number) ? $change->cell_number : '' }}</td>
+                                        </tr>
+                                    @endforeach
+                                @endif
                                 </tbody>
                                 <tfoot>
-									<tr>
-										<th>View</th>
-										<th>Title</th>
-										<th>FirstName</th>
-										<th>Surname</th>
-										<th>Known As</th>
-										<th>Date of Birth</th>
-									</tr>
+                                <tr>
+                                    <th>First Name</th>
+                                    <th>Surname</th>
+                                    <th>Employee Number</th>
+                                    <th>Email</th>
+                                    <th>Cell Phone</th>
+                                    <th>Action</th>
+                                    <th></th>
+                                </tr>
                                 </tfoot>
                             </table>
                         </div>
@@ -76,19 +63,19 @@
                 </div>
                 <!-- /.box-body -->
                 <div class="box-footer">
-				<button type="button" id="cat_module" class="btn btn-default pull-right" data-toggle="modal"
-						data-target="#create-onboarding-modal">Create New
-				</button>
                 </div>
                 <!-- /.box-footer -->
-			</form>
+            </form>
         </div>
         <!-- /.box -->
     </div>
     <!-- Include the reject leave modal-->
-	@include('Employees.partials.create_onboarding')
-    @include('Employees.partials.reject_onboarding')
-
+    @include('leave.partials.reject_leave')
+    <!--  -->
+    @if(Session('success_application'))
+        @include('leave.partials.success_action', ['modal_title' => "Application Successful!", 'modal_content' => session('success_application')])
+    @endif
+    <!--  -->
     </div>
 @endsection
 @section('page_script')
@@ -108,14 +95,18 @@
                 "autoWidth": true
             });
         });
-
+        //       document.getElementById("postData").onclick = function () {
+        //     // location.href = "leave/application/AcceptLeave";
+        //     alert("I am an alert box!");
+        // };
         // post data
         function postData(id, data) {
-            if (data == 'view_id') location.href = "/employee/onboarding-view/" + id;
+            if (data == 'approval_id') location.href = "/employee/approval_changes/" + id;
+            else if (data == 'view_id') location.href = "/employee/view_changes/" + id;
         }
 
         function reject(id, data) {
-            if (data == 'reject_id') location.href = "/leave/reject/" + id;
+            if (data == 'reject_id') location.href = "/employee/reject_changes/" + id;
         }
 
         //Vertically center modals on pag
@@ -145,7 +136,7 @@
             modal.find('#description').val(description);
         });
         //Post module form to server using ajax (ADD)
-        $('#rejection-onboarding').on('click', function () {
+        $('#rejection-reason').on('click', function () {
             //console.log('strUrl');
             var strUrl = '/leave/reject/' + reject_ID;
             var modalID = 'reject-leave-modal';
@@ -159,24 +150,6 @@
             var successMsgTitle = 'reject reason Saved!';
             var successMsg = 'The reject reason has been Saved successfully.';
             //var formMethod = 'PATCH';
-            modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
-        });
-		// send link 
-		//Post module form to server using ajax (ADD)
-        $('#send-link').on('click', function () {
-            //console.log('strUrl');
-            var strUrl = '/employee/send-onboarding/';
-            var modalID = 'create-onboarding-modal';
-            var objData = {
-                // name: $('#'+modalID).find('#name').val(),
-                email: $('#' + modalID).find('#email').val(),
-                first_name: $('#' + modalID).find('#first_name').val(),
-                _token: $('#' + modalID).find('input[name=_token]').val()
-            };
-            var submitBtnID = 'send-link';
-            var redirectUrl = '/employee/onboarding';
-            var successMsgTitle = 'New Onboarding Created!!!';
-            var successMsg = 'New Onboarding have been created.';
             modalAjaxSubmit(strUrl, objData, modalID, submitBtnID, redirectUrl, successMsgTitle, successMsg);
         });
     </script>

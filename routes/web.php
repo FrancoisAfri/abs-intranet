@@ -179,7 +179,6 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
     Route::post('video/assign', 'VideoManagementController@assign')
         ->name('video.assign');
 
-
     Route::get('/licences_management', 'LicenceManagementController@index')
         ->name('licences_management.index');
 
@@ -211,6 +210,17 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
         ->name('organogram.view');
     Route::get('delete_comany/{division}', 'EmployeeManagementController@deleteCompany')
         ->name('delete.company');
+    Route::get('delete_comany_child/{parentLevel}/{parentID}/{childID}', 'EmployeeManagementController@deleteChildCompany')
+        ->name('delete.company_child');
+    Route::get('change_approval', 'EmployeeManagementController@changeApproval')
+        ->name('changes.approval');
+    Route::get('view_changes/{change}', 'EmployeeManagementController@ViewChanges')
+        ->name('view.changes');
+    Route::get('approval_changes/{change}', 'EmployeeManagementController@updateChanges')
+        ->name('view.changes');
+    Route::post('reject-changes/{change}', 'EmployeeManagementController@rejectChanges')
+        ->name('license.print');
+
 });
 
 

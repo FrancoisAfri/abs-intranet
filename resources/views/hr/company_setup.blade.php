@@ -40,12 +40,12 @@
 										<td>{{ ($type->hrManager) ? $type->hrManager->first_name." ".$type->hrManager->surname : ''}}</td>
 										<td>{{ ($type->payrollOfficer) ? $type->payrollOfficer->first_name." ".$type->payrollOfficer->surname : ''}}</td>
 										<td>
-											<button type="button" id="view_ribbons" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
+											<button type="button" id="activate_company" class="btn {{ (!empty($type->active) && $type->active == 1) ? " btn-danger " : "btn-success " }}
 											btn-xs" onclick="postData({{$type->id}}, 'dactive');"><i class="fa {{ (!empty($type->active) && $type->active == 1) ?
 											"fa-times " : "fa-check " }}"></i> {{(!empty($type->active) && $type->active == 1) ? "De-Activate" : "Activate"}}</button>
 										</td>
                                         <td>
-                                            <button type="button" id="view_ribbons" class="btn btn-danger"
+                                            <button type="button" id="delete_company" class="btn btn-danger btn-xs"
 											btn-xs" onclick="if(confirm('Are you sure you want to delete this record ?')){ deleteRecord({{ $type->id }})} else {return false;}"><i class="fa fa-trash"></i> Delete</button>
                                         </td>
 									</tr>

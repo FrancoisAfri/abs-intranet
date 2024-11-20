@@ -30,6 +30,7 @@ class EmployeeCompanySetupController extends Controller
 
     public function viewLevel()
     {
+
         $jobCategories = JobCategory::orderBy('name', 'asc')->get();
         if (!empty($leave_customs))
           $jobCategories = $jobCategories->load('catJobTitle');
@@ -146,6 +147,7 @@ class EmployeeCompanySetupController extends Controller
 
     public function viewchildLevel($parentLevel, $parent_id)
     {
+
         //   $childLevel = null;
         $intCurrentLvl = 0;
         if ($parentLevel == 5) {

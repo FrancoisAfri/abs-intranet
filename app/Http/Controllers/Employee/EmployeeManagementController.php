@@ -6,11 +6,14 @@ use App\DivisionLevelFive;
 use App\DivisionLevelFour;
 use App\DivisionLevelThree;
 use App\DivisionLevelTwo;
+use App\Mail\SendHRChangesApproval;
+use App\Mail\SendRejectChanges;
 use App\ManualClockin;
 use App\TrainingDocuments;
 use App\DivisionLevel;
 use App\EmployeeTasks;
 use App\HRPerson;
+use App\HrPeopleChange;
 use App\Http\Controllers\AuditReportsController;
 use App\Http\Controllers\LeaveApplicationController;
 use App\Models\AssetTransfers;
@@ -30,6 +33,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
@@ -642,13 +646,192 @@ class EmployeeManagementController extends Controller
             AuditReportsController::store('Employee Management', 'Division deleted', "deleted by user", 0);
             return back();
         }
-        // update the hr_people
-        $hrPerson = HRPerson::where('user_id', $user->id)->first();
-        $hrPerson->status == 1 ? $stastus = 0 : $stastus = 1;
-        $hrPerson->status = $stastus;
-        $hrPerson->update();
-
-
     }
+    // delete company child
+    public function deleteChildCompany($parentLevel, $parentID, $childID): RedirectResponse
+    {
 
+        $level = $parentLevel + 1;
+        // check which child level we are at
+       if ($parentLevel == 4) {
+
+           // check if the division is been used in either hr_people or division level four
+           $divisionThree = DivisionLevelThree::where('parent_id', $childID)->first();
+           $userCheck = HRPerson::where('division_level_4', $childID)->first();
+           if (empty($divisionThree) || !empty($userCheck)) {
+
+               $childDiv = DivisionLevelFour::find($childID);
+               $childDiv->delete();
+
+               Alert::success('Status changed', 'Record Deleted Successfully');
+
+               AuditReportsController::store('User Management', 'User Status Changed', "User status Changed", 0);
+               return redirect("/hr/child_setup/$level/$parentID");
+           } else {
+               Alert::success('Warning !!!!', 'This record can not be deleted. it is been used');
+
+               AuditReportsController::store('Employee Management', 'Division deleted', "deleted by user", 0);
+               return redirect("/hr/child_setup/$level/$parentID");
+           }
+       }
+       elseif ($parentLevel == 3) {
+
+           // check if the division is been used in either hr_people or division level three
+           $divisionTwo = DivisionLevelTwo::where('parent_id', $childID)->first();
+           $userCheck = HRPerson::where('division_level_3', $childID)->first();
+           if (empty($divisionTwo) || !empty($userCheck)) {
+               $childDiv = DivisionLevelThree::find($childID);
+               $childDiv->delete();
+
+               Alert::success('Status changed', 'Record Deleted Successfully');
+
+               AuditReportsController::store('User Management', 'User Status Changed', "User status Changed", 0);
+               return redirect("/hr/child_setup/$level/$parentID");
+           } else {
+               Alert::success('Warning !!!!', 'This record can not be deleted. it is been used');
+
+               AuditReportsController::store('Employee Management', 'Division deleted', "deleted by user", 0);
+               return redirect("/hr/child_setup/$level/$parentID");
+           }
+       }
+       elseif ($parentLevel == 2)
+       {
+           // check if the division is been used in either hr_people or division level two
+           $divisionOne = DivisionLevelOne::where('parent_id', $childID)->first();
+           $userCheck = HRPerson::where('division_level_2', $childID)->first();
+           if (empty($divisionOne) || !empty($userCheck)) {
+
+               $childDiv = DivisionLevelTwo::find($childID);
+               $childDiv->delete();
+
+               Alert::success('Status changed', 'Record Deleted Successfully');
+
+               AuditReportsController::store('User Management', 'User Status Changed', "User status Changed", 0);
+               return redirect("/hr/child_setup/$level/$parentID");
+           } else {
+               Alert::success('Warning !!!!', 'This record can not be deleted. it is been used');
+
+               AuditReportsController::store('Employee Management', 'Division deleted', "deleted by user", 0);
+               return redirect("/hr/child_setup/$level/$parentID");
+           }
+       }
+       elseif ($parentLevel == 1) {
+
+           // check if the division is been used in either hr_people or division level one
+           $userCheck = HRPerson::where('division_level_1', $childID)->first();
+           if (!empty($userCheck)) {
+               $childDiv = DivisionLevelOne::find($childID);
+               $childDiv->delete();
+
+               Alert::success('Status changed', 'Record Deleted Successfully');
+
+               AuditReportsController::store('User Management', 'User Status Changed', "User status Changed", 0);
+               return redirect("/hr/child_setup/$level/$parentID");
+           } else {
+               Alert::success('Warning !!!!', 'This record can not be deleted. it is been used');
+
+               AuditReportsController::store('Employee Management', 'Division deleted', "deleted by user", 0);
+               return redirect("/hr/child_setup/$level/$parentID");
+           }
+        }
+    }
+    // Changes approval
+    public function changeApproval()
+    {
+
+        $data = $this->breadCrump(
+            "Employee Records",
+            "Change Approval", "fa fa-lock",
+            "Employee Management",
+            "Employee Management",
+            "/hr",
+            "Employee Management",
+            "Employee Management"
+        );
+        $changes = HrPeopleChange::where('is_approved', false)->get();
+
+        $data['changes'] = $changes;
+        return view('Employees.change_approval')->with($data);
+    }
+    public function ViewChanges($change)
+    {
+        // check if record was changed
+        $changeRecord = HrPeopleChange::find($change);
+        $originalRecord = HRPerson::find($changeRecord->hr_main_id);
+
+        $fieldsToIgnore = ['uuid', 'status', 'created_at', 'updated_at', 'id']; // Fields to ignore
+
+        $differences = [];
+        foreach ($changeRecord->getAttributes() as $key => $value) {
+            // Skip ignored fields
+            if (in_array($key, $fieldsToIgnore)) {
+                continue;
+            }
+
+            // Compare the field value with the original record
+            if (isset($originalRecord->$key) && $value != $originalRecord->$key) {
+                if ($key == 'res_province_id')
+                {
+                    $differences[] = [
+                        'field' => $key,
+                        'original' => $originalRecord->$key,
+                        'changed' => $value,
+                    ];
+                }
+                $differences[] = [
+                    'field' => $key,
+                    'original' => $originalRecord->$key,
+                    'changed' => $value,
+                ];
+            }
+        }
+        $data['differences'] = $differences;
+        $data['change'] = $change;
+        return view('Employees.change_view')->with($data);
+    }
+    public function updateChanges($change)
+    {
+        // check if record was changed
+        $changeRecord = HrPeopleChange::find($change);
+        $originalRecord = HRPerson::find($changeRecord->hr_main_id);
+
+        $fieldsToIgnore = ['uuid', 'status', 'created_at', 'updated_at', 'id']; // Fields to ignore
+
+        foreach ($changeRecord->getAttributes() as $key => $value) {
+            // Skip ignored fields
+            if (in_array($key, $fieldsToIgnore)) {
+                continue;
+            }
+
+            // Compare the field value and update the original record if they differ
+            if (isset($originalRecord->$key) && $value != $originalRecord->$key) {
+                $originalRecord->$key = $value;
+            }
+        }
+        // Save all changes at once
+        $originalRecord->save();
+        $changeRecord->delete();
+
+        return redirect('/employee/change_approval')->with('success_edit', 'Record updated successfully.');
+    }
+    // reject changes
+    public function rejectChanges(Request $request, HrPeopleChange $change)
+    {
+        $this->validate($request, [
+            'description' => 'required',
+        ]);
+        // email user.
+        if (empty($change->hr_main_id))
+        {
+            // get hr email
+            $hrDetail = HRPerson::where('id', $change->hr_main_id)->first();
+            if (!empty($hrDetail->email))
+            {
+                Mail::to($hrDetail->email)->send(new SendRejectChanges($hrDetail->first_name), $request->input('description'));
+            }
+        }
+        $change->delete();
+
+        return redirect('/employee/change_approval')->with('success_edit', 'Changes have been rejected successfully.');
+    }
 }
