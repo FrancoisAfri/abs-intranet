@@ -14,6 +14,11 @@
 				<form class="form-horizontal" method="POST" action="/leave/bal">
 				<input type="hidden" name="userID" value="{{!empty($userID) ? $userID : ''}}">
 				<input type="hidden" name="LevTypID" value="{{!empty($LevTypID) ? $LevTypID : ''}}">
+				 <input type="hidden" name="div1" value="{{!empty($div1) ? $div1 : ''}}">
+                 <input type="hidden" name="div2" value="{{!empty($div2) ? $div2 : ''}}">
+                 <input type="hidden" name="div3" value="{{!empty($div3) ? $div3 : ''}}">
+                 <input type="hidden" name="div4" value="{{!empty($div4) ? $div4 : ''}}">
+                 <input type="hidden" name="div5" value="{{!empty($div5) ? $div5 : ''}}">
                <!-- -->
 					{{ csrf_field() }}
                 <div class="box-body">
@@ -23,6 +28,9 @@
                         <table id="example2" class="table table-bordered table-hover">
 							<thead>
 								<tr>
+									@foreach($division_levels as $division_level)
+										<th>{{ $division_level->name }}</th>
+									@endforeach
 									<th>Employee Number </th>
 									<th>Employee Name </th>
 									<th>Leave Type</th>
@@ -33,6 +41,8 @@
 							@if(count($credit) > 0)
 								@foreach($credit as $audit)
 									<tr>
+										<td>{{ !empty($audit->division->name) ? $audit->division->name : '' }}</td>
+										<td>{{ !empty($audit->department->name) ? $audit->department->name : '' }}</td>
 										<td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
 										<td>{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
 										<td>{{ !empty($audit->leaveType) ? $audit->leaveType : '' }}</td>
@@ -43,6 +53,9 @@
 							</tbody>
 							<tfoot>
 								<tr>
+									@foreach($division_levels as $division_level)
+										<th>{{ $division_level->name }}</th>
+									@endforeach
 									<th>Employee Number </th>
 									<th>Employee Name </th>
 									<th>Leave Type</th>

@@ -31,7 +31,7 @@
                 </div>
                 <form name="leave-application-form" class="form-horizontal" method="POST" action=" " enctype="multipart/form-data">
                     {{ csrf_field() }}
-                    <div class="box-body">
+                    <div class="box-body" id="view_users">
                         @if (count($errors) > 0)
                             <div class="alert alert-danger alert-dismissible fade in">
                                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -54,6 +54,24 @@
                                     <label class="radio-inline"><input type="radio" id="rdo_pending_leaves" name="application_type" value="7"> Pending Leaves</label>
                                 </div>
                             </div>
+							@foreach($division_levels as $division_level)
+								<div class="form-group {{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+									<label for="{{ 'division_level_' . $division_level->level }}"
+										   class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+									<div class="col-sm-10">
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-black-tie"></i>
+											</div>
+											<select id="{{ 'division_level_' . $division_level->level }}"
+													name="{{ 'division_level_' . $division_level->level }}"
+													class="form-control" onchange="divDDOnChange(this, 'hr_person_id', 'view_users')">
+											</select>
+										</div>
+									</div>
+								</div>
+							@endforeach
                           <div class="form-group {{ $errors->has('hr_person_id') ? ' has-error' : '' }}">
                             <label for="hr_person_id" class="col-sm-2 control-label">Employee</label>
                             <div class="col-sm-10">
@@ -61,7 +79,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-user-circle"></i>
                                     </div>
-                                    <select class="form-control select2" style="width: 100%;" id="hr_person_id" name="hr_person_id">
+                                    <select class="form-control select2" multiple="multiple" style="width: 100%;" id="hr_person_id" name="hr_person_id[]">
                                         <option value="">*** Select an Employee ***</option>
                                         @foreach($employees as $employee)
                                             <option value="{{ $employee->id }}">{{ $employee->first_name . ' ' . $employee->surname }}</option>
@@ -82,7 +100,7 @@
                                       
                                     </div>
                                 </div>
-                            </div>                                        
+                        </div>                                        
                         <div class="form-group lev-field{{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="leave_types_id" class="col-sm-2 control-label">Leave Type</label>
                             <div class="col-sm-10">
@@ -310,7 +328,7 @@
                  $('.to-field').hide();
                  $('.from-field').hide();
                  $('.levAction-field').hide();
-                  $('.manual-field').show();
+                  $('.manual-field').hide();
                  $('.lev-field').show();
                  $('.date-field').hide();
                  $('form[name="leave-application-form"]').attr('action', '/leave/reports/leaveAll');

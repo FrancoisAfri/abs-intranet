@@ -35,7 +35,6 @@
                         @endif
                         <div class="form-group{{ $errors->has('allocation_type') ? ' has-error' : '' }}">
                             <label for="Leave_type" class="col-sm-2 control-label"> Action</label>
-
                             <div class="col-sm-9">
                                 <label class="radio-inline" style="padding-left: 0px;"><input type="radio"
                                                                                               id="rdo_adjust"
@@ -48,7 +47,6 @@
                                                                    value="3"> Allocate Leave</label>
                             </div>
                         </div>
-
                         <!--                        <div class="form-group ">-->
                         <div class="form-group emp-field{{ $errors->has('leave_types_id') ? ' has-error' : '' }}">
                             <label for="leave_types_id" class="col-sm-2 control-label">Leave Type(s)</label>
@@ -274,20 +272,16 @@
         var parentDDID = '';
         var loadAllDivs = 1;
         @foreach($division_levels as $division_level)
-        //Populate drop down on page load
-        var ddID = '{{ 'division_level_' . $division_level->level }}';
-        var postTo = '{!! route('divisionsdropdown') !!}';
-        var selectedOption = '';
-        var divLevel = parseInt('{{ $division_level->level }}');
-        var incInactive = -1;
-        var loadAll = loadAllDivs;
-        loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-        parentDDID = ddID;
-        loadAllDivs = -1;
-        @endforeach
-        //        });
-
-        //function to populate the year drop down
-
+            //Populate drop down on page load
+            var ddID = '{{ 'division_level_' . $division_level->level }}';
+            var postTo = '{!! route('divisionsdropdown') !!}';
+            var selectedOption = '';
+            var divLevel = parseInt('{{ $division_level->level }}');
+            var incInactive = -1;
+            var loadAll = loadAllDivs;
+            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+            parentDDID = ddID;
+            loadAllDivs = -1;
+        @endforeach 
     </script>
 @endsection

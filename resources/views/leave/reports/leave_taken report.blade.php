@@ -15,6 +15,11 @@
                  <input type="hidden" name="action_date" value="{{!empty($actionDate) ? $actionDate : ''}}">
                  <input type="hidden" name="hr_person_id" value="{{!empty($userID) ? $userID : ''}}">
                  <input type="hidden" name="leave_types_id" value="{{!empty($LevTypID) ? $LevTypID : ''}}">
+                 <input type="hidden" name="div1" value="{{!empty($div1) ? $div1 : ''}}">
+                 <input type="hidden" name="div2" value="{{!empty($div2) ? $div2 : ''}}">
+                 <input type="hidden" name="div3" value="{{!empty($div3) ? $div3 : ''}}">
+                 <input type="hidden" name="div4" value="{{!empty($div4) ? $div4 : ''}}">
+                 <input type="hidden" name="div5" value="{{!empty($div5) ? $div5 : ''}}">
 					{{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
@@ -25,6 +30,9 @@
 								<table id="example2" class="table table-bordered table-hover">
 									<thead>
 										<tr>
+											@foreach($division_levels as $division_level)
+												<th>{{ $division_level->name }}</th>
+											@endforeach
 											<th>Employee Number </th>
 											<th>Employee Name </th>
 											<th>Leave Type</th>
@@ -36,7 +44,9 @@
 									@if(count($leaveTakens) > 0)
 										@foreach($leaveTakens as $leaveTaken)
 											<tr>
-											   <td>{{ !empty($leaveTaken->employee_number) ? $leaveTaken->employee_number : '' }}</td>
+												<td>{{ !empty($leaveTaken->person->division->name) ? $leaveTaken->person->division->name : '' }}</td>
+												<td>{{ !empty($leaveTaken->person->department->name) ? $leaveTaken->person->department->name : '' }}</td>
+												<td>{{ !empty($leaveTaken->employee_number) ? $leaveTaken->employee_number : '' }}</td>
 												<td>{{ !empty($leaveTaken->first_name) && !empty($leaveTaken->surname) ? $leaveTaken->first_name.' '.$leaveTaken->surname : '' }}</td>
 												<td>{{ !empty($leaveTaken->leave_type_name) ? $leaveTaken->leave_type_name : '' }}</td>
 												<td>{{ !empty($leaveTaken->start_date) ? date('Y M d : H : i : s', $leaveTaken->start_date) : '' }}</td>
@@ -47,6 +57,9 @@
 									</tbody>
 									<tfoot>
 										<tr>
+											@foreach($division_levels as $division_level)
+												<th>{{ $division_level->name }}</th>
+											@endforeach
 											<th>Employee Number </th>
 											<th>Employee Name </th>
 											<th>Leave Type</th>

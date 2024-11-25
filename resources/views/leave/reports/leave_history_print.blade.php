@@ -53,6 +53,9 @@
 			<div class="box-body">
 				<table class="table table-striped">
 					<tr>
+						@foreach($division_levels as $division_level)
+							<th>{{ $division_level->name }}</th>
+						@endforeach
 						<th>Employee Number </th>
 						<th>Names</th>
 						<th>Action</th>
@@ -66,8 +69,10 @@
 					@if(count($historyAudit) > 0)
 						@foreach($historyAudit as $audit)
 							<tr>
+								<td>{{ !empty($audit->person->division->name) ? $audit->person->division->name : '' }}</td>
+								<td>{{ !empty($audit->person->department->name) ? $audit->person->department->name : '' }}</td>
 							   <td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
-								<td>{{ !empty($audit->firstname) && !empty($audit->surname) ? $audit->firstname.' '.$audit->surname : '' }}</td>
+								<td>{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
 								<td>{{ !empty($audit->action) ? $audit->action : '' }}</td>
 								<td>{{ !empty($audit->action_date) ? date('Y M d : H : i : s', $audit->action_date) : '' }}</td>
 								<td>{{ !empty($audit->leave_type) ? $audit->leave_type : '' }}</td>

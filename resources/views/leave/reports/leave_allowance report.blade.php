@@ -14,6 +14,11 @@
 				<form class="form-horizontal" method="POST" action="/leave/print-allowance">
                  <input type="hidden" name="hr_person_id" value="{{!empty($userID) ? $userID : ''}}">
                  <input type="hidden" name="leave_types_id" value="{{!empty($LevTypID) ? $LevTypID : ''}}">
+				  <input type="hidden" name="div1" value="{{!empty($div1) ? $div1 : ''}}">
+                 <input type="hidden" name="div2" value="{{!empty($div2) ? $div2 : ''}}">
+                 <input type="hidden" name="div3" value="{{!empty($div3) ? $div3 : ''}}">
+                 <input type="hidden" name="div4" value="{{!empty($div4) ? $div4 : ''}}">
+                 <input type="hidden" name="div5" value="{{!empty($div5) ? $div5 : ''}}">
 					{{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
@@ -21,6 +26,9 @@
 						<table id="example2" class="table table-bordered table-hover">
 							<thead>
 								<tr>
+									@foreach($division_levels as $division_level)
+										<th>{{ $division_level->name }}</th>
+									@endforeach
 									<th>Employee Number </th>
 									<th>Employee Name </th>
 									<th>Leave Type </th>
@@ -32,6 +40,8 @@
 							 @if(count($allowances) > 0)
 								@foreach($allowances as $allowance)
 									<tr>
+										<td>{{ !empty($allowance->division->name) ? $allowance->division->name : '' }}</td>
+										<td>{{ !empty($allowance->department->name) ? $allowance->department->name : '' }}</td>
 									   <td>{{ !empty($allowance->employee_number) ? $allowance->employee_number : '' }}</td>
 										<td>{{ !empty($allowance->first_name) && !empty($allowance->surname) ? $allowance->first_name.' '.$allowance->surname : '' }}</td>
 										<td>{{ !empty($allowance->leave_type_name) ? $allowance->leave_type_name : $allowance->leave_type_name }}</td>
@@ -43,6 +53,9 @@
 							</tbody>
 							<tfoot>
 								<tr>
+									@foreach($division_levels as $division_level)
+										<th>{{ $division_level->name }}</th>
+									@endforeach
 									<th>Employee Number </th>
 									<th>Employee Name </th>
 									<th>Leave Type </th>

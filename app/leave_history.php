@@ -41,7 +41,10 @@ class leave_history extends Model
     {
         return $this->hasMany(HRPerson::class, 'position');
     }
-
+	public function person()
+    {
+        return $this->belongsTo(HRPerson::class, 'hr_id');
+    }
     /**
      * @param string $actionFrom
      * @param string $actionTo
@@ -53,16 +56,14 @@ class leave_history extends Model
     public static function getLeaveHistory(
         string $actionFrom = "",
         string $actionTo = "",
-        string $hr_person_id = "",
+        $employees,
         string $LevTypID = "",
         string $date = ""
     )
     {
 
         return leave_history::select('leave_history.*',
-            'hr_people.employee_number as employee_number '
-            , 'hr_people.first_name as firstname'
-            , 'hr_people.surname as surname', 'leave_types.name as leave_type')
+            'hr_people.*', 'leave_types.name as leave_type')
             ->leftJoin('hr_people', 'leave_history.hr_id', '=', 'hr_people.id')
             ->leftJoin('leave_types', 'leave_history.leave_type_id', '=', 'leave_types.id')
             ->where(function ($query) use ($actionFrom, $actionTo) {
@@ -75,20 +76,20 @@ class leave_history extends Model
                     $query->where('leave_history.created_at', '>=', $date);
                 }
             })
-            ->where(function ($query) use ($hr_person_id) {
-                if (!empty($hr_person_id)) {
-                    $query->where('leave_history.hr_id', $hr_person_id);
-                }
-            })
+			->where(function ($query) use ($employees) {
+				if (!empty($employees)) {
+						$query->whereIn('leave_history.hr_id', $employees);
+				}
+			})
             ->where(function ($query) use ($LevTypID) {
                 if (!empty($LevTypID)) {
                     $query->where('leave_history.leave_type_id', $LevTypID);
                 }
             })
+            ->orderBy('leave_history.action_date')
             ->orderBy('hr_people.first_name')
             ->orderBy('hr_people.surname')
             ->orderBy('leave_types.name')
-            ->orderBy('leave_history.action_date')
             ->get();
 
     }
@@ -98,7 +99,7 @@ class leave_history extends Model
      * @param string $LevTypID
      * @return HRPerson[]|Collection|Builder[]|\Illuminate\Support\Collection
      */
-    public static function getLeaveBalance(string $userID = "", string $LevTypID = "")
+    public static function getLeaveBalance($employees, string $LevTypID = "")
     {
         return HRPerson::select('hr_people.*',
             'leave_credit.hr_id as userID',
@@ -109,11 +110,11 @@ class leave_history extends Model
             ->leftJoin('leave_credit', 'leave_credit.hr_id', '=', 'hr_people.id')
             ->leftJoin('leave_types', 'leave_credit.leave_type_id', '=', 'leave_types.id')
             ->where('hr_people.status', 1)
-            ->where(function ($query) use ($userID) {
-                if (!empty($userID)) {
-                    $query->where('hr_people.id', $userID);
-                }
-            })
+            ->where(function ($query) use ($employees) {
+				if (!empty($employees)) {
+						$query->whereIn('hr_people.id', $employees);
+				}
+			})
             ->where(function ($query) use ($LevTypID) {
                 if (!empty($LevTypID)) {
                     $query->where('leave_credit.leave_type_id', $LevTypID);
@@ -130,7 +131,7 @@ class leave_history extends Model
      * @param string $LevTypID
      * @return HRPerson[]|Collection|Builder[]|\Illuminate\Support\Collection
      */
-    public static function getLeaveAllowance(string $userID = "", string $LevTypID = "")
+    public static function getLeaveAllowance($employees, string $LevTypID = "")
     {
         return HRPerson::select(
             'hr_people.*',
@@ -141,11 +142,11 @@ class leave_history extends Model
             ->leftJoin('type_profile', 'type_profile.leave_profile_id', '=', 'type_profile.leave_profile_id')
             ->leftJoin('leave_types', 'type_profile.leave_type_id', '=', 'leave_types.id')
             ->where('hr_people.status', 1)
-            ->where(function ($query) use ($userID) {
-                if (!empty($userID)) {
-                    $query->where('hr_people.id', $userID);
-                }
-            })
+            ->where(function ($query) use ($employees) {
+				if (!empty($employees)) {
+						$query->whereIn('hr_people.id', $employees);
+				}
+			})
             ->where(function ($query) use ($LevTypID) {
                 if (!empty($LevTypID)) {
                     $query->where('type_profile.leave_type_id', $LevTypID);
@@ -163,26 +164,25 @@ class leave_history extends Model
      * @return leave_application[]|Collection|Builder[]|\Illuminate\Support\Collection
      */
     public static function getLeaveTaken(
-        string $userID = "",
+        $employees,
         string $LevTypID = "",
         string $actionFrom = "",
-        string $actionTo = ""
+        string $actionTo = "",
+        $status
     )
     {
         return leave_application::select(
             'leave_application.*',
-            'hr_people.employee_number as employee_number'
-            , 'hr_people.first_name'
-            , 'hr_people.surname'
-            , 'leave_types.name as leave_type_name')
+            'hr_people.*'
+            ,'leave_types.name as leave_type_name')
             ->leftJoin('hr_people', 'leave_application.hr_id', '=', 'hr_people.id')
             ->leftJoin('leave_types', 'leave_application.leave_type_id', '=', 'leave_types.id')
             ->where('hr_people.status', 1)
-            ->where(function ($query) use ($userID) {
-                if (!empty($userID)) {
-                    $query->where('hr_people.id', $userID);
-                }
-            })
+			->where(function ($query) use ($employees) {
+				if (!empty($employees)) {
+						$query->whereIn('leave_application.hr_id', $employees);
+				}
+			})
             ->where(function ($query) use ($LevTypID) {
                 if (!empty($LevTypID)) {
                     $query->where('leave_application.leave_type_id', $LevTypID);
@@ -193,6 +193,11 @@ class leave_history extends Model
                     $query->whereBetween('start_date', [$actionFrom, $actionTo]);
                 }
             })
+			->where(function ($query) use ($status) {
+					if ($status > 0) {
+						$query->where('leave_application.status', $status);
+					}
+				})
             ->orderBy('hr_people.first_name')
             ->orderBy('hr_people.surname')
             ->orderBy('leave_types.name')

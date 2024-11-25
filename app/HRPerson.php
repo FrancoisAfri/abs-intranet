@@ -271,15 +271,10 @@ class HRPerson extends Model
 
                 if ($user > 0) {
                     $query->where('id', $user);
-                    $query->whereIn('type', [1, 3]);
-                    $query->where('status', $status);
-                } elseif ($status == null) {
-                    $query->whereIn('type', [1, 3]);
-                    $query->where('status', 1);
-                } else {
-                    $query->whereIn('type', [1, 3]);
                     $query->where('status', $status);
                 }
+				elseif ($status == null) $query->where('status', 1);
+				else $query->where('status', $status);
             })->with('jobTitle','province','division','department','managerDetails')
             ->$collector();
 

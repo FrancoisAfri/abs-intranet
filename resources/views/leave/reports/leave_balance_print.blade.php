@@ -46,6 +46,9 @@
 			<div class="box-body">
 				<table class="table table-striped">
 					<tr>
+					@foreach($division_levels as $division_level)
+						<th>{{ $division_level->name }}</th>
+					@endforeach
 					<th>Employee Number </th>
 					<th>Employee Name </th>
 					<th>Leave Type</th>
@@ -54,6 +57,8 @@
 					@if(count($credit) > 0)
 							@foreach($credit as $audit)
 						<tr>
+							<td>{{ !empty($audit->division->name) ? $audit->division->name : '' }}</td>
+							<td>{{ !empty($audit->department->name) ? $audit->department->name : '' }}</td>
 							<td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
 							<td>{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
 							<td>{{ !empty($audit->leaveType) ? $audit->leaveType : '' }}</td>

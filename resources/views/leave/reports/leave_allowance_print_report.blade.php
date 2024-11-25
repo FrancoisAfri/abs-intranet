@@ -47,6 +47,9 @@
 				<table id="example2" class="table table-bordered table-hover">
 					<thead>
 						<tr>
+							@foreach($division_levels as $division_level)
+								<th>{{ $division_level->name }}</th>
+							@endforeach
 							<th>Employee Number </th>
 							<th>Employee Name </th>
 							<th>Leave Type </th>
@@ -58,7 +61,9 @@
 					 @if(count($allowances) > 0)
 						@foreach($allowances as $allowance)
 							<tr>
-							   <td>{{ !empty($allowance->employee_number) ? $allowance->employee_number : '' }}</td>
+								<td>{{ !empty($allowance->division->name) ? $allowance->division->name : '' }}</td>
+								<td>{{ !empty($allowance->department->name) ? $allowance->department->name : '' }}</td>
+								<td>{{ !empty($allowance->employee_number) ? $allowance->employee_number : '' }}</td>
 								<td>{{ !empty($allowance->first_name) && !empty($allowance->surname) ? $allowance->first_name.' '.$allowance->surname : '' }}</td>
 								<td>{{ !empty($allowance->leave_type_name) ? $allowance->leave_type_name : $allowance->leave_type_name }}</td>
 								<td>{{ !empty($allowance->min) ? $allowance->min : $allowance->min }}</td>
@@ -69,6 +74,9 @@
 					</tbody>
 					<tfoot>
 						<tr>
+							@foreach($division_levels as $division_level)
+								<th>{{ $division_level->name }}</th>
+							@endforeach
 							<th>Employee Number </th>
 							<th>Employee Name </th>
 							<th>Leave Type </th>

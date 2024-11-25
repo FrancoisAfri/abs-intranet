@@ -170,7 +170,9 @@ class LeaveHistoryAuditController extends Controller
      */
     public function getlevhistoryReport(Request $request)
     {
-
+		$this->validate($request, [
+            'division_level_5' => 'required',
+        ]);
         $actionFrom = $actionTo = 0;
         $hr_person_id = $request['hr_person_id'];
         $LevTypID = !empty($request['leave_types_id']) ? $request['leave_types_id'] : 0;
@@ -180,14 +182,41 @@ class LeaveHistoryAuditController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		//
+		$div5 = !empty($request['division_level_5']) ? $request['division_level_5'] : 0;
+        $div4 = !empty($request['division_level_4']) ? $request['division_level_4'] : 0;
+        $div3 = !empty($request['division_level_3']) ? $request['division_level_3'] : 0;
+        $div2 = !empty($request['division_level_2']) ? $request['division_level_2'] : 0;
+        $div1 = !empty($request['division_level_1']) ? $request['division_level_1'] : 0;
+		$userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
 
-        $historyAudit = leave_history::getLeaveHistory($actionFrom, $actionTo, $hr_person_id, $LevTypID);
-
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			
+        $historyAudit = leave_history::getLeaveHistory($actionFrom, $actionTo, $employees, $LevTypID);
+		//return $historyAudit;
+		$data['div1'] = $div1;
+        $data['div2'] = $div2;
+        $data['div3'] = $div3;
+        $data['div4'] = $div4;
+        $data['div5'] = $div5;
         $data['actionFrom'] = $actionFrom;
         $data['hr_person_id'] = $hr_person_id;
         $data['actionDate'] = $actionDate;
         $data['leave_types_id'] = $LevTypID;
         $data['historyAudit'] = $historyAudit;
+		$data['division_levels'] = $divisionLevels;
         $data['page_title'] = "Leave history Audit Report";
         $data['page_description'] = "Leave history Audit Report";
         $data['breadcrumb'] = [
@@ -206,7 +235,12 @@ class LeaveHistoryAuditController extends Controller
      */
     public function printlevhistoReport(Request $request)
     {
-
+		
+		$div5 = !empty($request['div5']) ? $request['div5'] : 0;
+        $div4 = !empty($request['div4']) ? $request['div4'] : 0;
+        $div3 = !empty($request['div3']) ? $request['div3'] : 0;
+        $div2 = !empty($request['div2']) ? $request['div2'] : 0;
+        $div1 = !empty($request['div1']) ? $request['div1'] : 0;
         $actionFrom = $actionTo = 0;
         $hr_person_id = $request['hr_person_id'];
         $LevTypID = !empty($request['leave_types_id']) ? $request['leave_types_id'] : 0;
@@ -216,7 +250,29 @@ class LeaveHistoryAuditController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $historyAudit = leave_history::getLeaveHistory($actionFrom, $actionTo, $hr_person_id, $LevTypID);
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		//
+		$div5 = !empty($request['div5']) ? $request['div5'] : 0;
+        $div4 = !empty($request['div4']) ? $request['div4'] : 0;
+        $div3 = !empty($request['div3']) ? $request['div3'] : 0;
+        $div2 = !empty($request['div2']) ? $request['div2'] : 0;
+        $div1 = !empty($request['div1']) ? $request['div1'] : 0;
+		$userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
+
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			
+        $historyAudit = leave_history::getLeaveHistory($actionFrom, $actionTo, $employees, $LevTypID);
 
         $data['historyAudit'] = $historyAudit;
         $data['page_title'] = "Leave history Audit Report";
@@ -227,6 +283,7 @@ class LeaveHistoryAuditController extends Controller
         ];
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Reports';
+		$data['division_levels'] = $divisionLevels;
         $user = Auth::user()->load('person');
         $companyDetails = CompanyIdentity::systemSettings();
         $data['support_email'] = $companyDetails['support_email'];
@@ -247,9 +304,33 @@ class LeaveHistoryAuditController extends Controller
      */
     public function cancelledLeaves(Request $request)
     {
-
+		$this->validate($request, [
+            'division_level_5' => 'required',
+        ]);
         $reportData = $request->all();
-        return $this->getCancelledLeavesReport($reportData['hr_person_id'], $reportData['leave_types_id'], $reportData['action_date'], false);
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		//
+		$div5 = !empty($reportData['division_level_5']) ? $reportData['division_level_5'] : 0;
+        $div4 = !empty($reportData['division_level_4']) ? $reportData['division_level_4'] : 0;
+        $div3 = !empty($reportData['division_level_3']) ? $reportData['division_level_3'] : 0;
+        $div2 = !empty($reportData['division_level_2']) ? $reportData['division_level_2'] : 0;
+        $div1 = !empty($reportData['division_level_1']) ? $reportData['division_level_1'] : 0;
+		$userID = !empty($reportData['hr_person_id']) ? $reportData['hr_person_id'] : 0;
+
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			
+        return $this->getCancelledLeavesReport($employees, $reportData['leave_types_id'], $reportData['action_date'], false);
     }
 
     /**
@@ -270,11 +351,12 @@ class LeaveHistoryAuditController extends Controller
      * @param $print
      * @return BladeView|false|Factory|Application|View
      */
-    private function getCancelledLeavesReport($employeeID, $leaveTypeID, $action_date, $print = false)
+    private function getCancelledLeavesReport($employees, $leaveTypeID, $action_date, $print = false)
     {
-        $data['employeeID'] = $employeeID;
+        $data['employees'] = $employees;
         $data['leaveTypeID'] = $leaveTypeID;
         $data['action_date'] = $action_date;
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
         $actionFrom = $actionTo = 0;
         $employeeID = !empty($employeeID) ? (int)$employeeID : 0;
         $leaveTypeID = !empty($leaveTypeID) ? (int)$leaveTypeID : 0;
@@ -285,11 +367,11 @@ class LeaveHistoryAuditController extends Controller
         }
 
         $leaveApplications = leave_application::where('status', 10)
-            ->where(function ($query) use ($employeeID) {
-                if ($employeeID > 0) {
-                    $query->where('hr_id', $employeeID);
-                }
-            })
+			->where(function ($query) use ($employees) {
+				if (!empty($employees)) {
+						$query->whereIn('hr_id', $employees);
+				}
+			})
             ->where(function ($query) use ($leaveTypeID) {
                 if ($leaveTypeID > 0) {
                     $query->where('leave_type_id', $leaveTypeID);
@@ -303,7 +385,8 @@ class LeaveHistoryAuditController extends Controller
             ->limit(100)
             ->with('person', 'leavetpe', 'canceller')
             ->get();
-
+			
+		$data['division_levels'] = $divisionLevels;
         $data['page_title'] = "Leave Report";
         $data['page_description'] = "Cancelled Leaves Report";
         $data['breadcrumb'] = [
@@ -335,20 +418,46 @@ class LeaveHistoryAuditController extends Controller
     public function leavebalance(Request $request)
     {
         $this->validate($request, [
-            #code here ....
+            'division_level_5' => 'required',
         ]);
         $request = $request->all();
         unset($request['_token']);
 
-        $userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
         $LevTypID = !empty($request['leave_types_id']) ? $request['leave_types_id'] : 0;
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		//
+		$div5 = !empty($request['division_level_5']) ? $request['division_level_5'] : 0;
+        $div4 = !empty($request['division_level_4']) ? $request['division_level_4'] : 0;
+        $div3 = !empty($request['division_level_3']) ? $request['division_level_3'] : 0;
+        $div2 = !empty($request['division_level_2']) ? $request['division_level_2'] : 0;
+        $div1 = !empty($request['division_level_1']) ? $request['division_level_1'] : 0;
+		$userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
 
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			//return $employees;
         #Query the leave credit
-        $credit = leave_history::getLeaveBalance($userID, $LevTypID);
+        $credit = leave_history::getLeaveBalance($employees, $LevTypID);
 
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
         $data['credit'] = $credit;
+		$data['division_levels'] = $divisionLevels;
+        $data['div1'] = $div1;
+        $data['div2'] = $div2;
+        $data['div3'] = $div3;
+        $data['div4'] = $div4;
+        $data['div5'] = $div5;
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
@@ -370,8 +479,29 @@ class LeaveHistoryAuditController extends Controller
 
         $userID = $request['userID'];
         $LevTypID = $request['LevTypID'];
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		//
+		$div5 = !empty($request['div5']) ? $request['div5'] : 0;
+        $div4 = !empty($request['div4']) ? $request['div4'] : 0;
+        $div3 = !empty($request['div3']) ? $request['div3'] : 0;
+        $div2 = !empty($request['div2']) ? $request['div2'] : 0;
+        $div1 = !empty($request['div1']) ? $request['div1'] : 0;
+		$userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
 
-        $credit = leave_history::getLeaveBalance($userID, $LevTypID);
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			
+        $credit = leave_history::getLeaveBalance($employees, $LevTypID);
 
         $data['user_id'] = $userID;
         $data['LevTypID'] = $LevTypID;
@@ -384,6 +514,7 @@ class LeaveHistoryAuditController extends Controller
         ];
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Reports';
+		$data['division_levels'] = $divisionLevels;
         $user = Auth::user()->load('person');
         $companyDetails = CompanyIdentity::systemSettings();
         $data['support_email'] = $companyDetails['support_email'];
@@ -405,19 +536,45 @@ class LeaveHistoryAuditController extends Controller
     public function leaveAllowance(Request $request)
     {
         $this->validate($request, [
-            #validation code here ....
+            'division_level_5' => 'required',
         ]);
         $request = $request->all();
         unset($request['_token']);
 
-        $userID = $request['hr_person_id'];
         $LevTypID = $request['leave_types_id'];
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		//
+		$div5 = !empty($request['division_level_5']) ? $request['division_level_5'] : 0;
+        $div4 = !empty($request['division_level_4']) ? $request['division_level_4'] : 0;
+        $div3 = !empty($request['division_level_3']) ? $request['division_level_3'] : 0;
+        $div2 = !empty($request['division_level_2']) ? $request['division_level_2'] : 0;
+        $div1 = !empty($request['division_level_1']) ? $request['division_level_1'] : 0;
+		$userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
 
-        $allowances = leave_history::getLeaveAllowance($userID, $LevTypID);
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			
+        $allowances = leave_history::getLeaveAllowance($employees, $LevTypID);
 
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
         $data['allowances'] = $allowances;
+		$data['division_levels'] = $divisionLevels;
+        $data['div1'] = $div1;
+        $data['div2'] = $div2;
+        $data['div3'] = $div3;
+        $data['div4'] = $div4;
+        $data['div5'] = $div5;
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
@@ -439,8 +596,29 @@ class LeaveHistoryAuditController extends Controller
     {
         $userID = $request['hr_person_id'];
         $LevTypID = $request['leave_types_id'];
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		//
+		$div5 = !empty($request['div5']) ? $request['div5'] : 0;
+        $div4 = !empty($request['div4']) ? $request['div4'] : 0;
+        $div3 = !empty($request['div3']) ? $request['div3'] : 0;
+        $div2 = !empty($request['div2']) ? $request['div2'] : 0;
+        $div1 = !empty($request['div1']) ? $request['div1'] : 0;
+		$userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
 
-        $allowances = leave_history::getLeaveAllowance($userID, $LevTypID);
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			
+        $allowances = leave_history::getLeaveAllowance($employees, $LevTypID);
 
         $data['allowances'] = $allowances;
         $data['page_title'] = "Leave Allowance";
@@ -449,7 +627,7 @@ class LeaveHistoryAuditController extends Controller
             ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
         ];
-
+		$data['division_levels'] = $divisionLevels;
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Reports';
         $user = Auth::user()->load('person');
@@ -473,12 +651,13 @@ class LeaveHistoryAuditController extends Controller
     public function taken(Request $request)
     {
         $this->validate($request, [
-            #validation code here ....
+           'division_level_5' => 'required',
         ]);
+		
         $request = $request->all();
         unset($request['_token']);
         $actionFrom = $actionTo = 0;
-        $userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
+        
         $LevTypID = !empty($request['leave_types_id']) ? $request['leave_types_id'] : 0;
         $actionDate = $request['action_date'];
         if (!empty($actionDate)) {
@@ -486,12 +665,42 @@ class LeaveHistoryAuditController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $leaveTakens = leave_history::getLeaveTaken($userID, $LevTypID, $actionFrom, $actionTo);
+		//$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get()->load('divisionLevelGroup');
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		//
+		$div5 = !empty($request['division_level_5']) ? $request['division_level_5'] : 0;
+        $div4 = !empty($request['division_level_4']) ? $request['division_level_4'] : 0;
+        $div3 = !empty($request['division_level_3']) ? $request['division_level_3'] : 0;
+        $div2 = !empty($request['division_level_2']) ? $request['division_level_2'] : 0;
+        $div1 = !empty($request['division_level_1']) ? $request['division_level_1'] : 0;
+		$userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
+		$status = !empty($request['status']) ? $request['status'] : 0;
 
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+
+        $leaveTakens = leave_history::getLeaveTaken($employees, $LevTypID, $actionFrom, $actionTo,$status);
+		
         $data['userID'] = $userID;
+        $data['div1'] = $div1;
+        $data['div2'] = $div2;
+        $data['div3'] = $div3;
+        $data['div4'] = $div4;
+        $data['div5'] = $div5;
         $data['LevTypID'] = $LevTypID;
         $data['actionDate'] = $actionDate;
         $data['leaveTakens'] = $leaveTakens;
+        $data['division_levels'] = $divisionLevels;
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
@@ -514,7 +723,6 @@ class LeaveHistoryAuditController extends Controller
     public function takenPrint(Request $request)
     {
 
-
         $actionFrom = $actionTo = 0;
         $userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
         $LevTypID = !empty($request['leave_types_id']) ? $request['leave_types_id'] : 0;
@@ -524,8 +732,30 @@ class LeaveHistoryAuditController extends Controller
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-        $leaveTakens = leave_history::getLeaveTaken($userID, $LevTypID, $actionFrom, $actionTo);
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		//
+		$div5 = !empty($request['div5']) ? $request['div5'] : 0;
+        $div4 = !empty($request['div4']) ? $request['div4'] : 0;
+        $div3 = !empty($request['div3']) ? $request['div3'] : 0;
+        $div2 = !empty($request['div2']) ? $request['div2'] : 0;
+        $div1 = !empty($request['div1']) ? $request['div1'] : 0;
+		$userID = !empty($request['hr_person_id']) ? $request['hr_person_id'] : 0;
 
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			
+		$leaveTakens = leave_history::getLeaveTaken($employees, $LevTypID, $actionFrom, $actionTo);
+		
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
         $data['leaveTakens'] = $leaveTakens;
@@ -544,7 +774,7 @@ class LeaveHistoryAuditController extends Controller
         $data['company_name'] = $companyDetails['company_name'];
         $data['company_logo'] = url('/') . $companyDetails['company_logo_url'];
         $data['date'] = date("d-m-Y");
-
+		$data['division_levels'] = $divisionLevels;
         $data['full_company_name'] = $companyDetails['full_company_name'];
         $data['user'] = $user;
         AuditReportsController::store('Leave Management', 'Viewed Leave Taken Report Results', "view Reports Results", 0);
@@ -586,8 +816,34 @@ class LeaveHistoryAuditController extends Controller
 	
 	public function pendingLeaves(Request $request)
     {
+		$this->validate($request, [
+            'division_level_5' => 'required',
+        ]);
         $reportData = $request->all();
-        return $this->getpendingLeavesReport($reportData['hr_person_id'], $reportData['leave_types_id'], $reportData['action_date'], false, $reportData['status']);
+		
+		
+		//
+		$div5 = !empty($reportData['division_level_5']) ? $reportData['division_level_5'] : 0;
+        $div4 = !empty($reportData['division_level_4']) ? $reportData['division_level_4'] : 0;
+        $div3 = !empty($reportData['division_level_3']) ? $reportData['division_level_3'] : 0;
+        $div2 = !empty($reportData['division_level_2']) ? $reportData['division_level_2'] : 0;
+        $div1 = !empty($reportData['division_level_1']) ? $reportData['division_level_1'] : 0;
+		$userID = !empty($reportData['hr_person_id']) ? $reportData['hr_person_id'] : 0;
+
+        if (!empty($userID))
+            $employees = $userID;
+        elseif (!empty($div1))
+            $employees = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employees = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employees = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employees = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employees = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			
+        return $this->getpendingLeavesReport($employees, $reportData['leave_types_id'], $reportData['action_date'], false, $reportData['status']);
     }
 
     /**
@@ -608,37 +864,38 @@ class LeaveHistoryAuditController extends Controller
      * @param $print
      * @return BladeView|false|Factory|Application|View
      */
-    private function getpendingLeavesReport($employeeID, $leaveTypeID, $action_date, $print = false, $status=0)
+    private function getpendingLeavesReport($employees, $leaveTypeID, $action_date, $print = false, $status=0)
     {
 		$statusArray = [1 => 'Approved',2 => 'Require managers approval ',3 => 'Require department head approval',
             4 => 'Require hr approval',5 => 'Require payroll approval',6 => 'rejected',
             7 => 'rejectd_by_department_head',8 => 'rejectd_by_hr',9 => 'rejectd_by_payroll',
             10 => 'Cancelled'];
-        $data['employeeID'] = $employeeID;
+        $data['employees'] = $employees;
         $data['leaveTypeID'] = $leaveTypeID;
         $data['action_date'] = $action_date;
         $data['status'] = $status;
         $data['statusArray'] = $statusArray;
         $actionFrom = $actionTo = 0;
-        $employeeID = !empty($employeeID) ? (int)$employeeID : 0;
+        //$employeeID = !empty($employeeID) ? (int)$employeeID : 0;
         $leaveTypeID = !empty($leaveTypeID) ? (int)$leaveTypeID : 0;
         if (!empty($actionDate)) {
             $startExplode = explode('-', $actionDate);
             $actionFrom = strtotime($startExplode[0]);
             $actionTo = strtotime($startExplode[1]);
         }
-
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
         $leaveApplications = leave_application::
 			where(function ($query) use ($status) {
 					if ($status > 0) {
 						$query->where('status', $status);
 					}
+					else $query->whereIn('status', [2,3,4,5,]);
 				})
-            ->where(function ($query) use ($employeeID) {
-                if ($employeeID > 0) {
-                    $query->where('hr_id', $employeeID);
-                }
-            })
+            ->where(function ($query) use ($employees) {
+				if (!empty($employees)) {
+						$query->whereIn('hr_id', $employees);
+				}
+			})
             ->where(function ($query) use ($leaveTypeID) {
                 if ($leaveTypeID > 0) {
                     $query->where('leave_type_id', $leaveTypeID);
@@ -659,6 +916,7 @@ class LeaveHistoryAuditController extends Controller
             ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave Report', 'active' => 1, 'is_module' => 0]
         ];
+		$data['division_levels'] = $divisionLevels;
         $data['active_mod'] = 'Leave Management';
         $data['active_rib'] = 'Reports';
         $data['leaveApplications'] = $leaveApplications;

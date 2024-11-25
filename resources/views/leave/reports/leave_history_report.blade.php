@@ -16,6 +16,11 @@
                  <input type="hidden" name="hr_person_id" value="{{!empty($hr_person_id) ? $hr_person_id : ''}}">
                  <input type="hidden" name="report" value="{{!empty($report) ? $report : ''}}">
                  <input type="hidden" name="leave_types_id" value="{{!empty($leave_types_id) ? $leave_types_id : ''}}">
+				 <input type="hidden" name="div1" value="{{!empty($div1) ? $div1 : ''}}">
+                 <input type="hidden" name="div2" value="{{!empty($div2) ? $div2 : ''}}">
+                 <input type="hidden" name="div3" value="{{!empty($div3) ? $div3 : ''}}">
+                 <input type="hidden" name="div4" value="{{!empty($div4) ? $div4 : ''}}">
+                 <input type="hidden" name="div5" value="{{!empty($div5) ? $div5 : ''}}">
 					{{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
@@ -24,6 +29,9 @@
 						<table id="example2" class="table table-bordered table-hover">
 							<thead>
 								<tr>
+									@foreach($division_levels as $division_level)
+										<th>{{ $division_level->name }}</th>
+									@endforeach
 									<th>Employee Number </th>
 									<th>Names</th>
 									<th>Action</th>
@@ -39,8 +47,10 @@
 							@if(count($historyAudit) > 0)
 								@foreach($historyAudit as $audit)
 									<tr>
-									   <td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
-										<td>{{ !empty($audit->firstname) && !empty($audit->surname) ? $audit->firstname.' '.$audit->surname : '' }}</td>
+										<td>{{ !empty($audit->person->division->name) ? $audit->person->division->name : '' }}</td>
+										<td>{{ !empty($audit->person->department->name) ? $audit->person->department->name : '' }}</td>
+										<td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
+										<td>{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
 										<td>{{ !empty($audit->action) ? $audit->action : '' }}</td>
 										<td>{{ !empty($audit->action_date) ? date('Y M d : H : i : s', $audit->action_date) : '' }}</td>
 										<td>{{ !empty($audit->leave_type) ? $audit->leave_type : '' }}</td>
@@ -54,6 +64,9 @@
 							</tbody>
 							<tfoot>
 								<tr>
+									@foreach($division_levels as $division_level)
+										<th>{{ $division_level->name }}</th>
+									@endforeach
 									<th>Employee Number </th>
 									<th>Names</th>
 									<th>Action</th>

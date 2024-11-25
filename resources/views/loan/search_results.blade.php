@@ -24,7 +24,7 @@
 										<th>Date Applied</th>
 										<th>Amount</th>
 										<th>Repayment Month(s)</th>
-										<th nowrap>Notes</th>
+										<th  style="width: 70px; text-align: center;">Notes</th>
 										<th>Status</th>
 									</tr>
                                 </thead>
@@ -38,7 +38,7 @@
 												<td>{{ !empty($loan->created_at) ? $loan->created_at : '' }}</td>
 												<td>{{ !empty($loan->amount) ? 'R ' .number_format($loan->amount, 2) : '' }}</td>
 												<td style="width: 10px; text-align: center;">{{ (!empty( $loan->repayment_month)) ?  $loan->repayment_month : ''}} </td>
-												<td nowrap>{{ !empty($loan->reason) ? $loan->reason : '' }}</td>
+												<td style="width: 70px; text-align: center;">{{ !empty($loan->reason) ? $loan->reason : '' }}</td>
 												<td>{{ (!empty( $loan->status)) ?  $statuses[$loan->status] : ''}} </td>
 											</tr>
 										@endforeach
@@ -52,7 +52,7 @@
 										<th>Date Applied</th>
 										<th>Amount</th>
 										<th>Repayment Month(s)</th>
-										<th nowrap>Notes</th>
+										<th  style="width: 70px; text-align: center;">Notes</th>
 										<th>Status</th>
 									</tr>
                                 </tfoot>
