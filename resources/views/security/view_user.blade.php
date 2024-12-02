@@ -23,6 +23,17 @@
                     {{ csrf_field() }}
                     {{ method_field('PATCH') }}
                     <div class="box-body" id="view_users">
+					@if (count($errors) > 0)
+                            <div class="alert alert-danger alert-dismissible fade in">
+                                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                                <h4><i class="icon fa fa-ban"></i> Invalid Input Data!</h4>
+                                <ul>
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
 					<hr class="hr-text" data-content="Personal Information">
 						<div class="form-group">
 							<label for="title" class="col-sm-2 control-label">Title </label>
@@ -207,7 +218,7 @@
                                         <i class="fa fa-book"></i>
                                     </div>
                                     <input type="number" class="form-control" id="id_number" name="id_number"
-                                           value="{{ $user->person->id_number }}" placeholder="ID Number" min="1" max="13">
+                                           value="{{ $user->person->id_number }}" placeholder="ID Number">
                                 </div>
                             </div>
                         </div>
@@ -468,6 +479,29 @@
                             </div>
                         </div>
 						<hr class="hr-text" data-content="Work Details">
+						<div class="form-group">
+							<label for="start_time" class="col-sm-2 control-label">Working Hours</label>
+							<div class="col-sm-5">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-calendar"></i>
+									</div>
+									<input type="time" class="form-control" id="start_time"
+										   name="start_time" value="{{ $user->person->start_time }}"
+										   placeholder="Start Time Eg 8:00">
+								</div>
+							</div>
+							<div class="col-sm-5">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-calendar"></i>
+									</div>
+									<input type="time" class="form-control" id="end_time"
+										   name="end_time" value="{{ $user->person->end_time }}"
+										   placeholder="End Time Eg 17:00">
+								</div>
+							</div>
+						</div>
 						@if (isset($view_by_admin) && $view_by_admin === 1)
 							<div class="form-group">
 								<label for="employee_number" class="col-sm-2 control-label">Employee Number</label>
@@ -745,7 +779,6 @@
     <!-- optionally if you need translation for your language then include locale file as mentioned below
     <script src="/bower_components/bootstrap_fileinput/js/locales/<lang>.js"></script>-->
     <!-- End Bootstrap File input -->
-
     <!-- Ajax form submit -->
     <script src="/custom_components/js/modal_ajax_submit.js"></script>
 
@@ -753,6 +786,7 @@
     <script src="/custom_components/js/load_dropdown_options.js"></script>
 
     <script>
+		
         $(function () {
             //Cancel button click event
             document.getElementById("cancel").onclick = function () {

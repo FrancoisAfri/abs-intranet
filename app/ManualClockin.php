@@ -52,7 +52,7 @@ class ManualClockin extends Model
     }
 	// get Clockout and clockin
 	
-	public static function getAllattendance($clockinType , $employeeNo, $dates)
+	public static function getAllattendance($clocktypes , $employees, $dates)
     {
 		// convert date
 		if (!empty($dates)) {
@@ -63,18 +63,18 @@ class ManualClockin extends Model
 		else $actionFrom = $actionTo = 0;
 		// query
         $query = ManualClockin::with('user')
-            ->orderBy('clockin_time', 'desc')
+            ->orderBy('clockin_time', 'asc')
             ->orderBy('hr_id', 'asc')
 			->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('clockin_time', [$actionFrom, $actionTo]);
                 }
             });
-        if (!empty($employeeNo)){
-            $query->where('hr_id', $employeeNo);
+        if (!empty($employees)){
+			$query->whereIn('hr_id', $employees);
         } 
-		if (!empty($clockinType)){
-            $query->where('clockin_type', $clockinType);
+		if (!empty($clocktypes)){
+			$query->whereIn('clockin_type', $clocktypes);
         }
         $query->limit(2000);
         return $query->get();

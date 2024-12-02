@@ -493,6 +493,15 @@ class UsersController extends Controller
 
     public function update(Request $request, User $user)
     {
+		
+		$this->validate($request, [
+			'id_number' => [
+				'required', // Ensure the field is not empty
+				'digits:13', // Ensure it is exactly 13 digits
+				'unique:hr_people,id_number', // Ensure it is unique in the users table
+			],
+		]);
+
         $person = $request->all();
         $userLogin = Auth::user()->load('person');
        // return $userLogin;

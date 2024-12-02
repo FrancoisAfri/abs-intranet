@@ -91,8 +91,30 @@ class EmployeeManagementController extends Controller
         $date = !empty($request['action_date']) ? $request['action_date'] : 0;
         $clocktypes = !empty($request['clockin_type']) ? $request['clockin_type'] : 0;
         $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
+		$levels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
+		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
+		$div5 = !empty($request['division_level_5']) ? $request['division_level_5'] : 0;
+        $div4 = !empty($request['division_level_4']) ? $request['division_level_4'] : 0;
+        $div3 = !empty($request['division_level_3']) ? $request['division_level_3'] : 0;
+        $div2 = !empty($request['division_level_2']) ? $request['division_level_2'] : 0;
+        $div1 = !empty($request['division_level_1']) ? $request['division_level_1'] : 0;
+		$userID = !empty($request['employee_number']) ? $request['employee_number'] : 0;
+		$employeesCol = array();
+		if (!empty($userID))
+            $employeesCol = $userID;
+        elseif (!empty($div1))
+            $employeesCol = HRPerson::where('division_level_1', $div1)->where('status', 1)->pluck('hr_id');
+        elseif (!empty($div2))
+            $employeesCol = HRPerson::where('division_level_2', $div2)->where('status', 1)->pluck('id');
+        elseif (!empty($div3))
+            $employeesCol = HRPerson::where('division_level_3', $div3)->where('status', 1)->pluck('id');
+        elseif (!empty($div4))
+            $employeesCol = HRPerson::where('division_level_4', $div4)->where('status', 1)->pluck('id');
+        elseif (!empty($div5))
+            $employeesCol = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
+			//return $employeesCol;
         // get data
-        $clockins = ManualClockin::getAllattendance($clocktypes, $employeID, $date);
+        $clockins = ManualClockin::getAllattendance($clocktypes, $employeesCol, $date);
         //return $clockins;
         $data = $this->breadCrump(
             "Employee Records",
@@ -110,6 +132,8 @@ class EmployeeManagementController extends Controller
         $data['m_silhouette'] = $m_silhouette;
         $data['f_silhouette'] = $f_silhouette;
         $data['clockins'] = $clockins;
+		$data['division_levels'] = $divisionLevels;
+		$data['levels'] = $levels;
         $data['employees'] = $employees;
 
         return view('Employees.clockin_report')->with($data);

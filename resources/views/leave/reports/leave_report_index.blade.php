@@ -183,8 +183,7 @@
     <script src="/bower_components/AdminLTE/plugins/datepicker/bootstrap-datepicker.js"></script>
     <!-- iCheck -->
     <script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
-    <!--  -->
-     <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
+
             <!-- InputMask -->
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.js"></script>
     <script src="/bower_components/AdminLTE/plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
@@ -362,21 +361,21 @@
                 $('#gen-report').val("Submit");
             }
             return allType;      
-            }
-          //Load divisions drop down
-        var parentDDID = '';
-        var loadAllDivs = 1;
-        @foreach($division_levels as $division_level)
-            //Populate drop down on page load
-            var ddID = '{{ 'division_level_' . $division_level->level }}';
-            var postTo = '{!! route('divisionsdropdown') !!}';
-            var selectedOption = '';
-            var divLevel = parseInt('{{ $division_level->level }}');
-            var incInactive = -1;
-            var loadAll = loadAllDivs;
-            loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
-            parentDDID = ddID;
-            loadAllDivs = -1;
-        @endforeach 
+         }
+			//Load divisions drop down
+			var parentDDID = '';
+			var loadAllDivs = 1;
+			@foreach($division_levels as $division_level)
+				//Populate drop down on page load
+				var ddID = '{{ 'division_level_' . $division_level->level }}';
+				var postTo = '{!! route('divisionsdropdown') !!}';
+				var selectedOption = '';
+				var divLevel = parseInt('{{ $division_level->level }}');
+				var incInactive = -1;
+				var loadAll = loadAllDivs;
+				loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+				parentDDID = ddID;
+				loadAllDivs = -1;
+			@endforeach 
     </script>
 @endsection

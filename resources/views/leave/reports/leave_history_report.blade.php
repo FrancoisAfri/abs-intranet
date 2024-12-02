@@ -10,18 +10,6 @@
                 <div class="box-header">
                     <h3 class="box-title">Leave History Report</h3>
                 </div>
-                <!-- /.box-header -->
-				<form class="form-horizontal" method="POST" action="/leave/print">
-                 <input type="hidden" name="actionDate" value="{{!empty($actionDate) ? $actionDate : ''}}">
-                 <input type="hidden" name="hr_person_id" value="{{!empty($hr_person_id) ? $hr_person_id : ''}}">
-                 <input type="hidden" name="report" value="{{!empty($report) ? $report : ''}}">
-                 <input type="hidden" name="leave_types_id" value="{{!empty($leave_types_id) ? $leave_types_id : ''}}">
-				 <input type="hidden" name="div1" value="{{!empty($div1) ? $div1 : ''}}">
-                 <input type="hidden" name="div2" value="{{!empty($div2) ? $div2 : ''}}">
-                 <input type="hidden" name="div3" value="{{!empty($div3) ? $div3 : ''}}">
-                 <input type="hidden" name="div4" value="{{!empty($div4) ? $div4 : ''}}">
-                 <input type="hidden" name="div5" value="{{!empty($div5) ? $div5 : ''}}">
-					{{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
                     <div class="box-group" id="accordion">
@@ -82,8 +70,7 @@
 						<div class="row no-print">
 							<div class="col-xs-12">
 							<button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back</button>
-								<button type="submit" id="print" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button>
-								 <!-- <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button> -->
+								 <!-- <button type="submit" id="print" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print report</button> <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button> -->
 							</div>
 						</div>
 								<!-- End amortization /table -->
@@ -135,6 +122,10 @@
 					},
 					{
 						extend: 'copyHtml5',
+						title: 'Leave History Report'
+					},
+					{
+						extend: 'pdfHtml5',
 						title: 'Leave History Report'
 					}
 				]

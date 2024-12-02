@@ -17,6 +17,7 @@ use App\Mail\sendManagersListOfAbsentUsers;
 use App\Models\ErsAbsentUsers;
 use App\Models\ExemptedUsers;
 use App\ManualClockin;
+use App\EmployeesTimeAndAttendance;
 use App\Models\ManagerReport;
 use Carbon\Carbon;
 use ErrorException;
@@ -32,6 +33,12 @@ use Illuminate\Support\Facades\Mail;
 use OpenSpout\Writer\Common\Creator\Style\StyleBuilder;
 use phpDocumentor\Reflection\Types\Integer;
 use Rap2hpoutre\FastExcel\FastExcel;
+use Illuminate\Support\Facades\DB;
+
+//use App\Models\ManualClockin;
+//use App\Models\HRPerson;
+//use Carbon\Carbon;
+//use GuzzleHttp\Client;
 
 
 class ReadErsDetails
@@ -69,12 +76,9 @@ class ReadErsDetails
             . '&export=0'
             . '&display=2'; // export type
 
-//echo $theUrl;
-///die('etst');
         $res = $client->request('GET', $theUrl);
         $body = $res->getBody()->getContents();
         return json_decode($body, true);
-
     }
 
 
@@ -170,7 +174,7 @@ class ReadErsDetails
 
         return $collection;
     }
-
+	
     /**
      * @param $absentUsers
      * @param $date
@@ -467,5 +471,216 @@ class ReadErsDetails
 				return $isOnLeaveToday;
 		}
     }
+	
+	// getClockinRecordsFromERS
+	public function getClockinRecordsFromERS(): \Illuminate\Support\Collection
+    {
+        /**
+         * call  connect to Ers class for the api response
+         */
+        try {
+            // Connect to the external API
+            $resp = $this->connectToErs();
+
+            if (empty($resp['Raw_Clocks'])) {
+                throw new \ErrorException('No clock-in data found.');
+            }
+
+            // Decode API response
+            $clockData = $resp['Raw_Clocks'];
+
+            // Convert data to a collection for processing
+            $collection = collect($clockData);
+
+            // Group data by Employee_Pin
+            $grouped = $collection->groupBy('Employee_Pin');
+
+            // Process each group and save to the database
+            $grouped->each(function ($records, $pin) {
+                $firstClockIn = collect($records)->sortBy('Clocked')->first();
+                $lastClockIn = collect($records)->sortByDesc('Clocked')->first();
+
+                $data = [
+                    'hr_id' => $pin,
+                    'employee_number' => $this->getHRID($pin),
+                    'clokin_time' => $firstClockIn['Clocked'],
+                    'clockin_locations' => $firstClockIn['Device'],
+                    'clockout_time' => $lastClockIn['Clocked'],
+                    'clockout_locations' => $lastClockIn['Device'],
+                    'date_of_action' => now()->toDateString(),
+                    'hours_worked' => $this->calculateHoursWorked($firstClockIn['Clocked'], $lastClockIn['Clocked']),
+                    'late_arrival' => $this->isLate($firstClockIn['Clocked'], $pin),
+                    'early_clockout' => $this->earlyLeft($lastClockIn['Clocked'], $pin),
+                    'absent' => false, // Add logic for absence if needed
+                    'onleave' => false // Add logic for leave if needed
+                ];
+
+                // Save to the database
+                EmployeesTimeAndAttendance::create($data);
+            });
+
+            return response()->json(['message' => 'Clock-in data processed and saved successfully.']);
+        } catch (\Exception $e) {
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
+    }
+	
+	/**
+     * @return void
+     * @throws GuzzleException
+     * @throws \Throwable
+     * @Comment get time and attendance from ERS
+     */
+    public function getTimeAndAttendance()
+    {
+
+        $date_now = Carbon::now()->toDayDateTimeString();
+        $users = ManagerReport::getListOfManagers();
+
+        $absentUsers = $this->getClockinRecordsFromERS();
+		// add all 
+		$arrayEmpNum = array();
+		if (count($absentUsers) > 0) {
+            foreach ($absentUsers as $emploNumb) {
+				
+				if (in_array($emploNumb, $arrayEmpNum)) {
+					//echo "Got Irix";
+				}
+				else
+					array_push($arrayEmpNum,$emploNumb);
+			}
+		}
+
+		$results = HRPerson::select('employee_number')->whereIn('employee_number', $arrayEmpNum)->where('status',1)->orderBy('manager_id')->get();
+
+        //create a new collection with name, surname, and employee  number
+        $AbsentUsersColl = array();
+
+        if (count($results) > 0) {
+            foreach ($results as $absentUser) {
+				
+                $details = HRPerson::getUserDetails($absentUser->employee_number);
+                // if manager and second manager are set on the on employee profile
+				if (!empty($details['manager_id']))
+				{
+					$managerDetails = HRPerson::getManagername($details['manager_id']);
+					if (!empty($managerDetails['first_name']) && $managerDetails['surname'])
+						$managerName = $managerDetails['first_name']." ".$managerDetails['surname'];
+					else $managerName = '' ;
+				}
+				else $managerName;
+				// if department id are set on the on employee profile
+				if (!empty($details['division_level_4']))
+				{
+					$departDetails = HRPerson::getUserDepartment($details['division_level_4']);
+					if (!empty($departDetails['name']))
+						$deptName = $departDetails['name'];
+					else $deptName = '' ;
+				}
+				else $deptName;
+				// check leave status
+                $checkStatus = $this->userOnLeave($details->id);
+				if (!empty($checkStatus)) $leave = 'Yes';
+				else $leave = '';
+				
+				$AbsentUsersColl[] = ([
+					'employee_number' => $details['employee_number'],
+					'name' => $details['first_name'],
+					'surname' => $details['surname'],
+					'email' => $details['email'],
+					'On Leave' => $leave,
+					'Department' => $deptName,
+					'Manager' => $managerName,
+				]);
+            }
+        }
+        /**
+         * create an Excel file and store it the application
+         */
+        $header_style = (new StyleBuilder())->setFontBold()->build();
+        $rows_style = (new StyleBuilder())
+            ->setFontSize(10)
+            ->setShouldWrapText()
+            ->build();
+
+
+        $ExcelDoc = (new FastExcel($AbsentUsersColl))
+            ->headerStyle($header_style)
+            ->rowsStyle($rows_style)
+            ->export('storage/app/Absent Users.xls');
+
+        /**
+         * get the file from storage
+         */
+        $file = Storage::get('Absent Users.xls');
+
+        /**
+         * Delete the file from storage
+         */
+        Storage::delete('Absent Users.xls');
+
+
+        foreach ($users as $managers) {
+            $managersDet = HRPerson::getManagerDetails($managers->hr_id);
+            try {
+                Mail::to($managersDet['email'])->send(
+                    new sendManagersListOfAbsentUsers(
+                        $managersDet['first_name']
+                        , $file, $date_now
+                    ));
+                echo 'mgs sent';
+            } catch (\Exception $e) {
+                echo 'Error - ' . $e;
+            }
+        }
+
+    }
+	
+	private function calculateHoursWorked($startTime, $endTime)
+    {
+        $start = Carbon::parse($startTime);
+        $end = Carbon::parse($endTime);
+        return $start->diffInHours($end); // Calculate hours worked
+    }
+	// check if user clocked in late
+	private function isLate($clockinTime, $pin)
+	{
+		$clockIn = Carbon::parse($clockinTime);
+		$expected = HRPerson::where('employee_number', $pin)->first();
+
+		if (!$expected || empty($expected->start_time)) {
+			return false; // Default to not late if no start time is defined
+		}
+
+		// Combine the start_time with the date from clockIn for comparison
+		$expectedStart = Carbon::createFromFormat('Y-m-d H:i:s', $clockIn->format('Y-m-d') . ' ' . $expected->start_time . ':00');
+
+		return $clockIn->greaterThan($expectedStart);
+	}
+	// check if user clocked in early
+	private function earlyLeft($clockoutTime, $pin)
+	{
+		$clockOut = Carbon::parse($clockoutTime);
+		$expected = HRPerson::where('employee_number', $pin)->first();
+
+		if (!$expected || empty($expected->end_time)) {
+			return false; // Default to not early if no end time is defined
+		}
+
+		// Combine the end_time with the date from clockOut for comparison
+		$expectedEnd = Carbon::createFromFormat('Y-m-d H:i:s', $clockOut->format('Y-m-d') . ' ' . $expected->end_time . ':00');
+
+		return $clockOut->lessThan($expectedEnd);
+	}
+	// check if user clocked in early
+	private function getHRID($pin)
+	{
+		$result = HRPerson::where('employee_number', $pin)->first();
+
+		if (empty($result->id)) {
+			return false; // Default to not early if no end time is defined
+		}
+		return $result->id;
+	}
 
 }

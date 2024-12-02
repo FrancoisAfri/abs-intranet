@@ -8,39 +8,30 @@
         <div class="col-sm-12">
             <div class="box">
                 <div class="box-header">
-                    <h3 class="box-title">Leave Status Applications Report</h3>
+                    <h3 class="box-title">Leave Applications Status Report</h3>
                 </div>
-                <!-- /.box-header -->
-                <form class="form-horizontal" method="POST" action="/leave/reports/pending-leaves/print" target="_blank">
-                    <input type="hidden" name="employees[]" value="{{ $employees }}">
-                    <input type="hidden" name="leave_types_id" value="{{ $leaveTypeID }}">
-                    <input type="hidden" name="action_date" value="{{ $action_date }}">
-                    <input type="hidden" name="status" value="{{ $status }}">
-                    {{ csrf_field() }}
-                    <div class="box-body">
-                        <!-- Collapsible section containing the amortization schedule -->
-                        <div class="box-group" id="accordion">
-                            <!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
-                            <table id="example2" class="table table-bordered table-hover">
-                                <thead>
-									<tr>
-										<th class="text-center" width="5px">#</th>
-										@foreach($division_levels as $division_level)
-											<th>{{ $division_level->name }}</th>
-										@endforeach
-										<th>Employee Number</th>
-										<th>Employee Name</th>
-										<th>Leave Type</th>
-										<th>Start Date</th>
-										<th>End Date</th>
-										<th>Status</th>
-									</tr>
-								</thead>
-								<tbody>
-                                @if(count($leaveApplications) > 0)
-                                    @foreach($leaveApplications as $leaveApplication)
+				<div class="box-body">
+					<!-- Collapsible section containing the amortization schedule -->
+					<div class="box-group" id="accordion">
+						<!-- we are adding the .panel class so bootstrap.js collapse plugin detects it -->
+						<table id="example2" class="table table-bordered table-hover">
+							<thead>
+								<tr>
+									@foreach($division_levels as $division_level)
+										<th>{{ $division_level->name }}</th>
+									@endforeach
+									<th>Employee Number</th>
+									<th>Employee Name</th>
+									<th>Leave Type</th>
+									<th>Start Date</th>
+									<th>End Date</th>
+									<th>Status</th>
+								</tr>
+							</thead>
+							<tbody>
+								@if(count($leaveApplications) > 0)
+									@foreach($leaveApplications as $leaveApplication)
 										<tr>
-											<td class="text-center" nowrap>{{ $loop->iteration }}</td>
 											<td nowrap>{{ ($leaveApplication->person->division->name) ? $leaveApplication->person->division->name : '' }}</td>
 											<td nowrap>{{ ($leaveApplication->person->department->name) ? $leaveApplication->person->department->name : '' }}</td>
 											<td nowrap>{{ ($leaveApplication->person) ? $leaveApplication->person->employee_number : '' }}</td>
@@ -50,39 +41,38 @@
 											<td nowrap>{{ ($leaveApplication->end_time) ? date('d M Y H:i', $leaveApplication->end_time) : (($leaveApplication->end_date) ? date('d M Y', $leaveApplication->end_date) : '') }}</td>
 											<td nowrap>{{ ($leaveApplication->status) ? $statusArray[$leaveApplication->status]: '' }}</td>
 										</tr>
-                                    @endforeach
-                                @endif
-								</tbody>
-								<tfoot>
-									<tr>
-										<th class="text-center" width="5px">#</th>
-										@foreach($division_levels as $division_level)
-											<th>{{ $division_level->name }}</th>
-										@endforeach
-										<th>Employee Number</th>
-										<th>Employee Name</th>
-										<th>Leave Type</th>
-										<th>Start Date</th>
-										<th>End Date</th>
-										<th>Status</th>
-									</tr>
-								</tfoot>
-                            </table>
-                            <div class="row no-print">
-                                <div class="col-xs-12">
-                                    <a href="/leave/reports" id="cancel" class="btn btn-default"><i class="fa fa-arrow-left"></i> Back</a>
-                                </div>
-                            </div>
-                            <!-- End amortization /table <button type="submit" id="cancel" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print</button> -->
-                        </div>
-                        <!-- /. End Collapsible section containing the amortization schedule -->
-                    </div>
-                </form>
+									@endforeach
+								@endif
+							</tbody>
+							<tfoot>
+								<tr>
+									@foreach($division_levels as $division_level)
+										<th>{{ $division_level->name }}</th>
+									@endforeach
+									<th>Employee Number</th>
+									<th>Employee Name</th>
+									<th>Leave Type</th>
+									<th>Start Date</th>
+									<th>End Date</th>
+									<th>Status</th>
+								</tr>
+							</tfoot>
+						</table>
+						<div class="row no-print">
+							<div class="col-xs-12">
+								<button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back</button>
+							</div>
+						</div>
+						<!-- End amortization /table <button type="submit" id="cancel" class="btn btn-primary pull-right"><i class="fa fa-print"></i> Print</button> -->
+					</div>
+					<!-- /. End Collapsible section containing the amortization schedule -->
+				</div>
             </div>
         </div>
     </div>
 @endsection
 @section('page_script')
+	<!-- DataTables -->
 	<!-- DataTables -->
 	<script src="/bower_components/AdminLTE/plugins/datatables/jquery.dataTables.min.js"></script>
 	<script src="/bower_components/AdminLTE/plugins/datatables/dataTables.bootstrap.min.js"></script>
@@ -101,6 +91,7 @@
 		});
 	})
 		$(function () {
+			
 			$('#example2').DataTable({
 				"paging": true,
 				"lengthChange": true,
@@ -123,9 +114,14 @@
 					{
 						extend: 'copyHtml5',
 						title: 'Leave Status Report'
+					},
+					{
+						extend: 'pdfHtml5',
+						title: 'Leave Status Report'
 					}
 				]
 			});
+			
 		});
 	</script>
 @endsection

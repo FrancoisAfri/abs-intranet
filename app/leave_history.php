@@ -86,9 +86,9 @@ class leave_history extends Model
                     $query->where('leave_history.leave_type_id', $LevTypID);
                 }
             })
-            ->orderBy('leave_history.action_date')
             ->orderBy('hr_people.first_name')
             ->orderBy('hr_people.surname')
+			->orderBy('leave_history.action_date')
             ->orderBy('leave_types.name')
             ->get();
 

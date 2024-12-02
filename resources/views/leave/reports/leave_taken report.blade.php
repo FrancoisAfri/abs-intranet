@@ -10,17 +10,6 @@
                 <div class="box-header">
                     <h3 class="box-title">Leave Taken Report</h3>
                 </div>
-                <!-- /.box-header -->
-				<form class="form-horizontal" method="POST" action="/leave_taken/print">
-                 <input type="hidden" name="action_date" value="{{!empty($actionDate) ? $actionDate : ''}}">
-                 <input type="hidden" name="hr_person_id" value="{{!empty($userID) ? $userID : ''}}">
-                 <input type="hidden" name="leave_types_id" value="{{!empty($LevTypID) ? $LevTypID : ''}}">
-                 <input type="hidden" name="div1" value="{{!empty($div1) ? $div1 : ''}}">
-                 <input type="hidden" name="div2" value="{{!empty($div2) ? $div2 : ''}}">
-                 <input type="hidden" name="div3" value="{{!empty($div3) ? $div3 : ''}}">
-                 <input type="hidden" name="div4" value="{{!empty($div4) ? $div4 : ''}}">
-                 <input type="hidden" name="div5" value="{{!empty($div5) ? $div5 : ''}}">
-					{{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
                     <div class="box-group" id="accordion">
@@ -31,26 +20,26 @@
 									<thead>
 										<tr>
 											@foreach($division_levels as $division_level)
-												<th>{{ $division_level->name }}</th>
+												<th style="text-align:center;">{{ $division_level->name }}</th>
 											@endforeach
-											<th>Employee Number </th>
-											<th>Employee Name </th>
-											<th>Leave Type</th>
-											<th>Date taken</th>
-											<th>Day(s)</th>
+											<th style="text-align:center;">Employee Number </th>
+											<th style="text-align:center;">Employee Name </th>
+											<th style="text-align:center;">Leave Type</th>
+											<th style="text-align:center;">Date taken</th>
+											<th style="text-align:center;">Day(s)</th>
 										</tr>
 									</thead>
 									<tbody>
 									@if(count($leaveTakens) > 0)
 										@foreach($leaveTakens as $leaveTaken)
 											<tr>
-												<td>{{ !empty($leaveTaken->person->division->name) ? $leaveTaken->person->division->name : '' }}</td>
-												<td>{{ !empty($leaveTaken->person->department->name) ? $leaveTaken->person->department->name : '' }}</td>
-												<td>{{ !empty($leaveTaken->employee_number) ? $leaveTaken->employee_number : '' }}</td>
-												<td>{{ !empty($leaveTaken->first_name) && !empty($leaveTaken->surname) ? $leaveTaken->first_name.' '.$leaveTaken->surname : '' }}</td>
-												<td>{{ !empty($leaveTaken->leave_type_name) ? $leaveTaken->leave_type_name : '' }}</td>
-												<td>{{ !empty($leaveTaken->start_date) ? date('Y M d : H : i : s', $leaveTaken->start_date) : '' }}</td>
-												<td>{{ !empty($leaveTaken->leave_taken) ? number_format($leaveTaken->leave_taken/8, 2) : '' }} days(s)</td>
+												<td style="text-align:center;">{{ !empty($leaveTaken->person->division->name) ? $leaveTaken->person->division->name : '' }}</td>
+												<td style="text-align:center;">{{ !empty($leaveTaken->person->department->name) ? $leaveTaken->person->department->name : '' }}</td>
+												<td style="text-align:center;">{{ !empty($leaveTaken->employee_number) ? $leaveTaken->employee_number : '' }}</td>
+												<td style="text-align:center;">{{ !empty($leaveTaken->first_name) && !empty($leaveTaken->surname) ? $leaveTaken->first_name.' '.$leaveTaken->surname : '' }}</td>
+												<td style="text-align:center;">{{ !empty($leaveTaken->leave_type_name) ? $leaveTaken->leave_type_name : '' }}</td>
+												<td style="text-align:center;">{{ !empty($leaveTaken->start_date) ? date('Y M d : H : i : s', $leaveTaken->start_date) : '' }}</td>
+												<td style="text-align:center;">{{ !empty($leaveTaken->leave_taken) ? number_format($leaveTaken->leave_taken/8, 2) : '' }} days(s)</td>
 											</tr>
 										@endforeach
 									@endif
@@ -58,21 +47,21 @@
 									<tfoot>
 										<tr>
 											@foreach($division_levels as $division_level)
-												<th>{{ $division_level->name }}</th>
+												<th style="text-align:center;">{{ $division_level->name }}</th>
 											@endforeach
-											<th>Employee Number </th>
-											<th>Employee Name </th>
-											<th>Leave Type</th>
-											<th>Date taken</th>
-											<th>Day(s)</th>
+											<th style="text-align:center;">Employee Number </th>
+											<th style="text-align:center;">Employee Name </th>
+											<th style="text-align:center;">Leave Type</th>
+											<th style="text-align:center;">Date taken</th>
+											<th style="text-align:center;">Day(s)</th>
 										</tr>
 									</tfoot>
 								</table>
 								<div class="row no-print">
 									<div class="col-xs-12">
 									<button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back</button>
-										<button type="submit" id="print" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
-										 <!-- <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button> -->
+										<!-- <button type="submit" id="print" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
+										 <button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Cancel</button> -->
 									</div>
 								</div>
 								<!-- End amortization /table -->
@@ -132,6 +121,10 @@
 					},
 					{
 						extend: 'copyHtml5',
+						title: 'Leave Taken Report'
+					},
+					{
+						extend: 'pdfHtml5',
 						title: 'Leave Taken Report'
 					}
 				]

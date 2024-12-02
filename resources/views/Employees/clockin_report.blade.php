@@ -23,12 +23,31 @@
                         <div class="form-group container-sm">
                             <form class="form-horizontal" method="get" action="{{ route('employee.clockin_report') }}">
                                 {{ csrf_field() }}
-                                <div class="col-md-6">
+                                <div class="col-md-12" id="view_users">
                                     <div class="form-group">
                                         <div class="col-sm-4">
+											@foreach($division_levels as $division_level)
+												<div class="form-group {{ $errors->has('division_level_' . $division_level->level) ? ' has-error' : '' }}">
+													<label for="{{ 'division_level_' . $division_level->level }}"
+														   class="col-sm-2 control-label">{{ $division_level->name }}</label>
+
+													<div class="col-sm-10">
+														<div class="input-group">
+															<div class="input-group-addon">
+																<i class="fa fa-black-tie"></i>
+															</div>
+															<select id="{{ 'division_level_' . $division_level->level }}"
+																	name="{{ 'division_level_' . $division_level->level }}"
+																	class="form-control" onchange="divDDOnChange(this, 'hr_person_id', 'view_users')">
+															</select>
+														</div>
+													</div>
+												</div>
+											@endforeach
+                                        </div>
+										<div class="col-sm-4">
                                             <label>Employees</label>
-											<select class="form-control select2" style="width: 100%;"
-													id="employee_number" name="employee_number">
+											<select class="form-control select2" multiple="multiple" style="width: 100%;" id="employee_number" name="employee_number[]">
 												<option value="">*** Select Employee ***</option>
 												@foreach($employees as $employee)
 													<option value="{{ $employee->id }} ">{{$employee->first_name . ' ' . $employee->surname }}</option>
@@ -37,8 +56,8 @@
                                         </div>
 										<div class="col-sm-4">
                                             <label>Types</label>
-                                            <select class="form-control select2 " style="width: 100%;"
-                                                    id="clockin_type" name="clockin_type" data-select2-id="1"
+                                            <select class="form-control select2 " style="width: 100%;" multiple="multiple" 
+                                                    id="clockin_type" name="clockin_type[]" data-select2-id="1"
                                                     tabindex="-1" aria-hidden="true">
                                                 <option value="0">** Select Type **</option>
                                                     <option value="1">CLOCK IN</option>
@@ -65,6 +84,9 @@
                             <thead>
                             <tr>
                                 <th style="width: 10px; text-align: center;"></th>
+								@foreach($levels as $level)
+									<th style="width: 10px; text-align: center;">{{ $level->name }}</th>
+								@endforeach
                                 <th style="width: 5px; text-align: center;">Employee Number</th>
                                 <th style="width: 5px; text-align: center;">Name</th>
                                 <th style="width: 5px; text-align: center;">Email</th>
@@ -96,6 +118,8 @@
                                                     </div>
                                                 </div>
                                             </td>
+											<td style="text-align:center;">{{ !empty($clockin->user->division->name) ? $clockin->user->division->name : '' }}</td>
+											<td style="text-align:center;">{{ !empty($clockin->user->department->name) ? $clockin->user->department->name : '' }}</td>
                                             <td style="text-align:center;">
                                                 <span data-toggle="tooltip" title="" class="badge bg-grey"
                                                       data-original-title="">{{ (!empty($clockin->user->employee_number)) ? $clockin->user->employee_number : '' }}</span>
@@ -123,6 +147,8 @@
     </div>
 @stop
 @section('page_script')
+<!-- Select2 -->
+    <script src="/bower_components/AdminLTE/plugins/select2/select2.full.min.js"></script>
     <!-- DataTables -->
     <script src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
@@ -145,6 +171,8 @@
     <script src="/bower_components/AdminLTE/plugins/daterangepicker/moment.min.js"></script>
     <script src="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.js"></script>
     <!-- End Bootstrap File input -->
+	<!-- Ajax dropdown options load -->
+    <script src="/custom_components/js/load_dropdown_options.js"></script>
     <script type="text/javascript">
 
         function sendStatus() {
@@ -167,7 +195,8 @@
         //TODO WILL CREATE A SIGLE GLOBAL FILE
 
         $(function () {
-
+			//Initialize Select2 Elements
+            $(".select2").select2();
             $('table.asset').DataTable({
 
                 paging: true,
@@ -210,7 +239,21 @@
                     $('#enlargeImageModal').modal('show');
                 });
             });
-
         });
+		//Load divisions drop down
+		var parentDDID = '';
+		var loadAllDivs = 1;
+		@foreach($division_levels as $division_level)
+			//Populate drop down on page load
+			var ddID = '{{ 'division_level_' . $division_level->level }}';
+			var postTo = '{!! route('divisionsdropdown') !!}';
+			var selectedOption = '';
+			var divLevel = parseInt('{{ $division_level->level }}');
+			var incInactive = -1;
+			var loadAll = loadAllDivs;
+			loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo);
+			parentDDID = ddID;
+			loadAllDivs = -1;
+		@endforeach 
     </script>
 @stop

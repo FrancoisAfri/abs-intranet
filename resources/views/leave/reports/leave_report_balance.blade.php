@@ -10,17 +10,6 @@
                 <div class="box-header">
                     <h3 class="box-title">Leave Report  Balance</h3>
                 </div>
-                <!-- /.box-header -->
-				<form class="form-horizontal" method="POST" action="/leave/bal">
-				<input type="hidden" name="userID" value="{{!empty($userID) ? $userID : ''}}">
-				<input type="hidden" name="LevTypID" value="{{!empty($LevTypID) ? $LevTypID : ''}}">
-				 <input type="hidden" name="div1" value="{{!empty($div1) ? $div1 : ''}}">
-                 <input type="hidden" name="div2" value="{{!empty($div2) ? $div2 : ''}}">
-                 <input type="hidden" name="div3" value="{{!empty($div3) ? $div3 : ''}}">
-                 <input type="hidden" name="div4" value="{{!empty($div4) ? $div4 : ''}}">
-                 <input type="hidden" name="div5" value="{{!empty($div5) ? $div5 : ''}}">
-               <!-- -->
-					{{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
                     <div class="box-group" id="accordion">
@@ -29,24 +18,24 @@
 							<thead>
 								<tr>
 									@foreach($division_levels as $division_level)
-										<th>{{ $division_level->name }}</th>
+										<th style="text-align:center;">{{ $division_level->name }}</th>
 									@endforeach
-									<th>Employee Number </th>
-									<th>Employee Name </th>
-									<th>Leave Type</th>
-									<th>Balance days(s)</th>
+									<th style="text-align:center;">Employee Number </th>
+									<th style="text-align:center;">Employee Name </th>
+									<th style="text-align:center;">Leave Type</th>
+									<th style="text-align:center;">Balance days(s)</th>
 								</tr>
 							</thead>
 							<tbody>
 							@if(count($credit) > 0)
 								@foreach($credit as $audit)
 									<tr>
-										<td>{{ !empty($audit->division->name) ? $audit->division->name : '' }}</td>
-										<td>{{ !empty($audit->department->name) ? $audit->department->name : '' }}</td>
-										<td>{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
-										<td>{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
-										<td>{{ !empty($audit->leaveType) ? $audit->leaveType : '' }}</td>
-										<td>{{ !empty($audit->Balance) ? number_format($audit->Balance/8, 2) : '' }} days(s)</td>
+										<td style="text-align:center;">{{ !empty($audit->division->name) ? $audit->division->name : '' }}</td>
+										<td style="text-align:center;">{{ !empty($audit->department->name) ? $audit->department->name : '' }}</td>
+										<td style="text-align:center;">{{ !empty($audit->employee_number) ? $audit->employee_number : '' }}</td>
+										<td style="text-align:center;">{{ !empty($audit->first_name) && !empty($audit->surname) ? $audit->first_name.' '.$audit->surname : '' }}</td>
+										<td style="text-align:center;">{{ !empty($audit->leaveType) ? $audit->leaveType : '' }}</td>
+										<td style="text-align:center;">{{ !empty($audit->Balance) ? number_format($audit->Balance/8, 2) : '' }} days(s)</td>
 									</tr>
 								@endforeach
 							@endif
@@ -54,26 +43,24 @@
 							<tfoot>
 								<tr>
 									@foreach($division_levels as $division_level)
-										<th>{{ $division_level->name }}</th>
+										<th style="text-align:center;">{{ $division_level->name }}</th>
 									@endforeach
-									<th>Employee Number </th>
-									<th>Employee Name </th>
-									<th>Leave Type</th>
-									<th>Balance days(s)</th>
+									<th style="text-align:center;">Employee Number </th>
+									<th style="text-align:center;">Employee Name </th>
+									<th style="text-align:center;">Leave Type</th>
+									<th style="text-align:center;">Balance days(s)</th>
 								</tr>
 							</tfoot>
 						</table>
 						<div class="row no-print">
 							<div class="col-xs-12">
 								<button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back</button>
-								<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
 							</div>
 						</div>
-								<!-- End amortization /table -->
+								<!-- End amortization /table <button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>-->
                     </div>
                     <!-- /. End Collapsible section containing the amortization schedule -->
                 </div>
-				</form>
             </div>
         </div>
     </div>
@@ -124,9 +111,14 @@
 					{
 						extend: 'copyHtml5',
 						title: 'Leave Balance Report'
+					},
+					{
+						extend: 'pdfHtml5',
+						title: 'Leave Balance Report'
 					}
 				]
 			});
+			
 		});
 	</script>
 @endsection

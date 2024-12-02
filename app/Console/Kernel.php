@@ -66,6 +66,7 @@ class Kernel extends ConsoleKernel
 		$schedule->command('schedule:employeeBirthday')->dailyAt('08:00');
 		$schedule->command('schedule:montlyAssetDepreciation')->monthlyOn(1, '04:00');
 		$schedule->command('schedule:policyRefresh')->dailyAt('11:30');
+		$schedule->command('schedule:gettimeAttendance')->weekdays()->dailyAt("23:30");
     }
 
     /**

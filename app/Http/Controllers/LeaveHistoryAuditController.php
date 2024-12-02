@@ -50,7 +50,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave Audit Report";
         $data['page_description'] = "Leave History Audit";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -220,7 +220,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave history Audit Report";
         $data['page_description'] = "Leave history Audit Report";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -278,7 +278,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave history Audit Report";
         $data['page_description'] = "Leave history Audit Report";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave History Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -390,7 +390,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave Report";
         $data['page_description'] = "Cancelled Leaves Report";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave Report', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -448,7 +448,7 @@ class LeaveHistoryAuditController extends Controller
 			//return $employees;
         #Query the leave credit
         $credit = leave_history::getLeaveBalance($employees, $LevTypID);
-
+		//return $credit;
         $data['userID'] = $userID;
         $data['LevTypID'] = $LevTypID;
         $data['credit'] = $credit;
@@ -461,7 +461,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave Balance Audit', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -509,7 +509,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave history Audit Report";
         $data['page_description'] = "Leave history Audit Report";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave History Audit', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -624,7 +624,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave Allowance";
         $data['page_description'] = "Report";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
         ];
 		$data['division_levels'] = $divisionLevels;
@@ -704,7 +704,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -762,7 +762,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Reports', 'active' => 1, 'is_module' => 0]
         ];
 
@@ -805,7 +805,7 @@ class LeaveHistoryAuditController extends Controller
         $data['page_title'] = "Leave Reports";
         $data['page_description'] = "Leave Report";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave Taken Audit', 'active' => 1, 'is_module' => 0]
         ];
         $data['active_mod'] = 'Leave Management';
@@ -911,9 +911,9 @@ class LeaveHistoryAuditController extends Controller
             ->get();
 
         $data['page_title'] = "Leave Report";
-        $data['page_description'] = "Cancelled Leaves Report";
+        $data['page_description'] = "Leave Applications Status";
         $data['breadcrumb'] = [
-            ['title' => 'Leave Management', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/Leave_History_Audit', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
+            ['title' => 'Leave Management', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 1], //  ['title' => 'Leave History Audit', 'path' => '/leave/reports', 'icon' => 'fa fa-eye', 'active' => 0, 'is_module' => 0],
             ['title' => 'Leave Report', 'active' => 1, 'is_module' => 0]
         ];
 		$data['division_levels'] = $divisionLevels;

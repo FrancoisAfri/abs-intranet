@@ -10,16 +10,6 @@
                 <div class="box-header">
                     <h3 class="box-title">Leave Allownce Report</h3>
                 </div>
-                <!-- /.box-header -->
-				<form class="form-horizontal" method="POST" action="/leave/print-allowance">
-                 <input type="hidden" name="hr_person_id" value="{{!empty($userID) ? $userID : ''}}">
-                 <input type="hidden" name="leave_types_id" value="{{!empty($LevTypID) ? $LevTypID : ''}}">
-				  <input type="hidden" name="div1" value="{{!empty($div1) ? $div1 : ''}}">
-                 <input type="hidden" name="div2" value="{{!empty($div2) ? $div2 : ''}}">
-                 <input type="hidden" name="div3" value="{{!empty($div3) ? $div3 : ''}}">
-                 <input type="hidden" name="div4" value="{{!empty($div4) ? $div4 : ''}}">
-                 <input type="hidden" name="div5" value="{{!empty($div5) ? $div5 : ''}}">
-					{{ csrf_field() }}
                 <div class="box-body">
                     <!-- Collapsible section containing the amortization schedule -->
                     <div class="box-group" id="accordion">						
@@ -27,26 +17,26 @@
 							<thead>
 								<tr>
 									@foreach($division_levels as $division_level)
-										<th>{{ $division_level->name }}</th>
+										<th style="text-align:center;">{{ $division_level->name }}</th>
 									@endforeach
-									<th>Employee Number </th>
-									<th>Employee Name </th>
-									<th>Leave Type </th>
-									<th>Min Day(s)</th>
-									<th>Max Day(s)</th>
+									<th style="text-align:center;">Employee Number </th>
+									<th style="text-align:center;">Employee Name </th>
+									<th style="text-align:center;">Leave Type </th>
+									<th style="text-align:center;">Min Day(s)</th>
+									<th style="text-align:center;">Max Day(s)</th>
 								</tr>
 							</thead>
 							<tbody>
 							 @if(count($allowances) > 0)
 								@foreach($allowances as $allowance)
 									<tr>
-										<td>{{ !empty($allowance->division->name) ? $allowance->division->name : '' }}</td>
-										<td>{{ !empty($allowance->department->name) ? $allowance->department->name : '' }}</td>
-									   <td>{{ !empty($allowance->employee_number) ? $allowance->employee_number : '' }}</td>
-										<td>{{ !empty($allowance->first_name) && !empty($allowance->surname) ? $allowance->first_name.' '.$allowance->surname : '' }}</td>
-										<td>{{ !empty($allowance->leave_type_name) ? $allowance->leave_type_name : $allowance->leave_type_name }}</td>
-										<td>{{ !empty($allowance->min) ? $allowance->min : $allowance->min }}</td>
-										<td>{{ !empty($allowance->max) ? $allowance->max : $allowance->max }}</td>
+										<td style="text-align:center;">{{ !empty($allowance->division->name) ? $allowance->division->name : '' }}</td>
+										<td style="text-align:center;">{{ !empty($allowance->department->name) ? $allowance->department->name : '' }}</td>
+										<td style="text-align:center;">{{ !empty($allowance->employee_number) ? $allowance->employee_number : '' }}</td>
+										<td style="text-align:center;">{{ !empty($allowance->first_name) && !empty($allowance->surname) ? $allowance->first_name.' '.$allowance->surname : '' }}</td>
+										<td style="text-align:center;">{{ !empty($allowance->leave_type_name) ? $allowance->leave_type_name : $allowance->leave_type_name }}</td>
+										<td style="text-align:center;">{{ !empty($allowance->min) ? $allowance->min : $allowance->min }}</td>
+										<td style="text-align:center;">{{ !empty($allowance->max) ? $allowance->max : $allowance->max }}</td>
 									</tr>
 								@endforeach
 							@endif
@@ -54,19 +44,18 @@
 							<tfoot>
 								<tr>
 									@foreach($division_levels as $division_level)
-										<th>{{ $division_level->name }}</th>
+										<th style="text-align:center;">{{ $division_level->name }}</th>
 									@endforeach
-									<th>Employee Number </th>
-									<th>Employee Name </th>
-									<th>Leave Type </th>
-									<th>Min Day(s)</th>
-									<th>Max Day(s)</th>
+									<th style="text-align:center;">Employee Number </th>
+									<th style="text-align:center;">Employee Name </th>
+									<th style="text-align:center;">Leave Type </th>
+									<th style="text-align:center;">Min Day(s)</th>
+									<th style="text-align:center;">Max Day(s)</th>
 								</tr>
 							</tfoot>
 						</table>
 						<div class="row no-print">
 							<div class="col-xs-12">
-								<button type="submit" class="btn btn-primary pull-right"><i class="fa fa-print"></i>Print report</button>
 								<button type="button" id="cancel" class="btn btn-primary"><i class="fa fa-arrow-left"></i> Back</button>
 							</div>
 						</div>
@@ -119,6 +108,10 @@
 					},
 					{
 						extend: 'copyHtml5',
+						title: 'Leave Allowance Report'
+					},
+					{
+						extend: 'pdfHtml5',
 						title: 'Leave Allowance Report'
 					}
 				]

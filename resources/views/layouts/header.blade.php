@@ -158,9 +158,9 @@
                             <div class="pull-left">
                                 <a href="/employee/show/{{str_replace(' ', '_', strtolower($user->person->first_name) )}}-{{$user->person->id}}-{{str_replace(' ', '_', strtolower($user->person->surname))}}" class="btn btn-default btn-flat">Profile</a>
                             </div>
-                                    <div class="pull-left">
+                                    <!--<div class="pull-left">
                                 <a href="{{ ($user->type === 2) ? '' : '/general_information/view' }}" class="btn btn-default btn-flat">Informations</a>
-                            </div>
+                            </div>-->
                             <div class="pull-right">
                                 <a href="{{ url('/logout') }}" class="btn btn-default btn-flat"
                                    onclick="event.preventDefault();

@@ -193,8 +193,19 @@
 
                     </td>
                 </tr>
-                
+				<tr>
+                    <td>
+                        <div class="d-flex align-items-center">
+                            <strong>Working Hours</strong>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="col-md-6">
+							{{ (!empty($employee->start_time)) ? $employee->start_time : '' }} - {{ (!empty($employee->end_time)) ? $employee->end_time : '' }}
+						</div>
 
+                    </td>
+                </tr>
                 </tbody>
             </table>
         </div>
