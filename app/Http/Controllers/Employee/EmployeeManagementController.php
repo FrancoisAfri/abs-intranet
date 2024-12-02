@@ -9,6 +9,7 @@ use App\DivisionLevelTwo;
 use App\Mail\SendHRChangesApproval;
 use App\Mail\SendRejectChanges;
 use App\ManualClockin;
+use App\EmployeesTimeAndAttendance;
 use App\TrainingDocuments;
 use App\DivisionLevel;
 use App\EmployeeTasks;
@@ -39,6 +40,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use RealRashid\SweetAlert\Facades\Alert;
+use Carbon\Carbon;
 
 class EmployeeManagementController extends Controller
 {
@@ -178,11 +180,10 @@ class EmployeeManagementController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //dd($request);
         /**
          * get user location
          */
-        $latLong = $request['latitudes'] . ',' . $request['longitudes'];
+        /*$latLong = $request['latitudes'] . ',' . $request['longitudes'];
 
         if (!empty($request['latitudes']) && !empty($request['longitudes']))
             $location = $this->getLocation($latLong);
@@ -199,9 +200,177 @@ class EmployeeManagementController extends Controller
             'location' => $location,
             'employee_number' => $user->person->employee_number
         ]);
+		if ($status == 1)
+		{
+			$timeAndAttendance = new EmployeesTimeAndAttendance();
+			$timeAndAttendance->hr_id = $user->person->id;
+			$timeAndAttendance->employee_number = $user->person->employee_number;
+			$timeAndAttendance->clokin_time = date('Y-m-d H:i:s');
+			$timeAndAttendance->clockin_locations = $location;
+			$timeAndAttendance->date_of_action = Carbon::today()->toDateString();
+			$timeAndAttendance->late_arrival = $this->isLate(date('Y-m-d H:i:s'), $user->person->employee_number);
+			$timeAndAttendance->absent = false;
+			$timeAndAttendance->onleave = false;
+			$timeAndAttendance->save();
+		}
+		else
+		{
+			//get last user clockin
+			$today = Carbon::today()->toDateString(); // Get today's date in 'Y-m-d' format
+			
+			$record = EmployeesTimeAndAttendance::whereDate('date_of_action', $today)
+			->where('hr_id',$user->person->id)
+			->where('employee_number',$user->person->employee_number)
+			->first();
+			// update record
+			$record->clockout_time = date('Y-m-d H:i:s');
+			$record->clockout_locations = $location;
+			$record->date_of_action = Carbon::today()->toDateString();
+			$record->hours_worked = $this->calculateHoursWorked($record->clokin_time, date('Y-m-d H:i:s')),;
+			$record->early_clockout = $this->earlyLeft(date('Y-m-d H:i:s'), $user->person->employee_number);
+			$record->update();
+			
+		}
 
-        return redirect()->route('employee.clockin')->with('status', 'Clockin Saved!');
+        return redirect()->route('employee.clockin')->with('status', 'Clockin Saved!');*/
+		
+		$latLong = $request['latitudes'] . ',' . $request['longitudes'];
+		$location = !empty($request['latitudes']) && !empty($request['longitudes'])
+			? $this->getLocation($latLong)
+			: 'User did not allow location sharing';
+
+		$user = Auth::user()->load('person');
+		$status = !empty($request['clockin']) ? 1 : 2;
+
+		ManualClockin::create([
+			'ip_address' => $request->ip(),
+			'hr_id' => $user->person->id,
+			'clockin_type' => $status,
+			'clockin_time' => Carbon::now()->timestamp,
+			'location' => $location,
+			'employee_number' => $user->person->employee_number,
+		]);
+
+		if ($status == 1) {
+			EmployeesTimeAndAttendance::create([
+				'hr_id' => $user->person->id,
+				'employee_number' => $user->person->employee_number,
+				'clokin_time' => Carbon::now(),
+				'clockin_locations' => $location,
+				'date_of_action' => strtotime(Carbon::today()),
+				'late_arrival' => $this->isLate(Carbon::now(), $user->person->employee_number),
+				'absent' => false,
+				'onleave' => false,
+			]);
+		} else {
+			
+			$startOfDay = Carbon::today()->startOfDay()->timestamp;
+			$endOfDay = Carbon::today()->endOfDay()->timestamp;
+
+			$record = EmployeesTimeAndAttendance::where('date_of_action', '>=', $startOfDay)
+				->where('date_of_action', '<=', $endOfDay)
+				->where('hr_id', $user->person->id)
+				->where('employee_number', $user->person->employee_number)
+				->first();
+
+
+			if ($record) {
+				$record->update([
+					'clockout_time' => Carbon::now(),
+					'clockout_locations' => $location,
+					'hours_worked' => $this->calculateHoursWorked($record->clokin_time, Carbon::now()),
+					'early_clockout' => $this->earlyLeft(Carbon::now(), $user->person->employee_number),
+				]);
+			} else {
+				// Handle the case where no clock-in record exists
+			}
+		}
+
+		return redirect()->route('employee.clockin')->with('status', 'Clockin Saved!');
+
     }
+	///
+	private function calculateHoursWorked($startTime, $endTime)
+    {
+        $start = Carbon::parse($startTime);
+        $end = Carbon::parse($endTime);
+        return $start->diffInHours($end); // Calculate hours worked
+    }
+	// check if user clocked in late
+	/*private function isLate($clockinTime, $pin)
+	{
+		$clockIn = Carbon::parse($clockinTime);
+		$expected = HRPerson::where('employee_number', $pin)->first();
+
+		if (!$expected || empty($expected->start_time)) {
+			return false; // Default to not late if no start time is defined
+		}
+
+		// Combine the start_time with the date from clockIn for comparison
+		$expectedStart = Carbon::createFromFormat('Y-m-d H:i:s', $clockIn->format('Y-m-d') . ' ' . $expected->start_time . ':00');
+
+		return $clockIn->greaterThan($expectedStart);
+	}*/
+	private function isLate($clockinTime, $pin)
+	{
+		$clockIn = Carbon::parse($clockinTime);
+		$expected = HRPerson::where('employee_number', $pin)->first();
+
+		if (!$expected || empty($expected->start_time)) {
+			return false; // Default to not late if no start time is defined
+		}
+
+		// Combine the start_time with the date from clockIn for comparison
+		$expectedStart = Carbon::createFromFormat(
+			'Y-m-d H:i:s',
+			$clockIn->format('Y-m-d') . ' ' . $expected->start_time . ':00'
+		);
+
+		// Add 15 minutes buffer to the expected start time
+		$thresholdTime = $expectedStart->addMinutes(15);
+
+		// Check if the clock-in time is after the 15-minute threshold
+		return $clockIn->greaterThan($thresholdTime);
+	}
+
+	// check if user clocked in early
+	/*private function earlyLeft($clockoutTime, $pin)
+	{
+		$clockOut = Carbon::parse($clockoutTime);
+		$expected = HRPerson::where('employee_number', $pin)->first();
+
+		if (!$expected || empty($expected->end_time)) {
+			return false; // Default to not early if no end time is defined
+		}
+
+		// Combine the end_time with the date from clockOut for comparison
+		$expectedEnd = Carbon::createFromFormat('Y-m-d H:i:s', $clockOut->format('Y-m-d') . ' ' . $expected->end_time . ':00');
+
+		return $clockOut->lessThan($expectedEnd);
+	}*/
+	
+	private function earlyLeft($clockoutTime, $pin)
+	{
+		$clockOut = Carbon::parse($clockoutTime);
+		$expected = HRPerson::where('employee_number', $pin)->first();
+
+		if (!$expected || empty($expected->end_time)) {
+			return false; // Default to not early if no end time is defined
+		}
+
+		// Combine the end_time with the date from clockOut for comparison
+		$expectedEnd = Carbon::createFromFormat(
+			'Y-m-d H:i:s',
+			$clockOut->format('Y-m-d') . ' ' . $expected->end_time . ':00'
+		);
+
+		// Subtract 15 minutes from the expected end time
+		$thresholdTime = $expectedEnd->subMinutes(15);
+
+		// Check if the clock-out time is before the 15-minute threshold
+		return $clockOut->lessThan($thresholdTime);
+	}
+
 
     /**
      * @param $latlong

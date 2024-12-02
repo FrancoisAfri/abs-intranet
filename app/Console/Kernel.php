@@ -34,6 +34,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\EmployeeBirthday::class,
         \App\Console\Commands\AssetDepreciation::class,
         \App\Console\Commands\PolicyRefresh::class,
+        \App\Console\Commands\TimeAndAttendanceCron::class,
     ];
 
     /**

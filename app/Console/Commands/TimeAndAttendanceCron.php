@@ -11,7 +11,7 @@ class TimeAndAttendanceCron extends Command
      *
      * @var string
      */
-    protected $signature = 'command:name';
+    protected $signature = 'schedule:gettimeAttendance';
 
     /**
      * The console command description.
