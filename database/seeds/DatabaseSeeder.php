@@ -1547,6 +1547,42 @@ class DatabaseSeeder extends Seeder
         $ribbon->ribbon_path = 'loan/setup';
         $ribbon->access_level = 4;
         $module->addRibbon($ribbon);
+		//
+		$module = new modules();
+        $module->active = 1;
+        $module->name = 'Time & Attendance';
+        $module->code_name = 'attendance';
+        $module->path = 'employee/clockin';
+        $module->font_awesome = 'fa-eye';
+        $module->save();
+
+        //Insert navigation menus
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 1;
+        $ribbon->ribbon_name = 'Clockin';
+        $ribbon->description = 'Clockin';
+        $ribbon->ribbon_path = 'employee/clockin';
+        $ribbon->access_level = 1;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 2;
+        $ribbon->ribbon_name = 'Clockin Report';
+        $ribbon->description = 'Clockin Report';
+        $ribbon->ribbon_path = 'employee/clockin_report';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
+
+        $ribbon = new module_ribbons();
+        $ribbon->active = 1;
+        $ribbon->sort_order = 3;
+        $ribbon->ribbon_name = 'Attendance Report';
+        $ribbon->description = 'Attendance Report';
+        $ribbon->ribbon_path = 'employee/attendance-reports';
+        $ribbon->access_level = 4;
+        $module->addRibbon($ribbon);
 
         $leave_config = new leave_configuration();
         $leave_config->save();

@@ -49,7 +49,7 @@ class EmployeesTimeAndAttendance extends Model
 		// query
         $query = EmployeesTimeAndAttendance::with('user')
             ->orderBy('date_of_action', 'asc')
-            ->orderBy('hr_id', 'asc')
+            //->orderBy('hr_id', 'asc')
 			->where(function ($query) use ($actionFrom, $actionTo) {
                 if ($actionFrom > 0 && $actionTo > 0) {
                     $query->whereBetween('date_of_action', [$actionFrom, $actionTo]);

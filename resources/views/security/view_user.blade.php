@@ -479,30 +479,30 @@
                             </div>
                         </div>
 						<hr class="hr-text" data-content="Work Details">
-						<div class="form-group">
-							<label for="start_time" class="col-sm-2 control-label">Working Hours</label>
-							<div class="col-sm-5">
-								<div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input type="time" class="form-control" id="start_time"
-										   name="start_time" value="{{ $user->person->start_time }}"
-										   placeholder="Start Time Eg 8:00">
-								</div>
-							</div>
-							<div class="col-sm-5">
-								<div class="input-group">
-									<div class="input-group-addon">
-										<i class="fa fa-calendar"></i>
-									</div>
-									<input type="time" class="form-control" id="end_time"
-										   name="end_time" value="{{ $user->person->end_time }}"
-										   placeholder="End Time Eg 17:00">
-								</div>
-							</div>
-						</div>
 						@if (isset($view_by_admin) && $view_by_admin === 1)
+							<div class="form-group">
+								<label for="start_time" class="col-sm-2 control-label">Working Hours</label>
+								<div class="col-sm-5">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</div>
+										<input type="time" class="form-control" id="start_time"
+											   name="start_time" value="{{ $user->person->start_time }}"
+											   placeholder="Start Time Eg 8:00">
+									</div>
+								</div>
+								<div class="col-sm-5">
+									<div class="input-group">
+										<div class="input-group-addon">
+											<i class="fa fa-calendar"></i>
+										</div>
+										<input type="time" class="form-control" id="end_time"
+											   name="end_time" value="{{ $user->person->end_time }}"
+											   placeholder="End Time Eg 17:00">
+									</div>
+								</div>
+							</div>
 							<div class="form-group">
 								<label for="employee_number" class="col-sm-2 control-label">Employee Number</label>
 								<div class="col-sm-10">

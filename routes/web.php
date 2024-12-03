@@ -141,8 +141,12 @@ Route::group(['prefix' => 'employee', 'namespace' => 'Employee', 'middleware' =>
     Route::get('show/{employee}', 'EmployeeManagementController@show')
         ->name('employee.show');
 	
-	Route::get('clockin_report', 'EmployeeManagementController@clockinReports')
+	Route::get('clockin_report', 'EmployeeDashboardController@clockinReports')
         ->name('employee.clockin_report');
+	Route::get('attendance-reports', 'EmployeeDashboardController@attendanceReports')
+        ->name('attendance.report');
+	Route::get('dashboard', 'EmployeeDashboardController@employeeDashboard')
+        ->name('attendance.dashboard');
 		
 	Route::get('clockin', 'EmployeeManagementController@clockin')
         ->name('employee.clockin');

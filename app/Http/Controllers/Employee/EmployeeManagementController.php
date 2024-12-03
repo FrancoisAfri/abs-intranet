@@ -119,13 +119,13 @@ class EmployeeManagementController extends Controller
         $clockins = ManualClockin::getAllattendance($clocktypes, $employeesCol, $date);
         //return $clockins;
         $data = $this->breadCrump(
-            "Employee Records",
+            "Time & Attendance",
             "Clockin Report", "fa fa-lock",
             "Employee",
             "Clockin Report",
             "employee/clockin_report",
-            "Employee Management",
-            "Employee Management"
+            "Time & Attendance",
+            "Time & Attendance"
         );
 
         $m_silhouette = Storage::disk('local')->url('avatars/m-silhouette.jpg');
@@ -156,13 +156,13 @@ class EmployeeManagementController extends Controller
         $clockout = ManualClockin::checkClockout($user->person->employee_number);
 
         $data = $this->breadCrump(
-            "Employee Records",
+            "Time & Attendance",
             "Clockin", "fa fa-lock",
             "Employee",
             "Attendance Management",
             "/hr",
-            "Employee Management",
-            "Employee Management"
+            "Time & Attendance",
+            "Time & Attendance"
         );
 
         $data['clockout'] = $clockout;

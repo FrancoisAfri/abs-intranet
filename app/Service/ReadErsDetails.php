@@ -199,7 +199,21 @@ class ReadErsDetails
                         'is_email_sent' => 1,
 
                     ]);
-
+				// save in attendancde table
+				$timeAndAttendance = new EmployeesTimeAndAttendance();
+				$timeAndAttendance->hr_id = $userID;
+				$timeAndAttendance->employee_number = $getUsersDetails->employee_number;
+				$timeAndAttendance->clokin_time = '';
+				$timeAndAttendance->clockin_locations = '';
+				$timeAndAttendance->clockout_time = '';
+				$timeAndAttendance->clockout_locations = '';
+				$timeAndAttendance->date_of_action = $date;
+				$timeAndAttendance->hours_worked = 0;
+				$timeAndAttendance->late_arrival = '';
+				$timeAndAttendance->early_clockout = '';
+				$timeAndAttendance->absent = true;
+				$timeAndAttendance->onleave = true;
+				$timeAndAttendance->save();
                 //send email to remind them
                 try {
                     Mail::to($getUsersDetails->email)->send(new remindUserToapplyLeave($full_nane, $getUsersDetails->email, $date_from));
@@ -219,6 +233,21 @@ class ReadErsDetails
                         'is_email_sent' => 0,
 
                     ]);
+				// save in attendancde table
+				$timeAndAttendance = new EmployeesTimeAndAttendance();
+				$timeAndAttendance->hr_id = $userID;
+				$timeAndAttendance->employee_number = $getUsersDetails->employee_number;
+				$timeAndAttendance->clokin_time = '';
+				$timeAndAttendance->clockin_locations = '';
+				$timeAndAttendance->clockout_time = '';
+				$timeAndAttendance->clockout_locations = '';
+				$timeAndAttendance->date_of_action = $date;
+				$timeAndAttendance->hours_worked = 0;
+				$timeAndAttendance->late_arrival = '';
+				$timeAndAttendance->early_clockout = '';
+				$timeAndAttendance->absent = true;
+				$timeAndAttendance->onleave = false;
+				$timeAndAttendance->save();
             }
         }
     }
