@@ -52,21 +52,6 @@ class DashboardController extends Controller
 
     public function index()
     {
-		
-		$timeAndAttendance = new EmployeesTimeAndAttendance();
-				$timeAndAttendance->hr_id = 1;
-				$timeAndAttendance->employee_number = 2;
-				$timeAndAttendance->clokin_time = 3;
-				$timeAndAttendance->clockin_locations = 'e';
-				$timeAndAttendance->clockout_time = 333333;
-				$timeAndAttendance->clockout_locations = 'eeeeeeeeee';
-				$timeAndAttendance->date_of_action = 444;
-				$timeAndAttendance->hours_worked = 10;
-				$timeAndAttendance->late_arrival = true;
-				$timeAndAttendance->early_clockout = true;
-				$timeAndAttendance->absent = false;
-				$timeAndAttendance->onleave = false;
-				$timeAndAttendance->save();
 		$user = Auth::user()->load('person');
 		// check if there is a policy that needs refresh
 		$today =  strtotime(date("Y-m-d"));
