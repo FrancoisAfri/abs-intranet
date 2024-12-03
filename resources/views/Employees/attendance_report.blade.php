@@ -206,9 +206,32 @@
                 info: true,
                 autoWidth: true,
                 dom: 'Bfrtip',
-                buttons: [
-                    'copy', 'csv', 'excel', 'pdf', 'print'
-                ]
+				buttons: [
+						{
+							extend: 'copy',
+							text: 'Copy to Clipboard'
+						},
+						{
+							extend: 'csv',
+							text: 'Export to CSV',
+							filename: 'Time and Attendance Report'
+						},
+						{
+							extend: 'excel',
+							text: 'Export to Excel',
+							filename: 'Time and Attendance Report'
+						},
+						{
+							extend: 'pdf',
+							text: 'Export to PDF',
+							filename: 'Time and Attendance Report'
+						},
+						{
+							extend: 'print',
+							text: 'Print Table'
+						}
+				]
+
             });
 			//Date Range picker
             $('.daterangepicker').daterangepicker({
