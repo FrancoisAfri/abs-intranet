@@ -37,7 +37,7 @@ class EmployeesTimeAndAttendance extends Model
 	
 	// get Clockout and clockin
 	
-	public static function getAllattendance($employees, $dates)
+	public static function getAllattendance($employees, $dates, $late_arrival, $early_clockout, $absent, $onleave)
     {
 		// convert date
 		if (!empty($dates)) {
@@ -58,7 +58,19 @@ class EmployeesTimeAndAttendance extends Model
         if (!empty($employees)){
 			$query->whereIn('hr_id', $employees);
         }
+		if (!empty($late_arrival)){
+			$query->where('late_arrival', $late_arrival);
+        }
+		if (!empty($early_clockout)){
+			$query->where('early_clockout', $early_clockout);
+        }
+		if (!empty($absent)){
+			$query->where('absent', $absent);
+        }
+		if (!empty($onleave)){
+			$query->where('onleave', $onleave);
+        }
         $query->limit(2000);
         return $query->get();
-    }	
+    }
 }

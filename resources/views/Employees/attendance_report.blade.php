@@ -8,6 +8,11 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.5.1/css/buttons.dataTables.min.css">
 	    <!-- bootstrap datepicker -->
     <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/daterangepicker/daterangepicker.css">
+	    <!-- iCheck -->
+    <link rel="stylesheet" href="/bower_components/AdminLTE/plugins/iCheck/square/blue.css">
+	<!-- bootstrap file input -->
+    <link href="/bower_components/bootstrap_fileinput/css/fileinput.min.css" media="all" rel="stylesheet"
+          type="text/css"/>
 @stop
 @section('content')
     <div class="row">
@@ -21,7 +26,7 @@
                     <div class="box-header">
 
                         <div class="form-group container-sm">
-                            <form class="form-horizontal" method="get" action="{{ route('employee.clockin_report') }}">
+                            <form class="form-horizontal" method="get" action="{{ route('attendance.report') }}">
                                 {{ csrf_field() }}
                                 <div class="col-md-12" id="view_users">
                                     <div class="form-group">
@@ -55,9 +60,38 @@
 											</select>
                                         </div>
 										<div class="col-sm-4">
+                                           <label for="late_arrival" class="col-sm-2 control-label">Late Arrival</label>
+										   <div class="col-sm-4">
+												<label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
+													<input class="rdo-iCheck" type="checkbox" id="late_arrival" name="late_arrival" value="1">
+												</label>
+											</div>
+											<label for="early_clockout" class="col-sm-2 control-label">Early Clockout</label>
+										   <div class="col-sm-4">
+												<label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
+													<input class="rdo-iCheck" type="checkbox" id="early_clockout" name="early_clockout" value="1">
+												</label>
+											</div>
+                                        </div>
+										
+										<div class="col-sm-4">
+                                           <label for="absent" class="col-sm-2 control-label">Absent</label>
+										   <div class="col-sm-4">
+												<label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
+													<input class="rdo-iCheck" type="checkbox" id="absent" name="absent" value="1">
+												</label>
+											</div>
+											<label for="onleave" class="col-sm-2 control-label">On Leave</label>
+										   <div class="col-sm-4">
+												<label class="radio-inline pull-right no-padding" style="padding-left: 0px;">
+													<input class="rdo-iCheck" type="checkbox" id="onleave" name="onleave" value="1">
+												</label>
+											</div>
+                                        </div>
+										<div class="col-sm-4">
                                             <label>Dates</label>
-													<input type="text" class="form-control daterangepicker" id="date_of_action"
-														   name="date_of_action" value="" placeholder="Select Action Date...">
+											<input type="text" class="form-control daterangepicker" id="date_of_action"
+												name="date_of_action" value="" placeholder="Select Action Date...">
                                         </div>
                                     </div>
                                     <div class="box-footer">
@@ -137,6 +171,24 @@
                                 @endforeach
                             @endif
                             </tbody>
+							<tr>
+                                <th style="width: 10px; text-align: center;"></th>
+								@foreach($levels as $level)
+									<th style="width: 10px; text-align: center;">{{ $level->name }}</th>
+								@endforeach
+                                <th style="width: 5px; text-align: center;">Employee Number</th>
+                                <th style="width: 5px; text-align: center;">Name</th>
+                                <th style="width: 5px; text-align: center;">Date</th>
+                                <th style="width: 5px; text-align: center;">Clokin Time</th>
+                                <th style="width: 5px; text-align: center;">Location</th>
+                                <th style="width: 5px; text-align: center;">Clockout Time</th>
+                                <th style="width: 5px; text-align: center;">Location</th>
+                                <th style="width: 5px; text-align: center;">Hours Worked</th>
+                                <th style="width: 5px; text-align: center;">Late Arrival</th>
+                                <th style="width: 5px; text-align: center;">Early Clockout</th>
+                                <th style="width: 5px; text-align: center;">Absent</th>
+                                <th style="width: 5px; text-align: center;">On Leave</th>
+                            </tr>
                         </table>
                         <!-- /.box-body -->
                     </div>
@@ -154,7 +206,14 @@
     <script src="{{ asset('plugins/datatables/dataTables.bootstrap.min.js') }}"></script>
     <script src="{{ asset('custom_components/js/modal_ajax_submit.js') }}"></script>
     <script src="{{ asset('custom_components/js/deleteAlert.js') }}"></script>
-
+	<!-- purify.min.js is only needed if you wish to purify HTML content in your preview for HTML files. This must be loaded before fileinput.min.js -->
+	<script src="/bower_components/bootstrap_fileinput/js/plugins/purify.min.js"
+			type="text/javascript"></script>
+	<!-- the main fileinput plugin file -->
+	<script src="/bower_components/bootstrap_fileinput/js/fileinput.min.js"></script>
+	<!-- optionally if you need a theme like font awesome theme you can include it as mentioned below -->
+	<script src="/bower_components/bootstrap_fileinput/themes/fa/theme.js"></script>
+	<script src="/bower_components/AdminLTE/plugins/iCheck/icheck.min.js"></script>
     <script src="{{ asset('bower_components/bootstrap_fileinput/js/fileinput.min.js') }}"></script>
 
     <script src="{{ asset('plugins/axios/dist/axios.min.js') }}"></script>
@@ -195,6 +254,12 @@
         //TODO WILL CREATE A SIGLE GLOBAL FILE
 
         $(function () {
+			//Initialize iCheck/iRadio Elements
+			$('input').iCheck({
+				checkboxClass: 'icheckbox_square-blue',
+				radioClass: 'iradio_square-blue',
+				increaseArea: '10%' // optional
+			});
 			//Initialize Select2 Elements
             $(".select2").select2();
             $('table.asset').DataTable({
