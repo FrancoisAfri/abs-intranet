@@ -124,6 +124,10 @@ class EmployeeDashboardController extends Controller
         $div2 = !empty($request['division_level_2']) ? $request['division_level_2'] : 0;
         $div1 = !empty($request['division_level_1']) ? $request['division_level_1'] : 0;
 		$userID = !empty($request['employee_number']) ? $request['employee_number'] : 0;
+		$late_arrival = !empty($request['late_arrival']) ? $request['late_arrival'] : 0;
+		$early_clockout = !empty($request['early_clockout']) ? $request['early_clockout'] : 0;
+		$absent = !empty($request['absent']) ? $request['absent'] : 0;
+		$onleave = !empty($request['onleave']) ? $request['onleave'] : 0;
 		$employeesCol = array();
 		if (!empty($userID))
             $employeesCol = $userID;
@@ -139,7 +143,7 @@ class EmployeeDashboardController extends Controller
             $employeesCol = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
 			//return $employeesCol;
         // get data
-        $attendances = EmployeesTimeAndAttendance::getAllattendance($employeesCol, $date);
+        $attendances = EmployeesTimeAndAttendance::getAllattendance($employeesCol, $date, $late_arrival, $early_clockout, $absent, $onleave);
         //return $attendances;
         $data = $this->breadCrump(
             "Time & Attendance",
