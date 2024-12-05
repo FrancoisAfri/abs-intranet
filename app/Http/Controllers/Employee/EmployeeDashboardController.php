@@ -172,18 +172,10 @@ class EmployeeDashboardController extends Controller
     public function employeeDashboard(Request $request)
     {
         //Inputs
-        $employeID = !empty($request['employee_number']) ? $request['employee_number'] : 0;
-        $date = !empty($request['action_date']) ? $request['action_date'] : 0;
-        $clocktypes = !empty($request['clockin_type']) ? $request['clockin_type'] : 0;
-        $employees = HRPerson::where('status', 1)->orderBy('first_name', 'asc')->get();
-		$levels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->limit(2)->get();
-		$divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get();
-		$div5 = !empty($request['division_level_5']) ? $request['division_level_5'] : 0;
-        $div4 = !empty($request['division_level_4']) ? $request['division_level_4'] : 0;
-        $div3 = !empty($request['division_level_3']) ? $request['division_level_3'] : 0;
-        $div2 = !empty($request['division_level_2']) ? $request['division_level_2'] : 0;
-        $div1 = !empty($request['division_level_1']) ? $request['division_level_1'] : 0;
-		$userID = !empty($request['employee_number']) ? $request['employee_number'] : 0;
+		$user = Auth::user()->load('person');
+        $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get(); //->load('divisionLevelGroup');
+		
+		
 		$employeesCol = array();
 		if (!empty($userID))
             $employeesCol = $userID;
@@ -221,6 +213,6 @@ class EmployeeDashboardController extends Controller
 		$data['levels'] = $levels;
         $data['employees'] = $employees;
 
-        return view('Employees.clockin_report')->with($data);
+        return view('Employees.attendance_dashboard')->with($data);
     }
 }

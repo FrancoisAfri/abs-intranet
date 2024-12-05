@@ -531,28 +531,33 @@ class ReadErsDetails
                     'clockin_locations' => $firstClockIn['Device'],
                     'clockout_time' => $lastClockIn['Clocked'],
                     'clockout_locations' => $lastClockIn['Device'],
-                    'date_of_action' =>  strtotime(Carbon::now()->toDateString()),
+                    'date_of_action' =>  strtotime(Carbon::today()),
                     'hours_worked' => $this->calculateHoursWorked($firstClockIn['Clocked'], $lastClockIn['Clocked']),
                     'late_arrival' => $this->isLate($firstClockIn['Clocked'], $pin),
                     'early_clockout' => $this->earlyLeft($lastClockIn['Clocked'], $pin),
                     'absent' => false, // Add logic for absence if needed
                     'onleave' => false // Add logic for leave if needed
                 ];
-				
-				$timeAndAttendance = new EmployeesTimeAndAttendance();
-				$timeAndAttendance->hr_id = $data['hr_id'];
-				$timeAndAttendance->employee_number = $data['employee_number'];
-				$timeAndAttendance->clokin_time = $data['clokin_time'];
-				$timeAndAttendance->clockin_locations = $data['clockin_locations'];
-				$timeAndAttendance->clockout_time = $data['clockout_time'];
-				$timeAndAttendance->clockout_locations = $data['clockout_locations'];
-				$timeAndAttendance->date_of_action = $data['date_of_action'];
-				$timeAndAttendance->hours_worked = $data['hours_worked'];
-				$timeAndAttendance->late_arrival = $data['late_arrival'];
-				$timeAndAttendance->early_clockout = $data['early_clockout'];
-				$timeAndAttendance->absent = $data['absent'];
-				$timeAndAttendance->onleave = $data['onleave'];
-				$timeAndAttendance->save();
+				// get if a record has already been saved for the day on the user
+				$existingRecord = EmployeesTimeAndAttendance::where('hr_id', $data['hr_id'])
+				->where('date_of_action', strtotime(Carbon::today()))->first();
+				if (empty($existingRecord)) 
+				{
+					$timeAndAttendance = new EmployeesTimeAndAttendance();
+					$timeAndAttendance->hr_id = $data['hr_id'];
+					$timeAndAttendance->employee_number = $data['employee_number'];
+					$timeAndAttendance->clokin_time = $data['clokin_time'];
+					$timeAndAttendance->clockin_locations = $data['clockin_locations'];
+					$timeAndAttendance->clockout_time = $data['clockout_time'];
+					$timeAndAttendance->clockout_locations = $data['clockout_locations'];
+					$timeAndAttendance->date_of_action = $data['date_of_action'];
+					$timeAndAttendance->hours_worked = $data['hours_worked'];
+					$timeAndAttendance->late_arrival = $data['late_arrival'];
+					$timeAndAttendance->early_clockout = $data['early_clockout'];
+					$timeAndAttendance->absent = $data['absent'];
+					$timeAndAttendance->onleave = $data['onleave'];
+					$timeAndAttendance->save();
+				}
             });
 
             return response()->json(['message' => 'Clock-in data processed and saved successfully.']);

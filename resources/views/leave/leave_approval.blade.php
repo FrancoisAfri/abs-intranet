@@ -64,12 +64,11 @@
 												<td>{{ (!empty($approval->status)) ?  $leaveStatus[$approval->status] : ''}}</td>
 												<td>{{ !empty($approval->mg_firstname) && !empty($approval->mg_surname) ? $approval->mg_firstname.' '.$approval->mg_surname : '' }}</td>
 												<td>
-													<button type="button" id="Accept"
-															class="btn btn-success btn-xs btn-detail open-modal"
-															value="{{$approval->id}}"
-															onclick="postData({{$approval->id}}, 'approval_id')">Accept
+													<button type="button" id="Accept-{{$approval->id}}"
+														class="btn btn-success btn-xs btn-detail open-modal"
+														value="{{$approval->id}}"
+														onclick="disableButton(this); postData({{$approval->id}}, 'approval_id')">Accept
 													</button>
-
 												</td>
 												<td>
 													<button type="button" id="reject-reason" class="btn btn-danger btn-xs"
@@ -100,7 +99,6 @@
                         </div>
                     </div>
                 </div>
-				
                 <!-- Subdinate leave -->
 				<div class="box box-primary">
                     <div class="box-header with-border">
@@ -236,6 +234,10 @@
         function postData(id, data) {
             if (data == 'approval_id') location.href = "/leave/approval/" + id;
         }
+		function disableButton(button) {
+			button.disabled = true;
+			button.innerText = "Processing...";
+		}
 
         function reject(id, data) {
             if (data == 'reject_id') location.href = "/leave/reject/" + id;

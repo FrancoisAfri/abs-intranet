@@ -997,7 +997,7 @@ class EmployeeManagementController extends Controller
             }
 
             // Compare the field value and update the original record if they differ
-            if (isset($originalRecord->$key) && $value != $originalRecord->$key) {
+            if (isset($originalRecord->$key) && $value != $originalRecord->$key && !empty($value)) {
                 $originalRecord->$key = $value;
             }
         }
