@@ -319,24 +319,24 @@
 				<tr>
 					<td>
 						<div class="d-flex align-items-center">
-							<strong>Provident Fund</strong>
-						</div>
-					</td>
-					<td>
-						<div class="col-md-6">
-							{{ (!empty( $employee->provident_amount)) ? $employee->provident_amount : ''}}
-						</div>
-					</td>
-				</tr>
-				<tr>
-					<td>
-						<div class="d-flex align-items-center">
 							<strong>Provident Fund Name</strong>
 						</div>
 					</td>
 					<td>
 						<div class="col-md-6">
 							{{ (!empty( $employee->provident_name)) ? $employee->provident_name : ''}}
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="d-flex align-items-center">
+							<strong>Provident Fund Product</strong>
+						</div>
+					</td>
+					<td>
+						<div class="col-md-6">
+							{{ (!empty( $employee->provident_fund_product)) ? $employee->provident_fund_product : ''}}
 						</div>
 					</td>
 				</tr>

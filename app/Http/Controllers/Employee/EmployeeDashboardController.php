@@ -174,7 +174,7 @@ class EmployeeDashboardController extends Controller
         //Inputs
 		$user = Auth::user()->load('person');
         $divisionLevels = DivisionLevel::where('active', 1)->orderBy('id', 'desc')->get(); //->load('divisionLevelGroup');
-		
+		$activeModules = modules::where('active', 1)->get();
 		
 		$employeesCol = array();
 		if (!empty($userID))
@@ -191,7 +191,7 @@ class EmployeeDashboardController extends Controller
             $employeesCol = HRPerson::where('division_level_5', $div5)->where('status', 1)->pluck('id');
 			//return $employeesCol;
         // get data
-        $clockins = ManualClockin::getAllattendance($clocktypes, $employeesCol, $date);
+        //$clockins = ManualClockin::getAllattendance($clocktypes, $employeesCol, $date);
         //return $clockins;
         $data = $this->breadCrump(
             "Time & Attendance",
@@ -208,10 +208,10 @@ class EmployeeDashboardController extends Controller
 
         $data['m_silhouette'] = $m_silhouette;
         $data['f_silhouette'] = $f_silhouette;
-        $data['clockins'] = $clockins;
-		$data['division_levels'] = $divisionLevels;
-		$data['levels'] = $levels;
-        $data['employees'] = $employees;
+		$data['divisionLevels'] = $divisionLevels;
+		//$data['levels'] = $levels;
+       // $data['employees'] = $employees;
+		$data['activeModules'] = $activeModules;
 
         return view('Employees.attendance_dashboard')->with($data);
     }

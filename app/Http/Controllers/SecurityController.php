@@ -300,7 +300,7 @@ class SecurityController extends Controller
             'new_password' => 'required',
         ]);
 		
-        $resetPassword = $request->input('reset_password');
+        $resetPassword = !empty($request->input('reset_password')) ? $request->input('reset_password') : array();
 
         if (count($resetPassword) > 0) {
             foreach ($resetPassword as $userID => $accessLevel) {

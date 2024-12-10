@@ -457,17 +457,6 @@
                             </div> 
                         </div>
 						<div class="form-group">
-                            <label for="provident_amount" class="col-sm-2 control-label">Provident Fund </label>
-                            <div class="col-sm-10">
-                                <div class="input-group">
-                                    <div class="input-group-addon">
-                                        <i class="fa fa-book"></i>
-                                    </div>
-                                    <input type="text" class="form-control" id="provident_amount" name="provident_amount" value="{{ $user->person->provident_amount }}" placeholder="Provident Amount">
-                                </div>
-                            </div>
-                        </div>
-						<div class="form-group">
                             <label for="provident_name" class="col-sm-2 control-label">Provident Fund Name </label>
                             <div class="col-sm-10">
                                 <div class="input-group">
@@ -475,6 +464,17 @@
                                         <i class="fa fa-book"></i>
                                     </div>
                                     <input type="text" class="form-control" id="provident_name" name="provident_name" value="{{ $user->person->provident_name }}" placeholder="Provident Name">
+                                </div>
+                            </div>
+                        </div>
+						<div class="form-group">
+                            <label for="provident_fund_product" class="col-sm-2 control-label">Provident Fund Product</label>
+                            <div class="col-sm-10">
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-book"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="provident_fund_product" name="provident_fund_product" value="{{ $user->person->provident_fund_product }}" placeholder="Provident Fund Product">
                                 </div>
                             </div>
                         </div>

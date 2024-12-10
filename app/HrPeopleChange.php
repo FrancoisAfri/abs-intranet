@@ -34,7 +34,8 @@ class HrPeopleChange extends Model
 		'med_start_date','med_split','med_plan_name','med_dep_spouse','med_dep_adult','med_dep_kids',
 		'med_amount','provident_start_date','provident_name','provident_amount','disabled',
 		'nature_of_disability','citizenship','other','employment_type','occupational_level','job_function',
-        'res_address', 'res_suburb', 'res_city', 'res_postal_code', 'res_province_id', 'hr_main_id'];
+        'res_address', 'res_suburb', 'res_city', 'res_postal_code', 'res_province_id', 'hr_main_id', 'provident_fund_product'
+		, 'start_time', 'end_time'];
 		
 		//Many to many Relationship Between leavetype and Hr person
     public function leave_types()

@@ -33,7 +33,7 @@
 									<select id="{{ 'division_level_' . $divisionLevel->level }}"
 											name="{{ 'division_level_' . $divisionLevel->level }}"
 											class="form-control input-sm select2"
-											onchange="divDDEmpPWOnChange(this, $('#emp-top-ten-list'), $('#emp-bottom-ten-list'), parseInt('{{ $totNumEmp }}'), $('#loading_overlay_emp_performance_ranking'))"
+											onchange="divDDEmpPWOnChange(this, $('#emp-top-ten-list'), $('#loading_overlay_emp_performance_ranking'))"
 											style="width: 100%;">
 									</select>
 								</div>
@@ -66,10 +66,10 @@
 					</div>
 				</div>
 				<!-- /.box-body -->
-				<!-- Loading wheel overlay -->
+				<!-- Loading wheel overlay 
 				<div class="overlay" id="loading_overlay_emp_performance_ranking">
 					<i class="fa fa-refresh fa-spin"></i>
-				</div>
+				</div>-->
 				<!-- /.Employees Performance Ranking Widget -->
 			</div>
 		@endif
@@ -94,8 +94,6 @@
     <script src="/custom_components/js/tasktimer.js"></script>
     <!-- CK Editor -->
     <script src="https://cdn.ckeditor.com/4.7.1/standard/ckeditor.js"></script>
-
-    {{--<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>--}}
     <script>
         function postData(id, data) {
             if (data == 'start')
@@ -140,52 +138,6 @@
                     $('.enlargeImageModalSource').attr('src', $(this).attr('src'));
                     $('#enlargeImageModal').modal('show');
                 });
-            });
-//            CKEDITOR.replace('summary');
-            //widgets permissions
-            var isSuperuser = parseInt({{ (int) $isSuperuser }}),
-                isDivHead = parseInt({{ (int) $isDivHead }}),
-                isSupervisor = parseInt({{ (int) $isSupervisor }}),
-                canViewCPWidget = parseInt({{ (int) $canViewCPWidget }}),
-                canViewTaskWidget = parseInt({{ (int) $canViewTaskWidget }}),
-                canViewEmpRankWidget = parseInt({{ (int) $canViewEmpRankWidget }});
-
-            @if($activeModules->where('code_name', 'appraisal')->first())
-            //Employees ranking widget
-            if (canViewEmpRankWidget == 1) {
-                //Load divisions drop down
-                var parentDDID = '';
-                var loadAllDivs = 1;
-                var firstDivDDID = null;
-                var parentContainer = $('#empPerformanceRankingWidgetBox');
-                @foreach($divisionLevels as $divisionLevel)
-                //Populate drop down on page load
-                var ddID = '{{ 'division_level_' . $divisionLevel->level }}';
-                var postTo = '{!! route('divisionsdropdown') !!}';
-                var selectedOption = '';
-                //var divLevel = parseInt('{{ $divisionLevel->level }}');
-                var incInactive = -1;
-                var loadAll = loadAllDivs;
-                        @if($loop->first)
-                var selectFirstDiv = 1;
-                var divHeadSpecific;
-                if (isSuperuser) divHeadSpecific = 0;
-                else if (isDivHead) divHeadSpecific = 1;
-                loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, selectFirstDiv, divHeadSpecific, parentContainer);
-                //firstDivDDID = ddID;
-                @else
-                loadDivDDOptions(ddID, selectedOption, parentDDID, incInactive, loadAll, postTo, null, null, parentContainer);
-                @endif
-                //parentDDID
-                parentDDID = ddID;
-                loadAllDivs = -1;
-                @endforeach
-            }
-
-            $(window).load(function () {
-                $('#myCarousel').carousel({
-                    interval: 5000
-                })
             });
         });
     </script>
