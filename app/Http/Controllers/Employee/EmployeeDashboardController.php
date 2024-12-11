@@ -147,7 +147,7 @@ class EmployeeDashboardController extends Controller
         //return $attendances;
         $data = $this->breadCrump(
             "Time & Attendance",
-            "Clockin Report", "fa fa-lock",
+            "Attendance Report", "fa fa-lock",
             "Employee",
             "Attendance Report",
             "employee/clockin_report",

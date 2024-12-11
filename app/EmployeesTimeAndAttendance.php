@@ -27,7 +27,7 @@ class EmployeesTimeAndAttendance extends Model
 	// Mass assignable fields
     protected $fillable = [
         'hours_worked', 'hr_id', 'date_of_action', 'clokin_time', 'employee_number', 'clockout_time', 'late_arrival', 'early_clockout'
-		, 'absent', 'clockin_locations', 'clockout_locations', 'onleave'];
+		, 'absent', 'clockin_locations', 'clockout_locations', 'onleave', 'leave_type'];
 		
 	//hrperson relationship	
 	public function user()

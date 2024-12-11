@@ -212,7 +212,7 @@ class ReadErsDetails
 				$timeAndAttendance->late_arrival = '';
 				$timeAndAttendance->early_clockout = '';
 				$timeAndAttendance->absent = true;
-				$timeAndAttendance->onleave = true;
+				$timeAndAttendance->onleave = false;
 				$timeAndAttendance->save();
                 //send email to remind them
                 try {
@@ -223,8 +223,9 @@ class ReadErsDetails
                 }
 
 
-            } else {
-
+            } 
+			else 
+			{
                 ErsAbsentUsers::updateOrCreate(
                     [
                         'hr_id' => $userID,
@@ -245,8 +246,9 @@ class ReadErsDetails
 				$timeAndAttendance->hours_worked = 0;
 				$timeAndAttendance->late_arrival = '';
 				$timeAndAttendance->early_clockout = '';
-				$timeAndAttendance->absent = true;
-				$timeAndAttendance->onleave = false;
+				$timeAndAttendance->absent = false;
+				$timeAndAttendance->onleave = true;
+				$timeAndAttendance->leave_type = $checkUserApplicationStatus->leavetpe->name;
 				$timeAndAttendance->save();
             }
         }
@@ -261,6 +263,7 @@ class ReadErsDetails
 
         $today = date("Y-m-d");
         $getEscalationDays = leave_configuration::pluck('number_of_days_before_automate_application')->first();
+        $allowUnpaidLeave = leave_configuration::pluck('allow_unpaid_leave_when_annual_done')->first();
 
         if (!empty($getEscalationDays)) {
             $days = $getEscalationDays;
@@ -289,12 +292,25 @@ class ReadErsDetails
                 if (!isset($checkUserApplicationStatus)) {
 
                     $applicationStatus = LeaveApplicationController::ApplicationDetails(0, $absent->hr_id);
-
-                    $credit = leave_credit::getLeaveCredit($absent->hr_id, 1);
+					// check if the user doest have annual leave the apply for unpaid
+					
+					//$allowUnpaid = !empty($row->allow_unpaid_leave_when_annual_done) ? $row->allow_unpaid_leave_when_annual_done : 0;
+					$leaveType = 1;
+					$credit = leave_credit::getLeaveCredit($absent->hr_id, $leaveType);
+					if (!empty($allowUnpaidLeave))
+					{
+						
+						$availableBalance = !empty($credit->leave_balance) ? $credit->leave_balance / 8 : 0;
+						if ($availableBalance < 0)
+						{
+							$leaveType = 7;
+							$credit = leave_credit::getLeaveCredit($absent->hr_id, $leaveType);
+						}
+					}
 
                     //persist to db
                     $levApp = leave_application::create([
-                        'leave_type_id' => 1,
+                        'leave_type_id' => $leaveType,
                         'start_date' => $absent->date,
                         'end_date' => $absent->date,
                         'leave_taken' => 8,
@@ -304,7 +320,6 @@ class ReadErsDetails
                         'manager_id' => $applicationStatus['manager_id'],
                     ]);
 
-
                     // save audit
                     LeaveHistoryAuditController::store(
                         "Leave application submitted by : Cron Job system",
@@ -312,7 +327,7 @@ class ReadErsDetails
                         $credit['leave_balance'],
                         1,
                         $credit['leave_balance'],
-                        1,
+                        $leaveType,
                         $absent->hr_id,
                         1,
                         0
@@ -330,9 +345,7 @@ class ReadErsDetails
                 }
 				else 
 				{
-
                     //this one is to update the ers table
-
                     ErsAbsentUsers::where('id', $absent->id)
                         ->update([
                             'hr_id' => $absent->hr_id,
@@ -404,7 +417,13 @@ class ReadErsDetails
                 $checkStatus = $this->userOnLeave($details->id);
 				if (!empty($checkStatus)) $leave = 'Yes';
 				else $leave = '';
-				
+				// Initialize the array with the heading row
+				$AbsentUsersColl = [
+					[
+						'Heading' => 'Absent Users List Report',
+						'Date' => date('Y-m-d'), // You can change the format as needed
+					]
+				];
 				$AbsentUsersColl[] = ([
 					'employee_number' => $details['employee_number'],
 					'name' => $details['first_name'],

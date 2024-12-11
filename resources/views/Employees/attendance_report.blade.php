@@ -123,6 +123,7 @@
                                 <th style="width: 5px; text-align: center;">Early Clockout</th>
                                 <th style="width: 5px; text-align: center;">Absent</th>
                                 <th style="width: 5px; text-align: center;">On Leave</th>
+                                <th style="width: 5px; text-align: center;">Leave Type</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -166,7 +167,7 @@
                                             <td style="text-align:center;">{{ (!empty($attendance->late_arrival)) ? 'Yes' : '' }}</td>
                                             <td style="text-align:center;">{{ (!empty($attendance->early_clockout)) ? 'Yes' : '' }}</td>
                                             <td style="text-align:center;">{{ (!empty($attendance->absent)) ? 'Yes' : '' }}</td>
-                                            <td style="text-align:center;">{{ (!empty($attendance->onleave)) ? 'Yes' : '' }}</td>
+                                            <td style="text-align:center;">{{ (!empty($attendance->leave_type)) ? $attendance->leave_type : '' }}</td>
                                         </tr>
                                 @endforeach
                             @endif
@@ -188,6 +189,7 @@
                                 <th style="width: 5px; text-align: center;">Early Clockout</th>
                                 <th style="width: 5px; text-align: center;">Absent</th>
                                 <th style="width: 5px; text-align: center;">On Leave</th>
+								<th style="width: 5px; text-align: center;">Leave Type</th>
                             </tr>
                         </table>
                         <!-- /.box-body -->

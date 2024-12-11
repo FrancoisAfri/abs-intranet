@@ -85,7 +85,8 @@ class leave_application extends Model
 					->orwherebetween('end_date', [$startDate, $endDate]);
 			})->first();*/
 
-        return leave_application::where('hr_id', $userID)
+        return leave_application::with('leavetpe')
+			->where('hr_id', $userID)
             ->whereIn('status', [1, 2, 3, 4, 5])
             ->where(function ($query) use ($startDate, $endDate) {
                 $query->whereBetween('start_date', [$startDate, $endDate])
